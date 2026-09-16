@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EduFlow Nachrichten</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='uber.css') }}">
+<script>try{var t=localStorage.getItem("theme");if(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches){t="dark";}if(t){document.documentElement.dataset.theme=t;}}catch(e){}</script>
+<script src="{{ url_for('static', filename='theme.js') }}" defer></script>
+</head>
+<body>
+<div class="nav-wrap">
+  <div class="container nav">
+    <a class="brand" href="/dashboard"><span class="brand-mark">E</span>EduFlow</a>
+    <nav class="nav-mid">
+      <a class="nav-pill active" href="/dashboard">Nachrichten</a>
+      <a class="nav-pill" href="/hausaufgaben">Hausaufgaben</a>
+      <a class="nav-pill" href="/stundenplan">Stundenplan</a>
+    </nav>
+    <div class="nav-cta">
+      <span class="nav-user">{{ username }} @ {{ subdomain }}</span>
+      <button class="theme-toggle" type="button" aria-label="Farbschema wechseln">☾</button>
+      <a class="btn btn-primary btn-sm" href="/logout">Abmelden</a>
+    </div>
+  </div>
+</div>
+
+<main class="container container-wide">
+  <div class="page-head anim-in">
+    <span class="eyebrow">Timeline</span>
+    <h1>Nachrichten</h1>
+  </div>
+
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in msgs %}
+      <div class="notice">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+  {% if error %}
+    <div class="notice">{{ error }}</div>
+  {% endif %}
+
+  <div class="layout">
+    <aside class="sidebar anim-in" style="--d:80ms">
+      <h2>Filter</h2>
+      <form method="get" action="/dashboard" style="display:flex;flex-direction:column;gap:14px">
+        <div class="field">
+          <label for="search">Suche</label>
+          <input class="input-pill" id="search" type="search" placeholder="Text / Autor filtern…" oninput="applyFilter()">
+        </div>
+        <div class="field">
+          <label for="typeFilter">Typ</label>
+          <div class="select-wrap">
+            <select class="input-pill" id="typeFilter" name="type" onchange="applyFilter()">
+              <option value="">alle Typen ({{ total }})</option>
+              {% for v, label, count in type_options %}
+                <option value="{{ v }}" {% if selected_type == v %}selected{% endif %}>{{ label }} ({{ count }})</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="since">Verlauf seit</label>
+          <input class="input-pill" type="date" id="since" name="since" value="{{ since }}">
+        </div>
+        <div class="field">
+          <label for="mode">Modus</label>
+          <div class="select-wrap">
+            <select class="input-pill" id="mode" name="only_messages">
+              <option value="1" {% if only_messages %}selected{% endif %}>nur Nachrichten</option>
+              <option value="0" {% if not only_messages %}selected{% endif %}>alle Timeline-Einträge</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Neu laden</button>
+        <button class="btn btn-light" type="submit" name="refresh" value="1" title="Cache ignorieren und wirklich neu von EduPage laden">Frisch laden</button>
+        <button class="btn btn-light" type="button" onclick="exportCSV()">CSV-Export</button>
+      </form>
+      <p class="side-note">Suche und Typ filtern live im Browser. „Neu laden" nutzt den lokalen Cache, „Frisch laden" fragt EduPage neu ab (nur Geändertes/Neues wird übernommen).</p>
+    </aside>
+
+    <div class="feed">
+      <div class="feed-head">
+        <p class="stats" id="stats">{{ total }} Nachrichten.</p>
+        {% if cache_info %}<p class="stats">⚡ {{ cache_info }}</p>{% endif %}
+      </div>
+      <div id="list">
+      {% for m in messages %}
+        <div class="msg card anim-in" style="--d:{{ [loop.index0 * 45, 450]|min }}ms" data-type="{{ m.type }}" data-search="{{ (m.author ~ ' ' ~ m.recipient ~ ' ' ~ m.text)|lower|e }}">
+          <div class="meta">
+            <span>{{ m.timestamp }}</span>
+            {% if m.type != "sprava" %}<span class="tag tag-muted">{{ m.type }}</span>{% endif %}
+            <span><strong>{{ m.author }}</strong> → {{ m.recipient }}</span>
+            {% if m.is_starred %}<span class="tag tag-soft">★ markiert</span>{% endif %}
+            {% if m.is_done %}<span class="tag tag-soft">✓ erledigt</span>{% endif %}
+            {% if m.reaction_count %}<span class="tag tag-soft">♥ {{ m.reaction_count }}</span>{% endif %}
+          </div>
+          <div class="text">{{ m.text if m.text.strip() else '(kein Text)' }}</div>
+          {% if m.extra %}
+          <details><summary>Rohdaten</summary><pre>{{ m.extra }}</pre></details>
+          {% endif %}
+        </div>
+      {% endfor %}
+      </div>
+      {% if not messages %}
+        <div class="empty">Keine Nachrichten in diesem Zeitraum. Versuch ein früheres Datum oder den Modus „alle Timeline-Einträge“.</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <footer><p>EduFlow Dashboard · lokal</p></footer>
+</main>
+
+<script>
+function applyFilter() {
+  const q = (document.getElementById('search').value || '').toLowerCase();
+  const t = document.getElementById('typeFilter').value;
+  let visible = 0;
+  document.querySelectorAll('#list .msg').forEach(el => {
+    const okQ = !q || (el.dataset.search || '').includes(q);
+    const okT = !t || el.dataset.type === t;
+    const show = okQ && okT;
+    el.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  document.getElementById('stats').textContent = visible + ' Nachrichten angezeigt.';
+}
+// Falls per URL ein Typ vorausgewählt ist (?type=...), Filter sofort anwenden.
+if (document.getElementById('typeFilter').value) { applyFilter(); }
+function exportCSV() {
+  const rows = [['datum','typ','autor','empfaenger','text']];
+  document.querySelectorAll('#list .msg').forEach(el => {
+    if (el.style.display === 'none') return;
+    const meta = el.querySelector('.meta').innerText;
+    const text = el.querySelector('.text').innerText.replace(/\r?\n/g, ' ');
+    rows.push(['"' + el.querySelector('.meta span').innerText + '"', el.dataset.type, '"' + meta.replace(/"/g, '""') + '"', '""', '"' + text.replace(/"/g, '""') + '"']);
+  });
+  const csv = rows.map(r => r.join(';')).join('\n');
+  const blob = new Blob([csv], {type: 'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'eduflow-nachrichten.csv';
+  a.click();
+}
+</script>
+</body>
+</html>

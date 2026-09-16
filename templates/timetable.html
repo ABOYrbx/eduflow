@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EduFlow Stundenplan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='uber.css') }}">
+<script>try{var t=localStorage.getItem("theme");if(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches){t="dark";}if(t){document.documentElement.dataset.theme=t;}}catch(e){}</script>
+<script src="{{ url_for('static', filename='theme.js') }}" defer></script>
+<style>
+  .day-nav{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin:14px 0 4px}
+  .lesson{display:flex;gap:12px;align-items:center;padding:10px 16px;margin-bottom:8px}
+  .lesson-time{font-weight:800;font-size:14px;letter-spacing:-.3px;white-space:nowrap;min-width:104px}
+  .lesson-main{flex:1;min-width:0}
+  .lesson-main h3{margin:0 0 2px;font-size:15px}
+  .lesson .meta{margin-bottom:0;font-size:12px}
+  .lesson.is-cancelled{opacity:.6}
+  .lesson.is-cancelled h3{text-decoration:line-through}
+  .lesson.compact{flex-direction:column;align-items:stretch;gap:6px;padding:10px 12px}
+  .lesson.compact .lesson-time{min-width:0;font-size:12px;color:var(--ink-muted)}
+  .lesson.compact .lesson-main h3{font-size:14px}
+</style>
+</head>
+<body>
+<div class="nav-wrap">
+  <div class="container nav">
+    <a class="brand" href="/dashboard"><span class="brand-mark">E</span>EduFlow</a>
+    <nav class="nav-mid">
+      <a class="nav-pill" href="/dashboard">Nachrichten</a>
+      <a class="nav-pill" href="/hausaufgaben">Hausaufgaben</a>
+      <a class="nav-pill active" href="/stundenplan">Stundenplan</a>
+    </nav>
+    <div class="nav-cta">
+      <span class="nav-user">{{ username }} @ {{ subdomain }}</span>
+      <button class="theme-toggle" type="button" aria-label="Farbschema wechseln">☾</button>
+      <a class="btn btn-primary btn-sm" href="/logout">Abmelden</a>
+    </div>
+  </div>
+</div>
+
+<main class="container">
+  <div class="page-head anim-in">
+    <span class="eyebrow">Plan</span>
+    <h1>{% if view == 'week' %}{{ week_label }}{% else %}{{ day_label }}{% endif %}</h1>
+    <p class="stats">{% if view == 'week' %}{{ week|map(attribute='lessons')|map('length')|sum }} Stunden diese Woche.{% else %}{{ lessons|length }} Stunden.{% endif %}{% if cache_info %} · ⚡ {{ cache_info }}{% endif %}</p>
+  </div>
+
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in msgs %}
+      <div class="notice">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+  {% if error %}
+    <div class="notice">{{ error }}</div>
+  {% endif %}
+
+  <form class="day-nav" method="get" action="/stundenplan">
+    <div class="view-toggle">
+      <a href="/stundenplan?view=day&amp;day={{ day }}" class="{% if view == 'day' %}active{% endif %}">Tag</a>
+      <a href="/stundenplan?view=week&amp;day={{ day }}" class="{% if view == 'week' %}active{% endif %}">Woche</a>
+    </div>
+    {% if view == 'day' %}
+      <a class="btn btn-light btn-sm" href="/stundenplan?view=day&amp;day={{ prev_day }}">← Zurück</a>
+      <div class="field">
+        <label for="day">Tag</label>
+        <input class="input-pill" type="date" id="day" name="day" value="{{ day }}" onchange="this.form.submit()">
+      </div>
+      <a class="btn btn-light btn-sm" href="/stundenplan?view=day&amp;day={{ today_str }}">Heute</a>
+      <a class="btn btn-light btn-sm" href="/stundenplan?view=day&amp;day={{ next_day }}">Weiter →</a>
+    {% else %}
+      <a class="btn btn-light btn-sm" href="/stundenplan?view=week&amp;day={{ prev_day }}">← Vorwoche</a>
+      <a class="btn btn-light btn-sm" href="/stundenplan?view=week&amp;day={{ today_str }}">Diese Woche</a>
+      <a class="btn btn-light btn-sm" href="/stundenplan?view=week&amp;day={{ next_day }}">Nächste →</a>
+    {% endif %}
+    <a class="btn btn-light btn-sm" href="/stundenplan?view={{ view }}&amp;day={{ day }}&amp;refresh=1" title="Cache ignorieren und wirklich neu von EduPage laden">↻ Frisch laden</a>
+  </form>
+
+  {% macro lesson_card(l, compact=False, idx=0) %}
+    <div class="lesson card anim-in{% if l.is_cancelled %} is-cancelled{% endif %}{% if compact %} compact{% endif %}" style="--d:{{ [idx * 45, 450]|min }}ms">
+      <div class="lesson-time">{{ l.time }}</div>
+      <div class="lesson-main">
+        <h3>{{ l.title }}</h3>
+        <div class="meta">
+          <span class="tag tag-solid">{{ l.period }}. Std.</span>
+          {% if l.is_cancelled %}<span class="tag tag-red">entfällt</span>{% endif %}
+          {% if l.is_event %}<span class="tag tag-amber">Event</span>{% endif %}
+          {% if l.is_online %}<span class="tag tag-blue">online</span>{% endif %}
+          {% if l.teachers %}<span>{{ l.teachers }}</span>{% endif %}
+          {% if l.rooms %}<span>Raum {{ l.rooms }}</span>{% endif %}
+        </div>
+      </div>
+    </div>
+  {% endmacro %}
+
+  {% if view == 'week' %}
+    <div class="tt-scroll">
+      <div class="tt-matrix anim-in" style="--d:120ms">
+        <div style="grid-column:1;grid-row:1"></div>
+        {% for d in week %}
+          <div class="tt-day" style="grid-column:{{ loop.index0 + 2 }};grid-row:1">{{ d.day_name }} <small>{{ d.day_date }}</small>{% if d.is_today %} <span class="tag tag-solid">heute</span>{% endif %}</div>
+        {% endfor %}
+        {% for p in periods %}
+          {% set row = period_rows[p] %}
+          <div class="tt-period" style="grid-column:1;grid-row:{{ row }}">{{ p }}.</div>
+          {% for d in week %}
+            {% if (d.date, p) not in covered %}
+              {% set l = matrix[d.date].get(p) %}
+              <div class="tt-cell {% if l and l.is_cancelled %}is-cancelled{% endif %}" style="grid-column:{{ loop.index0 + 2 }};grid-row:{{ row }}{% if l and l.rowspan > 1 %} / span {{ l.rowspan }}{% endif %}">
+              {% if l %}
+                <strong>{{ l.title }}</strong>
+                <small>{% if l.rooms %}Raum {{ l.rooms }}{% endif %}{% if l.rooms and l.teachers %} · {% endif %}{% if l.teachers %}{{ l.teachers }}{% endif %}{% if l.time and 'lernzeit' not in l.title.lower() %}{% if l.rooms or l.teachers %} · {% endif %}{{ l.time }}{% endif %}</small>
+                {% if l.is_cancelled %}<span class="tag tag-red">entfällt</span>{% endif %}
+              {% else %}
+                <span class="tt-empty">–</span>
+              {% endif %}
+            </div>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+      </div>
+    </div>
+    {% if not periods %}
+      <div class="empty">Kein Unterricht in dieser Woche.</div>
+    {% endif %}
+  {% else %}
+  <div id="list">
+  {% for l in lessons %}
+    {{ lesson_card(l, False, loop.index0) }}
+  {% endfor %}
+  </div>
+  {% if not lessons %}
+    <div class="empty">Kein Stundenplan für diesen Tag (Wochenende / Ferien / kein Unterricht?).</div>
+  {% endif %}
+  {% endif %}
+
+  <footer><p>EduFlow Dashboard · lokal</p></footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EduFlow Hausaufgaben</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='uber.css') }}">
+<script>try{var t=localStorage.getItem("theme");if(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches){t="dark";}if(t){document.documentElement.dataset.theme=t;}}catch(e){}</script>
+<script src="{{ url_for('static', filename='theme.js') }}" defer></script>
+</head>
+<body>
+<div class="nav-wrap">
+  <div class="container nav">
+    <a class="brand" href="/dashboard"><span class="brand-mark">E</span>EduFlow</a>
+    <nav class="nav-mid">
+      <a class="nav-pill" href="/dashboard">Nachrichten</a>
+      <a class="nav-pill active" href="/hausaufgaben">Hausaufgaben</a>
+      <a class="nav-pill" href="/stundenplan">Stundenplan</a>
+    </nav>
+    <div class="nav-cta">
+      <span class="nav-user">{{ username }} @ {{ subdomain }}</span>
+      <button class="theme-toggle" type="button" aria-label="Farbschema wechseln">☾</button>
+      <a class="btn btn-primary btn-sm" href="/logout">Abmelden</a>
+    </div>
+  </div>
+</div>
+
+<main class="container container-wide">
+  <div class="page-head anim-in">
+    <span class="eyebrow">Aufgaben</span>
+    <h1>Hausaufgaben</h1>
+  </div>
+
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in msgs %}
+      <div class="notice">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+  {% if error %}
+    <div class="notice">{{ error }}</div>
+  {% endif %}
+
+  <div class="stat-grid">
+    <div class="stat anim-in" style="--d:60ms"><div class="n">{{ total }}</div><div class="l">geladen</div></div>
+    <div class="stat anim-in" style="--d:120ms"><div class="n">{{ n_offen }}</div><div class="l">offen</div></div>
+    <div class="stat anim-in" style="--d:180ms"><div class="n n-danger">{{ n_ueber }}</div><div class="l">überfällig</div></div>
+    <div class="stat anim-in" style="--d:240ms"><div class="n n-ok">{{ n_erledigt }}</div><div class="l">erledigt</div></div>
+  </div>
+
+  <div class="layout">
+    <aside class="sidebar anim-in" style="--d:80ms">
+      <h2>Filter</h2>
+      <form method="get" action="/hausaufgaben" style="display:flex;flex-direction:column;gap:14px">
+        <div class="field">
+          <label for="search">Suche</label>
+          <input class="input-pill" id="search" type="search" placeholder="Titel / Fach / Lehrer…" oninput="applyFilter()">
+        </div>
+        <div class="field">
+          <label for="status">Status</label>
+          <div class="select-wrap">
+            <select class="input-pill" id="status" name="status" onchange="this.form.submit()">
+              <option value="alle" {% if status == 'alle' %}selected{% endif %}>alle</option>
+              <option value="offen" {% if status == 'offen' %}selected{% endif %}>nur offene</option>
+              <option value="überfällig" {% if status == 'überfällig' %}selected{% endif %}>nur überfällige</option>
+              <option value="erledigt" {% if status == 'erledigt' %}selected{% endif %}>nur erledigte</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="since">Verlauf seit</label>
+          <input class="input-pill" type="date" id="since" name="since" value="{{ since }}">
+        </div>
+        <label class="check"><input type="checkbox" name="include_tests" value="1" {% if include_tests %}checked{% endif %}> Tests/Prüfungen einbeziehen</label>
+        <button class="btn btn-primary" type="submit">Neu laden</button>
+        <button class="btn btn-light" type="submit" name="refresh" value="1" title="Cache ignorieren und wirklich neu von EduPage laden">Frisch laden</button>
+        <button class="btn btn-light" type="button" onclick="exportCSV()">CSV-Export</button>
+      </form>
+      <p class="side-note">Die Suche filtert live im Browser. „Neu laden" nutzt den lokalen Cache, „Frisch laden" fragt EduPage neu ab.</p>
+    </aside>
+
+    <div class="feed">
+      <div class="feed-head">
+        <p class="stats" id="stats">{{ total }} Einträge.</p>
+        {% if cache_info %}<p class="stats">⚡ {{ cache_info }}</p>{% endif %}
+      </div>
+      <div id="list">
+      {% for h in items %}
+        <div class="hw card {{ h.status_class }} anim-in{% if h.is_done %} is-done{% endif %}" style="--d:{{ [loop.index0 * 45, 450]|min }}ms"
+         data-status="{{ h.status }}" data-type="{{ h.type }}"
+         data-search="{{ (h.title ~ ' ' ~ h.subject ~ ' ' ~ h.author ~ ' ' ~ h.description)|lower|e }}">
+          <h3>{{ h.title }}</h3>
+          <div class="meta">
+            <span class="tag tag-muted">{{ h.type }}</span>
+            <span class="tag {{ h.tag_class }}">{{ h.status }}</span>
+            <span>fällig: <strong>{{ h.due_display }}</strong></span>
+            <span>aufgegeben: {{ h.assigned }}</span>
+            {% if h.subject %}<span>{{ h.subject }}</span>{% endif %}
+            <span>{{ h.author }}</span>
+            {% if h.is_starred %}<span class="tag tag-soft">★ markiert</span>{% endif %}
+            {% if h.done_at %}<span class="tag tag-soft">✓ {{ h.done_at }}</span>{% endif %}
+          </div>
+          <div class="text">{{ h.description if h.description.strip() else '(keine Beschreibung)' }}</div>
+          {% if h.extra %}
+          <details><summary>Rohdaten</summary><pre>{{ h.extra }}</pre></details>
+          {% endif %}
+        </div>
+      {% endfor %}
+      </div>
+      {% if not items %}
+        <div class="empty">Keine Hausaufgaben in diesem Zeitraum. Versuch ein früheres Datum oder aktiviere „Tests/Prüfungen einbeziehen“.</div>
+      {% endif %}
+    </div>
+  </div>
+
+  <footer><p>EduFlow Dashboard · lokal</p></footer>
+</main>
+
+<script>
+function applyFilter() {
+  const q = (document.getElementById('search').value || '').toLowerCase();
+  let visible = 0;
+  document.querySelectorAll('#list .hw').forEach(el => {
+    const show = !q || (el.dataset.search || '').includes(q);
+    el.style.display = show ? '' : 'none';
+    if (show) visible++;
+  });
+  document.getElementById('stats').textContent = visible + ' Einträge angezeigt.';
+}
+function exportCSV() {
+  const rows = [['titel','status','faellig','aufgegeben','fach','lehrer','beschreibung']];
+  document.querySelectorAll('#list .hw').forEach(el => {
+    if (el.style.display === 'none') return;
+    const q = s => '"' + (s || '').replace(/"/g, '""') + '"';
+    rows.push([
+      q(el.querySelector('h3').innerText),
+      q(el.dataset.status),
+      q(el.dataset.type),
+      q(el.querySelector('.meta').innerText.replace(/\r?\n/g, ' ')),
+      '',
+      '',
+      q(el.querySelector('.text').innerText.replace(/\r?\n/g, ' '))
+    ]);
+  });
+  const blob = new Blob([rows.map(r => r.join(';')).join('\n')], {type: 'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'eduflow-hausaufgaben.csv';
+  a.click();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EduFlow Anmeldung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='uber.css') }}">
+<script>try{var t=localStorage.getItem("theme");if(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches){t="dark";}if(t){document.documentElement.dataset.theme=t;}}catch(e){}</script>
+<script src="{{ url_for('static', filename='theme.js') }}" defer></script>
+</head>
+<body>
+<button class="theme-toggle auth-top-right" type="button" aria-label="Farbschema wechseln">☾</button>
+<div class="auth-wrap">
+  <div class="auth-card anim-in">
+    <div class="brand"><span class="brand-mark">E</span></div>
+    <h1>EduFlow Dashboard</h1>
+    <p class="sub">Melde dich an, um deine Nachrichten und Hausaufgaben von ganz früher bis heute zu sehen.</p>
+    {% with msgs = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in msgs %}
+        <div class="notice">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+    <form method="post" action="/login">
+      <label for="subdomain">Schul-Subdomain</label>
+      <input class="input-pill" id="subdomain" name="subdomain" placeholder="z. B. myschule" autocomplete="username">
+      <label for="username">Benutzername</label>
+      <input class="input-pill" id="username" name="username" required autocomplete="username">
+      <label for="password">Passwort</label>
+      <input class="input-pill" id="password" name="password" type="password" required autocomplete="current-password">
+      <button class="btn btn-primary" type="submit">Anmelden</button>
+    </form>
+    <p class="hint">Subdomain leer lassen für Auto-Erkennung über <code>portal.edupage.org</code>.<br>
+    Nur lokal ausführen, nicht öffentlich freigeben.</p>
+  </div>
+</div>
+</body>
+</html>
