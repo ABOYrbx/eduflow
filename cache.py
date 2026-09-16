@@ -244,6 +244,38 @@ def save_timeline(uhash: str, earliest_iso: str, records: List[Dict[str, Any]]) 
         pass
 
 
+def set_record_done(uhash: str, event_id, done: bool) -> bool:
+    """Done-Status eines Timeline-Records lokal nachpflegen (ohne Neu-Fetch).
+
+    Wird nach erfolgreichem `homeworkFlag`-Request aufgerufen, damit die
+    Anzeige sofort stimmt. Returns True, wenn der Record gefunden wurde.
+    """
+    try:
+        data = load_timeline(uhash)
+        if not data:
+            return False
+        changed = False
+        now_str = datetime.now().strftime(_DATETIME_FMT)
+        for r in data.get("events", []) or []:
+            if str(r.get("id")) != str(event_id):
+                continue
+            r["is_done"] = bool(done)
+            r["done_at"] = now_str if done else ""
+            changed = True
+            break
+        if not changed:
+            return False
+        _atomic_write_json(_timeline_path(uhash), {
+            "version": 1,
+            "saved_at": datetime.now().strftime(_DATETIME_FMT),
+            "earliest": data.get("earliest", ""),
+            "events": data.get("events", []),
+        })
+        return True
+    except Exception:
+        return False
+
+
 def cache_age_s(saved_at_str: Any) -> Optional[int]:
     dt = _parse_dt(saved_at_str)
     if dt is None:
@@ -301,3 +333,138 @@ def save_timetable(uhash: str, day: date, lessons: List[Dict[str, Any]]) -> None
 def is_fresh(saved_at_str: Any, ttl_s: int) -> bool:
     age = cache_age_s(saved_at_str)
     return age is not None and age < ttl_s
+
+
+# ------------------------------------------------- Gelesen-Status
+# Die EduPage-API kennt kein "ungelesen"-Flag, daher wird lokal pro User
+# gespeichert, welche Timeline-Event-IDs bereits gesehen wurden.
+# Alles best-effort wie der Rest des Caches. `cache-clear` in app.py
+# löscht diese Datei automatisch mit (Muster `*_<uhash>.json`).
+
+def _seen_path(uhash: str) -> Path:
+    return CACHE_DIR / f"seen_{uhash}.json"
+
+
+def load_seen(uhash: str) -> set:
+    """IDs bereits gesehener Timeline-Events (Strings)."""
+    data = _read_json(_seen_path(uhash))
+    if not data or not isinstance(data.get("ids"), list):
+        return set()
+    try:
+        return {str(i) for i in data.get("ids", [])}
+    except Exception:
+        return set()
+
+
+def save_seen(uhash: str, ids: set) -> None:
+    try:
+        _atomic_write_json(_seen_path(uhash), {
+            "version": 1,
+            "saved_at": datetime.now().strftime(_DATETIME_FMT),
+            "ids": sorted(str(i) for i in ids),
+        })
+    except Exception:
+        pass
+
+
+def mark_seen(uhash: str, ids) -> int:
+    """Fügt IDs zum Gelesen-Status hinzu. Returns Anzahl neu markierter."""
+    try:
+        seen = load_seen(uhash)
+        new = {str(i) for i in (ids or []) if i is not None}
+        added = new - seen
+        if added:
+            save_seen(uhash, seen | new)
+        return len(added)
+    except Exception:
+        return 0
+
+
+# ------------------------------------------------- Einstellungen
+# Allgemeine Einstellungen pro User (Startseite, Filter-Defaults, Limits).
+# Gleiches JSON-Format und gleiche Best-effort-Semantik wie oben.
+# WICHTIG: `settings_*.json` wird von "Cache leeren" bewusst NICHT gelöscht
+# (siehe cache_clear in app.py) – Einstellungen sollen erhalten bleiben.
+
+def _settings_path(uhash: str) -> Path:
+    return CACHE_DIR / f"settings_{uhash}.json"
+
+
+def load_settings(uhash: str) -> dict:
+    """Gespeicherte Einstellungen (rohes Dict, ggf. leer/unvollständig)."""
+    try:
+        data = _read_json(_settings_path(uhash))
+        if isinstance(data, dict) and isinstance(data.get("values"), dict):
+            return dict(data["values"])
+    except Exception:
+        pass
+    return {}
+
+
+def save_settings(uhash: str, values: dict) -> None:
+    try:
+        _atomic_write_json(_settings_path(uhash), {
+            "version": 1,
+            "saved_at": datetime.now().strftime(_DATETIME_FMT),
+            "values": {str(k): v for k, v in (values or {}).items()},
+        })
+    except Exception:
+        pass
+
+
+# ------------------------------------------------- Ausgeblendete Aufgaben
+# Schüler können aufgegebene Hausaufgaben auf EduPage nicht löschen
+# (nur das done-Flag ist Schüler-Zustand). "Löschen" ist daher ein rein
+# lokaler Zustand pro User: ausgeblendete Event-IDs erscheinen weder auf
+# der Hausaufgaben-Seite noch in der Übersicht. Gleiches Format und
+# gleiche Best-effort-Semantik wie der Gelesen-Status oben.
+
+def _hidden_path(uhash: str) -> Path:
+    return CACHE_DIR / f"hidden_{uhash}.json"
+
+
+def load_hidden(uhash: str) -> set:
+    """IDs lokal ausgeblendeter Timeline-Events (Strings)."""
+    data = _read_json(_hidden_path(uhash))
+    if not data or not isinstance(data.get("ids"), list):
+        return set()
+    try:
+        return {str(i) for i in data.get("ids", [])}
+    except Exception:
+        return set()
+
+
+def _save_hidden(uhash: str, ids: set) -> None:
+    try:
+        _atomic_write_json(_hidden_path(uhash), {
+            "version": 1,
+            "saved_at": datetime.now().strftime(_DATETIME_FMT),
+            "ids": sorted(str(i) for i in ids),
+        })
+    except Exception:
+        pass
+
+
+def hide_ids(uhash: str, ids) -> int:
+    """Blendet IDs aus. Returns Anzahl neu ausgeblendeter."""
+    try:
+        hidden = load_hidden(uhash)
+        new = {str(i) for i in (ids or []) if i is not None}
+        added = new - hidden
+        if added:
+            _save_hidden(uhash, hidden | new)
+        return len(added)
+    except Exception:
+        return 0
+
+
+def unhide_ids(uhash: str, ids) -> int:
+    """Blendet IDs wieder ein. Returns Anzahl wieder eingeblendeter."""
+    try:
+        hidden = load_hidden(uhash)
+        gone = {str(i) for i in (ids or []) if i is not None} & hidden
+        if gone:
+            _save_hidden(uhash, hidden - gone)
+        return len(gone)
+    except Exception:
+        return 0

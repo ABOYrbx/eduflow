@@ -7,22 +7,51 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ url_for('static', filename='uber.css') }}">
-<script>try{var t=localStorage.getItem("theme");if(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches){t="dark";}if(t){document.documentElement.dataset.theme=t;}}catch(e){}</script>
+<script>try{var t=localStorage.getItem("theme");if(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches){t="dark";}if(t){document.documentElement.dataset.theme=t;}var a=localStorage.getItem("accent");if(a){document.documentElement.dataset.accent=a;}}catch(e){}</script>
 <script src="{{ url_for('static', filename='theme.js') }}" defer></script>
+<script src="{{ url_for('static', filename='profile-menu.js') }}" defer></script>
 </head>
 <body>
 <div class="nav-wrap">
   <div class="container nav">
-    <a class="brand" href="/dashboard"><span class="brand-mark">E</span>EduFlow</a>
     <nav class="nav-mid">
+      <a class="nav-pill" href="/">Übersicht</a>
       <a class="nav-pill active" href="/dashboard">Nachrichten</a>
       <a class="nav-pill" href="/hausaufgaben">Hausaufgaben</a>
       <a class="nav-pill" href="/stundenplan">Stundenplan</a>
     </nav>
     <div class="nav-cta">
-      <span class="nav-user">{{ username }} @ {{ subdomain }}</span>
-      <button class="theme-toggle" type="button" aria-label="Farbschema wechseln">☾</button>
-      <a class="btn btn-primary btn-sm" href="/logout">Abmelden</a>
+      <div class="profile-wrap">
+        <button class="avatar-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Profilmenü öffnen" title="{{ username }} @ {{ subdomain }}">{{ username[0]|upper }}</button>
+        <div class="profile-menu" role="menu">
+          <div class="pm-head">
+            <div class="t">Dein Profil</div>
+            <div class="u">{{ username }} @ {{ subdomain }}</div>
+          </div>
+          <div class="pm-div"></div>
+          <div class="pm-sec">Einstellungen</div>
+          <div class="pm-row">
+            <span>Erscheinungsbild</span>
+            <button class="theme-toggle" type="button" aria-label="Farbschema wechseln">☾</button>
+          </div>
+          <div class="pm-row pm-accents">
+            <span>Akzentfarbe</span>
+            <div class="accent-dots" role="group" aria-label="Akzentfarbe">
+              <button class="accent-dot" type="button" data-set-accent="black" style="--c:#000000" aria-label="Schwarz" title="Schwarz"></button>
+              <button class="accent-dot" type="button" data-set-accent="blue" style="--c:#2563EB" aria-label="Blau" title="Blau"></button>
+              <button class="accent-dot" type="button" data-set-accent="violet" style="--c:#7C3AED" aria-label="Lila" title="Lila"></button>
+              <button class="accent-dot" type="button" data-set-accent="teal" style="--c:#0E7490" aria-label="Petrol" title="Petrol"></button>
+              <button class="accent-dot" type="button" data-set-accent="green" style="--c:#16A34A" aria-label="Grün" title="Grün"></button>
+              <button class="accent-dot" type="button" data-set-accent="orange" style="--c:#EA580C" aria-label="Orange" title="Orange"></button>
+              <button class="accent-dot" type="button" data-set-accent="red" style="--c:#DC2626" aria-label="Rot" title="Rot"></button>
+              <button class="accent-dot" type="button" data-set-accent="pink" style="--c:#DB2777" aria-label="Pink" title="Pink"></button>
+            </div>
+          </div>
+          <div class="pm-div"></div>
+          <a class="pm-link" href="/einstellungen" role="menuitem">Einstellungen</a>
+          <a class="pm-link pm-danger" href="/logout" role="menuitem">Abmelden</a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -45,11 +74,7 @@
   <div class="layout">
     <aside class="sidebar anim-in" style="--d:80ms">
       <h2>Filter</h2>
-      <form method="get" action="/dashboard" style="display:flex;flex-direction:column;gap:14px">
-        <div class="field">
-          <label for="search">Suche</label>
-          <input class="input-pill" id="search" type="search" placeholder="Text / Autor filtern…" oninput="applyFilter()">
-        </div>
+      <form method="get" action="/dashboard" id="filterForm" style="display:flex;flex-direction:column;gap:14px">
         <div class="field">
           <label for="typeFilter">Typ</label>
           <div class="select-wrap">
@@ -65,77 +90,204 @@
           <label for="since">Verlauf seit</label>
           <input class="input-pill" type="date" id="since" name="since" value="{{ since }}">
         </div>
-        <div class="field">
-          <label for="mode">Modus</label>
-          <div class="select-wrap">
-            <select class="input-pill" id="mode" name="only_messages">
-              <option value="1" {% if only_messages %}selected{% endif %}>nur Nachrichten</option>
-              <option value="0" {% if not only_messages %}selected{% endif %}>alle Timeline-Einträge</option>
-            </select>
-          </div>
-        </div>
         <button class="btn btn-primary" type="submit">Neu laden</button>
-        <button class="btn btn-light" type="submit" name="refresh" value="1" title="Cache ignorieren und wirklich neu von EduPage laden">Frisch laden</button>
-        <button class="btn btn-light" type="button" onclick="exportCSV()">CSV-Export</button>
       </form>
-      <p class="side-note">Suche und Typ filtern live im Browser. „Neu laden" nutzt den lokalen Cache, „Frisch laden" fragt EduPage neu ab (nur Geändertes/Neues wird übernommen).</p>
     </aside>
 
     <div class="feed">
+      <div class="searchbar anim-in" style="--d:40ms">
+        <div class="searchbar-row">
+          <div class="search-field">
+            <input class="input-pill" id="search" name="q" form="filterForm" type="search" placeholder="Nachrichten durchsuchen…" value="{{ q }}" oninput="applyFilter()" autocomplete="off" aria-label="Nachrichten durchsuchen">
+            <button class="search-icon-btn" type="button" onclick="doSearch()" aria-label="Suchen" title="Suchen">
+              <svg viewBox="0 0 148 160" fill="currentColor" width="20" height="20" aria-hidden="true"><path d="M55 0h17v1h-17ZM50 1h28v1h-28ZM46 2h36v1h-36ZM43 3h42v1h-42ZM40 4h47v1h-47ZM38 5h52v1h-52ZM36 6h56v1h-56ZM34 7h60v1h-60ZM32 8h64v1h-64ZM30 9h67v1h-67ZM29 10h70v1h-70ZM27 11h73v1h-73ZM26 12h75v1h-75ZM25 13h78v1h-78ZM24 14h80v1h-80ZM23 15h82v1h-82ZM21 16h85v1h-85ZM20 17h87v1h-87ZM19 18h89v1h-89ZM18 19h91v1h-91ZM17 20h38v1h-38ZM73 20h37v1h-37ZM16 21h35v1h-35ZM77 21h34v1h-34ZM16 22h32v1h-32ZM80 22h32v1h-32ZM15 23h31v1h-31ZM82 23h31v1h-31ZM14 24h30v1h-30ZM84 24h30v1h-30ZM13 25h29v1h-29ZM86 25h28v1h-28ZM12 26h28v1h-28ZM88 26h27v1h-27ZM11 27h27v1h-27ZM89 27h27v1h-27ZM11 28h26v1h-26ZM91 28h26v1h-26ZM10 29h26v1h-26ZM92 29h25v1h-25ZM9 30h25v1h-25ZM93 30h25v1h-25ZM9 31h24v1h-24ZM94 31h25v1h-25ZM8 32h24v1h-24ZM95 32h24v1h-24ZM8 33h23v1h-23ZM96 33h24v1h-24ZM7 34h24v1h-24ZM97 34h23v1h-23ZM7 35h23v1h-23ZM98 35h23v1h-23ZM6 36h23v1h-23ZM99 36h22v1h-22ZM6 37h22v1h-22ZM99 37h23v1h-23ZM5 38h22v1h-22ZM100 38h22v1h-22ZM5 39h22v1h-22ZM101 39h22v1h-22ZM5 40h21v1h-21ZM101 40h22v1h-22ZM4 41h22v1h-22ZM102 41h21v1h-21ZM4 42h21v1h-21ZM102 42h22v1h-22ZM3 43h22v1h-22ZM103 43h21v1h-21ZM3 44h21v1h-21ZM103 44h21v1h-21ZM3 45h21v1h-21ZM104 45h20v1h-20ZM3 46h20v1h-20ZM104 46h21v1h-21ZM2 47h21v1h-21ZM105 47h20v1h-20ZM2 48h21v1h-21ZM105 48h20v1h-20ZM2 49h20v1h-20ZM105 49h20v1h-20ZM2 50h20v1h-20ZM106 50h20v1h-20ZM1 51h21v1h-21ZM106 51h20v1h-20ZM1 52h20v1h-20ZM106 52h20v1h-20ZM1 53h20v1h-20ZM107 53h19v1h-19ZM1 54h20v1h-20ZM107 54h19v1h-19ZM1 55h20v1h-20ZM107 55h20v1h-20ZM1 56h19v1h-19ZM107 56h20v1h-20ZM0 57h20v1h-20ZM107 57h20v1h-20ZM0 58h20v1h-20ZM108 58h19v1h-19ZM0 59h20v1h-20ZM108 59h19v1h-19ZM0 60h20v1h-20ZM108 60h19v1h-19ZM0 61h20v1h-20ZM108 61h19v1h-19ZM0 62h20v1h-20ZM108 62h19v1h-19ZM0 63h20v1h-20ZM108 63h19v1h-19ZM0 64h20v1h-20ZM108 64h19v1h-19ZM0 65h20v1h-20ZM108 65h19v1h-19ZM0 66h20v1h-20ZM108 66h19v1h-19ZM0 67h20v1h-20ZM108 67h19v1h-19ZM0 68h20v1h-20ZM108 68h19v1h-19ZM0 69h20v1h-20ZM107 69h20v1h-20ZM1 70h19v1h-19ZM107 70h20v1h-20ZM1 71h19v1h-19ZM107 71h20v1h-20ZM1 72h20v1h-20ZM107 72h19v1h-19ZM1 73h20v1h-20ZM107 73h19v1h-19ZM1 74h20v1h-20ZM106 74h20v1h-20ZM1 75h20v1h-20ZM106 75h20v1h-20ZM1 76h21v1h-21ZM106 76h20v1h-20ZM2 77h20v1h-20ZM106 77h20v1h-20ZM2 78h20v1h-20ZM105 78h20v1h-20ZM2 79h21v1h-21ZM105 79h20v1h-20ZM2 80h21v1h-21ZM104 80h21v1h-21ZM3 81h21v1h-21ZM104 81h20v1h-20ZM3 82h21v1h-21ZM103 82h21v1h-21ZM3 83h21v1h-21ZM103 83h21v1h-21ZM4 84h21v1h-21ZM102 84h22v1h-22ZM4 85h21v1h-21ZM102 85h21v1h-21ZM4 86h22v1h-22ZM101 86h22v1h-22ZM5 87h21v1h-21ZM101 87h22v1h-22ZM5 88h22v1h-22ZM100 88h22v1h-22ZM6 89h22v1h-22ZM99 89h23v1h-23ZM6 90h23v1h-23ZM99 90h22v1h-22ZM7 91h22v1h-22ZM98 91h23v1h-23ZM7 92h23v1h-23ZM97 92h23v1h-23ZM8 93h23v1h-23ZM96 93h24v1h-24ZM8 94h24v1h-24ZM95 94h24v1h-24ZM9 95h24v1h-24ZM94 95h25v1h-25ZM9 96h25v1h-25ZM93 96h25v1h-25ZM10 97h25v1h-25ZM92 97h26v1h-26ZM11 98h25v1h-25ZM91 98h26v1h-26ZM11 99h27v1h-27ZM90 99h26v1h-26ZM12 100h27v1h-27ZM88 100h28v1h-28ZM13 101h28v1h-28ZM87 101h28v1h-28ZM13 102h29v1h-29ZM85 102h29v1h-29ZM14 103h30v1h-30ZM83 103h30v1h-30ZM15 104h31v1h-31ZM81 104h31v1h-31ZM16 105h33v1h-33ZM79 105h33v1h-33ZM17 106h36v1h-36ZM75 106h38v1h-38ZM18 107h40v1h-40ZM69 107h45v1h-45ZM19 108h96v1h-96ZM20 109h96v1h-96ZM21 110h96v1h-96ZM22 111h96v1h-96ZM23 112h96v1h-96ZM25 113h95v1h-95ZM26 114h94v1h-94ZM27 115h94v1h-94ZM29 116h93v1h-93ZM30 117h93v1h-93ZM32 118h92v1h-92ZM34 119h91v1h-91ZM35 120h57v1h-57ZM95 120h31v1h-31ZM38 121h52v1h-52ZM96 121h31v1h-31ZM40 122h48v1h-48ZM97 122h30v1h-30ZM43 123h42v1h-42ZM98 123h30v1h-30ZM46 124h36v1h-36ZM98 124h31v1h-31ZM49 125h29v1h-29ZM99 125h31v1h-31ZM54 126h19v1h-19ZM100 126h31v1h-31ZM101 127h31v1h-31ZM102 128h31v1h-31ZM103 129h31v1h-31ZM104 130h31v1h-31ZM105 131h31v1h-31ZM106 132h31v1h-31ZM107 133h31v1h-31ZM108 134h31v1h-31ZM109 135h31v1h-31ZM110 136h31v1h-31ZM111 137h31v1h-31ZM112 138h31v1h-31ZM113 139h30v1h-30ZM114 140h30v1h-30ZM114 141h31v1h-31ZM115 142h31v1h-31ZM116 143h31v1h-31ZM117 144h30v1h-30ZM118 145h30v1h-30ZM119 146h29v1h-29ZM120 147h28v1h-28ZM121 148h27v1h-27ZM122 149h26v1h-26ZM123 150h25v1h-25ZM123 151h25v1h-25ZM124 152h24v1h-24ZM125 153h22v1h-22ZM126 154h21v1h-21ZM127 155h19v1h-19ZM128 156h17v1h-17ZM129 157h15v1h-15ZM130 158h13v1h-13ZM133 159h8v1h-8Z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
       <div class="feed-head">
-        <p class="stats" id="stats">{{ total }} Nachrichten.</p>
-        {% if cache_info %}<p class="stats">⚡ {{ cache_info }}</p>{% endif %}
+        <p class="stats" id="stats">{{ total }} Einträge.</p>
       </div>
       <div id="list">
-      {% for m in messages %}
-        <div class="msg card anim-in" style="--d:{{ [loop.index0 * 45, 450]|min }}ms" data-type="{{ m.type }}" data-search="{{ (m.author ~ ' ' ~ m.recipient ~ ' ' ~ m.text)|lower|e }}">
+      {% for g in groups %}
+      {% if g["items"] %}
+      <section class="feed-group" data-group="{{ g.key }}">
+        <h2 class="group-title">{{ g.label }} <span class="tag tag-muted group-count">{{ g["items"]|length }}</span></h2>
+        {% if g.kind == "homework" %}
+        {% for h in g["items"] %}
+        <div class="hw card {{ h.status_class }} anim-in{% if h.is_done %} is-done{% endif %}" style="--d:{{ [loop.index0 * 45, 450]|min }}ms" data-type="{{ h.type }}" data-assigned="{{ h.assigned }}" data-search="{{ (h.title ~ ' ' ~ h.subject ~ ' ' ~ h.author ~ ' ' ~ h.description ~ ' ' ~ h.type_label)|lower|e }}">
+          <h3>{{ h.title }}</h3>
           <div class="meta">
+            <span class="tag tag-muted">{{ h.type_label }}</span>
+            <span class="tag {{ h.tag_class }}">{{ h.status }}</span>
+            <span>fällig: <strong>{{ h.due_display }}</strong></span>
+            <span>aufgegeben: {{ h.assigned }}</span>
+            {% if h.subject %}<span>{{ h.subject }}</span>{% endif %}
+            <span>{{ h.author }}</span>
+            {% if h.is_starred %}<span class="tag tag-soft">★ markiert</span>{% endif %}
+            {% if h.done_at %}<span class="tag tag-soft">✓ {{ h.done_at }}</span>{% endif %}
+          </div>
+          <div class="text">{{ h.description if h.description.strip() else '(keine Beschreibung)' }}</div>
+        </div>
+        {% endfor %}
+        {% else %}
+        {% for m in g["items"] %}
+        <div class="msg card anim-in" style="--d:{{ [loop.index0 * 45, 450]|min }}ms" data-id="{{ m.id }}" data-type="{{ m.type }}" data-reactions="{{ m.reaction_count }}" data-search="{{ (m.author ~ ' ' ~ m.recipient ~ ' ' ~ m.text ~ ' ' ~ m.type_label)|lower|e }}">
+           <div class="meta">
             <span>{{ m.timestamp }}</span>
-            {% if m.type != "sprava" %}<span class="tag tag-muted">{{ m.type }}</span>{% endif %}
+            {% if m.type != "sprava" %}<span class="tag tag-muted">{{ m.type_label }}</span>{% endif %}
             <span><strong>{{ m.author }}</strong> → {{ m.recipient }}</span>
             {% if m.is_starred %}<span class="tag tag-soft">★ markiert</span>{% endif %}
             {% if m.is_done %}<span class="tag tag-soft">✓ erledigt</span>{% endif %}
             {% if m.reaction_count %}<span class="tag tag-soft">♥ {{ m.reaction_count }}</span>{% endif %}
+            {% if m.attachments %}<span class="tag tag-blue">{{ m.attachments|length }} {{ 'Datei' if m.attachments|length == 1 else 'Dateien' }}</span>{% endif %}
           </div>
           <div class="text">{{ m.text if m.text.strip() else '(kein Text)' }}</div>
           {% if m.extra %}
           <details><summary>Rohdaten</summary><pre>{{ m.extra }}</pre></details>
           {% endif %}
         </div>
+        {% endfor %}
+        {% endif %}
+      </section>
+      {% endif %}
       {% endfor %}
       </div>
-      {% if not messages %}
-        <div class="empty">Keine Nachrichten in diesem Zeitraum. Versuch ein früheres Datum oder den Modus „alle Timeline-Einträge“.</div>
+      <div class="empty" id="noResults" hidden>Keine Einträge für diese Suche. Weniger Wörter oder anderen Typ versuchen.</div>
+      {% if not total %}
+        <div class="empty">Keine Einträge in diesem Zeitraum. Versuch ein früheres Datum.</div>
       {% endif %}
     </div>
   </div>
 
-  <footer><p>EduFlow Dashboard · lokal</p></footer>
+  <footer><p>EduFlow Dashboard · lokal{% if cache_info %} · {{ cache_info }}{% endif %}</p></footer>
 </main>
 
+<div class="modal-backdrop" id="msgModal" hidden>
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-label="Nachricht in Großansicht">
+    <button class="modal-close" type="button" id="modalClose" aria-label="Schließen">✕</button>
+    <div class="modal-content">
+    <div class="meta" id="modalMeta"></div>
+    <div class="text" id="modalText"></div>
+    <div id="modalLikesWrap" hidden>
+      <h3 class="modal-files-title">Likes (<span id="modalLikesCount">0</span>)</h3>
+      <div class="modal-files" id="modalLikes">
+        <button class="btn btn-light btn-sm" type="button" id="modalLikesBtn">Likes & Antworten anzeigen</button>
+      </div>
+    </div>
+    <div id="modalRepliesWrap" hidden>
+      <h3 class="modal-files-title">Antworten (<span id="modalRepliesCount">0</span>)</h3>
+      <div class="modal-files" id="modalReplies"></div>
+    </div>
+    <div id="modalFilesWrap" hidden>
+      <h3 class="modal-files-title">Dateien</h3>
+      <div class="modal-files" id="modalFiles"></div>
+    </div>
+    </div>
+  </div>
+</div>
+
 <script>
+// Wort-Suche: Query in einzelne Wörter zerlegen (Leerzeichen-getrennt).
+// Eine Nachricht wird nur gezeigt, wenn ALLE Wörter in Autor, Empfänger
+// oder Text vorkommen (case-insensitiv, Umlaute-tolerant via NFD-Normierung).
+function normStr(s) {
+  return (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+function queryWords(q) {
+  return normStr(q).split(/\s+/).filter(Boolean);
+}
+function rawWords(q) {
+  return (q || '').toLowerCase().split(/\s+/).filter(Boolean);
+}
+function escHtml(s) {
+  return s.replace(/[&<>"']/g, function (c) {
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+function escReg(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+// Normalisierter Suchindex pro Karte (einmalig cachen, damit das Filtern
+// auch bei vielen Nachrichten flüssig bleibt).
+function hayOf(el) {
+  if (!el._hay) el._hay = normStr(el.dataset.search);
+  return el._hay;
+}
+function highlightText(textEl, words) {
+  if (textEl._orig === undefined) textEl._orig = textEl.textContent;
+  const orig = textEl._orig;
+  if (!words.length) {
+    if (textEl.innerHTML !== escHtml(orig)) textEl.textContent = orig;
+    return;
+  }
+  const re = new RegExp('(' + words.map(escReg).join('|') + ')', 'gi');
+  textEl.innerHTML = escHtml(orig).replace(re, '<mark>$1</mark>');
+}
 function applyFilter() {
-  const q = (document.getElementById('search').value || '').toLowerCase();
+  const searchEl = document.getElementById('search');
+  const words = queryWords(searchEl.value);
+  const hiWords = rawWords(searchEl.value);
   const t = document.getElementById('typeFilter').value;
+  const cards = document.querySelectorAll('#list .msg, #list .hw');
   let visible = 0;
-  document.querySelectorAll('#list .msg').forEach(el => {
-    const okQ = !q || (el.dataset.search || '').includes(q);
+  cards.forEach(el => {
+    const okQ = !words.length || words.every(function (w) { return hayOf(el).includes(w); });
     const okT = !t || el.dataset.type === t;
     const show = okQ && okT;
     el.style.display = show ? '' : 'none';
-    if (show) visible++;
+    if (show) {
+      visible++;
+      var textEl = el.querySelector('.text');
+      if (textEl) highlightText(textEl, hiWords);
+      var head = el.querySelector('h3');
+      if (head) highlightText(head, hiWords);
+    }
   });
-  document.getElementById('stats').textContent = visible + ' Nachrichten angezeigt.';
+  // Gruppen ohne sichtbare Karten ausblenden, Zähler je Gruppe aktualisieren.
+  document.querySelectorAll('#list .feed-group').forEach(sec => {
+    let n = 0;
+    sec.querySelectorAll('.msg, .hw').forEach(el => { if (el.style.display !== 'none') n++; });
+    sec.style.display = n ? '' : 'none';
+    const c = sec.querySelector('.group-count');
+    if (c) c.textContent = n;
+  });
+  const total = cards.length;
+  document.getElementById('stats').textContent = words.length || t
+    ? visible + ' von ' + total + ' Einträgen angezeigt.'
+    : total + ' Einträge.';
+  document.getElementById('noResults').hidden = visible !== 0;
 }
-// Falls per URL ein Typ vorausgewählt ist (?type=...), Filter sofort anwenden.
-if (document.getElementById('typeFilter').value) { applyFilter(); }
+// Falls per URL ein Typ oder eine Suche vorausgewählt ist (?type=..., ?q=...),
+// Filter sofort anwenden. 'search'-Event fängt das native X (Feld leeren) ab.
+if (document.getElementById('typeFilter').value || document.getElementById('search').value) { applyFilter(); }
+document.getElementById('search').addEventListener('search', applyFilter);
+// Explizite Suche per Button oder Enter: filtert sofort, lädt die Seite nicht
+// neu (das Live-Filtern oben läuft trotzdem bei jeder Eingabe mit) und
+// schließt die Handy-Tastatur.
+function doSearch() {
+  applyFilter();
+  var s = document.getElementById('search');
+  if (s) s.blur();
+}
+document.getElementById('search').addEventListener('keydown', function (e) {
+  if (e.key === 'Enter') { e.preventDefault(); doSearch(); }
+});
+// Deutsche Typ-Labels für den CSV-Export (Filter nutzt weiter Rohwerte).
+const TYPE_LABELS = {{ type_labels|tojson }};
 function exportCSV() {
   const rows = [['datum','typ','autor','empfaenger','text']];
-  document.querySelectorAll('#list .msg').forEach(el => {
+  document.querySelectorAll('#list .msg, #list .hw').forEach(el => {
     if (el.style.display === 'none') return;
     const meta = el.querySelector('.meta').innerText;
-    const text = el.querySelector('.text').innerText.replace(/\r?\n/g, ' ');
-    rows.push(['"' + el.querySelector('.meta span').innerText + '"', el.dataset.type, '"' + meta.replace(/"/g, '""') + '"', '""', '"' + text.replace(/"/g, '""') + '"']);
+    let prefix = '';
+    const head = el.querySelector('h3');
+    if (head) prefix = head.innerText.replace(/\r?\n/g, ' ') + ' – ';
+    const text = prefix + el.querySelector('.text').innerText.replace(/\r?\n/g, ' ');
+    const datum = el.classList.contains('hw')
+      ? (el.dataset.assigned || '')
+      : el.querySelector('.meta span').innerText;
+    rows.push(['"' + datum + '"', (TYPE_LABELS[el.dataset.type] || el.dataset.type), '"' + meta.replace(/"/g, '""') + '"', '""', '"' + text.replace(/"/g, '""') + '"']);
   });
   const csv = rows.map(r => r.join(';')).join('\n');
   const blob = new Blob([csv], {type: 'text/csv'});
@@ -144,6 +296,237 @@ function exportCSV() {
   a.download = 'eduflow-nachrichten.csv';
   a.click();
 }
+// Vollbild-Ansicht: Klick auf eine Nachricht öffnet sie als Overlay,
+// inkl. Datei-Downloads. Links/Buttons/Rohdaten in der Karte bleiben klickbar.
+var ATTACH = {{ attach_map|tojson }};
+var modal = document.getElementById('msgModal');
+function openMsg(card) {
+  var id = card.dataset.id;
+  modal.dataset.reactions = card.dataset.reactions || '0';
+  document.getElementById('modalMeta').innerHTML = card.querySelector('.meta').innerHTML;
+  document.getElementById('modalText').innerText = card.querySelector('.text').innerText;
+  resetLikes(id);
+  var files = ATTACH[id] || ATTACH[String(id)] || [];
+  var wrap = document.getElementById('modalFilesWrap');
+  var box = document.getElementById('modalFiles');
+  box.innerHTML = '';
+  if (files.length) {
+    wrap.hidden = false;
+    files.forEach(function (name, i) {
+      var a = document.createElement('a');
+      a.className = 'modal-file';
+      a.href = '/datei/' + encodeURIComponent(id) + '/' + i;
+      a.setAttribute('download', '');
+      var s = document.createElement('span');
+      s.textContent = name;
+      var b = document.createElement('span');
+      b.className = 'tag tag-blue';
+      b.textContent = 'Laden';
+      a.appendChild(s);
+      a.appendChild(b);
+      box.appendChild(a);
+    });
+  } else {
+    wrap.hidden = true;
+  }
+  modal.hidden = false;
+  document.body.style.overflow = 'hidden';
+  document.getElementById('modalClose').focus();
+}
+function closeMsg() {
+  modal.hidden = true;
+  document.body.style.overflow = '';
+}
+// Thread-Cache: Likes & Antworten werden im Hintergrund vorgeladen,
+// das Vollbild rendert sie dann sofort. Fallback bleibt der Knopfdruck.
+var THREAD_CACHE = {};
+function cachedThread(id) {
+  var e = THREAD_CACHE[id] || THREAD_CACHE[String(id)];
+  return (e && e.data) || null;
+}
+function fetchThread(id) {
+  id = String(id);
+  var e = THREAD_CACHE[id];
+  if (e) return e.data ? Promise.resolve(e.data) : e.promise;
+  var entry = {};
+  entry.promise = fetch('/likes/' + encodeURIComponent(id))
+    .then(function (res) { return res.json().then(function (body) { return {ok: res.ok, body: body}; }); })
+    .then(function (out) {
+      if (!out.ok) throw new Error((out.body && out.body.error) || 'Fehler');
+      entry.data = out.body;
+      return out.body;
+    })
+    .catch(function (err) {
+      if (THREAD_CACHE[id] === entry) delete THREAD_CACHE[id];
+      throw err;
+    });
+  THREAD_CACHE[id] = entry;
+  return entry.promise;
+}
+// Thread-Daten im Hintergrund vorladen: Sobald eine Karte in die Nähe des
+// Viewports kommt, wird ihr Thread gecached (Fehler werden still ignoriert).
+function prefetchThreads() {
+  var cards = Array.prototype.slice.call(document.querySelectorAll('#list .msg'));
+  if (!cards.length) return;
+  function kick(id) {
+    id = String(id || '');
+    if (!id || THREAD_CACHE[id]) return;
+    fetchThread(id).catch(function () {});
+  }
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        io.unobserve(en.target);
+        if (en.target.dataset) kick(en.target.dataset.id);
+      });
+    }, {rootMargin: '1000px 0px'});
+    cards.forEach(function (el) { io.observe(el); });
+  } else {
+    cards.slice(0, 15).forEach(function (el, i) {
+      if (!el.dataset) return;
+      setTimeout(function () { kick(el.dataset.id); }, 1500 + i * 400);
+    });
+  }
+}
+var modalLikesId = null;
+function resetLikes(id) {
+  modalLikesId = id;
+  document.getElementById('modalLikesWrap').hidden = false;
+  document.getElementById('modalRepliesWrap').hidden = true;
+  document.getElementById('modalRepliesCount').textContent = '0';
+  document.getElementById('modalReplies').innerHTML = '';
+  var cached = cachedThread(id);
+  if (cached) {
+    renderThread(cached);
+    return;
+  }
+  document.getElementById('modalLikesCount').textContent = '0';
+  document.getElementById('modalLikes').innerHTML =
+    '<button class="btn btn-light btn-sm" type="button" id="modalLikesBtn">Likes & Antworten anzeigen</button>';
+  document.getElementById('modalLikesBtn').addEventListener('click', function () {
+    loadLikes(modalLikesId);
+  });
+}
+function renderThread(body) {
+  var box = document.getElementById('modalLikes');
+  box.innerHTML = '';
+  var likes = (body && body.likes) || [];
+  var replies = (body && body.replies) || [];
+  var summary = (body && body.summary) || {};
+  document.getElementById('modalLikesCount').textContent = likes.length;
+  if (!likes.length) {
+    var empty = document.createElement('div');
+    empty.className = 'text';
+    empty.textContent = 'Noch keine Likes.';
+    box.appendChild(empty);
+  } else {
+    likes.forEach(function (like) {
+      var row = document.createElement('div');
+      row.className = 'modal-file';
+      var s = document.createElement('span');
+      s.textContent = like.name;
+      row.appendChild(s);
+      if (like.date) {
+        var b = document.createElement('span');
+        b.className = 'tag tag-soft';
+        b.textContent = like.date;
+        row.appendChild(b);
+      }
+      box.appendChild(row);
+    });
+  }
+  // Einordnen: Die Zahl an der Karte zählt ALLE Reaktionen
+  // (Likes + Antworten + Gesehen) – hier die Aufschlüsselung.
+  var cardTotal = parseInt(modal.dataset.reactions || '0', 10) || 0;
+  var parts = [];
+  var nReplies = summary.replies || 0;
+  var nSeen = summary.seen || 0;
+  if (nReplies) parts.push(nReplies + (nReplies === 1 ? ' Antwort' : ' Antworten'));
+  if (nSeen) parts.push(nSeen + ' Gesehen');
+  var detail = (summary.total || 0);
+  if (detail < cardTotal) {
+    parts.push('EduPage lieferte nur Details zu ' + detail + ' von ' + cardTotal + ' Reaktionen');
+  }
+  if (parts.length) {
+    var note = document.createElement('div');
+    note.className = 'text';
+    note.textContent = likes.length + (likes.length === 1 ? ' Like' : ' Likes') + ' · ' + parts.join(' · ') + ' (keine Likes).';
+    box.appendChild(note);
+  }
+  // Thread-Bündelung: Antworten gehören zur Hauptnachricht dazu.
+  var repliesBox = document.getElementById('modalReplies');
+  var repliesWrap = document.getElementById('modalRepliesWrap');
+  repliesBox.innerHTML = '';
+  document.getElementById('modalRepliesCount').textContent = replies.length;
+  if (replies.length) {
+    repliesWrap.hidden = false;
+    replies.forEach(function (reply) {
+      var row = document.createElement('div');
+      row.className = 'reply';
+      var meta = document.createElement('div');
+      meta.className = 'meta';
+      var who = document.createElement('span');
+      var strong = document.createElement('strong');
+      strong.textContent = reply.name;
+      who.appendChild(strong);
+      meta.appendChild(who);
+      if (reply.date) {
+        var when = document.createElement('span');
+        when.textContent = reply.date;
+        meta.appendChild(when);
+      }
+      row.appendChild(meta);
+      var txt = document.createElement('div');
+      txt.className = 'text';
+      txt.textContent = reply.text || '(kein Text)';
+      row.appendChild(txt);
+      repliesBox.appendChild(row);
+    });
+  } else {
+    repliesWrap.hidden = true;
+  }
+}
+function loadLikes(id) {
+  var wrap = document.getElementById('modalLikesWrap');
+  var box = document.getElementById('modalLikes');
+  box.innerHTML = '';
+  document.getElementById('modalLikesCount').textContent = '…';
+  wrap.hidden = false;
+  var note = document.createElement('div');
+  note.className = 'text';
+  note.textContent = 'Thread wird geladen…';
+  box.appendChild(note);
+  fetchThread(id)
+    .then(function (body) {
+      if (String(modalLikesId) !== String(id) || modal.hidden) return;
+      renderThread(body);
+    })
+    .catch(function () {
+      if (String(modalLikesId) !== String(id) || modal.hidden) return;
+      box.innerHTML = '';
+      document.getElementById('modalLikesCount').textContent = '0';
+      var err = document.createElement('div');
+      err.className = 'text';
+      err.textContent = 'Likes konnten nicht geladen werden.';
+      box.appendChild(err);
+    });
+}
+document.querySelectorAll('#list .msg').forEach(function (el) {
+  el.classList.add('is-clickable');
+  el.setAttribute('tabindex', '0');
+  el.addEventListener('click', function (e) {
+    if (e.target.closest('a,button,details,summary')) return;
+    openMsg(el);
+  });
+  el.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openMsg(el); }
+  });
+});
+modal.addEventListener('click', function (e) { if (e.target === modal) closeMsg(); });
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) closeMsg(); });
+document.getElementById('modalClose').addEventListener('click', closeMsg);
+prefetchThreads();
 </script>
 </body>
 </html>

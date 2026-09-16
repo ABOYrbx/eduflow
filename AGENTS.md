@@ -1,0 +1,1 @@
+Egal was du machst gehe NIEMALS an .eduflow.key oder .eduflow_secret und lese es.

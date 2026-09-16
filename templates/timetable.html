@@ -7,8 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ url_for('static', filename='uber.css') }}">
-<script>try{var t=localStorage.getItem("theme");if(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches){t="dark";}if(t){document.documentElement.dataset.theme=t;}}catch(e){}</script>
+<script>try{var t=localStorage.getItem("theme");if(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches){t="dark";}if(t){document.documentElement.dataset.theme=t;}var a=localStorage.getItem("accent");if(a){document.documentElement.dataset.accent=a;}}catch(e){}</script>
 <script src="{{ url_for('static', filename='theme.js') }}" defer></script>
+<script src="{{ url_for('static', filename='profile-menu.js') }}" defer></script>
 <style>
   .day-nav{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin:14px 0 4px}
   .lesson{display:flex;gap:12px;align-items:center;padding:10px 16px;margin-bottom:8px}
@@ -26,16 +27,44 @@
 <body>
 <div class="nav-wrap">
   <div class="container nav">
-    <a class="brand" href="/dashboard"><span class="brand-mark">E</span>EduFlow</a>
     <nav class="nav-mid">
+      <a class="nav-pill" href="/">Übersicht</a>
       <a class="nav-pill" href="/dashboard">Nachrichten</a>
       <a class="nav-pill" href="/hausaufgaben">Hausaufgaben</a>
       <a class="nav-pill active" href="/stundenplan">Stundenplan</a>
     </nav>
     <div class="nav-cta">
-      <span class="nav-user">{{ username }} @ {{ subdomain }}</span>
-      <button class="theme-toggle" type="button" aria-label="Farbschema wechseln">☾</button>
-      <a class="btn btn-primary btn-sm" href="/logout">Abmelden</a>
+      <div class="profile-wrap">
+        <button class="avatar-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Profilmenü öffnen" title="{{ username }} @ {{ subdomain }}">{{ username[0]|upper }}</button>
+        <div class="profile-menu" role="menu">
+          <div class="pm-head">
+            <div class="t">Dein Profil</div>
+            <div class="u">{{ username }} @ {{ subdomain }}</div>
+          </div>
+          <div class="pm-div"></div>
+          <div class="pm-sec">Einstellungen</div>
+          <div class="pm-row">
+            <span>Erscheinungsbild</span>
+            <button class="theme-toggle" type="button" aria-label="Farbschema wechseln">☾</button>
+          </div>
+          <div class="pm-row pm-accents">
+            <span>Akzentfarbe</span>
+            <div class="accent-dots" role="group" aria-label="Akzentfarbe">
+              <button class="accent-dot" type="button" data-set-accent="black" style="--c:#000000" aria-label="Schwarz" title="Schwarz"></button>
+              <button class="accent-dot" type="button" data-set-accent="blue" style="--c:#2563EB" aria-label="Blau" title="Blau"></button>
+              <button class="accent-dot" type="button" data-set-accent="violet" style="--c:#7C3AED" aria-label="Lila" title="Lila"></button>
+              <button class="accent-dot" type="button" data-set-accent="teal" style="--c:#0E7490" aria-label="Petrol" title="Petrol"></button>
+              <button class="accent-dot" type="button" data-set-accent="green" style="--c:#16A34A" aria-label="Grün" title="Grün"></button>
+              <button class="accent-dot" type="button" data-set-accent="orange" style="--c:#EA580C" aria-label="Orange" title="Orange"></button>
+              <button class="accent-dot" type="button" data-set-accent="red" style="--c:#DC2626" aria-label="Rot" title="Rot"></button>
+              <button class="accent-dot" type="button" data-set-accent="pink" style="--c:#DB2777" aria-label="Pink" title="Pink"></button>
+            </div>
+          </div>
+          <div class="pm-div"></div>
+          <a class="pm-link" href="/einstellungen" role="menuitem">Einstellungen</a>
+          <a class="pm-link pm-danger" href="/logout" role="menuitem">Abmelden</a>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -44,7 +73,7 @@
   <div class="page-head anim-in">
     <span class="eyebrow">Plan</span>
     <h1>{% if view == 'week' %}{{ week_label }}{% else %}{{ day_label }}{% endif %}</h1>
-    <p class="stats">{% if view == 'week' %}{{ week|map(attribute='lessons')|map('length')|sum }} Stunden diese Woche.{% else %}{{ lessons|length }} Stunden.{% endif %}{% if cache_info %} · ⚡ {{ cache_info }}{% endif %}</p>
+    <p class="stats">{% if view == 'week' %}{{ week|map(attribute='lessons')|map('length')|sum }} Stunden diese Woche.{% else %}{{ lessons|length }} Stunden.{% endif %}</p>
   </div>
 
   {% with msgs = get_flashed_messages(with_categories=true) %}
@@ -74,7 +103,6 @@
       <a class="btn btn-light btn-sm" href="/stundenplan?view=week&amp;day={{ today_str }}">Diese Woche</a>
       <a class="btn btn-light btn-sm" href="/stundenplan?view=week&amp;day={{ next_day }}">Nächste →</a>
     {% endif %}
-    <a class="btn btn-light btn-sm" href="/stundenplan?view={{ view }}&amp;day={{ day }}&amp;refresh=1" title="Cache ignorieren und wirklich neu von EduPage laden">↻ Frisch laden</a>
   </form>
 
   {% macro lesson_card(l, compact=False, idx=0) %}
@@ -83,7 +111,7 @@
       <div class="lesson-main">
         <h3>{{ l.title }}</h3>
         <div class="meta">
-          <span class="tag tag-solid">{{ l.period }}. Std.</span>
+          {% if not l.is_lernzeit %}<span class="tag tag-solid">{{ l.period }}. Std.</span>{% endif %}
           {% if l.is_cancelled %}<span class="tag tag-red">entfällt</span>{% endif %}
           {% if l.is_event %}<span class="tag tag-amber">Event</span>{% endif %}
           {% if l.is_online %}<span class="tag tag-blue">online</span>{% endif %}
@@ -135,7 +163,7 @@
   {% endif %}
   {% endif %}
 
-  <footer><p>EduFlow Dashboard · lokal</p></footer>
+  <footer><p>EduFlow Dashboard · lokal{% if cache_info %} · {{ cache_info }}{% endif %}</p></footer>
 </main>
 </body>
 </html>

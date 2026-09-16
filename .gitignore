@@ -4,3 +4,5 @@ __pycache__/
 venv/
 .env
 .cache/
+.eduflow_secret
+.eduflow.key

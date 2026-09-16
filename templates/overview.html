@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EduFlow Übersicht</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='uber.css') }}">
+<script>try{var t=localStorage.getItem("theme");if(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches){t="dark";}if(t){document.documentElement.dataset.theme=t;}var a=localStorage.getItem("accent");if(a){document.documentElement.dataset.accent=a;}}catch(e){}</script>
+<script src="{{ url_for('static', filename='theme.js') }}" defer></script>
+<script src="{{ url_for('static', filename='profile-menu.js') }}" defer></script>
+</head>
+<body>
+<div class="nav-wrap">
+  <div class="container nav">
+    <nav class="nav-mid">
+      <a class="nav-pill active" href="/">Übersicht</a>
+      <a class="nav-pill" href="/dashboard">Nachrichten</a>
+      <a class="nav-pill" href="/hausaufgaben">Hausaufgaben</a>
+      <a class="nav-pill" href="/stundenplan">Stundenplan</a>
+    </nav>
+    <div class="nav-cta">
+      <div class="profile-wrap">
+        <button class="avatar-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Profilmenü öffnen" title="{{ username }} @ {{ subdomain }}">{{ username[0]|upper }}</button>
+        <div class="profile-menu" role="menu">
+          <div class="pm-head">
+            <div class="t">Dein Profil</div>
+            <div class="u">{{ username }} @ {{ subdomain }}</div>
+          </div>
+          <div class="pm-div"></div>
+          <div class="pm-sec">Einstellungen</div>
+          <div class="pm-row">
+            <span>Erscheinungsbild</span>
+            <button class="theme-toggle" type="button" aria-label="Farbschema wechseln">☾</button>
+          </div>
+          <div class="pm-row pm-accents">
+            <span>Akzentfarbe</span>
+            <div class="accent-dots" role="group" aria-label="Akzentfarbe">
+              <button class="accent-dot" type="button" data-set-accent="black" style="--c:#000000" aria-label="Schwarz" title="Schwarz"></button>
+              <button class="accent-dot" type="button" data-set-accent="blue" style="--c:#2563EB" aria-label="Blau" title="Blau"></button>
+              <button class="accent-dot" type="button" data-set-accent="violet" style="--c:#7C3AED" aria-label="Lila" title="Lila"></button>
+              <button class="accent-dot" type="button" data-set-accent="teal" style="--c:#0E7490" aria-label="Petrol" title="Petrol"></button>
+              <button class="accent-dot" type="button" data-set-accent="green" style="--c:#16A34A" aria-label="Grün" title="Grün"></button>
+              <button class="accent-dot" type="button" data-set-accent="orange" style="--c:#EA580C" aria-label="Orange" title="Orange"></button>
+              <button class="accent-dot" type="button" data-set-accent="red" style="--c:#DC2626" aria-label="Rot" title="Rot"></button>
+              <button class="accent-dot" type="button" data-set-accent="pink" style="--c:#DB2777" aria-label="Pink" title="Pink"></button>
+            </div>
+          </div>
+          <div class="pm-div"></div>
+          <a class="pm-link" href="/einstellungen" role="menuitem">Einstellungen</a>
+          <a class="pm-link pm-danger" href="/logout" role="menuitem">Abmelden</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="container container-wide">
+  <div class="ov-top anim-in">
+    <div class="clock-card">
+      <div class="clock-time" id="clock">{{ now_time }}</div>
+      <div class="clock-date">{{ now_date }}</div>
+    </div>
+    <div class="weather-card" id="weather">
+      <div class="wx-day"><div class="wx-l">Wetter</div><div class="wx-cond">lädt…</div></div>
+    </div>
+    <a class="now-card now-right" href="/stundenplan">
+      <div class="l">jetzt</div>
+      {% if current %}
+        <div class="n">{{ current.title }}</div>
+        <div class="s">{{ current.time }}{% if current.rooms %} · Raum {{ current.rooms }}{% endif %}{% if current.teachers %} · {{ current.teachers }}{% endif %}</div>
+      {% elif next %}
+        <div class="n">Pause</div>
+        <div class="s">weiter {{ next.time }}: {{ next.title }}</div>
+      {% else %}
+        <div class="n">Schulfrei</div>
+        <div class="s">kein Unterricht mehr heute</div>
+      {% endif %}
+    </a>
+  </div>
+
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in msgs %}
+      <div class="notice">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+  {% if error %}
+    <div class="notice">{{ error }}</div>
+  {% endif %}
+
+  <div class="ov-grid">
+    <section class="ov-col anim-in" style="--d:80ms">
+      <div class="ov-col-head">
+        <h2>Ungelesene Nachrichten</h2>
+        <div class="ov-actions">
+          <form method="post" action="/als-gelesen">
+            <button class="btn btn-light btn-sm" type="submit">Alle als gelesen markieren</button>
+          </form>
+          <a class="btn btn-primary btn-sm" href="/dashboard">Alle Nachrichten</a>
+        </div>
+      </div>
+      {% for m in unread %}
+        <div class="msg card">
+          <div class="meta">
+            <span>{{ m.timestamp }}</span>
+            {% if m.type != "sprava" %}<span class="tag tag-muted">{{ m.type_label }}</span>{% endif %}
+            <span><strong>{{ m.author }}</strong> → {{ m.recipient }}</span>
+          </div>
+          <div class="text">{{ m.text if m.text.strip() else '(kein Text)' }}</div>
+        </div>
+      {% endfor %}
+      {% if not unread %}
+        <div class="empty">Alles gelesen. Neue Nachrichten erscheinen hier automatisch.</div>
+      {% elif n_unread > unread|length %}
+        <div class="empty">+ {{ n_unread - unread|length }} weitere – <a href="/dashboard"><strong>alle ansehen</strong></a></div>
+      {% endif %}
+    </section>
+
+    <section class="ov-col anim-in" style="--d:140ms">
+      <div class="ov-col-head">
+        <h2>Hausaufgaben</h2>
+        <div class="ov-actions">
+          <a class="btn btn-primary btn-sm" href="/hausaufgaben">Alle Aufgaben</a>
+        </div>
+      </div>
+      <div class="ov-bundle card">
+        <span><strong>{{ n_unread }}</strong> ungelesen</span>
+        <span class="sep">·</span>
+        <span><strong>{{ n_offen }}</strong> offen</span>
+        <span class="sep">·</span>
+        <span><strong class="n-danger">{{ n_ueber }}</strong> überfällig</span>
+        <span class="sep">·</span>
+        <span><strong class="n-ok">{{ n_erledigt }}</strong> erledigt</span>
+      </div>
+      {% for h in homework %}
+        <div class="hw card {{ h.status_class }}{% if h.is_done %} is-done{% endif %}">
+          <h3>{{ h.title }}</h3>
+          <div class="meta">
+            <span class="tag {{ h.tag_class }}">{{ h.status }}</span>
+            <span>fällig: <strong>{{ h.due_display }}</strong></span>
+            {% if h.subject %}<span>{{ h.subject }}</span>{% endif %}
+            <span>{{ h.author }}</span>
+          </div>
+          <div class="text">{{ h.description if h.description.strip() else '(keine Beschreibung)' }}</div>
+        </div>
+      {% endfor %}
+      {% if not homework %}
+        <div class="empty">Keine offenen Hausaufgaben. Sehr gut.</div>
+      {% endif %}
+    </section>
+  </div>
+
+  <footer><p>EduFlow Dashboard · lokal{% if cache_info %} · {{ cache_info }}{% endif %}</p></footer>
+</main>
+
+<script>
+// Live-Uhr (oben links): jede Sekunde aktualisieren, deutsches Format.
+(function () {
+  var timeEl = document.getElementById('clock');
+  function tick() {
+    try {
+      timeEl.textContent = new Date().toLocaleTimeString('de-DE', {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+    } catch (e) {}
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
+<script>
+// Wetter (rechts neben der Uhr): heute + morgen über den Server-Proxy
+// /api/wetter (OpenWeatherMap-Key bleibt serverseitig).
+// Standort aus dem Browser, Fallback Berlin.
+(function () {
+  var el = document.getElementById('weather');
+  function iconUrl(icon) {
+    return icon ? 'https://openweathermap.org/img/wn/' + icon + '@2x.png' : '';
+  }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function dayHtml(label, big, cond, icon, sub) {
+    return '<div class="wx-day"><div class="wx-l">' + label + '</div>' +
+      (icon ? '<img class="wx-img" src="' + iconUrl(icon) + '" alt="' + esc(cond) + '" loading="lazy">' : '') +
+      '<div class="wx-temp">' + big + '</div>' +
+      '<div class="wx-cond">' + esc(cond) + sub + '</div></div>';
+  }
+  function render(d) {
+    try {
+      var t = d.today, m = d.tomorrow || {};
+      el.innerHTML =
+        dayHtml('Heute', t.temp + '°', t.desc,
+          t.icon, ' · ' + t.max + '°/' + t.min + '°') +
+        dayHtml('Morgen', (m.max != null ? m.max + '°' : '–'), m.desc || '',
+          m.icon, (m.max != null ? ' · ' + m.max + '°/' + m.min + '°' : ''));
+    } catch (e) {
+      el.innerHTML = '<div class="wx-day"><div class="wx-l">Wetter</div><div class="wx-cond">nicht verfügbar</div></div>';
+    }
+  }
+  function fail(msg) {
+    el.innerHTML = '<div class="wx-day"><div class="wx-l">Wetter</div><div class="wx-cond">' + esc(msg) + '</div></div>';
+  }
+  function load(lat, lon) {
+    fetch('/api/wetter?lat=' + lat + '&lon=' + lon)
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (j.error) {
+          fail(j.error.indexOf('API-Key') !== -1 ? 'Kein API-Key (.env)' : 'nicht verfügbar');
+          return;
+        }
+        render(j);
+      })
+      .catch(function () { fail('nicht verfügbar'); });
+  }
+  // Standort: 1) Koordinaten aus .env, 2) Stadt aus .env,
+  // 3) Browser-Geolocation, 4) Berlin.
+  var serverLat = '{{ weather_lat }}', serverLon = '{{ weather_lon }}';
+  var serverCity = {{ weather_city|tojson }};
+  function locate() {
+    if (serverLat !== '' && serverLon !== '') {
+      load(serverLat, serverLon);
+    } else if (serverCity) {
+      fetch('/api/wetter?city=' + encodeURIComponent(serverCity))
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          if (j.error) {
+            fail(j.error.indexOf('API-Key') !== -1 ? 'Kein API-Key (.env)' : 'nicht verfügbar');
+            return;
+          }
+          render(j);
+        })
+        .catch(function () { fail('nicht verfügbar'); });
+    } else if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function (p) { load(p.coords.latitude.toFixed(2), p.coords.longitude.toFixed(2)); },
+        function () { load(52.52, 13.41); },
+        {timeout: 5000});
+    } else {
+      load(52.52, 13.41);
+    }
+  }
+  locate();
+})();
+</script>
+</body>
+</html>

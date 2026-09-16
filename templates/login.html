@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ url_for('static', filename='uber.css') }}">
-<script>try{var t=localStorage.getItem("theme");if(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches){t="dark";}if(t){document.documentElement.dataset.theme=t;}}catch(e){}</script>
+<script>try{var t=localStorage.getItem("theme");if(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches){t="dark";}if(t){document.documentElement.dataset.theme=t;}var a=localStorage.getItem("accent");if(a){document.documentElement.dataset.accent=a;}}catch(e){}</script>
 <script src="{{ url_for('static', filename='theme.js') }}" defer></script>
 </head>
 <body>
@@ -29,10 +29,10 @@
       <input class="input-pill" id="username" name="username" required autocomplete="username">
       <label for="password">Passwort</label>
       <input class="input-pill" id="password" name="password" type="password" required autocomplete="current-password">
+      <label class="check" style="margin-top:14px"><input type="checkbox" name="remember" value="1" checked> Angemeldet bleiben (30 Tage)</label>
       <button class="btn btn-primary" type="submit">Anmelden</button>
     </form>
-    <p class="hint">Subdomain leer lassen für Auto-Erkennung über <code>portal.edupage.org</code>.<br>
-    Nur lokal ausführen, nicht öffentlich freigeben.</p>
+    <p class="hint">Subdomain leer lassen für Auto-Erkennung über <code>portal.edupage.org</code>.</p>
   </div>
 </div>
 </body>

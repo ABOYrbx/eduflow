@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EduFlow Einstellungen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='uber.css') }}">
+<script>try{var t=localStorage.getItem("theme");if(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches){t="dark";}if(t){document.documentElement.dataset.theme=t;}var a=localStorage.getItem("accent");if(a){document.documentElement.dataset.accent=a;}}catch(e){}</script>
+<script src="{{ url_for('static', filename='theme.js') }}" defer></script>
+<script src="{{ url_for('static', filename='profile-menu.js') }}" defer></script>
+</head>
+<body>
+<div class="nav-wrap">
+  <div class="container nav">
+    <nav class="nav-mid">
+      <a class="nav-pill" href="/">Übersicht</a>
+      <a class="nav-pill" href="/dashboard">Nachrichten</a>
+      <a class="nav-pill" href="/hausaufgaben">Hausaufgaben</a>
+      <a class="nav-pill" href="/stundenplan">Stundenplan</a>
+    </nav>
+    <div class="nav-cta">
+      <div class="profile-wrap">
+        <button class="avatar-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Profilmenü öffnen" title="{{ username }} @ {{ subdomain }}">{{ username[0]|upper }}</button>
+        <div class="profile-menu" role="menu">
+          <div class="pm-head">
+            <div class="t">Dein Profil</div>
+            <div class="u">{{ username }} @ {{ subdomain }}</div>
+          </div>
+          <div class="pm-div"></div>
+          <a class="pm-link" href="/einstellungen" role="menuitem">Einstellungen</a>
+          <a class="pm-link pm-danger" href="/logout" role="menuitem">Abmelden</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="container">
+  <div class="page-head anim-in">
+    <span class="eyebrow">Profil</span>
+    <h1>Einstellungen</h1>
+  </div>
+
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in msgs %}
+      <div class="notice">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+  {% if error %}
+    <div class="notice">{{ error }}</div>
+  {% endif %}
+
+  <section class="card anim-in" style="--d:60ms" aria-labelledby="set-look">
+    <h2 id="set-look" class="set-title">Aussehen</h2>
+    <p class="set-note">Wird sofort übernommen und gilt auf diesem Gerät.</p>
+    <h3 class="set-sub">Farbschema</h3>
+    <div class="radio-cards" role="radiogroup" aria-label="Farbschema">
+      <label class="radio-card">
+        <input type="radio" name="edesign-theme" value="system">
+        <span class="rc-body"><span class="rc-t">System</span><span class="rc-d">Folgt Hell/Dunkel des Geräts</span></span>
+      </label>
+      <label class="radio-card">
+        <input type="radio" name="edesign-theme" value="light">
+        <span class="rc-body"><span class="rc-t">Hell</span><span class="rc-d">Immer helles Design</span></span>
+      </label>
+      <label class="radio-card">
+        <input type="radio" name="edesign-theme" value="dark">
+        <span class="rc-body"><span class="rc-t">Dunkel</span><span class="rc-d">Immer dunkles Design</span></span>
+      </label>
+    </div>
+    <h3 class="set-sub">Akzentfarbe</h3>
+    <div class="accent-dots set-accents" role="group" aria-label="Akzentfarbe">
+      <button class="accent-dot" type="button" data-set-accent="black" style="--c:#000000" aria-label="Schwarz" title="Schwarz"></button>
+      <button class="accent-dot" type="button" data-set-accent="blue" style="--c:#2563EB" aria-label="Blau" title="Blau"></button>
+      <button class="accent-dot" type="button" data-set-accent="violet" style="--c:#7C3AED" aria-label="Lila" title="Lila"></button>
+      <button class="accent-dot" type="button" data-set-accent="teal" style="--c:#0E7490" aria-label="Petrol" title="Petrol"></button>
+      <button class="accent-dot" type="button" data-set-accent="green" style="--c:#16A34A" aria-label="Grün" title="Grün"></button>
+      <button class="accent-dot" type="button" data-set-accent="orange" style="--c:#EA580C" aria-label="Orange" title="Orange"></button>
+      <button class="accent-dot" type="button" data-set-accent="red" style="--c:#DC2626" aria-label="Rot" title="Rot"></button>
+      <button class="accent-dot" type="button" data-set-accent="pink" style="--c:#DB2777" aria-label="Pink" title="Pink"></button>
+    </div>
+    <p class="set-note" id="theme-saved" hidden>Übernommen.</p>
+  </section>
+
+  <section class="card anim-in" style="--d:120ms" aria-labelledby="set-general">
+    <h2 id="set-general" class="set-title">Allgemein</h2>
+    <p class="set-note">Gilt für deinen Account auf allen Geräten.</p>
+    <form method="post" action="/einstellungen" style="display:flex;flex-direction:column;gap:14px">
+      {% for f in schema %}
+        {% if f.kind == 'select' %}
+          <div class="field">
+            <label for="set-{{ f.key }}">{{ f.label }}</label>
+            <div class="select-wrap">
+              <select class="input-pill" id="set-{{ f.key }}" name="{{ f.key }}">
+                {% for v, label in f.options %}
+                  <option value="{{ v }}" {% if values.get(f.key) == v %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        {% elif f.kind == 'bool' %}
+          <label class="check"><input type="checkbox" name="{{ f.key }}" value="1" {% if values.get(f.key) %}checked{% endif %}> {{ f.label }}</label>
+        {% elif f.kind == 'int' %}
+          <div class="field">
+            <label for="set-{{ f.key }}">{{ f.label }}</label>
+            <input class="input-pill" type="number" id="set-{{ f.key }}" name="{{ f.key }}" value="{{ values.get(f.key) }}" min="{{ f.min }}" max="{{ f.max }}" step="1">
+          </div>
+        {% endif %}
+      {% endfor %}
+      <div><button class="btn btn-primary" type="submit">Speichern</button></div>
+    </form>
+  </section>
+
+  <section class="card anim-in" style="--d:180ms" aria-labelledby="set-data">
+    <h2 id="set-data" class="set-title">Daten</h2>
+    <p class="set-note">Der lokale API-Cache beschleunigt das Laden. Leeren lädt alles einmalig frisch – deine Einstellungen bleiben erhalten.</p>
+    <div><a class="btn btn-light" href="/cache-clear">Cache jetzt leeren</a></div>
+  </section>
+
+  <footer><p>EduFlow Dashboard · lokal</p></footer>
+</main>
+
+<script>
+(function () {
+  function syncThemeRadios() {
+    var api = window.EduFlowTheme;
+    if (!api) return;
+    var cur = api.choice();
+    document.querySelectorAll('input[name="edesign-theme"]').forEach(function (r) {
+      r.checked = (r.value === cur);
+    });
+  }
+  document.querySelectorAll('input[name="edesign-theme"]').forEach(function (r) {
+    r.addEventListener('change', function () {
+      if (window.EduFlowTheme) window.EduFlowTheme.setChoice(r.value);
+      var hint = document.getElementById('theme-saved');
+      if (hint) {
+        hint.hidden = false;
+        setTimeout(function () { hint.hidden = true; }, 2000);
+      }
+    });
+  });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', syncThemeRadios);
+  } else {
+    syncThemeRadios();
+  }
+})();
+</script>
+</body>
+</html>
