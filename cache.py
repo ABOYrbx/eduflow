@@ -1,4 +1,4 @@
-"""Lokaler Cache für EduPage-API-Antworten (Timeline + Stundenplan).
+"""Lokaler Cache für EduPage-API-Antworten (Timeline + Stundenplan + Likes).
 
 Ziel: Ladezeiten reduzieren, indem API-Antworten lokal als JSON gespeichert
 und nur dann neu geladen/aktualisiert werden, wenn nötig:
@@ -37,6 +37,10 @@ TIMELINE_WINDOW_DAYS = int(os.environ.get("EDUFLOW_TIMELINE_WINDOW_DAYS", "60"))
 TT_TTL_PAST_S = int(os.environ.get("EDUFLOW_TT_TTL_PAST", str(7 * 24 * 3600)))
 TT_TTL_TODAY_S = int(os.environ.get("EDUFLOW_TT_TTL_TODAY", "600"))
 TT_TTL_FUTURE_S = int(os.environ.get("EDUFLOW_TT_TTL_FUTURE", "3600"))
+
+# Threads (Likes & Antworten) ändern sich selten: eine Datei pro User,
+# keyed by Event-ID. TTL per EDUFLOW_LIKES_TTL (Sekunden, default 1 Stunde).
+LIKES_TTL_S = int(os.environ.get("EDUFLOW_LIKES_TTL", "3600"))
 
 _DATETIME_FMT = "%Y-%m-%d %H:%M:%S"
 
@@ -468,3 +472,43 @@ def unhide_ids(uhash: str, ids) -> int:
         return len(gone)
     except Exception:
         return 0
+
+
+# ------------------------------------------------- Likes/Threads
+# Thread (Likes & Antworten) einer Nachricht: eine Datei pro User, keyed by
+# Event-ID, inkl. saved_at pro Eintrag für die TTL-Prüfung (is_fresh).
+# Gleiches JSON-Format und gleiche Best-effort-Semantik wie oben:
+# kaputt/fehlend -> None (Aufrufer lädt frisch), Schreibfehler egal.
+
+def _likes_path(uhash: str) -> Path:
+    return CACHE_DIR / f"likes_{uhash}.json"
+
+
+def load_likes(uhash: str, event_id) -> Optional[Dict[str, Any]]:
+    """Gecachter Thread-Eintrag {saved_at, data} oder None."""
+    try:
+        data = _read_json(_likes_path(uhash))
+        if not data or not isinstance(data.get("threads"), dict):
+            return None
+        entry = data["threads"].get(str(event_id))
+        if not isinstance(entry, dict) or not isinstance(entry.get("data"), dict):
+            return None
+        return entry
+    except Exception:
+        return None
+
+
+def save_likes(uhash: str, event_id, thread: Dict[str, Any]) -> None:
+    """Thread-Eintrag speichern (andere Einträge bleiben erhalten)."""
+    try:
+        data = _read_json(_likes_path(uhash)) or {}
+        threads = data.get("threads")
+        if not isinstance(threads, dict):
+            threads = {}
+        threads[str(event_id)] = {
+            "saved_at": datetime.now().strftime(_DATETIME_FMT),
+            "data": thread,
+        }
+        _atomic_write_json(_likes_path(uhash), {"version": 1, "threads": threads})
+    except Exception:
+        pass

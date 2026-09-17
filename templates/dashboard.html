@@ -29,25 +29,6 @@
             <div class="u">{{ username }} @ {{ subdomain }}</div>
           </div>
           <div class="pm-div"></div>
-          <div class="pm-sec">Einstellungen</div>
-          <div class="pm-row">
-            <span>Erscheinungsbild</span>
-            <button class="theme-toggle" type="button" aria-label="Farbschema wechseln">☾</button>
-          </div>
-          <div class="pm-row pm-accents">
-            <span>Akzentfarbe</span>
-            <div class="accent-dots" role="group" aria-label="Akzentfarbe">
-              <button class="accent-dot" type="button" data-set-accent="black" style="--c:#000000" aria-label="Schwarz" title="Schwarz"></button>
-              <button class="accent-dot" type="button" data-set-accent="blue" style="--c:#2563EB" aria-label="Blau" title="Blau"></button>
-              <button class="accent-dot" type="button" data-set-accent="violet" style="--c:#7C3AED" aria-label="Lila" title="Lila"></button>
-              <button class="accent-dot" type="button" data-set-accent="teal" style="--c:#0E7490" aria-label="Petrol" title="Petrol"></button>
-              <button class="accent-dot" type="button" data-set-accent="green" style="--c:#16A34A" aria-label="Grün" title="Grün"></button>
-              <button class="accent-dot" type="button" data-set-accent="orange" style="--c:#EA580C" aria-label="Orange" title="Orange"></button>
-              <button class="accent-dot" type="button" data-set-accent="red" style="--c:#DC2626" aria-label="Rot" title="Rot"></button>
-              <button class="accent-dot" type="button" data-set-accent="pink" style="--c:#DB2777" aria-label="Pink" title="Pink"></button>
-            </div>
-          </div>
-          <div class="pm-div"></div>
           <a class="pm-link" href="/einstellungen" role="menuitem">Einstellungen</a>
           <a class="pm-link pm-danger" href="/logout" role="menuitem">Abmelden</a>
         </div>
@@ -71,42 +52,41 @@
     <div class="notice">{{ error }}</div>
   {% endif %}
 
-  <div class="layout">
-    <aside class="sidebar anim-in" style="--d:80ms">
-      <h2>Filter</h2>
-      <form method="get" action="/dashboard" id="filterForm" style="display:flex;flex-direction:column;gap:14px">
-        <div class="field">
-          <label for="typeFilter">Typ</label>
-          <div class="select-wrap">
-            <select class="input-pill" id="typeFilter" name="type" onchange="applyFilter()">
-              <option value="">alle Typen ({{ total }})</option>
-              {% for v, label, count in type_options %}
-                <option value="{{ v }}" {% if selected_type == v %}selected{% endif %}>{{ label }} ({{ count }})</option>
-              {% endfor %}
-            </select>
-          </div>
-        </div>
-        <div class="field">
-          <label for="since">Verlauf seit</label>
-          <input class="input-pill" type="date" id="since" name="since" value="{{ since }}">
-        </div>
-        <button class="btn btn-primary" type="submit">Neu laden</button>
-      </form>
-    </aside>
-
-    <div class="feed">
-      <div class="searchbar anim-in" style="--d:40ms">
-        <div class="searchbar-row">
+  <div class="layout mail-layout">
+    <div class="feed mail-list-pane">
+      <div class="searchbar mail-filterbar anim-in" style="--d:40ms">
+      <form method="get" action="/dashboard" id="filterForm">
+        <div class="filterbar-row">
           <div class="search-field">
-            <input class="input-pill" id="search" name="q" form="filterForm" type="search" placeholder="Nachrichten durchsuchen…" value="{{ q }}" oninput="applyFilter()" autocomplete="off" aria-label="Nachrichten durchsuchen">
-            <button class="search-icon-btn" type="button" onclick="doSearch()" aria-label="Suchen" title="Suchen">
+          <input class="input-pill" id="search" name="q" type="search" placeholder="Nachrichten durchsuchen…" value="{{ q }}" oninput="applyFilter()" autocomplete="off" aria-label="Nachrichten durchsuchen">
+          <button class="search-icon-btn" type="button" onclick="doSearch()" aria-label="Suchen" title="Suchen">
               <svg viewBox="0 0 148 160" fill="currentColor" width="20" height="20" aria-hidden="true"><path d="M55 0h17v1h-17ZM50 1h28v1h-28ZM46 2h36v1h-36ZM43 3h42v1h-42ZM40 4h47v1h-47ZM38 5h52v1h-52ZM36 6h56v1h-56ZM34 7h60v1h-60ZM32 8h64v1h-64ZM30 9h67v1h-67ZM29 10h70v1h-70ZM27 11h73v1h-73ZM26 12h75v1h-75ZM25 13h78v1h-78ZM24 14h80v1h-80ZM23 15h82v1h-82ZM21 16h85v1h-85ZM20 17h87v1h-87ZM19 18h89v1h-89ZM18 19h91v1h-91ZM17 20h38v1h-38ZM73 20h37v1h-37ZM16 21h35v1h-35ZM77 21h34v1h-34ZM16 22h32v1h-32ZM80 22h32v1h-32ZM15 23h31v1h-31ZM82 23h31v1h-31ZM14 24h30v1h-30ZM84 24h30v1h-30ZM13 25h29v1h-29ZM86 25h28v1h-28ZM12 26h28v1h-28ZM88 26h27v1h-27ZM11 27h27v1h-27ZM89 27h27v1h-27ZM11 28h26v1h-26ZM91 28h26v1h-26ZM10 29h26v1h-26ZM92 29h25v1h-25ZM9 30h25v1h-25ZM93 30h25v1h-25ZM9 31h24v1h-24ZM94 31h25v1h-25ZM8 32h24v1h-24ZM95 32h24v1h-24ZM8 33h23v1h-23ZM96 33h24v1h-24ZM7 34h24v1h-24ZM97 34h23v1h-23ZM7 35h23v1h-23ZM98 35h23v1h-23ZM6 36h23v1h-23ZM99 36h22v1h-22ZM6 37h22v1h-22ZM99 37h23v1h-23ZM5 38h22v1h-22ZM100 38h22v1h-22ZM5 39h22v1h-22ZM101 39h22v1h-22ZM5 40h21v1h-21ZM101 40h22v1h-22ZM4 41h22v1h-22ZM102 41h21v1h-21ZM4 42h21v1h-21ZM102 42h22v1h-22ZM3 43h22v1h-22ZM103 43h21v1h-21ZM3 44h21v1h-21ZM103 44h21v1h-21ZM3 45h21v1h-21ZM104 45h20v1h-20ZM3 46h20v1h-20ZM104 46h21v1h-21ZM2 47h21v1h-21ZM105 47h20v1h-20ZM2 48h21v1h-21ZM105 48h20v1h-20ZM2 49h20v1h-20ZM105 49h20v1h-20ZM2 50h20v1h-20ZM106 50h20v1h-20ZM1 51h21v1h-21ZM106 51h20v1h-20ZM1 52h20v1h-20ZM106 52h20v1h-20ZM1 53h20v1h-20ZM107 53h19v1h-19ZM1 54h20v1h-20ZM107 54h19v1h-19ZM1 55h20v1h-20ZM107 55h20v1h-20ZM1 56h19v1h-19ZM107 56h20v1h-20ZM0 57h20v1h-20ZM107 57h20v1h-20ZM0 58h20v1h-20ZM108 58h19v1h-19ZM0 59h20v1h-20ZM108 59h19v1h-19ZM0 60h20v1h-20ZM108 60h19v1h-19ZM0 61h20v1h-20ZM108 61h19v1h-19ZM0 62h20v1h-20ZM108 62h19v1h-19ZM0 63h20v1h-20ZM108 63h19v1h-19ZM0 64h20v1h-20ZM108 64h19v1h-19ZM0 65h20v1h-20ZM108 65h19v1h-19ZM0 66h20v1h-20ZM108 66h19v1h-19ZM0 67h20v1h-20ZM108 67h19v1h-19ZM0 68h20v1h-20ZM108 68h19v1h-19ZM0 69h20v1h-20ZM107 69h20v1h-20ZM1 70h19v1h-19ZM107 70h20v1h-20ZM1 71h19v1h-19ZM107 71h20v1h-20ZM1 72h20v1h-20ZM107 72h19v1h-19ZM1 73h20v1h-20ZM107 73h19v1h-19ZM1 74h20v1h-20ZM106 74h20v1h-20ZM1 75h20v1h-20ZM106 75h20v1h-20ZM1 76h21v1h-21ZM106 76h20v1h-20ZM2 77h20v1h-20ZM106 77h20v1h-20ZM2 78h20v1h-20ZM105 78h20v1h-20ZM2 79h21v1h-21ZM105 79h20v1h-20ZM2 80h21v1h-21ZM104 80h21v1h-21ZM3 81h21v1h-21ZM104 81h20v1h-20ZM3 82h21v1h-21ZM103 82h21v1h-21ZM3 83h21v1h-21ZM103 83h21v1h-21ZM4 84h21v1h-21ZM102 84h22v1h-22ZM4 85h21v1h-21ZM102 85h21v1h-21ZM4 86h22v1h-22ZM101 86h22v1h-22ZM5 87h21v1h-21ZM101 87h22v1h-22ZM5 88h22v1h-22ZM100 88h22v1h-22ZM6 89h22v1h-22ZM99 89h23v1h-23ZM6 90h23v1h-23ZM99 90h22v1h-22ZM7 91h22v1h-22ZM98 91h23v1h-23ZM7 92h23v1h-23ZM97 92h23v1h-23ZM8 93h23v1h-23ZM96 93h24v1h-24ZM8 94h24v1h-24ZM95 94h24v1h-24ZM9 95h24v1h-24ZM94 95h25v1h-25ZM9 96h25v1h-25ZM93 96h25v1h-25ZM10 97h25v1h-25ZM92 97h26v1h-26ZM11 98h25v1h-25ZM91 98h26v1h-26ZM11 99h27v1h-27ZM90 99h26v1h-26ZM12 100h27v1h-27ZM88 100h28v1h-28ZM13 101h28v1h-28ZM87 101h28v1h-28ZM13 102h29v1h-29ZM85 102h29v1h-29ZM14 103h30v1h-30ZM83 103h30v1h-30ZM15 104h31v1h-31ZM81 104h31v1h-31ZM16 105h33v1h-33ZM79 105h33v1h-33ZM17 106h36v1h-36ZM75 106h38v1h-38ZM18 107h40v1h-40ZM69 107h45v1h-45ZM19 108h96v1h-96ZM20 109h96v1h-96ZM21 110h96v1h-96ZM22 111h96v1h-96ZM23 112h96v1h-96ZM25 113h95v1h-95ZM26 114h94v1h-94ZM27 115h94v1h-94ZM29 116h93v1h-93ZM30 117h93v1h-93ZM32 118h92v1h-92ZM34 119h91v1h-91ZM35 120h57v1h-57ZM95 120h31v1h-31ZM38 121h52v1h-52ZM96 121h31v1h-31ZM40 122h48v1h-48ZM97 122h30v1h-30ZM43 123h42v1h-42ZM98 123h30v1h-30ZM46 124h36v1h-36ZM98 124h31v1h-31ZM49 125h29v1h-29ZM99 125h31v1h-31ZM54 126h19v1h-19ZM100 126h31v1h-31ZM101 127h31v1h-31ZM102 128h31v1h-31ZM103 129h31v1h-31ZM104 130h31v1h-31ZM105 131h31v1h-31ZM106 132h31v1h-31ZM107 133h31v1h-31ZM108 134h31v1h-31ZM109 135h31v1h-31ZM110 136h31v1h-31ZM111 137h31v1h-31ZM112 138h31v1h-31ZM113 139h30v1h-30ZM114 140h30v1h-30ZM114 141h31v1h-31ZM115 142h31v1h-31ZM116 143h31v1h-31ZM117 144h30v1h-30ZM118 145h30v1h-30ZM119 146h29v1h-29ZM120 147h28v1h-28ZM121 148h27v1h-27ZM122 149h26v1h-26ZM123 150h25v1h-25ZM123 151h25v1h-25ZM124 152h24v1h-24ZM125 153h22v1h-22ZM126 154h21v1h-21ZM127 155h19v1h-19ZM128 156h17v1h-17ZM129 157h15v1h-15ZM130 158h13v1h-13ZM133 159h8v1h-8Z"/></svg>
             </button>
-          </div>
         </div>
-      </div>
-      <div class="feed-head">
-        <p class="stats" id="stats">{{ total }} Einträge.</p>
+          <button class="filter-icon-btn" id="filterMenuBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Filter öffnen" title="Filter">
+            <img src="{{ url_for('static', filename='icons/filter.svg') }}" alt="" width="20" height="20">
+            <span class="filter-dot" id="filterDot" hidden></span>
+          </button>
+        </div>
+        <div class="filter-menu" id="filterMenu" hidden>
+          <div class="field">
+            <label for="typeFilter">Typ</label>
+            <div class="select-wrap">
+              <select class="input-pill" id="typeFilter" name="type" onchange="applyFilter()">
+                <option value="">alle Typen ({{ total }})</option>
+                {% for v, label, count in type_options %}
+                  <option value="{{ v }}" {% if selected_type == v %}selected{% endif %}>{{ label }} ({{ count }})</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="since">Verlauf seit</label>
+            <input class="input-pill" type="date" id="since" name="since" value="{{ since }}">
+          </div>
+          <button class="btn btn-primary" type="submit">Neu laden</button>
+        </div>
+        </form>
       </div>
       <div id="list">
       {% for g in groups %}
@@ -132,19 +112,29 @@
         {% endfor %}
         {% else %}
         {% for m in g["items"] %}
-        <div class="msg card anim-in" style="--d:{{ [loop.index0 * 45, 450]|min }}ms" data-id="{{ m.id }}" data-type="{{ m.type }}" data-reactions="{{ m.reaction_count }}" data-search="{{ (m.author ~ ' ' ~ m.recipient ~ ' ' ~ m.text ~ ' ' ~ m.type_label)|lower|e }}">
-           <div class="meta">
+        {% set snip = m.text.strip() if m.text.strip() else '(kein Text)' %}
+        <div class="msg card msg-row anim-in" style="--d:{{ [loop.index0 * 45, 450]|min }}ms" data-id="{{ m.id }}" data-type="{{ m.type }}" data-reactions="{{ m.reaction_count }}" data-search="{{ (m.author ~ ' ' ~ m.recipient ~ ' ' ~ m.text ~ ' ' ~ m.type_label)|lower|e }}" tabindex="0" role="option" aria-selected="false">
+          <div class="row-head"><strong class="row-author">{{ m.author }}</strong><span class="row-time">{{ m.timestamp }}</span></div>
+          <div class="row-snippet">{{ snip[:160] }}{% if snip|length > 160 %}…{% endif %}</div>
+          <div class="row-tags">
+            {% if m.type != "sprava" %}<span class="tag tag-muted">{{ m.type_label }}</span>{% endif %}
+            {% if m.is_starred %}<span class="tag tag-soft">★ markiert</span>{% endif %}
+            {% if m.is_done %}<span class="tag tag-soft">✓ erledigt</span>{% endif %}
+            {% if m.reaction_count %}<span class="tag tag-soft js-likes">♥ {{ m.reaction_count }}</span>{% endif %}
+            {% if m.attachments %}<span class="tag tag-blue">{{ m.attachments|length }} {{ 'Datei' if m.attachments|length == 1 else 'Dateien' }}</span>{% endif %}
+          </div>
+          <div class="meta" hidden>
             <span>{{ m.timestamp }}</span>
             {% if m.type != "sprava" %}<span class="tag tag-muted">{{ m.type_label }}</span>{% endif %}
             <span><strong>{{ m.author }}</strong> → {{ m.recipient }}</span>
             {% if m.is_starred %}<span class="tag tag-soft">★ markiert</span>{% endif %}
             {% if m.is_done %}<span class="tag tag-soft">✓ erledigt</span>{% endif %}
-            {% if m.reaction_count %}<span class="tag tag-soft">♥ {{ m.reaction_count }}</span>{% endif %}
+            {% if m.reaction_count %}<span class="tag tag-soft js-likes">♥ {{ m.reaction_count }}</span>{% endif %}
             {% if m.attachments %}<span class="tag tag-blue">{{ m.attachments|length }} {{ 'Datei' if m.attachments|length == 1 else 'Dateien' }}</span>{% endif %}
           </div>
-          <div class="text">{{ m.text if m.text.strip() else '(kein Text)' }}</div>
+          <div class="text" hidden>{{ m.text if m.text.strip() else '(kein Text)' }}</div>
           {% if m.extra %}
-          <details><summary>Rohdaten</summary><pre>{{ m.extra }}</pre></details>
+          <details hidden><summary>Rohdaten</summary><pre>{{ m.extra }}</pre></details>
           {% endif %}
         </div>
         {% endfor %}
@@ -153,39 +143,47 @@
       {% endif %}
       {% endfor %}
       </div>
+      <div class="more-wrap" id="moreWrap" hidden>
+        <button class="btn btn-light" id="moreBtn" type="button" onclick="loadMore()">Mehr laden</button>
+      </div>
       <div class="empty" id="noResults" hidden>Keine Einträge für diese Suche. Weniger Wörter oder anderen Typ versuchen.</div>
       {% if not total %}
         <div class="empty">Keine Einträge in diesem Zeitraum. Versuch ein früheres Datum.</div>
       {% endif %}
     </div>
+
+    <aside class="mail-detail" id="mailDetail" aria-label="Nachrichtendetail">
+      <div class="detail-empty" id="detailEmpty">
+        <p><strong>Keine Nachricht ausgewählt</strong></p>
+        <p class="stats">Wähle links eine Nachricht aus der Liste.</p>
+      </div>
+      <div id="detailContent" hidden>
+        <div class="detail-top">
+          <button class="btn btn-light btn-sm detail-back" id="detailBack" type="button">← Zurück</button>
+          <button class="btn btn-light btn-sm" id="detailLikesTop" type="button" aria-label="Likes anzeigen" aria-pressed="false">♥ <span id="detailLikesTopCount">0</span></button>
+        </div>
+        <div class="meta" id="detailMeta"></div>
+        <div class="text" id="detailText"></div>
+        <div id="detailLikesWrap" hidden>
+          <h3 class="modal-files-title">Likes (<span id="detailLikesCount">0</span>)</h3>
+          <div class="modal-files" id="detailLikes">
+            <button class="btn btn-light btn-sm" type="button" id="detailLikesBtn">Likes anzeigen</button>
+          </div>
+        </div>
+        <div id="detailRepliesWrap" hidden>
+          <h3 class="modal-files-title">Antworten (<span id="detailRepliesCount">0</span>)</h3>
+          <div class="modal-files" id="detailReplies"></div>
+        </div>
+        <div id="detailFilesWrap" hidden>
+          <h3 class="modal-files-title">Dateien</h3>
+          <div class="modal-files" id="detailFiles"></div>
+        </div>
+      </div>
+    </aside>
   </div>
 
   <footer><p>EduFlow Dashboard · lokal{% if cache_info %} · {{ cache_info }}{% endif %}</p></footer>
 </main>
-
-<div class="modal-backdrop" id="msgModal" hidden>
-  <div class="modal-panel" role="dialog" aria-modal="true" aria-label="Nachricht in Großansicht">
-    <button class="modal-close" type="button" id="modalClose" aria-label="Schließen">✕</button>
-    <div class="modal-content">
-    <div class="meta" id="modalMeta"></div>
-    <div class="text" id="modalText"></div>
-    <div id="modalLikesWrap" hidden>
-      <h3 class="modal-files-title">Likes (<span id="modalLikesCount">0</span>)</h3>
-      <div class="modal-files" id="modalLikes">
-        <button class="btn btn-light btn-sm" type="button" id="modalLikesBtn">Likes & Antworten anzeigen</button>
-      </div>
-    </div>
-    <div id="modalRepliesWrap" hidden>
-      <h3 class="modal-files-title">Antworten (<span id="modalRepliesCount">0</span>)</h3>
-      <div class="modal-files" id="modalReplies"></div>
-    </div>
-    <div id="modalFilesWrap" hidden>
-      <h3 class="modal-files-title">Dateien</h3>
-      <div class="modal-files" id="modalFiles"></div>
-    </div>
-    </div>
-  </div>
-</div>
 
 <script>
 // Wort-Suche: Query in einzelne Wörter zerlegen (Leerzeichen-getrennt).
@@ -224,39 +222,67 @@ function highlightText(textEl, words) {
   const re = new RegExp('(' + words.map(escReg).join('|') + ')', 'gi');
   textEl.innerHTML = escHtml(orig).replace(re, '<mark>$1</mark>');
 }
+// Stufenweises Laden: Von allen Treffern werden nur die ersten `showLimit`
+// gezeigt, der Rest per "Mehr laden" (je PAGE_SIZE weitere). Suche und
+// Typ-Filter setzen dabei auf die erste Seite zurück.
+var PAGE_SIZE = 20;
+var showLimit = PAGE_SIZE;
+function applyLimit() {
+  const cards = document.querySelectorAll('#list .msg, #list .hw');
+  let matched = 0;
+  cards.forEach(el => {
+    if (el._match === false) { el.style.display = 'none'; return; }
+    matched++;
+    el.style.display = matched <= showLimit ? '' : 'none';
+  });
+  // Gruppen ohne sichtbare Karten ausblenden. Die Zähler zeigen immer die
+  // eigentliche Gesamtzahl der Gruppe (nicht nur die geladene Seite).
+  document.querySelectorAll('#list .feed-group').forEach(sec => {
+    let nVisible = 0;
+    let nTotal = 0;
+    sec.querySelectorAll('.msg, .hw').forEach(el => {
+      if (el._match === false) return;
+      nTotal++;
+      if (el.style.display !== 'none') nVisible++;
+    });
+    sec.style.display = nVisible ? '' : 'none';
+    const c = sec.querySelector('.group-count');
+    if (c) c.textContent = nTotal;
+  });
+  document.getElementById('noResults').hidden = matched !== 0;
+  const hasMore = matched > showLimit;
+  const moreBtn = document.getElementById('moreBtn');
+  const moreWrap = document.getElementById('moreWrap');
+  if (moreBtn) {
+    moreBtn.hidden = !hasMore;
+    if (hasMore) moreBtn.textContent = 'Mehr laden (' + (matched - showLimit) + ' weitere)';
+  }
+  if (moreWrap) moreWrap.hidden = !hasMore;
+}
+function loadMore() {
+  showLimit += PAGE_SIZE;
+  applyLimit();
+}
 function applyFilter() {
+  showLimit = PAGE_SIZE;
   const searchEl = document.getElementById('search');
   const words = queryWords(searchEl.value);
   const hiWords = rawWords(searchEl.value);
   const t = document.getElementById('typeFilter').value;
   const cards = document.querySelectorAll('#list .msg, #list .hw');
-  let visible = 0;
   cards.forEach(el => {
     const okQ = !words.length || words.every(function (w) { return hayOf(el).includes(w); });
     const okT = !t || el.dataset.type === t;
     const show = okQ && okT;
-    el.style.display = show ? '' : 'none';
+    el._match = show;
     if (show) {
-      visible++;
       var textEl = el.querySelector('.text');
       if (textEl) highlightText(textEl, hiWords);
       var head = el.querySelector('h3');
       if (head) highlightText(head, hiWords);
     }
   });
-  // Gruppen ohne sichtbare Karten ausblenden, Zähler je Gruppe aktualisieren.
-  document.querySelectorAll('#list .feed-group').forEach(sec => {
-    let n = 0;
-    sec.querySelectorAll('.msg, .hw').forEach(el => { if (el.style.display !== 'none') n++; });
-    sec.style.display = n ? '' : 'none';
-    const c = sec.querySelector('.group-count');
-    if (c) c.textContent = n;
-  });
-  const total = cards.length;
-  document.getElementById('stats').textContent = words.length || t
-    ? visible + ' von ' + total + ' Einträgen angezeigt.'
-    : total + ' Einträge.';
-  document.getElementById('noResults').hidden = visible !== 0;
+  applyLimit();
 }
 // Falls per URL ein Typ oder eine Suche vorausgewählt ist (?type=..., ?q=...),
 // Filter sofort anwenden. 'search'-Event fängt das native X (Feld leeren) ab.
@@ -273,12 +299,41 @@ function doSearch() {
 document.getElementById('search').addEventListener('keydown', function (e) {
   if (e.key === 'Enter') { e.preventDefault(); doSearch(); }
 });
+// Filter-Menü (Icon-Button neben der Suche): klappt Typ/Verlauf/Neu laden
+// auf und zu. Schließt bei Klick daneben oder Escape. Der Punkt zeigt an,
+// dass ein Typ-Filter aktiv ist.
+(function () {
+  var btn = document.getElementById('filterMenuBtn');
+  var menu = document.getElementById('filterMenu');
+  if (!btn || !menu) return;
+  function setOpen(open) {
+    menu.hidden = !open;
+    btn.classList.toggle('active', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.setAttribute('aria-label', open ? 'Filter schließen' : 'Filter öffnen');
+  }
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    setOpen(menu.hidden);
+  });
+  document.addEventListener('click', function (e) {
+    if (!menu.hidden && !e.target.closest('#filterMenu,#filterMenuBtn')) setOpen(false);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !menu.hidden) { setOpen(false); btn.focus(); }
+  });
+  var dot = document.getElementById('filterDot');
+  var typeSel = document.getElementById('typeFilter');
+  function paintDot() { if (dot && typeSel) dot.hidden = !typeSel.value; }
+  if (typeSel) typeSel.addEventListener('change', paintDot);
+  paintDot();
+})();
 // Deutsche Typ-Labels für den CSV-Export (Filter nutzt weiter Rohwerte).
 const TYPE_LABELS = {{ type_labels|tojson }};
 function exportCSV() {
   const rows = [['datum','typ','autor','empfaenger','text']];
   document.querySelectorAll('#list .msg, #list .hw').forEach(el => {
-    if (el.style.display === 'none') return;
+    if (el._match === false) return;
     const meta = el.querySelector('.meta').innerText;
     let prefix = '';
     const head = el.querySelector('h3');
@@ -296,19 +351,46 @@ function exportCSV() {
   a.download = 'eduflow-nachrichten.csv';
   a.click();
 }
-// Vollbild-Ansicht: Klick auf eine Nachricht öffnet sie als Overlay,
-// inkl. Datei-Downloads. Links/Buttons/Rohdaten in der Karte bleiben klickbar.
+// Detailansicht (Apple-Mail-Prinzip): Klick auf eine Nachricht zeigt sie
+// rechts in groß, inkl. Datei-Downloads. Rohdaten bleiben nur in der
+// Detailansicht aufklappbar (in der Liste sind sie versteckt).
 var ATTACH = {{ attach_map|tojson }};
-var modal = document.getElementById('msgModal');
-function openMsg(card) {
+var detailPane = document.getElementById('mailDetail');
+function setTopLikes(t) {
+  var el = document.getElementById('detailLikesTopCount');
+  if (el) el.textContent = t;
+}
+function visibleMsgs() {
+  return Array.prototype.filter.call(document.querySelectorAll('#list .msg'), function (el) {
+    if (el.style.display === 'none') return false;
+    var sec = el.closest('.feed-group');
+    return !sec || sec.style.display !== 'none';
+  });
+}
+function selectMsg(card, opts) {
+  opts = opts || {};
+  document.querySelectorAll('#list .msg.selected').forEach(function (el) {
+    el.classList.remove('selected');
+    el.setAttribute('aria-selected', 'false');
+  });
+  card.classList.add('selected');
+  card.setAttribute('aria-selected', 'true');
   var id = card.dataset.id;
-  modal.dataset.reactions = card.dataset.reactions || '0';
-  document.getElementById('modalMeta').innerHTML = card.querySelector('.meta').innerHTML;
-  document.getElementById('modalText').innerText = card.querySelector('.text').innerText;
+  detailMsgId = id;
+  detailPane.dataset.reactions = card.dataset.reactions || '0';
+  // Zähler startet als "lädt…": die echte Like-Anzahl kommt aus dem Thread
+  // (showReplies, Cache oder Hintergrund-Request) – die Kartenzahl zählt
+  // Likes + Antworten + Gesehen und wäre als Like-Anzahl falsch.
+  setTopLikes('…');
+  detailPane.classList.remove('show-likes');
+  var topBtnReset = document.getElementById('detailLikesTop');
+  if (topBtnReset) { topBtnReset.classList.remove('active'); topBtnReset.setAttribute('aria-pressed', 'false'); topBtnReset.setAttribute('aria-label', 'Likes anzeigen'); }
+  document.getElementById('detailMeta').innerHTML = card.querySelector('.meta').innerHTML;
+  document.getElementById('detailText').innerText = card.querySelector('.text').innerText;
   resetLikes(id);
   var files = ATTACH[id] || ATTACH[String(id)] || [];
-  var wrap = document.getElementById('modalFilesWrap');
-  var box = document.getElementById('modalFiles');
+  var wrap = document.getElementById('detailFilesWrap');
+  var box = document.getElementById('detailFiles');
   box.innerHTML = '';
   if (files.length) {
     wrap.hidden = false;
@@ -329,13 +411,28 @@ function openMsg(card) {
   } else {
     wrap.hidden = true;
   }
-  modal.hidden = false;
-  document.body.style.overflow = 'hidden';
-  document.getElementById('modalClose').focus();
+  document.getElementById('detailEmpty').hidden = true;
+  document.getElementById('detailContent').hidden = false;
+  if (opts.open !== false) document.body.classList.add('detail-open');
+  if (opts.focus !== false && window.innerWidth > 900) card.focus({preventScroll: true});
 }
-function closeMsg() {
-  modal.hidden = true;
-  document.body.style.overflow = '';
+function clearDetail() {
+  document.querySelectorAll('#list .msg.selected').forEach(function (el) {
+    el.classList.remove('selected');
+    el.setAttribute('aria-selected', 'false');
+  });
+  detailMsgId = null;
+  document.getElementById('detailEmpty').hidden = false;
+  document.getElementById('detailContent').hidden = true;
+  document.body.classList.remove('detail-open');
+  detailPane.classList.remove('show-likes');
+  var topBtnClear = document.getElementById('detailLikesTop');
+  if (topBtnClear) { topBtnClear.classList.remove('active'); topBtnClear.setAttribute('aria-pressed', 'false'); }
+}
+function closeDetail() {
+  document.body.classList.remove('detail-open');
+  var sel = document.querySelector('#list .msg.selected');
+  if (sel && window.innerWidth <= 900) sel.focus({preventScroll: true});
 }
 // Thread-Cache: Likes & Antworten werden im Hintergrund vorgeladen,
 // das Vollbild rendert sie dann sofort. Fallback bleibt der Knopfdruck.
@@ -344,20 +441,50 @@ function cachedThread(id) {
   var e = THREAD_CACHE[id] || THREAD_CACHE[String(id)];
   return (e && e.data) || null;
 }
+// Listenzähler links: ♥-Tag der Karte auf die echte Like-Anzahl setzen,
+// sobald der Thread (Vorladen beim Scrollen oder Öffnen) geladen ist.
+// Bis dahin steht dort die Gesamt-Reaktionszahl vom Server als Näherung.
+function paintCardLikes(id, n) {
+  document.querySelectorAll('#list .msg[data-id="' + id + '"]').forEach(function (card) {
+    card.querySelectorAll('.js-likes').forEach(function (t) {
+      t.textContent = '♥ ' + n;
+    });
+  });
+}
+// Während ein Thread lädt: "♥ …" statt der (ggf. falschen) Server-Summe.
+function paintCardLikesLoading(id) {
+  document.querySelectorAll('#list .msg[data-id="' + id + '"]').forEach(function (card) {
+    card.querySelectorAll('.js-likes').forEach(function (t) {
+      t.textContent = '♥ …';
+    });
+  });
+}
+// Falls das Laden scheitert: zurück zur Server-Summe (beste bekannte Zahl).
+function paintCardLikesFallback(id) {
+  document.querySelectorAll('#list .msg[data-id="' + id + '"]').forEach(function (card) {
+    var total = (card.dataset && card.dataset.reactions) || '0';
+    card.querySelectorAll('.js-likes').forEach(function (t) {
+      t.textContent = '♥ ' + total;
+    });
+  });
+}
 function fetchThread(id) {
   id = String(id);
   var e = THREAD_CACHE[id];
   if (e) return e.data ? Promise.resolve(e.data) : e.promise;
+  paintCardLikesLoading(id);
   var entry = {};
   entry.promise = fetch('/likes/' + encodeURIComponent(id))
     .then(function (res) { return res.json().then(function (body) { return {ok: res.ok, body: body}; }); })
     .then(function (out) {
       if (!out.ok) throw new Error((out.body && out.body.error) || 'Fehler');
       entry.data = out.body;
+      paintCardLikes(id, ((out.body && out.body.likes) || []).length);
       return out.body;
     })
     .catch(function (err) {
       if (THREAD_CACHE[id] === entry) delete THREAD_CACHE[id];
+      paintCardLikesFallback(id);
       throw err;
     });
   THREAD_CACHE[id] = entry;
@@ -389,32 +516,48 @@ function prefetchThreads() {
     });
   }
 }
-var modalLikesId = null;
+var detailMsgId = null;
 function resetLikes(id) {
-  modalLikesId = id;
-  document.getElementById('modalLikesWrap').hidden = false;
-  document.getElementById('modalRepliesWrap').hidden = true;
-  document.getElementById('modalRepliesCount').textContent = '0';
-  document.getElementById('modalReplies').innerHTML = '';
+  detailMsgId = id;
+  // Normale Ansicht: Nachricht + Antworten. Likes nur im ♥-Modus.
+  document.getElementById('detailLikesWrap').hidden = true;
+  document.getElementById('detailRepliesWrap').hidden = true;
+  document.getElementById('detailRepliesCount').textContent = '0';
+  document.getElementById('detailReplies').innerHTML = '';
+  document.getElementById('detailLikesCount').textContent = '0';
+  document.getElementById('detailLikes').innerHTML =
+    '<button class="btn btn-light btn-sm" type="button" id="detailLikesBtn">Likes anzeigen</button>';
+  document.getElementById('detailLikesBtn').addEventListener('click', function () {
+    loadLikes(detailMsgId);
+  });
+  showReplies(id);
+}
+// Antworten für die normale Ansicht laden (Cache zuerst, sonst im
+// Hintergrund nachladen – Likes bleiben dabei versteckt). Pflegt nebenbei
+// den ♥-Zähler mit der echten Like-Anzahl (Fallback: Kartenzahl).
+function showReplies(id) {
   var cached = cachedThread(id);
   if (cached) {
-    renderThread(cached);
+    setTopLikes(String(((cached && cached.likes) || []).length));
+    renderRepliesOnly(cached);
     return;
   }
-  document.getElementById('modalLikesCount').textContent = '0';
-  document.getElementById('modalLikes').innerHTML =
-    '<button class="btn btn-light btn-sm" type="button" id="modalLikesBtn">Likes & Antworten anzeigen</button>';
-  document.getElementById('modalLikesBtn').addEventListener('click', function () {
-    loadLikes(modalLikesId);
+  fetchThread(id).then(function (body) {
+    if (String(detailMsgId) !== String(id)) return;
+    if (detailPane.classList.contains('show-likes')) return;
+    setTopLikes(String(((body && body.likes) || []).length));
+    renderRepliesOnly(body);
+  }).catch(function () {
+    if (String(detailMsgId) !== String(id)) return;
+    setTopLikes(detailPane.dataset.reactions || '0');
   });
 }
-function renderThread(body) {
-  var box = document.getElementById('modalLikes');
+function renderLikesOnly(body) {
+  var box = document.getElementById('detailLikes');
   box.innerHTML = '';
   var likes = (body && body.likes) || [];
-  var replies = (body && body.replies) || [];
-  var summary = (body && body.summary) || {};
-  document.getElementById('modalLikesCount').textContent = likes.length;
+  document.getElementById('detailLikesCount').textContent = likes.length;
+  setTopLikes(String(likes.length));
   if (!likes.length) {
     var empty = document.createElement('div');
     empty.className = 'text';
@@ -436,29 +579,15 @@ function renderThread(body) {
       box.appendChild(row);
     });
   }
-  // Einordnen: Die Zahl an der Karte zählt ALLE Reaktionen
-  // (Likes + Antworten + Gesehen) – hier die Aufschlüsselung.
-  var cardTotal = parseInt(modal.dataset.reactions || '0', 10) || 0;
-  var parts = [];
-  var nReplies = summary.replies || 0;
-  var nSeen = summary.seen || 0;
-  if (nReplies) parts.push(nReplies + (nReplies === 1 ? ' Antwort' : ' Antworten'));
-  if (nSeen) parts.push(nSeen + ' Gesehen');
-  var detail = (summary.total || 0);
-  if (detail < cardTotal) {
-    parts.push('EduPage lieferte nur Details zu ' + detail + ' von ' + cardTotal + ' Reaktionen');
-  }
-  if (parts.length) {
-    var note = document.createElement('div');
-    note.className = 'text';
-    note.textContent = likes.length + (likes.length === 1 ? ' Like' : ' Likes') + ' · ' + parts.join(' · ') + ' (keine Likes).';
-    box.appendChild(note);
-  }
-  // Thread-Bündelung: Antworten gehören zur Hauptnachricht dazu.
-  var repliesBox = document.getElementById('modalReplies');
-  var repliesWrap = document.getElementById('modalRepliesWrap');
+  // Thread-Bündelung: Antworten gehören zur normalen Nachricht dazu
+  // (nicht in den Likes-Modus).
+}
+function renderRepliesOnly(body) {
+  var replies = (body && body.replies) || [];
+  var repliesBox = document.getElementById('detailReplies');
+  var repliesWrap = document.getElementById('detailRepliesWrap');
   repliesBox.innerHTML = '';
-  document.getElementById('modalRepliesCount').textContent = replies.length;
+  document.getElementById('detailRepliesCount').textContent = replies.length;
   if (replies.length) {
     repliesWrap.hidden = false;
     replies.forEach(function (reply) {
@@ -488,10 +617,11 @@ function renderThread(body) {
   }
 }
 function loadLikes(id) {
-  var wrap = document.getElementById('modalLikesWrap');
-  var box = document.getElementById('modalLikes');
+  var wrap = document.getElementById('detailLikesWrap');
+  var box = document.getElementById('detailLikes');
   box.innerHTML = '';
-  document.getElementById('modalLikesCount').textContent = '…';
+  document.getElementById('detailLikesCount').textContent = '…';
+  setTopLikes('…');
   wrap.hidden = false;
   var note = document.createElement('div');
   note.className = 'text';
@@ -499,13 +629,14 @@ function loadLikes(id) {
   box.appendChild(note);
   fetchThread(id)
     .then(function (body) {
-      if (String(modalLikesId) !== String(id) || modal.hidden) return;
-      renderThread(body);
+      if (String(detailMsgId) !== String(id)) return;
+      renderLikesOnly(body);
     })
     .catch(function () {
-      if (String(modalLikesId) !== String(id) || modal.hidden) return;
+      if (String(detailMsgId) !== String(id)) return;
       box.innerHTML = '';
-      document.getElementById('modalLikesCount').textContent = '0';
+      document.getElementById('detailLikesCount').textContent = '0';
+      setTopLikes(detailPane.dataset.reactions || '0');
       var err = document.createElement('div');
       err.className = 'text';
       err.textContent = 'Likes konnten nicht geladen werden.';
@@ -514,18 +645,79 @@ function loadLikes(id) {
 }
 document.querySelectorAll('#list .msg').forEach(function (el) {
   el.classList.add('is-clickable');
-  el.setAttribute('tabindex', '0');
   el.addEventListener('click', function (e) {
     if (e.target.closest('a,button,details,summary')) return;
-    openMsg(el);
+    selectMsg(el);
   });
   el.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openMsg(el); }
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectMsg(el); }
   });
 });
-modal.addEventListener('click', function (e) { if (e.target === modal) closeMsg(); });
-document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) closeMsg(); });
-document.getElementById('modalClose').addEventListener('click', closeMsg);
+document.getElementById('detailBack').addEventListener('click', closeDetail);
+document.getElementById('detailLikesTop').addEventListener('click', function () {
+  var on = detailPane.classList.toggle('show-likes');
+  var top = document.getElementById('detailLikesTop');
+  if (top) {
+    top.classList.toggle('active', on);
+    top.setAttribute('aria-pressed', on ? 'true' : 'false');
+    top.setAttribute('aria-label', on ? 'Zurück zur Nachricht' : 'Likes anzeigen');
+  }
+  var wrap = document.getElementById('detailLikesWrap');
+  var repliesWrap = document.getElementById('detailRepliesWrap');
+  if (on) {
+    // Likes-Modus: nur Likes zeigen, Nachricht + Antworten verstecken.
+    if (wrap) wrap.hidden = false;
+    if (repliesWrap) repliesWrap.hidden = true;
+    var cached = cachedThread(detailMsgId);
+    if (cached) {
+      renderLikesOnly(cached);
+    } else {
+      var btn = document.getElementById('detailLikesBtn');
+      if (btn) btn.click();
+      else loadLikes(detailMsgId);
+    }
+  } else {
+    // Zurück zur normalen Nachricht: Likes verstecken, Antworten zeigen.
+    if (wrap) wrap.hidden = true;
+    var cachedBack = cachedThread(detailMsgId);
+    if (cachedBack) {
+      renderRepliesOnly(cachedBack);
+    } else {
+      showReplies(detailMsgId);
+    }
+  }
+});
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape' && document.body.classList.contains('detail-open')) closeDetail();
+  if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+  var t = document.activeElement;
+  if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable)) return;
+  var list = visibleMsgs();
+  if (!list.length) return;
+  e.preventDefault();
+  var idx = list.indexOf(document.querySelector('#list .msg.selected'));
+  idx = idx === -1 ? 0 : idx + (e.key === 'ArrowDown' ? 1 : -1);
+  idx = Math.max(0, Math.min(list.length - 1, idx));
+  selectMsg(list[idx]);
+});
+// Auswahl bei Filterung erhalten, sonst erste sichtbare Nachricht wählen.
+var _origApplyFilter = applyFilter;
+applyFilter = function () {
+  _origApplyFilter();
+  var sel = document.querySelector('#list .msg.selected');
+  if (sel && sel.style.display !== 'none') return;
+  var first = visibleMsgs()[0];
+  if (first) selectMsg(first, {open: false, focus: false});
+  else clearDetail();
+};
+// Initial nur die erste Seite zeigen (Rest per "Mehr laden").
+applyLimit();
+// Erste Nachricht direkt auswählen (mobil ohne Overlay).
+(function () {
+  var first = visibleMsgs()[0];
+  if (first) selectMsg(first, {open: false, focus: false});
+  else clearDetail();
+})();
 prefetchThreads();
 </script>
 </body>

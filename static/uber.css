@@ -128,14 +128,7 @@ details{margin-top:12px;font-size:12px;color:var(--ink-muted)}
 details summary{cursor:pointer;font-weight:600}
 pre{background:var(--surface-1);border:1px solid var(--border);padding:12px;border-radius:8px;overflow:auto;margin-top:8px;font-size:12px}
 
-/* ---------- Nachrichten-Dialog (groß, Seite bleibt dahinter sichtbar) ---------- */
-.modal-backdrop{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.45);backdrop-filter:blur(10px) saturate(1.4);-webkit-backdrop-filter:blur(10px) saturate(1.4)}
-.modal-backdrop[hidden]{display:none}
-.modal-panel{position:relative;width:760px;max-width:100%;max-height:88vh;max-height:88dvh;overflow-y:auto;background:#fff;border:1px solid rgba(255,255,255,.6);border-radius:18px;padding:26px 26px 22px;box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 24px 80px rgba(0,0,0,.3)}
-.modal-content{max-width:720px;margin:0 auto}
-.modal-panel .text{margin-top:12px}
-.modal-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;background:var(--surface-1);border:1px solid var(--border-strong);font-size:14px;line-height:1;color:var(--ink)}
-.modal-close:hover{background:var(--surface-2)}
+/* ---------- Detail-Bausteine (Likes/Dateien/Antworten) ---------- */
 .modal-files-title{font-size:14px;font-weight:800;margin:18px 0 8px}
 .modal-files{display:flex;flex-direction:column;gap:8px}
 .modal-file{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--border);border-radius:12px;padding:10px 14px;font-size:14px;font-weight:600}
@@ -143,7 +136,62 @@ pre{background:var(--surface-1);border:1px solid var(--border);padding:12px;bord
 .reply{border:1px solid var(--border);border-radius:12px;padding:10px 14px}
 .reply .meta{margin-bottom:4px}
 .reply .text{font-size:14px;margin-top:0}
-[data-theme="dark"] .modal-panel{background:#141414;border-color:rgba(255,255,255,.14)}
+
+/* ---------- Mail-Layout: Filter | Liste | Detail (Apple-Mail-Prinzip) ---------- */
+.layout.mail-layout{grid-template-columns:minmax(300px,370px) minmax(0,1fr)}
+/* Filter-Bar nur über der Nachrichtenauswahl (sticky dort) – die
+   Detailansicht daneben scrollt normal mit weg (nicht sticky). */
+.mail-filterbar{min-width:0}
+.filterbar-row{display:flex;gap:10px;align-items:stretch}
+.filterbar-row .search-field{flex:1}
+/* Filter-Icon-Button (SVG aus static/icons/filter.svg, currentColor):
+   öffnet das Filter-Menü unter der Suchleiste. */
+.filter-icon-btn{position:relative;flex:0 0 auto;width:54px;border:1px solid var(--border-strong);border-radius:9999px;background:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.07)}
+.filter-icon-btn:hover{background:var(--surface-1)}
+.filter-icon-btn.active{border-color:var(--accent)}
+.filter-icon-btn img{width:20px;height:20px;display:block}
+/* Icon ist schwarz (Light Mode) und wird im Dark Mode per invert weiß. */
+[data-theme="dark"] .filter-icon-btn img{filter:invert(1)}
+.filter-dot{position:absolute;top:10px;right:10px;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+/* Aufklappbares Filter-Menü (Typ, Verlauf, Neu laden). */
+.filter-menu{margin-top:10px;background:var(--canvas);border:1px solid var(--border-strong);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:14px;box-shadow:0 12px 32px rgba(0,0,0,.12)}
+.filter-menu[hidden]{display:none}
+.filter-menu .input-pill{width:100%}
+.filter-menu .btn{width:100%}
+[data-theme="dark"] .filter-icon-btn{background:#101010}
+[data-theme="dark"] .filter-icon-btn:hover{background:var(--surface-1)}
+.mail-list-pane{min-width:0}
+#list .msg-row{padding:12px 14px;margin-bottom:8px}
+#list .msg-row > .meta,#list .msg-row > .text,#list .msg-row > details{display:none}
+.row-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.row-author{font-size:14px;font-weight:800;letter-spacing:-.2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row-time{font-size:12px;color:var(--ink-muted);white-space:nowrap;flex-shrink:0}
+.row-snippet{font-size:13px;color:var(--ink-muted);line-height:1.45;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.row-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.row-tags:empty{display:none}
+.msg.selected{border-color:var(--ink);background:var(--surface-1)}
+.msg.selected:hover{background:var(--surface-1)}
+.msg:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.mail-detail{background:#fff;border:1px solid var(--border);border-radius:14px;padding:22px;min-width:0}
+.detail-empty{text-align:center;padding:56px 20px;color:var(--ink-muted)}
+.detail-empty p{margin-bottom:8px}
+.detail-top{display:flex;gap:10px;align-items:center;margin-bottom:14px}
+.detail-top .detail-back{margin-bottom:0}
+#detailLikesTop.active{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.mail-detail.show-likes #detailMeta,.mail-detail.show-likes #detailText{display:none}
+.detail-back{display:none}
+[data-theme="dark"] .mail-detail{background:#101010}
+[data-theme="dark"] .msg.selected{border-color:#fff}
+@media(max-width:1200px){
+  .layout.mail-layout{grid-template-columns:minmax(280px,340px) minmax(0,1fr)}
+}
+@media(max-width:900px){
+  .layout.mail-layout{grid-template-columns:1fr}
+  .mail-detail{display:none}
+  body.detail-open{overflow:hidden}
+  body.detail-open .mail-detail{display:block;position:fixed;inset:0;z-index:90;border:0;border-radius:0;max-height:none;padding:20px 18px 40px}
+  body.detail-open .detail-back{display:inline-flex;margin-bottom:0}
+}
 
 /* ---------- Statistik-Karten ---------- */
 .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0 4px}
@@ -197,8 +245,16 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
    kein schwarzes Browser-Rechteck nach Tap/Klick beim Scrollen. */
 .search-icon-btn:focus-visible{box-shadow:0 0 0 2px var(--canvas),0 0 0 4px var(--ink-muted)}
 .search-icon-btn svg{width:20px;height:20px;display:block}
+/* Typ-Filter in der Suchleiste (gehört zu #filterForm, filtert live mit): auf
+   kleinen Breiten bricht er unter das Suchfeld um. */
+.searchbar-row{flex-wrap:wrap}
+.search-type{flex:0 1 200px;min-width:150px;display:flex}
+.search-type .input-pill{width:100%;padding-top:15px;padding-bottom:15px;font-size:14px;box-shadow:0 4px 16px rgba(0,0,0,.07)}
 .feed-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:2px 2px 12px;flex-wrap:wrap}
 .feed-head .stats{margin:0}
+/* "Mehr laden" am Listenende (stufenweises Laden, je 20 weitere). */
+.more-wrap{display:flex;justify-content:center;margin:4px 0 18px}
+.more-wrap[hidden]{display:none}
 /* Gruppen-Trennung im Nachrichten-Feed: Nachrichten / Hausaufgaben /
    Tests & Prüfungen / Sonstiges, je mit Zähler. */
 .feed-group{margin:0 0 6px}
@@ -243,6 +299,8 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 .tt-cell.is-cancelled{opacity:.6}
 .tt-cell.is-cancelled strong{text-decoration:line-through}
 .tt-empty{color:var(--ink-dim);text-align:center}
+.tt-cell.is-event{border-color:#D97706;background:#FFFBEB}
+[data-theme="dark"] .tt-cell.is-event{background:#211811}
 [data-theme="dark"] .tt-cell{background:#101010}
 .week-day .empty{padding:20px 10px;font-size:13px}
 @media(max-width:1100px){
@@ -298,8 +356,6 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 .accent-dot{width:18px;height:18px;border-radius:50%;background:var(--c);border:1px solid var(--border-strong);padding:0;flex-shrink:0}
 .accent-dot:hover{transform:scale(1.15)}
 .accent-dot.active{outline:2px solid var(--ink);outline-offset:2px}
-.pm-row.pm-accents{flex-direction:column;align-items:stretch;gap:8px}
-.pm-row.pm-accents .accent-dots{flex-wrap:wrap}
 @media(max-width:720px){
   .nav-user{display:none}
 }
@@ -332,9 +388,7 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 .pm-head{padding:10px 12px 8px}
 .pm-head .t{font-size:11px;color:var(--ink-muted);font-weight:700;text-transform:uppercase;letter-spacing:.8px}
 .pm-head .u{font-size:15px;font-weight:800;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pm-sec{font-size:11px;color:var(--ink-muted);font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:8px 12px 2px}
 .pm-div{height:1px;background:var(--border);margin:6px 4px}
-.pm-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 12px;font-size:14px;font-weight:600}
 .pm-link{display:block;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:700}
 .pm-link:hover{background:var(--surface-1)}
 .pm-danger{color:#DC2626}
@@ -359,18 +413,37 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 }
 
 /* ---------- Übersicht: Uhr oben links, zwei Spalten ---------- */
-.ov-top{display:flex;gap:16px;align-items:stretch;margin-top:20px;flex-wrap:wrap}
-.clock-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px 26px;min-width:260px;display:flex;flex-direction:column;justify-content:center}
+.ov-top{display:flex;gap:16px;align-items:stretch;margin-top:20px}
+.clock-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px 26px;flex:0 1 auto;min-width:200px;display:flex;flex-direction:column;justify-content:center}
 .clock-time{font-size:clamp(38px,4.5vw,52px);font-weight:800;letter-spacing:-1.5px;line-height:1;font-variant-numeric:tabular-nums}
 .clock-date{font-size:14px;color:var(--ink-muted);font-weight:600;margin-top:6px}
 /* Wetterkarte rechts neben der Uhr: heute + morgen */
-.weather-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px 22px;min-width:290px;display:flex;gap:16px;align-items:stretch;justify-content:center}
-.wx-day{flex:1;text-align:center;display:flex;flex-direction:column;justify-content:center;gap:2px}
+.weather-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px 22px;flex:1 1 0;min-width:0;display:flex;gap:16px;align-items:stretch;justify-content:center}
+.wx-day{flex:1;min-width:0;text-align:center;display:flex;flex-direction:column;justify-content:center;gap:2px;overflow:hidden}
 .wx-day + .wx-day{border-left:1px solid var(--border);padding-left:16px}
 .wx-l{font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink-muted)}
 .wx-img{width:52px;height:52px;margin:0 auto}
 .wx-temp{font-size:24px;font-weight:800;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
 .wx-cond{font-size:12px;color:var(--ink-muted);font-weight:600}
+.wx-pop{font-size:12px;color:var(--ink-muted);font-weight:600;margin-top:2px}
+/* Wetter-Detailansicht (Klick aufs Widget): Stundenvorhersage + Details. */
+.weather-card[role="button"]{cursor:pointer}
+.wx-modal-backdrop{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.45)}
+.wx-modal-backdrop[hidden]{display:none}
+.wx-modal{position:relative;width:640px;max-width:100%;max-height:88vh;overflow-y:auto;background:#fff;border-radius:18px;padding:26px;box-shadow:0 24px 80px rgba(0,0,0,.3)}
+.wx-modal-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:50%;background:var(--surface-1);border:1px solid var(--border-strong);font-size:16px;color:var(--ink);cursor:pointer}
+.wx-modal-close:hover{background:var(--surface-2)}
+.wx-modal-now{display:flex;align-items:baseline;gap:12px;margin:4px 0 6px}
+.wx-modal-temp{font-size:44px;font-weight:800;letter-spacing:-1px}
+.wx-hours{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px}
+.wx-hour{flex:0 0 auto;min-width:64px;text-align:center;border:1px solid var(--border);border-radius:12px;padding:8px 6px;display:flex;flex-direction:column;gap:2px;align-items:center}
+.wx-hour .wx-img{width:36px;height:36px;margin:0}
+.wx-hour .wx-temp{font-size:16px}
+.wx-details{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.wx-detail{border:1px solid var(--border);border-radius:12px;padding:10px 14px}
+.wx-detail-v{font-size:16px;font-weight:800;margin-top:2px}
+[data-theme="dark"] .wx-modal{background:#101010}
+body.wx-open{overflow:hidden}
 [data-theme="dark"] .weather-card{background:#101010}
 .ov-bundle{display:flex;gap:10px;align-items:baseline;justify-content:center;flex-wrap:wrap;font-size:14px;font-weight:600;color:var(--ink-muted);margin-bottom:14px}
 .ov-bundle strong{font-size:18px;font-weight:800;letter-spacing:-.5px;color:var(--ink)}
@@ -378,13 +451,13 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 .ov-bundle strong.n-ok{color:#16A34A}
 .ov-bundle .sep{color:var(--ink-dim)}
 /* Aktuelle Stunde oben links: schwarze Karte, Dark Mode invertiert */
-.now-card{background:#000;color:#fff;border-radius:14px;padding:18px 24px;min-width:250px;display:flex;flex-direction:column;justify-content:center}
+.now-card{background:#000;color:#fff;border-radius:14px;padding:18px 24px;flex:1 1 0;min-width:0;display:flex;flex-direction:column;justify-content:center}
 .now-card.now-right{margin-left:auto}
 .now-card:hover{background:#1A1A1A}
 .now-card .l{font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;opacity:.6}
 .now-card .n{font-size:30px;font-weight:800;letter-spacing:-.8px;line-height:1.15;margin:4px 0}
 .now-card .s{font-size:13px;font-weight:500;opacity:.75}
-[data-theme="dark"] .now-card{background:#161616;color:#fff;border:1px solid var(--border-strong)}
+[data-theme="dark"] .now-card{background:#101010;color:#fff;border:1px solid var(--border)}
 [data-theme="dark"] .now-card:hover{background:#1F1F1F}
 .ov-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start;margin-top:24px}
 .ov-col{min-width:0}
@@ -392,7 +465,30 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 .ov-col-head h2{font-size:20px;font-weight:800;letter-spacing:-.5px}
 .ov-actions{display:flex;gap:8px;flex-wrap:wrap}
 .ov-actions form{margin:0}
+/* Stunden-Karussell in der Jetzt-Karte (wischbar, eine Stunde sichtbar). */
+.now-swipe{overflow:hidden}
+.now-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:2px}
+.now-count{font-size:11px;font-weight:800;letter-spacing:.6px;background:rgba(255,255,255,.12);border-radius:999px;padding:3px 10px}
+.now-viewport{overflow:hidden;touch-action:pan-y;margin:2px -4px;padding:2px 4px;cursor:grab}
+.now-track{position:relative;display:flex;transition:transform .25s ease}
+.now-track.drag{transition:none;cursor:grabbing}
+.now-slide{flex:0 0 100%;min-width:0}
+.now-tags{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;align-items:center}
+.now-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:currentColor;margin-right:6px;vertical-align:1px;animation:now-pulse 2s ease-in-out infinite}
+@keyframes now-pulse{0%,100%{opacity:1}50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){.now-dot{animation:none}}
+.now-nav{display:flex;align-items:center;justify-content:space-between;margin-top:10px}
+.now-arrow{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,.4);background:transparent;color:#fff;font-size:18px;line-height:1;cursor:pointer;flex-shrink:0;transition:background .15s,transform .15s}
+.now-arrow:hover{background:rgba(255,255,255,.14)}
+.now-arrow:active{transform:scale(.92)}
+.now-link{font-size:13px;font-weight:700;opacity:.75}
+.now-link:hover{opacity:1;text-decoration:underline}
 [data-theme="dark"] .clock-card{background:#101010}
 @media(max-width:900px){
   .ov-grid{grid-template-columns:1fr}
+}
+@media(max-width:720px){
+  .ov-top{flex-wrap:wrap}
+  .ov-top > *{flex:1 1 100%;min-width:0}
+  .now-card.now-right{margin-left:0}
 }

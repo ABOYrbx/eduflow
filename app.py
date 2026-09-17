@@ -18,7 +18,7 @@ import os
 import re
 import secrets
 from base64 import b64encode
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 from functools import wraps
 from pathlib import Path
 from typing import Optional
@@ -77,6 +77,10 @@ def _load_dotenv() -> None:
 _load_dotenv()
 
 app = Flask(__name__)
+
+# Lokales Dev-Tool: statische Dateien (CSS/JS/Icons) nie cachen, damit nach
+# Änderungen sofort der frische Stand ankommt (kein hartes Neuladen nötig).
+app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -252,6 +256,9 @@ def event_to_dict(ev) -> dict:
     except Exception:
         extra_json = ""
         extra = {}
+
+    # Slowakische Server-Floskeln (Známka, Udalosť, …) eindeutschen.
+    text = translate_server_text(text)
 
     attachments = extract_attachments(extra if isinstance(extra, dict) else {})
 
@@ -566,7 +573,7 @@ def short_label(ev, maxlen: int = 80) -> str:
     """Kurztitel eines TimelineEvents (erste Textzeile bzw. oldVals.title)."""
     text = (getattr(ev, "text", "") or "").strip().replace("\n", " ")
     if text:
-        return text[:maxlen]
+        return translate_server_text(text[:maxlen])
     ad = getattr(ev, "additional_data", {}) or {}
     if isinstance(ad, dict):
         old = ad.get("oldVals") if isinstance(ad.get("oldVals"), dict) else {}
@@ -754,6 +761,37 @@ TYPE_LABELS = {
 
 def type_label(t: str) -> str:
     return TYPE_LABELS.get(t, t)
+
+
+# Slowakische Auto-Texte des EduPage-Servers (Noten, Ereignisse, Tests,
+# Entschuldigungen, Fotoalben, Stundenplan) → Deutsch. Die Phrasen enthalten
+# slowakische Sonderzeichen und treffen daher keinen deutschen Text.
+# Längere Phrasen stehen zuerst (Substring-Ersetzung der Reihe nach).
+SK_DE_PHRASES = [
+    ("Zverejnený nový rozvrh", "Neuer Stundenplan veröffentlicht"),
+    ("Aktualizovaný fotoalbum", "Aktualisiertes Fotoalbum"),
+    ("Nová ospravedlnenka", "Neue Entschuldigung"),
+    ("Pridelený test", "Zugeteilter Test"),
+    ("Udalosť:", "Ereignis:"),
+    ("Známka", "Note"),
+    # Fallbacks ohne Diakritika (falls der Server je ohne liefert):
+    ("Zverejneny novy rozvrh", "Neuer Stundenplan veröffentlicht"),
+    ("Aktualizovany fotoalbum", "Aktualisiertes Fotoalbum"),
+    ("Nova ospravedlnenka", "Neue Entschuldigung"),
+    ("Prideleny test", "Zugeteilter Test"),
+    ("Udalost:", "Ereignis:"),
+    ("Znamka", "Note"),
+]
+
+
+def translate_server_text(text: str) -> str:
+    """Slowakische Server-Floskeln im Timeline-Text eindeutschen."""
+    if not text:
+        return text
+    for sk, de in SK_DE_PHRASES:
+        if sk in text:
+            text = text.replace(sk, de)
+    return text
 
 
 def _parse_due_date(value) -> "date | None":
@@ -1444,8 +1482,8 @@ def uebersicht_alt():
 @app.route("/overview")
 @login_required
 def uebersicht():
-    """Startseite: Uhr oben links, ungelesene Nachrichten links,
-    offene Hausaufgaben rechts."""
+    """Startseite: Uhr oben links, swipebares Stunden-Karussell oben rechts,
+    ungelesene Nachrichten links, offene Hausaufgaben rechts."""
     username = session["username"]
     subdomain = session["subdomain"]
     now = datetime.now()
@@ -1457,6 +1495,7 @@ def uebersicht():
             now_time=now.strftime("%H:%M:%S"), now_date=now_date,
             unread=[], n_unread=0, homework=[],
             n_offen=0, n_ueber=0, n_erledigt=0, current=None, next=None,
+            lessons=[], lesson_start=0,
             weather_lat=WEATHER_LAT if WEATHER_LAT is not None else "",
             weather_lon=WEATHER_LON if WEATHER_LON is not None else "",
             weather_city=WEATHER_CITY,
@@ -1495,10 +1534,13 @@ def uebersicht():
     homework, n_offen, n_ueber, n_erledigt = open_homework(
         events, apicache.load_hidden(uhash), _s["ov_homework"])
 
-    # Aktuelle Stunde für oben links: heutiger Stundenplan (aus Cache),
+    # Aktuelle Stunde für oben rechts: heutiger Stundenplan (aus Cache),
     # laufende bzw. nächste nicht-entfallene Stunde bestimmen.
+    # Events (is_event, z. B. Projekttag) werden bewusst ignoriert –
+    # hier stehen nur echte Unterrichtsstunden.
     current = None
     nxt = None
+    _day_lessons = []
     try:
         _day_lessons, _dm = get_timetable_day_cached(
             edupage, subdomain, username, date.today(), False)
@@ -1514,23 +1556,46 @@ def uebersicht():
         _now_t = now.time()
         for _d in _day_lessons:
             _s, _e = _range(_d.get("time", ""))
-            if _s and _e and _s <= _now_t <= _e and not _d.get("is_cancelled"):
+            if (_s and _e and _s <= _now_t <= _e and not _d.get("is_cancelled")
+                    and not _d.get("is_event")):
                 current = _d
                 break
         for _d in _day_lessons:
             _s, _e = _range(_d.get("time", ""))
-            if _s and _e and _now_t < _s and not _d.get("is_cancelled"):
+            if (_s and _e and _now_t < _s and not _d.get("is_cancelled")
+                    and not _d.get("is_event")):
                 nxt = _d
                 break
     except Exception:
         current, nxt = None, None
+
+    # Alle Stunden des Tages für das swipebare Karussell oben rechts:
+    # echte Unterrichtsstunden (keine Events), Lernzeit zusammengefasst
+    # wie im Stundenplan, laufende Stunde markiert, Startposition passend.
+    lessons_today = []
+    lesson_start = 0
+    try:
+        for _d in merge_lernzeit([dict(d) for d in _day_lessons]):
+            if _d.get("is_event"):
+                continue
+            _s, _e = _range(_d.get("time", ""))
+            _d["is_now"] = bool(
+                _s and _e and _s <= _now_t <= _e and not _d.get("is_cancelled"))
+            lessons_today.append(_d)
+        if lessons_today:
+            # _now_t/_range existieren hier sicher (_day_lessons war nicht leer)
+            lesson_start = lesson_start_index(lessons_today, _now_t)
+    except Exception:
+        lessons_today = []
+        lesson_start = 0
 
     return render_template(
         "overview.html", username=username, subdomain=subdomain,
         now_time=now.strftime("%H:%M:%S"), now_date=now_date,
         unread=unread, n_unread=n_unread, homework=homework,
         n_offen=n_offen, n_ueber=n_ueber, n_erledigt=n_erledigt,
-        current=current, next=nxt,
+        current=current, next=nxt, lessons=lessons_today,
+        lesson_start=lesson_start,
         weather_lat=WEATHER_LAT if WEATHER_LAT is not None else "",
         weather_lon=WEATHER_LON if WEATHER_LON is not None else "",
         weather_city=WEATHER_CITY,
@@ -1568,11 +1633,35 @@ def _owm_cap(s: str) -> str:
     return s[:1].upper() + s[1:] if s else ""
 
 
-def _owm_aggregate_tomorrow(fc: dict) -> Optional[dict]:
-    """Tageswerte für morgen aus der 3-Stunden-Vorhersage (2.5/forecast)."""
-    tomorrow = (date.today() + timedelta(days=1)).isoformat()
+def _owm_localtime(ts, tz_offset) -> str:
+    """Unix-Zeit + OWM-Timezone-Offset -> lokale HH:MM (oder "–")."""
+    try:
+        return datetime.fromtimestamp(int(ts) + int(tz_offset or 0),
+                                      tz=timezone.utc).strftime("%H:%M")
+    except (TypeError, ValueError, OverflowError, OSError):
+        return "–"
+
+
+def _owm_compass(deg) -> str:
+    """Windrichtung in Grad -> Himmelsrichtung (N, NO, O, …) oder "–"."""
+    try:
+        dirs = ["N", "NO", "O", "SO", "S", "SW", "W", "NW"]
+        return dirs[int((float(deg) + 22.5) // 45) % 8]
+    except (TypeError, ValueError):
+        return "–"
+
+
+def _owm_aggregate_day(fc: dict, day_offset: int = 1) -> Optional[dict]:
+    """Tageswerte aus der 3-Stunden-Vorhersage (2.5/forecast).
+
+    `day_offset`: 0 = heute (Rest des Tages), 1 = morgen, 2 = übermorgen.
+    Liefert max/min-Temperatur, Wetterlage (Mittagseintrag bevorzugt,
+    sonst häufigstes Icon) und Regenwahrscheinlichkeit (`pop` als
+    Tagesmaximum in Prozent, None ohne Daten).
+    """
+    day = (date.today() + timedelta(days=day_offset)).isoformat()
     entries = [e for e in (fc.get("list") or [])
-               if str(e.get("dt_txt", "")).startswith(tomorrow)]
+               if str(e.get("dt_txt", "")).startswith(day)]
     temps = [e.get("main", {}).get("temp") for e in entries]
     temps = [t for t in temps if isinstance(t, (int, float))]
     if not temps:
@@ -1588,14 +1677,20 @@ def _owm_aggregate_tomorrow(fc: dict) -> Optional[dict]:
         icon = max(set(icons), key=icons.count) if icons else ""
         desc = next((c.get("description", "") for c in conds
                      if c.get("icon") == icon), "")
+    pops = [e.get("pop") for e in entries]
+    pops = [p for p in pops if isinstance(p, (int, float))]
     return {"max": round(max(temps)), "min": round(min(temps)),
-            "desc": _owm_cap(desc), "icon": icon or ""}
+            "desc": _owm_cap(desc), "icon": icon or "",
+            "pop": round(max(pops) * 100) if pops else None}
 
 
 @app.route("/api/wetter")
 @login_required
 def api_wetter():
-    """Wetter-Proxy (Key bleibt serverseitig): heute + morgen als JSON.
+    """Wetter-Proxy (Key bleibt serverseitig): heute + morgen +
+    übermorgen als JSON (je mit Regenwahrscheinlichkeit `pop` in %),
+    dazu Stundenvorhersage (`hourly`, nächste 24 h in 3-h-Schritten),
+    Details (gefühlte Temperatur, Wind, …) und Ortsname (`city`).
 
     Ort per ?lat=..&lon=.. oder ?city=Name (OpenWeatherMap löst den
     Stadtnamen selbst auf). Ohne Angabe: 400.
@@ -1626,16 +1721,64 @@ def api_wetter():
         return {"error": str(e)}, 502
     w = (cur.get("weather") or [{}])[0]
     main = cur.get("main", {})
-    tomorrow = _owm_aggregate_tomorrow(fc) or {}
+    wind = cur.get("wind", {})
+    sys = cur.get("sys", {}) if isinstance(cur.get("sys"), dict) else {}
+    tz = ((fc.get("city") or {}).get("timezone")
+          if isinstance(fc, dict) else None)
+    if not isinstance(tz, (int, float)):
+        tz = cur.get("timezone", 0) if isinstance(cur, dict) else 0
+    if not isinstance(tz, (int, float)):
+        tz = 0
+    tomorrow = _owm_aggregate_day(fc, 1) or {}
+    day3 = _owm_aggregate_day(fc, 2) or {}
+    day3["label"] = GERMAN_WEEKDAYS[(date.today() + timedelta(days=2)).weekday()]
+    today_pop = _owm_aggregate_day(fc, 0)
+
+    hourly = []
+    for e in (fc.get("list") or [])[:8]:
+        if not isinstance(e, dict):
+            continue
+        w2 = (e.get("weather") or [{}])[0] if isinstance(e.get("weather"), list) else {}
+        main2 = e.get("main", {}) if isinstance(e.get("main"), dict) else {}
+        t2 = main2.get("temp")
+        p2 = e.get("pop")
+        hourly.append({
+            "time": _owm_localtime(e.get("dt"), tz),
+            "temp": round(t2) if isinstance(t2, (int, float)) else None,
+            "icon": w2.get("icon", "") or "",
+            "desc": _owm_cap(w2.get("description", "") or ""),
+            "pop": round(p2 * 100) if isinstance(p2, (int, float)) else None,
+        })
+
+    def _num(v):
+        return v if isinstance(v, (int, float)) else None
+
+    wind_ms = _num(wind.get("speed"))
+    vis_m = _num(cur.get("visibility"))
     return {
+        "city": cur.get("name", "") or "",
         "today": {
             "temp": round(main.get("temp", 0)),
             "max": round(main.get("temp_max", main.get("temp", 0))),
             "min": round(main.get("temp_min", main.get("temp", 0))),
             "desc": _owm_cap(w.get("description", "") or ""),
             "icon": w.get("icon", ""),
+            "pop": today_pop["pop"] if today_pop else None,
         },
         "tomorrow": tomorrow,
+        "day3": day3,
+        "hourly": hourly,
+        "details": {
+            "feels_like": round(main["feels_like"]) if isinstance(main.get("feels_like"), (int, float)) else None,
+            "humidity": _num(main.get("humidity")),
+            "pressure": _num(main.get("pressure")),
+            "wind_kmh": round(wind_ms * 3.6) if wind_ms is not None else None,
+            "wind_dir": _owm_compass(wind.get("deg")),
+            "clouds": _num((cur.get("clouds", {}) or {}).get("all")) if isinstance(cur.get("clouds"), dict) else None,
+            "visibility_km": round(vis_m / 1000, 1) if vis_m is not None else None,
+            "sunrise": _owm_localtime(sys.get("sunrise"), tz),
+            "sunset": _owm_localtime(sys.get("sunset"), tz),
+        },
     }
 
 
@@ -1975,6 +2118,27 @@ def merge_lernzeit(items):
     return out
 
 
+def lesson_start_index(lessons, now_t) -> int:
+    """Startposition Stunden-Karussell: laufende Stunde, sonst nächste
+    kommende (nicht entfallene), sonst letzte Stunde, sonst 0."""
+    if not lessons:
+        return 0
+    for i, _d in enumerate(lessons):
+        if _d.get("is_now"):
+            return i
+    for i, _d in enumerate(lessons):
+        if _d.get("is_cancelled"):
+            continue
+        try:
+            _start = datetime.strptime(
+                _d.get("time", "").split("–")[0].strip(), "%H:%M").time()
+        except Exception:
+            continue
+        if now_t < _start:
+            return i
+    return len(lessons) - 1
+
+
 @app.route("/stundenplan")
 @login_required
 def stundenplan():
@@ -2209,12 +2373,16 @@ def likes(event_id: int):
     """Liefert als JSON den Thread einer Nachricht.
 
     {"likes": [{name, date}], "replies": [{name, date, text}],
-     "summary": {"total", "likes", "replies", "seen"}}.
+     "summary": {"total", "likes", "replies", "seen"}, "cached": bool}.
     Hinweis: Die Reaktions-Zahl an der Karte (pocet_reakcii) zählt ALLE
     Reaktionen (Likes + Antworten + Gesehen) – `summary` schlüsselt das auf.
+
+    Threads liegen pro User im Datei-Cache (`likes_<hash>.json`, TTL
+    `LIKES_TTL_S`); nur bei Miss/stalem Cache oder `?refresh=1` geht ein
+    Request an EduPage.
     """
     try:
-        edupage, _, _ = get_logged_in_edupage()
+        edupage, username, subdomain = get_logged_in_edupage()
     except (RuntimeError, SessionExpired):
         return jsonify({"error": "Sitzung abgelaufen. Bitte erneut anmelden."}), 401
     except (BadCredentialsException, CaptchaException):
@@ -2222,10 +2390,28 @@ def likes(event_id: int):
     except Exception as e:
         return jsonify({"error": f"Anmeldung fehlgeschlagen: {e}"}), 502
 
+    uhash = apicache.user_hash(subdomain, username)
+    if request.args.get("refresh", "0") != "1":
+        try:
+            cached = apicache.load_likes(uhash, event_id)
+            if cached is not None and apicache.is_fresh(
+                    cached.get("saved_at"), apicache.LIKES_TTL_S):
+                data = cached.get("data") or {}
+                return jsonify({"likes": data.get("likes", []),
+                                "replies": data.get("replies", []),
+                                "summary": data.get("summary", {}),
+                                "cached": True})
+        except Exception:
+            pass
+
     try:
         result = get_message_likes(edupage, event_id)
+        try:
+            apicache.save_likes(uhash, event_id, result)
+        except Exception:
+            pass
         return jsonify({"likes": result["likes"], "replies": result["replies"],
-                        "summary": result["summary"]})
+                        "summary": result["summary"], "cached": False})
     except Exception as e:
         return jsonify({"error": f"Likes konnten nicht geladen werden: {e}"}), 502
 

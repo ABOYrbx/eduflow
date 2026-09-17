@@ -19,6 +19,8 @@
   .lesson .meta{margin-bottom:0;font-size:12px}
   .lesson.is-cancelled{opacity:.6}
   .lesson.is-cancelled h3{text-decoration:line-through}
+  .lesson.is-event{border-left:6px solid #D97706;background:#FFFBEB}
+  [data-theme="dark"] .lesson.is-event{background:#211811}
   .lesson.compact{flex-direction:column;align-items:stretch;gap:6px;padding:10px 12px}
   .lesson.compact .lesson-time{min-width:0;font-size:12px;color:var(--ink-muted)}
   .lesson.compact .lesson-main h3{font-size:14px}
@@ -40,25 +42,6 @@
           <div class="pm-head">
             <div class="t">Dein Profil</div>
             <div class="u">{{ username }} @ {{ subdomain }}</div>
-          </div>
-          <div class="pm-div"></div>
-          <div class="pm-sec">Einstellungen</div>
-          <div class="pm-row">
-            <span>Erscheinungsbild</span>
-            <button class="theme-toggle" type="button" aria-label="Farbschema wechseln">☾</button>
-          </div>
-          <div class="pm-row pm-accents">
-            <span>Akzentfarbe</span>
-            <div class="accent-dots" role="group" aria-label="Akzentfarbe">
-              <button class="accent-dot" type="button" data-set-accent="black" style="--c:#000000" aria-label="Schwarz" title="Schwarz"></button>
-              <button class="accent-dot" type="button" data-set-accent="blue" style="--c:#2563EB" aria-label="Blau" title="Blau"></button>
-              <button class="accent-dot" type="button" data-set-accent="violet" style="--c:#7C3AED" aria-label="Lila" title="Lila"></button>
-              <button class="accent-dot" type="button" data-set-accent="teal" style="--c:#0E7490" aria-label="Petrol" title="Petrol"></button>
-              <button class="accent-dot" type="button" data-set-accent="green" style="--c:#16A34A" aria-label="Grün" title="Grün"></button>
-              <button class="accent-dot" type="button" data-set-accent="orange" style="--c:#EA580C" aria-label="Orange" title="Orange"></button>
-              <button class="accent-dot" type="button" data-set-accent="red" style="--c:#DC2626" aria-label="Rot" title="Rot"></button>
-              <button class="accent-dot" type="button" data-set-accent="pink" style="--c:#DB2777" aria-label="Pink" title="Pink"></button>
-            </div>
           </div>
           <div class="pm-div"></div>
           <a class="pm-link" href="/einstellungen" role="menuitem">Einstellungen</a>
@@ -106,12 +89,12 @@
   </form>
 
   {% macro lesson_card(l, compact=False, idx=0) %}
-    <div class="lesson card anim-in{% if l.is_cancelled %} is-cancelled{% endif %}{% if compact %} compact{% endif %}" style="--d:{{ [idx * 45, 450]|min }}ms">
-      <div class="lesson-time">{{ l.time }}</div>
+    <div class="lesson card anim-in{% if l.is_cancelled %} is-cancelled{% endif %}{% if compact %} compact{% endif %}{% if l.is_event %} is-event{% endif %}" style="--d:{{ [idx * 45, 450]|min }}ms">
+      {% if not l.is_event %}<div class="lesson-time">{{ l.time }}</div>{% endif %}
       <div class="lesson-main">
         <h3>{{ l.title }}</h3>
         <div class="meta">
-          {% if not l.is_lernzeit %}<span class="tag tag-solid">{{ l.period }}. Std.</span>{% endif %}
+          {% if not l.is_lernzeit and not l.is_event %}<span class="tag tag-solid">{{ l.period }}. Std.</span>{% endif %}
           {% if l.is_cancelled %}<span class="tag tag-red">entfällt</span>{% endif %}
           {% if l.is_event %}<span class="tag tag-amber">Event</span>{% endif %}
           {% if l.is_online %}<span class="tag tag-blue">online</span>{% endif %}
@@ -135,10 +118,10 @@
           {% for d in week %}
             {% if (d.date, p) not in covered %}
               {% set l = matrix[d.date].get(p) %}
-              <div class="tt-cell {% if l and l.is_cancelled %}is-cancelled{% endif %}" style="grid-column:{{ loop.index0 + 2 }};grid-row:{{ row }}{% if l and l.rowspan > 1 %} / span {{ l.rowspan }}{% endif %}">
+              <div class="tt-cell {% if l and l.is_cancelled %}is-cancelled{% endif %}{% if l and l.is_event %} is-event{% endif %}" style="grid-column:{{ loop.index0 + 2 }};grid-row:{{ row }}{% if l and l.rowspan > 1 %} / span {{ l.rowspan }}{% endif %}">
               {% if l %}
                 <strong>{{ l.title }}</strong>
-                <small>{% if l.rooms %}Raum {{ l.rooms }}{% endif %}{% if l.rooms and l.teachers %} · {% endif %}{% if l.teachers %}{{ l.teachers }}{% endif %}{% if l.time and 'lernzeit' not in l.title.lower() %}{% if l.rooms or l.teachers %} · {% endif %}{{ l.time }}{% endif %}</small>
+                <small>{% if l.rooms %}Raum {{ l.rooms }}{% endif %}{% if l.rooms and l.teachers %} · {% endif %}{% if l.teachers %}{{ l.teachers }}{% endif %}{% if l.time and not l.is_lernzeit and not l.is_event %}{% if l.rooms or l.teachers %} · {% endif %}{{ l.time }}{% endif %}</small>
                 {% if l.is_cancelled %}<span class="tag tag-red">entfällt</span>{% endif %}
               {% else %}
                 <span class="tt-empty">–</span>

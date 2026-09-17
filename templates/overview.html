@@ -29,25 +29,6 @@
             <div class="u">{{ username }} @ {{ subdomain }}</div>
           </div>
           <div class="pm-div"></div>
-          <div class="pm-sec">Einstellungen</div>
-          <div class="pm-row">
-            <span>Erscheinungsbild</span>
-            <button class="theme-toggle" type="button" aria-label="Farbschema wechseln">☾</button>
-          </div>
-          <div class="pm-row pm-accents">
-            <span>Akzentfarbe</span>
-            <div class="accent-dots" role="group" aria-label="Akzentfarbe">
-              <button class="accent-dot" type="button" data-set-accent="black" style="--c:#000000" aria-label="Schwarz" title="Schwarz"></button>
-              <button class="accent-dot" type="button" data-set-accent="blue" style="--c:#2563EB" aria-label="Blau" title="Blau"></button>
-              <button class="accent-dot" type="button" data-set-accent="violet" style="--c:#7C3AED" aria-label="Lila" title="Lila"></button>
-              <button class="accent-dot" type="button" data-set-accent="teal" style="--c:#0E7490" aria-label="Petrol" title="Petrol"></button>
-              <button class="accent-dot" type="button" data-set-accent="green" style="--c:#16A34A" aria-label="Grün" title="Grün"></button>
-              <button class="accent-dot" type="button" data-set-accent="orange" style="--c:#EA580C" aria-label="Orange" title="Orange"></button>
-              <button class="accent-dot" type="button" data-set-accent="red" style="--c:#DC2626" aria-label="Rot" title="Rot"></button>
-              <button class="accent-dot" type="button" data-set-accent="pink" style="--c:#DB2777" aria-label="Pink" title="Pink"></button>
-            </div>
-          </div>
-          <div class="pm-div"></div>
           <a class="pm-link" href="/einstellungen" role="menuitem">Einstellungen</a>
           <a class="pm-link pm-danger" href="/logout" role="menuitem">Abmelden</a>
         </div>
@@ -62,22 +43,41 @@
       <div class="clock-time" id="clock">{{ now_time }}</div>
       <div class="clock-date">{{ now_date }}</div>
     </div>
-    <div class="weather-card" id="weather">
+    <div class="weather-card" id="weather" role="button" tabindex="0"
+         aria-label="Wetterdetails öffnen" title="Wetterdetails öffnen">
       <div class="wx-day"><div class="wx-l">Wetter</div><div class="wx-cond">lädt…</div></div>
     </div>
-    <a class="now-card now-right" href="/stundenplan">
-      <div class="l">jetzt</div>
-      {% if current %}
-        <div class="n">{{ current.title }}</div>
-        <div class="s">{{ current.time }}{% if current.rooms %} · Raum {{ current.rooms }}{% endif %}{% if current.teachers %} · {{ current.teachers }}{% endif %}</div>
-      {% elif next %}
-        <div class="n">Pause</div>
-        <div class="s">weiter {{ next.time }}: {{ next.title }}</div>
-      {% else %}
-        <div class="n">Schulfrei</div>
-        <div class="s">kein Unterricht mehr heute</div>
-      {% endif %}
-    </a>
+    <div class="now-card now-right now-swipe" id="nowSwipe" data-start="{{ lesson_start }}">
+      <div class="now-top">
+        <span class="l">Stunden heute</span>
+        <span class="now-count" id="nowCount"></span>
+      </div>
+      <div class="now-viewport" id="nowViewport">
+        <div class="now-track" id="nowTrack">
+          {% for l in lessons %}
+            <div class="now-slide">
+              <div class="n">{{ l.title }}</div>
+              <div class="s">{{ l.period }}. Std · {{ l.time }}{% if l.rooms %} · Raum {{ l.rooms }}{% endif %}{% if l.teachers %} · {{ l.teachers }}{% endif %}</div>
+              <div class="now-tags">
+                {% if l.is_now %}<span class="tag tag-solid"><span class="now-dot"></span>Jetzt</span>{% endif %}
+                {% if l.is_cancelled %}<span class="tag tag-muted">Entfällt</span>{% endif %}
+              </div>
+            </div>
+          {% endfor %}
+          {% if not lessons %}
+            <div class="now-slide">
+              <div class="n">Schulfrei</div>
+              <div class="s">kein Unterricht heute</div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="now-nav">
+        <button class="now-arrow" id="nowPrev" type="button" aria-label="Vorherige Stunde">‹</button>
+        <a class="now-link" href="/stundenplan">Stundenplan</a>
+        <button class="now-arrow" id="nowNext" type="button" aria-label="Nächste Stunde">›</button>
+      </div>
+    </div>
   </div>
 
   {% with msgs = get_flashed_messages(with_categories=true) %}
@@ -154,6 +154,13 @@
   <footer><p>EduFlow Dashboard · lokal{% if cache_info %} · {{ cache_info }}{% endif %}</p></footer>
 </main>
 
+<div class="wx-modal-backdrop" id="wxModal" hidden>
+  <div class="wx-modal" role="dialog" aria-modal="true" aria-label="Wetterdetails">
+    <button class="wx-modal-close" id="wxModalClose" type="button" aria-label="Schließen">×</button>
+    <div id="wxModalBody"><div class="wx-cond">lädt…</div></div>
+  </div>
+</div>
+
 <script>
 // Live-Uhr (oben links): jede Sekunde aktualisieren, deutsches Format.
 (function () {
@@ -168,6 +175,88 @@
 })();
 </script>
 <script>
+// Stunden-Karussell in der Jetzt-Karte: per Wisch oder Pfeile blättern.
+// Startposition (laufende/nächste Stunde) kommt per data-start vom Server.
+(function () {
+  var root = document.getElementById('nowSwipe');
+  if (!root) return;
+  var viewport = document.getElementById('nowViewport');
+  var track = document.getElementById('nowTrack');
+  if (!viewport || !track) return;
+  var slides = track.children.length;
+  var count = document.getElementById('nowCount');
+  var prev = document.getElementById('nowPrev');
+  var next = document.getElementById('nowNext');
+  var idx = parseInt(root.dataset.start || '0', 10) || 0;
+  if (idx < 0) idx = 0;
+  if (idx > slides - 1) idx = Math.max(slides - 1, 0);
+
+  function pos(i) {
+    var s = track.children[i];
+    return s ? s.offsetLeft : 0;
+  }
+  function paint() {
+    track.style.transform = 'translateX(-' + pos(idx) + 'px)';
+    if (count) count.textContent = slides > 1 ? (idx + 1) + ' / ' + slides : '';
+    var multi = slides > 1;
+    if (prev) prev.style.visibility = multi ? '' : 'hidden';
+    if (next) next.style.visibility = multi ? '' : 'hidden';
+  }
+  function go(d) {
+    var n = idx + d;
+    if (n < 0 || n > slides - 1) return;
+    idx = n;
+    paint();
+  }
+  if (prev) prev.addEventListener('click', function () { go(-1); });
+  if (next) next.addEventListener('click', function () { go(1); });
+
+  // Wischen (Pointer Events, wie Hausaufgaben-Swipe): horizontal mitziehen,
+  // ab ~50px blättern; eher vertikal = Scrollen, Swipe abbrechen.
+  var pid = null, sx = 0, sy = 0, dx = 0, horiz = false;
+  viewport.addEventListener('pointerdown', function (e) {
+    if (pid !== null || slides < 2) return;
+    pid = e.pointerId; sx = e.clientX; sy = e.clientY;
+    dx = 0; horiz = false;
+    track.classList.add('drag');
+  });
+  viewport.addEventListener('pointermove', function (e) {
+    if (e.pointerId !== pid) return;
+    var mx = e.clientX - sx, my = e.clientY - sy;
+    if (!horiz && Math.abs(my) > 12 && Math.abs(my) > Math.abs(mx)) {
+      pid = null; track.classList.remove('drag');
+      return;
+    }
+    if (Math.abs(mx) > 8) {
+      horiz = true;
+      // Ab hier sicher horizontal: Pointer einfangen, damit pointerup auch
+      // bei Loslassen außerhalb ankommt (sonst bliebe die Spur stehen).
+      try { viewport.setPointerCapture(e.pointerId); } catch (err) {}
+    }
+    if (!horiz) return;
+    if (e.cancelable) e.preventDefault();
+    dx = mx;
+    track.style.transform = 'translateX(' + (-pos(idx) + dx) + 'px)';
+  });
+  function end(e) {
+    if (e.pointerId !== pid) return;
+    pid = null; track.classList.remove('drag');
+    if (horiz && Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+    else paint();
+  }
+  viewport.addEventListener('pointerup', end);
+  viewport.addEventListener('pointercancel', function () {
+    pid = null; track.classList.remove('drag'); paint();
+  });
+  viewport.addEventListener('lostpointercapture', function () {
+    if (pid === null) return;
+    pid = null; track.classList.remove('drag'); paint();
+  });
+  window.addEventListener('resize', paint);
+  paint();
+})();
+</script>
+<script>
 // Wetter (rechts neben der Uhr): heute + morgen über den Server-Proxy
 // /api/wetter (OpenWeatherMap-Key bleibt serverseitig).
 // Standort aus dem Browser, Fallback Berlin.
@@ -177,20 +266,25 @@
     return icon ? 'https://openweathermap.org/img/wn/' + icon + '@2x.png' : '';
   }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
-  function dayHtml(label, big, cond, icon, sub) {
+  function dayHtml(label, big, cond, icon, sub, pop) {
     return '<div class="wx-day"><div class="wx-l">' + label + '</div>' +
       (icon ? '<img class="wx-img" src="' + iconUrl(icon) + '" alt="' + esc(cond) + '" loading="lazy">' : '') +
       '<div class="wx-temp">' + big + '</div>' +
-      '<div class="wx-cond">' + esc(cond) + sub + '</div></div>';
+      '<div class="wx-cond">' + esc(cond) + sub + '</div>' +
+      '<div class="wx-pop">☂ ' + (pop != null ? pop + ' %' : '–') + '</div></div>';
   }
   function render(d) {
     try {
-      var t = d.today, m = d.tomorrow || {};
+      wxData = d;
+      var t = d.today, m = d.tomorrow || {}, o = d.day3 || {};
       el.innerHTML =
         dayHtml('Heute', t.temp + '°', t.desc,
-          t.icon, ' · ' + t.max + '°/' + t.min + '°') +
+          t.icon, ' · ' + t.max + '°/' + t.min + '°', t.pop) +
         dayHtml('Morgen', (m.max != null ? m.max + '°' : '–'), m.desc || '',
-          m.icon, (m.max != null ? ' · ' + m.max + '°/' + m.min + '°' : ''));
+          m.icon, (m.max != null ? ' · ' + m.max + '°/' + m.min + '°' : ''), m.pop) +
+        dayHtml(o.label || 'Übermorgen', (o.max != null ? o.max + '°' : '–'), o.desc || '',
+          o.icon, (o.max != null ? ' · ' + o.max + '°/' + o.min + '°' : ''), o.pop);
+      if (wxOpen) renderWxModal();
     } catch (e) {
       el.innerHTML = '<div class="wx-day"><div class="wx-l">Wetter</div><div class="wx-cond">nicht verfügbar</div></div>';
     }
@@ -214,6 +308,75 @@
   // 3) Browser-Geolocation, 4) Berlin.
   var serverLat = '{{ weather_lat }}', serverLon = '{{ weather_lon }}';
   var serverCity = {{ weather_city|tojson }};
+  var wxData = null, wxOpen = false;
+  var wxModal = document.getElementById('wxModal');
+  var wxModalBody = document.getElementById('wxModalBody');
+  var wxModalClose = document.getElementById('wxModalClose');
+  function fmt(v, suffix) {
+    return (v == null || v === '' || v === '–') ? '–' : v + suffix;
+  }
+  function renderWxModal() {
+    if (!wxModalBody) return;
+    if (!wxData || !wxData.today) {
+      wxModalBody.innerHTML = '<div class="wx-cond">Keine Wetterdaten – prüfe API-Key und Verbindung.</div>';
+      return;
+    }
+    var t = wxData.today, det = wxData.details || {};
+    var hours = wxData.hourly || [];
+    var h = '<div class="wx-hours">';
+    hours.forEach(function (e, i) {
+      h += '<div class="wx-hour"><div class="wx-l">' + (i === 0 ? 'Jetzt' : esc(e.time || '')) + '</div>' +
+        (e.icon ? '<img class="wx-img" src="' + iconUrl(e.icon) + '" alt="' + esc(e.desc || '') + '" loading="lazy">' : '') +
+        '<div class="wx-temp">' + (e.temp != null ? e.temp + '°' : '–') + '</div>' +
+        '<div class="wx-pop">☂ ' + (e.pop != null ? e.pop + ' %' : '–') + '</div></div>';
+    });
+    h += '</div>';
+    if (!hours.length) h = '';
+    function row(label, value) {
+      return '<div class="wx-detail"><div class="wx-l">' + label + '</div>' +
+        '<div class="wx-detail-v">' + value + '</div></div>';
+    }
+    wxModalBody.innerHTML =
+      (wxData.city ? '<div class="wx-l">Wetter in ' + esc(wxData.city) + '</div>' : '') +
+      '<div class="wx-modal-now"><div class="wx-modal-temp">' + t.temp + '°</div>' +
+      '<div class="wx-cond">' + esc(t.desc || '') + ' · ' + t.max + '°/' + t.min + '°</div></div>' +
+      '<h3 class="modal-files-title">Nächste 24 Stunden</h3>' + h +
+      '<h3 class="modal-files-title">Details</h3>' +
+      '<div class="wx-details">' +
+      row('Gefühlt', fmt(det.feels_like, '°')) +
+      row('Wind', (det.wind_kmh != null ? det.wind_kmh + ' km/h' : '–') +
+        (det.wind_dir && det.wind_dir !== '–' ? ' ' + esc(det.wind_dir) : '')) +
+      row('Luftfeuchte', fmt(det.humidity, ' %')) +
+      row('Luftdruck', fmt(det.pressure, ' hPa')) +
+      row('Wolken', fmt(det.clouds, ' %')) +
+      row('Sicht', fmt(det.visibility_km, ' km')) +
+      row('Sonnenaufgang', esc(det.sunrise || '–')) +
+      row('Sonnenuntergang', esc(det.sunset || '–')) +
+      '</div>';
+  }
+  function setWxModal(open) {
+    if (!wxModal) return;
+    wxOpen = open;
+    wxModal.hidden = !open;
+    document.body.classList.toggle('wx-open', open);
+    if (open) {
+      renderWxModal();
+      if (wxModalClose) wxModalClose.focus();
+    }
+  }
+  if (el) {
+    el.addEventListener('click', function () { setWxModal(true); });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setWxModal(true); }
+    });
+  }
+  if (wxModalClose) wxModalClose.addEventListener('click', function () { setWxModal(false); });
+  if (wxModal) wxModal.addEventListener('click', function (e) {
+    if (e.target === wxModal) setWxModal(false);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && wxOpen) setWxModal(false);
+  });
   function locate() {
     if (serverLat !== '' && serverLon !== '') {
       load(serverLat, serverLon);
