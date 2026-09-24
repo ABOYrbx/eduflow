@@ -17,7 +17,10 @@ import json
 import os
 import re
 import secrets
+import threading
+import time
 from base64 import b64encode
+from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, timedelta, timezone
 from functools import wraps
 from pathlib import Path
@@ -30,6 +33,7 @@ from flask import (
     Flask,
     Response,
     flash,
+    g,
     jsonify,
     redirect,
     render_template,
@@ -49,6 +53,7 @@ from edupage_api.exceptions import (
 from edupage_api.people import EduAccount
 
 import cache as apicache
+import essen as essenplan
 
 # Mini-.env-Loader (keine extra Dependency): lädt KEY=Value aus .env im
 # Projektordner in os.environ, ohne echte Env-Vars zu überschreiben.
@@ -78,11 +83,65 @@ _load_dotenv()
 
 app = Flask(__name__)
 
-# Lokales Dev-Tool: statische Dateien (CSS/JS/Icons) nie cachen, damit nach
+# Statische Dateien (CSS/JS/Icons): im Dev-Betrieb nie cachen, damit nach
 # Änderungen sofort der frische Stand ankommt (kein hartes Neuladen nötig).
-app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
+# Per Env überstimmbar (Sekunden, z. B. EDUFLOW_STATIC_MAX_AGE=3600), falls
+# der Server je im LAN für mehrere Nutzer läuft.
+app.config["SEND_FILE_MAX_AGE_DEFAULT"] = int(
+    os.environ.get("EDUFLOW_STATIC_MAX_AGE", "0") or 0)
 
 BASE_DIR = Path(__file__).resolve().parent
+
+
+# ------------------------------------------------------- Server-Timing
+# Pro-Request-Phasenmessung (Login, Fetch, …) für Vorher/Nachher-Vergleiche:
+# als `Server-Timing`-Header an jeder Antwort (im Browser-DevTools lesbar)
+# plus Logzeile bei langsamen Requests. Rein additiv, kein Verhalten ändert
+# sich dadurch.
+
+def tmark(label: str, dur_s: float) -> None:
+    """Eine gemessene Phase an den aktuellen Request hängen (best-effort)."""
+    try:
+        g.timings.append((label, max(0.0, float(dur_s))))
+    except Exception:
+        pass
+
+
+@app.before_request
+def _timing_start():
+    g.req_t0 = time.perf_counter()
+    g.timings = []
+
+
+@app.after_request
+def _timing_header(resp):
+    try:
+        total = time.perf_counter() - g.req_t0
+        parts = ["total;dur=%d" % int(total * 1000)]
+        for label, dur in g.timings:
+            parts.append("%s;dur=%d" % (label, int(dur * 1000)))
+        resp.headers["Server-Timing"] = ", ".join(parts)
+        if total > 1.0:
+            app.logger.info("slow %s %.2fs (%s)",
+                            request.path, total,
+                            ", ".join("%s=%.2f" % t for t in g.timings))
+    except Exception:
+        pass
+    return resp
+
+
+def _timed(label: str):
+    """Decorator: Funktionsdauer als Server-Timing-Phase messen (additiv)."""
+    def deco(fn):
+        @wraps(fn)
+        def w(*args, **kwargs):
+            t0 = time.perf_counter()
+            try:
+                return fn(*args, **kwargs)
+            finally:
+                tmark(label, time.perf_counter() - t0)
+        return w
+    return deco
 
 
 def _load_or_create_file_secret(name: str, nbytes: int = 32) -> bytes:
@@ -114,6 +173,10 @@ def _load_or_create_file_secret(name: str, nbytes: int = 32) -> bytes:
 # Stabiler Session-Key (bleibt über Neustarts erhalten) + lange Cookie-Laufzeit.
 app.secret_key = os.environ.get("FLASK_SECRET_KEY") or _load_or_create_file_secret(".eduflow_secret").hex()
 app.permanent_session_lifetime = timedelta(days=30)
+
+# API v1 für die Android-App (einzige Anbindungsstelle; Routen in api/).
+from api import bp as api_v1_bp
+app.register_blueprint(api_v1_bp)
 
 
 class SessionExpired(Exception):
@@ -172,8 +235,58 @@ def session_password() -> str:
 
 # Server-side store for in-progress 2FA logins:
 # token -> {"edupage": Edupage, "two_factor": TwoFactorLogin,
-#           "username": ..., "subdomain": ...}
+#           "username": ..., "subdomain": ..., "created": datetime, ...}
 PENDING_2FA: dict = {}
+
+# 2FA-Zwischen-Token leben nur kurz (10 Min., per Env überstimmbar).
+# Danach werden sie verworfen – inkl. Passwort im Server-Speicher.
+PENDING_2FA_TTL_S = int(os.environ.get("EDUFLOW_PENDING_TTL", "600") or 600)
+
+
+def prune_pending_2fa(now=None) -> int:
+    """Abgelaufene 2FA-Zwischen-Einträge verwerfen. Returns Anzahl."""
+    try:
+        ref = now or datetime.now()
+        expired = []
+        for token, rec in list(PENDING_2FA.items()):
+            try:
+                created = rec.get("created") if isinstance(rec, dict) else None
+                if not isinstance(created, datetime):
+                    continue
+                age = (ref - created).total_seconds()
+                if age > PENDING_2FA_TTL_S:
+                    expired.append(token)
+            except Exception:
+                continue
+        for token in expired:
+            PENDING_2FA.pop(token, None)
+        return len(expired)
+    except Exception:
+        return 0
+
+
+def pending_2fa_get(token):
+    """Zwischen-Eintrag holen oder None (prunt nebenbei, prüft TTL)."""
+    try:
+        prune_pending_2fa()
+    except Exception:
+        pass
+    try:
+        rec = PENDING_2FA.get(token) if token else None
+    except Exception:
+        return None
+    if not isinstance(rec, dict):
+        return None
+    try:
+        created = rec.get("created")
+        if isinstance(created, datetime):
+            age = (datetime.now() - created).total_seconds()
+            if age > PENDING_2FA_TTL_S:
+                PENDING_2FA.pop(token, None)
+                return None
+    except Exception:
+        pass
+    return rec
 
 # Verlauf ab der frühestmöglichen Datenquelle der API anfordern.
 # get_notification_history(date_from) liefert alles ab date_from bis heute zurück,
@@ -366,23 +479,113 @@ def login_required(view):
     return wrapped
 
 
+def _norm_subdomain(subdomain: str) -> str:
+    """Bare Subdomain aus Eingabe/URL/Domain extrahieren (wie bisher)."""
+    subdomain = (subdomain or "").strip()
+    if not subdomain:
+        return ""
+    subdomain = subdomain.replace("https://", "").replace("http://", "").strip().strip("/")
+    if ".edupage.org" in subdomain:
+        subdomain = subdomain.split(".edupage.org")[0].split(".")[-1]
+    if "." in subdomain:
+        subdomain = subdomain.split(".")[0]
+    return subdomain
+
+
+# ------------------------------------------------------- EduPage-Session-Cache
+# do_login() meldete sich bisher bei JEDEM Seitenaufruf komplett neu an
+# (4 HTTP-Requests: MainLogin-GET, getToken-POST, login-POST, Redirect-GET).
+# Stattdessen wird die PHP-Sitzung (PHPSESSID-Cookie) pro User im Speicher
+# gehalten und per Ein-Request-Reload (`GET /user`, wie `from_session_id`)
+# reaktiviert. Klappt der Reload nicht (Sitzung abgelaufen), fällt der Code
+# auf den bisherigen Voll-Login zurück – Captcha-/2FA-Verhalten bleibt
+# unverändert. TTL per EDUFLOW_SESSION_TTL (Sekunden, Standard 30 Minuten),
+# mit 0 abschaltbar.
+_SESSIONS: dict = {}
+_SESSIONS_LOCK = threading.Lock()
+SESSION_REUSE_TTL_S = int(os.environ.get("EDUFLOW_SESSION_TTL", "1800") or 0)
+_SESSIONS_MAX = 16
+
+
+def _session_cache_get(uhash: str):
+    """Gecachte PHPSESSID holen (None bei Miss/Alter)."""
+    if not SESSION_REUSE_TTL_S:
+        return None
+    try:
+        with _SESSIONS_LOCK:
+            rec = _SESSIONS.get(uhash)
+            if not rec:
+                return None
+            age = (datetime.now() - rec["saved_at"]).total_seconds()
+            if age > SESSION_REUSE_TTL_S:
+                _SESSIONS.pop(uhash, None)
+                return None
+            return rec["session_id"]
+    except Exception:
+        return None
+
+
+def _session_cache_put(uhash: str, edupage) -> None:
+    """PHPSESSID aus eingeloggter Sitzung cachen (best-effort)."""
+    if not SESSION_REUSE_TTL_S:
+        return
+    try:
+        sid = edupage.session.cookies.get("PHPSESSID")
+        if not sid:
+            return
+        with _SESSIONS_LOCK:
+            if len(_SESSIONS) >= _SESSIONS_MAX and uhash not in _SESSIONS:
+                _SESSIONS.pop(next(iter(_SESSIONS)), None)
+            _SESSIONS[uhash] = {"session_id": sid, "saved_at": datetime.now()}
+    except Exception:
+        pass
+
+
+def _session_cache_drop(uhash: str) -> None:
+    try:
+        with _SESSIONS_LOCK:
+            _SESSIONS.pop(uhash, None)
+    except Exception:
+        pass
+
+
+def _login_via_session(subdomain: str, username: str, session_id: str):
+    """Sitzung per PHPSESSID reaktivieren (1 Request statt 4)."""
+    from edupage_api.login import Login
+    edupage = Edupage()
+    Login(edupage).reload_data(subdomain, session_id, username)
+    return edupage
+
+
 def do_login(username: str, password: str, subdomain: str):
     """Create Edupage object and log in. Returns (edupage, two_factor_or_None)."""
-    edupage = Edupage()
-    subdomain = (subdomain or "").strip()
-    if subdomain:
-        # Allow full URLs / domains: extract bare subdomain
-        subdomain = subdomain.replace("https://", "").replace("http://", "").strip().strip("/")
-        if ".edupage.org" in subdomain:
-            subdomain = subdomain.split(".edupage.org")[0].split(".")[-1]
-        # user may paste "myschool.edupage.org" -> "myschool"
-        if "." in subdomain:
-            subdomain = subdomain.split(".")[0]
-        two_factor = edupage.login(username, password, subdomain)
-    else:
+    t0 = time.perf_counter()
+    try:
+        subdomain = _norm_subdomain(subdomain)
+        if subdomain:
+            uhash = apicache.user_hash(subdomain, username)
+            cached_sid = _session_cache_get(uhash)
+            if cached_sid:
+                try:
+                    edupage = _login_via_session(subdomain, username, cached_sid)
+                    tmark("login-cached", time.perf_counter() - t0)
+                    return edupage, None, subdomain
+                except Exception:
+                    _session_cache_drop(uhash)  # abgelaufen -> Voll-Login
+            edupage = Edupage()
+            two_factor = edupage.login(username, password, subdomain)
+            if two_factor is None:
+                _session_cache_put(uhash, edupage)
+            tmark("login", time.perf_counter() - t0)
+            return edupage, two_factor, subdomain
+        edupage = Edupage()
         two_factor = edupage.login_auto(username, password)
         subdomain = edupage.subdomain
-    return edupage, two_factor, subdomain
+        tmark("login", time.perf_counter() - t0)
+        return edupage, two_factor, subdomain
+    except Exception:
+        tmark("login", time.perf_counter() - t0)
+        raise
 
 
 def fetch_history_with_fallback(edupage: Edupage, since: date):
@@ -432,6 +635,7 @@ def _filter_events_since(events, since: date):
     return out
 
 
+@_timed("timeline")
 def get_timeline_cached(edupage: Edupage, subdomain: str, username: str,
                         since: date, force_refresh: bool = False):
     """Timeline mit lokalem Cache (siehe cache.py).
@@ -498,12 +702,74 @@ def get_timeline_cached(edupage: Edupage, subdomain: str, username: str,
         return events, 0, cached_earliest, meta
 
     # ---- staler Cache: inkrementell mergen ------------------------------
+    # Standard: sofort rendern, Fenster im Hintergrund nachladen
+    # (stale-while-revalidate). Nur bei BG_REFRESH=0 oder laufendem Refresh
+    # synchron wie bisher.
+    if BG_REFRESH and _refresh_claim(uhash):
+        events = _filter_events_since(_records_to_events(records), since)
+        age = age_s or 0
+        try:
+            threading.Thread(
+                target=_refresh_timeline_window_bg,
+                args=(edupage, subdomain, username,
+                      records, cached_earliest),
+                daemon=True).start()
+        except Exception:
+            _refresh_release(uhash)
+        meta = {"from_cache": True, "cache_age_s": age,
+                "cache_info": f"Stand vom Cache ({apicache.format_age(age)}), Aktualisierung läuft",
+                "added": 0, "updated": 0, "stale_fallback": False}
+        return events, 0, cached_earliest, meta
+    return _refresh_timeline_window(edupage, subdomain, username,
+                                    records, since, cached_earliest, age_s)
+
+
+# ------------------------------------------------------- Hintergrund-Refresh
+# Stale-while-revalidate für die Timeline: Bei stalem Cache wird sofort der
+# alte Stand serviert und das Fenster (TIMELINE_WINDOW_DAYS) in einem
+# Daemon-Thread nachgeladen – die Antwort wartet nicht mehr auf EduPage.
+# Per EDUFLOW_BG_REFRESH=0 abschaltbar (dann synchron wie bisher).
+BG_REFRESH = (os.environ.get("EDUFLOW_BG_REFRESH", "1") or "1") not in (
+    "0", "false", "no")
+_REFRESHING: set = set()
+_REFRESHING_LOCK = threading.Lock()
+
+
+def _refresh_claim(uhash: str) -> bool:
+    """Genau ein Hintergrund-Refresh pro User (Doppel-Fetch vermeiden)."""
+    try:
+        with _REFRESHING_LOCK:
+            if uhash in _REFRESHING:
+                return False
+            _REFRESHING.add(uhash)
+            return True
+    except Exception:
+        return False
+
+
+def _refresh_release(uhash: str) -> None:
+    try:
+        with _REFRESHING_LOCK:
+            _REFRESHING.discard(uhash)
+    except Exception:
+        pass
+
+
+def _refresh_timeline_window(edupage, subdomain: str, username: str,
+                             records, since: date,
+                             cached_earliest: date, age_s):
+    """Stales Fenster synchron nachladen + mergen (alter Codepfad).
+
+    Returns (events, n_requests, earliest, meta) wie get_timeline_cached.
+    """
+    uhash = apicache.user_hash(subdomain, username)
     window_since = date.today() - timedelta(days=apicache.TIMELINE_WINDOW_DAYS)
     try:
         fresh, n_req, _eff = fetch_history_with_fallback(edupage, window_since)
     except Exception:
         # Offline/API-Fehler: alten Stand weiter serven statt 500.
-        events = _filter_events_since(_records_to_events(records), since)
+        events = _filter_events_since(
+            [apicache.record_to_event(r) for r in records], since)
         meta = {"from_cache": True, "cache_age_s": age_s or 0,
                 "cache_info": f"offline: Cache ({apicache.format_age(age_s)} alt) – Aktualisierung fehlgeschlagen",
                 "added": 0, "updated": 0, "stale_fallback": True}
@@ -515,7 +781,8 @@ def get_timeline_cached(edupage: Edupage, subdomain: str, username: str,
         apicache.save_timeline(uhash, cached_earliest.isoformat(), merged)
     except Exception:
         pass
-    events = _filter_events_since(_records_to_events(merged), since)
+    events = _filter_events_since(
+        [apicache.record_to_event(r) for r in merged], since)
     if added or updated:
         info = f"aktualisiert ({n_req} API-Requests, {added} neu, {updated} geändert)"
     else:
@@ -525,6 +792,23 @@ def get_timeline_cached(edupage: Edupage, subdomain: str, username: str,
     return events, n_req, cached_earliest, meta
 
 
+def _refresh_timeline_window_bg(edupage, subdomain: str, username: str,
+                                records, cached_earliest: date) -> None:
+    """Hintergrund-Variante: mergen + speichern, Fehler still schlucken."""
+    uhash = apicache.user_hash(subdomain, username)
+    try:
+        _refresh_timeline_window(edupage, subdomain, username, records,
+                                 EARLIEST_DEFAULT, cached_earliest, 0)
+    except Exception as e:
+        try:
+            app.logger.info("bg-refresh %s fehlgeschlagen: %s", uhash, e)
+        except Exception:
+            pass
+    finally:
+        _refresh_release(uhash)
+
+
+@_timed("timetable")
 def get_timetable_day_cached(edupage: Edupage, subdomain: str, username: str,
                              day: date, force_refresh: bool = False):
     """Ein einzelner Stundenplan-Tag mit Cache.
@@ -611,7 +895,8 @@ OVERVIEW_HOMEWORK_LIMIT = 10
 SETTINGS_SCHEMA = [
     {"key": "landing", "kind": "select", "label": "Startseite nach Anmeldung",
      "options": [("uebersicht", "Übersicht"), ("dashboard", "Nachrichten"),
-                 ("hausaufgaben", "Hausaufgaben"), ("stundenplan", "Stundenplan")],
+                 ("hausaufgaben", "Hausaufgaben"), ("noten", "Noten"),
+                 ("stundenplan", "Stundenplan")],
      "default": "uebersicht"},
     {"key": "hw_status", "kind": "select", "label": "Hausaufgaben: Standardfilter",
      "options": [("alle", "Alle"), ("offen", "Nur offene"),
@@ -940,6 +1225,8 @@ def index():
             return redirect(url_for("dashboard"))
         if landing == "hausaufgaben":
             return redirect(url_for("hausaufgaben"))
+        if landing == "noten":
+            return redirect(url_for("noten"))
         if landing == "stundenplan":
             return redirect(url_for("stundenplan"))
         return uebersicht()
@@ -979,6 +1266,7 @@ def login():
             "subdomain": real_subdomain,
             "password": password,  # nur im Server-Speicher, nie im Cookie
             "remember": remember,
+            "created": datetime.now(),
         }
         session["pending_2fa"] = token
         return redirect(url_for("twofa"))
@@ -990,7 +1278,7 @@ def login():
 @app.route("/2fa", methods=["GET", "POST"])
 def twofa():
     token = session.get("pending_2fa")
-    pending = PENDING_2FA.get(token) if token else None
+    pending = pending_2fa_get(token)
     if not pending:
         flash("2FA-Sitzung abgelaufen. Bitte erneut anmelden.", "error")
         return redirect(url_for("index"))
@@ -1132,6 +1420,10 @@ def dashboard():
     for e in sorted(events, key=_sort_key, reverse=True):
         t = _event_type_str(e)
         if t in MESSAGE_TYPES:
+            if _is_reply(e):
+                # Antwort auf eine andere Nachricht: steht im Thread der
+                # Elternnachricht (Detailansicht), nicht als eigene Karte.
+                continue
             by_key["nachrichten"]["items"].append(event_to_dict(e))
             seen_ids.append(getattr(e, "event_id", None))
         elif t in HOMEWORK_TYPES:
@@ -1461,15 +1753,34 @@ def hausaufgabe_ausblenden():
 
 # ------------------------------------------------------- Übersicht
 
+def _is_reply(ev) -> bool:
+    """Ob das Event eine Antwort auf eine andere Nachricht ist.
+
+    Kriterium aus der JS-Referenzlib (EdupageAPI, Message.js):
+    `isReply = !!data.textReply`. Antworten stehen im Thread der
+    Elternnachricht und werden nicht als eigene Karten gezeigt.
+    """
+    try:
+        ad = getattr(ev, "additional_data", {}) or {}
+        if isinstance(ad, dict):
+            return bool(ad.get("textReply"))
+    except Exception:
+        pass
+    return False
+
+
 def unread_messages(events, seen: set, limit: int = OVERVIEW_UNREAD_LIMIT):
     """Neueste Nachrichtentypen, die noch nicht als gesehen markiert sind.
 
     Die EduPage-API kennt kein "ungelesen"-Flag, daher zählt lokal:
     alles aus MESSAGE_TYPES, dessen ID nicht in `seen` steht.
+    Antworten (`textReply`) zählen nicht mit – sie stehen im Thread der
+    Elternnachricht, wie in der Nachrichtenliste.
     Returns (items, total_unread) – items sind `event_to_dict`-Dicts,
     neueste zuerst, auf `limit` gekürzt.
     """
-    dicts = [event_to_dict(e) for e in events if _event_type_str(e) in MESSAGE_TYPES]
+    dicts = [event_to_dict(e) for e in events
+             if _event_type_str(e) in MESSAGE_TYPES and not _is_reply(e)]
     dicts.sort(key=lambda m: m["sort_key"], reverse=True)
     unread = [m for m in dicts if str(m["id"]) not in seen]
     return unread[:limit], len(unread)
@@ -1713,24 +2024,16 @@ def _owm_aggregate_day(fc: dict, day_offset: int = 1) -> Optional[dict]:
             "pop": round(max(pops) * 100) if pops else None}
 
 
-@app.route("/api/wetter")
-@login_required
-def api_wetter():
-    """Wetter-Proxy (Key bleibt serverseitig): heute + morgen +
-    übermorgen als JSON (je mit Regenwahrscheinlichkeit `pop` in %),
-    dazu Stundenvorhersage (`hourly`, nächste 24 h in 3-h-Schritten),
-    Details (gefühlte Temperatur, Wind, …) und Ortsname (`city`).
+def get_wetter_payload(lat, lon, city):
+    """Wetterdaten laden und aufbereiten (Proxy, Key bleibt serverseitig).
 
-    Ort per ?lat=..&lon=.. oder ?city=Name (OpenWeatherMap löst den
-    Stadtnamen selbst auf). Ohne Angabe: 400.
+    Nimmt aufgelöste Ortsangaben (lat/lon als float oder None, city als str)
+    und liefert (payload_dict, http_status) – Erfolg wie bisher mit heute,
+    morgen, übermorgen, Stunden und Details; Fehler mit `error`-Feld und
+    400 (kein Ort), 503 (kein API-Key) oder 502 (Upstream/Netz).
+    Wird von der Web-Route und der API v1 gemeinsam genutzt.
     """
     params = {"appid": OPENWEATHER_KEY, "units": "metric", "lang": "de"}
-    try:
-        lat = float(request.args.get("lat", ""))
-        lon = float(request.args.get("lon", ""))
-    except (TypeError, ValueError):
-        lat = lon = None
-    city = (request.args.get("city") or "").strip()
     if lat is not None and lon is not None:
         params["lat"], params["lon"] = lat, lon
     elif city:
@@ -1808,7 +2111,46 @@ def api_wetter():
             "sunrise": _owm_localtime(sys.get("sunrise"), tz),
             "sunset": _owm_localtime(sys.get("sunset"), tz),
         },
-    }
+    }, 200
+
+
+@app.route("/api/wetter")
+@login_required
+def api_wetter():
+    """Wetter-Proxy (Key bleibt serverseitig): heute + morgen +
+    übermorgen als JSON (je mit Regenwahrscheinlichkeit `pop` in %),
+    dazu Stundenvorhersage (`hourly`, nächste 24 h in 3-h-Schritten),
+    Details (gefühlte Temperatur, Wind, …) und Ortsname (`city`).
+
+    Ort per ?lat=..&lon=.. oder ?city=Name (OpenWeatherMap löst den
+    Stadtnamen selbst auf). Ohne Angabe: 400. Logik in
+    `get_wetter_payload` (gemeinsam mit API v1 genutzt).
+    """
+    try:
+        lat = float(request.args.get("lat", ""))
+        lon = float(request.args.get("lon", ""))
+    except (TypeError, ValueError):
+        lat = lon = None
+    city = (request.args.get("city") or "").strip()
+    payload, status = get_wetter_payload(lat, lon, city)
+    return payload, status
+
+
+@app.route("/api/essen")
+@login_required
+def api_essen():
+    """Wochen-Essensplan als JSON (siehe essen.py).
+
+    Liefert Label, PDF-Quelle, Tage mit Gerichten und den heutigen Tag.
+    `?refresh=1` lädt das PDF neu statt aus dem Wochen-Cache.
+    """
+    force = request.args.get("refresh", "0") == "1"
+    try:
+        return essenplan.get_week_menu(force_refresh=force)
+    except essenplan.EssenUnavailable as e:
+        return {"error": str(e)}, 502
+    except Exception as e:
+        return {"error": f"Essenplan konnte nicht geladen werden: {e}"}, 502
 
 
 @app.route("/als-gelesen", methods=["POST"])
@@ -2026,6 +2368,224 @@ def get_message_likes(edupage: Edupage, event_id) -> dict:
     except Exception:
         raise RuntimeError("Unerwartete Antwort von EduPage.")
     return parse_likes_response(data, root_id=event_id)
+
+
+# ------------------------------------------------------- Nachrichten senden
+# Neue Nachrichten via `Edupage.send_message` (python-lib, Endpoint
+# `akcia=createItem`), Antworten via `akcia=createReply` (wie JS-Referenzlib
+# loumadev/EdupageAPI: {groupid, recipient, text, moredata}, gleiche
+# eqap-Kodierung wie getRepliesItem/homeworkFlag oben).
+
+_RECIPIENT_ID_RE = re.compile(
+    r"^(Teacher|Student|StudentOnly|Parent|Rodic|Ucitel)\d+$", re.I)
+
+
+def get_recipients(edupage: Edupage) -> list:
+    """Empfänger für den Compose-Dialog: Lehrer + Mitschüler.
+
+    Returns [{id, name, kind}] sortiert nach Name. Alles best-effort:
+    schlägt ein Teil fehl, kommt der Rest trotzdem.
+    """
+    out: list = []
+    seen: set = set()
+
+    def _add(accounts, kind: str):
+        for a in accounts or []:
+            try:
+                rid = a.get_id() if hasattr(a, "get_id") else None
+                name = getattr(a, "name", "") or str(a)
+            except Exception:
+                continue
+            if not rid or rid in seen:
+                continue
+            seen.add(rid)
+            out.append({"id": rid, "name": name.strip() or rid, "kind": kind})
+
+    for fn, kind in (("get_teachers", "Lehrer"), ("get_students", "Schüler")):
+        try:
+            _add(getattr(edupage, fn)(), kind)
+        except Exception:
+            continue
+    out.sort(key=lambda r: r["name"].lower())
+    return out
+
+
+def send_reply(edupage: Edupage, group_id, text: str) -> dict:
+    """Auf eine Nachricht antworten (`POST /timeline/?akcia=createReply`).
+
+    `recipient=""` = Antwort an alle im Thread (wie Web-Client ohne
+    Einzel-Empfänger). Wirft RuntimeError bei Server-/Antwortfehlern.
+    """
+    text = (text or "").strip()
+    if not text:
+        raise ValueError("Antworttext ist leer.")
+    url = f"https://{edupage.subdomain}.edupage.org/timeline/?akcia=createReply"
+    resp = edupage.session.post(
+        url,
+        data=_encode_eqap({
+            "groupid": str(group_id),
+            "recipient": "",
+            "text": text,
+            "moredata": json.dumps({"attachements": {}}),
+        }),
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "X-Requested-With": "XMLHttpRequest",
+        },
+        timeout=30,
+    )
+    if resp.status_code != 200:
+        raise RuntimeError(f"EduPage meldet Fehler {resp.status_code}.")
+    try:
+        data = resp.json()
+    except Exception:
+        raise RuntimeError("Unerwartete Antwort von EduPage.")
+    if not isinstance(data, dict) or str(data.get("status", "")).lower() != "ok":
+        raise RuntimeError("EduPage hat die Antwort nicht bestätigt.")
+    return data
+
+
+@app.route("/nachrichten/neu")
+@login_required
+def nachricht_neu():
+    """Compose-Dialog: neue Nachricht an Lehrer/Mitschüler schreiben."""
+    username = session["username"]
+    subdomain = session["subdomain"]
+    try:
+        edupage, username, subdomain = get_logged_in_edupage()
+    except (RuntimeError, SessionExpired):
+        flash("Sitzung erfordert erneut 2FA. Bitte erneut anmelden.", "error")
+        return redirect(url_for("logout"))
+    except (BadCredentialsException, CaptchaException):
+        flash("Anmeldung ungültig. Bitte erneut anmelden.", "error")
+        return redirect(url_for("logout"))
+    except Exception as e:
+        return render_template(
+            "compose.html", username=username, subdomain=subdomain,
+            recipients=[], error=f"Empfänger konnten nicht geladen werden: {e}",
+        )
+    try:
+        recipients = get_recipients(edupage)
+    except Exception as e:
+        return render_template(
+            "compose.html", username=username, subdomain=subdomain,
+            recipients=[], error=f"Empfänger konnten nicht geladen werden: {e}",
+        )
+    return render_template(
+        "compose.html", username=username, subdomain=subdomain,
+        recipients=recipients, error=None,
+    )
+
+
+@app.route("/api/empfaenger")
+@login_required
+def api_empfaenger():
+    """Empfängerliste als JSON für die Compose-Suche."""
+    try:
+        edupage, _, _ = get_logged_in_edupage()
+    except (RuntimeError, SessionExpired):
+        return jsonify({"error": "Sitzung abgelaufen. Bitte erneut anmelden."}), 401
+    except (BadCredentialsException, CaptchaException):
+        return jsonify({"error": "Anmeldung ungültig. Bitte erneut anmelden."}), 401
+    except Exception as e:
+        return jsonify({"error": f"Anmeldung fehlgeschlagen: {e}"}), 502
+    try:
+        return jsonify({"recipients": get_recipients(edupage)})
+    except Exception as e:
+        return jsonify({"error": f"Empfänger konnten nicht geladen werden: {e}"}), 502
+
+
+@app.route("/nachrichten/senden", methods=["POST"])
+@login_required
+def nachricht_senden():
+    """Neue Nachricht senden (ein oder mehrere Empfänger)."""
+    recipient_ids = [
+        r.strip() for r in (request.form.get("recipients", "") or "").split(",")
+        if r.strip()
+    ]
+    # Checkbox-Formular schickt ggf. mehrere `recipient`-Felder statt CSV.
+    recipient_ids += [
+        r.strip() for r in request.form.getlist("recipient") if r.strip()
+    ]
+    # Deduplizieren (Reihenfolge behalten), ungültige IDs verwerfen.
+    seen: set = set()
+    valid: list = []
+    for r in recipient_ids:
+        if r not in seen:
+            seen.add(r)
+            if _RECIPIENT_ID_RE.match(r):
+                valid.append(r)
+    body = (request.form.get("body", "") or "").strip()[:5000]
+
+    if not valid:
+        flash("Bitte mindestens einen Empfänger wählen.", "error")
+        return redirect(url_for("nachricht_neu"))
+    if not body:
+        flash("Bitte einen Nachrichtentext eingeben.", "error")
+        return redirect(url_for("nachricht_neu"))
+
+    try:
+        edupage, username, subdomain = get_logged_in_edupage()
+    except (RuntimeError, SessionExpired):
+        flash("Sitzung erfordert erneut 2FA. Bitte erneut anmelden.", "error")
+        return redirect(url_for("logout"))
+    except (BadCredentialsException, CaptchaException):
+        flash("Anmeldung ungültig. Bitte erneut anmelden.", "error")
+        return redirect(url_for("logout"))
+    except Exception as e:
+        flash(f"Senden fehlgeschlagen: {e}", "error")
+        return redirect(url_for("nachricht_neu"))
+
+    try:
+        new_id = edupage.send_message(valid, body)
+    except Exception as e:
+        flash(f"Senden fehlgeschlagen: {e}", "error")
+        return redirect(url_for("nachricht_neu"))
+
+    flash(f"Nachricht gesendet (#{new_id}).", "info")
+    return redirect(url_for("dashboard", refresh="1"))
+
+
+@app.route("/nachrichten/antworten", methods=["POST"])
+@login_required
+def nachricht_antworten():
+    """Auf eine Nachricht im Thread antworten."""
+    group_id = (request.form.get("id") or "").strip()
+    body = (request.form.get("body", "") or "").strip()[:5000]
+    back = request.form.get("back") or url_for("dashboard")
+    if not group_id:
+        flash("Keine Nachricht ausgewählt.", "error")
+        return redirect(back)
+    if not body:
+        flash("Bitte einen Antworttext eingeben.", "error")
+        return redirect(back)
+
+    try:
+        edupage, username, subdomain = get_logged_in_edupage()
+    except (RuntimeError, SessionExpired):
+        flash("Sitzung erfordert erneut 2FA. Bitte erneut anmelden.", "error")
+        return redirect(url_for("logout"))
+    except (BadCredentialsException, CaptchaException):
+        flash("Anmeldung ungültig. Bitte erneut anmelden.", "error")
+        return redirect(url_for("logout"))
+    except Exception as e:
+        flash(f"Antwort fehlgeschlagen: {e}", "error")
+        return redirect(back)
+
+    try:
+        send_reply(edupage, group_id, body)
+    except Exception as e:
+        flash(f"Antwort fehlgeschlagen: {e}", "error")
+        return redirect(back)
+
+    # Thread-Cache sofort auffrischen, damit die Antwort ohne Warten sichtbar ist.
+    try:
+        uhash = apicache.user_hash(subdomain, username)
+        apicache.save_likes(uhash, group_id, get_message_likes(edupage, group_id))
+    except Exception:
+        pass
+    flash("Antwort gesendet.", "info")
+    return redirect(back)
 
 
 # ------------------------------------------------------- Stundenplan
@@ -2321,6 +2881,308 @@ def stundenplan():
     )
 
 
+# ------------------------------------------------------- Noten
+
+def _de_num(value) -> str:
+    """Zahl mit deutschem Dezimalkomma ("2,5" statt "2.5")."""
+    try:
+        s = "%g" % float(value)
+    except (TypeError, ValueError):
+        return str(value)
+    return s.replace(".", ",")
+
+
+def grade_term_key(date_iso: str) -> str:
+    """Notendatum -> Halbjahr-Key "2025-H1" (Schuljahr Sept–Aug).
+
+    Sept–Jan = 1. Halbjahr, Feb–Aug = 2. Halbjahr. Ohne Datum fällt die
+    Note ins aktuellste Halbjahr (sie geht nie verloren)."""
+    try:
+        d = date.fromisoformat((date_iso or "").strip())
+    except (ValueError, TypeError):
+        return _current_term_key()
+    sy = d.year if d.month >= 9 else d.year - 1
+    half = 1 if d.month >= 9 or d.month == 1 else 2
+    return f"{sy}-H{half}"
+
+
+def _current_term_key() -> str:
+    today = date.today()
+    sy = today.year if today.month >= 9 else today.year - 1
+    half = 1 if today.month >= 9 or today.month == 1 else 2
+    return f"{sy}-H{half}"
+
+
+def grade_term_label(key: str) -> str:
+    """Halbjahr-Key -> deutsche Bezeichnung ("1. Halbjahr 25/26")."""
+    try:
+        sy, half = key.split("-H")
+        sy = int(sy)
+        return f"{int(half)}. Halbjahr {str(sy)[-2:]}/{str(sy + 1)[-2:]}"
+    except (ValueError, AttributeError):
+        return key
+
+
+def grade_to_dict(g) -> dict:
+    """EduGrade -> Template-Dict (Noten).
+
+    `grade_num` ist die 1–5-Note als float (für Schnitt + Farbe) oder None
+    (Punkte-/Prozent-/Verbalnoten). `weight` ist die Gewichtung (default 1).
+    Das Dict ist JSON-serialisierbar und liegt so im Noten-Cache.
+    """
+    raw = getattr(g, "grade_n", "")
+    numeric = None
+    if isinstance(raw, bool):
+        numeric = None
+    elif isinstance(raw, (int, float)):
+        try:
+            numeric = float(raw)
+        except (TypeError, ValueError):
+            numeric = None
+    elif isinstance(raw, str) and raw.strip():
+        try:
+            numeric = float(raw.strip().replace(",", "."))
+        except ValueError:
+            numeric = None
+    if numeric is not None and not 1 <= numeric <= 6:
+        # Punkte-/Prozentnoten gehören nicht auf die 1–5-Skala.
+        numeric = None
+
+    is_classic = numeric is not None and not bool(getattr(g, "verbal", False))
+
+    if is_classic:
+        display = _de_num(numeric)
+    elif isinstance(raw, float) and raw.is_integer():
+        display = str(int(raw))
+    elif isinstance(raw, float):
+        display = _de_num(raw)
+    elif isinstance(raw, str) and raw.strip():
+        display = raw.strip()
+    else:
+        display = "–"
+
+    try:
+        weight = float(getattr(g, "importance", None) or 1.0)
+        if not weight > 0:
+            weight = 1.0
+    except (TypeError, ValueError):
+        weight = 1.0
+
+    max_points = getattr(g, "max_points", None)
+    try:
+        max_points = float(max_points) if max_points is not None else None
+    except (TypeError, ValueError):
+        max_points = None
+    percent = getattr(g, "percent", None)
+    try:
+        percent = float(percent) if percent not in (None, float("inf")) else None
+    except (TypeError, ValueError):
+        percent = None
+
+    try:
+        class_avg = getattr(g, "class_grade_avg", None)
+        class_avg = float(class_avg) if class_avg is not None else None
+    except (TypeError, ValueError):
+        class_avg = None
+
+    ts = getattr(g, "date", None)
+    if isinstance(ts, datetime):
+        date_display = ts.strftime("%d.%m.%Y")
+        date_iso = ts.date().isoformat()
+        sort_key = ts.isoformat()
+    else:
+        date_display = str(ts or "–")
+        date_iso = ""
+        sort_key = ""
+
+    teacher = getattr(g, "teacher", None)
+    teacher_name = (getattr(teacher, "name", "") or "").strip() if teacher else ""
+    if not teacher_name and teacher:
+        try:
+            teacher_name = str(teacher)
+        except Exception:
+            teacher_name = ""
+
+    if is_classic and numeric is not None:
+        if numeric <= 2:
+            badge = "g12"
+        elif numeric <= 3:
+            badge = "g3"
+        elif numeric <= 4:
+            badge = "g4"
+        else:
+            badge = "g56"
+    else:
+        badge = "gx"
+
+    sub_bits = []
+    if max_points is not None:
+        sub_bits.append(f"von {_de_num(max_points)} Punkten")
+    if percent is not None:
+        sub_bits.append(f"{_de_num(percent)} %")
+    if weight != 1.0:
+        sub_bits.append(f"Gewichtung ×{_de_num(weight)}")
+
+    return {
+        "id": getattr(g, "event_id", ""),
+        "title": (getattr(g, "title", "") or "").strip() or "Note",
+        "subject": (getattr(g, "subject_name", "") or "").strip() or "Sonstiges",
+        "teacher": teacher_name,
+        "date_display": date_display,
+        "date_iso": date_iso,
+        "sort_key": sort_key,
+        "comment": (getattr(g, "comment", "") or "").strip(),
+        "grade_display": display,
+        "grade_num": numeric if is_classic else None,
+        "weight": weight,
+        "weight_display": "" if weight == 1.0 else f"×{_de_num(weight)}",
+        "grade_sub": " · ".join(sub_bits),
+        "badge": badge,
+        "class_avg": class_avg,
+        "class_avg_display": _de_num(class_avg) if class_avg is not None else "",
+        "is_classic": is_classic,
+    }
+
+
+def grades_average(items) -> "float | None":
+    """Gewichteter Schnitt über klassische 1–5-Noten (Gewichtung = importance)."""
+    total = 0.0
+    weights = 0.0
+    for i in items or []:
+        v = i.get("grade_num")
+        if not isinstance(v, (int, float)) or not 1 <= v <= 6:
+            continue
+        try:
+            w = float(i.get("weight") or 1.0)
+            if not w > 0:
+                w = 1.0
+        except (TypeError, ValueError):
+            w = 1.0
+        total += v * w
+        weights += w
+    if not weights:
+        return None
+    return round(total / weights, 2)
+
+
+def get_grades_cached(edupage: Edupage, subdomain: str, username: str,
+                      force_refresh: bool = False):
+    """Noten mit Cache (eine Datei pro User, TTL GRADES_TTL_S).
+
+    Returns (grade_dicts, meta {from_cache, cache_age_s, cache_info}).
+    grade_dicts ist bereits das `grade_to_dict`-Format (anzeigefertig).
+    """
+    uhash = apicache.user_hash(subdomain, username)
+    cached = apicache.load_grades(uhash)
+    if cached is not None and not force_refresh \
+            and apicache.is_fresh(cached.get("saved_at"), apicache.GRADES_TTL_S):
+        age = apicache.cache_age_s(cached.get("saved_at")) or 0
+        return cached.get("grades", []), {
+            "from_cache": True, "cache_age_s": age,
+            "cache_info": f"aus Cache ({apicache.format_age(age)} alt)"}
+
+    grades = edupage.get_grades() or []
+    dicts = [grade_to_dict(g) for g in grades]
+    try:
+        apicache.save_grades(uhash, dicts)
+    except Exception:
+        pass
+    return dicts, {"from_cache": False, "cache_age_s": 0,
+                   "cache_info": "frisch geladen"}
+
+
+@app.route("/noten")
+@app.route("/grades")
+@login_required
+def noten():
+    """Noten-Seite im EduPage-Stil: Halbjahr-Tabs, Fächer mit kompakten
+    Noten-Chips (inkl. Gewichtung), Schnitt je Fach und Gesamt.
+
+    Das Halbjahr wird aus dem Notendatum abgeleitet (Sept–Jan = 1.,
+    Feb–Aug = 2. Halbjahr) – keine Extra-API-Calls, alles aus dem Cache."""
+    username = session["username"]
+    subdomain = session["subdomain"]
+
+    term = (request.args.get("term") or "").strip()[:16]
+    force_refresh = request.args.get("refresh", "0") == "1"
+
+    def _fail(error):
+        return render_template(
+            "grades.html", username=username, subdomain=subdomain,
+            terms=[], term="alle", groups=[],
+            total=0, n_numeric=0,
+            avg=None, avg_display="–", error=error, cache_info="",
+        )
+
+    try:
+        edupage, username, subdomain = get_logged_in_edupage()
+    except (RuntimeError, SessionExpired):
+        flash("Sitzung erfordert erneut 2FA. Bitte erneut anmelden.", "error")
+        return redirect(url_for("logout"))
+    except BadCredentialsException:
+        flash("Gespeicherte Zugangsdaten sind ungültig. Bitte erneut anmelden.", "error")
+        return redirect(url_for("logout"))
+    except CaptchaException:
+        flash("EduFlow verlangt ein Captcha. Bitte einmal im Browser anmelden, dann erneut versuchen.", "error")
+        return redirect(url_for("logout"))
+    except Exception as e:
+        return _fail(f"Noten konnten nicht geladen werden: {e}")
+
+    try:
+        grades, meta = get_grades_cached(
+            edupage, subdomain, username, force_refresh)
+        cache_info = meta.get("cache_info", "")
+    except Exception as e:
+        return _fail(f"Noten konnten nicht geladen werden: {e}")
+
+    # Halbjahre aus den Notendaten ableiten (neuestes zuerst) + "alle".
+    # Key-Format "2025-H1" (Schuljahr 2025/26, 1. Halbjahr).
+    term_keys: dict = {}
+    for gd in grades:
+        term_keys.setdefault(grade_term_key(gd.get("date_iso")), 0)
+        term_keys[grade_term_key(gd.get("date_iso"))] += 1
+    terms = [{"key": k, "label": grade_term_label(k), "count": c}
+             for k, c in sorted(term_keys.items(), reverse=True)]
+    terms.append({"key": "alle", "label": "Gesamt",
+                  "count": len(grades)})
+    if term not in [t["key"] for t in terms]:
+        term = _current_term_key()
+        if term not in term_keys and terms:
+            # Aktuelles Halbjahr ohne Noten -> neuestes mit Noten.
+            term = terms[0]["key"] if terms[0]["key"] != "alle" else "alle"
+    shown = [gd for gd in grades
+             if term == "alle" or grade_term_key(gd.get("date_iso")) == term]
+
+    # Nach Fach gruppieren (Fächer alphabetisch, Noten neueste zuerst).
+    by_subject: dict = {}
+    for gd in shown:
+        by_subject.setdefault(gd["subject"], []).append(gd)
+    groups = []
+    for subject in sorted(by_subject, key=str.lower):
+        items = sorted(by_subject[subject],
+                       key=lambda i: i["sort_key"], reverse=True)
+        avg = grades_average(items)
+        groups.append({
+            "subject": subject,
+            "items": items,
+            "count": len(items),
+            "avg": avg,
+            "avg_display": _de_num(avg) if avg is not None else "–",
+        })
+
+    total = len(shown)
+    n_numeric = sum(1 for gd in shown if gd.get("is_classic"))
+    avg = grades_average(shown)
+
+    return render_template(
+        "grades.html", username=username, subdomain=subdomain,
+        terms=terms, term=term, groups=groups,
+        total=total, n_numeric=n_numeric,
+        avg=avg, avg_display=_de_num(avg) if avg is not None else "–",
+        error=None, cache_info=cache_info,
+    )
+
+
 @app.route("/datei/<int:event_id>/<int:idx>")
 @login_required
 def datei(event_id: int, idx: int):
@@ -2461,16 +3323,71 @@ def einstellungen():
             flash(f"Einstellungen konnten nicht gespeichert werden: {e}", "error")
         return redirect(url_for("einstellungen"))
 
+    from api.core import list_user_tokens
+
+    new_token = session.pop("new_api_token", None)
     return render_template(
         "settings.html", username=username, subdomain=subdomain,
         schema=SETTINGS_SCHEMA, values=user_settings(), error=None,
+        api_tokens=list_user_tokens(subdomain, username),
+        new_api_token=new_token,
     )
+
+
+@app.route("/einstellungen/api-token", methods=["POST"])
+@login_required
+def api_token_erstellen():
+    """API-Token für /api/v1 erzeugen (einmalig im Klartext anzeigen)."""
+    from api.core import create_token
+
+    username = session["username"]
+    subdomain = session["subdomain"]
+    try:
+        password = session_password()
+    except SessionExpired:
+        flash("Anmeldung abgelaufen. Bitte erneut anmelden.", "error")
+        return redirect(url_for("logout"))
+
+    device = (request.form.get("device") or "").strip()[:80]
+    try:
+        created = create_token(subdomain, username, password,
+                               device=device or "Web-UI")
+    except Exception as e:
+        flash(f"Token konnte nicht erstellt werden: {e}", "error")
+        return redirect(url_for("einstellungen"))
+    session["new_api_token"] = {
+        "token": created["token"],
+        "expires": created.get("expires", ""),
+        "device": device or "Web-UI",
+    }
+    session.modified = True
+    flash("Neuer API-Token erstellt – jetzt kopieren, er wird nur einmal gezeigt.", "info")
+    return redirect(url_for("einstellungen"))
+
+
+@app.route("/einstellungen/api-token/widerrufen", methods=["POST"])
+@login_required
+def api_token_widerrufen():
+    """Eigenes API-Token per Datensatz-Hash widerrufen."""
+    from api.core import revoke_token_by_hash
+
+    username = session["username"]
+    subdomain = session["subdomain"]
+    token_hash = (request.form.get("id") or "").strip()
+    if not token_hash:
+        flash("Kein Token ausgewählt.", "error")
+        return redirect(url_for("einstellungen"))
+    if revoke_token_by_hash(token_hash, subdomain, username):
+        flash("API-Token widerrufen.", "info")
+    else:
+        flash("Token nicht gefunden.", "error")
+    return redirect(url_for("einstellungen"))
 
 
 @app.route("/cache-clear")
 @login_required
 def cache_clear():
-    """Eigenen lokalen API-Cache löschen (Timeline + Stundenplan).
+    """Eigenen lokalen API-Cache löschen (Timeline + Stundenplan + Essen).
 
     Einstellungen (`settings_*.json`) bleiben bewusst erhalten.
     """
@@ -2481,6 +3398,12 @@ def cache_clear():
         for p in apicache.CACHE_DIR.glob(f"*_{uhash}*.json"):
             if p.name.startswith("settings_"):
                 continue  # Einstellungen bleiben bei "Cache leeren" erhalten
+            try:
+                Path(p).unlink()
+                n += 1
+            except Exception:
+                pass
+        for p in apicache.CACHE_DIR.glob("essen_*.json"):
             try:
                 Path(p).unlink()
                 n += 1

@@ -339,6 +339,38 @@ def is_fresh(saved_at_str: Any, ttl_s: int) -> bool:
     return age is not None and age < ttl_s
 
 
+# ------------------------------------------------- Noten-Cache
+# Noten (`get_grades`) ändern sich selten: eine Datei pro User mit
+# Anzeige-Dicts (siehe grade_to_dict in app.py). TTL per
+# EDUFLOW_GRADES_TTL (Sekunden, default 1 Stunde). Gleiches JSON-Format
+# und gleiche Best-effort-Semantik wie oben; "Cache leeren" in app.py
+# löscht die Datei automatisch mit (Muster `*_<uhash>.json`).
+
+GRADES_TTL_S = int(os.environ.get("EDUFLOW_GRADES_TTL", "3600"))
+
+
+def _grades_path(uhash: str) -> Path:
+    return CACHE_DIR / f"grades_{uhash}.json"
+
+
+def load_grades(uhash: str) -> Optional[Dict[str, Any]]:
+    data = _read_json(_grades_path(uhash))
+    if not data or not isinstance(data.get("grades"), list):
+        return None
+    return data
+
+
+def save_grades(uhash: str, grades: List[Dict[str, Any]]) -> None:
+    try:
+        _atomic_write_json(_grades_path(uhash), {
+            "version": 1,
+            "saved_at": datetime.now().strftime(_DATETIME_FMT),
+            "grades": grades,
+        })
+    except Exception:
+        pass
+
+
 # ------------------------------------------------- Gelesen-Status
 # Die EduPage-API kennt kein "ungelesen"-Flag, daher wird lokal pro User
 # gespeichert, welche Timeline-Event-IDs bereits gesehen wurden.
