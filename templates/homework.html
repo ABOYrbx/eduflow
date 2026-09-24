@@ -95,7 +95,12 @@
         <p class="swipe-hint">links wischen = fertig · rechts wischen = Papierkorb</p>
       </div>
       <div id="list">
+      {% set ns = namespace(hidden_head=false) %}
       {% for h in items %}
+        {% if h.is_hidden and status == 'alle' and not ns.hidden_head %}
+          {% set ns.hidden_head = true %}
+          <h3 class="group-title">Gelöscht</h3>
+        {% endif %}
         {# anim-in bewusst auf dem Wrapper: auf der Karte wäre sie während
            der Startverzögerung (opacity 0) unsichtbar und die Swipe-Ebenen
            dahinter würden beim Laden kurz aufblitzen. #}
@@ -103,13 +108,14 @@
           <div class="swipe-bg swipe-bg-del" aria-hidden="true"><span>✕ Löschen</span></div>
           <div class="swipe-bg swipe-bg-done" aria-hidden="true"><span>{{ '↩ Öffnen' if h.is_done else '✓ Fertig' }}</span></div>
           <div class="swipe-fg">
-        <div class="hw card {{ h.status_class }}{% if h.is_done %} is-done{% endif %}"
+        <div class="hw card {{ h.status_class }}{% if h.is_done %} is-done{% endif %}{% if h.is_hidden %} is-hidden{% endif %}"
          data-status="{{ h.status }}" data-type="{{ h.type }}"
          data-search="{{ (h.title ~ ' ' ~ h.subject ~ ' ' ~ h.author ~ ' ' ~ h.description ~ ' ' ~ h.type_label)|lower|e }}">
           <h3>{{ h.title }}</h3>
           <div class="meta">
             <span class="tag tag-muted">{{ h.type_label }}</span>
             <span class="tag {{ h.tag_class }}">{{ h.status }}</span>
+            {% if h.is_hidden %}<span class="tag tag-gray">Gelöscht</span>{% endif %}
             <span>fällig: <strong>{{ h.due_display }}</strong></span>
             <span>aufgegeben: {{ h.assigned }}</span>
             {% if h.subject %}<span>{{ h.subject }}</span>{% endif %}
@@ -118,7 +124,7 @@
             {% if h.done_at %}<span class="tag tag-soft">✓ {{ h.done_at }}</span>{% endif %}
           </div>
           <div class="text">{{ h.description if h.description.strip() else '(keine Beschreibung)' }}</div>
-          {% if status == 'papierkorb' %}
+          {% if status == 'papierkorb' or h.is_hidden %}
           <form method="post" action="/hausaufgaben/ausblenden" class="hw-actions">
             <input type="hidden" name="id" value="{{ h.id }}">
             <input type="hidden" name="hide" value="0">

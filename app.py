@@ -9,7 +9,7 @@ Simple Flask web dashboard:
 Run:
     pip install -r requirements.txt
     python app.py
-Then open http://127.0.0.1:5000
+Then open http://127.0.0.1:8000
 """
 
 import html
@@ -604,7 +604,10 @@ OVERVIEW_HOMEWORK_LIMIT = 10
 # Allgemeine Einstellungen (Einstellungsseite `/einstellungen`, Ablage pro
 # User in cache.py). Neue Einstellung = ein Dict anhängen – Speichern,
 # Validieren und Formular-Rendering laufen generisch über dieses Schema.
-# kinds: "select" (options=[(value, label), ...]), "bool", "int" (min/max).
+# kinds: "select" (options=[(value, label), ...]), "bool", "int" (min/max),
+# "text" (placeholder, maxlength), "password" (wie text, maskiert).
+# Optional "section": Überschrift, ab der die Einstellung in einer eigenen
+# Untergruppe gezeigt wird. "hint": Hilfetext unter dem Feld.
 SETTINGS_SCHEMA = [
     {"key": "landing", "kind": "select", "label": "Startseite nach Anmeldung",
      "options": [("uebersicht", "Übersicht"), ("dashboard", "Nachrichten"),
@@ -655,6 +658,9 @@ def _coerce_setting(spec: dict, value):
         if kind == "int":
             iv = int(value)
             return max(spec.get("min", iv), min(spec.get("max", iv), iv))
+        if kind in ("text", "password"):
+            s = str(value or "").strip().replace("\n", " ").replace("\r", "")
+            return s[:int(spec.get("maxlength", 500))]
     except (TypeError, ValueError):
         pass
     return spec["default"]
@@ -1185,6 +1191,33 @@ def dashboard():
     )
 
 
+def mark_hidden(items, hidden) -> tuple:
+    """Teilt Hausaufgaben-Dicts in (sichtbar, gelöscht) und setzt je
+    Eintrag das `is_hidden`-Flag (für Design + Sortierung)."""
+    hidden = {str(x) for x in (hidden or set()) if x is not None}
+    visible, deleted = [], []
+    for i in items or []:
+        if str(i.get("id")) in hidden:
+            i["is_hidden"] = True
+            deleted.append(i)
+        else:
+            i["is_hidden"] = False
+            visible.append(i)
+    return visible, deleted
+
+
+def homework_rank(i) -> int:
+    """Sortierrang: überfällig zuerst, dann offen, dann erledigt,
+    gelöschte (Papierkorb) immer ganz unten."""
+    if i.get("is_hidden"):
+        return 3
+    if i.get("status") == "überfällig":
+        return 0
+    if i.get("status") == "erledigt":
+        return 2
+    return 1
+
+
 @app.route("/hausaufgaben")
 @app.route("/homework")
 @login_required
@@ -1262,17 +1295,20 @@ def hausaufgaben():
     items = [homework_to_dict(e) for e in hw_events]
 
     # Lokal ausgeblendete Aufgaben (Swipe nach rechts) herausfiltern –
-    # außer im Papierkorb-Modus, der genau diese zum Wiederherstellen zeigt.
+    # außer im Papierkorb-Modus (zeigt nur diese) und bei "alle"
+    # (zeigt sie zusätzlich ganz unten, eigenes Design via is_hidden).
     # Die Zähler beziehen sich immer auf die sichtbaren Aufgaben.
     hidden = apicache.load_hidden(apicache.user_hash(subdomain, username))
-    visible = [i for i in items if str(i["id"]) not in hidden]
-    n_hidden = len(items) - len(visible)
+    visible, hidden_items = mark_hidden(items, hidden)
+    n_hidden = len(hidden_items)
     n_offen = sum(1 for i in visible if i["status"] in ("offen", "heute fällig"))
     n_ueber = sum(1 for i in visible if i["status"] == "überfällig")
     n_erledigt = sum(1 for i in visible if i["status"] == "erledigt")
 
     if status_filter == "papierkorb":
-        items = [i for i in items if str(i["id"]) in hidden]
+        items = hidden_items
+    elif status_filter == "alle":
+        items = visible + hidden_items
     else:
         items = visible
 
@@ -1284,15 +1320,8 @@ def hausaufgaben():
         items = [i for i in items if i["status"] == "erledigt"]
 
     # Sortierung: Überfällige zuerst, dann Offene (nach Fälligkeit,
-    # ohne Datum hinten), Erledigte ans Ende.
-    def _rank(i):
-        if i["status"] == "überfällig":
-            return 0
-        if i["status"] == "erledigt":
-            return 2
-        return 1
-
-    items.sort(key=lambda i: (_rank(i), i["due"] == "", i["due"], i["assigned_iso"]))
+    # ohne Datum hinten), Erledigte danach, Gelöschte ganz ans Ende.
+    items.sort(key=lambda i: (homework_rank(i), i["due"] == "", i["due"], i["assigned_iso"]))
 
     return render_template(
         "homework.html", username=username, subdomain=subdomain,
@@ -2471,9 +2500,7 @@ def logout():
 
 
 if __name__ == "__main__":
-    # Standard-Port 5000, per PORT-Env-Var änderbar (z. B. PORT=8000).
-    # Hinweis macOS: Ist Port 5000 belegt (meist AirPlay-Empfänger im
-    # Control Center), dort AirPlay-Empfänger deaktivieren oder mit
-    # PORT=8000 starten.
-    port = int(os.environ.get("PORT", "5000"))
+    # Standard-Port 8000 (Port 5000 meiden: macOS AirPlay-Empfänger antwortet
+    # dort mit 403). Per PORT-Env-Var änderbar (z. B. PORT=8080).
+    port = int(os.environ.get("PORT", "8000"))
     app.run(host="127.0.0.1", port=port, debug=True)

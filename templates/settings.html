@@ -88,7 +88,12 @@
     <h2 id="set-general" class="set-title">Allgemein</h2>
     <p class="set-note">Gilt für deinen Account auf allen Geräten.</p>
     <form method="post" action="/einstellungen" style="display:flex;flex-direction:column;gap:14px">
+      {% set ns = namespace(section=None) %}
       {% for f in schema %}
+        {% if f.section and f.section != ns.section %}
+          {% set ns.section = f.section %}
+          <h3 class="set-sub">{{ f.section }}</h3>
+        {% endif %}
         {% if f.kind == 'select' %}
           <div class="field">
             <label for="set-{{ f.key }}">{{ f.label }}</label>
@@ -106,6 +111,19 @@
           <div class="field">
             <label for="set-{{ f.key }}">{{ f.label }}</label>
             <input class="input-pill" type="number" id="set-{{ f.key }}" name="{{ f.key }}" value="{{ values.get(f.key) }}" min="{{ f.min }}" max="{{ f.max }}" step="1">
+            {% if f.hint %}<div class="field-hint">{{ f.hint }}</div>{% endif %}
+          </div>
+        {% elif f.kind == 'text' %}
+          <div class="field">
+            <label for="set-{{ f.key }}">{{ f.label }}</label>
+            <input class="input-pill" type="text" id="set-{{ f.key }}" name="{{ f.key }}" value="{{ values.get(f.key) }}" {% if f.placeholder %}placeholder="{{ f.placeholder }}"{% endif %} autocomplete="off">
+            {% if f.hint %}<div class="field-hint">{{ f.hint }}</div>{% endif %}
+          </div>
+        {% elif f.kind == 'password' %}
+          <div class="field">
+            <label for="set-{{ f.key }}">{{ f.label }}</label>
+            <input class="input-pill" type="password" id="set-{{ f.key }}" name="{{ f.key }}" value="{{ values.get(f.key) }}" autocomplete="new-password">
+            {% if f.hint %}<div class="field-hint">{{ f.hint }}</div>{% endif %}
           </div>
         {% endif %}
       {% endfor %}
