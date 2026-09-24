@@ -18,6 +18,7 @@
       <a class="nav-pill" href="/">Übersicht</a>
       <a class="nav-pill" href="/dashboard">Nachrichten</a>
       <a class="nav-pill" href="/hausaufgaben">Hausaufgaben</a>
+      <a class="nav-pill" href="/noten">Noten</a>
       <a class="nav-pill" href="/stundenplan">Stundenplan</a>
     </nav>
     <div class="nav-cta">
@@ -131,7 +132,44 @@
     </form>
   </section>
 
-  <section class="card anim-in" style="--d:180ms" aria-labelledby="set-data">
+  <section class="card anim-in" style="--d:180ms" aria-labelledby="set-api">
+    <h2 id="set-api" class="set-title">API-Token</h2>
+    <p class="set-note">Token für die Android-App (<code>/api/v1</code>, 30 Tage gültig). Trage es dort als <code>Authorization: Bearer &lt;Token&gt;</code> ein.</p>
+    {% if new_api_token %}
+    <div class="notice" role="alert"><strong>Neuer Token – jetzt kopieren, er wird nur einmal gezeigt:</strong></div>
+    <div class="token-box">
+      <code id="newApiToken">{{ new_api_token.token }}</code>
+      <button class="btn btn-light btn-sm" type="button" id="copyApiToken">Kopieren</button>
+    </div>
+    <p class="set-note">Gerät: {{ new_api_token.device }} · gültig bis {{ new_api_token.expires }}</p>
+    {% endif %}
+    <form method="post" action="/einstellungen/api-token" style="display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-bottom:14px">
+      <div class="field">
+        <label for="api-device">Gerätename (optional)</label>
+        <input class="input-pill" type="text" id="api-device" name="device" placeholder="z. B. Pixel 8" maxlength="80" autocomplete="off">
+      </div>
+      <div><button class="btn btn-primary" type="submit">Neuen Token erstellen</button></div>
+    </form>
+    {% if api_tokens %}
+    <h3 class="set-sub">Aktive Token ({{ api_tokens|length }})</h3>
+    <div class="modal-files">
+      {% for t in api_tokens %}
+      <div class="modal-file">
+        <span>{{ t.device or 'Ohne Name' }} <span class="tag tag-muted">{{ t.short }}</span></span>
+        <span class="tag tag-soft">bis {{ t.expires }}</span>
+        <form method="post" action="/einstellungen/api-token/widerrufen" style="margin:0" onsubmit="return confirm('Diesen API-Token wirklich widerrufen?')">
+          <input type="hidden" name="id" value="{{ t.id }}">
+          <button class="btn btn-light btn-sm" type="submit">Widerrufen</button>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="set-note">Noch keine aktiven Token für diesen Account.</p>
+    {% endif %}
+  </section>
+
+  <section class="card anim-in" style="--d:220ms" aria-labelledby="set-data">
     <h2 id="set-data" class="set-title">Daten</h2>
     <p class="set-note">Der lokale API-Cache beschleunigt das Laden. Leeren lädt alles einmalig frisch – deine Einstellungen bleiben erhalten.</p>
     <div><a class="btn btn-light" href="/cache-clear">Cache jetzt leeren</a></div>
@@ -159,6 +197,25 @@
         setTimeout(function () { hint.hidden = true; }, 2000);
       }
     });
+  });
+  var copyBtn = document.getElementById('copyApiToken');
+  if (copyBtn) copyBtn.addEventListener('click', function () {
+    var el = document.getElementById('newApiToken');
+    var done = function () { copyBtn.textContent = 'Kopiert ✓'; };
+    try {
+      if (navigator.clipboard && el) {
+        navigator.clipboard.writeText(el.textContent).then(done, function () {});
+        return;
+      }
+    } catch (e) {}
+    if (el) {
+      var r = document.createRange();
+      r.selectNodeContents(el);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(r);
+      try { document.execCommand('copy'); done(); } catch (e) {}
+    }
   });
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', syncThemeRadios);

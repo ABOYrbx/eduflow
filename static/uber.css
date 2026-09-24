@@ -285,6 +285,36 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 .stat .n-danger{color:#DC2626}
 .stat .n-ok{color:#16A34A}
 
+/* ---------- Noten (EduPage-Stil): Halbjahr-Tabs, Fächer mit Chips,
+   Schnitt rechts, aufklappbare Detailtabelle ---------- */
+.grades-bar{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:20px 0 6px}
+.grades-tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.grades-search{min-width:220px;flex:1}
+.grades-search .input-pill{width:100%;padding:10px 18px;font-size:13px}
+.grades-tools .btn-sm{white-space:nowrap}
+.subj{margin-bottom:14px}
+.subj:hover{background:#FAFAFA}
+.subj-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.subj-title h3{margin:0 0 4px;font-size:18px;font-weight:800;letter-spacing:-.3px}
+.subj-title .meta{margin-bottom:0}
+.subj-avg{font-size:26px;font-weight:800;letter-spacing:-.8px;font-variant-numeric:tabular-nums;flex-shrink:0}
+.subj-avg-none{color:var(--ink-dim)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 4px}
+.chip{min-width:46px;text-align:center;padding:8px 10px 6px;border-radius:10px;color:#fff;font-weight:800;font-size:16px;font-variant-numeric:tabular-nums}
+.chip small{display:block;font-size:10px;font-weight:700;opacity:.85;line-height:1.2}
+.chip.g12{background:#16A34A}
+.chip.g3{background:#2563EB}
+.chip.g4{background:#D97706}
+.chip.g56{background:#DC2626}
+.chip.gx{background:#6B6B6B}
+.g-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px;min-width:640px}
+.g-table th,.g-table td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+.g-table thead th{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--ink-muted);border-bottom:1px solid var(--border-strong)}
+.g-table tbody tr:last-child td{border-bottom:0}
+.g-table .nowrap{white-space:nowrap}
+.g-table .dim{color:var(--ink-muted);font-weight:500;font-size:12px}
+[data-theme="dark"] .subj:hover{background:#161616}
+
 /* ---------- Tag/Woche-Umschalter + Wochentage ---------- */
 .view-toggle{display:inline-flex;gap:2px;background:var(--surface-1);border:1px solid var(--border);padding:4px;border-radius:var(--r-full)}
 .view-toggle a{padding:8px 20px;border-radius:var(--r-full);font-size:13px;font-weight:700;color:var(--ink-muted)}
@@ -414,6 +444,10 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 .rc-d{font-size:12px;color:var(--ink-muted);line-height:1.45}
 .set-accents{gap:12px;padding:4px 2px 2px}
 .set-accents .accent-dot{width:26px;height:26px}
+/* Einmal angezeigter API-Token: monospace, umbrechbar, mit Kopieren-Button. */
+.token-box{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border:1px dashed var(--border-strong);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:var(--surface-1)}
+.token-box code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;word-break:break-all;flex:1;min-width:200px}
+[data-theme="dark"] .token-box{background:#1A1A1A}
 @media(max-width:720px){
   .radio-cards{grid-template-columns:1fr}
 }
@@ -467,9 +501,9 @@ body.wx-open{overflow:hidden}
 [data-theme="dark"] .now-card:hover{background:#1F1F1F}
 .ov-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start;margin-top:24px}
 .ov-col{min-width:0}
-.ov-col-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:2px 2px 12px;flex-wrap:wrap}
+.ov-col-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:2px 2px 12px;flex-wrap:wrap;min-height:36px}
 .ov-col-head h2{font-size:20px;font-weight:800;letter-spacing:-.5px}
-.ov-actions{display:flex;gap:8px;flex-wrap:wrap}
+.ov-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;min-height:36px}
 .ov-actions form{margin:0}
 /* Stunden-Karussell in der Jetzt-Karte (wischbar, eine Stunde sichtbar). */
 .now-swipe{overflow:hidden}
@@ -493,6 +527,22 @@ body.wx-open{overflow:hidden}
 @media(max-width:900px){
   .ov-grid{grid-template-columns:1fr}
 }
+/* Mittagessen (Wochenplan-PDF): Tages-Blätterer mit Pfeilen unten. */
+.essen-pager{overflow:hidden}
+.essen-viewport{overflow:hidden;margin:2px -4px;padding:2px 4px}
+.essen-track{position:relative;display:flex;transition:transform .25s ease}
+.essen-slide{flex:0 0 100%;min-width:0;display:flex;flex-direction:column;gap:8px;padding:2px}
+.essen-dayhead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.essen-dayhead .n{font-size:17px;font-weight:800;letter-spacing:-.3px}
+.essen-dayhead .s{font-size:13px;color:var(--ink-muted);font-weight:600}
+.essen-dish{display:flex;gap:12px;align-items:baseline;justify-content:space-between;background:var(--surface-1);border:1px solid var(--border);border-radius:12px;padding:10px 14px;font-size:14px;line-height:1.5}
+.essen-price{flex:0 0 auto;font-weight:800;font-variant-numeric:tabular-nums}
+.essen-nav{display:flex;align-items:center;justify-content:space-between;margin-top:12px}
+.essen-arrow{width:32px;height:32px;border-radius:50%;border:1px solid var(--border-strong);background:transparent;color:var(--ink);font-size:18px;line-height:1;cursor:pointer;flex-shrink:0;transition:background .15s,transform .15s}
+.essen-arrow:hover{background:var(--surface-1)}
+.essen-arrow:active{transform:scale(.92)}
+.essen-count{font-size:12px;font-weight:800;color:var(--ink-muted)}
+.essen-src{font-size:12px;color:var(--ink-dim);margin-top:10px}
 @media(max-width:720px){
   .ov-top{flex-wrap:wrap}
   .ov-top > *{flex:1 1 100%;min-width:0}

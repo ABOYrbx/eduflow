@@ -5,12 +5,13 @@ Simple local web dashboard built on the [EduPage API Python library](https://git
 
 - Enter your school **subdomain**, **username** and **password**
 - View the **Übersicht** (`/`, start page after login):
-  live clock (top left), **ungelesene Nachrichten** (left),
-  **offene Hausaufgaben** (right). Read state is tracked locally
-  per user (the API has no unread flag): opening Nachrichten or
-  pressing "Alle als gelesen markieren" marks everything as seen.
+  live clock (top left), **offene Hausaufgaben** (left),
+  **Mittagessen** (right, Tages-Blätterer mit ‹ › unten, `/api/essen`).
 - View **all timeline messages from as far back as possible**
   (uses `Edupage.get_notification_history(date_from)` with an early date, default `2010-01-01`)
+- **Nachrichten schreiben**: neue Nachricht an Lehrer/Mitschüler (`/nachrichten/neu`,
+  Empfänger-Suche, `Edupage.send_message`) + im Nachrichtendetail direkt
+  **antworten** (`POST /nachrichten/antworten`, `akcia=createReply` an alle im Thread)
 - View **Hausaufgaben** (`/hausaufgaben`): timeline events of type `homework`
   with Fälligkeitsdatum (from `additional_data.oldVals.date`), Status
   (offen / heute fällig / überfällig / erledigt), Suche + CSV-Export,
@@ -23,6 +24,9 @@ Simple local web dashboard built on the [EduPage API Python library](https://git
   nicht löschen, nur das done-Flag ist Server-Zustand.
 - View **Stundenplan** (`/stundenplan`): `Edupage.get_my_timetable(date)`
   with day navigation (Zurück / Heute / Weiter) and week view (Mo–Fr, `?view=week`)
+- View **Mittagessen** (Übersicht, rechte Spalte): Wochenplan-PDF
+  der Mensa (`/api/essen`), Start beim heutigen Tag, mit ‹ › unten
+  durch Mo–Fr blättern, PDF-Link, Wochen-Cache)
 - Search / filter by type, reload from an earlier date, export to CSV
 
 ## Run
@@ -92,9 +96,10 @@ Env overrides: `FLASK_SECRET_KEY`, `EDUFLOW_KEY`.
 
 ## Files
 
-- `app.py` – Flask app (`/`, `/login`, `/2fa`, `/uebersicht`, `/als-gelesen`, `/dashboard`, `/likes/<id>` (wer hat geliked), `/datei/<id>/<idx>` (Datei-Download), `/hausaufgaben`, `/hausaufgaben/erledigt` (als erledigt markieren), `/hausaufgaben/ausblenden` (Papierkorb: reinlegen/zurückholen + als offen markieren), `/stundenplan`, `/einstellungen`, `/logout`)
-- `templates/login.html`, `templates/2fa.html`, `templates/overview.html`, `templates/dashboard.html`, `templates/homework.html`, `templates/timetable.html`, `templates/settings.html` (Aussehen + allgemeine Einstellungen, per `SETTINGS_SCHEMA` in `app.py` erweiterbar)
+- `app.py` – Flask app (`/`, `/login`, `/2fa`, `/uebersicht`, `/als-gelesen`, `/dashboard`, `/nachrichten/neu` (Verfassen-Dialog mit Empfänger-Suche), `/nachrichten/senden` (neue Nachricht via `send_message`), `/nachrichten/antworten` (Thread-Antwort via `akcia=createReply`), `/api/empfaenger` (Lehrer+Mitschüler als JSON), `/likes/<id>` (wer hat geliked), `/datei/<id>/<idx>` (Datei-Download), `/hausaufgaben`, `/hausaufgaben/erledigt` (als erledigt markieren), `/hausaufgaben/ausblenden` (Papierkorb: reinlegen/zurückholen + als offen markieren), `/noten` (Noten nach Fach mit Schnitt), `/stundenplan`, `/api/essen` (Wochen-Essensplan als JSON), `/einstellungen`, `/logout`)
+- `templates/login.html`, `templates/2fa.html`, `templates/overview.html`, `templates/dashboard.html`, `templates/compose.html`, `templates/homework.html`, `templates/grades.html`, `templates/timetable.html`, `templates/settings.html` (Aussehen + allgemeine Einstellungen, per `SETTINGS_SCHEMA` in `app.py` erweiterbar)
 - `cache.py` – `settings_<hash>.json` pro User (bleibt bei "Cache leeren" erhalten)
+- `essen.py` – Wochen-Essensplan: SWS-Mensa-PDF der aktuellen KW laden (`Mensa-und-Ausser-Haus-<KW>.-KW.pdf`), Gerichte pro Tag parsen, Wochen-Cache `essen_YYYY-Www.json` (TTL 6 h, `EDUFLOW_ESSEN_TTL`), Quelle per `ESSEN_BASE_URL` änderbar
 - `static/uber.css` – shared Design im Uber-iOS-Stil (weiß/Schwarz, Full-Pill-Buttons, Inter)
 - `static/theme.js` – Dark Mode (Toggle in der Navi, folgt zuerst dem System, speichert die Wahl in localStorage) + Akzentfarbe (8 Farben im Profilmenü, `data-accent`, localStorage)
 - `requirements.txt`

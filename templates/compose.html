@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EduFlow Neue Nachricht</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='uber.css') }}">
+<script>try{var t=localStorage.getItem("theme");if(!t&&window.matchMedia("(prefers-color-scheme: dark)").matches){t="dark";}if(t){document.documentElement.dataset.theme=t;}var a=localStorage.getItem("accent");if(a){document.documentElement.dataset.accent=a;}}catch(e){}</script>
+<script src="{{ url_for('static', filename='theme.js') }}" defer></script>
+<script src="{{ url_for('static', filename='profile-menu.js') }}" defer></script>
+</head>
+<body>
+<div class="nav-wrap">
+  <div class="container nav">
+    <nav class="nav-mid">
+      <a class="nav-pill" href="/">Übersicht</a>
+      <a class="nav-pill active" href="/dashboard">Nachrichten</a>
+      <a class="nav-pill" href="/hausaufgaben">Hausaufgaben</a>
+      <a class="nav-pill" href="/stundenplan">Stundenplan</a>
+    </nav>
+    <div class="nav-cta">
+      <div class="profile-wrap">
+        <button class="avatar-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="Profilmenü öffnen" title="{{ username }} @ {{ subdomain }}">{{ username[0]|upper }}</button>
+        <div class="profile-menu" role="menu">
+          <div class="pm-head">
+            <div class="t">Dein Profil</div>
+            <div class="u">{{ username }} @ {{ subdomain }}</div>
+          </div>
+          <div class="pm-div"></div>
+          <a class="pm-link" href="/einstellungen" role="menuitem">Einstellungen</a>
+          <a class="pm-link pm-danger" href="/logout" role="menuitem">Abmelden</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<main class="container">
+  <div class="page-head anim-in">
+    <span class="eyebrow">Nachricht</span>
+    <h1>Neue Nachricht</h1>
+  </div>
+
+  {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in msgs %}
+      <div class="notice">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+  {% if error %}
+    <div class="notice">{{ error }}</div>
+  {% endif %}
+
+  <style>
+    .compose-form{min-height:calc(100vh - 260px);}
+    .compose-search{position:relative;flex:1;min-width:0;}
+    .compose-search .input-pill{width:100%;padding:15px 54px 15px 22px;font-size:15px;}
+    .compose-clear{position:absolute;right:8px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:var(--ink-dim);font-size:18px;line-height:1;padding:8px;cursor:pointer;border-radius:50%;}
+    .compose-clear:hover{color:var(--ink);background:rgba(0,0,0,.06);}
+    #recipList{max-height:38vh;}
+    #body{width:100%;min-height:46vh;font-size:15px;font-weight:500;line-height:1.6;}
+  </style>
+
+  <form class="card anim-in compose-form" style="--d:60ms;display:flex;flex-direction:column;gap:14px" method="post" action="/nachrichten/senden" id="composeForm">
+    <div class="field">
+      <label for="q">Empfänger suchen</label>
+      <div style="display:flex;gap:10px;align-items:center">
+        <div class="compose-search">
+          <input class="input-pill" id="q" type="search" placeholder="Name tippen, z. B. Müller…" autocomplete="off" aria-label="Empfänger suchen" autofocus>
+          <button class="compose-clear" id="qClear" type="button" aria-label="Suche leeren" title="Suche leeren" hidden>×</button>
+        </div>
+        <span class="tag tag-soft" id="matchCount" aria-live="polite"></span>
+      </div>
+    </div>
+    <div class="field">
+      <label>Empfänger <span class="tag tag-soft" id="selCount">0 gewählt</span></label>
+      <div id="recipList" style="display:flex;flex-direction:column;gap:6px;overflow:auto">
+        {% for r in recipients %}
+        <label class="check" data-name="{{ r.name|lower|e }}">
+          <input type="checkbox" name="recipient" value="{{ r.id|e }}"> {{ r.name }} <span class="tag tag-muted">{{ r.kind }}</span>
+        </label>
+        {% endfor %}
+        {% if not recipients %}
+        <p class="stats">Keine Empfänger geladen.</p>
+        {% endif %}
+      </div>
+      <p class="stats" id="noMatch" hidden>Keine Treffer – anders schreiben oder Suche leeren.</p>
+    </div>
+    <div class="field" style="flex:1;display:flex;flex-direction:column">
+      <label for="body">Nachricht</label>
+      <textarea class="input-pill" id="body" name="body" maxlength="5000" required placeholder="Deine Nachricht…" style="border-radius:18px;resize:vertical;flex:1"></textarea>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-primary" type="submit">Senden</button>
+      <a class="btn btn-light" href="/dashboard">Abbrechen</a>
+    </div>
+  </form>
+
+  <footer><p>EduFlow Dashboard · lokal</p></footer>
+</main>
+
+<script>
+// Live-Filter über die Empfängerliste (Umlaute-tolerant).
+(function () {
+  var q = document.getElementById('q');
+  var clear = document.getElementById('qClear');
+  var list = document.getElementById('recipList');
+  var count = document.getElementById('selCount');
+  var match = document.getElementById('matchCount');
+  var noMatch = document.getElementById('noMatch');
+  if (!q || !list) return;
+  function norm(s) {
+    return (s || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+  function paintCount() {
+    var n = list.querySelectorAll('input[type="checkbox"]:checked').length;
+    if (count) count.textContent = n + ' gewählt';
+  }
+  function applySearch() {
+    var words = norm(q.value).split(/\s+/).filter(Boolean);
+    var nVisible = 0;
+    list.querySelectorAll('.check').forEach(function (el) {
+      var hay = norm(el.dataset.name || el.textContent);
+      var show = !words.length || words.every(function (w) { return hay.includes(w); });
+      el.style.display = show ? '' : 'none';
+      if (show) nVisible++;
+    });
+    if (match) match.textContent = nVisible + ' Treffer';
+    if (noMatch) noMatch.hidden = nVisible !== 0;
+    if (clear) clear.hidden = !q.value;
+  }
+  q.addEventListener('input', applySearch);
+  q.addEventListener('search', applySearch);
+  q.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && q.value) { q.value = ''; applySearch(); }
+  });
+  if (clear) clear.addEventListener('click', function () {
+    q.value = ''; applySearch(); q.focus();
+  });
+  list.addEventListener('change', paintCount);
+  paintCount();
+  applySearch();
+  document.getElementById('composeForm').addEventListener('submit', function (e) {
+    var n = list.querySelectorAll('input[type="checkbox"]:checked').length;
+    if (!n) { e.preventDefault(); alert('Bitte mindestens einen Empfänger wählen.'); }
+  });
+})();
+</script>
+</body>
+</html>

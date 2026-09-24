@@ -18,6 +18,7 @@
       <a class="nav-pill active" href="/">Übersicht</a>
       <a class="nav-pill" href="/dashboard">Nachrichten</a>
       <a class="nav-pill" href="/hausaufgaben">Hausaufgaben</a>
+      <a class="nav-pill" href="/noten">Noten</a>
       <a class="nav-pill" href="/stundenplan">Stundenplan</a>
     </nav>
     <div class="nav-cta">
@@ -92,33 +93,6 @@
   <div class="ov-grid">
     <section class="ov-col anim-in" style="--d:80ms">
       <div class="ov-col-head">
-        <h2>Ungelesene Nachrichten</h2>
-        <div class="ov-actions">
-          <form method="post" action="/als-gelesen">
-            <button class="btn btn-light btn-sm" type="submit">Alle als gelesen markieren</button>
-          </form>
-          <a class="btn btn-primary btn-sm" href="/dashboard">Alle Nachrichten</a>
-        </div>
-      </div>
-      {% for m in unread %}
-        <div class="msg card">
-          <div class="meta">
-            <span>{{ m.timestamp }}</span>
-            {% if m.type != "sprava" %}<span class="tag tag-muted">{{ m.type_label }}</span>{% endif %}
-            <span><strong>{{ m.author }}</strong> → {{ m.recipient }}</span>
-          </div>
-          <div class="text">{{ m.text if m.text.strip() else '(kein Text)' }}</div>
-        </div>
-      {% endfor %}
-      {% if not unread %}
-        <div class="empty">Alles gelesen. Neue Nachrichten erscheinen hier automatisch.</div>
-      {% elif n_unread > unread|length %}
-        <div class="empty">+ {{ n_unread - unread|length }} weitere – <a href="/dashboard"><strong>alle ansehen</strong></a></div>
-      {% endif %}
-    </section>
-
-    <section class="ov-col anim-in" style="--d:140ms">
-      <div class="ov-col-head">
         <h2>Hausaufgaben</h2>
         <div class="ov-actions">
           <a class="btn btn-primary btn-sm" href="/hausaufgaben">Alle Aufgaben</a>
@@ -148,6 +122,29 @@
       {% if not homework %}
         <div class="empty">Keine offenen Hausaufgaben. Sehr gut.</div>
       {% endif %}
+    </section>
+
+    <section class="ov-col anim-in" style="--d:140ms">
+      <div class="ov-col-head">
+        <h2>Mittagessen</h2>
+        <div class="ov-actions">
+          <a class="btn btn-light btn-sm" id="essenPdf" href="#" target="_blank" rel="noopener" hidden>PDF</a>
+        </div>
+      </div>
+      <div class="ov-bundle card" id="essenWeek"><span class="wx-cond">lädt…</span></div>
+      <div class="card essen-pager" id="essenPager">
+        <div class="essen-viewport" id="essenViewport">
+          <div class="essen-track" id="essenTrack">
+            <div class="essen-slide"><div class="wx-cond">lädt…</div></div>
+          </div>
+        </div>
+        <div class="essen-nav" id="essenNav" hidden>
+          <button class="essen-arrow" id="essenPrev" type="button" aria-label="Vorheriger Tag">‹</button>
+          <span class="essen-count" id="essenCount"></span>
+          <button class="essen-arrow" id="essenNext" type="button" aria-label="Nächster Tag">›</button>
+        </div>
+        <div class="essen-src" id="essenSrc" hidden></div>
+      </div>
     </section>
   </div>
 
@@ -401,6 +398,100 @@
     }
   }
   locate();
+})();
+</script>
+<script>
+// Mittagessen (Wochenplan-PDF): Tages-Blätterer über /api/essen.
+// Start beim heutigen Tag, mit ‹ › unten durch Mo–Fr blättern.
+(function () {
+  var track = document.getElementById('essenTrack');
+  if (!track) return;
+  var nav = document.getElementById('essenNav');
+  var prev = document.getElementById('essenPrev');
+  var next = document.getElementById('essenNext');
+  var count = document.getElementById('essenCount');
+  var pdf = document.getElementById('essenPdf');
+  var src = document.getElementById('essenSrc');
+  var week = document.getElementById('essenWeek');
+  var order = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'];
+  var idx = 0, total = 1;
+  function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function fmtDate(iso) {
+    var p = String(iso || '').split('-');
+    return p.length === 3 ? (parseInt(p[2], 10) + '.' + parseInt(p[1], 10) + '.') : '';
+  }
+  function dishHtml(d) {
+    return '<div class="essen-dish"><span>' + esc(d.text || '') + '</span>' +
+      (d.price ? '<span class="essen-price">' + esc(d.price) + '</span>' : '') + '</div>';
+  }
+  function slideHtml(name, info, isToday) {
+    var h = '<div class="essen-slide"><div class="essen-dayhead">' +
+      '<span class="n">' + esc(name) + '</span>' +
+      '<span class="s">' + esc(fmtDate(info && info.date)) + '</span>' +
+      (isToday ? '<span class="tag tag-solid">Heute</span>' : '') + '</div>';
+    if (info && info.dishes && info.dishes.length) {
+      h += info.dishes.map(dishHtml).join('');
+      if (info.note) h += '<div class="wx-cond">' + esc(info.note) + '</div>';
+    } else {
+      h += '<div class="wx-cond">Für diesen Tag steht nichts im Plan.</div>';
+    }
+    return h + '</div>';
+  }
+  function pos(i) {
+    var s = track.children[i];
+    return s ? s.offsetLeft : 0;
+  }
+  function paint() {
+    track.style.transform = 'translateX(-' + pos(idx) + 'px)';
+    if (count) count.textContent = total > 1 ? (idx + 1) + ' / ' + total : '';
+  }
+  function go(d) {
+    var n = idx + d;
+    if (n < 0 || n > total - 1) return;
+    idx = n;
+    paint();
+  }
+  if (prev) prev.addEventListener('click', function () { go(-1); });
+  if (next) next.addEventListener('click', function () { go(1); });
+  window.addEventListener('resize', paint);
+  fetch('/api/essen')
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      if (!j || j.error || !j.days) {
+        track.innerHTML = '<div class="essen-slide"><div class="wx-cond">Essenplan ' +
+          esc((j && j.error) || 'nicht verfügbar') + '</div></div>';
+        if (week) week.innerHTML = '<span class="wx-cond">Essenplan nicht verfügbar</span>';
+        return;
+      }
+      var h = '';
+      order.forEach(function (name) {
+        if (!j.days[name]) return;
+        h += slideHtml(name, j.days[name], name === j.today);
+      });
+      track.innerHTML = h;
+      total = track.children.length || 1;
+      idx = 0;
+      for (var i = 0; i < order.length; i++) {
+        if (order[i] === j.today && j.days[order[i]]) { idx = i; break; }
+      }
+      if (idx > total - 1) idx = 0;
+      if (nav) nav.hidden = false;
+      paint();
+      if (j.source_url && pdf) {
+        pdf.href = j.source_url;
+        pdf.hidden = false;
+      }
+      if (src) {
+        src.textContent = 'Woche ' + (j.label || j.week || '') + ' · Quelle: SWS Schulen' +
+          (j.cache_info ? ' · ' + j.cache_info : '');
+        src.hidden = false;
+      }
+      if (week) week.textContent = 'Woche ' + (j.label || j.week || '');
+    })
+    .catch(function () {
+      track.innerHTML = '<div class="essen-slide"><div class="wx-cond">Essenplan nicht verfügbar.</div></div>';
+      if (week) week.innerHTML = '<span class="wx-cond">Essenplan nicht verfügbar</span>';
+    });
 })();
 </script>
 </body>
