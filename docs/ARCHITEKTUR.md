@@ -19,13 +19,14 @@
                   Android-Client                            macOS-Client
                     Kotlin/Compose                            SwiftUI
 
-Separater Migrationspfad (kein Ersatz im Livebetrieb):
+Paritätspfad TypeScript (Cutover N-J offen, kein Ersatz im Livebetrieb):
 Next.js-Web ──HTTP──► NestJS-API ──► Prisma/PostgreSQL
-                          │
-                          └── Fake-Schulprovider (nur lokale Demo)
+                           │
+                           ├── echter EduPage-Anbieter (N-A–NI, drahtkompatibel)
+                           └── Fake-Schulprovider (nur lokale Demo, EDUFLOW_PROVIDER=fake)
 ```
 
-Android und macOS verwenden die Python-API als gemeinsamen Datenvertrag. Der TypeScript-Stack ist eine parallel entwickelte Migration und für die Demo konfiguriert; er verbindet sich nicht mit EduPage. iOS ist implementiert, wird nach Projektvorgabe derzeit aber nicht aktiv weitergebaut.
+Android und macOS verwenden die Python-API als gemeinsamen Datenvertrag; die Clients sind noch nicht auf den TypeScript-Stack umgestellt. Dessen echter EduPage-Anbieter (Paritätspakete N-A–NI) ist drahtkompatibel zu `/api/v1`, wird aber erst nach der Cutover-Abnahme (N-J: Live-Abgleich, App-Umschaltung) zum Live-Backend. iOS ist implementiert, wird nach Projektvorgabe derzeit aber nicht aktiv weitergebaut.
 
 ## Python-Referenzanwendung
 
@@ -95,6 +96,6 @@ Das Projekt ist als lokales Werkzeug konzipiert, nicht als öffentlicher Mehrben
 
 ## TypeScript-Migrationsarchitektur
 
-`apps/api/` ist ein NestJS-Modul-Monolith: Controller → Service → Prisma/PostgreSQL. `apps/web/` ist eine Next.js-/React-Oberfläche. Gemeinsame TypeScript-Grundverträge liegen in `packages/contracts/`. Der Next.js-Server hält Zugangstokens in HttpOnly-Cookies und leitet `/api/v1/*` serverseitig an die API weiter.
+`apps/api/` ist ein NestJS-Modul-Monolith: Controller → Service → Prisma/PostgreSQL, dazu ein expliziter EduPage-Adapter (`apps/api/src/edupage/`: Protokoll, Sitzung, Timeline und Bereichsabbildungen). `apps/web/` ist eine provider-neutrale Next.js-/React-Oberfläche. Gemeinsame TypeScript-Grundverträge liegen in `packages/contracts/`. Der Next.js-Server hält Sitzungen in HttpOnly-Cookies und leitet `/api/v1/*` serverseitig an die API weiter.
 
-Der derzeitige Provider ist ein künstlicher Schulprovider. Er erzeugt synthetische Daten für Demo und Tests; echte EduPage-Anmeldung, Sitzungen, Upstream-2FA/Captcha und Abfrage-/Schreiboperationen sind nicht implementiert. Daher ist dieser Stack noch keine produktive Datenquelle und die Python-Implementierung bleibt die Referenz. Siehe [Migrationsstatus](MIGRATION.md). Der macOS-Client speichert das aktive Token aktuell lokal im Application-Support-Verzeichnis mit Nur-Besitzer-Rechten; iOS verwendet aktuell UserDefaults und ist zurückgestellt.
+Der Anbieter ist zweigeteilt: Mit `EDUFLOW_PROVIDER=fake` läuft der künstliche Schulprovider (synthetische Demo-Daten, JWT-Demo-Auth, Logins `demo`/`demo`); jeder andere Wert wählt den echten EduPage-Anbieter (EduPage-Login mit 2FA-Abbildung, opake Bearer-Token mit `pending_token` und `?dl=`-Kurz-Tokens, gleiche Routen/DTOs/Fehlercodes wie Python). Der Echtbetrieb ist implementiert, aber ohne Live-Abgleich mit echten Zugangsdaten (Cutover N-J) nicht für Clients freigegeben; die Python-Implementierung bleibt bis dahin die Referenz. Siehe [Migrationsstatus](MIGRATION.md). Der macOS-Client speichert das aktive Token aktuell lokal im Application-Support-Verzeichnis mit Nur-Besitzer-Rechten; iOS verwendet aktuell UserDefaults und ist zurückgestellt.

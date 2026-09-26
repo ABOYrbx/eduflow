@@ -21,11 +21,11 @@ Weitere Webaktionen umfassen Antworten, Likes/Threads, Anhang-Proxy, Empfänger-
 
 `static/uber.css` ist das Web-Designsystem. `static/theme.js` steuert lokale Hell-/Dunkelwahl und Akzentfarbe; `static/profile-menu.js` das Profilmenü. Die Android-/iOS-Designs orientieren sich dagegen an der PNG-Referenz `templates/EduFlow · Weitere App Screens.png`; macOS verwendet bewusst den Web-Stil.
 
-## TypeScript-Webclient (Migrations-Demo)
+## TypeScript-Webclient (Migration)
 
-`apps/web/` enthält eine Next.js-/React-Oberfläche. Das Dashboard implementiert Übersicht, Nachrichten, Hausaufgaben, Noten, Stundenplan, Termine und Einstellungen. `/login` bietet den Demo-/Anmeldeablauf. Inhalte werden über serverseitige Next-API-Routen an `apps/api` weitergereicht; Sitzungswerte liegen in HttpOnly-Cookies, nicht im Client-JavaScript.
+`apps/web/` enthält eine provider-neutrale Next.js-/React-Oberfläche. Das Dashboard implementiert Übersicht, Nachrichten, Hausaufgaben, Noten, Stundenplan, Termine und Einstellungen. `/login` bietet den Anmeldeablauf. Inhalte werden über serverseitige Next-API-Routen an `apps/api` weitergereicht; Sitzungswerte liegen in HttpOnly-Cookies, nicht im Client-JavaScript.
 
-Dieser Client läuft mit dem Fake-Provider. Seine Daten und Fehler sind für Demo-/UI-Prüfungen gedacht, nicht für echte EduPage-Konten. Er ersetzt die Flask-Oberfläche erst nach systematischer Funktions- und API-Parität.
+Der dokumentierte Demo-Start läuft mit dem Fake-Provider (synthetische Daten für Demo-/UI-Prüfungen). Der Echtpfad mit echten EduPage-Daten ist implementiert (Parität N-A–NI), aber erst nach der Cutover-Abnahme freigegeben. Der Client ersetzt die Flask-Oberfläche erst nach Funktions- und API-Parität plus Umschaltung (N-J).
 
 ## Android
 

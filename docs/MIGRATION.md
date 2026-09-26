@@ -2,55 +2,59 @@
 
 ## Ziel
 
-Die schrittweise Migration soll den Flask-Monolithen durch NestJS, PostgreSQL/Prisma und Next.js ersetzen, **ohne** die existierenden Web-Funktionen oder Android-/macOS-Clients zu brechen. Die API bleibt zunächst unter demselben `/api/v1`-Präfix. Es gibt noch keinen Beleg, dass der Python-Server vollständig ersetzt werden kann.
+Die schrittweise Migration soll den Flask-Monolithen durch NestJS, PostgreSQL/Prisma und Next.js ersetzen, **ohne** die existierenden Web-Funktionen oder Android-/macOS-Clients zu brechen. Die API bleibt unter demselben `/api/v1`-Präfix. Die Paritätspakete N0–NI sind umgesetzt; der Cutover (N-J) mit Live-Abgleich steht noch aus, daher bleibt Python bis zur Abnahme das Live-Backend.
 
-Die ausführliche Ausgangs- und Phasenplanung liegt in `migration/README.md` (repo-intern); verbindliche Grenzen stehen weiter in `AGENTS.md` und `plaene/BACKEND.md` (repo-intern, nicht Teil dieser Website).
+Die ausführliche Ausgangs- und Phasenplanung liegt in `migration/README.md` (repo-intern, Stand vor N-A–NI); maßgeblich für den aktuellen Stand ist der Node-Paritätsplan `plaene/NODE_PARITAET.md`. Verbindliche Grenzen stehen weiter in `AGENTS.md` (repo-intern, nicht Teil dieser Website).
 
 ## Bestand im Repository
 
 | Bereich | Ort | Technischer Stand |
 | --- | --- | --- |
-| API | `apps/api/` | NestJS 11, TypeScript 6, JWT-basierte Demo-Authentifizierung, Controller/Services und API-Routen. |
-| Persistenz | `apps/api/prisma/` | PostgreSQL-Schema und versionierte Migrationen; Prisma Client. |
-| Schulprovider | `apps/api/src/school/demo-school.service.ts` | Synthetische Nachrichten, Aufgaben, Noten, Stunden, Schultermine, Essen und Wetter für Tests/Demo. Kein echter EduPage-Provider. |
-| Web | `apps/web/` | Next.js 16, React 19, Server-API-Routen, HttpOnly-Session-Cookies und Dashboard-Oberfläche. |
-| Contracts | `packages/contracts/` | API-Präfix, Fehlercodes, Page-Typ und Type-Guard. Noch keine vollständigen DTOs aller Ressourcen. |
-| Installer/Demo | `install.sh`, `run.sh`, `migration/` | Interaktiver lokaler Setup-Assistent und Start der Fake-API/Web-App. |
+| API | `apps/api/` | NestJS 11, TypeScript 6, Controller/Services und alle `/api/v1`-Routen; echter EduPage-Anbieter plus Fake-Demo. |
+| Persistenz | `apps/api/prisma/` | PostgreSQL-Schema (`UserAccount`, `CredentialVault`, `ApiToken`, `PendingSecondFactor`, Präferenzen, Zustände, Caches, Audit) und versionierte Migrationen; Prisma Client. |
+| Schulprovider | `apps/api/src/edupage/`, `apps/api/src/school/demo-school.service.ts` | Echter Anbieter (Protokoll, Sitzung, Timeline, Bereiche N-A–NI) plus Fake-Anbieter nur für Demo (`EDUFLOW_PROVIDER=fake`, Logins `demo`/`demo`). |
+| Web | `apps/web/` | Next.js 16, React 19, provider-neutrale Server-API-Routen, HttpOnly-Session-Cookies und Dashboard-Oberfläche. |
+| Contracts | `packages/contracts/` | API-Präfix, Fehlercodes, Page-Typ und Type-Guard. |
+| Installer/Demo | `install.sh`, `run.sh`, `migration/` | Interaktiver lokaler Setup-Assistent und Start der Fake-Demo (API 8101, Web 3000). |
 
-Der beschriebene Stack ist für lokale Entwicklung, synthetische Daten und UI-/API-Arbeit gedacht. `EDUFLOW_PROVIDER=fake` ist eine bewusste Sicherheitsgrenze. Ist der Fake-Provider nicht eingeschaltet, melden Authentifizierung und Schulressourcen derzeit, dass der Anbieter nicht konfiguriert ist.
+Der Stack ist drahtkompatibel zu Python-`/api/v1` (gleiche Routen, DTOs, Fehlercodes und Auth-Abläufe im Echtpfad). `EDUFLOW_PROVIDER=fake` bleibt eine bewusste Demo-Grenze: Nur dort gelten synthetische Daten und Demo-Logins; jeder andere Wert wählt den echten EduPage-Anbieter.
 
-## Was noch fehlt
+## Umsetzungsstand: Pakete N0–NI fertig
 
-**Der echte EduPage-Adapter ist nicht implementiert.** Es fehlen insbesondere:
+- **N0 Fundament:** Paginierungs-Parität plus Routenmatrix-Test gegen alle 30 Python-Pfade.
+- **N-A Auth echt:** EduPage-Login/2FA/Rate-Limit/Geräte, opake Bearer- plus Pending- und DL-Tokens, `/me`, `/devices` — drahtkompatibel zu Python.
+- **N-B Nachrichten:** Liste/Thread/Senden/Antworten/Likes, lokal getracktes Ungelesen, Empfänger, Anhänge plus DL-Tokens.
+- **N-C Hausaufgaben:** Filter, done/trash, Zähler, DTO-Parität.
+- **N-D Stundenplan:** Tag/Woche, Lernzeit-Blöcke, Ganztags-Filter.
+- **N-E Noten:** Notenprotokoll, Fachabbildung, Cache.
+- **N-F Einstellungen:** Schema-Parität, Präferenzen, Cache-Clear.
+- **N-G Meta:** Mensa-PDF-Parser in TypeScript plus Wochen-Cache, Wetter-Proxy plus Suche.
+- **N-H Schulalltag:** Vertretungen plus Agenda.
+- **N-I Web:** Next.js provider-neutral (Sitzungen ohne Refresh-Token-Abhängigkeit).
 
-- tatsächliche EduPage-Anmeldung, persistente/erneuerbare upstream Session und automatische Subdomain-Ermittlung;
-- Wiederverwendung der bisherigen Bibliothekslogik, Fehlerübersetzung für echte EduPage-Antworten, Captcha und EduPage-2FA;
-- Live-Abruf und unterstützte Schreiboperationen für Nachrichten, Aufgaben, Stundenplan, Noten, Vertretungen und Schultermine;
-- echter Mensa-PDF-Download und -Parser sowie OpenWeather-Integration;
-- systematischer DTO-/OpenAPI-Abgleich mit `api/` und Dekodierung in Kotlin/Swift;
-- vollständige Browser-E2E-Tests, PostgreSQL-Integrationsmatrix und native UI-Smoke-Tests gegen die neue API.
+## Offen: N-J Cutover
 
-Die vorhandene Fake-Funktionalität darf nicht als echte Schul- oder Live-Wetterfunktion dokumentiert werden. Die Python-App und nativen Clients bleiben erhalten, bis alle Funktions- und Vertragsprüfungen bestanden sind.
+Live-DTO-Abgleiche Python↔Node brauchen einen Staging-Server mit echten Zugangsdaten (nicht offline machbar); danach folgen App-Umschaltung und Python-Archivierung. **Kein Löschen ohne explizite Freigabe.**
+
+Die Fake-Funktionalität darf nicht als echte Schul- oder Live-Wetterfunktion dokumentiert werden. Die Python-App und nativen Clients bleiben erhalten, bis alle Funktions- und Vertragsprüfungen bestanden sind.
 
 ## Aktuelle Auth-/Persistenzform
 
-Das Prisma-Schema definiert Modelle für `UserAccount`, `CredentialVault`, `ApiToken`, `PendingSecondFactor`, `UserPreference`, `LocalResourceState`, `ResourceCache` und `AuditEvent`. Konto-Präferenzen, tokenbezogene Metadaten, lokale Demo-Zustände und Cache-Platzhalter sind damit relational vorgesehen.
+Das Prisma-Schema definiert Modelle für `UserAccount`, `CredentialVault`, `ApiToken`, `PendingSecondFactor`, `UserPreference`, `LocalResourceState`, `ResourceCache` und `AuditEvent`. Konto-Präferenzen, tokenbezogene Metadaten, lokale Zustände und Cache-Platzhalter sind damit relational abgebildet.
 
-Der Fake-Auth-Service stellt JWT-Zugangs- und Refresh-Token aus und persistiert deren Hashes in `ApiToken`; Login-Daten sind künstlich. Das Vorhandensein von `CredentialVault` im Schema bedeutet **nicht**, dass ein echter EduPage-Credential-Flow bereits implementiert ist. Der Fake-Schulservice hält versendete Demo-Nachrichten im Service-Speicher; persönliche Einstellungen und lokale Aufgabenstatus werden dagegen über Prisma-Modelle geschrieben.
+Der Anbieter bestimmt die Auth-Form: Im Fake-Modus stellt der Demo-Service JWT-Zugangs- und Refresh-Token aus; im Echtpfad meldet der EduPage-Anbieter an (inklusive 2FA-`pending_token` mit zehn Minuten TTL) und stellt opake Bearer-Token aus — Antwortformen, TTLs und Rate-Limit wie Python. Der Fake-Schulservice hält versendete Demo-Nachrichten im Service-Speicher; persönliche Einstellungen und lokale Aufgabenstatus werden dagegen über Prisma-Modelle geschrieben.
 
-Die Next-Weboberfläche setzt Zugang und Refresh-Token in HttpOnly-Cookies und leitet API-Aufrufe serverseitig weiter. Der Web-Proxy versucht bei 401, das Refresh-Token zu rotieren. Vor Client-Migration muss dieses Verhalten mit dem Python-Tokenvertrag vereinheitlicht werden.
+Die Next-Weboberfläche hält Sitzungen in HttpOnly-Cookies und leitet API-Aufrufe serverseitig weiter (provider-neutral, ohne Refresh-Token-Abhängigkeit).
 
-## Vertragslücken gegenüber Python
+## Restabweichungen gegenüber Python
 
-Die beiden Systeme teilen ein Routeninventar, aber nicht in jedem Detail dieselbe Semantik:
+Der Echtpfad teilt Routen, DTOs, Fehlercodes und Auth-Abläufe mit Python. Bekannte Restunterschiede:
 
-- Python stellt im dokumentierten API v1 Login mit einem opaken API-Token bereit; der aktuelle TypeScript-Fake gibt JWT-Zugangstoken **und** Refresh-Token zurück.
-- Python-Refresh authentifiziert mit dem Bearer-Token und prüft EduPage-Zugangsdaten erneut. TypeScript erwartet bevorzugt einen separaten Refresh-Token im JSON-Body und hat keinen echten EduPage-Recheck.
-- TypeScript bietet `POST /devices` zur Ausstellung eines weiteren Tokenpaars. Die Python-API v1 hat diese Route nicht; Web-Tokens werden dort über `/einstellungen/api-token` erstellt.
-- TypeScript-Fake-Daten und Fehlertexte sind synthetisch. Ebenso sind sein Wetter und Essensplan keine Live-Antworten.
-- Die handgepflegte OpenAPI-Antwort beider Server ist nicht voll typisiert; Routenpräsenz ist noch kein Nachweis, dass DTOs, Fehlercodes, Listenhüllen, Datenschutz oder Seiteneffekte übereinstimmen.
+- TypeScript bietet `POST /devices` zur Ausstellung eines weiteren Gerätetokens. Die Python-API v1 hat diese Route nicht; Web-Tokens werden dort über `/einstellungen/api-token` erstellt.
+- Nur der Fake-Modus gibt JWT-Zugangstoken **und** Refresh-Token zurück und erwartet den Refresh-Token im JSON-Body; der Echtpfad nutzt wie Python opake Bearer-Token.
+- Die handgepflegte OpenAPI-Antwort beider Server ist nicht voll typisiert; der Routenmatrix-Test prüft alle 30 Python-Pfade, ersetzt aber keinen Live-Abgleich.
 
-Vor jeder Aktivierung für echte Clients gilt: Vertrag vereinheitlichen oder explizit versionieren, Test-Fixtures aus den Python-Responses erstellen und Android/macOS-Decoding offline prüfen.
+Vor der Client-Umschaltung (N-J) gilt weiter: Test-Fixtures aus den Python-Responses erstellen und Android/macOS-Decoding offline prüfen.
 
 ## Lokal starten und testen
 
@@ -61,7 +65,7 @@ Voraussetzungen, Installer-Verhalten und Befehle stehen vollständig unter [Entw
 ./run.sh
 ```
 
-Der Fake-Server läuft auf Port 8101; die Weboberfläche normalerweise auf 3000. Demo-Konten: `demo` / `demo`; 2FA-Demo: `demo-2fa` / `demo`, Code `123456`. Ausschließlich synthetische Demodaten verwenden. **Achtung:** `run.sh` setzt `API_SERVER_URL` für Next.js aktuell nicht auf 8101; die Web-API-Routen fallen auf Port 8001 zurück. Ohne extern gesetztes `API_SERVER_URL=http://127.0.0.1:8101` kann der Browser die Demo-API daher verfehlen (siehe [Entwicklung](ENTWICKLUNG.md)).
+Der dokumentierte Start bleibt die Fake-Demo: `./install.sh` richtet PostgreSQL und lokale API-Konfiguration ein, `./run.sh` prüft Abhängigkeiten und Datenbankkonfiguration, startet die Fake-API auf Port 8101 (wartet auf `/api/v1/health`) und danach die Weboberfläche, normalerweise Port 3000. `Ctrl+C` beendet beide. Demo-Konten: `demo` / `demo`; 2FA-Demo: `demo-2fa` / `demo`, Code `123456`. Ausschließlich synthetische Demodaten verwenden. **Achtung:** `run.sh` setzt `API_SERVER_URL` für Next.js aktuell nicht auf 8101; die Web-API-Routen fallen auf Port 8001 zurück. Ohne extern gesetztes `API_SERVER_URL=http://127.0.0.1:8101` kann der Browser die Demo-API daher verfehlen (siehe [Entwicklung](ENTWICKLUNG.md)).
 
 Für Qualitätsprüfungen aus dem Stamm:
 
@@ -71,11 +75,11 @@ npm test
 npm run build
 ```
 
-Die Tests verwenden Fakes/Stubs; es gibt noch keine vollständige E2E-Abnahme gegen ein echtes EduPage-Konto, und eine solche darf keine realen Zugangsdaten in die Test-Suite übernehmen.
+Die Tests verwenden Fakes/Stubs und Fixtures aus dem EduPage-Protokollnachbau; der Live-Abgleich gegen echte EduPage-Konten (N-J) steht aus, und ein solcher darf keine realen Zugangsdaten in die Test-Suite übernehmen.
 
 ## Abschlusskriterien der Migration
 
-Die Python-Referenz darf erst nach ausdrücklicher Funktionsabnahme entfernt oder ersetzt werden, wenn:
+Die Python-Referenz darf erst nach ausdrücklicher Funktionsabnahme entfernt oder ersetzt werden. Stand der Kriterien: echter EduPage-Adapter (N-A) und Bereichsparität (N-B–NI) sind implementiert; ausstehend sind der Live-Abgleich aller Routen/DTOs gegen echte Konten, die Client-Umschaltung von Android/macOS und der nachgewiesene Rückbau des Python-Pfads. Im Einzelnen:
 
 1. ein sicherer echter EduPage-Adapter für alle freigegebenen Lese-/Schreibabläufe implementiert ist;
 2. alle dokumentierten API-Routen, Statuscodes, DTOs, Filter, Paginierung, Cache-/State-Regeln und Downloads kompatibel oder ausdrücklich versioniert sind;

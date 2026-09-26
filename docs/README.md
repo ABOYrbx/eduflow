@@ -1,6 +1,6 @@
 # EduFlow – Projektdokumentation
 
-Diese Dokumentation beschreibt den im Repository sichtbaren Aufbau und Funktionsumfang von EduFlow. Sie ergänzt die Arbeitsregeln und Detailpläne; sie ersetzt keine davon. Sie ist am **26. September 2026** anhand des Quellcodes und der vorhandenen Pläne zusammengestellt.
+Diese Dokumentation beschreibt den im Repository sichtbaren Aufbau und Funktionsumfang von EduFlow. Sie ergänzt die Arbeitsregeln und Detailpläne; sie ersetzt keine davon. Aktualisierungsstand ist der Node-Paritätsstand N0–NI (Cutover N-J offen).
 
 ## Schnellnavigation
 
@@ -24,7 +24,7 @@ Der Funktionsumfang umfasst Nachrichten und Threads, Hausaufgaben, Stunden- und 
 Das Repository enthält derzeit zwei nebeneinander bestehende Implementierungen:
 
 1. **Python-Referenzanwendung:** Flask in `app.py`, gemeinsame JSON-API in `api/`, Web-Templates unter `templates/`. Sie ist die aktuelle Referenz für EduPage-Integration und den stabilen `/api/v1`-Vertrag.
-2. **TypeScript-Migration:** NestJS unter `apps/api/`, Next.js unter `apps/web/` und gemeinsame Verträge unter `packages/contracts/`. Sie enthält einen Fake-Schulprovider für lokale Demo und UI-Arbeit. Ein echter EduPage-Adapter fehlt; diese Migration ist noch **nicht funktionsgleich und nicht für echte EduPage-Konten verwendbar**.
+2. **TypeScript-Migration:** NestJS unter `apps/api/`, Next.js unter `apps/web/` und gemeinsame Verträge unter `packages/contracts/`. Neben dem Fake-Schulprovider für lokale Demo (`EDUFLOW_PROVIDER=fake`) ist ein echter EduPage-Anbieter implementiert (Paritätspakete N0–NI: Auth, Nachrichten, Aufgaben, Stundenplan, Noten, Einstellungen, Essen/Wetter, Schulalltag, provider-neutrales Web) — drahtkompatibel zu `/api/v1`. Der Cutover (N-J: Live-Abgleich mit echten Zugangsdaten, App-Umschaltung, Python-Archivierung) ist noch **offen**; bis zur Abnahme bleibt die Python-Anwendung das Live-Backend.
 
 `./run.sh` startet ausdrücklich die TypeScript-Demo mit Fake-Provider auf Port 8101 und die Next.js-Weboberfläche. Die Python-Anwendung startet getrennt mit `python3 app.py` auf Port 8000. Die beiden Modi nicht verwechseln; Details: [Entwicklung](ENTWICKLUNG.md) und [Migration](MIGRATION.md).
 
@@ -40,7 +40,7 @@ Wenn Angaben voneinander abweichen, gilt diese Reihenfolge:
 4. Diese Überblicksdokumentation
 5. Das ältere `README.md` im Repository-Stamm, das noch historische Projektbeschreibungen enthält
 
-Die verbindlichen Pläne (`plaene/BACKEND.md`, `ANDROID.md`, `MACOS.md`, `IOS.md`, `IOS_APP_PLAN.md`, `EDUPAGE_LUECKENPLAN.md`, `DEMO.md`) sind repo-intern und nicht Teil dieser Website.
+Verbindlich sind der Node-Paritätsplan (`plaene/NODE_PARITAET.md`, Pakete N0–NI umgesetzt, Cutover N-J offen) sowie die fertig gebauten, eingefrorenen Bereichspläne unter `plaene/archiv/` (`BACKEND.md`, `ANDROID.md`, `MACOS.md`, `IOS.md`); dazu `IOS_APP_PLAN.md`, `EDUPAGE_LUECKENPLAN.md`, `DEMO.md` und `LOKALISIERUNG.md` direkt in `plaene/`. Alle repo-intern, nicht Teil dieser Website.
 
 ## Repository-Karte
 
