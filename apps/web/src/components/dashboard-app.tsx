@@ -55,8 +55,6 @@ function messageAttachments(message: Message) {
   const filename = (message.additional_data ?? {}).filename;
   return typeof filename === "string" && filename ? [filename] : [];
 }
-  return typeof filename === "string" && filename ? [filename] : [];
-}
 function PageTitle({ eyebrow, title, detail }: { eyebrow: string; title: string; detail?: string }) { return <div className="page-head anim-in"><span className="eyebrow">{eyebrow}</span><h1>{title}</h1>{detail && <p className="stats">{detail}</p>}</div>; }
 function Notice({ error }: { error: string }) { return error ? <p className="notice-error" role="alert">{error}</p> : null; }
 function Empty({ children }: { children: string }) { return <p className="empty">{children}</p>; }
