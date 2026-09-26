@@ -95,6 +95,6 @@ Native Downloader unterstützen nicht immer einen Authorization-Header. Daher ka
 
 Downloads sind auf Hosts unter `*.edupage.org` beschränkt und laufen über die eingeloggte EduPage-Sitzung. Datei-Uploads sind nicht vorgesehen.
 
-## Python und TypeScript nicht vermischen
+## Paritätsstand TypeScript
 
-Die Python-API ist Referenz. In der TypeScript-Migration gibt es aktuell unter anderem `POST /devices` (neues Gerätetoken), getrennte Zugangs- und Refresh-Tokens sowie andere Refresh-Details. Diese Erweiterungen bzw. Abweichungen sind noch kein Beleg für API-Parität; vor nativen Clientwechseln muss der Vertrag vereinheitlicht und getestet werden.
+Die Python-API ist Referenz und Live-Backend. Der TypeScript-Echtpfad (Paritätspakete N0–NI) ist drahtkompatibel: gleiche Routen, DTOs, Fehlercodes und Auth-Abläufe (opake Bearer-Token, `pending_token`, `?dl=`-Kurz-Tokens, Rate-Limit). Ein Routenmatrix-Test prüft alle 30 Python-Pfade. Bekannte Restunterschiede: `POST /devices` existiert nur in TypeScript; der Fake-Modus nutzt JWT-Zugangs- und Refresh-Token. Der Cutover (Live-Abgleich, Client-Umschaltung) steht aus — siehe [Migration](MIGRATION.md).

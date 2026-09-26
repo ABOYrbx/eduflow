@@ -1,6 +1,6 @@
 # Funktionsübersicht
 
-EduFlow richtet sich derzeit an **eine Schüler-/Eltern-Sitzung**. Die folgenden Funktionen sind im Python-Web/API-Pfad umgesetzt; Android und macOS decken die jeweils genannten Bereiche als Clients ab. Der TypeScript-Pfad zeigt denselben Umfang mit synthetischen Demodaten, nicht mit echten EduPage-Daten.
+EduFlow richtet sich derzeit an **eine Schüler-/Eltern-Sitzung**. Die folgenden Funktionen sind im Python-Web/API-Pfad umgesetzt; Android und macOS decken die jeweils genannten Bereiche als Clients ab. Der TypeScript-Pfad deckt denselben Umfang ab — im Fake-Modus mit synthetischen Demodaten, im Echtpfad (Parität N-A–NI, Cutover offen) mit echten EduPage-Daten.
 
 ## Anmeldung, Zwei-Faktor und Geräte
 
@@ -89,6 +89,6 @@ Hell/Dunkel/System, Akzentfarbe und „Neue Nachrichten“ sind auf den Clients 
 - Keine Mehrbenutzer-/Schulverwaltung, Lehrer- oder Adminfunktionen.
 - Kein öffentlicher Produktivbetrieb.
 - iOS ist gebaut, aber laut `AGENTS.md` vorerst zurückgestellt.
-- Der TypeScript-Migrationsserver ist kein echter EduPage-Adapter. Siehe [Migration](MIGRATION.md).
+- Der TypeScript-Server ist erst nach der Cutover-Abnahme (N-J) für echte Clients freigegeben. Siehe [Migration](MIGRATION.md).
 
 Eine ausführliche Liste weiterer geprüfter EduPage-Lücken und möglicher Prioritäten liegt im Funktionslückenplan `plaene/EDUPAGE_LUECKENPLAN.md` (repo-intern, nicht Teil dieser Website).

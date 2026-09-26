@@ -34,7 +34,7 @@ Die Migration benötigt Node.js 20.9+ und npm. `package-lock.json` und npm-Works
 
 Der Installer fragt nach PostgreSQL oder richtet eine lokale Datenbank ein, erstellt bei Bedarf eine lokale API-Konfiguration mit restriktiven Dateirechten, installiert npm-Abhängigkeiten, generiert Prisma Client und spielt versionierte Migrationen ein. Auf unterstützten Systemen (macOS/Homebrew oder Debian/Ubuntu/apt) kann die automatische PostgreSQL-Einrichtung Systempakete und Dienste installieren. Nur bewusst starten und die Fragen prüfen. `./install.sh -debug` zeigt detailliertere Setup-Ausgaben.
 
-`./run.sh` startet die TypeScript-NestJS-API **explizit mit Fake-Provider** auf Port 8101 und danach die Next.js-Weboberfläche, normalerweise Port 3000. Next.js wählt bei belegtem Port automatisch einen Folgeport. Demo-Login: `demo` / `demo`; der separate 2FA-Pfad nutzt `demo-2fa` / `demo`, Code `123456`. Das sind synthetische Demo-Zugänge, keine EduPage-Konten.
+`./run.sh` prüft `node`/`npm`/`curl`, eine vorhandene `npm install`-Ablage und die Datenbankkonfiguration, startet dann die TypeScript-NestJS-API **explizit mit Fake-Provider** auf Port 8101 (wartet auf `/api/v1/health`) und danach die Next.js-Weboberfläche, normalerweise Port 3000. Next.js wählt bei belegtem Port automatisch einen Folgeport. `Ctrl+C` beendet beide. Demo-Login: `demo` / `demo`; der separate 2FA-Pfad nutzt `demo-2fa` / `demo`, Code `123456`. Das sind synthetische Demo-Zugänge, keine EduPage-Konten.
 
 Weitere Befehle im Repository-Stamm:
 
@@ -58,8 +58,8 @@ Das Setup benötigt PostgreSQL-Konfiguration unter `apps/api/.env.local` oder `a
 | `DATABASE_URL` | Verbindung zur lokalen PostgreSQL-Datenbank. |
 | `PORT` | API-Port: standardmäßig 8001, im `run.sh`-Demo-Start 8101. |
 | `JWT_ACCESS_SECRET` | Geheimer Schlüssel zum Signieren der Demo-JWTs; mindestens 32 Byte. |
-| `CREDENTIAL_ENCRYPTION_KEY` | Separater 32-Byte-Schlüssel (64 Hex-Zeichen) für die geplante Credential-Vault-Verschlüsselung; ein echter EduPage-Credential-Flow ist noch nicht implementiert. |
-| `EDUFLOW_PROVIDER` | Für den Fake-Schulprovider muss der Wert explizit `fake` sein. |
+| `CREDENTIAL_ENCRYPTION_KEY` | Separater 32-Byte-Schlüssel (64 Hex-Zeichen) für die Credential-Vault-Verschlüsselung der gespeicherten EduPage-Zugangsdaten. |
+| `EDUFLOW_PROVIDER` | `fake` wählt den Demo-Schulprovider; jeder andere Wert den echten EduPage-Anbieter (Parität N-A–NI, Cutover N-J offen). |
 | `API_SERVER_URL` | NestJS-Ursprung für die Next.js-Serverrouten; deren Fallback ist `http://127.0.0.1:8001`. |
 
 **Bekannte Demo-Konfigurationsabweichung:** `run.sh` startet die API auf Port 8101, während die Next.js-API-Routen ohne gesetztes `API_SERVER_URL` auf Port 8001 zeigen. Das Skript setzt `API_SERVER_URL` derzeit nicht explizit für den Web-Prozess. Bei einer Standardinstallation kann der Browser-Webclient deshalb die gestartete Demo-API verfehlen; für einen verlässlichen Web-Demoaufruf muss die Zieladresse auf `http://127.0.0.1:8101` gesetzt oder der Startpfad korrigiert werden. Dies ist eine Codeprüfung, keine Aussage über einen hier ausgeführten Browser-Ende-zu-Ende-Test.
@@ -68,7 +68,7 @@ Das Setup benötigt PostgreSQL-Konfiguration unter `apps/api/.env.local` oder `a
 
 ### Python
 
-Die Tests sind eigenständige Offline-Skripte, kein gemeinsamer pytest-Einstieg. Einzelne Dateien direkt aus dem Stamm starten, zum Beispiel:
+Die Tests sind eigenständige Offline-Skripte (12 Dateien), kein gemeinsamer pytest-Einstieg. Einzelne Dateien direkt aus dem Stamm starten, zum Beispiel:
 
 ```bash
 python3 tests/test_api_e2e.py
@@ -92,7 +92,7 @@ python3 tests/test_api_settings.py
 
 ### TypeScript
 
-Die Monorepo-Kommandos aus `package.json` sind maßgeblich. API-Tests sind Jest-Tests mit Fake-/Prisma-Stubs; im Repository ist keine vollständige Browser-E2E-Matrix eingerichtet. Der in `migration/README.md` beschriebene Zustand weist darauf hin, dass native UI-Flows gegen den neuen NestJS-Server nicht durch die vorhandenen Offline-Tests bewiesen sind.
+Die Monorepo-Kommandos aus `package.json` sind maßgeblich. API-Tests sind Jest-Tests mit Fake-/Fixture-Stubs für beide Anbieterpfade (Umsetzungsstand: 12 API-Unit-/Vertragstests plus Contracts-Tests); im Repository ist keine vollständige Browser-E2E-Matrix eingerichtet. Native UI-Flows gegen den neuen NestJS-Server sind nicht durch die vorhandenen Offline-Tests bewiesen — das gehört zur Cutover-Abnahme (N-J).
 
 ## Wichtige Konfigurationsvariablen (Python)
 
