@@ -1,0 +1,12 @@
+# EduFlow – gettext-Vorlage (Deutsch ist Source-Sprache)
+#
+# Platzhalter, bis Schritt 2 aus plaene/LOKALISIERUNG.md umgesetzt ist
+# (Templates + app.py + api/*.py auf gettext umstellen, dann neu erzeugen):
+#   pybabel extract -F babel.cfg -o locales/templates/messages.pot .
+msgid ""
+msgstr ""
+"Project-Id-Version: EduFlow\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"

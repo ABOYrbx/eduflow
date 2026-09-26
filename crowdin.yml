@@ -1,0 +1,23 @@
+# EduFlow – Crowdin-Quellen (Source-Sprache: Deutsch)
+#
+# Die GitHub-Action (.github/workflows/crowdin.yml) nutzt diese Datei.
+# Secrets (CROWDIN_PROJECT_ID, CROWDIN_TOKEN) liegen nur als GitHub-Secrets,
+# niemals im Repo (siehe plaene/LOKALISIERUNG.md).
+project_id_env: CROWDIN_PROJECT_ID
+api_token_env: CROWDIN_TOKEN
+preserve_hierarchy: true
+
+files:
+  # Web + Backend (Flask-Babel/gettext).
+  # Quelle wird per pybabel aus templates/ + app.py + api/*.py erzeugt:
+  #   pybabel extract -F babel.cfg -o locales/templates/messages.pot .
+  - source: /locales/templates/messages.pot
+    translation: /locales/%locale%/LC_MESSAGES/messages.po
+
+  # Android (Quelle = deutsch, Compose-Strings gehören nach values/strings.xml)
+  - source: /android/app/src/main/res/values/strings.xml
+    translation: /android/app/src/main/res/values-%android_code%/strings.xml
+
+  # macOS String Catalog (alle Sprachen leben in derselben Datei)
+  - source: /mac/EduFlow/Resources/Localizable.xcstrings
+    translation: /mac/EduFlow/Resources/Localizable.xcstrings
