@@ -88,7 +88,7 @@ alte Web-Templates und `static/uber.css` werden fürs App-Design IGNORIERT).
   + `res/drawable-nodpi/logo.png` (AppHeader).
 - Default-URL `http://10.0.2.2:8000/api/v1/` (Emulator-Loopback, in Login +
   Einstellungen änderbar). Bauen/Testen (Gradle liegt NICHT im PATH):
-  `/Users/developer/.gradle-dist/gradle-8.7/bin/gradle :app:assembleDebug
+  `<GRADLE-DIST>/gradle-8.7/bin/gradle :app:assembleDebug
   :app:testDebugUnitTest` in `android/` → 59 Unit-Tests offline mit
   Fake-`ApiService` (`Auth/Logic/ResourcesPackageTest`).
 
@@ -157,6 +157,12 @@ alte Web-Templates und `static/uber.css` werden fürs App-Design IGNORIERT).
 
 ## Regeln für alle Arbeiten
 
+- Identität: Commits und Pushes laufen ausschließlich über den GitHub-Account
+  (`ABOYrbx`, Mail `ABOYrbx@users.noreply.github.com`) — niemals mit
+  Klarnamen oder lokalen Rechner-Mails. Echte Namen und lokale
+  Benutzerpfade (`/Users/<name>/…`, Hostnamen) gehören weder in Commits noch
+  in getrackte Dateien; Build-/Output-Ordner (`build/`, `.gradle/`,
+  `DerivedData/`, `xcuserdata/`) werden nie committet.
 - Alle UI-Strings deutsch, kurz, ohne Secrets/Stacktraces/Pfade.
   401-Verhalten überall → Login (`TOKEN_INVALID/EXPIRED`, `EDUPAGE_2FA` →
   neu anmelden). Jeder arbeitet auf eigenem Branch ab `main`; bei

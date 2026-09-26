@@ -29,3 +29,9 @@ venv/
 android/local.properties
 xcuserdata/
 *.xcuserstate
+# Build-/Output-Ordner (nie committen, enthalten lokale Pfade)
+build/
+.gradle/
+android/.gradle/
+android/app/build/
+DerivedData/
