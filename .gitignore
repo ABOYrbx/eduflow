@@ -6,3 +6,4 @@ venv/
 .cache/
 .eduflow_secret
 .eduflow.key
+site/
