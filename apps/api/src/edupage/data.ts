@@ -8,12 +8,14 @@ import { downloadViaSession, fetchThread, replyToMessage, sendTimelineMessage } 
 import { EXAM_TYPES, HOMEWORK_TYPES, eventToDict, extractAttachments, homeworkRank, homeworkToDict, markHidden, norm, recipientsFromDbi } from "./serializers";
 import { MESSAGE_TYPES, TimelineEvent, fetchTimelineHistory } from "./timeline";
 import { GERMAN_WEEKDAYS, LessonDict, fetchDayPlan, isAlldayEvent, lessonToDict, mergeLernzeit, parseDayPlan } from "./timetable";
+import { fetchGradeData, gradeToDict, parseGrades } from "./grades";
 import { setHomeworkDone } from "./homework";
 import { page, parsePage } from "../common/pagination";
 import { openPassword } from "./vault";
 
 const TIMELINE_TTL_S = 900;
 const LIKES_TTL_S = 3600;
+const GRADES_TTL_S = 3600;
 const DL_TTL_S = 300;
 const EARLIEST_DEFAULT = "2000-01-01";
 
@@ -56,6 +58,17 @@ const isoDaysAgo = (days: number): string => {
   const date = new Date(Date.now() - days * 86400000);
   return date.toISOString().slice(0, 10);
 };
+
+/** Alter lesbar machen (Port von `cache.format_age`). */
+export function formatAge(ageS: number | null): string {
+  if (ageS === null || ageS === undefined) return "unbekannt";
+  if (ageS < 60) return `${ageS} Sek.`;
+  const mins = Math.floor(ageS / 60);
+  if (mins < 60) return `${mins} Min.`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours} Std. ${mins % 60} Min.`;
+  return `${Math.floor(hours / 24)} Tage`;
+}
 
 /** Flag tolerant lesen (Port von `api/homework._parse_bool`). */
 export function parseBoolFlag(value: unknown, fallback = false): boolean {
@@ -742,6 +755,35 @@ export class EdupageDataService {
       days,
       cache_info: cacheInfo,
     };
+  }
+
+  // ------------------------------------------------ Noten (N-E)
+
+  async gradesList(claims: AuthClaims, query: Record<string, unknown>) {
+    const { limit, offset } = parsePage(query);
+    const force = query.refresh === "1";
+    if (!force) {
+      const cached = await this.readCache(claims.sub, "grades");
+      if (cached && cached.fresh) {
+        const payload = cached.payload as { grades?: Record<string, unknown>[]; savedAt?: string };
+        if (Array.isArray(payload.grades)) {
+          const age = payload.savedAt ? Math.max(0, Math.round((Date.now() - Date.parse(payload.savedAt)) / 1000)) : 0;
+          return { ...page(payload.grades, { limit: String(limit), offset: String(offset) }), cache_info: `aus Cache (${formatAge(age)} alt)` };
+        }
+      }
+    }
+    const { client, subdomain, loginData } = await this.loginFor(claims.sub);
+    let dicts: Record<string, unknown>[];
+    try {
+      const data = await fetchGradeData(client.session, subdomain);
+      const dbi = ((loginData as Record<string, unknown> | null)?.dbi ?? {}) as { subjects?: Record<string, { short?: string }>; teachers?: Record<string, { firstname?: string; lastname?: string }> };
+      dicts = parseGrades(data, dbi).map(gradeToDict);
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new HttpException({ error: `Noten konnten nicht geladen werden: ${detail}`, code: "UPSTREAM" }, 502);
+    }
+    await this.writeCache(claims.sub, "grades", { grades: dicts, savedAt: new Date().toISOString() }, GRADES_TTL_S);
+    return { ...page(dicts, { limit: String(limit), offset: String(offset) }), cache_info: "frisch geladen" };
   }
 }
 

@@ -105,7 +105,10 @@ export class SchoolController {
   @UseGuards(AccessTokenGuard)
   @Get("school/agenda") agenda(@Query() query: Record<string, unknown>) { return this.demo.agenda(query); }
   @UseGuards(AccessTokenGuard)
-  @Get("grades") grades(@Query() query: Record<string, unknown>) { return this.demo.grades(query); }
+  @Get("grades") grades(@Req() req: AuthenticatedRequest, @Query() query: Record<string, unknown>) {
+    if (useFakeProvider()) return this.demo.grades(query);
+    return this.edupage.gradesList(req.authClaims, query);
+  }
   @UseGuards(AccessTokenGuard)
   @Get("essen") meals() { return this.demo.meals(); }
   @UseGuards(AccessTokenGuard)
