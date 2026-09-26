@@ -1,5 +1,10 @@
 # EduFlow Dashboard (Nachrichten + Hausaufgaben)
 
+> **Stand:** Standard-Backend ist NestJS (`apps/api`, Port 8000). Der frühere
+> Python-Stack (`app.py`, `api/`, Templates) ist archiviert:
+> Branch [`archive/python-legacy`](https://github.com/ABOYrbx/eduflow/tree/archive/python-legacy).
+> Das Folgende beschreibt den archivierten Stand.
+
 > Vollständige deutsche [Projektdokumentation](docs/README.md) mit Architektur, Funktionen, API und Entwicklungsanleitung.
 
 Simple local web dashboard built on the [EduPage API Python library](https://github.com/EdupageAPI/edupage-api)

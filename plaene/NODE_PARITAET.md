@@ -44,10 +44,9 @@ Vorführungen (plaene/DEMO.md).
   Markup-Form verifiziert) + Agenda.
 - **N-I Web (fertig):** Next.js provider-neutral (Cookies ohne
   `refresh_token`, optionale Refresh-UI).
-- **N-J Cutover (offen):** Live-DTO-Diffs Python↔Node brauchen einen
-  Staging-Server mit echten Zugangsdaten (nicht offline machbar);
-  danach App-Umschaltung und Python-Archivierung. **Kein Löschen ohne
-  explizite Freigabe.**
+- **N-J Cutover (erledigt):** Python-Stack (`app.py`, `api/`, Templates,
+  Python-Tests) aus `main` entfernt und auf Branch `archive/python-legacy`
+  archiviert. NestJS auf Port 8000 ist Standard.
 
 ## Regeln je Paket
 

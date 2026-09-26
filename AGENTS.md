@@ -2,6 +2,11 @@ Egal was du machst gehe NIEMALS an .eduflow.key oder .eduflow_secret und lese es
 
 # EduFlow — Projektübersicht für Agenten
 
+> **Backend-Stand:** NestJS (`apps/api`, Port 8000) ist das Standard-Backend
+> (drahtkompatibel zu `/api/v1`, siehe `plaene/NODE_PARITAET.md`). Der
+> Python-Stack (`app.py`, `api/`, `templates/`) ist archiviert
+> (Branch `archive/python-legacy`) und wird nicht mehr ausgebaut.
+
 Lokales Schul-Dashboard (EduPage): Flask-Web-App + versioniertes JSON-Backend
 `/api/v1` + native Clients (Android, macOS, iOS). Server bleibt ein
 lokales Werkzeug, kein Produktiv-Betrieb. Secrets (`.env`, `.cache/`,
