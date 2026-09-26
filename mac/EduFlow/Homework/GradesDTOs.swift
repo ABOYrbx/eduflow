@@ -116,9 +116,9 @@ public enum HalfYear: Hashable, Sendable {
     public var label: String {
         switch self {
         case .all:
-            return "Gesamt"
+            return NSLocalizedString("grades_halfyear_all", value: "Gesamt", comment: "Noten: Gesamt-Tab")
         case .half(let yearStart, let half):
-            return "\(half). Halbjahr \(yearStart)/\(String(yearStart + 1).suffix(2))"
+            return String(format: NSLocalizedString("grades_halfyear_format", value: "%d. Halbjahr %d/%@", comment: "Noten: Halbjahr-Label"), half, yearStart, String(String(yearStart + 1).suffix(2)))
         }
     }
 

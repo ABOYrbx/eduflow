@@ -31,11 +31,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import de.eduflow.android.R
 import de.eduflow.android.ui.theme.LocalReducedMotion
 import de.eduflow.android.ui.theme.riseIn
 
@@ -133,7 +135,7 @@ fun ErrorBox(message: String, onRetry: () -> Unit, modifier: Modifier = Modifier
             modifier = Modifier.padding(24.dp),
         ) {
             Text(message, style = MaterialTheme.typography.bodyMedium)
-            PillButton(text = "Erneut versuchen", onClick = onRetry)
+            PillButton(text = stringResource(R.string.common_retry), onClick = onRetry)
         }
     }
 }

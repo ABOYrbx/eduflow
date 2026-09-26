@@ -38,19 +38,21 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
+import de.eduflow.android.R
 import de.eduflow.android.ui.theme.LocalEduFlowDark
 import de.eduflow.android.ui.theme.LocalReducedMotion
 
 // PNG-Design: fünf gleich breite Tabs; die aktive Auswahl gleitet in einer
 // weichen, runden Glaskapsel unter Icon und Bezeichnung.
-data class BottomTab(val route: String, val label: String, val icon: ImageVector)
+data class BottomTab(val route: String, val labelRes: Int, val icon: ImageVector)
 
 val BottomTabs = listOf(
-    BottomTab(Routes.OVERVIEW, "Home", Icons.Filled.Home),
-    BottomTab(Routes.HOMEWORK, "Aufgaben", Icons.AutoMirrored.Filled.Assignment),
-    BottomTab(Routes.MESSAGES, "Nachr.", Icons.Filled.MailOutline),
-    BottomTab(Routes.TIMETABLE, "Plan", Icons.Filled.CalendarMonth),
-    BottomTab(Routes.MORE, "Mehr", Icons.Filled.MoreHoriz),
+    BottomTab(Routes.OVERVIEW, R.string.bottom_home, Icons.Filled.Home),
+    BottomTab(Routes.HOMEWORK, R.string.bottom_tasks, Icons.AutoMirrored.Filled.Assignment),
+    BottomTab(Routes.MESSAGES, R.string.bottom_messages, Icons.Filled.MailOutline),
+    BottomTab(Routes.TIMETABLE, R.string.bottom_plan, Icons.Filled.CalendarMonth),
+    BottomTab(Routes.MORE, R.string.bottom_more, Icons.Filled.MoreHoriz),
 )
 
 /** Aktiver Tab zur Route (Thread/Verfassen zählen zu Nachrichten,
@@ -143,6 +145,7 @@ private fun BottomTabItem(
     modifier: Modifier = Modifier,
 ) {
     val scheme = MaterialTheme.colorScheme
+    val label = stringResource(tab.labelRes)
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -151,12 +154,12 @@ private fun BottomTabItem(
     ) {
         Icon(
             tab.icon,
-            contentDescription = tab.label,
+            contentDescription = label,
             tint = if (selected) scheme.onSurface else scheme.onSurfaceVariant,
             modifier = Modifier.size(18.dp),
         )
         Text(
-            tab.label,
+            label,
             fontSize = 9.sp,
             lineHeight = 11.sp,
             fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,

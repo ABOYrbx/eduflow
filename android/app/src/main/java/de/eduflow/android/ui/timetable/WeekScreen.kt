@@ -22,6 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
+import de.eduflow.android.R
 import de.eduflow.android.data.dto.ErrorCodes
 import de.eduflow.android.data.dto.TimetableView
 import de.eduflow.android.ui.common.AppHeader
@@ -56,7 +58,7 @@ fun WeekScreen(
         )
         Spacer(Modifier.height(12.dp))
         ScreenHead(
-            title = "Stundenplan",
+            title = stringResource(R.string.timetable_title),
             subtitle = week?.week_label ?: state.day,
         )
         Spacer(Modifier.height(12.dp))
@@ -66,7 +68,7 @@ fun WeekScreen(
         DayHeadRow(
             label = week?.week_label ?: state.day,
             count = if (week != null) {
-                "${week.days.sumOf { it.lessons.size }} Stunden diese Woche"
+                stringResource(R.string.timetable_week_count_format, week.days.sumOf { it.lessons.size })
             } else "",
             onPrev = { viewModel.step(-1) },
             onNext = { viewModel.step(1) },
@@ -108,11 +110,11 @@ fun WeekScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Text(
-                    "Keine Wochendaten geladen.",
+                    stringResource(R.string.timetable_empty_week),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                TextButton(onClick = viewModel::refresh) { Text("Neu laden") }
+                TextButton(onClick = viewModel::refresh) { Text(stringResource(R.string.common_reload)) }
             }
         } else {
             LazyColumn(
@@ -130,11 +132,11 @@ fun WeekScreen(
                                 else MaterialTheme.colorScheme.onBackground,
                                 modifier = Modifier.weight(1f),
                             )
-                            if (day.is_today) StatusPill(text = "Heute", dot = RDotBlue)
+                            if (day.is_today) StatusPill(text = stringResource(R.string.timetable_today), dot = RDotBlue)
                         }
                         if (day.lessons.isEmpty()) {
                             Text(
-                                "Kein Unterricht.",
+                                stringResource(R.string.timetable_no_lessons_day),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )

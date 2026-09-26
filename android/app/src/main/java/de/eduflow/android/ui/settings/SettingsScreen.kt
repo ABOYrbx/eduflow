@@ -44,9 +44,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import de.eduflow.android.R
 import de.eduflow.android.data.TokenStore
 import de.eduflow.android.data.dto.SettingsDefaults
 import de.eduflow.android.ui.common.AvatarDot
@@ -140,26 +143,26 @@ fun SettingsScreen(
             modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            ScreenHead(title = "Einstellungen", subtitle = "Dein EduFlow-Konto")
+            ScreenHead(title = stringResource(R.string.settings_title), subtitle = stringResource(R.string.settings_subtitle))
             Text(msg, color = MaterialTheme.colorScheme.error)
-            PrimaryButton(text = "Erneut versuchen", onClick = { vm.reload() })
+            PrimaryButton(text = stringResource(R.string.common_retry), onClick = { vm.reload() })
             if (isDemo) {
-                SectionLabel("Demo-Modus")
-                Text("Es werden ausschließlich synthetische Beispieldaten vom lokalen Demo-Server geladen.")
+                SectionLabel(stringResource(R.string.settings_demo_section))
+                Text(stringResource(R.string.settings_demo_text))
             } else {
-                SectionLabel("Server")
+                SectionLabel(stringResource(R.string.settings_server_section))
                 SettingsField(
                     value = baseDraft,
                     onValueChange = { baseDraft = it },
-                    placeholder = "Server (…/api/v1/)",
+                    placeholder = stringResource(R.string.settings_server_placeholder),
                 )
                 PrimaryButton(
-                    text = "Server übernehmen",
+                    text = stringResource(R.string.settings_server_apply),
                     onClick = { onBaseUrlChange(baseDraft.trim().trimEnd('/')); vm.reload() },
                 )
             }
             TextButton(onClick = { vm.logout(onLogout) }) {
-                Text("Abmelden", color = MaterialTheme.colorScheme.error)
+                Text(stringResource(R.string.common_menu_logout), color = MaterialTheme.colorScheme.error)
             }
         }
         return
@@ -170,7 +173,7 @@ fun SettingsScreen(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        ScreenHead(title = "Einstellungen", subtitle = "Dein EduFlow-Konto")
+        ScreenHead(title = stringResource(R.string.settings_title), subtitle = stringResource(R.string.settings_subtitle))
 
         EduCard(modifier = Modifier.fillMaxWidth()) {
             Row(
@@ -187,7 +190,7 @@ fun SettingsScreen(
                         color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
-                        "${session.subdomain.ifBlank { "Schule" }} · verbunden",
+                        stringResource(R.string.settings_connected_format, session.subdomain.ifBlank { stringResource(R.string.settings_school_fallback) }),
                         fontSize = 13.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -195,31 +198,31 @@ fun SettingsScreen(
             }
         }
 
-        SectionLabel("Darstellung")
+        SectionLabel(stringResource(R.string.settings_appearance))
         EduCard(modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.fillMaxWidth().padding(16.dp)) {
                 AppearanceRow(
-                    title = "Hell",
-                    subtitle = "Immer helles Design",
+                    title = stringResource(R.string.settings_theme_light),
+                    subtitle = stringResource(R.string.settings_theme_light_sub),
                     selected = themeChoice == TokenStore.THEME_LIGHT,
                     onClick = { vm.setTheme(TokenStore.THEME_LIGHT) },
                 )
                 AppearanceRow(
-                    title = "Dunkel",
-                    subtitle = "Immer dunkles Design",
+                    title = stringResource(R.string.settings_theme_dark),
+                    subtitle = stringResource(R.string.settings_theme_dark_sub),
                     selected = themeChoice == TokenStore.THEME_DARK,
                     onClick = { vm.setTheme(TokenStore.THEME_DARK) },
                 )
                 AppearanceRow(
-                    title = "System",
-                    subtitle = "Folgt Hell/Dunkel des Geräts",
+                    title = stringResource(R.string.settings_theme_system),
+                    subtitle = stringResource(R.string.settings_theme_system_sub),
                     selected = themeChoice == TokenStore.THEME_SYSTEM,
                     onClick = { vm.setTheme(TokenStore.THEME_SYSTEM) },
-                    pill = "System",
+                    pill = stringResource(R.string.settings_theme_system),
                 )
                 Spacer(Modifier.height(12.dp))
                 Text(
-                    "Akzentfarbe",
+                    stringResource(R.string.settings_accent),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
@@ -228,14 +231,14 @@ fun SettingsScreen(
             }
         }
 
-        SectionLabel("Benachrichtigungen")
+        SectionLabel(stringResource(R.string.settings_notifications))
         EduCard(modifier = Modifier.fillMaxWidth()) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
             ) {
                 Text(
-                    "Neue Nachrichten",
+                    stringResource(R.string.settings_notify_news),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface,
@@ -251,48 +254,50 @@ fun SettingsScreen(
             }
         }
 
-        SectionLabel("Übersicht & Aufgaben")
+        SectionLabel(stringResource(R.string.settings_overview_tasks))
         EduCard(modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.fillMaxWidth().padding(16.dp)) {
                 Text(
-                    "Startseite nach Anmeldung",
+                    stringResource(R.string.settings_landing_label),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 Spacer(Modifier.height(8.dp))
+                val landingOptions = SettingsDefaults.LANDING_OPTIONS.map { key ->
+                    key to landingLabel(key)
+                }
                 FilterChips(
-                    options = SettingsDefaults.LANDING_OPTIONS.map {
-                        landingLabels[it] ?: it
-                    },
-                    selected = landingLabels[v.landing] ?: v.landing,
+                    options = landingOptions.map { it.second },
+                    selected = landingOptions.firstOrNull { it.first == v.landing }?.second ?: v.landing,
                     onSelect = { label ->
-                        landingLabels.entries.firstOrNull { it.value == label }?.let {
-                            vm.update(v.copy(landing = it.key))
+                        landingOptions.firstOrNull { it.second == label }?.let {
+                            vm.update(v.copy(landing = it.first))
                         }
                     },
                 )
                 Spacer(Modifier.height(12.dp))
                 Text(
-                    "Aufgaben: Standardfilter",
+                    stringResource(R.string.settings_hwfilter_label),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 Spacer(Modifier.height(8.dp))
+                val hwStatusOptions = SettingsDefaults.HW_STATUS_OPTIONS.map { key ->
+                    key to hwStatusLabel(key)
+                }
                 FilterChips(
-                    options = SettingsDefaults.HW_STATUS_OPTIONS.map {
-                        hwStatusLabels[it] ?: it
-                    },
-                    selected = hwStatusLabels[v.hwStatus] ?: v.hwStatus,
+                    options = hwStatusOptions.map { it.second },
+                    selected = hwStatusOptions.firstOrNull { it.first == v.hwStatus }?.second ?: v.hwStatus,
                     onSelect = { label ->
-                        hwStatusLabels.entries.firstOrNull { it.value == label }?.let {
-                            vm.update(v.copy(hwStatus = it.key))
+                        hwStatusOptions.firstOrNull { it.second == label }?.let {
+                            vm.update(v.copy(hwStatus = it.first))
                         }
                     },
                 )
                 Spacer(Modifier.height(12.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        "Tests und Prüfungen einbeziehen",
+                        stringResource(R.string.settings_hwtests_label),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onSurface,
@@ -313,7 +318,7 @@ fun SettingsScreen(
                             vm.update(v.copy(ovUnread = n.coerceIn(1, 50)))
                         }
                     },
-                    placeholder = "Max. ungelesene Nachrichten (1–50)",
+                    placeholder = stringResource(R.string.settings_unread_placeholder),
                 )
                 Spacer(Modifier.height(8.dp))
                 var homework by remember(v.ovHomework) { mutableStateOf(v.ovHomework.toString()) }
@@ -325,25 +330,25 @@ fun SettingsScreen(
                             vm.update(v.copy(ovHomework = n.coerceIn(1, 50)))
                         }
                     },
-                    placeholder = "Max. offene Hausaufgaben (1–50)",
+                    placeholder = stringResource(R.string.settings_homework_placeholder),
                 )
             }
         }
 
-        SectionLabel("Wetter")
+        SectionLabel(stringResource(R.string.settings_weather_section))
         EduCard(modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.fillMaxWidth().padding(16.dp)) {
                 var city by remember(v.wetterCity) { mutableStateOf(v.wetterCity) }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(modifier = Modifier.weight(1f)) {
                         Text(
-                            "Wetterkarte anzeigen",
+                            stringResource(R.string.settings_weather_show),
                             fontSize = 15.sp,
                             fontWeight = FontWeight.SemiBold,
                             color = MaterialTheme.colorScheme.onSurface,
                         )
                         Text(
-                            "Auf der Übersicht in Android und im Web",
+                            stringResource(R.string.settings_weather_sub),
                             fontSize = 12.sp,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -367,10 +372,10 @@ fun SettingsScreen(
                         )
                         vm.searchWeatherCities(query)
                     },
-                    placeholder = "Stadt für Wetterkarte (z. B. Berlin)",
+                    placeholder = stringResource(R.string.settings_weather_city_placeholder),
                 )
                 if (state.weatherCitySearchLoading) {
-                    Text("Städte werden gesucht …", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.settings_weather_searching), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 state.weatherCitySearchError?.let {
                     Text(it, fontSize = 12.sp, color = MaterialTheme.colorScheme.error)
@@ -378,7 +383,7 @@ fun SettingsScreen(
                 if (state.weatherCitySearchComplete && state.weatherCitySuggestions.isEmpty()
                     && state.weatherCitySearchError == null
                 ) {
-                    Text("Keine passenden Orte gefunden.", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(stringResource(R.string.settings_weather_no_results), fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
                 state.weatherCitySuggestions.forEach { suggestion ->
                     Surface(
@@ -409,15 +414,15 @@ fun SettingsScreen(
                     }
                 }
                 Text(
-                    "Der Ort wird für die Wetterkarte auf Android und im Web verwendet.",
+                    stringResource(R.string.settings_weather_usage),
                     fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Spacer(Modifier.height(8.dp))
-                PrimaryButton(text = "Speichern", onClick = { vm.save() })
+                PrimaryButton(text = stringResource(R.string.common_save), onClick = { vm.save() })
                 if (state.saved) {
                     Text(
-                        "Gespeichert.",
+                        stringResource(R.string.settings_saved),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -425,17 +430,17 @@ fun SettingsScreen(
             }
         }
 
-        SectionLabel("Konto & Sicherheit")
+        SectionLabel(stringResource(R.string.settings_account))
         EduCard(modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.fillMaxWidth()) {
                 val count = state.devices.size
                 AccountRow(
-                    title = "Verbundene Geräte",
-                    trailing = "$count ${if (count == 1) "Gerät" else "Geräte"}",
+                    title = stringResource(R.string.settings_devices),
+                    trailing = pluralStringResource(R.plurals.settings_devices_count, count, count),
                     onClick = onDevices,
                 )
                 AccountRow(
-                    title = "Datenschutz",
+                    title = stringResource(R.string.settings_privacy),
                     onClick = { showPrivacy = true },
                 )
                 Row(
@@ -445,7 +450,7 @@ fun SettingsScreen(
                         .padding(16.dp),
                 ) {
                     Text(
-                        "Abmelden",
+                        stringResource(R.string.common_menu_logout),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.error,
@@ -454,13 +459,13 @@ fun SettingsScreen(
             }
         }
 
-        SectionLabel("Entwickleroptionen")
+        SectionLabel(stringResource(R.string.settings_dev_section))
         EduCard(modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.fillMaxWidth().padding(16.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(Modifier.weight(1f).padding(end = 12.dp)) {
-                        Text("Entwickleroptionen aktivieren", fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
-                        Text("Zusätzliche Diagnose- und Testaktionen anzeigen.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        Text(stringResource(R.string.settings_dev_enable), fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
+                        Text(stringResource(R.string.settings_dev_enable_sub), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     }
                     Switch(checked = developerOptions, onCheckedChange = vm::setDeveloperOptions)
                 }
@@ -470,8 +475,8 @@ fun SettingsScreen(
                     Spacer(Modifier.height(10.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Column(Modifier.weight(1f).padding(end = 12.dp)) {
-                            Text("Onboarding erneut durchlaufen", fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
-                            Text("Meldet dich ab und startet die Einführung neu.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(stringResource(R.string.settings_dev_onboarding), fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
+                            Text(stringResource(R.string.settings_dev_onboarding_sub), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                         Switch(checked = false, onCheckedChange = { checked -> if (checked) vm.restartOnboarding(onRestartOnboarding) })
                     }
@@ -484,16 +489,14 @@ fun SettingsScreen(
     if (showPrivacy) {
         AlertDialog(
             onDismissRequest = { showPrivacy = false },
-            title = { Text("Datenschutz") },
+            title = { Text(stringResource(R.string.settings_privacy)) },
             text = {
                 Text(
-                    "Deine Zugangsdaten bleiben auf diesem Gerät. Auf dem Server " +
-                        "landen nur kurzzeitige Caches und widerrufbare Tokens — " +
-                        "kein Tracking, keine Weitergabe an Dritte.",
+                    stringResource(R.string.settings_privacy_text),
                 )
             },
             confirmButton = {
-                TextButton(onClick = { showPrivacy = false }) { Text("OK") }
+                TextButton(onClick = { showPrivacy = false }) { Text(stringResource(R.string.common_ok)) }
             },
         )
     }
@@ -624,19 +627,23 @@ private fun AccentDotsRow(
 private fun initialsOf(name: String): String =
     name.split(" ", " ").mapNotNull { it.firstOrNull()?.toString() }.take(2).joinToString("")
 
-/** Deutsche Labels für die Server-Keys (Startseite, Aufgabenfilter). */
-private val landingLabels = mapOf(
-    "uebersicht" to "Übersicht",
-    "dashboard" to "Nachrichten",
-    "hausaufgaben" to "Aufgaben",
-    "noten" to "Noten",
-    "stundenplan" to "Plan",
-)
+/** Deutsche Labels für die Server-Keys (Startseite, Aufgabenfilter) via Ressourcen. */
+@Composable
+private fun landingLabel(key: String): String = when (key) {
+    "uebersicht" -> stringResource(R.string.settings_landing_overview)
+    "dashboard" -> stringResource(R.string.settings_landing_messages)
+    "hausaufgaben" -> stringResource(R.string.settings_landing_tasks)
+    "noten" -> stringResource(R.string.settings_landing_grades)
+    "stundenplan" -> stringResource(R.string.settings_landing_plan)
+    else -> key
+}
 
-private val hwStatusLabels = mapOf(
-    "alle" to "Alle",
-    "offen" to "Offen",
-    "überfällig" to "Überfällig",
-    "erledigt" to "Erledigt",
-    "papierkorb" to "Papierkorb",
-)
+@Composable
+private fun hwStatusLabel(key: String): String = when (key) {
+    "alle" -> stringResource(R.string.settings_hwstatus_all)
+    "offen" -> stringResource(R.string.settings_hwstatus_open)
+    "überfällig" -> stringResource(R.string.settings_hwstatus_overdue)
+    "erledigt" -> stringResource(R.string.settings_hwstatus_done)
+    "papierkorb" -> stringResource(R.string.settings_hwstatus_trash)
+    else -> key
+}

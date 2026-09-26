@@ -46,9 +46,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import de.eduflow.android.R
 import de.eduflow.android.data.dto.ErrorCodes
 import de.eduflow.android.data.dto.MessageDto
 import de.eduflow.android.data.dto.MsgFilter
@@ -96,38 +98,50 @@ fun MessagesScreen(
             )
             Spacer(Modifier.height(12.dp))
             ScreenHead(
-                title = "Nachrichten",
-                subtitle = "Mitteilungen aus deiner Schule",
+                title = stringResource(R.string.messages_title),
+                subtitle = stringResource(R.string.messages_subtitle),
             )
             Spacer(Modifier.height(12.dp))
             SearchPill(
                 value = state.query,
                 onValueChange = viewModel::onQuery,
-                placeholder = "Nachrichten durchsuchen",
+                placeholder = stringResource(R.string.messages_search_placeholder),
             )
             Spacer(Modifier.height(10.dp))
+            val filterAll = stringResource(R.string.messages_filter_all)
+            val filterUnread = stringResource(R.string.messages_filter_unread)
+            val filterFiles = stringResource(R.string.messages_filter_files)
+            val filterOptions = listOf(filterAll, filterUnread, filterFiles)
+            val filterSelected = when (state.filter) {
+                MsgFilter.UNGELESEN -> filterUnread
+                MsgFilter.MIT_DATEIEN -> filterFiles
+                MsgFilter.ALLE -> filterAll
+            }
             FilterChips(
-                options = MsgFilter.entries.map { it.label },
-                selected = state.filter.label,
+                options = filterOptions,
+                selected = filterSelected,
                 onSelect = { label ->
-                    MsgFilter.entries.firstOrNull { it.label == label }
-                        ?.let(viewModel::onFilter)
+                    when (label) {
+                        filterUnread -> viewModel.onFilter(MsgFilter.UNGELESEN)
+                        filterFiles -> viewModel.onFilter(MsgFilter.MIT_DATEIEN)
+                        else -> viewModel.onFilter(MsgFilter.ALLE)
+                    }
                 },
             )
             Spacer(Modifier.height(10.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 SectionLabel(
-                    "${visible.size} von ${state.total} Nachrichten",
+                    stringResource(R.string.messages_count_format, visible.size, state.total),
                     modifier = Modifier.weight(1f),
                 )
-                TextButton(onClick = viewModel::markRead) { Text("Alle gelesen") }
+                TextButton(onClick = viewModel::markRead) { Text(stringResource(R.string.messages_mark_all)) }
                 IconButton(onClick = viewModel::refresh, enabled = !state.isLoading) {
-                    Icon(Icons.Filled.Refresh, contentDescription = "Neu laden")
+                    Icon(Icons.Filled.Refresh, contentDescription = stringResource(R.string.common_reload))
                 }
             }
             if (state.marked > 0) {
                 Text(
-                    "${state.marked} als gelesen markiert.",
+                    stringResource(R.string.messages_marked_format, state.marked),
                     style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -156,14 +170,14 @@ fun MessagesScreen(
                 ) {
                     Text(
                         when (state.filter) {
-                            MsgFilter.UNGELESEN -> "Alles gelesen. Sehr gut."
-                            MsgFilter.MIT_DATEIEN -> "Keine Nachrichten mit Dateien."
-                            MsgFilter.ALLE -> "Keine Nachrichten gefunden."
+                            MsgFilter.UNGELESEN -> stringResource(R.string.messages_empty_unread)
+                            MsgFilter.MIT_DATEIEN -> stringResource(R.string.messages_empty_files)
+                            MsgFilter.ALLE -> stringResource(R.string.messages_empty_all)
                         },
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
-                    TextButton(onClick = viewModel::refresh) { Text("Neu laden") }
+                    TextButton(onClick = viewModel::refresh) { Text(stringResource(R.string.common_reload)) }
                 }
             } else {
                 LazyColumn(
@@ -194,7 +208,7 @@ fun MessagesScreen(
                                             .padding(end = 8.dp),
                                     )
                                 }
-                                Text("Mehr laden (${state.items.size}/${state.total})")
+                                Text(stringResource(R.string.common_load_more_format, state.items.size, state.total))
                             }
                         }
                     }
@@ -209,7 +223,7 @@ fun MessagesScreen(
             contentColor = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp).size(56.dp),
         ) {
-            Icon(Icons.Filled.Add, contentDescription = "Neue Nachricht")
+            Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.messages_new_desc))
         }
     }
 }
@@ -262,7 +276,7 @@ fun MessageCard(
                                 )
                                 Spacer(Modifier.width(2.dp))
                                 Text(
-                                    att.name.ifBlank { "Datei ${idx + 1}" },
+                                    att.name.ifBlank { stringResource(R.string.messages_file_format, idx + 1) },
                                     fontSize = 12.sp,
                                 )
                             }
@@ -271,7 +285,7 @@ fun MessageCard(
                 }
                 if (item.reaction_count > 0) {
                     Text(
-                        "♥ ${item.reaction_count}",
+                        stringResource(R.string.messages_like_format, item.reaction_count),
                         style = MaterialTheme.typography.labelMedium,
                         color = scheme.onSurfaceVariant,
                         modifier = Modifier.padding(top = 2.dp),
@@ -309,15 +323,15 @@ fun ThreadScreen(
     Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Zurück")
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
             }
             ScreenHead(
-                title = "Thread",
+                title = stringResource(R.string.messages_thread_title),
                 subtitle = message?.author.orEmpty(),
                 modifier = Modifier.weight(1f),
             )
             IconButton(onClick = viewModel::refresh, enabled = !state.isLoading) {
-                Icon(Icons.Filled.Refresh, contentDescription = "Neu laden")
+                Icon(Icons.Filled.Refresh, contentDescription = stringResource(R.string.common_reload))
             }
         }
 
@@ -334,7 +348,7 @@ fun ThreadScreen(
 
         if (thread?.cached == true) {
             Text(
-                "Aus Cache geladen.",
+                stringResource(R.string.messages_cached),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -365,7 +379,7 @@ fun ThreadScreen(
             val atts = message?.attachments.orEmpty()
             if (atts.isNotEmpty()) {
                 item {
-                    SectionLabel("Dateien (${atts.size})")
+                    SectionLabel(stringResource(R.string.messages_files_format, atts.size))
                 }
                 atts.forEachIndexed { idx, att ->
                     item {
@@ -385,12 +399,12 @@ fun ThreadScreen(
                                 )
                                 Spacer(Modifier.width(10.dp))
                                 Text(
-                                    att.name.ifBlank { "Datei ${idx + 1}" },
+                                    att.name.ifBlank { stringResource(R.string.messages_file_format, idx + 1) },
                                     style = MaterialTheme.typography.bodyMedium,
                                     modifier = Modifier.weight(1f),
                                 )
                                 Text(
-                                    "Laden",
+                                    stringResource(R.string.messages_load),
                                     style = MaterialTheme.typography.labelLarge,
                                     color = MaterialTheme.colorScheme.primary,
                                 )
@@ -401,12 +415,12 @@ fun ThreadScreen(
             }
             if (!thread?.likes.isNullOrEmpty()) {
                 item {
-                    SectionLabel("Likes (${thread?.summary?.likes ?: thread?.likes?.size ?: 0})")
+                    SectionLabel(stringResource(R.string.messages_likes_format, thread?.summary?.likes ?: thread?.likes?.size ?: 0))
                 }
                 thread?.likes?.forEach { like ->
                     item {
                         Text(
-                            "♥ ${like.name} · ${like.date}",
+                            stringResource(R.string.messages_like_detail_format, like.name, like.date),
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.padding(horizontal = 4.dp),
                         )
@@ -415,7 +429,7 @@ fun ThreadScreen(
             }
             item {
                 SectionLabel(
-                    "Antworten (${thread?.summary?.replies ?: thread?.replies?.size ?: 0})",
+                    stringResource(R.string.messages_replies_format, thread?.summary?.replies ?: thread?.replies?.size ?: 0),
                 )
             }
             thread?.replies?.forEach { reply ->
@@ -443,7 +457,7 @@ fun ThreadScreen(
             if (thread != null && thread.likes.isEmpty() && thread.replies.isEmpty()) {
                 item {
                     Text(
-                        "Noch keine Likes oder Antworten.",
+                        stringResource(R.string.messages_no_activity),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(8.dp),
@@ -457,7 +471,7 @@ fun ThreadScreen(
         OutlinedTextField(
             value = state.replyBody,
             onValueChange = viewModel::onReplyBody,
-            placeholder = { Text("Antworten …") },
+            placeholder = { Text(stringResource(R.string.messages_reply_placeholder)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = false,
             minLines = 2,
@@ -473,7 +487,7 @@ fun ThreadScreen(
         )
         Spacer(Modifier.height(8.dp))
         PrimaryButton(
-            text = if (state.isSending) "Wird gesendet …" else "Antworten",
+            text = if (state.isSending) stringResource(R.string.messages_sending) else stringResource(R.string.messages_reply_send),
             onClick = viewModel::sendReply,
             enabled = state.replyBody.isNotBlank() && !state.isSending,
         )
@@ -508,11 +522,11 @@ fun ComposeScreen(
     Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Zurück")
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
             }
             ScreenHead(
-                title = "Neue Nachricht",
-                subtitle = "Lehrer und Mitschüler wählen",
+                title = stringResource(R.string.messages_compose_title),
+                subtitle = stringResource(R.string.messages_compose_subtitle),
             )
         }
 
@@ -530,12 +544,12 @@ fun ComposeScreen(
         SearchPill(
             value = filter,
             onValueChange = { filter = it },
-            placeholder = "Empfänger suchen",
+            placeholder = stringResource(R.string.messages_recipient_search),
         )
 
         Spacer(Modifier.height(8.dp))
 
-        SectionLabel("${state.selectedIds.size} Empfänger gewählt")
+        SectionLabel(stringResource(R.string.messages_recipients_format, state.selectedIds.size))
 
         if (state.isLoadingRecipients) {
             Row(
@@ -571,7 +585,7 @@ fun ComposeScreen(
         OutlinedTextField(
             value = state.body,
             onValueChange = { viewModel.onBody(it.take(BODY_MAX)) },
-            placeholder = { Text("Nachrichtentext") },
+            placeholder = { Text(stringResource(R.string.messages_body_placeholder)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = false,
             minLines = 3,
@@ -593,7 +607,7 @@ fun ComposeScreen(
         )
         Spacer(Modifier.height(4.dp))
         PrimaryButton(
-            text = if (state.isSending) "Wird gesendet …" else "Senden",
+            text = if (state.isSending) stringResource(R.string.messages_sending) else stringResource(R.string.messages_compose_send),
             onClick = viewModel::send,
             enabled = !state.isSending,
         )
@@ -631,12 +645,12 @@ private fun MessageAuthError(
                 TextButton(
                     onClick = onReLogin,
                     colors = ButtonDefaults.textButtonColors(contentColor = Color.White),
-                ) { Text("Anmelden") }
+                ) { Text(stringResource(R.string.common_relogin)) }
             } else {
                 TextButton(
                     onClick = onDismiss,
                     colors = ButtonDefaults.textButtonColors(contentColor = Color.White),
-                ) { Text("OK") }
+                ) { Text(stringResource(R.string.common_ok)) }
             }
         },
         modifier = modifier.padding(bottom = 8.dp),

@@ -17,7 +17,7 @@ public struct GradesView: View {
             VStack(alignment: .leading, spacing: 14) {
                 PageHead(
                     "Noten",
-                    stats: "Schnitt: \(GradesAverage.display(vm.tabAverage))"
+                    stats: String(format: NSLocalizedString("grades_average_stats", value: "Schnitt: %@", comment: "Noten: Schnitt"), GradesAverage.display(vm.tabAverage))
                 )
                 toolsBar
                 if let error = vm.error, vm.items.isEmpty {
@@ -41,7 +41,7 @@ public struct GradesView: View {
                             .riseIn(delay: Double(min(index, 8)) * 0.06)
                     }
                     if vm.canLoadMore {
-                        Button(vm.isLoadingMore ? "Lädt …" : "Mehr laden (\(vm.items.count)/\(vm.total))") {
+                        Button(vm.isLoadingMore ? "Lädt …" : String(format: NSLocalizedString("grades_load_more", value: "Mehr laden (%d/%d)", comment: "Noten: mehr laden"), vm.items.count, vm.total)) {
                             Task { await vm.loadMore(onSessionExpired: onSessionExpired) }
                         }
                         .buttonStyle(UberButtonStyle(.smallLight))
@@ -63,7 +63,7 @@ public struct GradesView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle("Noten")
+        .navigationTitle(NSLocalizedString("grades_nav", value: "Noten", comment: "Noten: Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
         .refreshable { await vm.load(refresh: true, onSessionExpired: onSessionExpired) }
     }
@@ -95,7 +95,7 @@ public struct GradesView: View {
                         Text(group.subject)
                             .font(UberFont.text(18, weight: .heavy))
                             .tracking(-0.3)
-                        Text("\(group.grades.count) Noten")
+                        Text(String(format: NSLocalizedString("grades_subject_count", value: "%d Noten", comment: "Noten: Fachanzahl"), group.grades.count))
                             .font(UberFont.text(13))
                             .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     }

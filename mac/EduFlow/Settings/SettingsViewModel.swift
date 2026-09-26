@@ -85,7 +85,7 @@ public final class SettingsViewModel {
         let repo = SettingsRepository(client: store.makeClient())
         do {
             let count = try await repo.clearCache()
-            clearMessage = "Cache geleert (\(count) Dateien)."
+            clearMessage = String(format: NSLocalizedString("settings_cache_cleared", value: "Cache geleert (%d Dateien).", comment: "Einstellungen: Cache geleert"), count)
         } catch let apiError as APIError {
             if SessionRecovery.forceLogout(error: apiError, isLoggedIn: store.isLoggedIn) {
                 store.clear()

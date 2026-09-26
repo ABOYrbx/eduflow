@@ -33,9 +33,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import de.eduflow.android.R
 import de.eduflow.android.data.dto.ErrorCodes
 import de.eduflow.android.data.dto.LessonDto
 import de.eduflow.android.data.dto.TimetableView
@@ -83,7 +85,7 @@ fun DayScreen(
         )
         Spacer(Modifier.height(12.dp))
         ScreenHead(
-            title = "Stundenplan",
+            title = stringResource(R.string.timetable_title),
             subtitle = day?.day_label ?: state.day,
         )
         Spacer(Modifier.height(12.dp))
@@ -92,7 +94,7 @@ fun DayScreen(
 
         DayHeadRow(
             label = day?.day_label ?: state.day,
-            count = if (day != null) "${day.lessons.size} Stunden" else "",
+            count = if (day != null) stringResource(R.string.timetable_day_count_format, day.lessons.size) else "",
             onPrev = { viewModel.step(-1) },
             onNext = { viewModel.step(1) },
             onRefresh = viewModel::refresh,
@@ -133,11 +135,11 @@ fun DayScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Text(
-                    "Kein Stundenplan geladen.",
+                    stringResource(R.string.timetable_empty_day),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                TextButton(onClick = viewModel::refresh) { Text("Neu laden") }
+                TextButton(onClick = viewModel::refresh) { Text(stringResource(R.string.common_reload)) }
             }
         } else if (day.lessons.isEmpty()) {
             Column(
@@ -146,12 +148,12 @@ fun DayScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Text(
-                    if (isWeekend(state.day)) "Schulfrei — kein Unterricht an diesem Tag."
-                    else "Kein Unterricht an diesem Tag.",
+                    if (isWeekend(state.day)) stringResource(R.string.timetable_no_lessons_weekend)
+                    else stringResource(R.string.timetable_no_lessons),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                TextButton(onClick = viewModel::refresh) { Text("Neu laden") }
+                TextButton(onClick = viewModel::refresh) { Text(stringResource(R.string.common_reload)) }
             }
         } else {
             LazyColumn(
@@ -182,7 +184,7 @@ fun DayHeadRow(
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         IconButton(onClick = onPrev) {
-            Icon(Icons.Filled.ChevronLeft, contentDescription = "Zurück")
+            Icon(Icons.Filled.ChevronLeft, contentDescription = stringResource(R.string.common_back))
         }
         Column(Modifier.weight(1f)) {
             Text(
@@ -194,10 +196,10 @@ fun DayHeadRow(
             if (count.isNotBlank()) SectionLabel(count)
         }
         IconButton(onClick = onRefresh, enabled = !refreshing) {
-            Icon(Icons.Filled.Refresh, contentDescription = "Aktualisieren")
+            Icon(Icons.Filled.Refresh, contentDescription = stringResource(R.string.common_refresh_desc))
         }
         IconButton(onClick = onNext) {
-            Icon(Icons.Filled.ChevronRight, contentDescription = "Weiter")
+            Icon(Icons.Filled.ChevronRight, contentDescription = stringResource(R.string.common_next))
         }
     }
 }
@@ -211,7 +213,7 @@ fun TodayRow(onClick: () -> Unit) {
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
         ) {
             Text(
-                "Heute",
+                stringResource(R.string.timetable_today),
                 fontSize = 15.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -241,13 +243,13 @@ fun TimetableSegmented(
     ) {
         Row(modifier = Modifier.padding(4.dp)) {
             SegmentHalf(
-                label = "Tag",
+                label = stringResource(R.string.timetable_day_tab),
                 active = view == TimetableView.DAY,
                 onClick = { onView(TimetableView.DAY) },
                 modifier = Modifier.weight(1f),
             )
             SegmentHalf(
-                label = "Woche",
+                label = stringResource(R.string.timetable_week_tab),
                 active = view == TimetableView.WEEK,
                 onClick = { onView(TimetableView.WEEK) },
                 modifier = Modifier.weight(1f),
@@ -293,10 +295,12 @@ fun LessonCard(
     modifier: Modifier = Modifier,
 ) {
     val scheme = MaterialTheme.colorScheme
+    val cancelledText = cancelledLine(lesson)
+    val lessonSubText = lessonSub(lesson)
     EduCard(modifier = modifier.fillMaxWidth()) {
         if (lesson.is_cancelled) {
             Text(
-                cancelledLine(lesson),
+                cancelledText,
                 fontSize = 14.sp,
                 color = scheme.onSurfaceVariant,
                 modifier = Modifier.fillMaxWidth().padding(16.dp),
@@ -326,10 +330,9 @@ fun LessonCard(
                         color = scheme.onSurface,
                     )
                     Spacer(Modifier.height(2.dp))
-                    val sub = lessonSub(lesson)
-                    if (sub.isNotBlank()) {
+                    if (lessonSubText.isNotBlank()) {
                         Text(
-                            sub,
+                            lessonSubText,
                             fontSize = 13.sp,
                             color = scheme.onSurfaceVariant,
                         )
@@ -337,7 +340,7 @@ fun LessonCard(
                 }
                 if (isNow) {
                     Spacer(Modifier.width(8.dp))
-                    StatusPill(text = "Jetzt", dot = RDotBlue)
+                    StatusPill(text = stringResource(R.string.timetable_now), dot = RDotBlue)
                 }
             }
         }
@@ -361,9 +364,9 @@ fun AuthAwareError(
     Snackbar(
         action = {
             if (needsReLogin) {
-                TextButton(onClick = onReLogin) { Text("Anmelden") }
+                TextButton(onClick = onReLogin) { Text(stringResource(R.string.common_relogin)) }
             } else {
-                TextButton(onClick = onDismiss) { Text("OK") }
+                TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_ok)) }
             }
         },
         modifier = modifier.padding(bottom = 8.dp),
@@ -379,24 +382,28 @@ private fun startOf(time: String): String {
     return if (idx == null) time.trim() else time.substring(0, idx).trim()
 }
 
+@Composable
 private fun cancelledLine(lesson: LessonDto): String {
     val start = startOf(lesson.time)
-    val title = lesson.title.ifBlank { "Unterricht" }
-    return if (start.isNotBlank()) "$start · $title entfällt" else "$title entfällt"
+    val title = lesson.title.ifBlank { stringResource(R.string.timetable_lesson_fallback) }
+    return if (start.isNotBlank()) stringResource(R.string.timetable_cancelled_with_time, start, title)
+    else stringResource(R.string.timetable_cancelled, title)
 }
 
+@Composable
 private fun lessonSub(lesson: LessonDto): String {
+    val roomText = lesson.rooms.takeIf { it.isNotBlank() }?.let { stringResource(R.string.timetable_room_format, it) }.orEmpty()
+    val onlineText = if (lesson.is_online) stringResource(R.string.timetable_flag_online) else ""
+    val lernzeitText = if (lesson.is_lernzeit) {
+        if (lesson.rowspan > 1) stringResource(R.string.timetable_flag_lernzeit_hours, lesson.rowspan)
+        else stringResource(R.string.timetable_flag_lernzeit)
+    } else ""
+    val eventText = if (lesson.is_event) stringResource(R.string.timetable_flag_event) else ""
     val meta = listOfNotNull(
         lesson.teachers.takeIf { it.isNotBlank() },
-        lesson.rooms.takeIf { it.isNotBlank() }?.let { "Raum $it" },
+        roomText.takeIf { it.isNotBlank() },
     ).joinToString(" · ")
-    val flags = buildList {
-        if (lesson.is_online) add("Online")
-        if (lesson.is_lernzeit) {
-            add(if (lesson.rowspan > 1) "Lernzeit (${lesson.rowspan} Std.)" else "Lernzeit")
-        }
-        if (lesson.is_event) add("Veranstaltung")
-    }.joinToString(" · ")
+    val flags = listOf(onlineText, lernzeitText, eventText).filter { it.isNotBlank() }.joinToString(" · ")
     return listOf(meta, flags).filter { it.isNotBlank() }.joinToString(" · ")
 }
 

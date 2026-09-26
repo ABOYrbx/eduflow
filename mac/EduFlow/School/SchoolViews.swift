@@ -193,7 +193,7 @@ struct SchoolView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle("Termine & Vertretungen")
+        .navigationTitle(NSLocalizedString("school_nav", value: "Termine & Vertretungen", comment: "Schule: Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
         .refreshable { await vm.load(refresh: true, onSessionExpired: onSessionExpired) }
     }
@@ -241,7 +241,7 @@ struct SchoolView: View {
                                 .frame(width: 54, alignment: .leading)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(change.title).font(UberFont.text(14, weight: .semibold))
-                                Text("Klasse \(change.schoolClass)").font(UberFont.text(12))
+                                Text(String(format: NSLocalizedString("school_class_format", value: "Klasse %@", comment: "Schule: Klasse"), change.schoolClass)).font(UberFont.text(12))
                                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                             }
                             Spacer()
@@ -267,17 +267,17 @@ struct SchoolView: View {
 
     private func kindTitle(_ kind: String) -> String {
         switch kind {
-        case "exam": "TEST / PRÜFUNG"
-        case "attendance": "ANWESENHEIT"
-        default: "SCHULTERMIN"
+        case "exam": return NSLocalizedString("school_kind_exam", value: "TEST / PRÜFUNG", comment: "Schule: Prüfungsart")
+        case "attendance": return NSLocalizedString("school_kind_attendance", value: "ANWESENHEIT", comment: "Schule: Anwesenheit")
+        default: return NSLocalizedString("school_kind_event", value: "SCHULTERMIN", comment: "Schule: Schultermin")
         }
     }
 
     private func actionLabel(_ action: String) -> String {
         switch action {
-        case "add": "NEU"
-        case "remove": "ENTFÄLLT"
-        default: "GEÄNDERT"
+        case "add": return NSLocalizedString("school_action_add", value: "NEU", comment: "Schule: neu")
+        case "remove": return NSLocalizedString("school_action_remove", value: "ENTFÄLLT", comment: "Schule: entfällt")
+        default: return NSLocalizedString("school_action_changed", value: "GEÄNDERT", comment: "Schule: geändert")
         }
     }
 
@@ -285,6 +285,6 @@ struct SchoolView: View {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "de_DE")
         formatter.dateFormat = "dd.MM.yyyy"
-        return "Woche ab " + formatter.string(from: day)
+        return String(format: NSLocalizedString("school_week_from", value: "Woche ab %@", comment: "Schule: Wochenlabel"), formatter.string(from: day))
     }
 }

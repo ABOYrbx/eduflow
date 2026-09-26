@@ -43,6 +43,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -78,13 +79,13 @@ fun AppHeader(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logo),
-                contentDescription = "EduFlow-Logo",
+                contentDescription = stringResource(R.string.common_logo_desc),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.size(28.dp),
             )
         }
         Text(
-            "EduFlow",
+            stringResource(R.string.app_name),
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
             color = scheme.onBackground,
@@ -97,7 +98,7 @@ fun AppHeader(
                 modifier = Modifier.padding(end = 8.dp),
             ) {
                 Text(
-                    "DEMO",
+                    stringResource(R.string.common_demo_badge),
                     color = scheme.onSecondaryContainer,
                     fontWeight = FontWeight.Bold,
                     fontSize = 10.sp,
@@ -124,20 +125,24 @@ fun AppHeader(
             }
             DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }) {
                 Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
-                    Text("Dein Profil", fontWeight = FontWeight.SemiBold)
+                    Text(stringResource(R.string.common_profile_title), fontWeight = FontWeight.SemiBold)
                     Text(
-                        "${session.username.ifBlank { "Konto" }} @ ${session.subdomain.ifBlank { "EduPage" }}",
+                        stringResource(
+                            R.string.common_profile_subtitle_format,
+                            session.username.ifBlank { stringResource(R.string.common_profile_default_account) },
+                            session.subdomain.ifBlank { stringResource(R.string.common_profile_default_domain) },
+                        ),
                         color = scheme.onSurfaceVariant,
                         fontSize = 12.sp,
                     )
                 }
                 androidx.compose.material3.HorizontalDivider()
                 DropdownMenuItem(
-                    text = { Text("Einstellungen") },
+                    text = { Text(stringResource(R.string.common_menu_settings)) },
                     onClick = { menuOpen = false; onSettings() },
                 )
                 DropdownMenuItem(
-                    text = { Text("Abmelden") },
+                    text = { Text(stringResource(R.string.common_menu_logout)) },
                     onClick = { menuOpen = false; onLogout() },
                 )
             }

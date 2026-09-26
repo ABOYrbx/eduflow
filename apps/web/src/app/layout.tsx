@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { t } from "../lib/i18n";
 import "./uber.css";
 import "./compat.css";
 
-export const metadata: Metadata = { title: "EduFlow", description: "Lokales Schul-Dashboard" };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: "EduFlow", description: t("meta.description") };
+}
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <html lang="de" suppressHydrationWarning>

@@ -94,7 +94,7 @@ public struct DayView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle("Stundenplan")
+        .navigationTitle(NSLocalizedString("timetable_nav", value: "Stundenplan", comment: "Stundenplan: Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
         .refreshable { await vm.load(refresh: true, onSessionExpired: onSessionExpired) }
     }

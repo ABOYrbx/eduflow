@@ -33,7 +33,7 @@ public struct LoginView: View {
                     .padding(.top, 20)
                 stepDots
                     .padding(.top, 12)
-                Text("Schritt \(step + 1) von \(totalSteps)")
+                Text(String(format: NSLocalizedString("auth_step_counter", value: "Schritt %d von %d", comment: "Anmeldung: Schrittzähler"), step + 1, totalSteps))
                     .font(UberFont.text(12))
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     .padding(.top, 4)
@@ -86,7 +86,7 @@ public struct LoginView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle("Anmelden")
+        .navigationTitle(NSLocalizedString("auth_nav_login", value: "Anmelden", comment: "Anmeldung: Titel"))
     }
 
     private var stepDots: some View {
@@ -156,7 +156,7 @@ public struct LoginView: View {
             Button("Übernehmen") { vm.applyBaseURL() }
                 .font(UberFont.text(13, weight: .bold))
                 .padding(.top, 4)
-            Text("Server: \(vm.baseURL)")
+            Text(String(format: NSLocalizedString("auth_server_line", value: "Server: %@", comment: "Anmeldung: Serverzeile"), vm.baseURL))
                 .font(UberFont.text(12))
                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 .multilineTextAlignment(.center)
@@ -299,7 +299,7 @@ public struct TwoFAView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle("Zwei-Faktor-Code")
+        .navigationTitle(NSLocalizedString("auth_nav_2fa", value: "Zwei-Faktor-Code", comment: "Anmeldung: 2FA-Titel"))
     }
 
     private func doSubmit() {

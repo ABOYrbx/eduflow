@@ -17,7 +17,7 @@ public struct HomeworkView: View {
             VStack(alignment: .leading, spacing: 14) {
                 PageHead(
                     "Hausaufgaben",
-                    stats: vm.total == 0 ? nil : "\(vm.total) Aufgaben"
+                    stats: vm.total == 0 ? nil : String(format: NSLocalizedString("homework_count", value: "%d Aufgaben", comment: "Hausaufgaben: Anzahl"), vm.total)
                 )
                 controlsCard
                 statGrid
@@ -90,7 +90,7 @@ public struct HomeworkView: View {
                         .riseIn(delay: Double(min(index, 8)) * 0.06)
                     }
                     if vm.canLoadMore {
-                        Button(vm.isLoadingMore ? "Lädt …" : "Mehr laden (\(vm.items.count)/\(vm.total))") {
+                        Button(vm.isLoadingMore ? "Lädt …" : String(format: NSLocalizedString("homework_load_more", value: "Mehr laden (%d/%d)", comment: "Hausaufgaben: mehr laden"), vm.items.count, vm.total)) {
                             Task { await vm.loadMore(onSessionExpired: onSessionExpired) }
                         }
                         .buttonStyle(UberButtonStyle(.smallLight))
@@ -112,7 +112,7 @@ public struct HomeworkView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle("Hausaufgaben")
+        .navigationTitle(NSLocalizedString("homework_nav", value: "Hausaufgaben", comment: "Hausaufgaben: Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
         .refreshable { await vm.load(refresh: true, onSessionExpired: onSessionExpired) }
     }

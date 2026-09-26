@@ -235,7 +235,7 @@ private struct TopPillNav: View {
                 .overlay(Circle().stroke(EduFlowPalette.border(scheme), lineWidth: 1))
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Profilmenü öffnen")
+        .accessibilityLabel(NSLocalizedString("common_profile_menu_open", value: "Profilmenü öffnen", comment: "Navigation: Profilmenü"))
         .help("\(store.username) @ \(store.subdomain)")
         .popover(isPresented: $profileMenuOpen, arrowEdge: .top) {
             VStack(alignment: .leading, spacing: 14) {

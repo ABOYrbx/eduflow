@@ -57,7 +57,7 @@ public struct SettingsView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle("Einstellungen")
+        .navigationTitle(NSLocalizedString("settings_nav", value: "Einstellungen", comment: "Einstellungen: Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
     }
 
@@ -111,9 +111,9 @@ public struct SettingsView: View {
                 Text("Übersicht")
                     .font(UberFont.text(19, weight: .heavy))
                     .tracking(-0.4)
-                Stepper("Max. ungelesene Nachrichten: \(vm.values.ovUnread)", value: $vm.values.ovUnread, in: 1...50)
+                Stepper(String(format: NSLocalizedString("settings_max_unread", value: "Max. ungelesene Nachrichten: %d", comment: "Einstellungen: ungelesene Nachrichten"), vm.values.ovUnread), value: $vm.values.ovUnread, in: 1...50)
                     .font(UberFont.text(14, weight: .medium))
-                Stepper("Max. offene Hausaufgaben: \(vm.values.ovHomework)", value: $vm.values.ovHomework, in: 1...50)
+                Stepper(String(format: NSLocalizedString("settings_max_homework", value: "Max. offene Hausaufgaben: %d", comment: "Einstellungen: offene Hausaufgaben"), vm.values.ovHomework), value: $vm.values.ovHomework, in: 1...50)
                     .font(UberFont.text(14, weight: .medium))
                 Toggle("Wetterkarte anzeigen", isOn: $vm.values.ovWetter)
                     .font(UberFont.text(14, weight: .medium))
@@ -237,7 +237,7 @@ public struct SettingsView: View {
                 .buttonStyle(UberButtonStyle(.smallLight))
                 .hoverLift()
                 .disabled(vm.isLoading)
-                Button("Cache leeren\(vm.isClearing ? " …" : "")") {
+                Button(vm.isClearing ? NSLocalizedString("settings_cache_clear_busy", value: "Cache leeren …", comment: "Einstellungen: Cache leeren läuft") : NSLocalizedString("settings_cache_clear", value: "Cache leeren", comment: "Einstellungen: Cache leeren")) {
                     Task { await vm.clearCache(onSessionExpired: onSessionExpired) }
                 }
                 .buttonStyle(UberButtonStyle(.smallLight))

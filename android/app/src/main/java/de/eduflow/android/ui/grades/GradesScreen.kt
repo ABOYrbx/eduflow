@@ -31,9 +31,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import de.eduflow.android.R
 import de.eduflow.android.data.dto.ErrorCodes
 import de.eduflow.android.data.dto.GradeDto
 import de.eduflow.android.data.dto.GradeSubjectGroup
@@ -80,8 +83,8 @@ fun GradesScreen(
         )
         Spacer(Modifier.height(12.dp))
         ScreenHead(
-            title = "Noten",
-            subtitle = "Deine Leistungen nach Fach",
+            title = stringResource(R.string.grades_title),
+            subtitle = stringResource(R.string.grades_subtitle),
         )
         Spacer(Modifier.height(12.dp))
         AverageCard(avgDisplay = state.avgDisplay)
@@ -89,18 +92,21 @@ fun GradesScreen(
         SearchPill(
             value = state.query,
             onValueChange = viewModel::onQuery,
-            placeholder = "Fach, Titel oder Lehrkraft",
+            placeholder = stringResource(R.string.grades_search_placeholder),
         )
         if (state.terms.size > 1) {
             Spacer(Modifier.height(10.dp))
-            val labels = state.terms.map { "${it.label} (${it.count})" }
-            val selected = state.terms.firstOrNull { it.key == state.term }
-                ?.let { "${it.label} (${it.count})" }.orEmpty()
+            // Anzeige lokalisiert, Abgleich über dieselben Ressourcen-Strings (sprachunabhängig).
+            val labelByKeyLocalized = state.terms.associate { term ->
+                term.key to stringResource(R.string.grades_term_format, term.label, term.count)
+            }
+            val labels = state.terms.map { labelByKeyLocalized[it.key].orEmpty() }
+            val selected = labelByKeyLocalized[state.term].orEmpty()
             FilterChips(
                 options = labels,
                 selected = selected,
                 onSelect = { label ->
-                    state.terms.firstOrNull { "${it.label} (${it.count})" == label }
+                    labelByKeyLocalized.entries.firstOrNull { it.value == label }
                         ?.let { viewModel.onTerm(it.key) }
                 },
             )
@@ -108,11 +114,11 @@ fun GradesScreen(
         Spacer(Modifier.height(4.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             SectionLabel(
-                "Fächer",
+                stringResource(R.string.grades_section_subjects),
                 modifier = Modifier.weight(1f),
             )
             IconButton(onClick = viewModel::refresh, enabled = !state.isLoading) {
-                Icon(Icons.Filled.Refresh, contentDescription = "Aktualisieren")
+                Icon(Icons.Filled.Refresh, contentDescription = stringResource(R.string.common_refresh_desc))
             }
         }
         if (state.cacheInfo.isNotBlank()) {
@@ -147,11 +153,11 @@ fun GradesScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Text(
-                    "Keine Noten in diesem Zeitraum.",
+                    stringResource(R.string.grades_empty),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                TextButton(onClick = viewModel::refresh) { Text("Neu laden") }
+                TextButton(onClick = viewModel::refresh) { Text(stringResource(R.string.common_reload)) }
             }
         } else {
             LazyColumn(
@@ -173,13 +179,13 @@ fun GradesScreen(
                                     modifier = Modifier.size(16.dp).padding(end = 8.dp),
                                 )
                             }
-                            Text("Mehr laden (${state.allItems.size}/${state.total})")
+                            Text(stringResource(R.string.common_load_more_format, state.allItems.size, state.total))
                         }
                     }
                 }
                 item {
                     Text(
-                        "Zuletzt synchronisierte Einträge",
+                        stringResource(R.string.grades_footer),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
@@ -202,7 +208,7 @@ private fun AverageCard(avgDisplay: String) {
     ) {
         Column(Modifier.padding(20.dp)) {
             Text(
-                "GESAMTSCHNITT",
+                stringResource(R.string.grades_avg_title),
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 1.2.sp,
@@ -217,7 +223,7 @@ private fun AverageCard(avgDisplay: String) {
             )
             Spacer(Modifier.height(2.dp))
             Text(
-                "Deine Noten im Überblick",
+                stringResource(R.string.grades_avg_sub),
                 fontSize = 13.sp,
                 color = scheme.onPrimary.copy(alpha = 0.7f),
             )
@@ -231,6 +237,13 @@ private fun SubjectRow(group: GradeSubjectGroup) {
     var expanded by remember(group.subject) { mutableStateOf(false) }
     val scheme = MaterialTheme.colorScheme
     val newest = group.items.firstOrNull()
+    val newestLine = newestSub(newest)
+    val countLine = pluralStringResource(
+        R.plurals.grades_notes_count,
+        group.items.size,
+        group.avgDisplay,
+        group.items.size,
+    )
     EduCard(
         onClick = { expanded = !expanded },
         modifier = Modifier.fillMaxWidth(),
@@ -246,7 +259,7 @@ private fun SubjectRow(group: GradeSubjectGroup) {
                     )
                     Spacer(Modifier.height(2.dp))
                     Text(
-                        newestSub(newest),
+                        newestLine,
                         fontSize = 13.sp,
                         color = scheme.onSurfaceVariant,
                     )
@@ -261,8 +274,7 @@ private fun SubjectRow(group: GradeSubjectGroup) {
                 Spacer(Modifier.height(12.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
-                        "Ø ${group.avgDisplay} · ${group.items.size} " +
-                            if (group.items.size == 1) "Note" else "Noten",
+                        countLine,
                         style = MaterialTheme.typography.labelMedium,
                         color = scheme.onSurfaceVariant,
                     )
@@ -275,9 +287,10 @@ private fun SubjectRow(group: GradeSubjectGroup) {
     }
 }
 
+@Composable
 private fun newestSub(grade: GradeDto?): String {
-    if (grade == null) return "Noch keine Note"
-    val title = grade.title.ifBlank { "Note" }
+    if (grade == null) return stringResource(R.string.grades_no_grade)
+    val title = grade.title.ifBlank { stringResource(R.string.grades_grade_fallback) }
     val date = grade.date_display.ifBlank { "–" }
     return "$title · $date"
 }
@@ -310,6 +323,10 @@ private fun badgeColor(badge: String?): Color = when (badge) {
 
 @Composable
 private fun GradeDetailRow(grade: GradeDto) {
+    val noteFallback = stringResource(R.string.grades_grade_fallback)
+    val weightDefault = stringResource(R.string.grades_weight_default)
+    val teacherText = if (grade.teacher.isNotBlank()) stringResource(R.string.grades_teacher_format, grade.teacher) else ""
+    val classAvgText = if (grade.class_avg_display.isNotBlank()) stringResource(R.string.grades_class_avg_format, grade.class_avg_display) else ""
     Surface(
         shape = RoundedCornerShape(12.dp),
         color = MaterialTheme.colorScheme.surfaceVariant,
@@ -322,18 +339,18 @@ private fun GradeDetailRow(grade: GradeDto) {
         ) {
             GradeChip(grade = grade)
             Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                Text(grade.title.ifBlank { "Note" }, fontWeight = FontWeight.SemiBold)
+                Text(grade.title.ifBlank { noteFallback }, fontWeight = FontWeight.SemiBold)
                 Text(
                     "${grade.date_display.ifBlank { "–" }}" +
                         (if (grade.grade_sub.isNotBlank()) " · ${grade.grade_sub}" else "") +
-                        " · Gewichtung ${grade.weight_display.ifBlank { "×1" }}",
+                        stringResource(R.string.grades_weight_format, grade.weight_display.ifBlank { weightDefault }),
                     style = MaterialTheme.typography.bodySmall,
                 )
                 val meta = buildString {
-                    if (grade.teacher.isNotBlank()) append("Lehrer: ${grade.teacher}")
-                    if (grade.class_avg_display.isNotBlank()) {
+                    if (teacherText.isNotBlank()) append(teacherText)
+                    if (classAvgText.isNotBlank()) {
                         if (isNotEmpty()) append(" · ")
-                        append("Klasse Ø ${grade.class_avg_display}")
+                        append(classAvgText)
                     }
                     if (grade.comment.isNotBlank()) {
                         if (isNotEmpty()) append(" · ")

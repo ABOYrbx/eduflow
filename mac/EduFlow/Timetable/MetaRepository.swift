@@ -30,7 +30,7 @@ public struct MetaRepository: Sendable {
             guard !trimmed.isEmpty else {
                 throw APIError(
                     code: ErrorCodes.validation,
-                    message: "Bitte eine Stadt in den Einstellungen eintragen."
+                    message: NSLocalizedString("overview_city_missing", value: "Bitte eine Stadt in den Einstellungen eintragen.", comment: "Übersicht: Stadt fehlt")
                 )
             }
             items.append(URLQueryItem(name: "city", value: trimmed))

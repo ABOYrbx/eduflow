@@ -69,7 +69,7 @@ public struct OverviewView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle("Übersicht")
+        .navigationTitle(NSLocalizedString("overview_nav", value: "Übersicht", comment: "Übersicht: Titel"))
         .onReceive(clockTimer) { now = $0 }
         .task { await vm.load(onSessionExpired: onSessionExpired) }
         .refreshable { await vm.load(refresh: true, onSessionExpired: onSessionExpired) }
@@ -196,7 +196,12 @@ public struct OverviewView: View {
                         .tracking(-0.8)
                         .lineLimit(1)
                         .padding(.vertical, 4)
-                    Text("\(lesson.period). Std · \(lesson.time)\(lesson.rooms.isEmpty ? "" : " · Raum \(lesson.rooms)")\(lesson.teachers.isEmpty ? "" : " · \(lesson.teachers)")")
+                    Text(String(
+                        format: NSLocalizedString("overview_lesson_detail", value: "%@. Std · %@%@%@", comment: "Übersicht: Stundendetail"),
+                        lesson.period, lesson.time,
+                        lesson.rooms.isEmpty ? "" : String(format: NSLocalizedString("overview_lesson_room", value: " · Raum %@", comment: "Übersicht: Raum"), lesson.rooms),
+                        lesson.teachers.isEmpty ? "" : String(format: NSLocalizedString("overview_lesson_teachers", value: " · %@", comment: "Übersicht: Lehrkraft"), lesson.teachers)
+                    ))
                         .font(UberFont.text(13, weight: .medium))
                         .opacity(0.75)
                     HStack(spacing: 6) {
@@ -301,7 +306,7 @@ public struct OverviewView: View {
     private var messagesColumn: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("Nachrichten · \(vm.messagesTotal)")
+                Text(String(format: NSLocalizedString("overview_messages_total", value: "Nachrichten · %d", comment: "Übersicht: Nachrichtenzahl"), vm.messagesTotal))
                     .font(UberFont.text(20, weight: .heavy))
                 Spacer()
                 Button("Alle Nachrichten") { onNavigate(.messages) }
@@ -477,7 +482,7 @@ public struct OverviewView: View {
                 }
             }
             .frame(minHeight: 36)
-            Text("Woche \(vm.essen.label ?? vm.essen.week ?? "")")
+            Text(String(format: NSLocalizedString("overview_week_label", value: "Woche %@", comment: "Übersicht: Essenswoche"), vm.essen.label ?? vm.essen.week ?? ""))
                 .font(UberFont.text(14, weight: .semibold))
                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 .padding(.vertical, 14)
@@ -766,7 +771,7 @@ private struct WetterSheet: View {
                         .hoverLift()
                 }
                 if let city = wetter.city, !city.isEmpty {
-                    Text("Wetter in \(city)".uppercased())
+                    Text(String(format: NSLocalizedString("overview_weather_in_city", value: "Wetter in %@", comment: "Übersicht: Wetterstadt"), city).uppercased())
                         .font(UberFont.text(11, weight: .bold))
                         .tracking(1.2)
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))

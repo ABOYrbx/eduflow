@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { t } from "../../lib/i18n";
 
 export function ThemeToggle() {
   const [dark, setDark] = useState(false);
@@ -24,7 +25,7 @@ export function ThemeToggle() {
     <button
       className={`theme-toggle auth-top-right${dark ? " is-dark" : ""}`}
       type="button"
-      aria-label={dark ? "Zum hellen Modus wechseln" : "Zum dunklen Modus wechseln"}
+      aria-label={dark ? t("theme.toLight") : t("theme.toDark")}
       aria-pressed={dark}
       onClick={toggleTheme}
     >

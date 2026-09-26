@@ -33,11 +33,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import de.eduflow.android.R
 import de.eduflow.android.data.ApiService
 import de.eduflow.android.data.SchoolRepository
 import de.eduflow.android.data.dto.ErrorCodes
@@ -55,8 +57,8 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
-private enum class SchoolSection(val label: String) {
-    AGENDA("Kalender"), SUBSTITUTIONS("Vertretungen"),
+private enum class SchoolSection {
+    AGENDA, SUBSTITUTIONS,
 }
 
 private class SchoolViewModelFactory(private val api: () -> ApiService) : ViewModelProvider.Factory {
@@ -92,7 +94,9 @@ private fun SchoolScreen(
     val dateFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d. MMMM", Locale.GERMAN) }
     val agendaCount = state.agenda.size
     val substitutionCount = state.substitutions.sumOf { it.changes.size }
-    val tabOptions = listOf("Kalender · $agendaCount", "Vertretungen · $substitutionCount")
+    val tabCalendar = stringResource(R.string.school_tab_calendar_format, agendaCount)
+    val tabSubstitutions = stringResource(R.string.school_tab_substitutions_format, substitutionCount)
+    val tabOptions = listOf(tabCalendar, tabSubstitutions)
     val selectedTab = if (section == SchoolSection.AGENDA) tabOptions[0] else tabOptions[1]
 
     Column(Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
@@ -100,12 +104,12 @@ private fun SchoolScreen(
         Spacer(Modifier.height(10.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             ScreenHead(
-                title = "Schulalltag",
-                subtitle = "Termine und Planänderungen",
+                title = stringResource(R.string.school_title),
+                subtitle = stringResource(R.string.school_subtitle),
                 modifier = Modifier.weight(1f),
             )
             IconButton(onClick = { viewModel.load(refresh = true) }, enabled = !state.isLoading) {
-                Icon(Icons.Filled.Refresh, contentDescription = "Aktualisieren")
+                Icon(Icons.Filled.Refresh, contentDescription = stringResource(R.string.common_refresh_desc))
             }
         }
         Spacer(Modifier.height(12.dp))
@@ -113,22 +117,25 @@ private fun SchoolScreen(
             options = tabOptions,
             selected = selectedTab,
             onSelect = { value ->
-                section = if (value.startsWith("Kalender")) SchoolSection.AGENDA else SchoolSection.SUBSTITUTIONS
+                section = if (value == tabCalendar) SchoolSection.AGENDA else SchoolSection.SUBSTITUTIONS
             },
         )
         if (section == SchoolSection.SUBSTITUTIONS) {
             Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = { viewModel.load(day = state.selectedDay.minusWeeks(1)) }) {
-                    Icon(Icons.Filled.ChevronLeft, contentDescription = "Vorwoche")
+                    Icon(Icons.Filled.ChevronLeft, contentDescription = stringResource(R.string.school_prev_week_desc))
                 }
                 Text(
-                    text = "Woche ab ${state.selectedDay.with(java.time.DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))}",
+                    text = stringResource(
+                        R.string.school_week_format,
+                        state.selectedDay.with(java.time.DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                    ),
                     modifier = Modifier.weight(1f),
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Medium,
                 )
                 IconButton(onClick = { viewModel.load(day = state.selectedDay.plusWeeks(1)) }) {
-                    Icon(Icons.Filled.ChevronRight, contentDescription = "Nächste Woche")
+                    Icon(Icons.Filled.ChevronRight, contentDescription = stringResource(R.string.school_next_week_desc))
                 }
             }
         }
@@ -158,7 +165,7 @@ private fun SchoolScreen(
 @Composable
 private fun ColumnScope.AgendaList(items: List<SchoolAgendaItemDto>, formatter: DateTimeFormatter) {
     if (items.isEmpty()) {
-        EmptyMessage("Für diesen Zeitraum sind keine Schultermine oder Prüfungen eingetragen.")
+        EmptyMessage(stringResource(R.string.school_empty_agenda))
         return
     }
     LazyColumn(
@@ -180,9 +187,9 @@ private fun ColumnScope.AgendaList(items: List<SchoolAgendaItemDto>, formatter: 
 @Composable
 private fun AgendaCard(item: SchoolAgendaItemDto) {
     val kindLabel = when (item.kind) {
-        "exam" -> "TEST / PRÜFUNG"
-        "attendance" -> "ANWESENHEIT"
-        else -> "SCHULTERMIN"
+        "exam" -> stringResource(R.string.school_kind_exam)
+        "attendance" -> stringResource(R.string.school_kind_attendance)
+        else -> stringResource(R.string.school_kind_default)
     }
     val title = item.title.ifBlank { item.text.ifBlank { item.type_label } }
     EduCard(Modifier.fillMaxWidth()) {
@@ -202,7 +209,7 @@ private fun AgendaCard(item: SchoolAgendaItemDto) {
 private fun ColumnScope.SubstitutionList(days: List<SubstitutionDayDto>, formatter: DateTimeFormatter) {
     val changes = days.flatMap { it.changes.map { change -> it.date to change } }
     if (changes.isEmpty()) {
-        EmptyMessage("Für diese Woche sind keine Vertretungen eingetragen.")
+        EmptyMessage(stringResource(R.string.school_empty_substitutions))
         return
     }
     LazyColumn(
@@ -224,9 +231,9 @@ private fun ColumnScope.SubstitutionList(days: List<SubstitutionDayDto>, formatt
 @Composable
 private fun SubstitutionCard(change: SubstitutionChangeDto) {
     val status = when (change.action) {
-        "add" -> "NEU"
-        "remove" -> "ENTFÄLLT"
-        else -> "GEÄNDERT"
+        "add" -> stringResource(R.string.school_change_add)
+        "remove" -> stringResource(R.string.school_change_remove)
+        else -> stringResource(R.string.school_change_default)
     }
     EduCard(Modifier.fillMaxWidth()) {
         Row(
@@ -240,7 +247,9 @@ private fun SubstitutionCard(change: SubstitutionChangeDto) {
             }
             Column(Modifier.weight(1f)) {
                 Text(change.title, fontWeight = FontWeight.SemiBold)
-                Text("Klasse ${change.schoolClass}", fontSize = 12.sp,
+                Text(
+                    stringResource(R.string.school_class_format, change.schoolClass),
+                    fontSize = 12.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Text(status, fontSize = 9.sp, fontWeight = FontWeight.Bold,

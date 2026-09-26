@@ -29,6 +29,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
+import de.eduflow.android.R
 import de.eduflow.android.ui.common.PrimaryButton
 import de.eduflow.android.ui.common.SectionLabel
 
@@ -52,20 +54,20 @@ fun TwoFaScreen(
             .padding(horizontal = 20.dp, vertical = 24.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        SectionLabel("2 von 2 · Code bestätigen")
+        SectionLabel(stringResource(R.string.twofa_section))
         Text(
-            "Code bestätigen",
+            stringResource(R.string.twofa_title),
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold,
             color = scheme.onBackground,
         )
         Text(
-            "Gib den Zwei-Faktor-Code aus E-Mail oder App ein.",
+            stringResource(R.string.twofa_desc),
             style = MaterialTheme.typography.bodyMedium,
             color = scheme.onSurfaceVariant,
         )
         Text(
-            "Code aus E-Mail oder App",
+            stringResource(R.string.twofa_label),
             fontSize = 13.sp,
             fontWeight = FontWeight.SemiBold,
             color = scheme.onSurface,
@@ -73,7 +75,7 @@ fun TwoFaScreen(
         OutlinedTextField(
             value = code,
             onValueChange = { code = it },
-            placeholder = { Text("Code") },
+            placeholder = { Text(stringResource(R.string.twofa_placeholder)) },
             singleLine = true,
             shape = CircleShape,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -103,7 +105,7 @@ fun TwoFaScreen(
             }
         }
         PrimaryButton(
-            text = if (loading) "Prüfen …" else "Bestätigen",
+            text = if (loading) stringResource(R.string.twofa_confirm_loading) else stringResource(R.string.twofa_confirm),
             onClick = { vm.submit2fa(pendingToken, code, onLoggedIn) },
             enabled = !loading,
         )
@@ -113,11 +115,11 @@ fun TwoFaScreen(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             TextButton(onClick = onBackToLogin) {
-                Text("Zurück zum Login")
+                Text(stringResource(R.string.twofa_back))
             }
         }
         Text(
-            "Der Code ist 10 Minuten gültig.",
+            stringResource(R.string.twofa_validity),
             fontSize = 12.sp,
             color = scheme.onSurfaceVariant,
             textAlign = TextAlign.Center,

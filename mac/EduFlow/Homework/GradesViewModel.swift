@@ -41,7 +41,7 @@ public final class GradesViewModel {
         }
         var groups: [String: [GradeDTO]] = [:]
         for item in matching {
-            groups[item.subject ?? "Sonstiges", default: []].append(item)
+            groups[item.subject ?? NSLocalizedString("grades_subject_other", value: "Sonstiges", comment: "Noten: Fach-Fallback"), default: []].append(item)
         }
         return groups.keys.sorted().map { subject in
             let grades = (groups[subject] ?? []).sorted {

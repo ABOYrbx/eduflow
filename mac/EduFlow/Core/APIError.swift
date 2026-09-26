@@ -33,29 +33,29 @@ public struct APIError: LocalizedError, Sendable {
     public static func germanFallback(for code: String) -> String {
         switch code {
         case ErrorCodes.validation:
-            return "Ungültige Eingabe. Bitte prüfen und erneut versuchen."
+            return NSLocalizedString("common_error_validation", value: "Ungültige Eingabe. Bitte prüfen und erneut versuchen.", comment: "Fehler: ungültige Eingabe")
         case ErrorCodes.tokenInvalid:
-            return "Sitzung ungültig. Bitte erneut anmelden."
+            return NSLocalizedString("common_error_token_invalid", value: "Sitzung ungültig. Bitte erneut anmelden.", comment: "Fehler: Sitzung ungültig")
         case ErrorCodes.tokenExpired:
-            return "Sitzung abgelaufen. Bitte erneut anmelden."
+            return NSLocalizedString("common_error_token_expired", value: "Sitzung abgelaufen. Bitte erneut anmelden.", comment: "Fehler: Sitzung abgelaufen")
         case ErrorCodes.pendingInvalid:
-            return "Zwischenschritt abgelaufen. Bitte erneut anmelden."
+            return NSLocalizedString("common_error_pending_invalid", value: "Zwischenschritt abgelaufen. Bitte erneut anmelden.", comment: "Fehler: Zwischenschritt abgelaufen")
         case ErrorCodes.invalidCode:
-            return "Der Code wurde nicht akzeptiert. Bitte erneut versuchen."
+            return NSLocalizedString("common_error_invalid_code", value: "Der Code wurde nicht akzeptiert. Bitte erneut versuchen.", comment: "Fehler: Code nicht akzeptiert")
         case ErrorCodes.badCredentials:
-            return "Falscher Benutzername, Passwort oder Subdomain."
+            return NSLocalizedString("common_error_bad_credentials", value: "Falscher Benutzername, Passwort oder Subdomain.", comment: "Fehler: falsche Zugangsdaten")
         case ErrorCodes.edupage2FA:
-            return "EduPage verlangt erneut einen Code. Bitte neu anmelden."
+            return NSLocalizedString("common_error_edupage_2fa", value: "EduPage verlangt erneut einen Code. Bitte neu anmelden.", comment: "Fehler: EduPage verlangt Code")
         case ErrorCodes.captchaRequired:
-            return "EduPage verlangt ein Captcha. Bitte einmal im Browser anmelden."
+            return NSLocalizedString("common_error_captcha_required", value: "EduPage verlangt ein Captcha. Bitte einmal im Browser anmelden.", comment: "Fehler: Captcha erforderlich")
         case ErrorCodes.notFound:
-            return "Nicht gefunden."
+            return NSLocalizedString("common_error_not_found", value: "Nicht gefunden.", comment: "Fehler: nicht gefunden")
         case ErrorCodes.rateLimited:
-            return "Zu viele Versuche. Bitte später erneut versuchen."
+            return NSLocalizedString("common_error_rate_limited", value: "Zu viele Versuche. Bitte später erneut versuchen.", comment: "Fehler: zu viele Versuche")
         case ErrorCodes.configMissing:
-            return "Server-Schlüssel fehlt. Bitte später erneut versuchen."
+            return NSLocalizedString("common_error_config_missing", value: "Server-Schlüssel fehlt. Bitte später erneut versuchen.", comment: "Fehler: Server-Schlüssel fehlt")
         default:
-            return "Anfrage fehlgeschlagen. Bitte später erneut versuchen."
+            return NSLocalizedString("common_error_upstream", value: "Anfrage fehlgeschlagen. Bitte später erneut versuchen.", comment: "Fehler: Anfrage fehlgeschlagen")
         }
     }
 }

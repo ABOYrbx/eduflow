@@ -48,6 +48,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -112,15 +113,15 @@ fun LoginScreen(
             Spacer(Modifier.height(12.dp))
             Image(
                 painter = painterResource(R.drawable.logo),
-                contentDescription = "EduFlow",
+                contentDescription = stringResource(R.string.app_name),
                 contentScale = ContentScale.Fit,
                 modifier = Modifier.size(96.dp).clip(androidx.compose.foundation.shape.RoundedCornerShape(22.dp))
                     .shadow(12.dp, androidx.compose.foundation.shape.RoundedCornerShape(22.dp)),
             )
-            Text("EduFlow", fontSize = 28.sp, fontWeight = FontWeight.Black, letterSpacing = (-0.8).sp, color = scheme.onBackground, modifier = Modifier.padding(top = 20.dp))
+            Text(stringResource(R.string.app_name), fontSize = 28.sp, fontWeight = FontWeight.Black, letterSpacing = (-0.8).sp, color = scheme.onBackground, modifier = Modifier.padding(top = 20.dp))
             if (isDemo) {
                 Text(
-                    "Demo-Modus · nur synthetische Beispieldaten",
+                    stringResource(R.string.auth_demo_banner),
                     fontSize = 12.sp,
                     color = scheme.primary,
                     textAlign = TextAlign.Center,
@@ -142,7 +143,7 @@ fun LoginScreen(
                     ) {}
                 }
             }
-            Text("Schritt ${step + 1} von $stepCount", fontSize = 12.sp, color = scheme.onSurfaceVariant, modifier = Modifier.padding(top = 6.dp, bottom = 16.dp))
+            Text(stringResource(R.string.auth_step_format, step + 1, stepCount), fontSize = 12.sp, color = scheme.onSurfaceVariant, modifier = Modifier.padding(top = 6.dp, bottom = 16.dp))
             loginError?.let {
                 Text(it.message, color = scheme.error, textAlign = TextAlign.Center, modifier = Modifier.padding(bottom = 10.dp))
             }
@@ -161,33 +162,33 @@ fun LoginScreen(
                 Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
                     when (page) {
                         0 -> {
-                            StepHint("Zu welcher Schule gehörst du?")
-                            LoginField("Subdomain (optional)", subdomain, { subdomain = it }, "z. B. musterschule", KeyboardType.Uri)
+                            StepHint(stringResource(R.string.auth_hint_school))
+                            LoginField(stringResource(R.string.auth_label_subdomain), subdomain, { subdomain = it }, stringResource(R.string.auth_placeholder_subdomain), KeyboardType.Uri)
                         }
                         1 -> {
-                            StepHint("Wie heißt du bei EduPage?")
-                            LoginField("Benutzername", username, { username = it; vm.consumeLoginError() }, "z. B. max.muster", KeyboardType.Text)
+                            StepHint(stringResource(R.string.auth_hint_username))
+                            LoginField(stringResource(R.string.auth_label_username), username, { username = it; vm.consumeLoginError() }, stringResource(R.string.auth_placeholder_username), KeyboardType.Text)
                         }
                         2 -> {
-                            StepHint("Und dein Passwort?")
-                            LoginField("Passwort", password, { password = it; vm.consumeLoginError() }, "Passwort eingeben", KeyboardType.Password, password = true)
+                            StepHint(stringResource(R.string.auth_hint_password))
+                            LoginField(stringResource(R.string.auth_label_password), password, { password = it; vm.consumeLoginError() }, stringResource(R.string.auth_placeholder_password), KeyboardType.Password, password = true)
                         }
                         3 -> {
-                            StepHint("Welches Gerät meldest du an?")
-                            LoginField("Gerätename", device, { device = it }, "z. B. Pixel 9 Pro", KeyboardType.Text)
+                            StepHint(stringResource(R.string.auth_hint_device))
+                            LoginField(stringResource(R.string.auth_label_device), device, { device = it }, stringResource(R.string.auth_placeholder_device), KeyboardType.Text)
                         }
                         else -> {
-                            StepHint("Wo läuft dein Server?")
-                            LoginField("Server-URL", server, { server = it; showServerConfirm = false }, TokenStore.DEFAULT_BASE_URL, KeyboardType.Uri)
+                            StepHint(stringResource(R.string.auth_hint_server))
+                            LoginField(stringResource(R.string.auth_label_server), server, { server = it; showServerConfirm = false }, TokenStore.DEFAULT_BASE_URL, KeyboardType.Uri)
                             TextButton(onClick = {
                                 scope.launch {
                                     onBaseUrlChange(server.trim().trimEnd('/'))
                                     showServerConfirm = true
                                 }
                             }) {
-                                Text(if (showServerConfirm) "Übernommen" else "Übernehmen")
+                                Text(if (showServerConfirm) stringResource(R.string.common_applied) else stringResource(R.string.common_apply))
                             }
-                            Text("Server: ${server.ifBlank { TokenStore.DEFAULT_BASE_URL }}", fontSize = 12.sp, color = scheme.onSurfaceVariant, textAlign = TextAlign.Center)
+                            Text(stringResource(R.string.auth_server_current_format, server.ifBlank { TokenStore.DEFAULT_BASE_URL }), fontSize = 12.sp, color = scheme.onSurfaceVariant, textAlign = TextAlign.Center)
                         }
                     }
                 }
@@ -198,7 +199,7 @@ fun LoginScreen(
             }
             if (step == lastStep) {
                 Text(
-                    "Lokales Werkzeug — Zugangsdaten bleiben auf diesem Gerät.",
+                    stringResource(R.string.auth_privacy_note),
                     fontSize = 12.sp,
                     color = scheme.onSurfaceVariant,
                     textAlign = TextAlign.Center,
@@ -214,11 +215,11 @@ fun LoginScreen(
                     onClick = { step = (step - 1).coerceAtLeast(0); vm.consumeLoginError() },
                     modifier = Modifier.align(Alignment.Start),
                 ) {
-                    Text("Zurück", fontWeight = FontWeight.Bold, color = scheme.onSurfaceVariant)
+                    Text(stringResource(R.string.common_back), fontWeight = FontWeight.Bold, color = scheme.onSurfaceVariant)
                 }
             }
             PrimaryButton(
-                text = "Weiter",
+                text = stringResource(R.string.common_next),
                     onClick = { step += 1; vm.consumeLoginError() },
                     enabled = canAdvance(step, username, password),
             )
@@ -227,10 +228,10 @@ fun LoginScreen(
                 TextButton(
                     onClick = { step = (step - 1).coerceAtLeast(0); vm.consumeLoginError() },
                     modifier = Modifier.align(Alignment.Start),
-                ) { Text("Zurück", fontWeight = FontWeight.Bold, color = scheme.onSurfaceVariant) }
+                ) { Text(stringResource(R.string.common_back), fontWeight = FontWeight.Bold, color = scheme.onSurfaceVariant) }
             }
             PrimaryButton(
-                text = if (loading) "Anmelden …" else "Anmelden",
+                text = if (loading) stringResource(R.string.auth_login_loading) else stringResource(R.string.auth_login),
                 onClick = {
                     scope.launch {
                         if (showServerStep) {
@@ -247,7 +248,7 @@ fun LoginScreen(
                 onClick = { scope.launch { onStopDemo(); vm.consumeLoginError() } },
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             ) {
-                Text("Demo verlassen", color = scheme.onSurfaceVariant)
+                Text(stringResource(R.string.auth_demo_leave), color = scheme.onSurfaceVariant)
             }
         } else {
             TextButton(
@@ -263,7 +264,7 @@ fun LoginScreen(
                 enabled = !loading,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             ) {
-                Text("Demo ansehen", color = scheme.onSurfaceVariant)
+                Text(stringResource(R.string.auth_demo_view), color = scheme.onSurfaceVariant)
             }
         }
     }

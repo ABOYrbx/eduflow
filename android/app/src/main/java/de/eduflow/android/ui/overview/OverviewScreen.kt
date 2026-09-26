@@ -45,9 +45,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import de.eduflow.android.R
 import de.eduflow.android.data.dto.ErrorCodes
 import de.eduflow.android.data.dto.EssenDays
 import de.eduflow.android.data.dto.HomeworkDto
@@ -106,13 +108,13 @@ fun OverviewScreen(
             onLogout = onLogout,
         )
         Spacer(Modifier.height(12.dp))
-        ScreenHead(title = "Home", subtitle = todayLabel)
+        ScreenHead(title = stringResource(R.string.bottom_home), subtitle = todayLabel)
         TextButton(onClick = {
             draftOrder = OverviewOrder.parse(state.settings.ovOrder)
             showOrderEditor = true
         }) {
             Icon(Icons.Filled.Tune, contentDescription = null, modifier = Modifier.size(16.dp))
-            Text("Übersicht anpassen")
+            Text(stringResource(R.string.overview_customize))
         }
         Spacer(Modifier.height(12.dp))
 
@@ -181,18 +183,18 @@ fun OverviewScreen(
     if (showOrderEditor) {
         AlertDialog(
             onDismissRequest = { if (!state.savingOverviewOrder) showOrderEditor = false },
-            title = { Text("Übersicht anpassen") },
+            title = { Text(stringResource(R.string.overview_customize)) },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("Lege fest, welche Bereiche zuerst erscheinen.", style = MaterialTheme.typography.bodySmall)
+                    Text(stringResource(R.string.overview_customize_desc), style = MaterialTheme.typography.bodySmall)
                     draftOrder.forEachIndexed { index, key ->
                         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-                            Text(OverviewOrder.labels[key].orEmpty(), modifier = Modifier.weight(1f))
+                            Text(OverviewOrder.label(key), modifier = Modifier.weight(1f))
                             IconButton(onClick = { draftOrder = OverviewOrder.move(draftOrder, index, -1) }, enabled = index > 0) {
-                                Icon(Icons.Filled.KeyboardArrowUp, contentDescription = "Nach oben")
+                                Icon(Icons.Filled.KeyboardArrowUp, contentDescription = stringResource(R.string.overview_move_up_desc))
                             }
                             IconButton(onClick = { draftOrder = OverviewOrder.move(draftOrder, index, 1) }, enabled = index < draftOrder.lastIndex) {
-                                Icon(Icons.Filled.KeyboardArrowDown, contentDescription = "Nach unten")
+                                Icon(Icons.Filled.KeyboardArrowDown, contentDescription = stringResource(R.string.overview_move_down_desc))
                             }
                         }
                     }
@@ -205,11 +207,11 @@ fun OverviewScreen(
                         viewModel.saveOverviewOrder(draftOrder)
                         showOrderEditor = false
                     },
-                ) { Text(if (state.savingOverviewOrder) "Speichert …" else "Speichern") }
+                ) { Text(if (state.savingOverviewOrder) stringResource(R.string.common_saving) else stringResource(R.string.common_save)) }
             },
             dismissButton = {
                 TextButton(onClick = { showOrderEditor = false }, enabled = !state.savingOverviewOrder) {
-                    Text("Abbrechen")
+                    Text(stringResource(R.string.common_cancel))
                 }
             },
         )
@@ -219,10 +221,18 @@ fun OverviewScreen(
 @Composable
 private fun MessagesOverviewSection(messages: List<MessageDto>, total: Int, onMessages: () -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        SectionHeadRow(label = "Nachrichten · $total", action = "Alle", onAction = onMessages)
+        SectionHeadRow(
+            label = stringResource(R.string.overview_messages_count_format, total),
+            action = stringResource(R.string.overview_action_all),
+            onAction = onMessages,
+        )
         if (messages.isEmpty()) {
-            Text("Keine neuen Nachrichten.", style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(horizontal = 4.dp))
+            Text(
+                stringResource(R.string.overview_messages_empty),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 4.dp),
+            )
         } else messages.forEach { MessageRow(msg = it) }
     }
 }
@@ -232,11 +242,18 @@ private fun HomeworkOverviewSection(
     homework: List<HomeworkDto>, counts: de.eduflow.android.data.dto.HomeworkCounts, onHomework: () -> Unit,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        SectionHeadRow(label = "${counts.offen} offen · ${counts.ueberfaellig} überfällig",
-            action = "Alle Aufgaben", onAction = onHomework)
+        SectionHeadRow(
+            label = stringResource(R.string.overview_homework_count_format, counts.offen, counts.ueberfaellig),
+            action = stringResource(R.string.overview_action_all_tasks),
+            onAction = onHomework,
+        )
         if (homework.isEmpty()) {
-            Text("Keine offenen Hausaufgaben. Sehr gut.", style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(horizontal = 4.dp))
+            Text(
+                stringResource(R.string.overview_homework_empty),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 4.dp),
+            )
         } else homework.forEach { HomeworkRow(hw = it) }
     }
 }
@@ -244,7 +261,11 @@ private fun HomeworkOverviewSection(
 @Composable
 private fun LunchOverviewSection(state: OverviewUiState, viewModel: OverviewViewModel, onTimetable: () -> Unit) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        SectionHeadRow(label = "Mittagessen", action = "Stundenplan", onAction = onTimetable)
+        SectionHeadRow(
+            label = stringResource(R.string.overview_section_lunch),
+            action = stringResource(R.string.overview_action_timetable),
+            onAction = onTimetable,
+        )
         EssenPager(
             label = state.essen?.label.orEmpty(), sourceUrl = state.essen?.source_url.orEmpty(),
             cacheInfo = state.essen?.cache_info.orEmpty(),
@@ -279,7 +300,7 @@ private fun LiveClockCard(
         ) {
             Column(Modifier.weight(1f)) {
                 Text(
-                    "UHRZEIT",
+                    stringResource(R.string.overview_clock_label),
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 1.1.sp,
@@ -297,7 +318,7 @@ private fun LiveClockCard(
                 )
             }
             IconButton(onClick = onRefresh, enabled = !refreshing) {
-                Icon(Icons.Filled.Refresh, contentDescription = "Neu laden")
+                Icon(Icons.Filled.Refresh, contentDescription = stringResource(R.string.common_reload))
             }
         }
     }
@@ -318,7 +339,7 @@ private fun NowCard(
     ) {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
-                "STUNDEN HEUTE",
+                stringResource(R.string.overview_today_hours),
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 1.2.sp,
@@ -326,7 +347,7 @@ private fun NowCard(
             )
             if (current == null && next == null) {
                 Text(
-                    "Schulfrei — kein Unterricht heute.",
+                    stringResource(R.string.overview_no_school),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = scheme.onPrimary,
@@ -334,7 +355,7 @@ private fun NowCard(
             } else {
                 current?.let {
                     Text(
-                        "Jetzt: ${it.title} (${it.period}. Std · ${it.time})",
+                        stringResource(R.string.overview_now_format, it.title, it.period, it.time),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = scheme.onPrimary,
@@ -342,8 +363,14 @@ private fun NowCard(
                 }
                 next?.let {
                     Text(
-                        "Als Nächstes: ${it.title} (${it.period}. Std · ${it.time}" +
-                            (if (it.rooms.isNotBlank()) " · Raum ${it.rooms}" else "") + ")",
+                        if (it.rooms.isNotBlank()) stringResource(
+                            R.string.overview_next_room_format,
+                            it.title,
+                            it.period,
+                            it.time,
+                            it.rooms,
+                        )
+                        else stringResource(R.string.overview_next_format, it.title, it.period, it.time),
                         fontSize = 13.sp,
                         color = scheme.onPrimary.copy(alpha = 0.75f),
                     )
@@ -354,7 +381,7 @@ private fun NowCard(
                 colors = ButtonDefaults.textButtonColors(
                     contentColor = scheme.onPrimary,
                 ),
-            ) { Text("Stundenplan") }
+            ) { Text(stringResource(R.string.overview_action_timetable)) }
         }
     }
 }
@@ -375,14 +402,15 @@ private fun WetterCard(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
                     Text(
-                        "WETTER",
+                        stringResource(R.string.overview_weather_title),
                         fontSize = 11.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 1.2.sp,
                         color = scheme.onSurfaceVariant,
                     )
                     Text(
-                        wetter?.city?.ifBlank { city }?.ifBlank { "Dein Standort" } ?: "Wetterübersicht",
+                        wetter?.city?.ifBlank { city }?.ifBlank { stringResource(R.string.overview_weather_default_city) }
+                            ?: stringResource(R.string.overview_weather_default_title),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = scheme.onSurface,
@@ -392,26 +420,29 @@ private fun WetterCard(
                     if (loading) {
                         CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
                     } else {
-                        Icon(Icons.Filled.Refresh, contentDescription = "Wetter aktualisieren")
+                        Icon(Icons.Filled.Refresh, contentDescription = stringResource(R.string.overview_weather_refresh_desc))
                     }
                 }
             }
             if (wetter == null) {
                 if (city.isBlank()) {
                     Text(
-                        "Lege deinen Ort in den Einstellungen fest, damit hier die Vorhersage erscheint.",
+                        stringResource(R.string.overview_weather_set_location),
                         fontSize = 13.sp,
                         color = scheme.onSurfaceVariant,
                     )
-                    TextButton(onClick = onConfigure) { Text("Ort in Einstellungen festlegen") }
+                    TextButton(onClick = onConfigure) { Text(stringResource(R.string.overview_weather_set_location_action)) }
                 } else {
                     Text(
-                        error ?: "Wetterdaten für $city werden geladen.",
+                        error ?: stringResource(R.string.overview_weather_loading_format, city),
                         fontSize = 13.sp,
                         color = if (error != null) scheme.error else scheme.onSurfaceVariant,
                     )
                     TextButton(onClick = onLoad, enabled = !loading) {
-                        Text(if (loading) "Wird geladen …" else "Erneut laden")
+                        Text(
+                            if (loading) stringResource(R.string.overview_weather_loading)
+                            else stringResource(R.string.overview_weather_retry),
+                        )
                     }
                 }
             } else {
@@ -446,7 +477,7 @@ private fun WetterCard(
                                     color = scheme.onPrimaryContainer,
                                 )
                                 Text(
-                                    "  HEUTE",
+                                    stringResource(R.string.overview_weather_today_label),
                                     modifier = Modifier.padding(bottom = 7.dp),
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight.Bold,
@@ -455,7 +486,7 @@ private fun WetterCard(
                                 )
                             }
                             Text(
-                                t.desc.replaceFirstChar { it.uppercase() }.ifBlank { "Aktuelles Wetter" },
+                                t.desc.replaceFirstChar { it.uppercase() }.ifBlank { stringResource(R.string.overview_weather_current_fallback) },
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.SemiBold,
                                 color = scheme.onPrimaryContainer,
@@ -472,19 +503,19 @@ private fun WetterCard(
 
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     WetterMetric(
-                        label = "REGEN",
+                        label = stringResource(R.string.overview_weather_rain),
                         value = t.pop?.let { "$it %" } ?: "–",
                         icon = Icons.Filled.WaterDrop,
                         modifier = Modifier.weight(1f),
                     )
                     WetterMetric(
-                        label = "GEFÜHLT",
+                        label = stringResource(R.string.overview_weather_feels),
                         value = wetter.details.feels_like?.let { "$it°" } ?: "–",
                         icon = Icons.Filled.WbSunny,
                         modifier = Modifier.weight(1f),
                     )
                     WetterMetric(
-                        label = "WIND",
+                        label = stringResource(R.string.overview_weather_wind),
                         value = wetter.details.wind_kmh?.let { "$it km/h" } ?: "–",
                         icon = Icons.Filled.Cloud,
                         modifier = Modifier.weight(1f),
@@ -492,7 +523,7 @@ private fun WetterCard(
                 }
 
                 Text(
-                    "DIE NÄCHSTEN TAGE",
+                    stringResource(R.string.overview_weather_next_days),
                     fontSize = 10.sp,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 1.1.sp,
@@ -500,21 +531,21 @@ private fun WetterCard(
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     WetterForecastDay(
-                        label = "Heute",
+                        label = stringResource(R.string.overview_weather_today),
                         icon = t.icon,
                         high = t.max,
                         low = t.min,
                         modifier = Modifier.weight(1f),
                     )
                     WetterForecastDay(
-                        label = wetter.tomorrow.label.ifBlank { "Morgen" },
+                        label = wetter.tomorrow.label.ifBlank { stringResource(R.string.overview_weather_tomorrow) },
                         icon = wetter.tomorrow.icon,
                         high = wetter.tomorrow.max,
                         low = wetter.tomorrow.min,
                         modifier = Modifier.weight(1f),
                     )
                     WetterForecastDay(
-                        label = wetter.day3.label.ifBlank { "Übermorgen" },
+                        label = wetter.day3.label.ifBlank { stringResource(R.string.overview_weather_day3) },
                         icon = wetter.day3.icon,
                         high = wetter.day3.max,
                         low = wetter.day3.min,
@@ -644,17 +675,19 @@ private fun MessageRow(msg: MessageDto) {
 @Composable
 private fun HomeworkRow(hw: HomeworkDto) {
     val scheme = MaterialTheme.colorScheme
+    val titleFallback = stringResource(R.string.homework_title_format, hw.id)
+    val dueSuffix = if (hw.due_display.isNotBlank()) stringResource(R.string.overview_due_suffix_format, hw.due_display) else ""
+    val subjectSuffix = if (hw.subject.isNotBlank()) stringResource(R.string.overview_subject_suffix_format, hw.subject) else ""
     EduCard(modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
             Text(
-                hw.title.ifBlank { "Hausaufgabe #${hw.id}" },
+                hw.title.ifBlank { titleFallback },
                 fontSize = 15.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = scheme.onSurface,
             )
             Text(
-                "${hw.status}" + (if (hw.due_display.isNotBlank()) " · fällig: ${hw.due_display}" else "") +
-                    (if (hw.subject.isNotBlank()) " · ${hw.subject}" else ""),
+                "${hw.status}" + dueSuffix + subjectSuffix,
                 fontSize = 13.sp,
                 color = scheme.onSurfaceVariant,
             )
@@ -689,29 +722,30 @@ private fun EssenPager(
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = onPrev, enabled = canPrev) {
-                    Icon(Icons.Filled.ChevronLeft, contentDescription = "Vorheriger Tag")
+                    Icon(Icons.Filled.ChevronLeft, contentDescription = stringResource(R.string.overview_prev_day_desc))
                 }
                 Text(
-                    "$dayName${if (date.isNotBlank()) " · $date" else ""}",
+                    if (date.isNotBlank()) stringResource(R.string.overview_day_date_format, dayName, date) else dayName,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = scheme.onSurface,
                     modifier = Modifier.weight(1f),
                 )
                 IconButton(onClick = onNext, enabled = canNext) {
-                    Icon(Icons.Filled.ChevronRight, contentDescription = "Nächster Tag")
+                    Icon(Icons.Filled.ChevronRight, contentDescription = stringResource(R.string.overview_next_day_desc))
                 }
             }
             if (dishes.isEmpty()) {
                 Text(
-                    "Kein Essen für diesen Tag.",
+                    stringResource(R.string.overview_no_food),
                     style = MaterialTheme.typography.bodyMedium,
                     color = scheme.onSurfaceVariant,
                 )
             } else {
                 dishes.forEach { dish ->
+                    val priceSuffix = if (dish.price.isNotBlank()) stringResource(R.string.overview_dish_price_format, dish.price) else ""
                     Text(
-                        "• ${dish.text}" + (if (dish.price.isNotBlank()) " — ${dish.price}" else ""),
+                        stringResource(R.string.overview_dish_format, dish.text) + priceSuffix,
                         style = MaterialTheme.typography.bodyMedium,
                         color = scheme.onSurface,
                     )
@@ -726,7 +760,7 @@ private fun EssenPager(
             }
             if (sourceUrl.isNotBlank()) {
                 Text(
-                    "PDF-Link vorhanden",
+                    stringResource(R.string.overview_pdf_available),
                     style = MaterialTheme.typography.labelSmall,
                     color = scheme.onSurfaceVariant,
                 )

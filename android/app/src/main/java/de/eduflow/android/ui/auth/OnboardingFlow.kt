@@ -57,6 +57,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -148,7 +149,7 @@ private fun WelcomePage(onNext: () -> Unit) {
         ) {
             Image(
                 painter = painterResource(R.drawable.logo),
-                contentDescription = "EduFlow",
+                contentDescription = stringResource(R.string.app_name),
                 contentScale = androidx.compose.ui.layout.ContentScale.Fit,
                 modifier = Modifier.size(96.dp)
                     .clip(RoundedCornerShape(22.dp))
@@ -164,7 +165,7 @@ private fun WelcomePage(onNext: () -> Unit) {
                     androidx.compose.animation.scaleIn(spring(dampingRatio = 0.55f, stiffness = 260f), initialScale = 0.985f),
             modifier = Modifier.fillMaxWidth(),
         ) {
-            PrimaryButton(text = "Weiter", onClick = onNext)
+            PrimaryButton(text = stringResource(R.string.common_next), onClick = onNext)
         }
     }
 }
@@ -191,7 +192,8 @@ private fun HelloGreeting() {
         angle
     }
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-        "Hallo!".forEachIndexed { index, char ->
+        val greeting = stringResource(R.string.onboarding_greeting)
+        greeting.forEachIndexed { index, char ->
             var visible by remember { mutableStateOf(reduced) }
             LaunchedEffect(reduced) {
                 if (reduced) visible = true else {
@@ -288,7 +290,7 @@ private fun FeaturesPage(onNext: () -> Unit) {
         ) {
             Spacer(Modifier.weight(1f))
             Text(
-                "Alles an einem Ort.",
+                stringResource(R.string.onboarding_features_title),
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Black,
                 letterSpacing = (-1.2).sp,
@@ -296,12 +298,12 @@ private fun FeaturesPage(onNext: () -> Unit) {
                 modifier = Modifier.padding(top = 12.dp).riseIn(index = 2),
             )
             Column(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 22.dp)) {
-                FeatureRow("✉", "Nachrichten & Threads", "Alle EduPage-Nachrichten im Mail-Layout — mit Likes, Antworten und Dateien.", 3)
-                FeatureRow("☷", "Hausaufgaben & Noten", "Fälligkeiten mit Zählern, Halbjahr-Tabs und Schnitt.", 4)
-                FeatureRow("▦", "Stundenplan, Essen & Wetter", "Tag und Woche, Mensa-Plan und Wetter auf der Übersicht.", 6)
+                FeatureRow("✉", stringResource(R.string.onboarding_feat1_title), stringResource(R.string.onboarding_feat1_desc), 3)
+                FeatureRow("☷", stringResource(R.string.onboarding_feat2_title), stringResource(R.string.onboarding_feat2_desc), 4)
+                FeatureRow("▦", stringResource(R.string.onboarding_feat3_title), stringResource(R.string.onboarding_feat3_desc), 6)
             }
             Spacer(Modifier.weight(1f))
-            PrimaryButton(text = "Weiter", onClick = onNext, modifier = Modifier.riseIn(index = 7))
+            PrimaryButton(text = stringResource(R.string.common_next), onClick = onNext, modifier = Modifier.riseIn(index = 7))
         }
     }
 }
@@ -334,6 +336,8 @@ private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
     var message by remember { mutableStateOf<String?>(null) }
     var connected by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
+    val connectedText = stringResource(R.string.onboarding_connected)
+    val unreachableText = stringResource(R.string.onboarding_unreachable)
 
     fun normalizedUrl(): String = draft.trim().let { raw ->
         val withScheme = if (raw.isNotBlank() && "://" !in raw) "http://$raw" else raw
@@ -350,9 +354,9 @@ private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
         if (result.isSuccess && result.getOrNull()?.isSuccessful == true) {
             draft = normalized
             connected = true
-            message = "Verbunden"
+            message = connectedText
         } else {
-            message = "Server nicht erreichbar. Prüfe die Adresse und versuche es erneut."
+            message = unreachableText
         }
     }
 
@@ -366,7 +370,7 @@ private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
           horizontalAlignment = Alignment.CenterHorizontally,
       ) {
         Text(
-            "Wo läuft dein Server?",
+            stringResource(R.string.auth_hint_server),
             fontSize = 30.sp,
             fontWeight = FontWeight.Black,
             letterSpacing = (-1.2).sp,
@@ -375,7 +379,7 @@ private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
             modifier = Modifier.padding(top = 12.dp).riseIn(index = 2),
         )
         Text(
-            "Trage ein, wo EduFlow als Server läuft.",
+            stringResource(R.string.onboarding_server_sub),
             fontSize = 14.sp,
             lineHeight = 20.sp,
             textAlign = TextAlign.Center,
@@ -412,9 +416,9 @@ private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
           if (checking) CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp)
           else Text(
               when {
-                  connected -> "✓  Verbunden"
-                  message != null -> "×  Fehlgeschlagen"
-                  else -> "Verbindung testen"
+                  connected -> stringResource(R.string.onboarding_test_connected)
+                  message != null -> stringResource(R.string.onboarding_test_failed)
+                  else -> stringResource(R.string.onboarding_test_action)
               },
               fontWeight = FontWeight.SemiBold,
           )
@@ -424,7 +428,7 @@ private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
       }
       Spacer(Modifier.height(10.dp))
         PrimaryButton(
-            text = "Weiter",
+            text = stringResource(R.string.common_next),
             onClick = { scope.launch { onApply(normalizedUrl().trimEnd('/')) } },
             enabled = connected && !checking,
             modifier = Modifier.riseIn(index = 7),

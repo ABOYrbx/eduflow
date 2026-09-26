@@ -39,9 +39,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import de.eduflow.android.R
 import de.eduflow.android.data.dto.ErrorCodes
 import de.eduflow.android.data.dto.HomeworkDto
 import de.eduflow.android.data.dto.HomeworkItemStatus
@@ -61,11 +63,12 @@ import de.eduflow.android.ui.theme.StatusRed
 import de.eduflow.android.ui.timetable.AuthAwareError
 
 /** Chips aus dem PNG (Screen 01); Papierkorb läuft über den Button darunter. */
-private val chipOptions = listOf(
-    "Alle" to HomeworkStatus.ALLE,
-    "Offen" to HomeworkStatus.OFFEN,
-    "Überfällig" to HomeworkStatus.UEBERFAELLIG,
-    "Erledigt" to HomeworkStatus.ERLEDIGT,
+@Composable
+private fun chipOptions(): List<Pair<String, String>> = listOf(
+    stringResource(R.string.homework_filter_all) to HomeworkStatus.ALLE,
+    stringResource(R.string.homework_filter_open) to HomeworkStatus.OFFEN,
+    stringResource(R.string.homework_filter_overdue) to HomeworkStatus.UEBERFAELLIG,
+    stringResource(R.string.homework_filter_done) to HomeworkStatus.ERLEDIGT,
 )
 
 /**
@@ -98,26 +101,27 @@ fun HomeworkListScreen(
         )
         Spacer(Modifier.height(12.dp))
         ScreenHead(
-            title = "Hausaufgaben",
-            subtitle = "Deine Aufgaben im Überblick",
+            title = stringResource(R.string.homework_title),
+            subtitle = stringResource(R.string.homework_subtitle),
         )
         Spacer(Modifier.height(12.dp))
         SearchPill(
             value = state.query,
             onValueChange = viewModel::onQuery,
-            placeholder = "Titel, Fach oder Lehrkraft",
+            placeholder = stringResource(R.string.homework_search_placeholder),
         )
         Spacer(Modifier.height(10.dp))
+        val chips = chipOptions()
         FilterChips(
-            options = chipOptions.map { it.first },
-            selected = chipOptions.firstOrNull { it.second == state.status }?.first.orEmpty(),
+            options = chips.map { it.first },
+            selected = chips.firstOrNull { it.second == state.status }?.first.orEmpty(),
             onSelect = { label ->
-                chipOptions.firstOrNull { it.first == label }?.let { viewModel.onStatus(it.second) }
+                chips.firstOrNull { it.first == label }?.let { viewModel.onStatus(it.second) }
             },
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                "Tests/Prüfungen einbeziehen",
+                stringResource(R.string.homework_include_tests),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.weight(1f),
@@ -126,17 +130,20 @@ fun HomeworkListScreen(
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             SectionLabel(
-                if (inTrash) "Papierkorb · ${state.total} Einträge"
-                else "${state.counts.offen} offen · ${state.counts.ueberfaellig} überfällig",
+                if (inTrash) stringResource(R.string.homework_section_trash_format, state.total)
+                else stringResource(R.string.homework_section_open_format, state.counts.offen, state.counts.ueberfaellig),
                 modifier = Modifier.weight(1f),
             )
             TextButton(onClick = {
                 viewModel.onStatus(if (inTrash) HomeworkStatus.ALLE else HomeworkStatus.PAPIERKORB)
             }) {
-                Text(if (inTrash) "Zurück" else "Papierkorb (${state.counts.papierkorb})")
+                Text(
+                    if (inTrash) stringResource(R.string.common_back)
+                    else stringResource(R.string.homework_trash_open_format, state.counts.papierkorb),
+                )
             }
             IconButton(onClick = viewModel::refresh, enabled = !state.isLoading) {
-                Icon(Icons.Filled.Refresh, contentDescription = "Neu laden")
+                Icon(Icons.Filled.Refresh, contentDescription = stringResource(R.string.common_reload))
             }
         }
         if (state.cacheInfo.isNotBlank()) {
@@ -172,12 +179,12 @@ fun HomeworkListScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Text(
-                    if (inTrash) "Der Papierkorb ist leer."
-                    else "Keine Hausaufgaben gefunden.",
+                    if (inTrash) stringResource(R.string.homework_empty_trash)
+                    else stringResource(R.string.homework_empty),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                TextButton(onClick = viewModel::refresh) { Text("Neu laden") }
+                TextButton(onClick = viewModel::refresh) { Text(stringResource(R.string.common_reload)) }
             }
         } else {
             LazyColumn(
@@ -210,7 +217,7 @@ fun HomeworkListScreen(
                                     modifier = Modifier.size(16.dp).padding(end = 8.dp),
                                 )
                             }
-                            Text("Mehr laden (${state.items.size}/${state.total})")
+                            Text(stringResource(R.string.common_load_more_format, state.items.size, state.total))
                         }
                     }
                 }
@@ -266,7 +273,7 @@ private fun TrashSwipeRow(
                     contentAlignment = Alignment.CenterStart,
                 ) {
                     Text(
-                        if (item.is_hidden) "Wiederherstellen" else "Papierkorb",
+                        if (item.is_hidden) stringResource(R.string.homework_swipe_restore) else stringResource(R.string.homework_swipe_trash),
                         fontWeight = FontWeight.ExtraBold,
                         color = Color.White,
                     )
@@ -285,6 +292,8 @@ private fun HomeworkCard(
     onToggleDone: () -> Unit,
 ) {
     val dot = statusDot(item)
+    val title = cardTitle(item)
+    val pill = pillText(item)
     EduCard(modifier = Modifier.fillMaxWidth()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -298,7 +307,7 @@ private fun HomeworkCard(
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
                 Text(
-                    cardTitle(item),
+                    title,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface,
@@ -315,7 +324,7 @@ private fun HomeworkCard(
                 horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                StatusPill(text = pillText(item), dot = dot)
+                StatusPill(text = pill, dot = dot)
                 DoneCircle(done = item.is_done, pending = pending, onClick = onToggleDone)
             }
         }
@@ -342,7 +351,7 @@ private fun DoneCircle(
         ) {
             Icon(
                 Icons.Filled.Check,
-                contentDescription = "Wieder öffnen",
+                contentDescription = stringResource(R.string.homework_reopen_desc),
                 tint = scheme.onPrimary,
                 modifier = Modifier.size(16.dp),
             )
@@ -357,8 +366,10 @@ private fun DoneCircle(
     }
 }
 
+@Composable
 private fun cardTitle(item: HomeworkDto): String {
-    val title = item.title.ifBlank { "Hausaufgabe #${item.id}" }
+    val fallback = stringResource(R.string.homework_title_format, item.id)
+    val title = item.title.ifBlank { fallback }
     return if (item.subject.isNotBlank()) "${item.subject} - $title" else title
 }
 
@@ -367,8 +378,10 @@ private fun cardSub(item: HomeworkDto): String {
     return if (item.author.isNotBlank()) "$whenText · ${item.author}" else whenText
 }
 
+@Composable
 private fun pillText(item: HomeworkDto): String =
-    if (item.is_hidden) "Papierkorb" else item.status.ifBlank { "Offen" }
+    if (item.is_hidden) stringResource(R.string.homework_status_trash)
+    else item.status.ifBlank { stringResource(R.string.homework_status_open) }
 
 @Composable
 private fun statusDot(item: HomeworkDto): Color = when {

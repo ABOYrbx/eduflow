@@ -93,14 +93,14 @@ public enum Accent: String, CaseIterable, Identifiable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .black: return "Schwarz"
-        case .blue: return "Blau"
-        case .violet: return "Violett"
-        case .teal: return "Petrol"
-        case .green: return "Grün"
-        case .orange: return "Orange"
-        case .red: return "Rot"
-        case .pink: return "Pink"
+        case .black: return NSLocalizedString("common_accent_black", value: "Schwarz", comment: "Akzentfarbe")
+        case .blue: return NSLocalizedString("common_accent_blue", value: "Blau", comment: "Akzentfarbe")
+        case .violet: return NSLocalizedString("common_accent_violet", value: "Violett", comment: "Akzentfarbe")
+        case .teal: return NSLocalizedString("common_accent_teal", value: "Petrol", comment: "Akzentfarbe")
+        case .green: return NSLocalizedString("common_accent_green", value: "Grün", comment: "Akzentfarbe")
+        case .orange: return NSLocalizedString("common_accent_orange", value: "Orange", comment: "Akzentfarbe")
+        case .red: return NSLocalizedString("common_accent_red", value: "Rot", comment: "Akzentfarbe")
+        case .pink: return NSLocalizedString("common_accent_pink", value: "Pink", comment: "Akzentfarbe")
         }
     }
 

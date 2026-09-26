@@ -17,7 +17,7 @@ public struct DevicesView: View {
             VStack(alignment: .leading, spacing: 14) {
                 PageHead(
                     "Geräte",
-                    stats: vm.devices.isEmpty ? nil : "\(vm.devices.count) Sitzungen"
+                    stats: vm.devices.isEmpty ? nil : String(format: NSLocalizedString("devices_count", value: "%d Sitzungen", comment: "Geräte: Sitzungszahl"), vm.devices.count)
                 )
                 if vm.isLoading && vm.devices.isEmpty {
                     ProgressView()
@@ -44,7 +44,7 @@ public struct DevicesView: View {
                                     Text("\(device.short) · \(device.created)")
                                         .font(UberFont.text(12))
                                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                                    Text("Gültig bis \(device.expires)")
+                                    Text(String(format: NSLocalizedString("devices_valid_until", value: "Gültig bis %@", comment: "Geräte: Gültigkeit"), device.expires))
                                         .font(UberFont.text(12))
                                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                                 }
@@ -73,7 +73,7 @@ public struct DevicesView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle("Geräte")
+        .navigationTitle(NSLocalizedString("settings_devices_nav", value: "Geräte", comment: "Geräte: Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
     }
 }

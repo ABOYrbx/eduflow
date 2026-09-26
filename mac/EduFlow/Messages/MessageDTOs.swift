@@ -180,12 +180,12 @@ public enum MessageTypes {
 
     public static func label(_ type: String) -> String {
         switch type {
-        case sprava: return "Nachricht"
-        case news: return "Neuigkeit"
-        case anketa: return "Umfrage"
-        case chat: return "Chat"
-        case genotif: return "Mitteilung"
-        default: return "Alle"
+        case sprava: return NSLocalizedString("messages_type_sprava", value: "Nachricht", comment: "Nachrichtentyp")
+        case news: return NSLocalizedString("messages_type_news", value: "Neuigkeit", comment: "Nachrichtentyp")
+        case anketa: return NSLocalizedString("messages_type_anketa", value: "Umfrage", comment: "Nachrichtentyp")
+        case chat: return NSLocalizedString("messages_type_chat", value: "Chat", comment: "Nachrichtentyp")
+        case genotif: return NSLocalizedString("messages_type_genotif", value: "Mitteilung", comment: "Nachrichtentyp")
+        default: return NSLocalizedString("messages_type_all", value: "Alle", comment: "Nachrichtentyp: alle")
         }
     }
 }

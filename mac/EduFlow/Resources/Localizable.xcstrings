@@ -1,6 +1,2987 @@
 {
-  "sourceLanguage" : "de",
-  "strings" : {
+  "sourceLanguage": "de",
+  "strings": {
+    "6-stelliger Code": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6-stelliger Code"
+          }
+        }
+      }
+    },
+    "Abbrechen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abbrechen"
+          }
+        }
+      }
+    },
+    "Abmelden": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abmelden"
+          }
+        }
+      }
+    },
+    "Abmelden …": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abmelden …"
+          }
+        }
+      }
+    },
+    "Alle": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle"
+          }
+        }
+      }
+    },
+    "Alle Aufgaben": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle Aufgaben"
+          }
+        }
+      }
+    },
+    "Alle EduPage-Nachrichten im Mail-Layout — mit Likes, Antworten und Dateien.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle EduPage-Nachrichten im Mail-Layout — mit Likes, Antworten und Dateien."
+          }
+        }
+      }
+    },
+    "Alle Nachrichten": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle Nachrichten"
+          }
+        }
+      }
+    },
+    "Alle als gelesen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle als gelesen"
+          }
+        }
+      }
+    },
+    "Alles an einem Ort.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alles an einem Ort."
+          }
+        }
+      }
+    },
+    "Alles zeigen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alles zeigen"
+          }
+        }
+      }
+    },
+    "Als erledigt markieren": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Als erledigt markieren"
+          }
+        }
+      }
+    },
+    "Anmelden": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anmelden"
+          }
+        }
+      }
+    },
+    "Anmelden …": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anmelden …"
+          }
+        }
+      }
+    },
+    "Antwort schreiben": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Antwort schreiben"
+          }
+        }
+      }
+    },
+    "Antworten": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Antworten"
+          }
+        }
+      }
+    },
+    "Ausgeblendete": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausgeblendete"
+          }
+        }
+      }
+    },
+    "Aussehen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aussehen"
+          }
+        }
+      }
+    },
+    "Basis-URL": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Basis-URL"
+          }
+        }
+      }
+    },
+    "Benutzername": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Benutzername"
+          }
+        }
+      }
+    },
+    "Bereich": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bereich"
+          }
+        }
+      }
+    },
+    "Bestätigen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bestätigen"
+          }
+        }
+      }
+    },
+    "Code": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code"
+          }
+        }
+      }
+    },
+    "Code aus E-Mail oder App eingeben.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code aus E-Mail oder App eingeben."
+          }
+        }
+      }
+    },
+    "Code eingeben": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code eingeben"
+          }
+        }
+      }
+    },
+    "DEMO": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "DEMO"
+          }
+        }
+      }
+    },
+    "Dateien": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dateien"
+          }
+        }
+      }
+    },
+    "Datum": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datum"
+          }
+        }
+      }
+    },
+    "Dein Profil": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dein Profil"
+          }
+        }
+      }
+    },
+    "Demo ansehen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo ansehen"
+          }
+        }
+      }
+    },
+    "Demo verlassen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo verlassen"
+          }
+        }
+      }
+    },
+    "Demo-Modus": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo-Modus"
+          }
+        }
+      }
+    },
+    "Demo-Modus · nur synthetische Beispieldaten": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo-Modus · nur synthetische Beispieldaten"
+          }
+        }
+      }
+    },
+    "Details": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Details"
+          }
+        }
+      }
+    },
+    "Dienstag": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dienstag"
+          }
+        }
+      }
+    },
+    "Direkt in die Nachrichten": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Direkt in die Nachrichten"
+          }
+        }
+      }
+    },
+    "Direkt zu den Aufgaben": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Direkt zu den Aufgaben"
+          }
+        }
+      }
+    },
+    "Direkt zu den Noten": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Direkt zu den Noten"
+          }
+        }
+      }
+    },
+    "Direkt zum Stundenplan": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Direkt zum Stundenplan"
+          }
+        }
+      }
+    },
+    "Donnerstag": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Donnerstag"
+          }
+        }
+      }
+    },
+    "EduFlow Dashboard · lokal": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EduFlow Dashboard · lokal"
+          }
+        }
+      }
+    },
+    "Einstellungen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einstellungen"
+          }
+        }
+      }
+    },
+    "Entfall": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entfall"
+          }
+        }
+      }
+    },
+    "Entfernen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entfernen"
+          }
+        }
+      }
+    },
+    "Entfällt": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entfällt"
+          }
+        }
+      }
+    },
+    "Entwickleroptionen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entwickleroptionen"
+          }
+        }
+      }
+    },
+    "Entwickleroptionen aktivieren": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entwickleroptionen aktivieren"
+          }
+        }
+      }
+    },
+    "Erledigt": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erledigt"
+          }
+        }
+      }
+    },
+    "Erneut laden": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erneut laden"
+          }
+        }
+      }
+    },
+    "Erneut versuchen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erneut versuchen"
+          }
+        }
+      }
+    },
+    "Es werden ausschließlich synthetische Beispieldaten vom lokalen Demo-Server geladen.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es werden ausschließlich synthetische Beispieldaten vom lokalen Demo-Server geladen."
+          }
+        }
+      }
+    },
+    "Fehlgeschlagen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fehlgeschlagen"
+          }
+        }
+      }
+    },
+    "Fertig": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fertig"
+          }
+        }
+      }
+    },
+    "Fertige Aufgaben": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fertige Aufgaben"
+          }
+        }
+      }
+    },
+    "Freitag": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Freitag"
+          }
+        }
+      }
+    },
+    "Frist vorbei": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frist vorbei"
+          }
+        }
+      }
+    },
+    "Fälligkeiten mit Zählern, Halbjahr-Tabs und Schnitt.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fälligkeiten mit Zählern, Halbjahr-Tabs und Schnitt."
+          }
+        }
+      }
+    },
+    "Für diese Woche sind keine Vertretungen eingetragen.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Für diese Woche sind keine Vertretungen eingetragen."
+          }
+        }
+      }
+    },
+    "Für diesen Tag steht nichts im Plan.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Für diesen Tag steht nichts im Plan."
+          }
+        }
+      }
+    },
+    "Gefühlt": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gefühlt"
+          }
+        }
+      }
+    },
+    "Geladene Datei teilen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geladene Datei teilen"
+          }
+        }
+      }
+    },
+    "Gelöscht": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gelöscht"
+          }
+        }
+      }
+    },
+    "Gerät (optional)": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gerät (optional)"
+          }
+        }
+      }
+    },
+    "Geräte": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geräte"
+          }
+        }
+      }
+    },
+    "Geräte verwalten": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geräte verwalten"
+          }
+        }
+      }
+    },
+    "Halbjahr": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Halbjahr"
+          }
+        }
+      }
+    },
+    "Hallo!": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hallo!"
+          }
+        }
+      }
+    },
+    "Hausaufgaben": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hausaufgaben"
+          }
+        }
+      }
+    },
+    "Hausaufgaben & Noten": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hausaufgaben & Noten"
+          }
+        }
+      }
+    },
+    "Hell und Dunkel folgt dem System. Akzentfarbe:": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hell und Dunkel folgt dem System. Akzentfarbe:"
+          }
+        }
+      }
+    },
+    "Heute": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Heute"
+          }
+        }
+      }
+    },
+    "In den Papierkorb": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In den Papierkorb"
+          }
+        }
+      }
+    },
+    "Kalender": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kalender"
+          }
+        }
+      }
+    },
+    "Keine Hausaufgaben.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Hausaufgaben."
+          }
+        }
+      }
+    },
+    "Keine Likes.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Likes."
+          }
+        }
+      }
+    },
+    "Keine Nachrichten.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Nachrichten."
+          }
+        }
+      }
+    },
+    "Keine Noten.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Noten."
+          }
+        }
+      }
+    },
+    "Keine Schultermine oder Prüfungen in diesem Zeitraum.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Schultermine oder Prüfungen in diesem Zeitraum."
+          }
+        }
+      }
+    },
+    "Keine neuen Nachrichten.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine neuen Nachrichten."
+          }
+        }
+      }
+    },
+    "Keine offenen Hausaufgaben. Sehr gut.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine offenen Hausaufgaben. Sehr gut."
+          }
+        }
+      }
+    },
+    "Keine weiteren Sitzungen.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine weiteren Sitzungen."
+          }
+        }
+      }
+    },
+    "Laden": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laden"
+          }
+        }
+      }
+    },
+    "Lege fest, welche Bereiche zuerst erscheinen.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lege fest, welche Bereiche zuerst erscheinen."
+          }
+        }
+      }
+    },
+    "Lernzeit": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lernzeit"
+          }
+        }
+      }
+    },
+    "Lokales Werkzeug — Zugangsdaten bleiben auf diesem Mac.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lokales Werkzeug — Zugangsdaten bleiben auf diesem Mac."
+          }
+        }
+      }
+    },
+    "Luftdruck": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Luftdruck"
+          }
+        }
+      }
+    },
+    "Luftfeuchte": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Luftfeuchte"
+          }
+        }
+      }
+    },
+    "Lädt …": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lädt …"
+          }
+        }
+      }
+    },
+    "Meldet dich ab und startet die Einführung erneut.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meldet dich ab und startet die Einführung erneut."
+          }
+        }
+      }
+    },
+    "Mittagessen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mittagessen"
+          }
+        }
+      }
+    },
+    "Mittwoch": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mittwoch"
+          }
+        }
+      }
+    },
+    "Montag": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Montag"
+          }
+        }
+      }
+    },
+    "Morgen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Morgen"
+          }
+        }
+      }
+    },
+    "Nachrichten": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nachrichten"
+          }
+        }
+      }
+    },
+    "Nachrichten & Threads": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nachrichten & Threads"
+          }
+        }
+      }
+    },
+    "Neu laden": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neu laden"
+          }
+        }
+      }
+    },
+    "Neue Nachricht": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neue Nachricht"
+          }
+        }
+      }
+    },
+    "Note": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Note"
+          }
+        }
+      }
+    },
+    "Noten": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noten"
+          }
+        }
+      }
+    },
+    "Nur erledigte": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur erledigte"
+          }
+        }
+      }
+    },
+    "Nur offene": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur offene"
+          }
+        }
+      }
+    },
+    "Nur synthetische Beispieldaten vom lokalen Fake-Server": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur synthetische Beispieldaten vom lokalen Fake-Server"
+          }
+        }
+      }
+    },
+    "Nur überfällige": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur überfällige"
+          }
+        }
+      }
+    },
+    "Nächste 24 Stunden": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nächste 24 Stunden"
+          }
+        }
+      }
+    },
+    "Nächste →": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nächste →"
+          }
+        }
+      }
+    },
+    "Offen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Offen"
+          }
+        }
+      }
+    },
+    "Ohne erledigte": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ohne erledigte"
+          }
+        }
+      }
+    },
+    "Onboarding erneut durchlaufen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Onboarding erneut durchlaufen"
+          }
+        }
+      }
+    },
+    "Online": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Online"
+          }
+        }
+      }
+    },
+    "PDF": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF"
+          }
+        }
+      }
+    },
+    "Papierkorb": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Papierkorb"
+          }
+        }
+      }
+    },
+    "Passwort": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passwort"
+          }
+        }
+      }
+    },
+    "Passwort anzeigen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passwort anzeigen"
+          }
+        }
+      }
+    },
+    "Passwort eingeben": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passwort eingeben"
+          }
+        }
+      }
+    },
+    "Passwort verbergen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passwort verbergen"
+          }
+        }
+      }
+    },
+    "Prüfen …": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prüfen …"
+          }
+        }
+      }
+    },
+    "Prüft …": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prüft …"
+          }
+        }
+      }
+    },
+    "Schließen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schließen"
+          }
+        }
+      }
+    },
+    "Schulalltag": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schulalltag"
+          }
+        }
+      }
+    },
+    "Schule": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schule"
+          }
+        }
+      }
+    },
+    "Schulfrei": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schulfrei"
+          }
+        }
+      }
+    },
+    "Schulfrei.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schulfrei."
+          }
+        }
+      }
+    },
+    "Senden": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Senden"
+          }
+        }
+      }
+    },
+    "Sendet …": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sendet …"
+          }
+        }
+      }
+    },
+    "Server": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server"
+          }
+        }
+      }
+    },
+    "Server-URL": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server-URL"
+          }
+        }
+      }
+    },
+    "Sicht": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sicht"
+          }
+        }
+      }
+    },
+    "Sonnenaufgang": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonnenaufgang"
+          }
+        }
+      }
+    },
+    "Sonnenuntergang": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonnenuntergang"
+          }
+        }
+      }
+    },
+    "Speichern": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speichern"
+          }
+        }
+      }
+    },
+    "Speichern …": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speichern …"
+          }
+        }
+      }
+    },
+    "Speichert …": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Speichert …"
+          }
+        }
+      }
+    },
+    "Standardfilter": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standardfilter"
+          }
+        }
+      }
+    },
+    "Startseite nach Anmeldung": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Startseite nach Anmeldung"
+          }
+        }
+      }
+    },
+    "Status": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Status"
+          }
+        }
+      }
+    },
+    "Stunden heute": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stunden heute"
+          }
+        }
+      }
+    },
+    "Stundenplan": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stundenplan"
+          }
+        }
+      }
+    },
+    "Stundenplan, Essen & Wetter": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stundenplan, Essen & Wetter"
+          }
+        }
+      }
+    },
+    "Subdomain (optional)": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subdomain (optional)"
+          }
+        }
+      }
+    },
+    "Suche": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suche"
+          }
+        }
+      }
+    },
+    "Suchen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suchen"
+          }
+        }
+      }
+    },
+    "Tag": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tag"
+          }
+        }
+      }
+    },
+    "Tag und Woche, Mensa-Plan und Wetter auf der Übersicht.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tag und Woche, Mensa-Plan und Wetter auf der Übersicht."
+          }
+        }
+      }
+    },
+    "Termine": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Termine"
+          }
+        }
+      }
+    },
+    "Termine und Planänderungen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Termine und Planänderungen"
+          }
+        }
+      }
+    },
+    "Tests einbeziehen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tests einbeziehen"
+          }
+        }
+      }
+    },
+    "Tests und Prüfungen einbeziehen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tests und Prüfungen einbeziehen"
+          }
+        }
+      }
+    },
+    "Text": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Text"
+          }
+        }
+      }
+    },
+    "Titel": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Titel"
+          }
+        }
+      }
+    },
+    "Trage ein, wo EduFlow als Server läuft.": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trage ein, wo EduFlow als Server läuft."
+          }
+        }
+      }
+    },
+    "Typ": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Typ"
+          }
+        }
+      }
+    },
+    "Uhr, Nachrichten, Essen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uhr, Nachrichten, Essen"
+          }
+        }
+      }
+    },
+    "Unbekanntes Gerät": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unbekanntes Gerät"
+          }
+        }
+      }
+    },
+    "Und dein Passwort?": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Und dein Passwort?"
+          }
+        }
+      }
+    },
+    "Verbindung testen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verbindung testen"
+          }
+        }
+      }
+    },
+    "Verbunden": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verbunden"
+          }
+        }
+      }
+    },
+    "Vertretungen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vertretungen"
+          }
+        }
+      }
+    },
+    "Weiter": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weiter"
+          }
+        }
+      }
+    },
+    "Weiter ›": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weiter ›"
+          }
+        }
+      }
+    },
+    "Welches Gerät meldest du an?": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welches Gerät meldest du an?"
+          }
+        }
+      }
+    },
+    "Wetter": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wetter"
+          }
+        }
+      }
+    },
+    "Wetter: Stadt (optional)": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wetter: Stadt (optional)"
+          }
+        }
+      }
+    },
+    "Wetterkarte anzeigen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wetterkarte anzeigen"
+          }
+        }
+      }
+    },
+    "Wie heißt du bei EduPage?": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wie heißt du bei EduPage?"
+          }
+        }
+      }
+    },
+    "Wieder öffnen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wieder öffnen"
+          }
+        }
+      }
+    },
+    "Wind": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wind"
+          }
+        }
+      }
+    },
+    "Wo läuft dein Server?": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wo läuft dein Server?"
+          }
+        }
+      }
+    },
+    "Woche": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Woche"
+          }
+        }
+      }
+    },
+    "Wolken": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wolken"
+          }
+        }
+      }
+    },
+    "Zu welcher Schule gehörst du?": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zu welcher Schule gehörst du?"
+          }
+        }
+      }
+    },
+    "Zurück": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zurück"
+          }
+        }
+      }
+    },
+    "Zurück zur Anmeldung": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zurück zur Anmeldung"
+          }
+        }
+      }
+    },
+    "Zurückholen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zurückholen"
+          }
+        }
+      }
+    },
+    "Zurückholen (als offen)": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zurückholen (als offen)"
+          }
+        }
+      }
+    },
+    "Zusatz": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zusatz"
+          }
+        }
+      }
+    },
+    "Zwischengespeichert": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zwischengespeichert"
+          }
+        }
+      }
+    },
+    "z. B. MacBook": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "z. B. MacBook"
+          }
+        }
+      }
+    },
+    "z. B. max.muster": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "z. B. max.muster"
+          }
+        }
+      }
+    },
+    "z. B. musterschule": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "z. B. musterschule"
+          }
+        }
+      }
+    },
+    "kein Unterricht heute": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "kein Unterricht heute"
+          }
+        }
+      }
+    },
+    "offen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "offen"
+          }
+        }
+      }
+    },
+    "erledigt": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "erledigt"
+          }
+        }
+      }
+    },
+    "ungelesen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ungelesen"
+          }
+        }
+      }
+    },
+    "überfällig": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "überfällig"
+          }
+        }
+      }
+    },
+    "Überfällig": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Überfällig"
+          }
+        }
+      }
+    },
+    "Übermorgen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Übermorgen"
+          }
+        }
+      }
+    },
+    "Übernehmen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Übernehmen"
+          }
+        }
+      }
+    },
+    "Übernehmen & weiter": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Übernehmen & weiter"
+          }
+        }
+      }
+    },
+    "Übersicht": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Übersicht"
+          }
+        }
+      }
+    },
+    "Übersicht anpassen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Übersicht anpassen"
+          }
+        }
+      }
+    },
+    "(keine Beschreibung)": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(keine Beschreibung)"
+          }
+        }
+      }
+    },
+    "(unbekannt)": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(unbekannt)"
+          }
+        }
+      }
+    },
+    "fällig: ": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "fällig: "
+          }
+        }
+      }
+    },
+    "‹ Zurück": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "‹ Zurück"
+          }
+        }
+      }
+    },
+    "← Vorwoche": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "← Vorwoche"
+          }
+        }
+      }
+    },
+    "common_error_validation": {
+      "comment": "Fehler: ungültige Eingabe",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ungültige Eingabe. Bitte prüfen und erneut versuchen."
+          }
+        }
+      }
+    },
+    "common_error_token_invalid": {
+      "comment": "Fehler: Sitzung ungültig",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sitzung ungültig. Bitte erneut anmelden."
+          }
+        }
+      }
+    },
+    "common_error_token_expired": {
+      "comment": "Fehler: Sitzung abgelaufen",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sitzung abgelaufen. Bitte erneut anmelden."
+          }
+        }
+      }
+    },
+    "common_error_pending_invalid": {
+      "comment": "Fehler: Zwischenschritt abgelaufen",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zwischenschritt abgelaufen. Bitte erneut anmelden."
+          }
+        }
+      }
+    },
+    "common_error_invalid_code": {
+      "comment": "Fehler: Code nicht akzeptiert",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Code wurde nicht akzeptiert. Bitte erneut versuchen."
+          }
+        }
+      }
+    },
+    "common_error_bad_credentials": {
+      "comment": "Fehler: falsche Zugangsdaten",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Falscher Benutzername, Passwort oder Subdomain."
+          }
+        }
+      }
+    },
+    "common_error_edupage_2fa": {
+      "comment": "Fehler: EduPage verlangt Code",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EduPage verlangt erneut einen Code. Bitte neu anmelden."
+          }
+        }
+      }
+    },
+    "common_error_captcha_required": {
+      "comment": "Fehler: Captcha erforderlich",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EduPage verlangt ein Captcha. Bitte einmal im Browser anmelden."
+          }
+        }
+      }
+    },
+    "common_error_not_found": {
+      "comment": "Fehler: nicht gefunden",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht gefunden."
+          }
+        }
+      }
+    },
+    "common_error_rate_limited": {
+      "comment": "Fehler: zu viele Versuche",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zu viele Versuche. Bitte später erneut versuchen."
+          }
+        }
+      }
+    },
+    "common_error_config_missing": {
+      "comment": "Fehler: Server-Schlüssel fehlt",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server-Schlüssel fehlt. Bitte später erneut versuchen."
+          }
+        }
+      }
+    },
+    "common_error_upstream": {
+      "comment": "Fehler: Anfrage fehlgeschlagen",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anfrage fehlgeschlagen. Bitte später erneut versuchen."
+          }
+        }
+      }
+    },
+    "common_accent_black": {
+      "comment": "Akzentfarbe",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schwarz"
+          }
+        }
+      }
+    },
+    "common_accent_blue": {
+      "comment": "Akzentfarbe",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blau"
+          }
+        }
+      }
+    },
+    "common_accent_violet": {
+      "comment": "Akzentfarbe",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Violett"
+          }
+        }
+      }
+    },
+    "common_accent_teal": {
+      "comment": "Akzentfarbe",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Petrol"
+          }
+        }
+      }
+    },
+    "common_accent_green": {
+      "comment": "Akzentfarbe",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grün"
+          }
+        }
+      }
+    },
+    "common_accent_orange": {
+      "comment": "Akzentfarbe",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orange"
+          }
+        }
+      }
+    },
+    "common_accent_red": {
+      "comment": "Akzentfarbe",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rot"
+          }
+        }
+      }
+    },
+    "common_accent_pink": {
+      "comment": "Akzentfarbe",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pink"
+          }
+        }
+      }
+    },
+    "common_profile_menu_open": {
+      "comment": "Navigation: Profilmenü",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Profilmenü öffnen"
+          }
+        }
+      }
+    },
+    "auth_step_counter": {
+      "comment": "Anmeldung: Schrittzähler",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schritt %d von %d"
+          }
+        }
+      }
+    },
+    "auth_server_line": {
+      "comment": "Anmeldung: Serverzeile",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server: %@"
+          }
+        }
+      }
+    },
+    "auth_nav_login": {
+      "comment": "Anmeldung: Titel",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anmelden"
+          }
+        }
+      }
+    },
+    "auth_nav_2fa": {
+      "comment": "Anmeldung: 2FA-Titel",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zwei-Faktor-Code"
+          }
+        }
+      }
+    },
+    "overview_nav": {
+      "comment": "Übersicht: Titel",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Übersicht"
+          }
+        }
+      }
+    },
+    "overview_lesson_detail": {
+      "comment": "Übersicht: Stundendetail",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@. Std · %@%@%@"
+          }
+        }
+      }
+    },
+    "overview_lesson_room": {
+      "comment": "Übersicht: Raum",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " · Raum %@"
+          }
+        }
+      }
+    },
+    "overview_lesson_teachers": {
+      "comment": "Übersicht: Lehrkraft",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": " · %@"
+          }
+        }
+      }
+    },
+    "overview_messages_total": {
+      "comment": "Übersicht: Nachrichtenzahl",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nachrichten · %d"
+          }
+        }
+      }
+    },
+    "overview_week_label": {
+      "comment": "Übersicht: Essenswoche",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Woche %@"
+          }
+        }
+      }
+    },
+    "overview_weather_in_city": {
+      "comment": "Übersicht: Wetterstadt",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wetter in %@"
+          }
+        }
+      }
+    },
+    "overview_city_missing": {
+      "comment": "Übersicht: Stadt fehlt",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bitte eine Stadt in den Einstellungen eintragen."
+          }
+        }
+      }
+    },
+    "messages_count": {
+      "comment": "Nachrichten: Anzahl",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d Nachrichten"
+          }
+        }
+      }
+    },
+    "messages_load_more": {
+      "comment": "Nachrichten: mehr laden",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mehr laden (%d/%d)"
+          }
+        }
+      }
+    },
+    "messages_replies_count": {
+      "comment": "Nachrichten: Antwortanzahl",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Antworten (%d)"
+          }
+        }
+      }
+    },
+    "messages_recipients_chosen": {
+      "comment": "Nachrichten: Empfängerzahl",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Empfänger (%d gewählt)"
+          }
+        }
+      }
+    },
+    "messages_marked_read": {
+      "comment": "Nachrichten: als gelesen markiert",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d als gelesen markiert."
+          }
+        }
+      }
+    },
+    "messages_type_all": {
+      "comment": "Nachrichtentyp: alle",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle"
+          }
+        }
+      }
+    },
+    "messages_type_sprava": {
+      "comment": "Nachrichtentyp",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nachricht"
+          }
+        }
+      }
+    },
+    "messages_type_news": {
+      "comment": "Nachrichtentyp",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neuigkeit"
+          }
+        }
+      }
+    },
+    "messages_type_anketa": {
+      "comment": "Nachrichtentyp",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Umfrage"
+          }
+        }
+      }
+    },
+    "messages_type_chat": {
+      "comment": "Nachrichtentyp",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chat"
+          }
+        }
+      }
+    },
+    "messages_type_genotif": {
+      "comment": "Nachrichtentyp",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mitteilung"
+          }
+        }
+      }
+    },
+    "messages_nav_list": {
+      "comment": "Nachrichten: Titel",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nachrichten"
+          }
+        }
+      }
+    },
+    "messages_nav_thread": {
+      "comment": "Nachrichten: Thread-Titel",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thread"
+          }
+        }
+      }
+    },
+    "messages_nav_compose": {
+      "comment": "Nachrichten: Verfassen-Titel",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neue Nachricht"
+          }
+        }
+      }
+    },
+    "homework_count": {
+      "comment": "Hausaufgaben: Anzahl",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d Aufgaben"
+          }
+        }
+      }
+    },
+    "homework_load_more": {
+      "comment": "Hausaufgaben: mehr laden",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mehr laden (%d/%d)"
+          }
+        }
+      }
+    },
+    "homework_nav": {
+      "comment": "Hausaufgaben: Titel",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hausaufgaben"
+          }
+        }
+      }
+    },
+    "grades_average_stats": {
+      "comment": "Noten: Schnitt",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schnitt: %@"
+          }
+        }
+      }
+    },
+    "grades_subject_count": {
+      "comment": "Noten: Fachanzahl",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d Noten"
+          }
+        }
+      }
+    },
+    "grades_load_more": {
+      "comment": "Noten: mehr laden",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mehr laden (%d/%d)"
+          }
+        }
+      }
+    },
+    "grades_nav": {
+      "comment": "Noten: Titel",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noten"
+          }
+        }
+      }
+    },
+    "grades_halfyear_all": {
+      "comment": "Noten: Gesamt-Tab",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gesamt"
+          }
+        }
+      }
+    },
+    "grades_halfyear_format": {
+      "comment": "Noten: Halbjahr-Label",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d. Halbjahr %d/%@"
+          }
+        }
+      }
+    },
+    "grades_subject_other": {
+      "comment": "Noten: Fach-Fallback",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sonstiges"
+          }
+        }
+      }
+    },
+    "timetable_nav": {
+      "comment": "Stundenplan: Titel",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stundenplan"
+          }
+        }
+      }
+    },
+    "school_nav": {
+      "comment": "Schule: Titel",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Termine & Vertretungen"
+          }
+        }
+      }
+    },
+    "school_class_format": {
+      "comment": "Schule: Klasse",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klasse %@"
+          }
+        }
+      }
+    },
+    "school_week_from": {
+      "comment": "Schule: Wochenlabel",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Woche ab %@"
+          }
+        }
+      }
+    },
+    "school_kind_exam": {
+      "comment": "Schule: Prüfungsart",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TEST / PRÜFUNG"
+          }
+        }
+      }
+    },
+    "school_kind_attendance": {
+      "comment": "Schule: Anwesenheit",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ANWESENHEIT"
+          }
+        }
+      }
+    },
+    "school_kind_event": {
+      "comment": "Schule: Schultermin",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "SCHULTERMIN"
+          }
+        }
+      }
+    },
+    "school_action_add": {
+      "comment": "Schule: neu",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "NEU"
+          }
+        }
+      }
+    },
+    "school_action_remove": {
+      "comment": "Schule: entfällt",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ENTFÄLLT"
+          }
+        }
+      }
+    },
+    "school_action_changed": {
+      "comment": "Schule: geändert",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "GEÄNDERT"
+          }
+        }
+      }
+    },
+    "devices_count": {
+      "comment": "Geräte: Sitzungszahl",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d Sitzungen"
+          }
+        }
+      }
+    },
+    "devices_valid_until": {
+      "comment": "Geräte: Gültigkeit",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gültig bis %@"
+          }
+        }
+      }
+    },
+    "settings_devices_nav": {
+      "comment": "Geräte: Titel",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geräte"
+          }
+        }
+      }
+    },
+    "settings_nav": {
+      "comment": "Einstellungen: Titel",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Einstellungen"
+          }
+        }
+      }
+    },
+    "settings_max_unread": {
+      "comment": "Einstellungen: ungelesene Nachrichten",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max. ungelesene Nachrichten: %d"
+          }
+        }
+      }
+    },
+    "settings_max_homework": {
+      "comment": "Einstellungen: offene Hausaufgaben",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Max. offene Hausaufgaben: %d"
+          }
+        }
+      }
+    },
+    "settings_cache_cleared": {
+      "comment": "Einstellungen: Cache geleert",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cache geleert (%d Dateien)."
+          }
+        }
+      }
+    },
+    "settings_cache_clear": {
+      "comment": "Einstellungen: Cache leeren",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cache leeren"
+          }
+        }
+      }
+    },
+    "settings_cache_clear_busy": {
+      "comment": "Einstellungen: Cache leeren läuft",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cache leeren …"
+          }
+        }
+      }
+    }
   },
-  "version" : "1.0"
+  "version": "1.0"
 }

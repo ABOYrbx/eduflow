@@ -16,8 +16,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import de.eduflow.android.R
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.EmptyBox
 import de.eduflow.android.ui.common.LoadingBox
@@ -44,15 +46,15 @@ fun DevicesScreen(
     }
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         ScreenHead(
-            title = "Geräte",
-            subtitle = "Angemeldete Geräte verwalten",
+            title = stringResource(R.string.devices_title),
+            subtitle = stringResource(R.string.devices_subtitle),
         )
         if (state.devicesLoading) {
             LoadingBox()
             return
         }
         if (state.devices.isEmpty()) {
-            EmptyBox("Keine weiteren Geräte angemeldet.")
+            EmptyBox(stringResource(R.string.devices_empty))
             return
         }
         LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -64,22 +66,26 @@ fun DevicesScreen(
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                d.device.ifBlank { "Unbenanntes Gerät" } + " (${d.short})",
+                                stringResource(
+                                    R.string.devices_title_format,
+                                    d.device.ifBlank { stringResource(R.string.devices_unnamed) },
+                                    d.short,
+                                ),
                                 style = MaterialTheme.typography.titleMedium,
                                 color = MaterialTheme.colorScheme.onSurface,
                             )
                             Text(
-                                "Erstellt: ${d.created}",
+                                stringResource(R.string.devices_created_format, d.created),
                                 fontSize = 13.sp,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                             Text(
-                                "Läuft ab: ${d.expires}",
+                                stringResource(R.string.devices_expires_format, d.expires),
                                 fontSize = 13.sp,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
-                        TextButton(onClick = { vm.revokeDevice(d.id) }) { Text("Entfernen") }
+                        TextButton(onClick = { vm.revokeDevice(d.id) }) { Text(stringResource(R.string.devices_remove)) }
                     }
                 }
             }

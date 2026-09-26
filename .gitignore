@@ -33,6 +33,7 @@ xcuserdata/
 build/
 .gradle/
 android/.gradle/
+android/.kotlin/
 android/app/build/
 DerivedData/
 # Generierte Docs-Website (mkdocs build)

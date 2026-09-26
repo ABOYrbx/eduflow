@@ -75,7 +75,7 @@ public final class MessagesViewModel {
         markedMessage = nil
         do {
             let marked = try await repo().markRead()
-            markedMessage = "\(marked) als gelesen markiert."
+            markedMessage = String(format: NSLocalizedString("messages_marked_read", value: "%d als gelesen markiert.", comment: "Nachrichten: als gelesen markiert"), marked)
         } catch let apiError as APIError {
             if SessionRecovery.forceLogout(error: apiError, isLoggedIn: store.isLoggedIn) {
                 store.clear()

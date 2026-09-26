@@ -26,7 +26,7 @@ public struct MessagesView: View {
         VStack(alignment: .leading, spacing: 12) {
             PageHead(
                 "Nachrichten",
-                stats: vm.total == 0 ? nil : "\(vm.total) Nachrichten"
+                stats: vm.total == 0 ? nil : String(format: NSLocalizedString("messages_count", value: "%d Nachrichten", comment: "Nachrichten: Anzahl"), vm.total)
             )
             searchbar
             if let error = vm.error, vm.items.isEmpty {
@@ -39,7 +39,7 @@ public struct MessagesView: View {
         }
         .padding(20)
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle("Nachrichten")
+        .navigationTitle(NSLocalizedString("messages_nav_list", value: "Nachrichten", comment: "Nachrichten: Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
     }
 
@@ -130,7 +130,7 @@ public struct MessagesView: View {
                         .riseIn(delay: Double(min(index, 8)) * 0.06)
                     }
                     if vm.canLoadMore {
-                        Button(vm.isLoadingMore ? "Lädt …" : "Mehr laden (\(vm.items.count)/\(vm.total))") {
+                        Button(vm.isLoadingMore ? "Lädt …" : String(format: NSLocalizedString("messages_load_more", value: "Mehr laden (%d/%d)", comment: "Nachrichten: mehr laden"), vm.items.count, vm.total)) {
                             Task { await vm.loadMore(onSessionExpired: onSessionExpired) }
                         }
                         .buttonStyle(UberButtonStyle(.smallLight))
@@ -314,7 +314,7 @@ public struct ThreadDetail: View {
                 }
             }
             if !vm.thread.replies.isEmpty {
-                Text("Antworten (\(vm.thread.summary.replies))")
+                Text(String(format: NSLocalizedString("messages_replies_count", value: "Antworten (%d)", comment: "Nachrichten: Antwortanzahl"), vm.thread.summary.replies))
                     .font(UberFont.text(14, weight: .heavy))
                 VStack(spacing: 8) {
                     ForEach(vm.thread.replies.indices, id: \.self) { index in
@@ -430,7 +430,7 @@ public struct ThreadView: View {
             .padding(20)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle("Thread")
+        .navigationTitle(NSLocalizedString("messages_nav_thread", value: "Thread", comment: "Nachrichten: Thread-Titel"))
         .task { await vm.load(id: message.id, onSessionExpired: onSessionExpired) }
         .refreshable { await vm.load(id: message.id, refresh: true, onSessionExpired: onSessionExpired) }
     }
@@ -459,7 +459,7 @@ public struct ComposeView: View {
                 PageHead("Neue Nachricht")
                 UberCard {
                     VStack(alignment: .leading, spacing: 10) {
-                        Text("Empfänger (\(vm.selected.count) gewählt)")
+                        Text(String(format: NSLocalizedString("messages_recipients_chosen", value: "Empfänger (%d gewählt)", comment: "Nachrichten: Empfängerzahl"), vm.selected.count))
                             .font(UberFont.text(12, weight: .bold))
                             .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                         TextField("Suche", text: $vm.search)
@@ -514,7 +514,7 @@ public struct ComposeView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle("Neue Nachricht")
+        .navigationTitle(NSLocalizedString("messages_nav_compose", value: "Neue Nachricht", comment: "Nachrichten: Verfassen-Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
     }
 }
