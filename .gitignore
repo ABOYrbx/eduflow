@@ -37,3 +37,16 @@ android/app/build/
 DerivedData/
 # Generierte Docs-Website (mkdocs build)
 site/
+# Signing-/Schlüsseldateien (nie committen, auch später nicht)
+*.jks
+*.keystore
+*.p12
+*.pem
+*.key
+*.mobileprovision
+*.provisionprofile
+google-services.json
+GoogleService-Info.plist
+# Lokale Env-Varianten (Beispiele als *.example sind ok)
+.env.local
+.env.*.local
