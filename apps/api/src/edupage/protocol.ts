@@ -44,27 +44,40 @@ export function decodeResponse(response: string): string {
   }
 }
 
+/** Alles nach dem ERSTEN Vorkommen (Port von `split(sep, 1)[1]`). */
+function afterFirst(text: string, sep: string): string | null {
+  const index = text.indexOf(sep);
+  return index < 0 ? null : text.slice(index + sep.length);
+}
+
 /** Login-Daten aus der `userhome(...)`-Seite ziehen (Port von `Login`). */
 export function parseUserhome(html: string): { data: unknown; gsecHash: string | null } {
-  const inner = html.split("userhome(", 2)[1]?.split(");").slice(0, -1).join(");");
-  if (inner === undefined) throw new Error("EduPage did not return login data");
-  const cleaned = inner.replace(/[\t\n\r]/g, "");
+  const after = afterFirst(html, "userhome(");
+  if (after === null) throw new Error("EduPage did not return login data");
+  // Exakt wie Python `rsplit(");", 2)[0]`: alles außer den letzten zwei Trennern.
+  const pieces = after.split(");");
+  const inner = (pieces.length <= 2 ? (pieces[0] ?? "") : pieces.slice(0, -2).join(");"))
+    .replace(/[\t\n\r]/g, "");
   let data: unknown;
   try {
-    data = JSON.parse(cleaned);
+    data = JSON.parse(inner);
   } catch {
     throw new Error("EduPage did not return login data");
   }
-  const gsecHash = html.split('ASC.gsechash="', 2)[1]?.split('"', 1)[0] ?? null;
-  return { data, gsecHash: gsecHash ?? null };
+  const gsecPart = afterFirst(html, 'ASC.gsechash="');
+  const gsecHash = gsecPart === null ? null : (gsecPart.split('"', 1)[0] ?? null);
+  return { data, gsecHash };
 }
 
 /** 2FA-Formularfelder (`csrfauth`, `au`, `gu`) aus der Twofactor-Seite ziehen. */
 export function extractTwoFactorFields(html: string): { csrf: string; au: string; gu: string } | null {
   try {
-    const csrf = html.split('csrfauth" value="', 2)[1]?.split('"', 1)[0];
-    const au = html.split('au" value="', 2)[1]?.split('"', 1)[0];
-    const gu = html.split('gu" value="', 2)[1]?.split('"', 1)[0];
+    const csrfPart = afterFirst(html, 'csrfauth" value="');
+    const auPart = afterFirst(html, 'au" value="');
+    const guPart = afterFirst(html, 'gu" value="');
+    const csrf = csrfPart?.split('"', 1)[0];
+    const au = auPart?.split('"', 1)[0];
+    const gu = guPart?.split('"', 1)[0];
     if (!csrf || !au || !gu) return null;
     return { csrf, au, gu };
   } catch {
@@ -74,5 +87,6 @@ export function extractTwoFactorFields(html: string): { csrf: string; au: string
 
 /** CSRF-Token der Fallback-Loginseite (`"csrftoken":"..."`) ziehen. */
 export function extractCsrfToken(html: string): string | null {
-  return html.split('"csrftoken":"', 2)[1]?.split('"', 1)[0] ?? null;
+  const part = afterFirst(html, '"csrftoken":"');
+  return part?.split('"', 1)[0] ?? null;
 }

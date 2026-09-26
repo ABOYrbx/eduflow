@@ -2,7 +2,7 @@ import { EdupageClient } from "./client";
 import { BadCredentialsError, CaptchaError, SecondFactorFailedError } from "./errors";
 import type { FetchImpl } from "./session";
 
-interface Route { status: number; url: string; text: string; setCookie?: string[]; }
+interface Route { status: number; url: string; text: string; setCookie?: string[]; location?: string; }
 
 const USERHOME = '<html><script>userhome({"subdomain":"demo","id":7});</script><script>ASC.gsechash="gsec-1";</script></html>';
 const TWOFA = '<input name="csrfauth" value="csrf-1"><input name="au" value="au-2"><input name="gu" value="gu-3">';
@@ -16,7 +16,10 @@ function stubFetch(routes: Record<string, Route>, seen: string[] = []): FetchImp
     return {
       status: route.status,
       url: route.url,
-      headers: { get: () => null, getSetCookie: () => route.setCookie ?? [] },
+      headers: {
+        get: (name: string) => (name.toLowerCase() === "location" ? (route.location ?? null) : null),
+        getSetCookie: () => route.setCookie ?? [],
+      },
       text: async () => route.text,
       arrayBuffer: async () => new ArrayBuffer(0),
     };
@@ -83,7 +86,8 @@ describe("EdupageClient (Port von edupage_api.login)", () => {
     const routes: Record<string, Route> = {
       "GET https://demo.edupage.org/login/?cmd=MainLogin": { status: 200, url: "https://demo.edupage.org/login/?cmd=MainLogin", text: '{"csrftoken":"csrf-0"}' },
       "POST https://demo.edupage.org/login/?cmd=MainLogin&akcia=getToken": { status: 500, url: "https://demo.edupage.org/login/?cmd=MainLogin&akcia=getToken", text: "" },
-      "POST https://demo.edupage.org/login/edubarLogin.php": { status: 200, url: "https://demo.edupage.org/login/edubarLogin.php?cap=1", text: "" },
+      "POST https://demo.edupage.org/login/edubarLogin.php": { status: 302, url: "https://demo.edupage.org/login/edubarLogin.php", text: "", location: "https://demo.edupage.org/login/edubarLogin.php?cap=1" },
+      "GET https://demo.edupage.org/login/edubarLogin.php?cap=1": { status: 200, url: "https://demo.edupage.org/login/edubarLogin.php?cap=1", text: "" },
     };
     await expect(new EdupageClient(stubFetch(routes)).login("demo", "geheim", "demo")).rejects.toBeInstanceOf(CaptchaError);
   });

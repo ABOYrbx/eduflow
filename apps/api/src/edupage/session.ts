@@ -4,9 +4,10 @@
  * Der Fetch-Client ist injizierbar, damit Specs offline mit Fixtures laufen.
  */
 import { encodeFormData, encodeRequestBody } from "./protocol";
+import { RequestError } from "./errors";
 export interface PageResponse { status: number; url: string; text: string; }
 
-export type FetchImpl = (url: string, init: { method: string; headers: Record<string, string>; body?: string }) => Promise<{
+export type FetchImpl = (url: string, init: { method: string; headers: Record<string, string>; body?: string; redirect?: string }) => Promise<{
   status: number;
   url: string;
   headers: { get(name: string): string | null; getSetCookie?: () => string[] };
@@ -15,8 +16,8 @@ export type FetchImpl = (url: string, init: { method: string; headers: Record<st
 }>;
 
 const defaultFetch: FetchImpl = (url, init) => {
-  const requestInit: { method: string; headers: Record<string, string>; redirect: "follow"; body?: string } =
-    { method: init.method, headers: init.headers, redirect: "follow" };
+  const requestInit: { method: string; headers: Record<string, string>; redirect: "follow" | "manual"; body?: string } =
+    { method: init.method, headers: init.headers, redirect: init.redirect === "manual" ? "manual" : "follow" };
   if (init.body !== undefined) requestInit.body = init.body;
   return fetch(url, requestInit).then(async (response) => ({
     status: response.status,
@@ -112,13 +113,39 @@ export class EdupageSession {
   constructor(private readonly fetchImpl: FetchImpl = defaultFetch) {}
 
   private async request(url: string, method: string, headers: Record<string, string>, body?: string): Promise<PageResponse> {
-    const cookie = this.jar.headerFor(url);
-    const outgoing: Record<string, string> = { ...(cookie ? { Cookie: cookie } : {}), ...headers };
-    const init: { method: string; headers: Record<string, string>; body?: string } = { method, headers: outgoing };
-    if (body !== undefined) init.body = body;
-    const response = await this.fetchImpl(url, init);
-    this.jar.setFromHeaders(url, response.headers);
-    return { status: response.status, url: response.url, text: await response.text() };
+    // Redirects manuell folgen (wie `requests`): Cookies JEDES Hops
+    // verarbeiten und mitsenden — EduPage setzt Sitzungs-Cookies unterwegs.
+    let currentUrl = url;
+    let currentMethod = method;
+    let currentBody = body;
+    for (let hop = 0; hop < 10; hop += 1) {
+      const cookie = this.jar.headerFor(currentUrl);
+      const init: { method: string; headers: Record<string, string>; redirect: string; body?: string } = {
+        method: currentMethod,
+        headers: { ...(cookie ? { Cookie: cookie } : {}), ...headers },
+        redirect: "manual",
+      };
+      if (currentBody !== undefined) init.body = currentBody;
+      const response = await this.fetchImpl(currentUrl, init);
+      this.jar.setFromHeaders(currentUrl, response.headers);
+      if ([301, 302, 303, 307, 308].includes(response.status)) {
+        const location = response.headers.get("location");
+        try {
+          await response.text();
+        } catch {
+          /* Body verwerfen */
+        }
+        if (!location) return { status: response.status, url: currentUrl, text: "" };
+        currentUrl = new URL(location, currentUrl).toString();
+        if ([301, 302, 303].includes(response.status) && currentMethod === "POST") {
+          currentMethod = "GET";
+          currentBody = undefined;
+        }
+        continue;
+      }
+      return { status: response.status, url: currentUrl, text: await response.text() };
+    }
+    throw new RequestError("zu viele Redirects");
   }
 
   get(url: string): Promise<PageResponse> {

@@ -24,6 +24,11 @@ describe("protocol (Parität zu edupage_api.compression/login)", () => {
     expect(() => parseUserhome("<html>kein Login</html>")).toThrow();
   });
 
+  it("parst userhome wie Python trotz Nachbar-Content (rsplit-Semantik)", () => {
+    const html = '<script>userhome({"a":1});</script><script>var x = foo();</script>';
+    expect(parseUserhome(html)).toEqual({ data: { a: 1 }, gsecHash: null });
+  });
+
   it("zieht 2FA-Felder und CSRF-Token aus den Formularseiten", () => {
     const twofa = '<input name="csrfauth" value="csrf-1"><input name="au" value="au-2"><input name="gu" value="gu-3">';
     expect(extractTwoFactorFields(twofa)).toEqual({ csrf: "csrf-1", au: "au-2", gu: "gu-3" });
