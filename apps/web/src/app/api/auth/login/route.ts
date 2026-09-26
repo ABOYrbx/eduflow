@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const apiOrigin = () => process.env.API_SERVER_URL ?? "http://127.0.0.1:8001";
+const apiOrigin = () => process.env.API_SERVER_URL ?? "http://127.0.0.1:8000";
 const cookieOptions = { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax" as const, path: "/", maxAge: 60 * 60 * 24 * 30 };
 
 export async function POST(request: NextRequest) {

@@ -18,7 +18,7 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
   app.setGlobalPrefix("api/v1");
   app.useGlobalFilters(new ApiExceptionFilter());
-  const port = Number(process.env.PORT ?? "8001");
+  const port = Number(process.env.PORT ?? "8000");
   await app.listen(port, "127.0.0.1");
 }
 
