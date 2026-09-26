@@ -6,5 +6,6 @@ site:
       key: eduflow
       title: EduFlow
       path: eduflow
+      default: true
       content:
         directory: ./docs
