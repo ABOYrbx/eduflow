@@ -17,7 +17,7 @@ declare global {
 
 type ApiError = { error?: string; code?: string };
 type Page<T> = { items: T[]; total: number; limit: number; offset: number; counts?: Record<string, number>; cache_info?: string };
-type Message = { id: number; text: string; author: string; recipient: string; type: string; type_label: string; timestamp: string; timestamp_iso: string; additional_data: Record<string, unknown>; attachments?: Array<{ name: string; url: string }>; is_starred: boolean; is_done?: boolean; done_at?: string; reaction_count: number };
+type Message = { id: number; text: string; author: string; recipient: string; type: string; type_label: string; timestamp: string; timestamp_iso: string; additional_data?: Record<string, unknown>; attachments?: Array<{ name: string; url: string }>; is_starred: boolean; is_done?: boolean; done_at?: string; reaction_count: number };
 type Thread = { likes: Array<{ name: string; date: string }>; replies: Array<{ name: string; date: string; text: string }> };
 type Homework = { id: number; title: string; subject: string; description: string; teacher: string; author?: string; assigned?: string; assigned_iso?: string; due: string; due_display: string; status: string; is_done: boolean; is_hidden: boolean; is_starred?: boolean; done_at?: string; type: string; type_label?: string };
 type Lesson = { period: string; time: string; title: string; teachers: string; rooms: string; is_lernzeit: boolean; is_cancelled: boolean; is_online: boolean; is_event?: boolean };
@@ -52,7 +52,9 @@ function lessonStartIndex(lessons: Lesson[], now: Date) {
 }
 function messageAttachments(message: Message) {
   if (message.attachments?.length) return message.attachments.map((item) => item.name);
-  const filename = message.additional_data.filename;
+  const filename = (message.additional_data ?? {}).filename;
+  return typeof filename === "string" && filename ? [filename] : [];
+}
   return typeof filename === "string" && filename ? [filename] : [];
 }
 function PageTitle({ eyebrow, title, detail }: { eyebrow: string; title: string; detail?: string }) { return <div className="page-head anim-in"><span className="eyebrow">{eyebrow}</span><h1>{title}</h1>{detail && <p className="stats">{detail}</p>}</div>; }
