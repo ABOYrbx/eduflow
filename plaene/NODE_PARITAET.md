@@ -22,32 +22,31 @@ Vorführungen (plaene/DEMO.md).
 - Paginierung: `limit` 50/max 200, `{items, total, limit, offset}`,
   deutsche Fehlermeldungen wie `api/core.py` (Paket N0 erledigt das).
 
-## Pakete
+## Pakete (Stand: N0–NI umgesetzt auf `feature/node-paritaet-na`)
 
-- **N0 Fundament (diese Branch):** Paginierungs-Parität (Meldungen,
+- **N0 Fundament (fertig):** Paginierungs-Parität (Meldungen,
   `""`-Verhalten, Grenzen) + Routenmatrix-Test gegen alle 30
-  Python-Pfade + Konventionen. Abnahme: `npm test`, `npm run
-  typecheck` grün, nur additive Änderungen.
-- **N-A Auth echt:** EduPage-Login/2FA/Rate-Limit/Geräte, opake
-  Bearer + Pending- + DL-Tokens, `/me`, `/devices`. Abnahme:
-  Login/2FA/Refresh/Logout-Flows gegen Fixtures, Texte wie Python.
-- **N-B Nachrichten:** Liste/Thread/Senden/Antworten/Likes,
+  Python-Pfade + Konventionen.
+- **N-A Auth echt (fertig):** EduPage-Login/2FA/Rate-Limit/Geräte, opake
+  Bearer + Pending- + DL-Tokens, `/me`, `/devices` — drahtkompatibel zu
+  `api/core.py` + `api/auth.py`. Fake-Demo unverändert.
+- **N-B Nachrichten (fertig):** Liste/Thread/Senden/Antworten/Likes,
   lokal getracktes Ungelesen, Empfänger, Attachments + DL-Tokens.
-- **N-C Hausaufgaben:** Filter, done/trash, Zähler, DTO-Parität.
-- **N-D Stundenplan:** Tag/Woche, DTO-Parität (JETZT-Logik bleibt
-  Client-Sache).
-- **N-E Noten:** Schnitt, Halbjahre, Fächer.
-- **N-F Einstellungen:** Schema-Parität zu `app.py`, Geräte,
-  Cache-Clear.
-- **N-G Meta:** Mensa-PDF-Parser in TS + Wochen-Cache, Wetter
-  (OpenWeather-Key, Suche, Detail).
-- **N-H Schulalltag:** Vertretungen + Agenda (Kalender/Prüfungen/
-  Anwesenheit).
-- **N-I Web:** Next.js-Seitenparität zu den 11 Flask-Templates
-  (Login/2FA, Übersicht, Dashboard, Verfassen, Hausaufgaben,
-  Stundenplan, Noten, Einstellungen, Termine).
-- **N-J Cutover:** DTO-Diff-Tests Python↔Node, App-Umschaltung
-  (Server-URL), Python-Archivierung. **Kein Löschen ohne
+- **N-C Hausaufgaben (fertig):** Filter, done/trash, Zähler, DTO-Parität.
+- **N-D Stundenplan (fertig):** Tag/Woche, gcall-Protokoll,
+  Lernzeit-Blöcke, Ganztags-Filter.
+- **N-E Noten (fertig):** znamky-Protokoll, grade_to_dict, Cache.
+- **N-F Einstellungen (fertig):** Schema-Parität, UserPreference,
+  Cache-Clear. Geräte/`/me` aus N-A.
+- **N-G Meta (fertig):** Mensa-PDF-Parser in TS (neue Dep `pdf-parse`
+  als pypdf-Äquivalent) + Wochen-Cache, Wetter-Proxy + Suche.
+- **N-H Schulalltag (fertig):** Vertretungen (Viewer-Protokoll, echte
+  Markup-Form verifiziert) + Agenda.
+- **N-I Web (fertig):** Next.js provider-neutral (Cookies ohne
+  `refresh_token`, optionale Refresh-UI).
+- **N-J Cutover (offen):** Live-DTO-Diffs Python↔Node brauchen einen
+  Staging-Server mit echten Zugangsdaten (nicht offline machbar);
+  danach App-Umschaltung und Python-Archivierung. **Kein Löschen ohne
   explizite Freigabe.**
 
 ## Regeln je Paket
