@@ -1,36 +1,71 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, Req, Res, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
 import type { Request, Response } from "express";
 import { AccessTokenGuard, AuthenticatedRequest } from "../auth/access-token.guard";
 import { AuthClaims, AuthService } from "../auth/auth.service";
 import { DemoSchoolService } from "./demo-school.service";
+import { EdupageDataService } from "../edupage/data";
 
 interface AttachmentRequest extends Request { authClaims?: AuthClaims; }
 
+const useFakeProvider = (): boolean => process.env.EDUFLOW_PROVIDER === "fake";
+
 @Controller()
 export class SchoolController {
-  constructor(private readonly demo: DemoSchoolService, private readonly auth: AuthService) {}
+  constructor(private readonly demo: DemoSchoolService, private readonly auth: AuthService, private readonly edupage: EdupageDataService) {}
 
   @UseGuards(AccessTokenGuard)
-  @Get("messages") messages(@Req() req: AuthenticatedRequest, @Query() query: Record<string, unknown>) { return this.demo.messages(req.authClaims, query); }
+  @Get("messages") messages(@Req() req: AuthenticatedRequest, @Query() query: Record<string, unknown>) {
+    if (useFakeProvider()) return this.demo.messages(req.authClaims, query);
+    return this.edupage.messages(req.authClaims, query);
+  }
   @UseGuards(AccessTokenGuard)
-  @Get("messages/:id/thread") thread(@Param("id") id: string, @Req() req: AuthenticatedRequest) { return this.demo.thread(req.authClaims, Number(id)); }
+  @Get("messages/:id/thread") thread(@Param("id") id: string, @Req() req: AuthenticatedRequest, @Query() query: Record<string, unknown>) {
+    if (useFakeProvider()) return this.demo.thread(req.authClaims, Number(id));
+    return this.edupage.thread(req.authClaims, Number(id), query.refresh === "1");
+  }
   @UseGuards(AccessTokenGuard)
-  @HttpCode(HttpStatus.OK) @Post("messages/read") markRead(@Req() req: AuthenticatedRequest) { return this.demo.markMessagesRead(req.authClaims); }
+  @HttpCode(HttpStatus.OK) @Post("messages/read") markRead(@Req() req: AuthenticatedRequest) {
+    if (useFakeProvider()) return this.demo.markMessagesRead(req.authClaims);
+    return this.edupage.markRead(req.authClaims);
+  }
   @UseGuards(AccessTokenGuard)
-  @Get("recipients") recipients() { return this.demo.recipients(); }
+  @Get("recipients") recipients(@Req() req: AuthenticatedRequest, @Query() query: Record<string, unknown>) {
+    if (useFakeProvider()) return this.demo.recipients();
+    return this.edupage.recipients(req.authClaims, query);
+  }
   @UseGuards(AccessTokenGuard)
-  @HttpCode(HttpStatus.OK) @Post("messages/send") send(@Body() body: unknown) { return this.demo.sendMessage(body); }
+  @HttpCode(HttpStatus.OK) @Post("messages/send") send(@Body() body: unknown, @Req() req: AuthenticatedRequest) {
+    if (useFakeProvider()) return this.demo.sendMessage(body);
+    return this.edupage.send(req.authClaims, body);
+  }
   @UseGuards(AccessTokenGuard)
-  @HttpCode(HttpStatus.OK) @Post("messages/:id/reply") reply(@Param("id") id: string, @Body() body: unknown) { return this.demo.reply(Number(id), body); }
+  @HttpCode(HttpStatus.OK) @Post("messages/:id/reply") reply(@Param("id") id: string, @Body() body: unknown, @Req() req: AuthenticatedRequest) {
+    if (useFakeProvider()) return this.demo.reply(Number(id), body);
+    return this.edupage.reply(req.authClaims, Number(id), body);
+  }
   @UseGuards(AccessTokenGuard)
   @HttpCode(HttpStatus.OK) @Post("messages/download-token") downloadToken(@Body() body: unknown, @Req() req: AuthenticatedRequest) {
     const input = typeof body === "object" && body !== null ? body as Record<string, unknown> : {};
-    return this.demo.issueDownload(req.authClaims, Number(input.event_id), Number(input.idx));
+    if (useFakeProvider()) return this.demo.issueDownload(req.authClaims, Number(input.event_id), Number(input.idx));
+    return this.edupage.downloadToken(req.authClaims, body);
   }
 
   @Get("messages/:id/attachments/:idx")
   async attachment(@Param("id") id: string, @Param("idx") idx: string, @Query("dl") dl: string | undefined, @Query("token") token: string | undefined, @Req() req: AttachmentRequest, @Res() res: Response) {
     const eventId = Number(id); const index = Number(idx);
+    if (!useFakeProvider()) {
+      const bearer = /^Bearer\s+(.+)$/i.exec(req.headers.authorization ?? "")?.[1];
+      const queryToken = !bearer && !dl && token ? token : undefined;
+      const file = dl
+        ? await this.edupage.attachmentByDl(dl, eventId, index)
+        : await this.edupage.attachmentByClaims(
+          req.authClaims ?? (bearer || queryToken ? await this.auth.authenticate((bearer ?? queryToken) as string) : (() => { throw new UnauthorizedException({ error: "Ungültiges oder fehlendes Token.", code: "TOKEN_INVALID" }); })()),
+          eventId, index);
+      res.setHeader("Content-Type", file.contentType);
+      res.setHeader("Content-Disposition", `attachment; filename="${file.filename.replace(/[\r\n"\\]/g, "_")}"`);
+      res.status(HttpStatus.OK).send(file.bytes);
+      return;
+    }
     const bearer = /^Bearer\s+(.+)$/i.exec(req.headers.authorization ?? "")?.[1];
     const accessQueryToken = !bearer && !dl && token ? token : undefined;
     const resolvedClaims = req.authClaims ?? (bearer ? await this.auth.authenticate(bearer) : accessQueryToken ? await this.auth.authenticate(accessQueryToken) : undefined);
