@@ -8,6 +8,7 @@ import { downloadViaSession, fetchThread, replyToMessage, sendTimelineMessage } 
 import { EXAM_TYPES, HOMEWORK_TYPES, eventToDict, extractAttachments, homeworkRank, homeworkToDict, markHidden, norm, recipientsFromDbi } from "./serializers";
 import { MESSAGE_TYPES, TimelineEvent, fetchTimelineHistory } from "./timeline";
 import { GERMAN_WEEKDAYS, LessonDict, fetchDayPlan, isAlldayEvent, lessonToDict, mergeLernzeit, parseDayPlan } from "./timetable";
+import { SETTINGS_DEFAULTS, SETTINGS_SCHEMA, coerceSetting, settingsFromForm } from "./settings";
 import { fetchGradeData, gradeToDict, parseGrades } from "./grades";
 import { setHomeworkDone } from "./homework";
 import { page, parsePage } from "../common/pagination";
@@ -784,6 +785,67 @@ export class EdupageDataService {
     }
     await this.writeCache(claims.sub, "grades", { grades: dicts, savedAt: new Date().toISOString() }, GRADES_TTL_S);
     return { ...page(dicts, { limit: String(limit), offset: String(offset) }), cache_info: "frisch geladen" };
+  }
+
+  // --------------------------------------- Einstellungen + Cache (N-F)
+
+  async settingsGet(claims: AuthClaims) {
+    const merged: Record<string, unknown> = { ...SETTINGS_DEFAULTS };
+    try {
+      const rows = await this.prisma.userPreference.findMany({ where: { accountId: claims.sub } });
+      const stored: Record<string, unknown> = {};
+      for (const row of rows) stored[row.key] = row.value;
+      for (const spec of SETTINGS_SCHEMA) {
+        if (spec.key in stored) merged[spec.key] = coerceSetting(spec, stored[spec.key]);
+      }
+    } catch {
+      /* Defaults wie Python */
+    }
+    return { schema: SETTINGS_SCHEMA, values: merged };
+  }
+
+  async settingsPut(claims: AuthClaims, body: unknown) {
+    if (typeof body !== "object" || body === null || Array.isArray(body)) {
+      throw new BadRequestException({ error: "Ungültige Anfrage (JSON-Objekt erwartet).", code: "VALIDATION" });
+    }
+    const current = await this.settingsGet(claims);
+    const input = { ...(current.values as Record<string, unknown>), ...(body as Record<string, unknown>) };
+    const normalized: Record<string, unknown> = {};
+    for (const [key, value] of Object.entries(input)) {
+      if (value === true) normalized[key] = "1";
+      else if (value === false) normalized[key] = "0";
+      else normalized[key] = value;
+    }
+    let values: Record<string, unknown>;
+    try {
+      values = settingsFromForm(normalized);
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new BadRequestException({ error: `Einstellungen konnten nicht gespeichert werden: ${detail}`, code: "VALIDATION" });
+    }
+    try {
+      for (const spec of SETTINGS_SCHEMA) {
+        await this.prisma.userPreference.upsert({
+          where: { accountId_key: { accountId: claims.sub, key: spec.key } },
+          update: { value: values[spec.key] as never },
+          create: { accountId: claims.sub, key: spec.key, value: values[spec.key] as never },
+        });
+      }
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new HttpException({ error: `Einstellungen konnten nicht gespeichert werden: ${detail}`, code: "UPSTREAM" }, 502);
+    }
+    return { status: "ok", values: (await this.settingsGet(claims)).values };
+  }
+
+  async cacheClear(claims: AuthClaims) {
+    try {
+      const result = await this.prisma.resourceCache.deleteMany({ where: { accountId: claims.sub } });
+      return { status: "ok", cleared: result.count };
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new HttpException({ error: `Cache konnte nicht gelöscht werden: ${detail}`, code: "UPSTREAM" }, 502);
+    }
   }
 }
 

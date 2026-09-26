@@ -116,9 +116,18 @@ export class SchoolController {
   @UseGuards(AccessTokenGuard)
   @Get("wetter/suche") searchCities(@Query("q") query: unknown) { return this.demo.searchCities(query); }
   @UseGuards(AccessTokenGuard)
-  @Get("settings") settings(@Req() req: AuthenticatedRequest) { return this.demo.settings(req.authClaims); }
+  @Get("settings") settings(@Req() req: AuthenticatedRequest) {
+    if (useFakeProvider()) return this.demo.settings(req.authClaims);
+    return this.edupage.settingsGet(req.authClaims);
+  }
   @UseGuards(AccessTokenGuard)
-  @HttpCode(HttpStatus.OK) @Put("settings") saveSettings(@Req() req: AuthenticatedRequest, @Body() body: unknown) { return this.demo.saveSettings(req.authClaims, body); }
+  @HttpCode(HttpStatus.OK) @Put("settings") saveSettings(@Req() req: AuthenticatedRequest, @Body() body: unknown) {
+    if (useFakeProvider()) return this.demo.saveSettings(req.authClaims, body);
+    return this.edupage.settingsPut(req.authClaims, body);
+  }
   @UseGuards(AccessTokenGuard)
-  @HttpCode(HttpStatus.OK) @Post("cache-clear") clearCache(@Req() req: AuthenticatedRequest) { return this.demo.clearCache(req.authClaims); }
+  @HttpCode(HttpStatus.OK) @Post("cache-clear") clearCache(@Req() req: AuthenticatedRequest) {
+    if (useFakeProvider()) return this.demo.clearCache(req.authClaims);
+    return this.edupage.cacheClear(req.authClaims);
+  }
 }
