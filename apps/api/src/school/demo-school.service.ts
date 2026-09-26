@@ -1,6 +1,7 @@
 import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
 import { createHash, randomBytes } from "node:crypto";
 import { Prisma } from "@prisma/client";
+import { page as paginate, parsePage } from "../common/pagination";
 import { PrismaService } from "../prisma/prisma.service";
 import { AuthClaims } from "../auth/auth.service";
 import { demoGrades, demoHomework, demoLessons, demoMessages, demoRecipients } from "../testing/demo-data";
@@ -44,17 +45,11 @@ export class DemoSchoolService {
   }
 
   private validatePage(query: Record<string, unknown>) {
-    const integer = (key: string, fallback: number, min: number, max: number) => {
-      const raw = query[key]; if (raw === undefined || raw === "") return fallback;
-      const n = Number(raw); if (!Number.isInteger(n) || n < min || n > max) throw new BadRequestException({ error: "Ungültige Paginierung.", code: "VALIDATION" });
-      return n;
-    };
-    return { limit: integer("limit", 50, 1, 200), offset: integer("offset", 0, 0, Number.MAX_SAFE_INTEGER) };
+    return parsePage(query);
   }
 
   private page<T>(items: T[], query: Record<string, unknown>) {
-    const { limit, offset } = this.validatePage(query);
-    return { items: items.slice(offset, offset + limit), total: items.length, limit, offset };
+    return paginate(items, query);
   }
 
   private async allState(accountId: string, resource: string, stateKey: string) {

@@ -13,6 +13,7 @@ gesammelt.
 | [EDUPAGE_LUECKENPLAN.md](EDUPAGE_LUECKENPLAN.md) | Funktionslücken und priorisierte mögliche Erweiterungen |
 | [DEMO.md](DEMO.md) | Lokalen Demo-Modus starten und in den Apps verwenden |
 | [LOKALISIERUNG.md](LOKALISIERUNG.md) | Crowdin-Setup, Sync-Ablauf und Ausbauschritte (iOS ausgenommen) |
+| [NODE_PARITAET.md](NODE_PARITAET.md) | NestJS-Pakete N0–NJ zur Drahtkompatibilität mit Python-/api/v1 |
 
 Bei Änderungen an Architektur, Paketstatus oder Projektumfang bitte den
 betroffenen Plan und gegebenenfalls die Projektübersicht in `../AGENTS.md`
