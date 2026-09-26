@@ -39,7 +39,7 @@ describe("AuthService (fake EduPage provider)", () => {
   it("issues a JWT pair and authenticates the access token against its stored hash", async () => {
     const result = await service.login({ username: "demo", password: "demo", device: "Test" });
     expect(result.status).toBe("ok");
-    if (!("token" in result)) throw new Error("Expected a successful fake login");
+    if (!("token" in result) || !("refresh_token" in result)) throw new Error("Expected a successful fake login");
     expect(result.token).toEqual(expect.any(String));
     expect(result.refresh_token).toEqual(expect.any(String));
     await expect(service.authenticate(result.token)).resolves.toMatchObject({ sub: account.id, tokenUse: "access" });
@@ -48,7 +48,7 @@ describe("AuthService (fake EduPage provider)", () => {
   it("creates a separate device JWT pair for the signed-in account", async () => {
     const created = await service.createDevice({ sub: account.id, jti: "current", tokenUse: "access" }, { device: "  Pixel 8  " });
     expect(created.status).toBe("ok");
-    if (!("token" in created)) throw new Error("Expected a successful device token response");
+    if (!("token" in created) || !("refresh_token" in created)) throw new Error("Expected a successful device token response");
     expect(created.token).toEqual(expect.any(String));
     expect(created.refresh_token).toEqual(expect.any(String));
     expect(created).toMatchObject({ subdomain: account.subdomain, username: account.username });
@@ -67,10 +67,13 @@ describe("AuthService (fake EduPage provider)", () => {
     });
   });
 
-  it("requires the development fake provider instead of silently bypassing EduPage", async () => {
+  it("attempts a real EduPage login outside the fake provider (no silent bypass)", async () => {
+    const { BadCredentialsError } = await import("../edupage/errors");
+    const real = new AuthService(prisma as never, new JwtService({ secret: "test-secret-long-enough-to-sign-tokens" }),
+      () => ({ login: async () => { throw new BadCredentialsError(); } }) as never);
     process.env.EDUFLOW_PROVIDER = "unconfigured";
-    await expect(service.login({ username: "demo", password: "demo" })).rejects.toMatchObject({
-      response: { code: "CONFIG_MISSING" },
+    await expect(real.login({ username: "demo", password: "demo" })).rejects.toMatchObject({
+      response: { code: "BAD_CREDENTIALS" },
     });
     process.env.EDUFLOW_PROVIDER = "fake";
   });
