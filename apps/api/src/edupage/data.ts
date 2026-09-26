@@ -1,5 +1,5 @@
 import { randomBytes } from "node:crypto";
-import { BadRequestException, ForbiddenException, HttpException, Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, ForbiddenException, HttpException, Injectable, NotFoundException, Optional, UnauthorizedException } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import type { AuthClaims } from "../auth/auth.service";
 import { EdupageClient } from "./client";
@@ -119,17 +119,19 @@ export class EdupageDataService {
   private readonly fetchBytes: FetchBytes;
   private readonly extractPdfText: ExtractPdfText;
   private readonly fetchJson: FetchJson;
+  private readonly clientFactory: () => EdupageClient;
   /** Essens-Wochenpläne sind global (wie Python) und leben prozess-lokal. */
   private readonly essenMemory = new Map<string, { savedAt: number; data: WeekMenu }>();
 
   constructor(
     private readonly prisma: PrismaService,
-    private readonly clientFactory: () => EdupageClient = () => new EdupageClient(),
-    deps: { fetchBytes?: FetchBytes; extractPdfText?: ExtractPdfText; fetchJson?: FetchJson } = {},
+    @Optional() clientFactory?: () => EdupageClient,
+    @Optional() deps?: { fetchBytes?: FetchBytes; extractPdfText?: ExtractPdfText; fetchJson?: FetchJson },
   ) {
-    this.fetchBytes = deps.fetchBytes ?? defaultFetchBytes;
-    this.extractPdfText = deps.extractPdfText ?? defaultExtractPdfText;
-    this.fetchJson = deps.fetchJson ?? defaultFetchJson;
+    this.clientFactory = clientFactory ?? (() => new EdupageClient());
+    this.fetchBytes = deps?.fetchBytes ?? defaultFetchBytes;
+    this.extractPdfText = deps?.extractPdfText ?? defaultExtractPdfText;
+    this.fetchJson = deps?.fetchJson ?? defaultFetchJson;
   }
 
   /** EduPage-Re-Login aus Tresor-Zugangsdaten (wie Python `_api_login`). */

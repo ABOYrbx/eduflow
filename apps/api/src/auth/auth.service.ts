@@ -1,5 +1,5 @@
 import { createHash, randomBytes, randomUUID } from "node:crypto";
-import { Injectable, UnauthorizedException, BadRequestException, ForbiddenException, NotFoundException, HttpException } from "@nestjs/common";
+import { Injectable, UnauthorizedException, BadRequestException, ForbiddenException, NotFoundException, HttpException, Optional } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { PrismaService } from "../prisma/prisma.service";
 import { EdupageClient, TwoFactorFields } from "../edupage/client";
@@ -35,8 +35,10 @@ export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwt: JwtService,
-    private readonly clientFactory: () => EdupageClient = () => new EdupageClient(),
-  ) {}
+    @Optional() private readonly clientFactory: () => EdupageClient = () => new EdupageClient(),
+  ) {
+    this.clientFactory = clientFactory ?? (() => new EdupageClient());
+  }
 
   private isFake(): boolean {
     return process.env.EDUFLOW_PROVIDER === "fake";
