@@ -5,9 +5,10 @@ import type { AuthClaims } from "../auth/auth.service";
 import { EdupageClient } from "./client";
 import { BadCredentialsError, CaptchaError, MissingDataError } from "./errors";
 import { downloadViaSession, fetchThread, replyToMessage, sendTimelineMessage } from "./messages";
-import { EXAM_TYPES, HOMEWORK_TYPES, eventToDict, extractAttachments, homeworkRank, homeworkToDict, markHidden, norm, recipientsFromDbi } from "./serializers";
+import { EXAM_TYPES, HOMEWORK_TYPES, eventToDict, extractAttachments, formatIsoLocal, homeworkRank, homeworkToDict, markHidden, norm, recipientsFromDbi } from "./serializers";
 import { MESSAGE_TYPES, TimelineEvent, fetchTimelineHistory } from "./timeline";
 import { GERMAN_WEEKDAYS, LessonDict, fetchDayPlan, isAlldayEvent, lessonToDict, mergeLernzeit, parseDayPlan } from "./timetable";
+import { changeToDict, fetchSubstitutionHtml, parseSubstitutionHtml, resolveUserClass } from "./school";
 import { ESSEN_BASE_URL, ESSEN_TTL_S, EssenUnavailable, WeekMenu, candidateUrls, defaultExtractPdfText, defaultFetchBytes, parseMenuPdf, weekKey, type ExtractPdfText, type FetchBytes } from "./essen";
 import { defaultFetchJson, getWetter, searchWetterCities, type FetchJson } from "./meta";
 import { SETTINGS_DEFAULTS, SETTINGS_SCHEMA, coerceSetting, settingsFromForm } from "./settings";
@@ -109,6 +110,7 @@ interface SessionContext {
   subdomain: string;
   username: string;
   loginData: unknown;
+  gsecHash: string | null;
 }
 
 /** Echte EduPage-Daten für die Schul-Pakete (N-B; Fake bleibt unberührt). */
@@ -153,7 +155,7 @@ export class EdupageDataService {
     if (result.outcome === "twofactor") {
       throw new UnauthorizedException({ error: "Sitzung erfordert erneut 2FA. Bitte erneut über /auth/login anmelden.", code: "EDUPAGE_2FA" });
     }
-    return { client, accountId: account.id, subdomain: result.subdomain, username: account.username, loginData: result.data };
+    return { client, accountId: account.id, subdomain: result.subdomain, username: account.username, loginData: result.data, gsecHash: result.gsecHash };
   }
 
   private async readCache(accountId: string, key: string): Promise<{ payload: Record<string, unknown>; fresh: boolean } | null> {
@@ -881,6 +883,115 @@ export class EdupageDataService {
     const message = typeof payload.error === "string" ? payload.error : "Stadtsuche nicht verfügbar.";
     if (status === 503) throw new HttpException({ error: message, code: "CONFIG_MISSING" }, 503);
     throw new HttpException({ error: message, code: "UPSTREAM" }, 502);
+  }
+
+  // ------------------------------------------ Schulalltag (N-H)
+
+  async substitutionsWeek(claims: AuthClaims, query: Record<string, unknown>, today = new Date()) {
+    const raw = typeof query.day === "string" ? query.day.trim() : "";
+    const selected = raw || today.toISOString().slice(0, 10);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(selected) || Number.isNaN(Date.parse(`${selected}T00:00:00Z`))) {
+      throw new BadRequestException({ error: "Das Datum muss im Format JJJJ-MM-TT angegeben werden.", code: "VALIDATION" });
+    }
+    const { client, subdomain, loginData, gsecHash } = await this.loginFor(claims.sub);
+    const base = new Date(`${selected}T00:00:00Z`);
+    const monday = new Date(base.getTime() - (((base.getUTCDay() + 6) % 7) * 86400000));
+    const iso = (date: Date): string => date.toISOString().slice(0, 10);
+    const pad = (value: number): string => String(value).padStart(2, "0");
+    const userClass = resolveUserClass((loginData as Record<string, unknown> | null)?.dbi ?? {},
+      (loginData as Record<string, unknown> | null)?.userid ?? "");
+    const days: Record<string, unknown>[] = [];
+    try {
+      for (let index = 0; index < 5; index += 1) {
+        const current = new Date(monday.getTime() + index * 86400000);
+        const currentIso = iso(current);
+        const html = await fetchSubstitutionHtml(client.session, subdomain, gsecHash ?? "", currentIso);
+        const changes = parseSubstitutionHtml(html) ?? [];
+        const filtered = userClass ? changes.filter((change) => change.changeClass === userClass) : changes;
+        days.push({
+          date: currentIso,
+          day_label: `${GERMAN_WEEKDAYS[(current.getUTCDay() + 6) % 7]} ${pad(current.getUTCDate())}.${pad(current.getUTCMonth() + 1)}.${current.getUTCFullYear()}`,
+          changes: filtered.map(changeToDict),
+        });
+      }
+    } catch {
+      throw new HttpException({ error: "Vertretungsplan konnte nicht geladen werden.", code: "UPSTREAM" }, 502);
+    }
+    const friday = new Date(monday.getTime() + 4 * 86400000);
+    return {
+      monday: iso(monday),
+      week_label: `Woche ${pad(monday.getUTCDate())}.${pad(monday.getUTCMonth() + 1)}. – ${pad(friday.getUTCDate())}.${pad(friday.getUTCMonth() + 1)}.${friday.getUTCFullYear()}`,
+      days,
+    };
+  }
+
+  async agenda(claims: AuthClaims, query: Record<string, unknown>, today = new Date()) {
+    const parseRangeDate = (value: unknown, fallback: string): string => {
+      const text = typeof value === "string" && value.trim() ? value.trim() : fallback;
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(text) || Number.isNaN(Date.parse(`${text}T00:00:00Z`))) {
+        throw new BadRequestException({ error: "Das Datum muss im Format JJJJ-MM-TT angegeben werden.", code: "VALIDATION" });
+      }
+      return text;
+    };
+    const shiftIso = (days: number): string => new Date(today.getTime() + days * 86400000).toISOString().slice(0, 10);
+    const since = parseRangeDate(query.since, shiftIso(-30));
+    const until = parseRangeDate(query.until, shiftIso(60));
+    const spanDays = Math.round((Date.parse(`${until}T00:00:00Z`) - Date.parse(`${since}T00:00:00Z`)) / 86400000);
+    if (until < since || spanDays > 366) {
+      throw new BadRequestException({ error: "Der Zeitraum darf höchstens ein Jahr umfassen.", code: "VALIDATION" });
+    }
+    const force = query.refresh === "1";
+    const { client, subdomain } = await this.loginFor(claims.sub);
+    let events: TimelineEvent[];
+    let info: string;
+    try {
+      ({ events, info } = await this.timelineEvents(client, subdomain, claims.sub, since, force));
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new HttpException({ error: `Schultermine konnten nicht geladen werden: ${detail}`, code: "UPSTREAM" }, 502);
+    }
+    let items: Record<string, unknown>[];
+    try {
+      items = this.buildAgendaItems(events, since, until, today);
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new HttpException({ error: `Schultermine konnten nicht geladen werden: ${detail}`, code: "UPSTREAM" }, 502);
+    }
+    return { items, total: items.length, since, until, cache_info: info };
+  }
+
+  private buildAgendaItems(events: TimelineEvent[], since: string, until: string, today: Date): Record<string, unknown>[] {
+    const calendar = new Set(["ctevent", "bmeeting", "culture", "event", "excursion", "parentsevening", "schoolevent", "trip", "meeting", "freeday", "holiday", "sholiday", "project"]);
+    const attendance = new Set(["student_absent", "ospravedlnenka", "h_attendance", "pipnutie"]);
+    const items: Record<string, unknown>[] = [];
+    for (const event of events) {
+      const type = event.eventType ?? "";
+      const inCalendar = calendar.has(type);
+      const inAttendance = attendance.has(type);
+      const inExams = EXAM_TYPES.includes(type);
+      if (!inCalendar && !inAttendance && !inExams) continue;
+      const kind = inAttendance ? "attendance" : inExams ? "exam" : "event";
+      const item = kind === "exam" ? homeworkToDict(event, today) : eventToDict(event, today);
+      let eventDay = formatIsoLocal(event.timestamp).slice(0, 10);
+      if (kind === "exam" && typeof item.due === "string" && item.due) {
+        if (/^\d{4}-\d{2}-\d{2}$/.test(item.due) && !Number.isNaN(Date.parse(`${item.due}T00:00:00Z`))) eventDay = item.due;
+      }
+      if (eventDay < since || eventDay > until) continue;
+      item.kind = kind;
+      item.date = eventDay;
+      items.push(item);
+    }
+    const titleOf = (item: Record<string, unknown>): string => String(item.title ?? item.text ?? "").toLowerCase();
+    const isoOf = (item: Record<string, unknown>): string => String(item.timestamp_iso ?? item.assigned_iso ?? "");
+    items.sort((a, b) => {
+      const keysA = [String(a.date), isoOf(a), titleOf(a)];
+      const keysB = [String(b.date), isoOf(b), titleOf(b)];
+      for (let index = 0; index < keysA.length; index += 1) {
+        if (keysA[index] !== keysB[index]) return (keysA[index] as string) < (keysB[index] as string) ? -1 : 1;
+      }
+      return 0;
+    });
+    return items;
   }
 
   // --------------------------------------- Einstellungen + Cache (N-F)

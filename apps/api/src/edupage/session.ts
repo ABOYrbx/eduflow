@@ -150,6 +150,24 @@ export class EdupageSession {
     return { status: response.status, url: response.url, contentType: response.headers.get("content-type") ?? "", bytes: Buffer.from(await response.arrayBuffer()) };
   }
 
+  /** JSON-POST (z. B. DBI-/Viewer-Calls), Antwort als JSON. */
+  async postJson(url: string, body: unknown): Promise<{ status: number; url: string; data: unknown }> {
+    const cookie = this.jar.headerFor(url);
+    const response = await this.fetchImpl(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...(cookie ? { Cookie: cookie } : {}) },
+      body: JSON.stringify(body),
+    });
+    this.jar.setFromHeaders(url, response.headers);
+    let data: unknown = null;
+    try {
+      data = JSON.parse(await response.text()) as unknown;
+    } catch {
+      data = null;
+    }
+    return { status: response.status, url: response.url, data };
+  }
+
   postRpc(url: string, rpcparams: string): Promise<PageResponse> {
     const body = encodeRequestBody({ rpcparams });
     return this.request(url, "POST", { "Content-Type": "application/x-www-form-urlencoded" }, body);
