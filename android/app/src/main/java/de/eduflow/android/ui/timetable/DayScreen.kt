@@ -1,0 +1,434 @@
+package de.eduflow.android.ui.timetable
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronLeft
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import de.eduflow.android.data.dto.ErrorCodes
+import de.eduflow.android.data.dto.LessonDto
+import de.eduflow.android.data.dto.TimetableView
+import de.eduflow.android.ui.common.AppHeader
+import de.eduflow.android.ui.common.EduCard
+import de.eduflow.android.ui.common.ScreenHead
+import de.eduflow.android.ui.common.SectionLabel
+import de.eduflow.android.ui.common.StatusPill
+import de.eduflow.android.ui.theme.RDotBlue
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.LocalTime
+
+/**
+ * Tagesansicht (Paket D, Redesign-PNG Screen 03).
+ *
+ * Header, Titel „Stundenplan" + Datum als Untertitel, Segmented
+ * Tag/Woche, Tages-Kopf (Datum + „N STUNDEN") mit ‹ ›-Blättern,
+ * „Heute"-Zeile mit Chevron, Stunden-Zeilen: Startzeit links grau,
+ * Trennstrich, Fach fett + „Lehrer · Raum" darunter, „JETZT"-Pill an
+ * der laufenden Stunde (nur wenn der angezeigte Tag heute ist).
+ * Entfallene Stunden stehen als ausgegraute Einzeiler
+ * („08:00 · Sport entfällt"). Tag-Navi: ‹ › (±1 Tag, ±7 in der Woche)
+ * + Heute-Zeile. Logik (Tag/Woche, Paginierung gibt es keine,
+ * refresh=1) wie im Web.
+ */
+@Composable
+fun DayScreen(
+    viewModel: TimetableViewModel,
+    onReLogin: () -> Unit,
+    onOpenSettings: () -> Unit = {},
+    onLogout: () -> Unit = {},
+    modifier: Modifier = Modifier,
+) {
+    val state by viewModel.state.collectAsState()
+    val day = state.dayData
+    val isTodayShown = day != null &&
+        (day.day == day.today || day.day == LocalDate.now().toString())
+    val nowUid = if (isTodayShown && day != null) runningUid(day.lessons) else null
+
+    Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
+        AppHeader(
+            onSettings = onOpenSettings,
+            onLogout = onLogout,
+        )
+        Spacer(Modifier.height(12.dp))
+        ScreenHead(
+            title = "Stundenplan",
+            subtitle = day?.day_label ?: state.day,
+        )
+        Spacer(Modifier.height(12.dp))
+        TimetableSegmented(view = state.view, onView = viewModel::setView)
+        Spacer(Modifier.height(12.dp))
+
+        DayHeadRow(
+            label = day?.day_label ?: state.day,
+            count = if (day != null) "${day.lessons.size} Stunden" else "",
+            onPrev = { viewModel.step(-1) },
+            onNext = { viewModel.step(1) },
+            onRefresh = viewModel::refresh,
+            refreshing = state.isLoading,
+        )
+        Spacer(Modifier.height(8.dp))
+        TodayRow(onClick = viewModel::goToday)
+        if (day != null && day.cache_info.isNotBlank()) {
+            Spacer(Modifier.height(4.dp))
+            Text(
+                day.cache_info,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        Spacer(Modifier.height(4.dp))
+
+        state.error?.let { err ->
+            AuthAwareError(
+                message = "${err.message} (${err.code})",
+                needsReLogin = err.code in
+                    listOf(ErrorCodes.TOKEN_INVALID, ErrorCodes.TOKEN_EXPIRED, ErrorCodes.EDUPAGE_2FA),
+                onReLogin = onReLogin,
+                onDismiss = viewModel::dismissError,
+                modifier = Modifier.padding(bottom = 8.dp),
+            )
+        }
+
+        if (state.isLoading && day == null) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(32.dp),
+                horizontalArrangement = Arrangement.Center,
+            ) { CircularProgressIndicator() }
+        } else if (day == null) {
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Text(
+                    "Kein Stundenplan geladen.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                TextButton(onClick = viewModel::refresh) { Text("Neu laden") }
+            }
+        } else if (day.lessons.isEmpty()) {
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Text(
+                    if (isWeekend(state.day)) "Schulfrei — kein Unterricht an diesem Tag."
+                    else "Kein Unterricht an diesem Tag.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                TextButton(onClick = viewModel::refresh) { Text("Neu laden") }
+            }
+        } else {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier.weight(1f),
+            ) {
+                items(day.lessons, key = { it.period + it.time + it.title }) { lesson ->
+                    LessonCard(
+                        lesson = lesson,
+                        isNow = lessonKey(lesson) == nowUid,
+                    )
+                }
+                item { Spacer(Modifier.height(88.dp)) }
+            }
+        }
+    }
+}
+
+/** Tages-Kopf: ‹ Label + Zähler › + Aktualisieren (PNG Screen 03). */
+@Composable
+fun DayHeadRow(
+    label: String,
+    count: String,
+    onPrev: () -> Unit,
+    onNext: () -> Unit,
+    onRefresh: () -> Unit,
+    refreshing: Boolean,
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        IconButton(onClick = onPrev) {
+            Icon(Icons.Filled.ChevronLeft, contentDescription = "Zurück")
+        }
+        Column(Modifier.weight(1f)) {
+            Text(
+                label,
+                fontSize = 15.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+            if (count.isNotBlank()) SectionLabel(count)
+        }
+        IconButton(onClick = onRefresh, enabled = !refreshing) {
+            Icon(Icons.Filled.Refresh, contentDescription = "Aktualisieren")
+        }
+        IconButton(onClick = onNext) {
+            Icon(Icons.Filled.ChevronRight, contentDescription = "Weiter")
+        }
+    }
+}
+
+/** „Heute"-Zeile mit Chevron (PNG Screen 03, springt auf heute). */
+@Composable
+fun TodayRow(onClick: () -> Unit) {
+    EduCard(onClick = onClick, modifier = Modifier.fillMaxWidth()) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+        ) {
+            Text(
+                "Heute",
+                fontSize = 15.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.weight(1f),
+            )
+            Icon(
+                Icons.Filled.ChevronRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    }
+}
+
+/** Tag/Woche-Segmented (graue Pille, aktive Hälfte hell, wie im PNG). */
+@Composable
+fun TimetableSegmented(
+    view: String,
+    onView: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val scheme = MaterialTheme.colorScheme
+    Surface(
+        shape = CircleShape,
+        color = scheme.surfaceVariant,
+        modifier = modifier.fillMaxWidth(),
+    ) {
+        Row(modifier = Modifier.padding(4.dp)) {
+            SegmentHalf(
+                label = "Tag",
+                active = view == TimetableView.DAY,
+                onClick = { onView(TimetableView.DAY) },
+                modifier = Modifier.weight(1f),
+            )
+            SegmentHalf(
+                label = "Woche",
+                active = view == TimetableView.WEEK,
+                onClick = { onView(TimetableView.WEEK) },
+                modifier = Modifier.weight(1f),
+            )
+        }
+    }
+}
+
+@Composable
+private fun SegmentHalf(
+    label: String,
+    active: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val scheme = MaterialTheme.colorScheme
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier.clip(CircleShape)
+            .background(if (active) scheme.surface else scheme.surfaceVariant)
+            .clickable(onClick = onClick)
+            .padding(vertical = 8.dp),
+    ) {
+        Text(
+            label,
+            fontSize = 13.sp,
+            fontWeight = if (active) FontWeight.Bold else FontWeight.SemiBold,
+            color = if (active) scheme.onSurface else scheme.onSurfaceVariant,
+        )
+    }
+}
+
+/**
+ * Stunden-Zeile wie im PNG: Startzeit links grau, Trennstrich, Fach
+ * fett + „Lehrer · Raum"-Sub (Kennzeichen Online/Lernzeit/
+ * Veranstaltung als Suffix), „JETZT"-Pill an der laufenden Stunde.
+ * Entfall steht als ausgegrauter Einzeiler („08:00 · Sport entfällt").
+ */
+@Composable
+fun LessonCard(
+    lesson: LessonDto,
+    isNow: Boolean = false,
+    modifier: Modifier = Modifier,
+) {
+    val scheme = MaterialTheme.colorScheme
+    EduCard(modifier = modifier.fillMaxWidth()) {
+        if (lesson.is_cancelled) {
+            Text(
+                cancelledLine(lesson),
+                fontSize = 14.sp,
+                color = scheme.onSurfaceVariant,
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+            )
+        } else {
+            Row(
+                verticalAlignment = Alignment.Top,
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+            ) {
+                Text(
+                    startOf(lesson.time).ifBlank { "–" },
+                    fontSize = 13.sp,
+                    color = scheme.onSurfaceVariant,
+                    modifier = Modifier.width(52.dp).padding(top = 2.dp),
+                )
+                Box(
+                    modifier = Modifier.width(1.dp)
+                        .height(40.dp)
+                        .background(scheme.outlineVariant),
+                )
+                Spacer(Modifier.width(12.dp))
+                Column(Modifier.weight(1f)) {
+                    Text(
+                        lesson.title.ifBlank { "–" },
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = scheme.onSurface,
+                    )
+                    Spacer(Modifier.height(2.dp))
+                    val sub = lessonSub(lesson)
+                    if (sub.isNotBlank()) {
+                        Text(
+                            sub,
+                            fontSize = 13.sp,
+                            color = scheme.onSurfaceVariant,
+                        )
+                    }
+                }
+                if (isNow) {
+                    Spacer(Modifier.width(8.dp))
+                    StatusPill(text = "Jetzt", dot = RDotBlue)
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Fehler mit 401-Verhalten: abgelaufene/ungültige Sitzung (TOKEN_INVALID,
+ * TOKEN_EXPIRED, EDUPAGE_2FA) führt zurück zum Login, alle anderen Fehler
+ * sind nur verwerfbar (deutsche Kurztexte, keine Secrets).
+ * (Hier definiert, da auch Paket B es von hier importiert.)
+ */
+@Composable
+fun AuthAwareError(
+    message: String,
+    needsReLogin: Boolean,
+    onReLogin: () -> Unit,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Snackbar(
+        action = {
+            if (needsReLogin) {
+                TextButton(onClick = onReLogin) { Text("Anmelden") }
+            } else {
+                TextButton(onClick = onDismiss) { Text("OK") }
+            }
+        },
+        modifier = modifier.padding(bottom = 8.dp),
+    ) { Text(message) }
+}
+
+/** Eindeutiger Schlüssel einer Stunde (auch paketweit für die Woche). */
+internal fun lessonKey(lesson: LessonDto): String =
+    lesson.period + lesson.time + lesson.title
+
+private fun startOf(time: String): String {
+    val idx = listOf(time.indexOf('–'), time.indexOf('-')).filter { it >= 0 }.minOrNull()
+    return if (idx == null) time.trim() else time.substring(0, idx).trim()
+}
+
+private fun cancelledLine(lesson: LessonDto): String {
+    val start = startOf(lesson.time)
+    val title = lesson.title.ifBlank { "Unterricht" }
+    return if (start.isNotBlank()) "$start · $title entfällt" else "$title entfällt"
+}
+
+private fun lessonSub(lesson: LessonDto): String {
+    val meta = listOfNotNull(
+        lesson.teachers.takeIf { it.isNotBlank() },
+        lesson.rooms.takeIf { it.isNotBlank() }?.let { "Raum $it" },
+    ).joinToString(" · ")
+    val flags = buildList {
+        if (lesson.is_online) add("Online")
+        if (lesson.is_lernzeit) {
+            add(if (lesson.rowspan > 1) "Lernzeit (${lesson.rowspan} Std.)" else "Lernzeit")
+        }
+        if (lesson.is_event) add("Veranstaltung")
+    }.joinToString(" · ")
+    return listOf(meta, flags).filter { it.isNotBlank() }.joinToString(" · ")
+}
+
+/** Laufende Stunde (nicht entfallen) anhand der Uhrzeit, wie Übersicht. */
+internal fun runningUid(lessons: List<LessonDto>): String? {
+    val now = LocalTime.now().hour * 60 + LocalTime.now().minute
+    for (lesson in lessons) {
+        if (lesson.is_cancelled) continue
+        val (start, end) = rangeOf(lesson.time) ?: continue
+        if (start <= now && now <= end) return lessonKey(lesson)
+    }
+    return null
+}
+
+private fun rangeOf(time: String): Pair<Int, Int>? {
+    val sep = if ('–' in time) '–' else '-'
+    val parts = time.split(sep).map { it.trim() }
+    if (parts.size != 2) return null
+    val s = parts[0].toMinutesOrNull() ?: return null
+    val e = parts[1].toMinutesOrNull() ?: return null
+    return s to e
+}
+
+private fun String.toMinutesOrNull(): Int? {
+    val p = split(':').mapNotNull { it.toIntOrNull() }
+    if (p.size != 2) return null
+    return p[0] * 60 + p[1]
+}
+
+private fun isWeekend(dayIso: String): Boolean = try {
+    val dow = LocalDate.parse(dayIso).dayOfWeek
+    dow == DayOfWeek.SATURDAY || dow == DayOfWeek.SUNDAY
+} catch (_: Exception) {
+    false
+}

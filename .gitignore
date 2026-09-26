@@ -6,3 +6,26 @@ venv/
 .cache/
 .eduflow_secret
 .eduflow.key
+/node_modules/
+/apps/api/dist/
+/apps/api/coverage/
+/apps/web/.next/
+/apps/web/out/
+/apps/api/node_modules/
+/apps/web/node_modules/
+/packages/contracts/dist/
+/packages/contracts/node_modules/
+/apps/api/.env
+/apps/api/.env.local
+/apps/web/.env*
+/tsconfig.tsbuildinfo
+/apps/api/tsconfig.tsbuildinfo
+/apps/web/tsconfig.tsbuildinfo
+/packages/contracts/tsconfig.tsbuildinfo
+.DS_Store
+.idea/
+.freebuff/
+# Lokale Build-/IDE-Dateien (nie committen)
+android/local.properties
+xcuserdata/
+*.xcuserstate

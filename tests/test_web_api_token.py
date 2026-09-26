@@ -34,6 +34,12 @@ def _login(client):
         s["pwd_enc"] = A._fernet().encrypt(b"geheim").decode()
 
 
+def _csrf(client):
+    """CSRF-Token aus der Sitzung lesen (wird beim Rendern angelegt)."""
+    with client.session_transaction() as s:
+        return s.get("csrf_token", "")
+
+
 def main():
     A.app.config["TESTING"] = True
     client = A.app.test_client()
@@ -48,7 +54,8 @@ def main():
               and "/einstellungen/api-token" in html)
 
         r = client.post("/einstellungen/api-token",
-                        data={"device": "Testgerät"})
+                        data={"device": "Testgerät",
+                              "csrf_token": _csrf(client)})
         check("Erstellen leitet auf Einstellungen",
               r.status_code in (301, 302)
               and r.headers.get("Location", "").endswith("/einstellungen"))
@@ -81,7 +88,8 @@ def main():
             foreign["token"].encode()).hexdigest()
         try:
             r = client.post("/einstellungen/api-token/widerrufen",
-                            data={"id": foreign_hash})
+                            data={"id": foreign_hash,
+                                  "csrf_token": _csrf(client)})
             check("fremder Hash abgelehnt (Redirect)",
                   r.status_code in (301, 302))
             r = client.get("/api/v1/me", headers={
@@ -93,7 +101,7 @@ def main():
         # Eigenen Token widerrufen.
         own_hash = hashlib.sha256(token.encode()).hexdigest()
         r = client.post("/einstellungen/api-token/widerrufen",
-                        data={"id": own_hash})
+                        data={"id": own_hash, "csrf_token": _csrf(client)})
         check("Widerrufen leitet auf Einstellungen",
               r.status_code in (301, 302))
         created.remove(token)
@@ -102,7 +110,8 @@ def main():
         check("nach Widerruf 401", r.status_code == 401)
 
         # Ohne Auswahl: Fehlermeldung, kein Crash.
-        r = client.post("/einstellungen/api-token/widerrufen", data={})
+        r = client.post("/einstellungen/api-token/widerrufen",
+                        data={"csrf_token": _csrf(client)})
         check("Widerrufen ohne ID leitet weiter",
               r.status_code in (301, 302))
     finally:

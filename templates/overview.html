@@ -14,12 +14,14 @@
 <body>
 <div class="nav-wrap">
   <div class="container nav">
+    <a class="nav-logo" href="/" aria-label="EduFlow – Übersicht"><img src="{{ url_for('static', filename='icons/icon.png') }}" alt=""></a>
     <nav class="nav-mid">
       <a class="nav-pill active" href="/">Übersicht</a>
       <a class="nav-pill" href="/dashboard">Nachrichten</a>
       <a class="nav-pill" href="/hausaufgaben">Hausaufgaben</a>
       <a class="nav-pill" href="/noten">Noten</a>
       <a class="nav-pill" href="/stundenplan">Stundenplan</a>
+      <a class="nav-pill" href="/termine">Termine</a>
     </nav>
     <div class="nav-cta">
       <div class="profile-wrap">
@@ -31,7 +33,10 @@
           </div>
           <div class="pm-div"></div>
           <a class="pm-link" href="/einstellungen" role="menuitem">Einstellungen</a>
-          <a class="pm-link pm-danger" href="/logout" role="menuitem">Abmelden</a>
+          <form method="post" action="/logout" style="margin:0">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="pm-link pm-danger" role="menuitem" type="submit" style="background:none;border:0;width:100%;text-align:left;cursor:pointer;font:inherit">Abmelden</button>
+          </form>
         </div>
       </div>
     </div>
@@ -43,10 +48,6 @@
     <div class="clock-card">
       <div class="clock-time" id="clock">{{ now_time }}</div>
       <div class="clock-date">{{ now_date }}</div>
-    </div>
-    <div class="weather-card" id="weather" role="button" tabindex="0"
-         aria-label="Wetterdetails öffnen" title="Wetterdetails öffnen">
-      <div class="wx-day"><div class="wx-l">Wetter</div><div class="wx-cond">lädt…</div></div>
     </div>
     <div class="now-card now-right now-swipe" id="nowSwipe" data-start="{{ lesson_start }}">
       <div class="now-top">
@@ -90,7 +91,7 @@
     <div class="notice">{{ error }}</div>
   {% endif %}
 
-  <div class="ov-grid">
+  {% macro homework_section() %}
     <section class="ov-col anim-in" style="--d:80ms">
       <div class="ov-col-head">
         <h2>Hausaufgaben</h2>
@@ -99,8 +100,6 @@
         </div>
       </div>
       <div class="ov-bundle card">
-        <span><strong>{{ n_unread }}</strong> ungelesen</span>
-        <span class="sep">·</span>
         <span><strong>{{ n_offen }}</strong> offen</span>
         <span class="sep">·</span>
         <span><strong class="n-danger">{{ n_ueber }}</strong> überfällig</span>
@@ -123,7 +122,8 @@
         <div class="empty">Keine offenen Hausaufgaben. Sehr gut.</div>
       {% endif %}
     </section>
-
+  {% endmacro %}
+  {% macro lunch_section() %}
     <section class="ov-col anim-in" style="--d:140ms">
       <div class="ov-col-head">
         <h2>Mittagessen</h2>
@@ -146,6 +146,41 @@
         <div class="essen-src" id="essenSrc" hidden></div>
       </div>
     </section>
+  {% endmacro %}
+  {% macro messages_section() %}
+    <section class="ov-col anim-in" style="--d:80ms">
+      <div class="ov-col-head">
+        <h2>Nachrichten <span class="muted">· {{ n_unread }} ungelesen</span></h2>
+        <div class="ov-actions"><a class="btn btn-light btn-sm" href="/dashboard">Alle Nachrichten</a></div>
+      </div>
+      {% for m in unread[:5] %}
+        <article class="card overview-message">
+          <div class="meta"><strong>{{ m.author or 'Schule' }}</strong><span>{{ m.timestamp }}</span></div>
+          <div class="text">{{ m.text if m.text.strip() else m.type_label }}</div>
+        </article>
+      {% endfor %}
+      {% if not unread %}<div class="empty">Keine neuen Nachrichten.</div>{% endif %}
+    </section>
+  {% endmacro %}
+  {% macro weather_section() %}
+    {% if show_wetter|default(true) %}
+    <section class="ov-col anim-in" style="--d:60ms">
+      <div class="ov-col-head"><h2>Wetter</h2></div>
+      <div class="weather-card" id="weather" role="button" tabindex="0"
+           aria-label="Wetterdetails öffnen" title="Wetterdetails öffnen">
+        <div class="wx-loading"><span class="wx-loading-mark" aria-hidden="true">☼</span><span><span class="wx-l">Wetter</span><span class="wx-cond">Wetterdaten werden geladen …</span></span></div>
+      </div>
+    </section>
+    {% endif %}
+  {% endmacro %}
+  <div class="ov-grid">
+    {% for section in overview_order.split(',') %}
+      {% if section == 'messages' %}{{ messages_section() }}
+      {% elif section == 'homework' %}{{ homework_section() }}
+      {% elif section == 'weather' %}{{ weather_section() }}
+      {% elif section == 'lunch' %}{{ lunch_section() }}
+      {% endif %}
+    {% endfor %}
   </div>
 
   <footer><p>EduFlow Dashboard · lokal{% if cache_info %} · {{ cache_info }}{% endif %}</p></footer>
@@ -264,30 +299,36 @@
   }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
   function dayHtml(label, big, cond, icon, sub, pop) {
-    return '<div class="wx-day"><div class="wx-l">' + label + '</div>' +
+    return '<div class="wx-day' + (label === 'Heute' ? ' wx-day-today' : '') + '"><div class="wx-l">' + label + '</div>' +
       (icon ? '<img class="wx-img" src="' + iconUrl(icon) + '" alt="' + esc(cond) + '" loading="lazy">' : '') +
       '<div class="wx-temp">' + big + '</div>' +
-      '<div class="wx-cond">' + esc(cond) + sub + '</div>' +
-      '<div class="wx-pop">☂ ' + (pop != null ? pop + ' %' : '–') + '</div></div>';
+      '<div class="wx-cond">' + esc(cond || 'Wetter') + '</div>' +
+      '<div class="wx-range">' + (sub ? esc(sub.replace(/^ · /, '')) : '&nbsp;') + '</div>' +
+      '<div class="wx-pop"><span aria-hidden="true">☂</span> ' + (pop != null ? pop + ' % Regen' : '–') + '</div></div>';
+  }
+  function hiLow(max, min) {
+    return max != null && min != null ? ' · H ' + max + '° / T ' + min + '°' : '';
   }
   function render(d) {
     try {
       wxData = d;
       var t = d.today, m = d.tomorrow || {}, o = d.day3 || {};
-      el.innerHTML =
-        dayHtml('Heute', t.temp + '°', t.desc,
-          t.icon, ' · ' + t.max + '°/' + t.min + '°', t.pop) +
+      el.innerHTML = '<div class="wx-summary"><div class="wx-summary-title">Wetter</div><div class="wx-summary-city">' + esc(d.city || 'Dein Standort') + '</div></div>' +
+        '<div class="wx-forecast">' +
+        dayHtml('Heute', (t.temp != null ? t.temp + '°' : '–'), t.desc,
+          t.icon, hiLow(t.max, t.min), t.pop) +
         dayHtml('Morgen', (m.max != null ? m.max + '°' : '–'), m.desc || '',
-          m.icon, (m.max != null ? ' · ' + m.max + '°/' + m.min + '°' : ''), m.pop) +
+          m.icon, hiLow(m.max, m.min), m.pop) +
         dayHtml(o.label || 'Übermorgen', (o.max != null ? o.max + '°' : '–'), o.desc || '',
-          o.icon, (o.max != null ? ' · ' + o.max + '°/' + o.min + '°' : ''), o.pop);
+          o.icon, hiLow(o.max, o.min), o.pop) + '</div>';
       if (wxOpen) renderWxModal();
     } catch (e) {
       el.innerHTML = '<div class="wx-day"><div class="wx-l">Wetter</div><div class="wx-cond">nicht verfügbar</div></div>';
     }
   }
   function fail(msg) {
-    el.innerHTML = '<div class="wx-day"><div class="wx-l">Wetter</div><div class="wx-cond">' + esc(msg) + '</div></div>';
+    el.innerHTML = '<div class="wx-summary"><div class="wx-summary-title">Wetter</div><div class="wx-summary-city">Vorhersage</div></div>' +
+      '<div class="wx-unavailable"><span class="wx-unavailable-mark" aria-hidden="true">☁</span><span><strong>Gerade nicht verfügbar</strong><small>' + esc(msg) + '</small></span></div>';
   }
   function load(lat, lon) {
     fetch('/api/wetter?lat=' + lat + '&lon=' + lon)
@@ -397,6 +438,8 @@
       load(52.52, 13.41);
     }
   }
+  // Ausgeblendete Karte (Einstellung ov_wetter): nichts laden.
+  if (!el) return;
   locate();
 })();
 </script>

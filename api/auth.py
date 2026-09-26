@@ -47,12 +47,24 @@ LOGIN_RATE_LIMIT_WINDOW_S = int(
 _LOGIN_ATTEMPTS: dict = {}
 
 
+# Proxy-Header fürs Rate-Limit nur honorieren, wenn explizit aktiviert:
+# Sonst umgeht jeder das Limit per gefälschtem X-Forwarded-For und kann
+# unbegrenzt Zugangsdaten durchprobieren. Standard: direkte Client-IP.
+# Nur hinter einem vertrauenswürdigen Reverse-Proxy EDUFLOW_TRUST_PROXY=1
+# setzen (dann muss der Proxy den Header selbst setzen/bereinigen).
+TRUST_PROXY = os.environ.get(
+    "EDUFLOW_TRUST_PROXY", "0").strip().lower() in (
+        "1", "true", "yes", "on")
+
+
 def _client_ip() -> str:
-    """Client-IP fürs Rate-Limit (Proxy-Header nur falls gesetzt)."""
+    """Client-IP fürs Rate-Limit (Proxy-Header nur falls aktiviert)."""
     try:
-        fwd = (request.headers.get("X-Forwarded-For") or "").split(",")[0].strip()
-        if fwd:
-            return fwd[:64]
+        if TRUST_PROXY:
+            fwd = (request.headers.get("X-Forwarded-For") or "")
+            fwd = fwd.split(",")[0].strip()
+            if fwd:
+                return fwd[:64]
         return (request.remote_addr or "unknown")[:64]
     except Exception:
         return "unknown"
@@ -202,11 +214,28 @@ def api_refresh():
     """Token rotieren: neues Token, altes widerrufen (Sliding bleibt 30 Tage).
 
     Nimmt Subdomain/Benutzername/Passwort aus dem validierten Token
-    (g.api_*), stellt ein neues mit gleichem Gerätenamen aus und
-    widerruft danach das alte. Abgelaufene Tokens kommen hier nicht an
+    (g.api_*), prüft sie per EduPage-Re-Login nach und stellt erst dann
+    ein neues Token mit gleichem Gerätenamen aus; danach wird das alte
+    widerrufen. Abgelaufene Tokens kommen hier nicht an
     (token_required lehnt sie vorher mit TOKEN_EXPIRED ab).
+
+    Die Nachprüfung ist Absicht: Ohne sie ließe sich ein gestohlenes
+    Token per Refresh unbegrenzt am Leben halten – auch nach einer
+    Passwortänderung auf EduPage.
     """
-    from api.core import verify_token
+    from api.core import edupage_login_error, verify_token
+    from app import do_login
+
+    try:
+        _edupage, two_factor, _real = do_login(
+            g.api_username, g.api_password, g.api_subdomain)
+    except (BadCredentialsException, CaptchaException, Exception) as e:
+        message, code, status = edupage_login_error(e)
+        return api_error(message, code, status)
+    if two_factor is not None:
+        return api_error("Sitzung erfordert erneut 2FA. "
+                         "Bitte erneut über /auth/login anmelden.",
+                         "EDUPAGE_2FA", 401)
 
     old = _bearer_token()
     creds = verify_token(old)

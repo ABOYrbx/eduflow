@@ -14,12 +14,14 @@
 <body>
 <div class="nav-wrap">
   <div class="container nav">
+    <a class="nav-logo" href="/" aria-label="EduFlow – Übersicht"><img src="{{ url_for('static', filename='icons/icon.png') }}" alt=""></a>
     <nav class="nav-mid">
       <a class="nav-pill" href="/">Übersicht</a>
       <a class="nav-pill" href="/dashboard">Nachrichten</a>
       <a class="nav-pill" href="/hausaufgaben">Hausaufgaben</a>
       <a class="nav-pill" href="/noten">Noten</a>
       <a class="nav-pill" href="/stundenplan">Stundenplan</a>
+      <a class="nav-pill" href="/termine">Termine</a>
     </nav>
     <div class="nav-cta">
       <div class="profile-wrap">
@@ -31,7 +33,10 @@
           </div>
           <div class="pm-div"></div>
           <a class="pm-link" href="/einstellungen" role="menuitem">Einstellungen</a>
-          <a class="pm-link pm-danger" href="/logout" role="menuitem">Abmelden</a>
+          <form method="post" action="/logout" style="margin:0">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="pm-link pm-danger" role="menuitem" type="submit" style="background:none;border:0;width:100%;text-align:left;cursor:pointer;font:inherit">Abmelden</button>
+          </form>
         </div>
       </div>
     </div>
@@ -89,6 +94,7 @@
     <h2 id="set-general" class="set-title">Allgemein</h2>
     <p class="set-note">Gilt für deinen Account auf allen Geräten.</p>
     <form method="post" action="/einstellungen" style="display:flex;flex-direction:column;gap:14px">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       {% set ns = namespace(section=None) %}
       {% for f in schema %}
         {% if f.section and f.section != ns.section %}
@@ -107,11 +113,49 @@
             </div>
           </div>
         {% elif f.kind == 'bool' %}
-          <label class="check"><input type="checkbox" name="{{ f.key }}" value="1" {% if values.get(f.key) %}checked{% endif %}> {{ f.label }}</label>
+          {% if f.key == 'ov_wetter' %}
+            <label class="setting-switch" for="set-{{ f.key }}">
+              <span class="setting-switch-copy">
+                <span class="setting-switch-title">{{ f.label }}</span>
+                <span class="setting-switch-hint">{{ f.hint }}</span>
+              </span>
+              <input class="setting-switch-input" type="checkbox" id="set-{{ f.key }}" name="{{ f.key }}" value="1" {% if values.get(f.key) %}checked{% endif %}>
+              <span class="setting-switch-track" aria-hidden="true"><span></span></span>
+            </label>
+          {% else %}
+            <label class="check"><input type="checkbox" name="{{ f.key }}" value="1" {% if values.get(f.key) %}checked{% endif %}> {{ f.label }}</label>
+          {% endif %}
         {% elif f.kind == 'int' %}
           <div class="field">
             <label for="set-{{ f.key }}">{{ f.label }}</label>
             <input class="input-pill" type="number" id="set-{{ f.key }}" name="{{ f.key }}" value="{{ values.get(f.key) }}" min="{{ f.min }}" max="{{ f.max }}" step="1">
+            {% if f.hint %}<div class="field-hint">{{ f.hint }}</div>{% endif %}
+          </div>
+        {% elif f.kind == 'order' %}
+          <div class="field">
+            <label>{{ f.label }}</label>
+            <input type="hidden" id="set-{{ f.key }}" name="{{ f.key }}" value="{{ values.get(f.key, f.default) }}">
+            <div class="overview-order-editor" id="overview-order-editor">
+              {% set order_labels = {'messages': 'Nachrichten', 'homework': 'Hausaufgaben', 'weather': 'Wetter', 'lunch': 'Mittagessen'} %}
+              {% for key in values.get(f.key, f.default).split(',') %}
+                <div class="overview-order-row" data-order-key="{{ key }}">
+                  <span>{{ order_labels.get(key, key) }}</span>
+                  <span class="overview-order-actions">
+                    <button class="btn btn-light btn-sm" type="button" data-order-move="-1" aria-label="{{ order_labels.get(key, key) }} nach oben">↑</button>
+                    <button class="btn btn-light btn-sm" type="button" data-order-move="1" aria-label="{{ order_labels.get(key, key) }} nach unten">↓</button>
+                  </span>
+                </div>
+              {% endfor %}
+            </div>
+            <div class="field-hint">Mit den Pfeilen ordnest du die Bereiche auf der Übersicht.</div>
+          </div>
+        {% elif f.kind == 'text' and f.key == 'wetter_city' %}
+          <div class="field">
+            <label for="set-{{ f.key }}">{{ f.label }}</label>
+            <div class="weather-city-search">
+              <input class="input-pill" type="text" id="set-{{ f.key }}" name="{{ f.key }}" value="{{ values.get(f.key) }}" maxlength="{{ f.maxlength or 100 }}" placeholder="{{ f.placeholder or 'Stadt eingeben' }}" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="weather-city-options">
+              <div class="weather-city-options" id="weather-city-options" role="listbox" hidden></div>
+            </div>
             {% if f.hint %}<div class="field-hint">{{ f.hint }}</div>{% endif %}
           </div>
         {% elif f.kind == 'text' %}
@@ -132,6 +176,27 @@
     </form>
   </section>
 
+  <script>
+  (function () {
+    var editor = document.getElementById('overview-order-editor');
+    var input = document.getElementById('set-ov_order');
+    if (!editor || !input) return;
+    editor.addEventListener('click', function (event) {
+      var button = event.target.closest('[data-order-move]');
+      if (!button) return;
+      var row = button.closest('[data-order-key]');
+      var rows = Array.from(editor.querySelectorAll('[data-order-key]'));
+      var index = rows.indexOf(row);
+      var target = index + Number(button.dataset.orderMove);
+      if (target < 0 || target >= rows.length) return;
+      if (target < index) editor.insertBefore(row, rows[target]);
+      else editor.insertBefore(rows[target], row);
+      input.value = Array.from(editor.querySelectorAll('[data-order-key]'))
+        .map(function (item) { return item.dataset.orderKey; }).join(',');
+    });
+  })();
+  </script>
+
   <section class="card anim-in" style="--d:180ms" aria-labelledby="set-api">
     <h2 id="set-api" class="set-title">API-Token</h2>
     <p class="set-note">Token für die Android-App (<code>/api/v1</code>, 30 Tage gültig). Trage es dort als <code>Authorization: Bearer &lt;Token&gt;</code> ein.</p>
@@ -144,6 +209,7 @@
     <p class="set-note">Gerät: {{ new_api_token.device }} · gültig bis {{ new_api_token.expires }}</p>
     {% endif %}
     <form method="post" action="/einstellungen/api-token" style="display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-bottom:14px">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <div class="field">
         <label for="api-device">Gerätename (optional)</label>
         <input class="input-pill" type="text" id="api-device" name="device" placeholder="z. B. Pixel 8" maxlength="80" autocomplete="off">
@@ -158,6 +224,7 @@
         <span>{{ t.device or 'Ohne Name' }} <span class="tag tag-muted">{{ t.short }}</span></span>
         <span class="tag tag-soft">bis {{ t.expires }}</span>
         <form method="post" action="/einstellungen/api-token/widerrufen" style="margin:0" onsubmit="return confirm('Diesen API-Token wirklich widerrufen?')">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
           <input type="hidden" name="id" value="{{ t.id }}">
           <button class="btn btn-light btn-sm" type="submit">Widerrufen</button>
         </form>
@@ -172,7 +239,10 @@
   <section class="card anim-in" style="--d:220ms" aria-labelledby="set-data">
     <h2 id="set-data" class="set-title">Daten</h2>
     <p class="set-note">Der lokale API-Cache beschleunigt das Laden. Leeren lädt alles einmalig frisch – deine Einstellungen bleiben erhalten.</p>
-    <div><a class="btn btn-light" href="/cache-clear">Cache jetzt leeren</a></div>
+    <div><form method="post" action="/cache-clear" style="margin:0">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <button class="btn btn-light" type="submit">Cache jetzt leeren</button>
+    </form></div>
   </section>
 
   <footer><p>EduFlow Dashboard · lokal</p></footer>
@@ -222,6 +292,119 @@
   } else {
     syncThemeRadios();
   }
+})();
+
+// Live-Ortssuche. Der ausgewählte Suchwert wird mit den übrigen
+// Account-Einstellungen gespeichert und ist dadurch auf allen Geräten verfügbar.
+(function () {
+  var input = document.getElementById('set-wetter_city');
+  var options = document.getElementById('weather-city-options');
+  if (!input || !options) return;
+  var timer = null, requestId = 0;
+
+  function closeOptions() {
+    window.clearTimeout(timer);
+    requestId += 1;
+    options.hidden = true;
+    input.setAttribute('aria-expanded', 'false');
+  }
+  function showMessage(message) {
+    options.replaceChildren();
+    var status = document.createElement('div');
+    status.className = 'weather-city-status';
+    status.setAttribute('role', 'status');
+    status.textContent = message;
+    options.appendChild(status);
+    options.hidden = false;
+    input.setAttribute('aria-expanded', 'true');
+  }
+  function choose(item) {
+    input.value = item.query || item.label || item.name || '';
+    closeOptions();
+    input.focus();
+  }
+  function render(items) {
+    options.replaceChildren();
+    if (!items.length) {
+      showMessage('Keine passenden Orte gefunden.');
+      return;
+    }
+    items.forEach(function (item) {
+      var button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'weather-city-option';
+      button.setAttribute('role', 'option');
+      var title = document.createElement('span');
+      title.className = 'weather-city-option-title';
+      title.textContent = item.name || item.label || '';
+      button.appendChild(title);
+      var detailText = [item.state, item.country].filter(Boolean).join(', ');
+      if (detailText) {
+        var detail = document.createElement('span');
+        detail.className = 'weather-city-option-detail';
+        detail.textContent = detailText;
+        button.appendChild(detail);
+      }
+      button.addEventListener('click', function () { choose(item); });
+      options.appendChild(button);
+    });
+    options.hidden = false;
+    input.setAttribute('aria-expanded', 'true');
+  }
+  input.addEventListener('input', function () {
+    window.clearTimeout(timer);
+    var query = input.value.trim();
+    requestId += 1;
+    var currentRequest = requestId;
+    if (query.length < 2) {
+      closeOptions();
+      return;
+    }
+    showMessage('Städte werden gesucht …');
+    timer = window.setTimeout(function () {
+      fetch('/api/wetter/suche?q=' + encodeURIComponent(query))
+        .then(function (response) { return response.json(); })
+        .then(function (result) {
+          if (currentRequest !== requestId) return;
+          if (result.error) {
+            showMessage(result.error);
+            return;
+          }
+          render(result.items || []);
+        })
+        .catch(function () {
+          if (currentRequest === requestId) showMessage('Stadtsuche gerade nicht verfügbar.');
+        });
+    }, 280);
+  });
+  input.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') closeOptions();
+    if (event.key === 'Enter' && !options.hidden) {
+      var first = options.querySelector('[role="option"]');
+      if (first) {
+        event.preventDefault();
+        first.click();
+      }
+    }
+  });
+  options.addEventListener('keydown', function (event) {
+    var buttons = Array.prototype.slice.call(options.querySelectorAll('[role="option"]'));
+    var index = buttons.indexOf(document.activeElement);
+    if (event.key === 'ArrowDown' && buttons.length) {
+      event.preventDefault();
+      buttons[Math.min(index + 1, buttons.length - 1)].focus();
+    } else if (event.key === 'ArrowUp' && buttons.length) {
+      event.preventDefault();
+      if (index <= 0) input.focus();
+      else buttons[index - 1].focus();
+    } else if (event.key === 'Escape') {
+      closeOptions();
+      input.focus();
+    }
+  });
+  document.addEventListener('click', function (event) {
+    if (!event.target.closest('.weather-city-search')) closeOptions();
+  });
 })();
 </script>
 </body>

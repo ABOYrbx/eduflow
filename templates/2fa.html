@@ -23,6 +23,7 @@
       {% endfor %}
     {% endwith %}
     <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <label for="code">Code</label>
       <input class="input-pill" id="code" name="code" placeholder="2FA-Code" required autocomplete="one-time-code">
       <button class="btn btn-primary" type="submit">Bestätigen</button>

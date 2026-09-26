@@ -1,0 +1,320 @@
+package de.eduflow.android.ui.auth
+
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import de.eduflow.android.R
+import de.eduflow.android.data.defaultDeviceName
+import de.eduflow.android.data.TokenStore
+import de.eduflow.android.ui.common.PrimaryButton
+import de.eduflow.android.ui.theme.LocalReducedMotion
+import kotlinx.coroutines.launch
+
+/** Fünfstufige Anmeldung wie auf dem Mac: Schule, Benutzername, Passwort, Gerät, Server. */
+@Composable
+fun LoginScreen(
+    vm: AuthViewModel,
+    baseUrl: String,
+    onBaseUrlChange: suspend (String) -> Unit,
+    onTwoFa: (pending: String) -> Unit,
+    onStartDemo: suspend () -> Unit,
+    onStopDemo: suspend () -> Unit,
+    isDemo: Boolean = false,
+    showServerStep: Boolean = true,
+) {
+    var subdomain by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var device by remember { mutableStateOf(defaultDeviceName()) }
+    var server by remember(baseUrl) { mutableStateOf(baseUrl) }
+    var step by remember { mutableIntStateOf(0) }
+    var showServerConfirm by remember { mutableStateOf(false) }
+    val state by vm.login.collectAsState()
+    val reducedMotion = LocalReducedMotion.current
+    val scope = rememberCoroutineScope()
+    val scheme = MaterialTheme.colorScheme
+
+    LaunchedEffect(state) {
+        when (val result = state) {
+            is LoginUiState.TwoFa -> {
+                onTwoFa(result.pendingToken)
+                vm.consumeTwoFaState()
+            }
+            else -> Unit
+        }
+    }
+
+    val loading = state is LoginUiState.Loading
+    val loginError = state as? LoginUiState.Error
+    val stepCount = if (showServerStep) 5 else 4
+    val lastStep = stepCount - 1
+
+    Column(
+        modifier = Modifier.fillMaxSize().padding(horizontal = 32.dp, vertical = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Column(
+            modifier = Modifier.weight(1f).fillMaxWidth().verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Spacer(Modifier.height(12.dp))
+            Image(
+                painter = painterResource(R.drawable.logo),
+                contentDescription = "EduFlow",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.size(96.dp).clip(androidx.compose.foundation.shape.RoundedCornerShape(22.dp))
+                    .shadow(12.dp, androidx.compose.foundation.shape.RoundedCornerShape(22.dp)),
+            )
+            Text("EduFlow", fontSize = 28.sp, fontWeight = FontWeight.Black, letterSpacing = (-0.8).sp, color = scheme.onBackground, modifier = Modifier.padding(top = 20.dp))
+            if (isDemo) {
+                Text(
+                    "Demo-Modus · nur synthetische Beispieldaten",
+                    fontSize = 12.sp,
+                    color = scheme.primary,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(top = 8.dp),
+                )
+            }
+
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 14.dp)) {
+                repeat(stepCount) { index ->
+                    val dotWidth by animateDpAsState(
+                        targetValue = if (index == step) 24.dp else 8.dp,
+                        animationSpec = tween(if (reducedMotion) 1 else 200),
+                        label = "login-step-$index",
+                    )
+                    Surface(
+                        shape = CircleShape,
+                        color = if (index <= step) scheme.primary else scheme.outlineVariant,
+                        modifier = Modifier.size(width = dotWidth, height = 8.dp),
+                    ) {}
+                }
+            }
+            Text("Schritt ${step + 1} von $stepCount", fontSize = 12.sp, color = scheme.onSurfaceVariant, modifier = Modifier.padding(top = 6.dp, bottom = 16.dp))
+            loginError?.let {
+                Text(it.message, color = scheme.error, textAlign = TextAlign.Center, modifier = Modifier.padding(bottom = 10.dp))
+            }
+
+            AnimatedContent(
+                targetState = step,
+                transitionSpec = {
+                    val direction = if (targetState > initialState) 1 else -1
+                    (if (reducedMotion) EnterTransition.None else
+                        slideInHorizontally(tween(250, easing = FastOutSlowInEasing)) { it * direction } + fadeIn(tween(180))) togetherWith
+                        (if (reducedMotion) ExitTransition.None else
+                            slideOutHorizontally(tween(250, easing = FastOutSlowInEasing)) { -it * direction } + fadeOut(tween(180)))
+                },
+                label = "login-step",
+            ) { page ->
+                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+                    when (page) {
+                        0 -> {
+                            StepHint("Zu welcher Schule gehörst du?")
+                            LoginField("Subdomain (optional)", subdomain, { subdomain = it }, "z. B. musterschule", KeyboardType.Uri)
+                        }
+                        1 -> {
+                            StepHint("Wie heißt du bei EduPage?")
+                            LoginField("Benutzername", username, { username = it; vm.consumeLoginError() }, "z. B. max.muster", KeyboardType.Text)
+                        }
+                        2 -> {
+                            StepHint("Und dein Passwort?")
+                            LoginField("Passwort", password, { password = it; vm.consumeLoginError() }, "Passwort eingeben", KeyboardType.Password, password = true)
+                        }
+                        3 -> {
+                            StepHint("Welches Gerät meldest du an?")
+                            LoginField("Gerätename", device, { device = it }, "z. B. Pixel 9 Pro", KeyboardType.Text)
+                        }
+                        else -> {
+                            StepHint("Wo läuft dein Server?")
+                            LoginField("Server-URL", server, { server = it; showServerConfirm = false }, TokenStore.DEFAULT_BASE_URL, KeyboardType.Uri)
+                            TextButton(onClick = {
+                                scope.launch {
+                                    onBaseUrlChange(server.trim().trimEnd('/'))
+                                    showServerConfirm = true
+                                }
+                            }) {
+                                Text(if (showServerConfirm) "Übernommen" else "Übernehmen")
+                            }
+                            Text("Server: ${server.ifBlank { TokenStore.DEFAULT_BASE_URL }}", fontSize = 12.sp, color = scheme.onSurfaceVariant, textAlign = TextAlign.Center)
+                        }
+                    }
+                }
+            }
+
+            if (loading) {
+                CircularProgressIndicator(modifier = Modifier.padding(top = 12.dp))
+            }
+            if (step == lastStep) {
+                Text(
+                    "Lokales Werkzeug — Zugangsdaten bleiben auf diesem Gerät.",
+                    fontSize = 12.sp,
+                    color = scheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(top = 18.dp, bottom = 16.dp),
+                )
+            }
+            Spacer(Modifier.height(16.dp))
+        }
+
+        if (step < lastStep) {
+            if (step > 0) {
+                TextButton(
+                    onClick = { step = (step - 1).coerceAtLeast(0); vm.consumeLoginError() },
+                    modifier = Modifier.align(Alignment.Start),
+                ) {
+                    Text("Zurück", fontWeight = FontWeight.Bold, color = scheme.onSurfaceVariant)
+                }
+            }
+            PrimaryButton(
+                text = "Weiter",
+                    onClick = { step += 1; vm.consumeLoginError() },
+                    enabled = canAdvance(step, username, password),
+            )
+        } else {
+            if (step > 0) {
+                TextButton(
+                    onClick = { step = (step - 1).coerceAtLeast(0); vm.consumeLoginError() },
+                    modifier = Modifier.align(Alignment.Start),
+                ) { Text("Zurück", fontWeight = FontWeight.Bold, color = scheme.onSurfaceVariant) }
+            }
+            PrimaryButton(
+                text = if (loading) "Anmelden …" else "Anmelden",
+                onClick = {
+                    scope.launch {
+                        if (showServerStep) {
+                            onBaseUrlChange(server.trim().trimEnd('/').ifBlank { TokenStore.DEFAULT_BASE_URL.trimEnd('/') })
+                        }
+                        vm.login(username, password, subdomain, device)
+                    }
+                },
+                enabled = !loading,
+            )
+        }
+        if (isDemo) {
+            TextButton(
+                onClick = { scope.launch { onStopDemo(); vm.consumeLoginError() } },
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            ) {
+                Text("Demo verlassen", color = scheme.onSurfaceVariant)
+            }
+        } else {
+            TextButton(
+                onClick = {
+                    scope.launch {
+                        onStartDemo()
+                        subdomain = "demo"
+                        username = "demo"
+                        password = "demo"
+                        step = lastStep
+                    }
+                },
+                enabled = !loading,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+            ) {
+                Text("Demo ansehen", color = scheme.onSurfaceVariant)
+            }
+        }
+    }
+}
+
+private fun canAdvance(step: Int, username: String, password: String): Boolean = when (step) {
+    1 -> username.isNotBlank()
+    2 -> password.isNotEmpty()
+    else -> true
+}
+
+@Composable
+private fun StepHint(text: String) {
+    Text(
+        text,
+        fontSize = 14.sp,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp),
+    )
+}
+
+@Composable
+private fun LoginField(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholder: String,
+    keyboardType: KeyboardType,
+    password: Boolean = false,
+) {
+    val scheme = MaterialTheme.colorScheme
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier.fillMaxWidth()) {
+        Text(label, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = scheme.onSurface)
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            placeholder = { Text(placeholder) },
+            singleLine = true,
+            shape = CircleShape,
+            visualTransformation = if (password) PasswordVisualTransformation() else VisualTransformation.None,
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+            textStyle = MaterialTheme.typography.bodyMedium,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = scheme.surface,
+                unfocusedContainerColor = scheme.surface,
+                unfocusedBorderColor = scheme.outlineVariant,
+                focusedBorderColor = scheme.primary,
+                cursorColor = scheme.primary,
+            ),
+            modifier = Modifier.fillMaxWidth(),
+        )
+    }
+}

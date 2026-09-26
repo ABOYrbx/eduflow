@@ -1,0 +1,274 @@
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from "@nestjs/common";
+import { createHash, randomBytes } from "node:crypto";
+import { Prisma } from "@prisma/client";
+import { PrismaService } from "../prisma/prisma.service";
+import { AuthClaims } from "../auth/auth.service";
+import { demoGrades, demoHomework, demoLessons, demoMessages, demoRecipients } from "../testing/demo-data";
+
+const messageTypes = ["sprava", "news", "anketa", "chat", "genotif"];
+const homeworkTypes = ["homework", "bexam", "sexam", "oexam", "pexam", "rexam", "testing", "etesthw", "testpridelenie"];
+export interface SettingSpec { key: string; kind: string; label: string; options?: [string, string][]; default: unknown; min?: number; max?: number; section?: string; placeholder?: string; maxlength?: number; }
+const settingsSchema: SettingSpec[] = [
+  { key: "landing", kind: "select", label: "Startseite nach Anmeldung", options: [["uebersicht", "Übersicht"], ["dashboard", "Nachrichten"], ["hausaufgaben", "Hausaufgaben"], ["noten", "Noten"], ["stundenplan", "Stundenplan"]], default: "uebersicht" },
+  { key: "hw_status", kind: "select", label: "Hausaufgaben: Standardfilter", options: [["alle", "Alle"], ["offen", "Nur offene"], ["überfällig", "Nur überfällige"], ["erledigt", "Nur erledigte"], ["papierkorb", "Papierkorb"]], default: "alle" },
+  { key: "hw_tests", kind: "bool", label: "Hausaufgaben: Tests und Prüfungen standardmäßig einbeziehen", default: false },
+  { key: "ov_unread", kind: "int", label: "Übersicht: max. ungelesene Nachrichten", min: 1, max: 50, default: 10 },
+  { key: "ov_homework", kind: "int", label: "Übersicht: max. offene Hausaufgaben", min: 1, max: 50, default: 10 },
+  { key: "ov_order", kind: "order", section: "Übersicht", label: "Reihenfolge der Übersicht", default: "messages,homework,weather,lunch" },
+  { key: "ov_wetter", kind: "bool", section: "Wetter", label: "Wetterkarte auf der Übersicht anzeigen", default: true },
+  { key: "wetter_city", kind: "text", section: "Wetter", label: "Wetter: Stadt", placeholder: "z. B. Berlin", maxlength: 100, default: "" },
+];
+const defaults: Record<string, unknown> = Object.fromEntries(settingsSchema.map((item) => [item.key, item.default]));
+const hash = (text: string) => createHash("sha256").update(text).digest("hex");
+const norm = (text: unknown) => typeof text === "string" ? text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("de-DE") : "";
+const dateOnly = (value: string | Date) => new Date(value).toISOString().slice(0, 10);
+const germanDays = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+const germanMonths = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+const parseDate = (input: unknown, fallback: Date): Date => {
+  if (input === undefined || input === "") return fallback;
+  if (typeof input !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(input) || Number.isNaN(Date.parse(`${input}T00:00:00Z`))) throw new BadRequestException({ error: "Datum muss im Format JJJJ-MM-TT sein.", code: "VALIDATION" });
+  const value = new Date(`${input}T00:00:00Z`);
+  if (value.toISOString().slice(0, 10) !== input) throw new BadRequestException({ error: "Datum muss im Format JJJJ-MM-TT sein.", code: "VALIDATION" });
+  return value;
+};
+
+@Injectable()
+export class DemoSchoolService {
+  private sentMessages = [...demoMessages];
+  private readonly downloads = new Map<string, { accountId: string; id: number; idx: number; expires: number }>();
+
+  constructor(private readonly prisma: PrismaService) {}
+
+  assertEnabled(): void {
+    if (process.env.EDUFLOW_PROVIDER !== "fake") throw new ForbiddenException({ error: "Der EduPage-Anbieter ist noch nicht eingerichtet.", code: "CONFIG_MISSING" });
+  }
+
+  private validatePage(query: Record<string, unknown>) {
+    const integer = (key: string, fallback: number, min: number, max: number) => {
+      const raw = query[key]; if (raw === undefined || raw === "") return fallback;
+      const n = Number(raw); if (!Number.isInteger(n) || n < min || n > max) throw new BadRequestException({ error: "Ungültige Paginierung.", code: "VALIDATION" });
+      return n;
+    };
+    return { limit: integer("limit", 50, 1, 200), offset: integer("offset", 0, 0, Number.MAX_SAFE_INTEGER) };
+  }
+
+  private page<T>(items: T[], query: Record<string, unknown>) {
+    const { limit, offset } = this.validatePage(query);
+    return { items: items.slice(offset, offset + limit), total: items.length, limit, offset };
+  }
+
+  private async allState(accountId: string, resource: string, stateKey: string) {
+    const rows = await this.prisma.localResourceState.findMany({ where: { accountId, resource, stateKey } });
+    return new Map(rows.map((row) => [row.resourceId, row.value]));
+  }
+
+  private async writeState(accountId: string, resource: string, resourceId: string, stateKey: string, value: unknown) {
+    const where = { accountId_resource_resourceId_stateKey: { accountId, resource, resourceId, stateKey } };
+    await this.prisma.localResourceState.upsert({ where, create: { accountId, resource, resourceId, stateKey, value: value as Prisma.InputJsonValue }, update: { value: value as Prisma.InputJsonValue } });
+  }
+
+  async messages(claims: AuthClaims, query: Record<string, unknown>) {
+    this.assertEnabled();
+    const since = parseDate(query.since, new Date("2000-01-01T00:00:00Z"));
+    const type = typeof query.type === "string" ? query.type : "";
+    if (type && !messageTypes.includes(type)) throw new BadRequestException({ error: "Unbekannter Nachrichtentyp.", code: "VALIDATION" });
+    const words = norm(typeof query.q === "string" ? query.q.slice(0, 200) : "").split(/\s+/).filter(Boolean);
+    const items = this.sentMessages.filter((message) => {
+      if (!messageTypes.includes(message.type) || message.additional_data.textReply) return false;
+      if (type && message.type !== type) return false;
+      if (new Date(message.timestamp_iso) < since) return false;
+      const haystack = norm([message.author, message.recipient, message.text, message.type_label].join(" "));
+      return words.every((word) => haystack.includes(word));
+    }).sort((a, b) => b.sort_key.localeCompare(a.sort_key));
+    return this.page(items, query);
+  }
+
+  async thread(claims: AuthClaims, id: number) {
+    this.assertEnabled();
+    const root = this.sentMessages.find((item) => item.id === id);
+    if (!root) throw new NotFoundException({ error: "Nachricht nicht gefunden.", code: "NOT_FOUND" });
+    const reply = this.sentMessages.find((item) => item.additional_data.textReply === String(id));
+    return { likes: [{ name: "Lea Beispiel", date: "25.09.2026 14:12" }], replies: reply ? [{ name: reply.author, date: reply.timestamp, text: reply.text }] : [], reply_ids: reply ? [String(reply.id)] : [], summary: { total: 1 + Number(Boolean(reply)), likes: 1, replies: Number(Boolean(reply)), seen: 1 }, cached: true };
+  }
+
+  async markMessagesRead(claims: AuthClaims) {
+    this.assertEnabled();
+    const key = { accountId: claims.sub, resource: "messages", resourceId: "all", stateKey: "read" };
+    const previous = await this.prisma.localResourceState.findUnique({ where: { accountId_resource_resourceId_stateKey: key } });
+    await this.writeState(claims.sub, "messages", "all", "read", true);
+    return { marked: previous?.value === true ? 0 : this.sentMessages.filter((item) => messageTypes.includes(item.type)).length };
+  }
+
+  recipients() { this.assertEnabled(); return this.page(demoRecipients, {}); }
+
+  async sendMessage(body: unknown) {
+    this.assertEnabled();
+    if (typeof body !== "object" || body === null || Array.isArray(body)) throw new BadRequestException({ error: "Ungültige Anfrage (JSON-Objekt erwartet).", code: "VALIDATION" });
+    const input = body as Record<string, unknown>;
+    const recipients = Array.isArray(input.recipients) ? input.recipients.filter((item): item is string => typeof item === "string") : [];
+    const text = typeof input.body === "string" ? input.body.trim() : "";
+    if (!recipients.length || !text || recipients.some((id) => !demoRecipients.some((recipient) => recipient.id === id))) throw new BadRequestException({ error: "Bitte gültige Empfänger und einen Nachrichtentext angeben.", code: "VALIDATION" });
+    const now = new Date(); const stamp = now.toISOString().slice(0, 19).replace("T", " ");
+    const message = { id: 4999 + this.sentMessages.length, timestamp: stamp, timestamp_iso: now.toISOString(), sort_key: now.toISOString(), text, author: "Demo-Schüler", recipient: recipients.map((id) => demoRecipients.find((r) => r.id === id)?.name).join(", "), type: "sprava", type_label: "Nachricht", additional_data: {}, is_starred: false, is_done: false, done_at: "", reaction_count: 0, created_at: now.toISOString(), is_removed: false };
+    this.sentMessages.unshift(message);
+    return message;
+  }
+
+  async reply(id: number, body: unknown) {
+    this.assertEnabled();
+    const root = this.sentMessages.find((item) => item.id === id);
+    if (!root) throw new NotFoundException({ error: "Nachricht nicht gefunden.", code: "NOT_FOUND" });
+    const text = typeof body === "object" && body !== null && "body" in body && typeof (body as { body?: unknown }).body === "string" ? (body as { body: string }).body.trim() : "";
+    if (!text) throw new BadRequestException({ error: "Bitte einen Antworttext angeben.", code: "VALIDATION" });
+    const now = new Date(); const stamp = now.toISOString().slice(0, 19).replace("T", " ");
+    const reply = { id: 4999 + this.sentMessages.length, timestamp: stamp, timestamp_iso: now.toISOString(), sort_key: now.toISOString(), text, author: "Demo-Schüler", recipient: root.author, type: root.type, type_label: root.type_label, additional_data: { textReply: String(id) }, is_starred: false, is_done: false, done_at: "", reaction_count: 0, created_at: now.toISOString(), is_removed: false };
+    this.sentMessages.push(reply); return reply;
+  }
+
+  async issueDownload(claims: AuthClaims, id: number, idx: number) {
+    this.assertEnabled();
+    const item = this.sentMessages.find((message) => message.id === id);
+    if (!item || idx !== 0 || typeof item.additional_data.filename !== "string") throw new NotFoundException({ error: "Dateianhang nicht gefunden.", code: "NOT_FOUND" });
+    const token = randomBytes(24).toString("hex");
+    this.downloads.set(hash(token), { accountId: claims.sub, id, idx, expires: Date.now() + 5 * 60_000 });
+    return { download_token: token, expires_in: 300 };
+  }
+
+  attachment(claims: AuthClaims | undefined, id: number, idx: number, token?: string) {
+    this.assertEnabled();
+    if (!claims && token) {
+      const grant = this.downloads.get(hash(token));
+      if (!grant || grant.expires < Date.now() || grant.id !== id || grant.idx !== idx) throw new NotFoundException({ error: "Dateianhang nicht gefunden.", code: "NOT_FOUND" });
+      this.downloads.delete(hash(token));
+      claims = { sub: grant.accountId, jti: "", tokenUse: "access" };
+    }
+    if (!claims) throw new NotFoundException({ error: "Dateianhang nicht gefunden.", code: "NOT_FOUND" });
+    const item = this.sentMessages.find((message) => message.id === id);
+    if (!item || idx !== 0 || typeof item.additional_data.filename !== "string") throw new NotFoundException({ error: "Dateianhang nicht gefunden.", code: "NOT_FOUND" });
+    return { filename: item.additional_data.filename, content: Buffer.from("EduFlow-Demo: Beispielanhang\n", "utf8") };
+  }
+
+  async homework(claims: AuthClaims, query: Record<string, unknown>) {
+    this.assertEnabled();
+    const since = parseDate(query.since, new Date("2000-01-01T00:00:00Z"));
+    const includeTests = query.include_tests === "1" || query.include_tests === "true";
+    const doneState = await this.allState(claims.sub, "homework", "done");
+    const trashState = await this.allState(claims.sub, "homework", "trash");
+    let all = demoHomework.filter((item) => (includeTests || !homeworkTypes.slice(1).includes(item.type)) && new Date(`${item.assigned_iso}T00:00:00Z`) >= since).map((item) => {
+      const done = doneState.has(String(item.id)) ? doneState.get(String(item.id)) === true : item.is_done;
+      const hidden = trashState.get(String(item.id)) === true;
+      const dueDate = item.due;
+      const status = done ? "erledigt" : dueDate < dateOnly(new Date()) ? "überfällig" : dueDate === dateOnly(new Date()) ? "heute fällig" : "offen";
+      return { ...item, is_done: done, is_hidden: hidden, status };
+    });
+    const counts = { offen: all.filter((item) => !item.is_hidden && ["offen", "heute fällig"].includes(item.status)).length, ueberfaellig: all.filter((item) => !item.is_hidden && item.status === "überfällig").length, erledigt: all.filter((item) => !item.is_hidden && item.status === "erledigt").length, papierkorb: all.filter((item) => item.is_hidden).length };
+    const status = typeof query.status === "string" ? query.status : "alle";
+    if (!["alle", "offen", "überfällig", "erledigt", "papierkorb"].includes(status)) throw new BadRequestException({ error: "Ungültiger Status.", code: "VALIDATION" });
+    const q = norm(typeof query.q === "string" ? query.q : "");
+    all = all.filter((item) => {
+      const hidden = item.is_hidden;
+      if (status === "papierkorb" ? !hidden : status !== "alle" && hidden) return false;
+      if (status === "offen" && !["offen", "heute fällig"].includes(item.status)) return false;
+      if (status === "überfällig" && item.status !== "überfällig") return false;
+      if (status === "erledigt" && item.status !== "erledigt") return false;
+      return !q || norm([item.title, item.subject, item.description, item.teacher].join(" ")).includes(q);
+    });
+    const rank: Record<string, number> = { "überfällig": 0, "heute fällig": 1, offen: 2, erledigt: 3 };
+    all.sort((a, b) => Number(a.is_hidden) - Number(b.is_hidden) || (rank[a.status] ?? 4) - (rank[b.status] ?? 4) || a.due.localeCompare(b.due));
+    return { ...this.page(all, query), counts, cache_info: "Beispieldaten" };
+  }
+
+  async homeworkChange(claims: AuthClaims, id: string, mode: "done" | "trash", body: unknown) {
+    this.assertEnabled();
+    const item = demoHomework.find((entry) => String(entry.id) === id);
+    if (!item) throw new NotFoundException({ error: "Hausaufgabe nicht gefunden.", code: "NOT_FOUND" });
+    const input = typeof body === "object" && body !== null ? body as Record<string, unknown> : {};
+    if (mode === "done") {
+      const done = typeof input.done === "boolean" ? input.done : true;
+      await this.writeState(claims.sub, "homework", id, "done", done);
+      if (!done) await this.writeState(claims.sub, "homework", id, "trash", false);
+      return { ...item, is_done: done, is_hidden: false, status: done ? "erledigt" : "offen" };
+    }
+    const hide = typeof input.hide === "boolean" ? input.hide : typeof input.trash === "boolean" ? input.trash : true;
+    await this.writeState(claims.sub, "homework", id, "trash", hide);
+    if (!hide) await this.writeState(claims.sub, "homework", id, "done", false);
+    return { ...item, is_done: hide ? item.is_done : false, is_hidden: hide, status: hide ? "papierkorb" : "offen" };
+  }
+
+  timetableDay(query: Record<string, unknown>) {
+    this.assertEnabled(); const day = parseDate(query.day, new Date()); const iso = dateOnly(day);
+    const isWeekend = day.getUTCDay() === 0 || day.getUTCDay() === 6;
+    return { day: iso, day_label: `${germanDays[day.getUTCDay()]} ${day.toLocaleDateString("de-DE", { timeZone: "UTC", day: "2-digit", month: "2-digit", year: "numeric" })}`, prev_day: dateOnly(new Date(day.getTime() - 86400000)), next_day: dateOnly(new Date(day.getTime() + 86400000)), today: dateOnly(new Date()), lessons: isWeekend ? [] : [...demoLessons], cache_info: "Beispieldaten" };
+  }
+
+  timetableWeek(query: Record<string, unknown>) {
+    this.assertEnabled(); const day = parseDate(query.day, new Date()); const monday = new Date(day); monday.setUTCDate(monday.getUTCDate() - (monday.getUTCDay() + 6) % 7);
+    const days = Array.from({ length: 5 }, (_, i) => { const current = new Date(monday); current.setUTCDate(monday.getUTCDate() + i); return { date: dateOnly(current), day_name: germanDays[current.getUTCDay()], day_date: current.toLocaleDateString("de-DE", { timeZone: "UTC", day: "2-digit", month: "2-digit" }), is_today: dateOnly(current) === dateOnly(new Date()), lessons: [...demoLessons] }; });
+    const friday = new Date(monday); friday.setUTCDate(monday.getUTCDate() + 4);
+    return { day: dateOnly(day), monday: dateOnly(monday), week_label: `Woche ${monday.toLocaleDateString("de-DE", { timeZone: "UTC", day: "2-digit", month: "2-digit" })} – ${friday.toLocaleDateString("de-DE", { timeZone: "UTC", day: "2-digit", month: "2-digit", year: "numeric" })}`, days, cache_info: "Woche aus Beispieldaten" };
+  }
+
+  substitutions(query: Record<string, unknown>) {
+    this.assertEnabled(); const day = parseDate(query.day, new Date()); const monday = new Date(day); monday.setUTCDate(monday.getUTCDate() - (monday.getUTCDay() + 6) % 7); const friday = new Date(monday); friday.setUTCDate(monday.getUTCDate() + 4);
+    const days = Array.from({ length: 5 }, (_, i) => { const current = new Date(monday); current.setUTCDate(monday.getUTCDate() + i); return { date: dateOnly(current), day_label: `${germanDays[current.getUTCDay()]} ${current.toLocaleDateString("de-DE", { timeZone: "UTC" })}`, changes: i === 1 ? [{ class: "8A", lesson: "4", title: "Raumänderung", action: "changeroom" }] : [] }; });
+    return { monday: dateOnly(monday), week_label: `Woche ${monday.toLocaleDateString("de-DE", { timeZone: "UTC", day: "2-digit", month: "2-digit" })} – ${friday.toLocaleDateString("de-DE", { timeZone: "UTC", day: "2-digit", month: "2-digit", year: "numeric" })}`, days };
+  }
+
+  agenda(query: Record<string, unknown>) {
+    this.assertEnabled(); const now = new Date(); const since = parseDate(query.since, new Date(now.getTime() - 30 * 86400000)); const until = parseDate(query.until, new Date(now.getTime() + 60 * 86400000));
+    if (until < since || (until.getTime() - since.getTime()) / 86400000 > 366) throw new BadRequestException({ error: "Der Zeitraum darf höchstens ein Jahr umfassen.", code: "VALIDATION" });
+    const items = [
+      { id: 7101, kind: "event", date: dateOnly(new Date(now.getTime() + 3 * 86400000)), text: "Elternabend", title: "Elternabend", author: "Schule", type: "parentsevening", timestamp_iso: now.toISOString() },
+      { id: 7102, kind: "exam", date: dateOnly(new Date(now.getTime() + 5 * 86400000)), text: "Lernzielkontrolle: Kräfte", title: "Lernzielkontrolle: Kräfte", subject: "Physik", type: "bexam", due: dateOnly(new Date(now.getTime() + 5 * 86400000)), assigned_iso: now.toISOString() },
+      { id: 7103, kind: "attendance", date: dateOnly(new Date(now.getTime() - 2 * 86400000)), text: "Anwesenheit bestätigt", title: "Anwesenheit bestätigt", type: "student_absent", timestamp_iso: now.toISOString() },
+    ].filter((item) => item.date >= dateOnly(since) && item.date <= dateOnly(until)).sort((a, b) => a.date.localeCompare(b.date));
+    return { items, total: items.length, since: dateOnly(since), until: dateOnly(until), cache_info: "Beispieldaten" };
+  }
+
+  grades(query: Record<string, unknown>) { this.assertEnabled(); return { ...this.page([...demoGrades], query), cache_info: "Beispieldaten" }; }
+
+  meals() {
+    this.assertEnabled(); const now = new Date(); const monday = new Date(now); monday.setDate(now.getDate() - (now.getDay() + 6) % 7); const days: Record<string, unknown> = {};
+    ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"].forEach((name, i) => { const day = new Date(monday); day.setDate(monday.getDate() + i); days[name] = { date: dateOnly(day), dishes: [{ text: ["Gemüselasagne", "Hähnchen mit Reis", "Linsencurry", "Nudeln mit Tomatensauce", "Ofenkartoffeln"][i], price: "5,20 €" }], note: "" }; });
+    return { week: `${now.getFullYear()}-W${String(this.isoWeek(now)).padStart(2, "0")}`, label: `${monday.toLocaleDateString("de-DE", { day: "numeric", month: "numeric" })} – ${new Date(monday.getTime() + 4 * 86400000).toLocaleDateString("de-DE", { day: "numeric", month: "numeric", year: "numeric" })}`, source_url: "https://example.invalid/eduflow-demo-menu.pdf", days, today: germanDays[now.getDay()] };
+  }
+
+  private isoWeek(date: Date) { const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())); d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7)); const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1)); return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7); }
+
+  weather(query: Record<string, unknown>) {
+    this.assertEnabled(); const city = typeof query.city === "string" && query.city.trim() ? query.city.trim().slice(0, 100) : "Berlin";
+    return { city, today: { temp: 18, max: 20, min: 12, desc: "Leicht bewölkt", icon: "02d", pop: 10 }, tomorrow: { max: 19, min: 11, desc: "Sonnig", icon: "01d", pop: 0 }, day3: { label: germanDays[(new Date().getDay() + 2) % 7], max: 17, min: 10, desc: "Wolkig", icon: "03d", pop: 20 }, hourly: [], details: { feels_like: 17, humidity: 55, pressure: 1013, wind: 3.2, wind_kmh: 12, wind_dir: "W", visibility_km: 10, sunrise: "06:45", sunset: "19:20" } };
+  }
+
+  searchCities(query: unknown) {
+    this.assertEnabled(); const q = typeof query === "string" ? norm(query.trim()) : "";
+    if (q.length < 2) return { items: [] };
+    return { items: ["Berlin", "Hamburg", "München", "Wien", "Zürich"].filter((city) => norm(city).includes(q)).map((name) => ({ name, country: "DE", lat: 52.52, lon: 13.405 })) };
+  }
+
+  async settings(claims: AuthClaims) {
+    this.assertEnabled(); const rows = await this.prisma.userPreference.findMany({ where: { accountId: claims.sub } }); const values = { ...defaults };
+    for (const row of rows) if (row.key in values) values[row.key] = row.value;
+    return { schema: settingsSchema, values };
+  }
+
+  async saveSettings(claims: AuthClaims, body: unknown) {
+    this.assertEnabled(); if (typeof body !== "object" || body === null || Array.isArray(body)) throw new BadRequestException({ error: "Ungültige Anfrage (JSON-Objekt erwartet).", code: "VALIDATION" });
+    const current = await this.settings(claims); const input = { ...current.values, ...(body as Record<string, unknown>) } as Record<string, unknown>; const normalized: Record<string, unknown> = {};
+    for (const spec of settingsSchema) {
+      const raw = input[spec.key]; let value = raw;
+      if (spec.kind === "select") value = spec.options?.find(([optionValue]) => optionValue === raw)?.[0] ?? spec.default;
+      else if (spec.kind === "bool") value = typeof raw === "boolean" ? raw : ["1", "true", "on"].includes(String(raw));
+      else if (spec.kind === "int") { const n = Number(raw); value = Number.isFinite(n) ? Math.min(spec.max ?? n, Math.max(spec.min ?? n, Math.trunc(n))) : spec.default; }
+      else if (spec.kind === "order") { const allowed = ["messages", "homework", "weather", "lunch"]; const selected = (Array.isArray(raw) ? raw : String(raw ?? "").split(",")).filter((key): key is string => typeof key === "string" && allowed.includes(key)); value = [...new Set([...selected, ...allowed])].join(","); }
+      else if (spec.kind === "text") value = String(raw ?? "").trim().replace(/[\r\n]/g, " ").slice(0, spec.maxlength ?? 100);
+      normalized[spec.key] = value;
+      await this.prisma.userPreference.upsert({ where: { accountId_key: { accountId: claims.sub, key: spec.key } }, create: { accountId: claims.sub, key: spec.key, value: value as Prisma.InputJsonValue }, update: { value: value as Prisma.InputJsonValue } });
+    }
+    return { status: "ok", values: normalized };
+  }
+
+  async clearCache(claims: AuthClaims) {
+    this.assertEnabled(); const result = await this.prisma.resourceCache.deleteMany({ where: { accountId: claims.sub } }); return { status: "ok", cleared: result.count };
+  }
+}

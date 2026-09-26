@@ -12,17 +12,24 @@
 </head>
 <body>
 <button class="theme-toggle auth-top-right" type="button" aria-label="Farbschema wechseln">☾</button>
-<div class="auth-wrap">
-  <div class="auth-card anim-in">
-    <div class="brand"><span class="brand-mark">E</span></div>
-    <h1>EduFlow Dashboard</h1>
-    <p class="sub">Melde dich an, um deine Nachrichten und Hausaufgaben von ganz früher bis heute zu sehen.</p>
+<main class="auth-wrap auth-welcome">
+  <div class="auth-particles" aria-hidden="true"></div>
+  <section class="auth-layout anim-in">
+    <div class="auth-intro">
+      <div class="auth-logo-stage">
+        <img class="auth-logo" src="{{ url_for('static', filename='icons/icon.png') }}" alt="EduFlow">
+        <span class="auth-orbit auth-orbit-one"></span><span class="auth-orbit auth-orbit-two"></span>
+      </div>
+    </div>
+    <div class="auth-card">
+    <h2>Bei EduFlow anmelden</h2>
     {% with msgs = get_flashed_messages(with_categories=true) %}
       {% for cat, msg in msgs %}
         <div class="notice">{{ msg }}</div>
-      {% endfor %}
+    {% endfor %}
     {% endwith %}
     <form method="post" action="/login">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <label for="subdomain">Schul-Subdomain</label>
       <input class="input-pill" id="subdomain" name="subdomain" placeholder="z. B. myschule" autocomplete="username">
       <label for="username">Benutzername</label>
@@ -33,7 +40,8 @@
       <button class="btn btn-primary" type="submit">Anmelden</button>
     </form>
     <p class="hint">Subdomain leer lassen für Auto-Erkennung über <code>portal.edupage.org</code>.</p>
-  </div>
-</div>
+    </div>
+  </section>
+</main>
 </body>
 </html>

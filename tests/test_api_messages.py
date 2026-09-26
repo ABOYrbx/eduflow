@@ -277,6 +277,51 @@ def main():
         check("Proxy ruft EduPage-Adresse auf",
               fake.session.last_url == "https://testschule.edupage.org/cloud/test.pdf")
 
+        # --- Download-Token: Ausstellung + ?dl= (statt langlebigem ?token=)
+        r = client.post("/api/v1/messages/download-token", headers=auth,
+                        json={"event_id": 104, "idx": 0})
+        body = r.get_json()
+        check("Download-Token 200 mit Token + TTL",
+              r.status_code == 200 and body["download_token"]
+              and body["expires_in"] >= 60)
+        dl = body["download_token"]
+        r = client.get("/api/v1/messages/104/attachments/0?dl=%s" % dl)
+        check("Download per ?dl= 200 mit Inhalt",
+              r.status_code == 200 and r.data == b"datei-inhalt")
+        r = client.get("/api/v1/messages/101/attachments/0?dl=%s" % dl)
+        check("?dl= an andere Nachricht gebunden 401",
+              r.status_code == 401
+              and r.get_json()["code"] == "TOKEN_INVALID")
+        r = client.get("/api/v1/messages/104/attachments/7?dl=%s" % dl)
+        check("?dl= an anderen Index gebunden 401",
+              r.status_code == 401
+              and r.get_json()["code"] == "TOKEN_INVALID")
+        r = client.post("/api/v1/messages/download-token", headers=auth,
+                        json={})
+        check("Download-Token ohne Body 400 VALIDATION",
+              r.status_code == 400
+              and r.get_json()["code"] == "VALIDATION")
+        r = client.post("/api/v1/messages/download-token", headers=auth,
+                        json={"event_id": 4242, "idx": 0})
+        check("Download-Token falsche ID 404 NOT_FOUND",
+              r.status_code == 404
+              and r.get_json()["code"] == "NOT_FOUND")
+        r = client.post("/api/v1/messages/download-token", headers=auth,
+                        json={"event_id": 105, "idx": 0})
+        check("Download-Token fremde Adresse 400 VALIDATION",
+              r.status_code == 400
+              and r.get_json()["code"] == "VALIDATION")
+        r = client.post("/api/v1/messages/download-token",
+                        json={"event_id": 104, "idx": 0})
+        check("Download-Token ohne Auth 401 TOKEN_INVALID",
+              r.status_code == 401
+              and r.get_json()["code"] == "TOKEN_INVALID")
+        msgmod._DL_TOKENS[dl]["exp"] = 0
+        r = client.get("/api/v1/messages/104/attachments/0?dl=%s" % dl)
+        check("abgelaufenes ?dl= 401 TOKEN_INVALID",
+              r.status_code == 401
+              and r.get_json()["code"] == "TOKEN_INVALID")
+
         # --- Download: fremde Adresse und Fehlfälle
         r = client.get("/api/v1/messages/105/attachments/0", headers=auth)
         check("fremde Adresse 400 VALIDATION",
@@ -294,6 +339,7 @@ def main():
         print("Alle Nachrichten-Tests bestanden.")
     finally:
         msgmod._api_login = real_login
+        msgmod.reset_dl_tokens()
         webapp.get_message_likes = real_likes
         webapp.send_reply = real_reply
         core.revoke_token(token)
