@@ -1,0 +1,60 @@
+# Crowdin-Sync (Setup ohne Zielsprachen, siehe plaene/LOKALISIERUNG.md)
+#
+# - Push auf main lädt nur Quellen hoch (Deutsch ist Source + Fallback).
+# - Übersetzungen werden bewusst NICHT automatisch gepusht, sondern per
+#   manuellem Workflow-Start als PR nach main geholt (Kontrolle behalten).
+# Benötigte GitHub-Secrets: CROWDIN_PROJECT_ID, CROWDIN_TOKEN.
+
+name: Crowdin Sync
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'locales/templates/messages.pot'
+      - 'android/app/src/main/res/values/strings.xml'
+      - 'mac/EduFlow/Resources/Localizable.xcstrings'
+      - 'crowdin.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  upload-sources:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Quellen nach Crowdin hochladen
+        uses: crowdin/crowdin-github-action@v2
+        with:
+          upload_sources: true
+          upload_translations: false
+          download_translations: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_TOKEN: ${{ secrets.CROWDIN_TOKEN }}
+
+  download-translations:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Übersetzungen aus Crowdin als PR holen
+        uses: crowdin/crowdin-github-action@v2
+        with:
+          upload_sources: false
+          upload_translations: false
+          download_translations: true
+          localization_branch_name: l10n/crowdin-translations
+          create_pull_request: true
+          pull_request_title: 'chore(l10n): neue Crowdin-Übersetzungen'
+          pull_request_body: 'Automatisch aus Crowdin geladen. Deutsch bleibt Fallback; API-Codes unverändert.'
+          pull_request_base_branch_name: main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_TOKEN: ${{ secrets.CROWDIN_TOKEN }}

@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model UserAccount {
+  id                    String              @id @default(cuid())
+  subdomain             String
+  username              String
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  credentialVault       CredentialVault?
+  tokens                ApiToken[]
+  preferences           UserPreference[]
+  states                LocalResourceState[]
+  caches                ResourceCache[]
+  pendingSecondFactors  PendingSecondFactor[]
+
+  @@unique([subdomain, username])
+}
+
+model CredentialVault {
+  id        String      @id @default(cuid())
+  accountId String      @unique
+  account   UserAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  ciphertext Bytes
+  nonce      Bytes
+  updatedAt  DateTime   @updatedAt
+}
+
+model ApiToken {
+  id                String      @id @default(cuid())
+  accountId         String
+  account           UserAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accessTokenHash   String      @unique
+  refreshTokenHash  String?     @unique
+  deviceName        String      @default("")
+  accessExpiresAt   DateTime
+  refreshExpiresAt  DateTime?
+  revokedAt         DateTime?
+  createdAt         DateTime    @default(now())
+  rotatedFromId     String?
+  lastUsedAt        DateTime?
+
+  @@index([accountId, revokedAt])
+  @@index([refreshExpiresAt])
+}
+
+model PendingSecondFactor {
+  id              String      @id @default(cuid())
+  accountId       String?
+  account         UserAccount? @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  opaqueTokenHash String      @unique
+  challenge       Bytes
+  expiresAt       DateTime
+  consumedAt      DateTime?
+  createdAt       DateTime    @default(now())
+
+  @@index([expiresAt])
+}
+
+model UserPreference {
+  id        String      @id @default(cuid())
+  accountId String
+  account   UserAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  key       String
+  value     Json
+  updatedAt DateTime    @updatedAt
+
+  @@unique([accountId, key])
+}
+
+model LocalResourceState {
+  id         String      @id @default(cuid())
+  accountId  String
+  account    UserAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  resource   String
+  resourceId String
+  stateKey   String
+  value      Json
+  updatedAt  DateTime    @updatedAt
+
+  @@unique([accountId, resource, resourceId, stateKey])
+  @@index([accountId, resource, stateKey])
+}
+
+model ResourceCache {
+  id        String      @id @default(cuid())
+  accountId String
+  account   UserAccount @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  cacheKey  String
+  payload   Json
+  expiresAt DateTime
+  updatedAt DateTime    @updatedAt
+
+  @@unique([accountId, cacheKey])
+  @@index([expiresAt])
+}
+
+model AuditEvent {
+  id        String   @id @default(cuid())
+  accountId String?
+  action    String
+  outcome   String
+  createdAt DateTime @default(now())
+
+  @@index([accountId, createdAt])
+}

@@ -7,11 +7,13 @@ Routen (alle auf dem `api_v1`-Blueprint, Präfix `/api/v1`):
 - GET  /recipients                            – Empfängerliste
 - POST /messages/send                         – Nachricht senden
 - POST /messages/<id>/reply                   – Antwort senden
+- POST /messages/download-token          – Kurzzeit-Token für einen Anhang
 - GET  /messages/<id>/attachments/<idx>       – Dateianhang laden
 
 Alle Routen außer dem Download brauchen ein Bearer-Token (siehe
 `api.core.token_required`); der Download akzeptiert zusätzlich
-`?token=`, weil native Download-Komponenten nicht immer Header setzen
+`?dl=` (Kurzzeit-Token, empfohlen) oder `?token=` (Kompatibilität),
+weil native Download-Komponenten nicht immer Header setzen
 können. Serializer und Cache-Verhalten sind eins zu eins aus dem Web
 übernommen (Nachrichten-Bauer, Thread-Logik, Gelesen-Status, Likes-Cache),
 damit App und Web denselben Stand sehen.
@@ -21,7 +23,10 @@ bindet den Blueprint beim Start ein). Die Web-Helper werden innerhalb der
 Funktionen importiert – zur Request-Zeit ist app vollständig geladen.
 """
 
+import os
 import re
+import secrets
+import time
 import unicodedata
 from datetime import date
 from urllib.parse import urlparse
@@ -415,17 +420,79 @@ def message_reply(event_id):
 
 # ------------------------------------------------------------ Download
 
-def _download_credentials():
-    # type: () -> tuple
-    """Token aus Header oder `?token=` prüfen (für native Downloader).
+# ------------------------------------------------------------ Download-Tokens
+#
+# Native Download-Komponenten können nicht immer Authorization-Header
+# setzen. Statt des langlebigen API-Tokens in der URL (`?token=`, landet
+# in Server-Logs) gibt es dafür Kurzzeit-Tokens: per Bearer-Header
+# ausgestellt, 5 Min. gültig, gebunden an genau einen Benutzer und genau
+# eine Datei (Event-ID + Index). Ablage nur im Server-Speicher, kein
+# Klartext-Passwort auf Platte (analog zur PENDING_2FA-Zwischenablage).
+_DL_TTL_S = int(os.environ.get("EDUFLOW_DL_TTL", "300") or 300)
+_DL_TOKENS: dict = {}
 
-    Returns (creds, None) oder (None, Fehlerantwort).
+
+def _prune_dl_tokens(now=None) -> None:
+    """Abgelaufene Download-Tokens verwerfen (best-effort)."""
+    try:
+        ref = now if now is not None else time.time()
+        for tok in [t for t, rec in _DL_TOKENS.items()
+                    if not isinstance(rec, dict)
+                    or float(rec.get("exp", 0)) <= ref]:
+            _DL_TOKENS.pop(tok, None)
+    except Exception:
+        pass
+
+
+def reset_dl_tokens() -> None:
+    """Download-Token-Ablage leeren (nur für Tests)."""
+    try:
+        _DL_TOKENS.clear()
+    except Exception:
+        pass
+
+
+def _download_credentials(event_id=None, idx=None):
+    # type: (object, object) -> tuple
+    """Token aus Header, `?dl=` oder `?token=` prüfen.
+
+    Returns (creds, None) oder (None, Fehlerantwort). `?dl=`-Tokens sind
+    an Benutzer + Datei gebunden und werden gegen die angefragte
+    Route (event_id/idx) geprüft; `?token=` bleibt aus Kompatibilität
+    erhalten (langfristig: nur noch Header oder `?dl=` nutzen).
     """
     auth = request.headers.get("Authorization", "")
     token = auth[7:] if auth[:7].lower() == "bearer " else ""
     token = (token or "").strip()
-    if not token:
-        token = (request.args.get("token") or "").strip()
+    if token:
+        creds = verify_token(token)
+        if creds is None:
+            if token_expired(token):
+                return None, api_error(
+                    "Token ist abgelaufen. Bitte erneut anmelden.",
+                    "TOKEN_EXPIRED", 401)
+            return None, api_error(
+                "Ungültiges oder fehlendes Token.", "TOKEN_INVALID", 401)
+        return creds, None
+    dl = (request.args.get("dl") or "").strip()
+    if dl:
+        try:
+            _prune_dl_tokens()
+        except Exception:
+            pass
+        rec = _DL_TOKENS.get(dl)
+        if (not isinstance(rec, dict)
+                or float(rec.get("exp", 0)) <= time.time()
+                or str(rec.get("event_id")) != str(event_id)
+                or str(rec.get("idx")) != str(idx)):
+            return None, api_error(
+                "Ungültiges oder fehlendes Token.", "TOKEN_INVALID", 401)
+        return {"subdomain": rec.get("subdomain", ""),
+                "username": rec.get("username", ""),
+                "password": rec.get("password", ""),
+                "device": rec.get("device", ""),
+                "expires": ""}, None
+    token = (request.args.get("token") or "").strip()
     creds = verify_token(token)
     if creds is None:
         if token_expired(token):
@@ -435,6 +502,93 @@ def _download_credentials():
         return None, api_error(
             "Ungültiges oder fehlendes Token.", "TOKEN_INVALID", 401)
     return creds, None
+
+
+@bp.route("/messages/download-token", methods=["POST"])
+@token_required
+def message_download_token():
+    """Kurzzeit-Token für einen Dateianhang ausstellen.
+
+    JSON: {event_id: Zahl, idx: Zahl}. Antwort: {download_token, expires_in}.
+    Der Token gilt wenige Minuten, nur für genau diese Datei, und steht
+    statt des API-Tokens in der Download-URL (`?dl=`).
+    """
+    data = request.get_json(silent=True)
+    if not isinstance(data, dict):
+        data = {}
+    try:
+        event_id = int(data.get("event_id"))
+        idx = int(data.get("idx"))
+    except (TypeError, ValueError):
+        return api_error("Bitte event_id und idx als Zahl angeben.",
+                         "VALIDATION", 400)
+    if idx < 0:
+        return api_error("Bitte event_id und idx als Zahl angeben.",
+                         "VALIDATION", 400)
+
+    from app import (  # lazy: kein Importzyklus mit app.py
+        EARLIEST_DEFAULT,
+        extract_attachments,
+        get_timeline_cached,
+    )
+
+    edupage, subdomain, username, login_err = _login_or_error()
+    if login_err is not None:
+        return login_err
+
+    # Dieselbe Auflösung + Hostprüfung wie beim Download selbst: Es gibt
+    # nur Tokens für Dateien, die der Aufrufer auch laden dürfte.
+    uhash = apicache.user_hash(subdomain, username)
+    record = None
+    try:
+        cached = apicache.load_timeline(uhash)
+        for r in (cached.get("events", []) if cached else []) or []:
+            if str(r.get("id")) == str(event_id):
+                record = r
+                break
+    except Exception:
+        record = None
+    if record is None:
+        try:
+            events, _, _, _ = get_timeline_cached(
+                edupage, subdomain, username, EARLIEST_DEFAULT)
+            for e in events:
+                if str(getattr(e, "event_id", None)) == str(event_id):
+                    record = apicache.event_to_record(e)
+                    break
+        except Exception:
+            record = None
+    if record is None:
+        return api_error("Nachricht nicht gefunden.", "NOT_FOUND", 404)
+    try:
+        atts = extract_attachments(record.get("additional_data") or {})
+    except Exception:
+        atts = []
+    if idx >= len(atts):
+        return api_error("Datei nicht gefunden.", "NOT_FOUND", 404)
+    raw_url = (atts[idx].get("url") or "")
+    if raw_url.startswith("/"):
+        url = "https://%s.edupage.org%s" % (subdomain, raw_url)
+    else:
+        url = raw_url
+    if not (urlparse(url).hostname or "").endswith(".edupage.org"):
+        return api_error("Ungültiger Download-Link.", "VALIDATION", 400)
+
+    try:
+        _prune_dl_tokens()
+    except Exception:
+        pass
+    tok = secrets.token_urlsafe(24)
+    _DL_TOKENS[tok] = {
+        "subdomain": subdomain,
+        "username": username,
+        "password": g.api_password,
+        "device": "",
+        "event_id": str(event_id),
+        "idx": str(idx),
+        "exp": time.time() + max(60, _DL_TTL_S),
+    }
+    return {"download_token": tok, "expires_in": max(60, _DL_TTL_S)}, 200
 
 
 @bp.route("/messages/<int:event_id>/attachments/<int:idx>", methods=["GET"])
@@ -449,7 +603,7 @@ def message_attachment(event_id, idx):
         get_timeline_cached,
     )
 
-    creds, err = _download_credentials()
+    creds, err = _download_credentials(event_id, idx)
     if err is not None:
         return err
     g.api_subdomain = creds["subdomain"]

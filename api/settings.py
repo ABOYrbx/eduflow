@@ -54,6 +54,9 @@ def api_settings_put():
         return api_error("Ungültige Anfrage (JSON-Objekt erwartet).",
                          "VALIDATION", 400)
     from app import settings_from_form
+    # Ältere App-Versionen senden nur die ihnen bekannten Felder. Unbekannte
+    # neuere Kontoeinstellungen (z. B. die Übersichtsreihenfolge) beibehalten.
+    data = {**_merged_values(_uhash()), **data}
     normalized = {}
     for key, value in data.items():
         if value is True:

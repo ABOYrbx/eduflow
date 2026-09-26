@@ -14,12 +14,14 @@
 <body>
 <div class="nav-wrap">
   <div class="container nav">
+    <a class="nav-logo" href="/" aria-label="EduFlow – Übersicht"><img src="{{ url_for('static', filename='icons/icon.png') }}" alt=""></a>
     <nav class="nav-mid">
       <a class="nav-pill" href="/">Übersicht</a>
       <a class="nav-pill active" href="/dashboard">Nachrichten</a>
       <a class="nav-pill" href="/hausaufgaben">Hausaufgaben</a>
       <a class="nav-pill" href="/noten">Noten</a>
       <a class="nav-pill" href="/stundenplan">Stundenplan</a>
+      <a class="nav-pill" href="/termine">Termine</a>
     </nav>
     <div class="nav-cta">
       <div class="profile-wrap">
@@ -31,7 +33,10 @@
           </div>
           <div class="pm-div"></div>
           <a class="pm-link" href="/einstellungen" role="menuitem">Einstellungen</a>
-          <a class="pm-link pm-danger" href="/logout" role="menuitem">Abmelden</a>
+          <form method="post" action="/logout" style="margin:0">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="pm-link pm-danger" role="menuitem" type="submit" style="background:none;border:0;width:100%;text-align:left;cursor:pointer;font:inherit">Abmelden</button>
+          </form>
         </div>
       </div>
     </div>
@@ -181,6 +186,7 @@
           <div class="modal-files" id="detailFiles"></div>
         </div>
         <form id="replyForm" method="post" action="/nachrichten/antworten" style="display:flex;flex-direction:column;gap:8px;margin-top:12px">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
           <input type="hidden" name="id" id="replyId" value="">
           <input type="hidden" name="back" value="/dashboard">
           <label for="replyBody" style="font-weight:700;font-size:13px">Antworten</label>

@@ -107,9 +107,11 @@ Festgelegte Routenpfade: Nachrichtenliste unter messages (mit Zeitraum,
 Typfilter, Textsuche und Paginierung), Thread einer Nachricht unter
 messages/eindeutige-ID/thread, Gelesen-Markierung unter messages/read,
 Empfängerliste unter recipients, Senden unter messages/send, Antworten
-unter messages/eindeutige-ID/reply, Dateianhang unter
-messages/eindeutige-ID/attachments/Index (zusätzlich mit Token-Query
-erreichbar).
+unter messages/eindeutige-ID/reply, Kurzzeit-Download-Token per POST unter
+messages/download-token (JSON {event_id, idx} → {download_token, expires_in},
+5 Min. TTL via `EDUFLOW_DL_TTL`, gebunden an Benutzer + Datei), Dateianhang unter
+messages/eindeutige-ID/attachments/Index (Header-, `?dl=`- oder
+`?token=`-Auth; `?dl=` empfohlen, `?token=` nur Kompatibilität).
 
 - Die Liste zeigt nur Top-Level-Nachrichten (Antworten sind über das
   Antwort-Kennzeichen ausgeschlossen, wie im Web). Sie unterstützt Zeitraum,
@@ -289,3 +291,24 @@ P1 – Auth-Härtung (Tests: `tests/test_api_hardening.py` grün):
 - Login-Rate-Limit in `api/auth.py` (20 Versuche / 10 Min. / IP,
   `EDUFLOW_LOGIN_LIMIT`/`EDUFLOW_LOGIN_WINDOW`, 429 RATE_LIMITED,
   `reset_login_rate_limit` für Tests). Zählt `/auth/login` + `/auth/2fa`.
+  `X-Forwarded-For` wird standardmäßig ignoriert (sonst per Header-Spoofing
+  umgehbar); nur hinter vertrauenswürdigem Reverse-Proxy
+  `EDUFLOW_TRUST_PROXY=1` setzen.
+- `POST /auth/refresh` prüft die gespeicherten Zugangsdaten per
+  EduPage-Re-Login nach, bevor es rotiert: falsches Passwort →
+  `BAD_CREDENTIALS` (altes Token bleibt), erneute 2FA → `EDUPAGE_2FA`.
+  So überlebt kein gestohlenes Token eine Passwortänderung.
+- `GET /wetter`: `?city=` auf 100 Zeichen begrenzt.
+
+## Addendum — Schulalltag
+
+Die bestehenden API-Verträge bleiben stabil; dieses Feature ergänzt zwei
+authentifizierte GET-Routen:
+
+- `GET /substitutions/week?day=JJJJ-MM-TT`: Vertretungsänderungen Montag bis
+  Freitag für die Woche, in der `day` liegt.
+- `GET /school/agenda?since=JJJJ-MM-TT&until=JJJJ-MM-TT&refresh=0|1`:
+  Schulereignisse, Prüfungen und Anwesenheitsmeldungen bis zu einem Jahr.
+
+Implementierung: `api/school.py`. Die Web-Seite `/termine` und die nativen
+Clients nutzen dieselben Antwortdaten und EduPage-Timeline-/Sitzungs-Helper.

@@ -1,5 +1,7 @@
 # EduFlow Dashboard (Nachrichten + Hausaufgaben)
 
+> Vollständige deutsche [Projektdokumentation](docs/README.md) mit Architektur, Funktionen, API und Entwicklungsanleitung.
+
 Simple local web dashboard built on the [EduPage API Python library](https://github.com/EdupageAPI/edupage-api)
 (`pip install edupage-api`).
 
@@ -93,6 +95,12 @@ in the signed Flask session cookie to re-login on each page load
 server restarts; without it the session ends when the browser closes.
 Don't expose this publicly.
 Env overrides: `FLASK_SECRET_KEY`, `EDUFLOW_KEY`.
+Web forms and fetch carry a per-session CSRF token (`csrf_token()`,
+checked by `csrf_protect`, cookie `SameSite=Lax`); `/logout` and
+`/cache-clear` are POST-only. API downloads should use short-lived
+`?dl=` tokens (`POST /api/v1/messages/download-token`, 5 min TTL via
+`EDUFLOW_DL_TTL`) instead of the long-lived `?token=` query, and token
+values are redacted from server logs.
 
 ## Files
 
@@ -114,3 +122,9 @@ Env overrides: `FLASK_SECRET_KEY`, `EDUFLOW_KEY`.
 - Status: `is_done` (via `userProps.doneMaxCas`) → erledigt, sonst Vergleich
   Fälligkeitsdatum vs. heute → überfällig / heute fällig / offen.
 - Sortierung: überfällige zuerst, dann nach Fälligkeitsdatum.
+
+## Demo für Web, Android und macOS
+
+Für Screenshots und Vorführungen gibt es einen lokalen Fake-Server mit
+synthetischen Beispieldaten. Einrichtung, Start, Testkonten und die Grenzen
+des Demomodus stehen in der [Demo-Anleitung](plaene/DEMO.md).

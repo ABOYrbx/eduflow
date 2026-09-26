@@ -1,0 +1,566 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E0F100000000000000000101 /* EduFlowApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000201 /* EduFlowApp.swift */; };
+		E0F100000000000000000102 /* APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000202 /* APIError.swift */; };
+		E0F100000000000000000103 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000203 /* APIClient.swift */; };
+		E0F100000000000000000104 /* DTOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000204 /* DTOs.swift */; };
+		E0F100000000000000000105 /* TokenStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000205 /* TokenStore.swift */; };
+		E0F100000000000000000106 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000206 /* AuthService.swift */; };
+		E0F100000000000000000107 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000207 /* LoginView.swift */; };
+		E0F100000000000000000108 /* OverviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000208 /* OverviewViewModel.swift */; };
+		E0F100000000000000000109 /* OverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000209 /* OverviewView.swift */; };
+		E0F10000000000000000010A /* TimetableService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F10000000000000000020A /* TimetableService.swift */; };
+		E0F10000000000000000010B /* TimetableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F10000000000000000020B /* TimetableViewModel.swift */; };
+		E0F10000000000000000010C /* TimetableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F10000000000000000020C /* TimetableView.swift */; };
+		E0F10000000000000000010D /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F10000000000000000020D /* SettingsView.swift */; };
+		E0F100000000000000000120 /* DevicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000224 /* DevicesView.swift */; };
+		E0F10000000000000000010F /* MessagesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000213 /* MessagesService.swift */; };
+		E0F100000000000000000110 /* MessagesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000214 /* MessagesViewModel.swift */; };
+		E0F100000000000000000111 /* MessagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000215 /* MessagesView.swift */; };
+		E0F100000000000000000112 /* ThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000216 /* ThreadView.swift */; };
+		E0F100000000000000000114 /* HomeworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000218 /* HomeworkService.swift */; };
+		E0F100000000000000000115 /* HomeworkViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000219 /* HomeworkViewModel.swift */; };
+		E0F100000000000000000116 /* HomeworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F10000000000000000021A /* HomeworkView.swift */; };
+		E0F100000000000000000117 /* GradesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F10000000000000000021B /* GradesView.swift */; };
+		E0F100000000000000000118 /* GradesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F10000000000000000021C /* GradesService.swift */; };
+		E0F100000000000000000119 /* GradesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F10000000000000000021D /* GradesViewModel.swift */; };
+		E0F10000000000000000011F /* GradeTerms.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000223 /* GradeTerms.swift */; };
+		E0F10000000000000000011A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E0F10000000000000000021E /* Assets.xcassets */; };
+		E0F10000000000000000010E /* MessagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000211 /* MessagesTests.swift */; };
+		E0F100000000000000000113 /* HomeworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000217 /* HomeworkTests.swift */; };
+		E0F10000000000000000011B /* CoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F10000000000000000021F /* CoreTests.swift */; };
+		E0F100000000000000000122 /* AccentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000225 /* AccentTests.swift */; };
+		E0F100000000000000000123 /* GradeTermsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000226 /* GradeTermsTests.swift */; };
+		E0F10000000000000000011C /* LandingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000220 /* LandingState.swift */; };
+		E0F10000000000000000011D /* RedesignTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000221 /* RedesignTheme.swift */; };
+		E0F10000000000000000011E /* RedesignUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F100000000000000000222 /* RedesignUI.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		E0F100000000000000000201 /* EduFlowApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EduFlowApp.swift; sourceTree = "<group>"; };
+		E0F100000000000000000202 /* APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIError.swift; sourceTree = "<group>"; };
+		E0F100000000000000000203 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		E0F100000000000000000204 /* DTOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTOs.swift; sourceTree = "<group>"; };
+		E0F100000000000000000205 /* TokenStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenStore.swift; sourceTree = "<group>"; };
+		E0F100000000000000000206 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		E0F100000000000000000207 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		E0F100000000000000000208 /* OverviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewViewModel.swift; sourceTree = "<group>"; };
+		E0F100000000000000000209 /* OverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewView.swift; sourceTree = "<group>"; };
+		E0F10000000000000000020A /* TimetableService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableService.swift; sourceTree = "<group>"; };
+		E0F10000000000000000020B /* TimetableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableViewModel.swift; sourceTree = "<group>"; };
+		E0F10000000000000000020C /* TimetableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableView.swift; sourceTree = "<group>"; };
+		E0F10000000000000000020D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		E0F100000000000000000224 /* DevicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevicesView.swift; sourceTree = "<group>"; };
+		E0F100000000000000000213 /* MessagesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesService.swift; sourceTree = "<group>"; };
+		E0F100000000000000000214 /* MessagesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewModel.swift; sourceTree = "<group>"; };
+		E0F100000000000000000215 /* MessagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesView.swift; sourceTree = "<group>"; };
+		E0F100000000000000000216 /* ThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadView.swift; sourceTree = "<group>"; };
+		E0F100000000000000000218 /* HomeworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeworkService.swift; sourceTree = "<group>"; };
+		E0F100000000000000000219 /* HomeworkViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeworkViewModel.swift; sourceTree = "<group>"; };
+		E0F10000000000000000021A /* HomeworkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeworkView.swift; sourceTree = "<group>"; };
+		E0F10000000000000000021B /* GradesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradesView.swift; sourceTree = "<group>"; };
+		E0F10000000000000000021C /* GradesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradesService.swift; sourceTree = "<group>"; };
+		E0F10000000000000000021D /* GradesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradesViewModel.swift; sourceTree = "<group>"; };
+		E0F100000000000000000223 /* GradeTerms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradeTerms.swift; sourceTree = "<group>"; };
+		E0F10000000000000000021E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E0F10000000000000000020E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E0F100000000000000000211 /* MessagesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesTests.swift; sourceTree = "<group>"; };
+		E0F100000000000000000217 /* HomeworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeworkTests.swift; sourceTree = "<group>"; };
+		E0F10000000000000000021F /* CoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreTests.swift; sourceTree = "<group>"; };
+		E0F100000000000000000225 /* AccentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccentTests.swift; sourceTree = "<group>"; };
+		E0F100000000000000000226 /* GradeTermsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradeTermsTests.swift; sourceTree = "<group>"; };
+		E0F100000000000000000220 /* LandingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingState.swift; sourceTree = "<group>"; };
+		E0F100000000000000000221 /* RedesignTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedesignTheme.swift; sourceTree = "<group>"; };
+		E0F100000000000000000222 /* RedesignUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedesignUI.swift; sourceTree = "<group>"; };
+		E0F10000000000000000020F /* EduFlow.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EduFlow.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E0F100000000000000000212 /* EduFlowTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EduFlowTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E0F100000000000000000302 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E0F100000000000000000305 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E0F100000000000000000003 = {
+			isa = PBXGroup;
+			children = (
+				E0F100000000000000000004 /* EduFlow */,
+				E0F10000000000000000000C /* EduFlowTests */,
+				E0F10000000000000000000A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E0F100000000000000000004 /* EduFlow */ = {
+			isa = PBXGroup;
+			children = (
+				E0F100000000000000000201 /* EduFlowApp.swift */,
+				E0F10000000000000000020E /* Info.plist */,
+				E0F10000000000000000021E /* Assets.xcassets */,
+				E0F100000000000000000005 /* Core */,
+				E0F10000000000000000000E /* Features */,
+			);
+			path = EduFlow;
+			sourceTree = "<group>";
+		};
+		E0F10000000000000000000E /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				E0F100000000000000000006 /* Auth */,
+				E0F100000000000000000007 /* Overview */,
+				E0F100000000000000000008 /* Timetable */,
+				E0F100000000000000000009 /* Settings */,
+				E0F10000000000000000000D /* Messages */,
+				E0F10000000000000000000F /* Homework */,
+				E0F100000000000000000010 /* Grades */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		E0F100000000000000000005 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				E0F100000000000000000202 /* APIError.swift */,
+				E0F100000000000000000203 /* APIClient.swift */,
+				E0F100000000000000000204 /* DTOs.swift */,
+				E0F100000000000000000205 /* TokenStore.swift */,
+				E0F100000000000000000220 /* LandingState.swift */,
+				E0F100000000000000000221 /* RedesignTheme.swift */,
+				E0F100000000000000000222 /* RedesignUI.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		E0F100000000000000000006 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				E0F100000000000000000206 /* AuthService.swift */,
+				E0F100000000000000000207 /* LoginView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		E0F100000000000000000007 /* Overview */ = {
+			isa = PBXGroup;
+			children = (
+				E0F100000000000000000208 /* OverviewViewModel.swift */,
+				E0F100000000000000000209 /* OverviewView.swift */,
+			);
+			path = Overview;
+			sourceTree = "<group>";
+		};
+		E0F100000000000000000008 /* Timetable */ = {
+			isa = PBXGroup;
+			children = (
+				E0F10000000000000000020A /* TimetableService.swift */,
+				E0F10000000000000000020B /* TimetableViewModel.swift */,
+				E0F10000000000000000020C /* TimetableView.swift */,
+			);
+			path = Timetable;
+			sourceTree = "<group>";
+		};
+		E0F100000000000000000009 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				E0F10000000000000000020D /* SettingsView.swift */,
+				E0F100000000000000000224 /* DevicesView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		E0F10000000000000000000D /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+				E0F100000000000000000213 /* MessagesService.swift */,
+				E0F100000000000000000214 /* MessagesViewModel.swift */,
+				E0F100000000000000000215 /* MessagesView.swift */,
+				E0F100000000000000000216 /* ThreadView.swift */,
+			);
+			path = Messages;
+			sourceTree = "<group>";
+		};
+		E0F10000000000000000000F /* Homework */ = {
+			isa = PBXGroup;
+			children = (
+				E0F100000000000000000218 /* HomeworkService.swift */,
+				E0F100000000000000000219 /* HomeworkViewModel.swift */,
+				E0F10000000000000000021A /* HomeworkView.swift */,
+			);
+			path = Homework;
+			sourceTree = "<group>";
+		};
+		E0F100000000000000000010 /* Grades */ = {
+			isa = PBXGroup;
+			children = (
+				E0F10000000000000000021B /* GradesView.swift */,
+				E0F10000000000000000021C /* GradesService.swift */,
+				E0F10000000000000000021D /* GradesViewModel.swift */,
+				E0F100000000000000000223 /* GradeTerms.swift */,
+			);
+			path = Grades;
+			sourceTree = "<group>";
+		};
+		E0F10000000000000000000C /* EduFlowTests */ = {
+			isa = PBXGroup;
+			children = (
+				E0F100000000000000000211 /* MessagesTests.swift */,
+				E0F100000000000000000217 /* HomeworkTests.swift */,
+				E0F10000000000000000021F /* CoreTests.swift */,
+				E0F100000000000000000225 /* AccentTests.swift */,
+				E0F100000000000000000226 /* GradeTermsTests.swift */,
+			);
+			path = EduFlowTests;
+			sourceTree = "<group>";
+		};
+		E0F10000000000000000000A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E0F10000000000000000020F /* EduFlow.app */,
+				E0F100000000000000000212 /* EduFlowTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E0F100000000000000000002 /* EduFlow */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E0F100000000000000000501 /* Build configuration list for PBXNativeTarget "EduFlow" */;
+			buildPhases = (
+				E0F100000000000000000302 /* Frameworks */,
+				E0F100000000000000000303 /* Resources */,
+				E0F100000000000000000301 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EduFlow;
+			productName = EduFlow;
+			productReference = E0F10000000000000000020F /* EduFlow.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E0F10000000000000000000B /* EduFlowTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E0F100000000000000000503 /* Build configuration list for PBXNativeTarget "EduFlowTests" */;
+			buildPhases = (
+				E0F100000000000000000305 /* Frameworks */,
+				E0F100000000000000000306 /* Resources */,
+				E0F100000000000000000304 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E0F100000000000000000602 /* PBXTargetDependency */,
+			);
+			name = EduFlowTests;
+			productName = EduFlowTests;
+			productReference = E0F100000000000000000212 /* EduFlowTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXTargetDependency section */
+		E0F100000000000000000602 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E0F100000000000000000002 /* EduFlow */;
+			targetProxy = E0F100000000000000000601 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXContainerItemProxy section */
+		E0F100000000000000000601 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E0F100000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E0F100000000000000000002;
+			remoteInfo = EduFlow;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXProject section */
+		E0F100000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1520;
+				LastUpgradeCheck = 1520;
+				TargetAttributes = {
+					E0F100000000000000000002 = {
+						CreatedOnToolsVersion = 15.2;
+					};
+					E0F10000000000000000000B = {
+						CreatedOnToolsVersion = 15.2;
+						TestTargetID = E0F100000000000000000002;
+					};
+				};
+			};
+			buildConfigurationList = E0F100000000000000000502 /* Build configuration list for PBXProject "EduFlow" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = de;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				de,
+			);
+			mainGroup = E0F100000000000000000003;
+			productRefGroup = E0F10000000000000000000A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E0F100000000000000000002 /* EduFlow */,
+				E0F10000000000000000000B /* EduFlowTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E0F100000000000000000303 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E0F10000000000000000011A /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E0F100000000000000000306 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E0F100000000000000000301 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E0F100000000000000000101 /* EduFlowApp.swift in Sources */,
+				E0F100000000000000000102 /* APIError.swift in Sources */,
+				E0F100000000000000000103 /* APIClient.swift in Sources */,
+				E0F100000000000000000104 /* DTOs.swift in Sources */,
+				E0F100000000000000000105 /* TokenStore.swift in Sources */,
+				E0F10000000000000000011C /* LandingState.swift in Sources */,
+				E0F10000000000000000011D /* RedesignTheme.swift in Sources */,
+				E0F10000000000000000011E /* RedesignUI.swift in Sources */,
+				E0F100000000000000000106 /* AuthService.swift in Sources */,
+				E0F100000000000000000107 /* LoginView.swift in Sources */,
+				E0F100000000000000000108 /* OverviewViewModel.swift in Sources */,
+				E0F100000000000000000109 /* OverviewView.swift in Sources */,
+				E0F10000000000000000010A /* TimetableService.swift in Sources */,
+				E0F10000000000000000010B /* TimetableViewModel.swift in Sources */,
+				E0F10000000000000000010C /* TimetableView.swift in Sources */,
+				E0F10000000000000000010D /* SettingsView.swift in Sources */,
+				E0F100000000000000000120 /* DevicesView.swift in Sources */,
+				E0F10000000000000000010F /* MessagesService.swift in Sources */,
+				E0F100000000000000000110 /* MessagesViewModel.swift in Sources */,
+				E0F100000000000000000111 /* MessagesView.swift in Sources */,
+				E0F100000000000000000112 /* ThreadView.swift in Sources */,
+				E0F100000000000000000114 /* HomeworkService.swift in Sources */,
+				E0F100000000000000000115 /* HomeworkViewModel.swift in Sources */,
+				E0F100000000000000000116 /* HomeworkView.swift in Sources */,
+				E0F100000000000000000117 /* GradesView.swift in Sources */,
+				E0F100000000000000000118 /* GradesService.swift in Sources */,
+				E0F100000000000000000119 /* GradesViewModel.swift in Sources */,
+				E0F10000000000000000011F /* GradeTerms.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E0F100000000000000000304 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E0F10000000000000000010E /* MessagesTests.swift in Sources */,
+				E0F100000000000000000113 /* HomeworkTests.swift in Sources */,
+				E0F10000000000000000011B /* CoreTests.swift in Sources */,
+				E0F100000000000000000122 /* AccentTests.swift in Sources */,
+				E0F100000000000000000123 /* GradeTermsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		E0F100000000000000000401 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_TESTABILITY = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = EduFlow/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.eduflow.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E0F100000000000000000405 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.eduflow.app.tests;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EduFlow.app/EduFlow";
+			};
+			name = Debug;
+		};
+		E0F100000000000000000406 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.eduflow.app.tests;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EduFlow.app/EduFlow";
+			};
+			name = Release;
+		};
+		E0F100000000000000000402 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = EduFlow/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = de.eduflow.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		E0F100000000000000000403 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				MARKETING_VERSION = 0.1.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		E0F100000000000000000404 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				MARKETING_VERSION = 0.1.0;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E0F100000000000000000501 /* Build configuration list for PBXNativeTarget "EduFlow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E0F100000000000000000401 /* Debug */,
+				E0F100000000000000000402 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E0F100000000000000000503 /* Build configuration list for PBXNativeTarget "EduFlowTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E0F100000000000000000405 /* Debug */,
+				E0F100000000000000000406 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E0F100000000000000000502 /* Build configuration list for PBXProject "EduFlow" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E0F100000000000000000403 /* Debug */,
+				E0F100000000000000000404 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E0F100000000000000000001 /* Project object */;
+}

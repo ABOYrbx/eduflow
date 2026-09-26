@@ -101,8 +101,14 @@ def main():
                        headers={"Authorization": "Bearer " + token_b})
         check("gelöschtes Gerät 401",
               r.status_code == 401)
-        # Refresh rotiert: neu gültig, alt ungültig
-        r = client.post("/api/v1/auth/refresh", headers=ha)
+        # Refresh rotiert: neu gültig, alt ungültig. Der EduPage-Re-Login
+        # wird per Stub ersetzt (offline, kein Konto nötig).
+        orig_do_login = A.do_login
+        A.do_login = lambda u, p, s: (object(), None, "schule")
+        try:
+            r = client.post("/api/v1/auth/refresh", headers=ha)
+        finally:
+            A.do_login = orig_do_login
         body = r.get_json()
         check("refresh 200 mit neuem Token",
               r.status_code == 200 and body["status"] == "ok"
@@ -118,6 +124,24 @@ def main():
                 headers={"Authorization": "Bearer " + token_c})
             check("neues Token nach Refresh gültig",
                   r.status_code == 200)
+            # Revalidierung: Ist das Passwort inzwischen ungültig, gibt es
+            # kein neues Token – und das alte bleibt unangetastet.
+            A.do_login = lambda u, p, s: (_ for _ in ()).throw(
+                BadCredentialsException())
+            try:
+                r = client.post(
+                    "/api/v1/auth/refresh",
+                    headers={"Authorization": "Bearer " + token_c})
+                check("refresh bei falschem Passwort 401 BAD_CREDENTIALS",
+                      r.status_code == 401
+                      and r.get_json()["code"] == "BAD_CREDENTIALS")
+                r = client.get(
+                    "/api/v1/me",
+                    headers={"Authorization": "Bearer " + token_c})
+                check("Token nach abgelehntem Refresh weiter gültig",
+                      r.status_code == 200)
+            finally:
+                A.do_login = orig_do_login
         finally:
             core.revoke_token(token_c)
     finally:
@@ -181,6 +205,21 @@ def main():
                                                 "password": ""})
     check("nach Reset wieder 400 VALIDATION",
           r.status_code == 400 and r.get_json()["code"] == "VALIDATION")
+
+    # XFF-Spoofing umgeht das Limit nicht (Standard: Header wird ignoriert,
+    # nur mit EDUFLOW_TRUST_PROXY=1 hinter vertrauenswürdigem Proxy aktiv).
+    reset_login_rate_limit()
+    try:
+        last = None
+        for i in range(21):
+            last = client.post("/api/v1/auth/login",
+                               json={"username": "", "password": ""},
+                               headers={"X-Forwarded-For": "10.9.9.%d" % i})
+        check("21 Versuche mit rotiertem XFF trotzdem 429 RATE_LIMITED",
+              last.status_code == 429
+              and last.get_json()["code"] == "RATE_LIMITED")
+    finally:
+        reset_login_rate_limit()
 
     print("Alle Härtungs-Tests bestanden.")
 

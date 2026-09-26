@@ -1,0 +1,863 @@
+import SwiftUI
+
+/// Startseite 1:1 wie `/uebersicht`: Uhr + Wetter + schwarze Jetzt-Karte
+/// oben, darunter zwei Spalten (Hausaufgaben | Mittagessen) mit
+/// Kennzahlen-Band, Karten und Tages-Blätterer.
+public struct OverviewView: View {
+    @Environment(\.colorScheme) private var scheme
+    @Environment(\.uberAccent) private var accent
+    @State private var vm: OverviewViewModel
+    @State private var now = Date()
+    @State private var lessonIndex = 0
+    @State private var showWetter = false
+    @State private var showLayoutEditor = false
+    @State private var layoutDraft = ["messages", "homework", "weather", "lunch"]
+    private let onNavigate: (Route) -> Void
+    private let onSessionExpired: () -> Void
+
+    private static let clock: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "de_DE")
+        formatter.dateFormat = "HH:mm:ss"
+        return formatter
+    }()
+
+    private static let dateLine: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "de_DE")
+        formatter.dateFormat = "EEEE, d. MMMM yyyy"
+        return formatter
+    }()
+
+    private let clockTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+
+    public init(
+        store: TokenStore,
+        onNavigate: @escaping (Route) -> Void,
+        onSessionExpired: @escaping () -> Void
+    ) {
+        _vm = State(initialValue: OverviewViewModel(store: store))
+        self.onNavigate = onNavigate
+        self.onSessionExpired = onSessionExpired
+    }
+
+    public var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+                topRow
+                HStack {
+                    Spacer()
+                    Button("Übersicht anpassen") {
+                        layoutDraft = Self.normalizedOrder(vm.settings.ovOrder)
+                        showLayoutEditor = true
+                    }
+                    .buttonStyle(UberButtonStyle(.smallLight))
+                }
+                ForEach(Self.normalizedOrder(vm.settings.ovOrder), id: \.self) { section in
+                    switch section {
+                    case "messages": messagesColumn
+                    case "homework": homeworkColumn
+                    case "weather": if vm.settings.ovWetter { weatherCard.frame(height: 150) }
+                    case "lunch": essenColumn
+                    default: Color.clear.frame(height: 0)
+                    }
+                }
+                footer
+            }
+            .padding(20)
+            .frame(maxWidth: 1280)
+            .frame(maxWidth: .infinity)
+        }
+        .background(EduFlowPalette.canvas(scheme))
+        .navigationTitle("Übersicht")
+        .onReceive(clockTimer) { now = $0 }
+        .task { await vm.load(onSessionExpired: onSessionExpired) }
+        .refreshable { await vm.load(refresh: true, onSessionExpired: onSessionExpired) }
+        .sheet(isPresented: $showWetter) {
+            WetterSheet(wetter: vm.wetter)
+        }
+        .sheet(isPresented: $showLayoutEditor) {
+            OverviewOrderEditor(order: $layoutDraft, saving: vm.isSavingOrder, error: vm.orderSaveError) {
+                let saved = await vm.saveOverviewOrder(layoutDraft, onSessionExpired: onSessionExpired)
+                if saved { showLayoutEditor = false }
+                return saved
+            }
+        }
+    }
+
+    // MARK: - Obere Reihe (`.ov-top`)
+
+    private var topRow: some View {
+        VStack(spacing: 16) {
+            clockCard
+                .riseIn()
+            nowCard
+                .riseIn(delay: 0.08)
+        }
+    }
+
+    private var clockCard: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Spacer()
+            Text(Self.clock.string(from: now))
+                .font(UberFont.text(44, weight: .heavy))
+                .tracking(-1.5)
+                .monospacedDigit()
+            Text(Self.dateLine.string(from: now))
+                .font(UberFont.text(14, weight: .semibold))
+                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+            Spacer()
+        }
+        .padding(.vertical, 18)
+        .padding(.horizontal, 26)
+        .frame(minWidth: 200)
+        .background(EduFlowPalette.card(scheme))
+        .clipShape(.rect(cornerRadius: 14))
+        .overlay {
+            RoundedRectangle(cornerRadius: 14)
+                .stroke(EduFlowPalette.border(scheme), lineWidth: 1)
+        }
+    }
+
+    private var weatherCard: some View {
+        Button { showWetter = vm.wetter.today != nil } label: {
+            HStack(spacing: 0) {
+                WetterDayCard(
+                    label: "Heute",
+                    big: vm.wetter.today.map { "\($0.temp ?? 0)°" } ?? "–",
+                    cond: [vm.wetter.today?.desc, vm.wetter.today.map { "· \($0.max ?? 0)°/\($0.min ?? 0)°" }].compactMap { $0 }.joined(separator: " "),
+                    icon: vm.wetter.today?.icon,
+                    pop: vm.wetter.today?.pop
+                )
+                Divider()
+                WetterDayCard(
+                    label: "Morgen",
+                    big: vm.wetter.tomorrow.map { "\($0.max ?? 0)°" } ?? "–",
+                    cond: [vm.wetter.tomorrow?.desc, vm.wetter.tomorrow.map { "· \($0.max ?? 0)°/\($0.min ?? 0)°" }].compactMap { $0 }.joined(separator: " "),
+                    icon: vm.wetter.tomorrow?.icon,
+                    pop: vm.wetter.tomorrow?.pop
+                )
+                Divider()
+                WetterDayCard(
+                    label: vm.wetter.day3?.label ?? "Übermorgen",
+                    big: vm.wetter.day3.map { "\($0.max ?? 0)°" } ?? "–",
+                    cond: [vm.wetter.day3?.desc, vm.wetter.day3.map { "· \($0.max ?? 0)°/\($0.min ?? 0)°" }].compactMap { $0 }.joined(separator: " "),
+                    icon: vm.wetter.day3?.icon,
+                    pop: vm.wetter.day3?.pop
+                )
+            }
+            .padding(.vertical, 16)
+            .padding(.horizontal, 22)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .buttonStyle(.plain)
+        .background(EduFlowPalette.card(scheme))
+        .clipShape(.rect(cornerRadius: 14))
+        .overlay {
+            RoundedRectangle(cornerRadius: 14)
+                .stroke(EduFlowPalette.border(scheme), lineWidth: 1)
+        }
+    }
+
+    /// Schwarze Jetzt-Karte mit Stunden-Karussell (`.now-card`).
+    private var nowCard: some View {
+        let slides = vm.lessons.filter { !$0.isEvent }
+        return VStack(alignment: .leading, spacing: 2) {
+            HStack {
+                Text("Stunden heute")
+                    .font(UberFont.text(11, weight: .bold))
+                    .tracking(1.6)
+                    .opacity(0.6)
+                Spacer()
+                if slides.count > 1 {
+                    Text("\(lessonIndex + 1) / \(slides.count)")
+                        .font(UberFont.text(11, weight: .heavy))
+                        .tracking(0.6)
+                        .padding(.vertical, 3)
+                        .padding(.horizontal, 10)
+                        .background(.white.opacity(0.12))
+                        .clipShape(.capsule)
+                }
+            }
+            if slides.isEmpty {
+                Text("Schulfrei")
+                    .font(UberFont.text(30, weight: .heavy))
+                    .tracking(-0.8)
+                    .padding(.vertical, 4)
+                Text("kein Unterricht heute")
+                    .font(UberFont.text(13, weight: .medium))
+                    .opacity(0.75)
+            } else {
+                let lesson = slides[min(lessonIndex, slides.count - 1)]
+                let pair = vm.currentAndNext(now: now)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(lesson.title)
+                        .font(UberFont.text(30, weight: .heavy))
+                        .tracking(-0.8)
+                        .lineLimit(1)
+                        .padding(.vertical, 4)
+                    Text("\(lesson.period). Std · \(lesson.time)\(lesson.rooms.isEmpty ? "" : " · Raum \(lesson.rooms)")\(lesson.teachers.isEmpty ? "" : " · \(lesson.teachers)")")
+                        .font(UberFont.text(13, weight: .medium))
+                        .opacity(0.75)
+                    HStack(spacing: 6) {
+                        if isNow(lesson, pair: pair) {
+                            HStack(spacing: 6) {
+                                PulseDot()
+                                Text("Jetzt")
+                                    .font(UberFont.text(11, weight: .bold))
+                            }
+                            .padding(.vertical, 5)
+                            .padding(.horizontal, 12)
+                            .background(accent.resolved(scheme))
+                            .foregroundStyle(accent.resolvedInk(scheme))
+                            .clipShape(.capsule)
+                        }
+                        if lesson.isCancelled {
+                            Tag("Entfällt", style: .muted)
+                        }
+                    }
+                    .padding(.top, 8)
+                }
+                .id(lesson.uid)
+                .transition(
+                    .asymmetric(
+                        insertion: .move(edge: .trailing).combined(with: .opacity),
+                        removal: .move(edge: .leading).combined(with: .opacity)
+                    )
+                )
+            }
+            Spacer()
+            HStack {
+                NowArrow("‹") { stepLesson(-1, count: slides.count) }
+                Spacer()
+                Button("Stundenplan") { onNavigate(.timetable) }
+                    .font(UberFont.text(13, weight: .bold))
+                    .opacity(0.75)
+                Spacer()
+                NowArrow("›") { stepLesson(1, count: slides.count) }
+            }
+            .padding(.top, 10)
+        }
+        .padding(.vertical, 18)
+        .padding(.horizontal, 24)
+        .frame(maxWidth: .infinity, minHeight: 170)
+        .background(nowBackground)
+        .foregroundStyle(.white)
+        .clipShape(.rect(cornerRadius: 14))
+        .overlay {
+            if scheme == .dark {
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(EduFlowPalette.border(scheme), lineWidth: 1)
+            }
+        }
+        .onChange(of: vm.lessons) {
+            lessonIndex = startLessonIndex(slides: slides)
+        }
+    }
+
+    private var nowBackground: Color {
+        scheme == .dark
+            ? EduFlowPalette.card(scheme)
+            : Color(red: 0, green: 0, blue: 0)
+    }
+
+    private func isNow(_ lesson: Lesson, pair: (current: Lesson?, next: Lesson?)) -> Bool {
+        pair.current?.uid == lesson.uid
+    }
+
+    private func startLessonIndex(slides: [Lesson]) -> Int {
+        let pair = vm.currentAndNext(now: now)
+        if let current = pair.current,
+            let index = slides.firstIndex(where: { $0.uid == current.uid })
+        {
+            return index
+        }
+        if let next = pair.next,
+            let index = slides.firstIndex(where: { $0.uid == next.uid })
+        {
+            return index
+        }
+        return 0
+    }
+
+    private func stepLesson(_ delta: Int, count: Int) {
+        guard count > 0 else { return }
+        withAnimation(.easeInOut(duration: 0.25)) {
+            lessonIndex = min(max(lessonIndex + delta, 0), count - 1)
+        }
+    }
+
+    // MARK: - Spalten (`.ov-grid`)
+
+    private var columns: some View {
+        VStack(spacing: 24) {
+            homeworkColumn
+                .riseIn(delay: 0.08)
+            essenColumn
+                .riseIn(delay: 0.14)
+        }
+    }
+
+    private var messagesColumn: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Nachrichten · \(vm.messagesTotal)")
+                    .font(UberFont.text(20, weight: .heavy))
+                Spacer()
+                Button("Alle Nachrichten") { onNavigate(.messages) }
+                    .buttonStyle(UberButtonStyle(.smallLight))
+            }
+            if vm.messages.isEmpty {
+                Text("Keine neuen Nachrichten.")
+                    .font(UberFont.text(14))
+                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(18)
+                    .background(EduFlowPalette.card(scheme))
+                    .clipShape(.rect(cornerRadius: 14))
+            } else {
+                ForEach(Array(vm.messages.prefix(5)), id: \.id) { message in
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack {
+                            Text(message.author.isEmpty ? "Schule" : message.author)
+                                .font(UberFont.text(14, weight: .bold))
+                            Spacer()
+                            Text(message.timestamp)
+                                .font(UberFont.text(11, weight: .medium))
+                                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                        }
+                        Text(message.text.isEmpty ? message.typeLabel : message.text)
+                            .font(UberFont.text(13))
+                            .lineLimit(3)
+                            .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                    }
+                    .padding(14)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(EduFlowPalette.card(scheme))
+                    .clipShape(.rect(cornerRadius: 14))
+                    .overlay { RoundedRectangle(cornerRadius: 14).stroke(EduFlowPalette.border(scheme), lineWidth: 1) }
+                }
+            }
+        }
+    }
+
+    private static func normalizedOrder(_ raw: String) -> [String] {
+        let valid = ["messages", "homework", "weather", "lunch"]
+        let parsed = raw.split(separator: ",").map(String.init).filter { valid.contains($0) }
+        let unique = parsed.reduce(into: [String]()) { result, key in
+            if !result.contains(key) { result.append(key) }
+        }
+        return unique + valid.filter { !unique.contains($0) }
+    }
+
+    private var homeworkColumn: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Hausaufgaben")
+                    .font(UberFont.text(20, weight: .heavy))
+                    .tracking(-0.5)
+                Spacer()
+                Button("Alle Aufgaben") { onNavigate(.homework) }
+                    .buttonStyle(UberButtonStyle(.smallPrimary))
+                    .hoverLift()
+            }
+            .frame(minHeight: 36)
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+                HStack(spacing: 6) {
+                    Text("\(vm.messagesTotal)")
+                        .font(UberFont.text(18, weight: .heavy))
+                        .tracking(-0.5)
+                    Text("ungelesen")
+                        .font(UberFont.text(14, weight: .semibold))
+                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                }
+                HStack(spacing: 6) {
+                    Text("\(vm.homeworkOpen)")
+                        .font(UberFont.text(18, weight: .heavy))
+                        .tracking(-0.5)
+                    Text("offen")
+                        .font(UberFont.text(14, weight: .semibold))
+                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                }
+                HStack(spacing: 6) {
+                    Text("\(vm.homeworkOverdue)")
+                        .font(UberFont.text(18, weight: .heavy))
+                        .foregroundStyle(EduFlowPalette.red)
+                    Text("überfällig")
+                        .font(UberFont.text(14, weight: .semibold))
+                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                }
+                HStack(spacing: 6) {
+                    Text("\(vm.homeworkDone)")
+                        .font(UberFont.text(18, weight: .heavy))
+                        .foregroundStyle(EduFlowPalette.green)
+                    Text("erledigt")
+                        .font(UberFont.text(14, weight: .semibold))
+                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                }
+            }
+            .padding(.vertical, 14)
+            .padding(.horizontal, 18)
+            .frame(maxWidth: .infinity)
+            .background(EduFlowPalette.card(scheme))
+            .clipShape(.rect(cornerRadius: 14))
+            .overlay {
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(EduFlowPalette.border(scheme), lineWidth: 1)
+            }
+            if let error = vm.homeworkError {
+                Notice(error.message)
+            } else if vm.homework.isEmpty {
+                Text("Keine offenen Hausaufgaben. Sehr gut.")
+                    .font(UberFont.text(15))
+                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                    .frame(maxWidth: .infinity)
+                    .padding(48)
+            } else {
+                ForEach(Array(vm.homework.enumerated()), id: \.element.id) { index, item in
+                    HomeworkCard(status: item.status, isDone: item.isDone, isHidden: false) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text(item.title)
+                                .font(UberFont.text(17, weight: .heavy))
+                                .tracking(-0.3)
+                            HStack(spacing: 8) {
+                                Tag(item.status, style: statusTag(item.status))
+                                (Text("fällig: ")
+                                    + Text(item.dueDisplay).bold())
+                                    .font(UberFont.text(13))
+                                if !item.subject.isEmpty {
+                                    Text(item.subject)
+                                        .font(UberFont.text(13))
+                                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                                }
+                                Text(item.author)
+                                    .font(UberFont.text(13))
+                                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                            }
+                            Text(item.description.isEmpty ? "(keine Beschreibung)" : item.description)
+                                .font(UberFont.text(15))
+                                .lineSpacing(4)
+                        }
+                    }
+                    .riseIn(delay: Double(min(index, 8)) * 0.06)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    private func statusTag(_ status: String) -> TagStyle {
+        switch status {
+        case HomeworkItemStatus.ueberfaellig: return .red
+        case HomeworkItemStatus.heute: return .amber
+        case HomeworkItemStatus.offen: return .blue
+        case HomeworkItemStatus.erledigt: return .green
+        default: return .gray
+        }
+    }
+
+    private var essenColumn: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                Text("Mittagessen")
+                    .font(UberFont.text(20, weight: .heavy))
+                    .tracking(-0.5)
+                Spacer()
+                if let source = vm.essen.sourceUrl, !source.isEmpty, let url = URL(string: source) {
+                    Link("PDF", destination: url)
+                        .font(UberFont.text(13, weight: .bold))
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 18)
+                        .background(EduFlowPalette.card(scheme))
+                        .foregroundStyle(EduFlowPalette.ink(scheme))
+                        .clipShape(.capsule)
+                        .overlay {
+                            Capsule().stroke(EduFlowPalette.borderStrong(scheme), lineWidth: 1)
+                        }
+                }
+            }
+            .frame(minHeight: 36)
+            Text("Woche \(vm.essen.label ?? vm.essen.week ?? "")")
+                .font(UberFont.text(14, weight: .semibold))
+                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                .padding(.vertical, 14)
+                .padding(.horizontal, 18)
+                .frame(maxWidth: .infinity)
+                .background(EduFlowPalette.card(scheme))
+                .clipShape(.rect(cornerRadius: 14))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 14)
+                        .stroke(EduFlowPalette.border(scheme), lineWidth: 1)
+                }
+            VStack(alignment: .leading, spacing: 8) {
+                if let error = vm.essenError {
+                    Text(error.message)
+                        .font(UberFont.text(13))
+                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                } else {
+                    let dayName = EssenDays.order[min(vm.essenDay, EssenDays.order.count - 1)]
+                    let day = vm.essen.days?[dayName]
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack(alignment: .firstTextBaseline, spacing: 8) {
+                            Text(dayName)
+                                .font(UberFont.text(17, weight: .heavy))
+                                .tracking(-0.3)
+                            Text(formattedDayDate(day?.date))
+                                .font(UberFont.text(13, weight: .semibold))
+                                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                            if dayName == vm.essen.today {
+                                Tag("Heute", style: .solid)
+                            }
+                        }
+                        if let dishes = day?.dishes, !dishes.isEmpty {
+                            ForEach(dishes.indices, id: \.self) { index in
+                                HStack(alignment: .firstTextBaseline, spacing: 12) {
+                                    Text(dishes[index].text ?? "")
+                                        .font(UberFont.text(14))
+                                    Spacer()
+                                    Text(dishes[index].price ?? "")
+                                        .font(UberFont.text(14, weight: .heavy))
+                                        .monospacedDigit()
+                                }
+                                .padding(.vertical, 10)
+                                .padding(.horizontal, 14)
+                                .background(EduFlowPalette.surface1(scheme))
+                                .clipShape(.rect(cornerRadius: 12))
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(EduFlowPalette.border(scheme), lineWidth: 1)
+                                }
+                            }
+                            if let note = day?.note, !note.isEmpty {
+                                Text(note)
+                                    .font(UberFont.text(13))
+                                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                            }
+                        } else {
+                            Text("Für diesen Tag steht nichts im Plan.")
+                                .font(UberFont.text(13))
+                                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                        }
+                    }
+                    .id(dayName)
+                    .transition(
+                        .asymmetric(
+                            insertion: .move(edge: .trailing).combined(with: .opacity),
+                            removal: .move(edge: .leading).combined(with: .opacity)
+                        )
+                    )
+                }
+                HStack {
+                    EssenArrow("‹") {
+                        withAnimation(.easeInOut(duration: 0.25)) {
+                            vm.essenDay = (vm.essenDay + EssenDays.order.count - 1) % EssenDays.order.count
+                        }
+                    }
+                    Spacer()
+                    Text(vm.essen.days == nil ? "" : "\(vm.essenDay + 1) / \(EssenDays.order.count)")
+                        .font(UberFont.text(12, weight: .heavy))
+                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                    Spacer()
+                    EssenArrow("›") {
+                        withAnimation(.easeInOut(duration: 0.25)) {
+                            vm.essenDay = (vm.essenDay + 1) % EssenDays.order.count
+                        }
+                    }
+                }
+                .padding(.top, 12)
+            }
+            .padding(.vertical, 20)
+            .padding(.horizontal, 22)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(EduFlowPalette.card(scheme))
+            .clipShape(.rect(cornerRadius: 14))
+            .overlay {
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(EduFlowPalette.border(scheme), lineWidth: 1)
+            }
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+    private func formattedDayDate(_ iso: String?) -> String {
+        let parts = (iso ?? "").split(separator: "-")
+        guard parts.count == 3, let day = Int(parts[2]), let month = Int(parts[1]) else { return "" }
+        return "\(day).\(month)."
+    }
+
+    private var footer: some View {
+        Text("EduFlow Dashboard · lokal")
+            .font(UberFont.text(12))
+            .foregroundStyle(EduFlowPalette.inkDim(scheme))
+            .frame(maxWidth: .infinity)
+            .padding(.top, 16)
+    }
+}
+
+// MARK: - Bausteine
+
+private struct OverviewOrderEditor: View {
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) private var scheme
+    @Binding var order: [String]
+    let saving: Bool
+    let error: String?
+    let onSave: () async -> Bool
+
+    private let labels = [
+        "messages": "Nachrichten",
+        "homework": "Hausaufgaben",
+        "weather": "Wetter",
+        "lunch": "Mittagessen",
+    ]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 18) {
+            Text("Übersicht anpassen")
+                .font(UberFont.text(24, weight: .heavy))
+            Text("Lege fest, welche Bereiche zuerst erscheinen.")
+                .font(UberFont.text(14))
+                .foregroundStyle(.secondary)
+            ForEach(order.indices, id: \.self) { index in
+                HStack {
+                    Text(labels[order[index]] ?? order[index])
+                        .font(UberFont.text(15, weight: .semibold))
+                    Spacer()
+                    Button("↑") { order = OverviewOrderEditor.move(order, from: index, by: -1) }
+                        .disabled(index == 0)
+                    Button("↓") { order = OverviewOrderEditor.move(order, from: index, by: 1) }
+                        .disabled(index == order.count - 1)
+                }
+                .padding(12)
+                .background(EduFlowPalette.card(scheme))
+                .clipShape(.rect(cornerRadius: 12))
+            }
+            if let error {
+                Text(error)
+                    .font(UberFont.text(13, weight: .semibold))
+                    .foregroundStyle(EduFlowPalette.red)
+            }
+            HStack {
+                Button("Abbrechen") { dismiss() }
+                    .buttonStyle(UberButtonStyle(.smallLight))
+                Spacer()
+                Button(saving ? "Speichert …" : "Speichern") {
+                    Task { _ = await onSave() }
+                }
+                    .buttonStyle(UberButtonStyle(.smallPrimary))
+                    .disabled(saving)
+            }
+            .padding(.top, 4)
+        }
+        .padding(24)
+        .frame(minWidth: 420, minHeight: 360)
+    }
+
+    private static func move(_ order: [String], from: Int, by offset: Int) -> [String] {
+        let target = min(max(from + offset, 0), order.count - 1)
+        guard target != from else { return order }
+        var result = order
+        let item = result.remove(at: from)
+        result.insert(item, at: target)
+        return result
+    }
+}
+
+/// Wetter-Tag (`.wx-day`): Label, Icon, Temperatur, Bedingung, Regen.
+private struct WetterDayCard: View {
+    @Environment(\.colorScheme) var scheme
+    let label: String
+    let big: String
+    let cond: String
+    let icon: String?
+    let pop: Int?
+
+    var body: some View {
+        VStack(spacing: 2) {
+            Text(label.uppercased())
+                .font(UberFont.text(11, weight: .bold))
+                .tracking(1.2)
+                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+            if let icon, !icon.isEmpty {
+                AsyncImage(url: URL(string: "https://openweathermap.org/img/wn/\(icon)@2x.png")) { image in
+                    image.resizable()
+                } placeholder: {
+                    Color.clear
+                }
+                .frame(width: 52, height: 52)
+            }
+            Text(big)
+                .font(UberFont.text(24, weight: .heavy))
+                .tracking(-0.5)
+                .monospacedDigit()
+            Text(cond)
+                .font(UberFont.text(12, weight: .semibold))
+                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+            Text("☂ \(pop.map { "\($0) %" } ?? "–")")
+                .font(UberFont.text(12, weight: .semibold))
+                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+        }
+        .frame(maxWidth: .infinity)
+    }
+}
+
+/// Runder Pfeil in der Jetzt-Karte (`.now-arrow`).
+private struct NowArrow: View {
+    let title: String
+    let action: () -> Void
+
+    init(_ title: String, action: @escaping () -> Void) {
+        self.title = title
+        self.action = action
+    }
+
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(.system(size: 18))
+                .frame(width: 32, height: 32)
+                .background(.white.opacity(0.001))
+                .clipShape(.circle)
+                .overlay { Circle().stroke(.white.opacity(0.4), lineWidth: 1) }
+        }
+        .buttonStyle(.plain)
+        .foregroundStyle(.white)
+    }
+}
+
+/// Runder Pfeil im Essen-Blätterer (`.essen-arrow`).
+private struct EssenArrow: View {
+    @Environment(\.colorScheme) var scheme
+    let title: String
+    let action: () -> Void
+
+    init(_ title: String, action: @escaping () -> Void) {
+        self.title = title
+        self.action = action
+    }
+
+    var body: some View {
+        Button(action: action) {
+            Text(title)
+                .font(.system(size: 18))
+                .foregroundStyle(EduFlowPalette.ink(scheme))
+                .frame(width: 32, height: 32)
+                .background(.clear)
+                .clipShape(.circle)
+                .overlay { Circle().stroke(EduFlowPalette.borderStrong(scheme), lineWidth: 1) }
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+/// Wetter-Details als Sheet (`.wx-modal`): Stunden + Details.
+private struct WetterSheet: View {
+    @Environment(\.colorScheme) var scheme
+    @Environment(\.dismiss) var dismiss
+    let wetter: WetterResponse
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Spacer()
+                    Button("Schließen") { dismiss() }
+                        .buttonStyle(UberButtonStyle(.smallLight))
+                        .hoverLift()
+                }
+                if let city = wetter.city, !city.isEmpty {
+                    Text("Wetter in \(city)".uppercased())
+                        .font(UberFont.text(11, weight: .bold))
+                        .tracking(1.2)
+                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                }
+                if let today = wetter.today {
+                    HStack(alignment: .firstTextBaseline, spacing: 12) {
+                        Text("\(today.temp ?? 0)°")
+                            .font(UberFont.text(44, weight: .heavy))
+                            .tracking(-1)
+                        Text("\(today.desc ?? "") · \(today.max ?? 0)°/\(today.min ?? 0)°")
+                            .font(UberFont.text(14))
+                            .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                    }
+                }
+                if let hours = wetter.hourly, !hours.isEmpty {
+                    Text("Nächste 24 Stunden")
+                        .font(UberFont.text(14, weight: .heavy))
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 8) {
+                            ForEach(hours.indices, id: \.self) { index in
+                                let hour = hours[index]
+                                VStack(spacing: 2) {
+                                    Text(index == 0 ? "Jetzt" : (hour.time ?? ""))
+                                        .font(UberFont.text(11, weight: .bold))
+                                        .tracking(1.2)
+                                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                                    Text("\(hour.temp ?? 0)°")
+                                        .font(UberFont.text(16, weight: .heavy))
+                                    Text("☂ \(hour.pop.map { "\($0) %" } ?? "–")")
+                                        .font(UberFont.text(12, weight: .semibold))
+                                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                                }
+                                .padding(8)
+                                .frame(minWidth: 64)
+                                .background(EduFlowPalette.card(scheme))
+                                .clipShape(.rect(cornerRadius: 12))
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(EduFlowPalette.border(scheme), lineWidth: 1)
+                                }
+                            }
+                        }
+                    }
+                }
+                if let details = wetter.details {
+                    Text("Details")
+                        .font(UberFont.text(14, weight: .heavy))
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+                        WetterDetail(label: "Gefühlt", value: details.feelsLike.map { "\($0)°" } ?? "–")
+                        WetterDetail(
+                            label: "Wind",
+                            value: [details.windKmh.map { "\($0) km/h" }, details.windDir].compactMap { $0 }.joined(separator: " ")
+                        )
+                        WetterDetail(label: "Luftfeuchte", value: details.humidity.map { "\($0) %" } ?? "–")
+                        WetterDetail(label: "Luftdruck", value: details.pressure.map { "\($0) hPa" } ?? "–")
+                        WetterDetail(label: "Wolken", value: details.clouds.map { "\($0) %" } ?? "–")
+                        WetterDetail(label: "Sicht", value: details.visibilityKm.map { "\($0) km" } ?? "–")
+                        WetterDetail(label: "Sonnenaufgang", value: details.sunrise ?? "–")
+                        WetterDetail(label: "Sonnenuntergang", value: details.sunset ?? "–")
+                    }
+                }
+            }
+            .padding(20)
+        }
+        .frame(minWidth: 340, minHeight: 400)
+        .background(EduFlowPalette.canvas(scheme))
+    }
+}
+
+private struct WetterDetail: View {
+    @Environment(\.colorScheme) var scheme
+    let label: String
+    let value: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(label.uppercased())
+                .font(UberFont.text(11, weight: .bold))
+                .tracking(1.2)
+                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+            Text(value.isEmpty ? "–" : value)
+                .font(UberFont.text(16, weight: .heavy))
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, 10)
+        .padding(.horizontal, 14)
+        .background(EduFlowPalette.card(scheme))
+        .clipShape(.rect(cornerRadius: 12))
+        .overlay {
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(EduFlowPalette.border(scheme), lineWidth: 1)
+        }
+    }
+}

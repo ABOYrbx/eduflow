@@ -6,4 +6,47 @@ venv/
 .cache/
 .eduflow_secret
 .eduflow.key
+/node_modules/
+/apps/api/dist/
+/apps/api/coverage/
+/apps/web/.next/
+/apps/web/out/
+/apps/api/node_modules/
+/apps/web/node_modules/
+/packages/contracts/dist/
+/packages/contracts/node_modules/
+/apps/api/.env
+/apps/api/.env.local
+/apps/web/.env*
+/tsconfig.tsbuildinfo
+/apps/api/tsconfig.tsbuildinfo
+/apps/web/tsconfig.tsbuildinfo
+/packages/contracts/tsconfig.tsbuildinfo
+.DS_Store
+.idea/
+.freebuff/
+# Lokale Build-/IDE-Dateien (nie committen)
+android/local.properties
+xcuserdata/
+*.xcuserstate
+# Build-/Output-Ordner (nie committen, enthalten lokale Pfade)
+build/
+.gradle/
+android/.gradle/
+android/app/build/
+DerivedData/
+# Generierte Docs-Website (mkdocs build)
 site/
+# Signing-/Schlüsseldateien (nie committen, auch später nicht)
+*.jks
+*.keystore
+*.p12
+*.pem
+*.key
+*.mobileprovision
+*.provisionprofile
+google-services.json
+GoogleService-Info.plist
+# Lokale Env-Varianten (Beispiele als *.example sind ok)
+.env.local
+.env.*.local

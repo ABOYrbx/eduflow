@@ -47,7 +47,7 @@ npm run build
 - `typecheck`: TypeScript-Prüfung der API, Web-App und Verträge.
 - `test`: Jest-Tests der API und Node-Testläufe der Contracts. Der Contracts-Test läuft auf `packages/contracts/dist/*.test.js`; bei einem sauberen Checkout zunächst `npm run build --workspace @eduflow/contracts` oder `npm run build` ausführen, falls die kompilierten Dateien fehlen.
 - `build`: Contracts, NestJS und Next.js bauen.
-- `npm run dev:api`: NestJS im Watch-Modus; API-Standardport 8001, sofern `PORT` nicht gesetzt ist.
+- `npm run dev:api`: NestJS im Watch-Modus; API-Standardport 8000, sofern `PORT` nicht gesetzt ist.
 - `npm run dev:web`: Next.js-Entwicklungsserver.
 - `npm run db:generate`, `npm run db:migrate`, `npm run db:deploy`: Prisma Client erzeugen bzw. Datenbankmigrationen verwalten. Diese Befehle verändern eine Datenbank; nur in einer bewusst lokalen Entwicklungsumgebung ausführen.
 
@@ -56,13 +56,13 @@ Das Setup benötigt PostgreSQL-Konfiguration unter `apps/api/.env.local` oder `a
 | Variable | Verwendung |
 | --- | --- |
 | `DATABASE_URL` | Verbindung zur lokalen PostgreSQL-Datenbank. |
-| `PORT` | API-Port: standardmäßig 8001, im `run.sh`-Demo-Start 8101. |
+| `PORT` | API-Port: standardmäßig 8000, im `run.sh`-Demo-Start 8101. |
 | `JWT_ACCESS_SECRET` | Geheimer Schlüssel zum Signieren der Demo-JWTs; mindestens 32 Byte. |
 | `CREDENTIAL_ENCRYPTION_KEY` | Separater 32-Byte-Schlüssel (64 Hex-Zeichen) für die Credential-Vault-Verschlüsselung der gespeicherten EduPage-Zugangsdaten. |
 | `EDUFLOW_PROVIDER` | `fake` wählt den Demo-Schulprovider; jeder andere Wert den echten EduPage-Anbieter (Parität N-A–NI, Cutover N-J offen). |
-| `API_SERVER_URL` | NestJS-Ursprung für die Next.js-Serverrouten; deren Fallback ist `http://127.0.0.1:8001`. |
+| `API_SERVER_URL` | NestJS-Ursprung für die Next.js-Serverrouten; deren Fallback ist `http://127.0.0.1:8000`. |
 
-**Bekannte Demo-Konfigurationsabweichung:** `run.sh` startet die API auf Port 8101, während die Next.js-API-Routen ohne gesetztes `API_SERVER_URL` auf Port 8001 zeigen. Das Skript setzt `API_SERVER_URL` derzeit nicht explizit für den Web-Prozess. Bei einer Standardinstallation kann der Browser-Webclient deshalb die gestartete Demo-API verfehlen; für einen verlässlichen Web-Demoaufruf muss die Zieladresse auf `http://127.0.0.1:8101` gesetzt oder der Startpfad korrigiert werden. Dies ist eine Codeprüfung, keine Aussage über einen hier ausgeführten Browser-Ende-zu-Ende-Test.
+**Hinweis:** `run.sh` startet die Demo-API auf Port 8101 und setzt `API_SERVER_URL` für den Web-Prozess entsprechend, damit der Browser-Webclient die Demo-API trifft.
 
 ## Tests und Builds
 

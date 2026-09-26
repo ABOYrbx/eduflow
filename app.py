@@ -14,6 +14,7 @@ Then open http://127.0.0.1:8000
 
 import html
 import json
+import logging
 import os
 import re
 import secrets
@@ -89,6 +90,40 @@ app = Flask(__name__)
 # der Server je im LAN für mehrere Nutzer läuft.
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = int(
     os.environ.get("EDUFLOW_STATIC_MAX_AGE", "0") or 0)
+
+# Session-Cookie explizit eng: Lax blockt CSRF per fremdem POST-Formular
+# (nur Top-Level-GET trägt das Cookie), HttpOnly ist Flask-Standard.
+app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+
+
+class _RedactSecretsFilter(logging.Filter):
+    """Secrets aus Request-Logs halten.
+
+    Download-URLs tragen Token in der Query (`?token=`, `?dl=`); der
+    Dev-Server protokolliert den Pfad inkl. Query. Der Filter ersetzt
+    die Werte vor dem Schreiben (gilt für alle Logger, an die er
+    gehängt ist – unten: werkzeug).
+    """
+    _RE = re.compile(r"(token|dl)=[^&\s]*")
+
+    def filter(self, record):
+        try:
+            if isinstance(record.msg, str):
+                record.msg = self._RE.sub(r"\1=…", record.msg)
+            if record.args:
+                record.args = tuple(
+                    self._RE.sub(r"\1=…", a) if isinstance(a, str) else a
+                    for a in record.args
+                )
+        except Exception:
+            pass
+        return True
+
+
+try:
+    logging.getLogger("werkzeug").addFilter(_RedactSecretsFilter())
+except Exception:
+    pass
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -477,6 +512,53 @@ def login_required(view):
         return view(*args, **kwargs)
 
     return wrapped
+
+
+def csrf_token() -> str:
+    """Synchronizer-Token pro Sitzung (CSRF-Schutz für Web-Formulare/fetch).
+
+    Als Jinja-Global verfügbar (`{{ csrf_token() }}`): in jedes POST-Formular
+    als Hidden-Field legen; fetch sendet es als `csrf_token`-Feld oder
+    `X-CSRF-Token`-Header. Die API (/api/v1, Bearer-Header) braucht es nicht
+    und prüft es nicht – Browser hängen dort kein Auth an.
+    """
+    tok = session.get("csrf_token")
+    if not tok:
+        tok = secrets.token_urlsafe(32)
+        session["csrf_token"] = tok
+    return tok
+
+
+def csrf_protect(view):
+    """CSRF-Schutz für Web-Routen (nur POST/PUT/PATCH/DELETE prüfen).
+
+    Vergleicht Formularfeld `csrf_token` oder Header `X-CSRF-Token`
+    zeitkonstant mit dem Sitzungs-Token. Bei Fehlschlag: Flash + zurück
+    (kein 500, keine Aktion). Gilt nur fürs Web – API-Routen nutzen
+    Bearer-Tokens und sind von Browser-CSRF nicht betroffen.
+    """
+    @wraps(view)
+    def wrapped(*args, **kwargs):
+        if request.method in ("POST", "PUT", "PATCH", "DELETE"):
+            try:
+                sent = (request.form.get("csrf_token")
+                        or request.headers.get("X-CSRF-Token") or "")
+                want = session.get("csrf_token") or ""
+            except Exception:
+                sent, want = "", ""
+            if (not want or not sent or not secrets.compare_digest(
+                    str(sent), str(want))):
+                flash("Sicherheitsprüfung fehlgeschlagen. "
+                      "Bitte Seite neu laden und erneut versuchen.", "error")
+                return redirect(request.referrer or url_for("index"))
+        return view(*args, **kwargs)
+
+    return wrapped
+
+
+# In Templates als {{ csrf_token() }} nutzbar (Aufruf erst beim Rendern,
+# also mit Request-Kontext – trotz Registrierung auf Modulebene ok).
+app.jinja_env.globals["csrf_token"] = csrf_token
 
 
 def _norm_subdomain(subdomain: str) -> str:
@@ -884,6 +966,8 @@ MESSAGE_TYPES = {"sprava", "news", "anketa", "chat", "genotif"}
 # Einstellung gespeichert ist – siehe SETTINGS_SCHEMA/"ov_unread"/"ov_homework").
 OVERVIEW_UNREAD_LIMIT = 10
 OVERVIEW_HOMEWORK_LIMIT = 10
+OVERVIEW_SECTION_ORDER = "messages,homework,weather,lunch"
+OVERVIEW_SECTION_KEYS = ("messages", "homework", "weather", "lunch")
 
 # Allgemeine Einstellungen (Einstellungsseite `/einstellungen`, Ablage pro
 # User in cache.py). Neue Einstellung = ein Dict anhängen – Speichern,
@@ -912,6 +996,18 @@ SETTINGS_SCHEMA = [
     {"key": "ov_homework", "kind": "int",
      "label": "Übersicht: max. offene Hausaufgaben",
      "min": 1, "max": 50, "default": OVERVIEW_HOMEWORK_LIMIT},
+    {"key": "ov_order", "kind": "order", "section": "Übersicht",
+     "label": "Reihenfolge der Übersicht",
+     "default": OVERVIEW_SECTION_ORDER},
+    {"key": "ov_wetter", "kind": "bool", "section": "Wetter",
+     "label": "Wetterkarte auf der Übersicht anzeigen",
+     "hint": "Gilt für die Weboberfläche und die Android-App.",
+     "default": True},
+    {"key": "wetter_city", "kind": "text", "section": "Wetter",
+     "label": "Wetter: Stadt",
+     "placeholder": "z. B. Berlin", "maxlength": 100,
+     "hint": "Auswahl gilt für die Wetterkarte auf Web und Android.",
+     "default": ""},
 ]
 SETTINGS_DEFAULTS = {s["key"]: s["default"] for s in SETTINGS_SCHEMA}
 
@@ -943,6 +1039,16 @@ def _coerce_setting(spec: dict, value):
         if kind == "int":
             iv = int(value)
             return max(spec.get("min", iv), min(spec.get("max", iv), iv))
+        if kind == "order":
+            allowed = OVERVIEW_SECTION_KEYS
+            raw = value if isinstance(value, (list, tuple)) else str(value or "").split(",")
+            ordered = []
+            for item in raw:
+                key = str(item).strip()
+                if key in allowed and key not in ordered:
+                    ordered.append(key)
+            ordered.extend(key for key in allowed if key not in ordered)
+            return ",".join(ordered)
         if kind in ("text", "password"):
             s = str(value or "").strip().replace("\n", " ").replace("\r", "")
             return s[:int(spec.get("maxlength", 500))]
@@ -1234,6 +1340,7 @@ def index():
 
 
 @app.route("/login", methods=["POST"])
+@csrf_protect
 def login():
     username = request.form.get("username", "").strip()
     password = request.form.get("password", "")
@@ -1276,6 +1383,7 @@ def login():
 
 
 @app.route("/2fa", methods=["GET", "POST"])
+@csrf_protect
 def twofa():
     token = session.get("pending_2fa")
     pending = pending_2fa_get(token)
@@ -1628,6 +1736,7 @@ def hausaufgaben():
 
 @app.route("/hausaufgaben/erledigt", methods=["POST"])
 @login_required
+@csrf_protect
 def hausaufgabe_erledigt():
     """Hausaufgabe als erledigt markieren (oder wieder öffnen)."""
     username = session["username"]
@@ -1677,6 +1786,7 @@ def hausaufgabe_erledigt():
 
 @app.route("/hausaufgaben/ausblenden", methods=["POST"])
 @login_required
+@csrf_protect
 def hausaufgabe_ausblenden():
     """Hausaufgabe in den Papierkorb legen (oder daraus zurückholen).
 
@@ -1830,6 +1940,10 @@ def uebersicht():
     now_date = f"{GERMAN_WEEKDAYS[now.weekday()]}, {now.strftime('%d.%m.%Y')}"
 
     def _fail(error):
+        try:
+            _ws = user_settings()
+        except Exception:
+            _ws = dict(SETTINGS_DEFAULTS)
         return render_template(
             "overview.html", username=username, subdomain=subdomain,
             now_time=now.strftime("%H:%M:%S"), now_date=now_date,
@@ -1838,7 +1952,9 @@ def uebersicht():
             lessons=[], lesson_start=0,
             weather_lat=WEATHER_LAT if WEATHER_LAT is not None else "",
             weather_lon=WEATHER_LON if WEATHER_LON is not None else "",
-            weather_city=WEATHER_CITY,
+            weather_city=(_ws.get("wetter_city") or WEATHER_CITY),
+            show_wetter=_ws.get("ov_wetter", True),
+            overview_order=_ws.get("ov_order", OVERVIEW_SECTION_ORDER),
             error=error, cache_info="",
         )
 
@@ -1873,6 +1989,11 @@ def uebersicht():
         events, apicache.load_seen(uhash), _s["ov_unread"])
     homework, n_offen, n_ueber, n_erledigt = open_homework(
         events, apicache.load_hidden(uhash), _s["ov_homework"])
+
+    # Wetter-Einstellungen früh auslesen: `_s` wird unten in den
+    # Stundenplan-Schleifen als Zeit-Variable wiederverwendet.
+    _show_wetter = bool(_s.get("ov_wetter", True))
+    _wetter_city = _s.get("wetter_city") or WEATHER_CITY
 
     # Aktuelle Stunde für oben rechts: heutiger Stundenplan (aus Cache),
     # laufende bzw. nächste nicht-entfallene Stunde bestimmen.
@@ -1938,7 +2059,9 @@ def uebersicht():
         lesson_start=lesson_start,
         weather_lat=WEATHER_LAT if WEATHER_LAT is not None else "",
         weather_lon=WEATHER_LON if WEATHER_LON is not None else "",
-        weather_city=WEATHER_CITY,
+        weather_city=_wetter_city,
+        show_wetter=_show_wetter,
+        overview_order=_s.get("ov_order", OVERVIEW_SECTION_ORDER),
         error=None, cache_info=cache_info,
     )
 
@@ -2114,6 +2237,59 @@ def get_wetter_payload(lat, lon, city):
     }, 200
 
 
+def search_wetter_cities(query):
+    """Stadtsuche für die Einstellungsfelder (OpenWeather Geocoding)."""
+    query = str(query or "").strip()[:100]
+    if len(query) < 2:
+        return {"items": []}, 200
+    if not OPENWEATHER_KEY:
+        return {"error": "Die Stadtsuche ist nicht eingerichtet."}, 503
+    try:
+        response = requests.get(
+            "https://api.openweathermap.org/geo/1.0/direct",
+            params={"q": query, "limit": 5, "appid": OPENWEATHER_KEY},
+            timeout=5,
+        )
+        if response.status_code != 200:
+            return {"error": "Städte konnten gerade nicht gesucht werden."}, 502
+        matches = response.json()
+        if not isinstance(matches, list):
+            return {"error": "Städte konnten gerade nicht gesucht werden."}, 502
+        items = []
+        for place in matches[:5]:
+            if not isinstance(place, dict):
+                continue
+            name = str(place.get("name") or "").strip()
+            country = str(place.get("country") or "").strip()
+            state = str(place.get("state") or "").strip()
+            if not name:
+                continue
+            parts = []
+            for part in (name, state, country):
+                if part and part.casefold() not in {p.casefold() for p in parts}:
+                    parts.append(part)
+            query_value = ", ".join(parts)[:100]
+            items.append({
+                "name": name,
+                "state": state,
+                "country": country,
+                "label": " · ".join(parts),
+                "query": query_value,
+            })
+        return {"items": items}, 200
+    except Exception:
+        return {"error": "Städte konnten gerade nicht gesucht werden."}, 502
+
+
+@app.route("/api/wetter/suche")
+@login_required
+def api_wetter_suche():
+    """Live-Suche für Orte, die in den Account-Einstellungen gespeichert werden."""
+    query = (request.args.get("q") or "").strip()[:100]
+    payload, status = search_wetter_cities(query)
+    return jsonify(payload), status
+
+
 @app.route("/api/wetter")
 @login_required
 def api_wetter():
@@ -2155,6 +2331,7 @@ def api_essen():
 
 @app.route("/als-gelesen", methods=["POST"])
 @login_required
+@csrf_protect
 def als_gelesen():
     """Alle aktuellen Nachrichten als gelesen markieren (Button der Übersicht)."""
     uhash = apicache.user_hash(session.get("subdomain", ""), session.get("username", ""))
@@ -2497,6 +2674,7 @@ def api_empfaenger():
 
 @app.route("/nachrichten/senden", methods=["POST"])
 @login_required
+@csrf_protect
 def nachricht_senden():
     """Neue Nachricht senden (ein oder mehrere Empfänger)."""
     recipient_ids = [
@@ -2548,6 +2726,7 @@ def nachricht_senden():
 
 @app.route("/nachrichten/antworten", methods=["POST"])
 @login_required
+@csrf_protect
 def nachricht_antworten():
     """Auf eine Nachricht im Thread antworten."""
     group_id = (request.form.get("id") or "").strip()
@@ -2726,6 +2905,57 @@ def lesson_start_index(lessons, now_t) -> int:
         if now_t < _start:
             return i
     return len(lessons) - 1
+
+
+@app.route("/termine")
+@login_required
+def termine():
+    """Kalender, Tests, Anwesenheit und Vertretungsplan."""
+    username = session["username"]
+    subdomain = session["subdomain"]
+    day_raw = request.args.get("day", date.today().isoformat())
+    try:
+        selected = date.fromisoformat(day_raw)
+    except ValueError:
+        selected = date.today()
+    start = selected - timedelta(days=30)
+    end = selected + timedelta(days=60)
+    refresh = request.args.get("refresh", "0") == "1"
+
+    try:
+        edupage, username, subdomain = get_logged_in_edupage()
+        from api.school import build_agenda, build_substitutions
+        try:
+            agenda = build_agenda(edupage, username, subdomain, start, end, refresh)
+        except Exception:
+            agenda = {"items": [], "cache_info": ""}
+        try:
+            substitutions = build_substitutions(edupage, selected)
+        except Exception:
+            substitutions = {"week_label": "", "days": []}
+        error = "" if agenda.get("items") or substitutions.get("days") else \
+            "Schultermine konnten nicht geladen werden. Bitte später erneut versuchen."
+    except (RuntimeError, SessionExpired):
+        flash("Sitzung erfordert erneut 2FA. Bitte erneut anmelden.", "error")
+        return redirect(url_for("logout"))
+    except BadCredentialsException:
+        flash("Gespeicherte Zugangsdaten sind ungültig. Bitte erneut anmelden.", "error")
+        return redirect(url_for("logout"))
+    except CaptchaException:
+        flash("EduFlow verlangt ein Captcha. Bitte einmal im Browser anmelden.", "error")
+        return redirect(url_for("logout"))
+    except Exception:
+        agenda = {"items": [], "cache_info": ""}
+        substitutions = {"week_label": "", "days": []}
+        error = "Schultermine konnten nicht geladen werden. Bitte später erneut versuchen."
+
+    return render_template(
+        "agenda.html", username=username, subdomain=subdomain,
+        day=selected.isoformat(), agenda=agenda,
+        prev_week=(selected - timedelta(days=7)).isoformat(),
+        next_week=(selected + timedelta(days=7)).isoformat(),
+        substitutions=substitutions, error=error,
+    )
 
 
 @app.route("/stundenplan")
@@ -3309,6 +3539,7 @@ def likes(event_id: int):
 
 @app.route("/einstellungen", methods=["GET", "POST"])
 @login_required
+@csrf_protect
 def einstellungen():
     """Einstellungsseite: Aussehen (lokal im Browser) + Allgemeines (Server)."""
     username = session["username"]
@@ -3336,6 +3567,7 @@ def einstellungen():
 
 @app.route("/einstellungen/api-token", methods=["POST"])
 @login_required
+@csrf_protect
 def api_token_erstellen():
     """API-Token für /api/v1 erzeugen (einmalig im Klartext anzeigen)."""
     from api.core import create_token
@@ -3367,6 +3599,7 @@ def api_token_erstellen():
 
 @app.route("/einstellungen/api-token/widerrufen", methods=["POST"])
 @login_required
+@csrf_protect
 def api_token_widerrufen():
     """Eigenes API-Token per Datensatz-Hash widerrufen."""
     from api.core import revoke_token_by_hash
@@ -3384,8 +3617,9 @@ def api_token_widerrufen():
     return redirect(url_for("einstellungen"))
 
 
-@app.route("/cache-clear")
+@app.route("/cache-clear", methods=["POST"])
 @login_required
+@csrf_protect
 def cache_clear():
     """Eigenen lokalen API-Cache löschen (Timeline + Stundenplan + Essen).
 
@@ -3416,7 +3650,8 @@ def cache_clear():
     return redirect(back)
 
 
-@app.route("/logout")
+@app.route("/logout", methods=["POST"])
+@csrf_protect
 def logout():
     session.clear()
     return redirect(url_for("index"))

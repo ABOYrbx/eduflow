@@ -26,3 +26,4 @@ from api import grades  # noqa: E402,F401
 from api import meta  # noqa: E402,F401
 from api import settings  # noqa: E402,F401
 from api import system  # noqa: E402,F401
+from api import school  # noqa: E402,F401

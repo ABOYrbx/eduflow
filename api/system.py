@@ -110,8 +110,12 @@ def _openapi_spec():
             "Antworten", body={"type": "object"},
             ok={"type": "object"})},
         "/messages/{id}/attachments/{idx}": {"get": op(
-            "Dateianhang (Header- oder ?token=)",
+            "Dateianhang (Header-, ?dl- oder ?token=)",
             ok={"type": "string", "format": "binary"})},
+        "/messages/download-token": {"post": op(
+            "Kurzzeit-Download-Token ausstellen",
+            body={"type": "object"},
+            ok={"type": "object"})},
         "/recipients": {"get": op("Empfängerliste")},
         "/homework": {"get": op(
             "Hausaufgabenliste",
@@ -135,6 +139,16 @@ def _openapi_spec():
             "Wochenansicht Mo–Fr",
             params=[q("day", "Datum in der Woche"), q("refresh", "0/1")],
             ok={"type": "object"})},
+        "/substitutions/week": {"get": op(
+            "Vertretungsplan Mo–Fr",
+            params=[q("day", "Datum in der Woche")],
+            ok={"type": "object"})},
+        "/school/agenda": {"get": op(
+            "Schultermine, Tests und Anwesenheitsmeldungen",
+            params=[q("since", "Zeitraum ab JJJJ-MM-TT"),
+                    q("until", "Zeitraum bis JJJJ-MM-TT"),
+                    q("refresh", "0/1")],
+            ok={"type": "object"})},
         "/grades": {"get": op(
             "Notenliste",
             params=[q("limit", "1..200"), q("offset", "ab 0"),
@@ -147,6 +161,10 @@ def _openapi_spec():
             "Wetter-Proxy",
             params=[q("lat", "Breite"), q("lon", "Länge"),
                     q("city", "Stadtname")],
+            ok={"type": "object"})},
+        "/wetter/suche": {"get": op(
+            "Städte für Wetter-Einstellungen suchen",
+            params=[q("q", "Mindestens zwei Zeichen Suchtext")],
             ok={"type": "object"})},
         "/settings": {
             "get": op("Einstellungen lesen", ok={"type": "object"}),

@@ -65,7 +65,7 @@ Voraussetzungen, Installer-Verhalten und Befehle stehen vollständig unter [Entw
 ./run.sh
 ```
 
-Der dokumentierte Start bleibt die Fake-Demo: `./install.sh` richtet PostgreSQL und lokale API-Konfiguration ein, `./run.sh` prüft Abhängigkeiten und Datenbankkonfiguration, startet die Fake-API auf Port 8101 (wartet auf `/api/v1/health`) und danach die Weboberfläche, normalerweise Port 3000. `Ctrl+C` beendet beide. Demo-Konten: `demo` / `demo`; 2FA-Demo: `demo-2fa` / `demo`, Code `123456`. Ausschließlich synthetische Demodaten verwenden. **Achtung:** `run.sh` setzt `API_SERVER_URL` für Next.js aktuell nicht auf 8101; die Web-API-Routen fallen auf Port 8001 zurück. Ohne extern gesetztes `API_SERVER_URL=http://127.0.0.1:8101` kann der Browser die Demo-API daher verfehlen (siehe [Entwicklung](ENTWICKLUNG.md)).
+Der dokumentierte Start bleibt die Fake-Demo: `./install.sh` richtet PostgreSQL und lokale API-Konfiguration ein, `./run.sh` prüft Abhängigkeiten und Datenbankkonfiguration, startet die Fake-API auf Port 8101 (wartet auf `/api/v1/health`) und danach die Weboberfläche, normalerweise Port 3000. `Ctrl+C` beendet beide. Demo-Konten: `demo` / `demo`; 2FA-Demo: `demo-2fa` / `demo`, Code `123456`. Ausschließlich synthetische Demodaten verwenden. `run.sh` setzt `API_SERVER_URL` für Next.js dabei auf `http://127.0.0.1:8101`.
 
 Für Qualitätsprüfungen aus dem Stamm:
 
