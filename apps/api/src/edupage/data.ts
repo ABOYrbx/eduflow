@@ -7,6 +7,7 @@ import { BadCredentialsError, CaptchaError, MissingDataError } from "./errors";
 import { downloadViaSession, fetchThread, replyToMessage, sendTimelineMessage } from "./messages";
 import { EXAM_TYPES, HOMEWORK_TYPES, eventToDict, extractAttachments, homeworkRank, homeworkToDict, markHidden, norm, recipientsFromDbi } from "./serializers";
 import { MESSAGE_TYPES, TimelineEvent, fetchTimelineHistory } from "./timeline";
+import { GERMAN_WEEKDAYS, LessonDict, fetchDayPlan, isAlldayEvent, lessonToDict, mergeLernzeit, parseDayPlan } from "./timetable";
 import { setHomeworkDone } from "./homework";
 import { page, parsePage } from "../common/pagination";
 import { openPassword } from "./vault";
@@ -635,6 +636,112 @@ export class EdupageDataService {
     const updated = await this.homeworkDictById(claims.sub, eventId, today);
     if (!updated) throw new NotFoundException({ error: "Hausaufgabe nicht gefunden.", code: "NOT_FOUND" });
     return updated;
+  }
+
+  // ------------------------------------------------ Stundenplan (N-D)
+
+  private timetableTtlFor(dayIso: string, todayIso: string): number {
+    if (dayIso < todayIso) return 7 * 24 * 3600;
+    if (dayIso === todayIso) return 600;
+    return 3600;
+  }
+
+  private async loadTimetableDay(client: EdupageClient, accountId: string, subdomain: string, userId: string,
+    dbi: unknown, dayIso: string, force: boolean): Promise<{ lessons: LessonDict[]; info: string; fromCache: boolean }> {
+    const key = `tt:${dayIso}`;
+    const todayIso = new Date().toISOString().slice(0, 10);
+    const cached = await this.readCache(accountId, key);
+    if (cached && !force) {
+      const payload = cached.payload as { lessons?: LessonDict[]; savedAt?: string };
+      const ttl = this.timetableTtlFor(dayIso, todayIso);
+      const ageS = payload.savedAt ? Math.max(0, Math.round((Date.now() - Date.parse(payload.savedAt)) / 1000)) : Number.MAX_SAFE_INTEGER;
+      if (Array.isArray(payload.lessons) && ageS <= ttl) {
+        return { lessons: payload.lessons, info: "aus Cache", fromCache: true };
+      }
+    }
+    let plan: unknown[];
+    try {
+      plan = await fetchDayPlan(client.session, subdomain, userId, dayIso);
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new HttpException({ error: `Stundenplan konnte nicht geladen werden: ${detail}`, code: "UPSTREAM" }, 502);
+    }
+    const groups = (typeof dbi === "object" && dbi !== null ? dbi : {}) as Record<string, Record<string, { short?: string; firstname?: string; lastname?: string }>>;
+    const lessons = parseDayPlan(plan, { subjects: groups.subjects ?? {}, teachers: groups.teachers ?? {}, classrooms: groups.classrooms ?? {} }).map(lessonToDict);
+    await this.writeCache(accountId, key, { lessons, savedAt: new Date().toISOString() }, this.timetableTtlFor(dayIso, todayIso));
+    return { lessons, info: "frisch geladen", fromCache: false };
+  }
+
+  async timetableDay(claims: AuthClaims, query: Record<string, unknown>, today = new Date()) {
+    const raw = typeof query.day === "string" ? query.day.trim() : "";
+    const dayIso = raw || today.toISOString().slice(0, 10);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dayIso) || Number.isNaN(Date.parse(`${dayIso}T00:00:00Z`))) {
+      throw new BadRequestException({ error: "Das Datum muss im Format JJJJ-MM-TT angegeben werden.", code: "VALIDATION" });
+    }
+    const force = query.refresh === "1";
+    const { client, subdomain, loginData } = await this.loginFor(claims.sub);
+    const userId = String((loginData as Record<string, unknown> | null)?.userid ?? "");
+    if (!userId) throw new HttpException({ error: "Stundenplan konnte nicht geladen werden: fehlende Benutzerkennung.", code: "UPSTREAM" }, 502);
+    const dbi = (loginData as Record<string, unknown> | null)?.dbi ?? {};
+    const loaded = await this.loadTimetableDay(client, claims.sub, subdomain, userId, dbi, dayIso, force);
+    const lessons = mergeLernzeit(loaded.lessons);
+    const day = new Date(`${dayIso}T00:00:00Z`);
+    const pad = (value: number): string => String(value).padStart(2, "0");
+    const prev = new Date(day.getTime() - 86400000);
+    const next = new Date(day.getTime() + 86400000);
+    const iso = (date: Date): string => date.toISOString().slice(0, 10);
+    return {
+      day: dayIso,
+      day_label: `${GERMAN_WEEKDAYS[(day.getUTCDay() + 6) % 7]} ${pad(day.getUTCDate())}.${pad(day.getUTCMonth() + 1)}.${day.getUTCFullYear()}`,
+      prev_day: iso(prev),
+      next_day: iso(next),
+      today: today.toISOString().slice(0, 10),
+      lessons,
+      cache_info: loaded.info,
+    };
+  }
+
+  async timetableWeek(claims: AuthClaims, query: Record<string, unknown>, today = new Date()) {
+    const raw = typeof query.day === "string" ? query.day.trim() : "";
+    const dayIso = raw || today.toISOString().slice(0, 10);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(dayIso) || Number.isNaN(Date.parse(`${dayIso}T00:00:00Z`))) {
+      throw new BadRequestException({ error: "Das Datum muss im Format JJJJ-MM-TT angegeben werden.", code: "VALIDATION" });
+    }
+    const force = query.refresh === "1";
+    const { client, subdomain, loginData } = await this.loginFor(claims.sub);
+    const userId = String((loginData as Record<string, unknown> | null)?.userid ?? "");
+    if (!userId) throw new HttpException({ error: "Stundenplan konnte nicht geladen werden: fehlende Benutzerkennung.", code: "UPSTREAM" }, 502);
+    const dbi = (loginData as Record<string, unknown> | null)?.dbi ?? {};
+    const base = new Date(`${dayIso}T00:00:00Z`);
+    const monday = new Date(base.getTime() - (((base.getUTCDay() + 6) % 7) * 86400000));
+    const iso = (date: Date): string => date.toISOString().slice(0, 10);
+    const pad = (value: number): string => String(value).padStart(2, "0");
+    const days: Record<string, unknown>[] = [];
+    let cachedCount = 0;
+    for (let index = 0; index < 5; index += 1) {
+      const current = new Date(monday.getTime() + index * 86400000);
+      const currentIso = iso(current);
+      const loaded = await this.loadTimetableDay(client, claims.sub, subdomain, userId, dbi, currentIso, force);
+      if (loaded.fromCache) cachedCount += 1;
+      days.push({
+        date: currentIso,
+        day_name: GERMAN_WEEKDAYS[(current.getUTCDay() + 6) % 7],
+        day_date: `${pad(current.getUTCDate())}.${pad(current.getUTCMonth() + 1)}.`,
+        is_today: currentIso === today.toISOString().slice(0, 10),
+        lessons: mergeLernzeit(loaded.lessons).filter((entry) => !isAlldayEvent(entry)),
+      });
+    }
+    const friday = new Date(monday.getTime() + 4 * 86400000);
+    const cacheInfo = cachedCount === 5 ? "Woche aus Cache (0 API-Requests)"
+      : cachedCount > 0 ? `Woche teils aus Cache (${cachedCount}/5 Tage, ${5 - cachedCount} neu geladen)`
+        : "Woche frisch geladen (5 API-Requests)";
+    return {
+      day: dayIso,
+      monday: iso(monday),
+      week_label: `Woche ${pad(monday.getUTCDate())}.${pad(monday.getUTCMonth() + 1)}. – ${pad(friday.getUTCDate())}.${pad(friday.getUTCMonth() + 1)}.${friday.getUTCFullYear()}`,
+      days,
+      cache_info: cacheInfo,
+    };
   }
 }
 

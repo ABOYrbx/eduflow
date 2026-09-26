@@ -91,9 +91,15 @@ export class SchoolController {
     return this.edupage.homeworkTrash(req.authClaims, id, body);
   }
   @UseGuards(AccessTokenGuard)
-  @Get("timetable/day") timetableDay(@Query() query: Record<string, unknown>) { return this.demo.timetableDay(query); }
+  @Get("timetable/day") timetableDay(@Req() req: AuthenticatedRequest, @Query() query: Record<string, unknown>) {
+    if (useFakeProvider()) return this.demo.timetableDay(query);
+    return this.edupage.timetableDay(req.authClaims, query);
+  }
   @UseGuards(AccessTokenGuard)
-  @Get("timetable/week") timetableWeek(@Query() query: Record<string, unknown>) { return this.demo.timetableWeek(query); }
+  @Get("timetable/week") timetableWeek(@Req() req: AuthenticatedRequest, @Query() query: Record<string, unknown>) {
+    if (useFakeProvider()) return this.demo.timetableWeek(query);
+    return this.edupage.timetableWeek(req.authClaims, query);
+  }
   @UseGuards(AccessTokenGuard)
   @Get("substitutions/week") substitutions(@Query() query: Record<string, unknown>) { return this.demo.substitutions(query); }
   @UseGuards(AccessTokenGuard)
