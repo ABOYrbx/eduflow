@@ -12,9 +12,9 @@ export async function POST(request: NextRequest) {
   if (payload.status === "2fa_required" && typeof payload.pending_token === "string") {
     response.cookies.set("eduflow_pending", payload.pending_token, { ...cookieOptions, maxAge: 600 });
   }
-  if (payload.status === "ok" && typeof payload.token === "string" && typeof payload.refresh_token === "string") {
+  if (payload.status === "ok" && typeof payload.token === "string") {
     response.cookies.set("eduflow_access", payload.token, cookieOptions);
-    response.cookies.set("eduflow_refresh", payload.refresh_token, cookieOptions);
+    if (typeof payload.refresh_token === "string") response.cookies.set("eduflow_refresh", payload.refresh_token, cookieOptions);
   }
   return response;
 }

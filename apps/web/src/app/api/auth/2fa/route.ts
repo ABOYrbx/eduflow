@@ -13,9 +13,9 @@ export async function POST(request: NextRequest) {
   if (!upstream || !payload) return NextResponse.json({ error: "Der Server ist nicht erreichbar.", code: "UPSTREAM" }, { status: 502 });
   const response = NextResponse.json({ status: payload.status, error: payload.error, code: payload.code }, { status: upstream.status });
   response.cookies.delete("eduflow_pending");
-  if (payload.status === "ok" && typeof payload.token === "string" && typeof payload.refresh_token === "string") {
+  if (payload.status === "ok" && typeof payload.token === "string") {
     response.cookies.set("eduflow_access", payload.token, cookieOptions);
-    response.cookies.set("eduflow_refresh", payload.refresh_token, cookieOptions);
+    if (typeof payload.refresh_token === "string") response.cookies.set("eduflow_refresh", payload.refresh_token, cookieOptions);
   }
   return response;
 }
