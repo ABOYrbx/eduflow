@@ -346,3 +346,141 @@ export function recipientsFromDbi(dbi: unknown): Recipient[] {
     return left < right ? -1 : left > right ? 1 : 0;
   });
 }
+
+/* ------------------------------------------------ Hausaufgaben (N-C) */
+
+export const HOMEWORK_TYPES = ["homework"];
+export const EXAM_TYPES = ["bexam", "sexam", "oexam", "pexam", "rexam", "testing", "etesthw", "testpridelenie"];
+
+const DUE_FORMATS: Array<{ pattern: RegExp; order: Array<"y" | "m" | "d" | "H" | "M"> }> = [
+  { pattern: /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/, order: ["y", "m", "d", "H", "M"] },
+  { pattern: /^(\d{4})-(\d{2})-(\d{2})$/, order: ["y", "m", "d"] },
+  { pattern: /^(\d{2})\.(\d{2})\.(\d{4}) (\d{2}):(\d{2})$/, order: ["d", "m", "y", "H", "M"] },
+  { pattern: /^(\d{2})\.(\d{2})\.(\d{4})$/, order: ["d", "m", "y"] },
+];
+
+/** Fälligkeitsdatum tolerant parsen (Port von `_parse_due_date`). */
+export function parseDueDate(value: unknown): Date | null {
+  if (typeof value !== "string") return null;
+  const text = value.trim();
+  if (!text) return null;
+  for (const { pattern, order } of DUE_FORMATS) {
+    const match = pattern.exec(text);
+    if (!match) continue;
+    const parts: Record<string, number> = {};
+    order.forEach((key, index) => { parts[key] = Number.parseInt(match[index + 1] ?? "0", 10); });
+    const date = new Date(parts.y ?? 0, (parts.m ?? 1) - 1, parts.d ?? 1);
+    if (date.getFullYear() === parts.y && date.getMonth() === (parts.m ?? 1) - 1 && date.getDate() === parts.d) return date;
+  }
+  return null;
+}
+
+const SHORT_WEEKDAYS = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
+
+interface HomeworkEvent {
+  eventId: number;
+  timestamp: Date;
+  text: string;
+  author: string | null;
+  recipient: string | null;
+  eventType: string | null;
+  additionalData: Record<string, unknown>;
+  isDone: boolean;
+  doneAt: Date | null;
+  isStarred: boolean;
+}
+
+/** TimelineEvent (Hausaufgabe/Test) → Dict (Port von `homework_to_dict`). */
+export function homeworkToDict(event: HomeworkEvent, today = new Date()): Record<string, unknown> {
+  const typeValue = event.eventType ?? "unknown";
+  const assigned = event.timestamp;
+  const pad = (value: number): string => String(value).padStart(2, "0");
+  const assignedStr = `${assigned.getFullYear()}-${pad(assigned.getMonth() + 1)}-${pad(assigned.getDate())} ${pad(assigned.getHours())}:${pad(assigned.getMinutes())}`;
+  const assignedIso = formatIsoLocal(assigned);
+  const extra = (typeof event.additionalData === "object" && event.additionalData !== null ? event.additionalData : {}) as Record<string, unknown>;
+  const old = (typeof extra.oldVals === "object" && extra.oldVals !== null ? extra.oldVals : {}) as Record<string, unknown>;
+  const pick = (dicts: Record<string, unknown>[], keys: string[]): string => {
+    for (const dict of dicts) {
+      for (const key of keys) {
+        const value = dict[key];
+        if (typeof value === "string" && value.trim()) return value.trim();
+        if (value !== null && value !== undefined && ["predmet", "subject", "subjectid"].includes(key)) return String(value);
+      }
+    }
+    return "";
+  };
+  const dueRaw = pick([old, extra], ["date", "dueDate", "due-date", "dateto", "duedate", "termin", "dateTo"]);
+  const due = parseDueDate(dueRaw);
+  const titlePick = pick([old, extra], ["title", "nazov", "name", "nadpis"]);
+  const descriptionPick = pick([old, extra], ["popis", "description", "text", "messageContent", "detail"]);
+  const subject = pick([old, extra], ["predmet", "subject", "subjectName", "predmetName"]);
+  const text = (event.text || "").trim();
+  const title = titlePick || (text ? text.split("\n")[0]?.trim().slice(0, 120) || "" : `Hausaufgabe #${event.eventId}`);
+  const description = descriptionPick || (text && text !== title ? text : "");
+  const isDone = event.isDone;
+  const doneAtStr = event.doneAt instanceof Date
+    ? `${event.doneAt.getFullYear()}-${pad(event.doneAt.getMonth() + 1)}-${pad(event.doneAt.getDate())} ${pad(event.doneAt.getHours())}:${pad(event.doneAt.getMinutes())}`
+    : "";
+  const stripTime = (date: Date): Date => new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const todayDay = stripTime(today);
+  let status: string;
+  if (isDone) status = "erledigt";
+  else if (!due) status = "ohne Datum";
+  else if (stripTime(due) < todayDay) status = "überfällig";
+  else if (stripTime(due).getTime() === todayDay.getTime()) status = "heute fällig";
+  else status = "offen";
+  const statusClass = { "überfällig": "st-ueber", "heute fällig": "st-heute", offen: "st-offen", erledigt: "st-erledigt" }[status] ?? "st-ohne";
+  const tagClass = { "überfällig": "tag-red", "heute fällig": "tag-amber", offen: "tag-blue", erledigt: "tag-green" }[status] ?? "tag-gray";
+  let extraJson = "";
+  try {
+    extraJson = JSON.stringify(extra, null, 2);
+  } catch {
+    extraJson = String(extra);
+  }
+  return {
+    id: event.eventId,
+    type: typeValue,
+    type_label: TYPE_LABELS[typeValue] ?? typeValue,
+    title,
+    description,
+    subject: String(subject),
+    author: formatPerson(event.author),
+    recipient: formatPerson(event.recipient),
+    assigned: assignedStr,
+    assigned_iso: assignedIso,
+    due: due ? `${due.getFullYear()}-${pad(due.getMonth() + 1)}-${pad(due.getDate())}` : "",
+    due_display: due ? `${SHORT_WEEKDAYS[due.getDay()]} ${pad(due.getDate())}.${pad(due.getMonth() + 1)}.${due.getFullYear()}` : "–",
+    due_raw: dueRaw || "",
+    status,
+    status_class: statusClass,
+    tag_class: tagClass,
+    is_done: isDone,
+    done_at: doneAtStr,
+    is_starred: event.isStarred,
+    extra: extraJson,
+  };
+}
+
+/** Sortierrang (Port von `homework_rank`). */
+export function homeworkRank(item: Record<string, unknown>): number {
+  if (item.is_hidden) return 3;
+  if (item.status === "überfällig") return 0;
+  if (item.status === "erledigt") return 2;
+  return 1;
+}
+
+/** In (sichtbar, Papierkorb) teilen + `is_hidden` setzen (Port von `mark_hidden`). */
+export function markHidden(items: Record<string, unknown>[], hidden: Set<string>): { visible: Record<string, unknown>[]; deleted: Record<string, unknown>[] } {
+  const visible: Record<string, unknown>[] = [];
+  const deleted: Record<string, unknown>[] = [];
+  for (const item of items ?? []) {
+    if (hidden.has(String(item.id))) {
+      item.is_hidden = true;
+      deleted.push(item);
+    } else {
+      item.is_hidden = false;
+      visible.push(item);
+    }
+  }
+  return { visible, deleted };
+}

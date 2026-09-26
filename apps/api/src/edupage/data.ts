@@ -5,8 +5,9 @@ import type { AuthClaims } from "../auth/auth.service";
 import { EdupageClient } from "./client";
 import { BadCredentialsError, CaptchaError, MissingDataError } from "./errors";
 import { downloadViaSession, fetchThread, replyToMessage, sendTimelineMessage } from "./messages";
-import { eventToDict, extractAttachments, norm, recipientsFromDbi } from "./serializers";
+import { EXAM_TYPES, HOMEWORK_TYPES, eventToDict, extractAttachments, homeworkRank, homeworkToDict, markHidden, norm, recipientsFromDbi } from "./serializers";
 import { MESSAGE_TYPES, TimelineEvent, fetchTimelineHistory } from "./timeline";
+import { setHomeworkDone } from "./homework";
 import { page, parsePage } from "../common/pagination";
 import { openPassword } from "./vault";
 
@@ -55,12 +56,28 @@ const isoDaysAgo = (days: number): string => {
   return date.toISOString().slice(0, 10);
 };
 
-/** Anmeldefehler für Ressourcen-Pakete (Port von `edupage_login_error`,
- *  N-B-Text für falsche Zugangsdaten wie `api/messages.py`).
+/** Flag tolerant lesen (Port von `api/homework._parse_bool`). */
+export function parseBoolFlag(value: unknown, fallback = false): boolean {
+  if (value === undefined || value === null) return fallback;
+  if (typeof value === "boolean") return value;
+  if (typeof value === "number" && Number.isInteger(value)) {
+    if (value === 0 || value === 1) return value === 1;
+    throw new Error("Ungültiger Wahrheitswert (0 oder 1 erwartet).");
+  }
+  const text = String(value).trim().toLowerCase();
+  if (["1", "true", "on", "yes", "ja"].includes(text)) return true;
+  if (["0", "false", "off", "no", "nein"].includes(text)) return false;
+  throw new Error("Ungültiger Wahrheitswert (true/false erwartet).");
+}
+
+/** Anmeldefehler für Ressourcen-Pakete (Port von `edupage_login_error`).
+ *
+ * Standardtext wie `api/core.py`; nur `api/messages.py` nutzt die
+ * N-B-Variante ("Benutzername, ... ist falsch.") per Parameter.
  */
-export function mapResourceLoginError(error: unknown): HttpException {
+export function mapResourceLoginError(error: unknown, badCredentialsText = "Gespeicherte Zugangsdaten sind ungültig. Bitte erneut anmelden."): HttpException {
   if (error instanceof BadCredentialsError) {
-    return new UnauthorizedException({ error: "Benutzername, Passwort oder Subdomain ist falsch.", code: "BAD_CREDENTIALS" });
+    return new UnauthorizedException({ error: badCredentialsText, code: "BAD_CREDENTIALS" });
   }
   if (error instanceof CaptchaError) {
     return new ForbiddenException({ error: "EduPage verlangt ein Captcha. Bitte einmal im Browser anmelden.", code: "CAPTCHA_REQUIRED" });
@@ -86,7 +103,7 @@ export class EdupageDataService {
   ) {}
 
   /** EduPage-Re-Login aus Tresor-Zugangsdaten (wie Python `_api_login`). */
-  async loginFor(accountId: string): Promise<SessionContext> {
+  async loginFor(accountId: string, badCredentialsText?: string): Promise<SessionContext> {
     const account = await this.prisma.userAccount.findUnique({ where: { id: accountId } });
     if (!account) throw bearerError();
     const sealed = await this.prisma.credentialVault.findUnique({ where: { accountId } });
@@ -103,7 +120,7 @@ export class EdupageDataService {
     try {
       result = await client.login(account.username, password, account.subdomain);
     } catch (error) {
-      throw mapResourceLoginError(error);
+      throw mapResourceLoginError(error, badCredentialsText);
     }
     if (result.outcome === "twofactor") {
       throw new UnauthorizedException({ error: "Sitzung erfordert erneut 2FA. Bitte erneut über /auth/login anmelden.", code: "EDUPAGE_2FA" });
@@ -127,12 +144,12 @@ export class EdupageDataService {
   }
 
   /** Timeline mit Cache (stale/fehlend/`force` → voll neu; beobachtbar wie Python). */
-  async timelineEvents(client: EdupageClient, subdomain: string, accountId: string, since: string, force: boolean): Promise<TimelineEvent[]> {
+  async timelineEvents(client: EdupageClient, subdomain: string, accountId: string, since: string, force: boolean): Promise<{ events: TimelineEvent[]; info: string }> {
     const cached = await this.readCache(accountId, "timeline");
     if (cached && cached.fresh && !force) {
       const payload = cached.payload as { earliest?: string; events?: StoredEvent[] };
       if (typeof payload.earliest === "string" && payload.earliest <= since && Array.isArray(payload.events)) {
-        return payload.events.map(reviveEvent);
+        return { events: payload.events.map(reviveEvent), info: "aus Cache" };
       }
     }
     const attempts = [since];
@@ -146,11 +163,11 @@ export class EdupageDataService {
       try {
         const { events } = await fetchTimelineHistory(client.session, subdomain, attempt);
         await this.writeCache(accountId, "timeline", { earliest: attempt, events: events.map(storeEvent) }, TIMELINE_TTL_S);
-        return events;
+        return { events, info: "frisch geladen" };
       } catch (error) {
         if (error instanceof MissingDataError) {
           await this.writeCache(accountId, "timeline", { earliest: attempt, events: [] }, TIMELINE_TTL_S);
-          return [];
+          return { events: [], info: "frisch geladen" };
         }
         lastError = error;
       }
@@ -166,7 +183,7 @@ export class EdupageDataService {
       if (hit) return hit;
     }
     const fresh = await this.timelineEvents(client, subdomain, accountId, EARLIEST_DEFAULT, true);
-    return fresh.find((event) => event.eventId === eventId) ?? null;
+    return fresh.events.find((event) => event.eventId === eventId) ?? null;
   }
 
   // ---------------------------------------------------------- Liste
@@ -183,10 +200,10 @@ export class EdupageDataService {
     }
     const words = norm(typeof query.q === "string" ? query.q.trim().slice(0, 200) : "").split(/\s+/).filter(Boolean);
     const force = query.refresh === "1";
-    const { client, subdomain } = await this.loginFor(claims.sub);
+    const { client, subdomain } = await this.loginFor(claims.sub, "Benutzername, Passwort oder Subdomain ist falsch.");
     let events: TimelineEvent[];
     try {
-      events = await this.timelineEvents(client, subdomain, claims.sub, sinceRaw, force);
+      ({ events } = await this.timelineEvents(client, subdomain, claims.sub, sinceRaw, force));
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
       throw new HttpException({ error: `Nachrichten konnten nicht geladen werden: ${detail}`, code: "UPSTREAM" }, 502);
@@ -221,7 +238,7 @@ export class EdupageDataService {
       const payload = cached.payload as { likes?: unknown; replies?: unknown; reply_ids?: unknown; summary?: unknown };
       return { likes: payload.likes ?? [], replies: payload.replies ?? [], reply_ids: payload.reply_ids ?? [], summary: payload.summary ?? {}, cached: true };
     }
-    const { client, subdomain } = await this.loginFor(claims.sub);
+    const { client, subdomain } = await this.loginFor(claims.sub, "Benutzername, Passwort oder Subdomain ist falsch.");
     let result;
     try {
       result = await fetchThread(client.session, subdomain, eventId);
@@ -265,7 +282,7 @@ export class EdupageDataService {
 
   async recipients(claims: AuthClaims, query: Record<string, unknown>) {
     const { limit, offset } = parsePage(query);
-    const { loginData } = await this.loginFor(claims.sub);
+    const { loginData } = await this.loginFor(claims.sub, "Benutzername, Passwort oder Subdomain ist falsch.");
     let recs;
     try {
       recs = recipientsFromDbi((loginData as Record<string, unknown> | null)?.dbi ?? {});
@@ -298,7 +315,7 @@ export class EdupageDataService {
     const text = typeof input.body === "string" ? input.body.trim().slice(0, 5000) : "";
     if (!valid.length) throw new BadRequestException({ error: "Bitte mindestens einen gültigen Empfänger angeben.", code: "VALIDATION" });
     if (!text) throw new BadRequestException({ error: "Bitte einen Nachrichtentext eingeben.", code: "VALIDATION" });
-    const { client, subdomain } = await this.loginFor(claims.sub);
+    const { client, subdomain } = await this.loginFor(claims.sub, "Benutzername, Passwort oder Subdomain ist falsch.");
     let newId: number;
     try {
       newId = await sendTimelineMessage(client.session, subdomain, valid, text);
@@ -307,7 +324,7 @@ export class EdupageDataService {
       throw new HttpException({ error: `Senden fehlgeschlagen: ${detail}`, code: "UPSTREAM" }, 502);
     }
     try {
-      const events = await this.timelineEvents(client, subdomain, claims.sub, EARLIEST_DEFAULT, true);
+      const { events } = await this.timelineEvents(client, subdomain, claims.sub, EARLIEST_DEFAULT, true);
       const found = events.find((event) => String(event.eventId) === String(newId));
       if (found) return eventToDict(found);
     } catch {
@@ -322,7 +339,7 @@ export class EdupageDataService {
     const input = (typeof body === "object" && body !== null && !Array.isArray(body) ? body : {}) as Record<string, unknown>;
     const text = typeof input.body === "string" ? input.body.trim().slice(0, 5000) : "";
     if (!text) throw new BadRequestException({ error: "Bitte einen Antworttext eingeben.", code: "VALIDATION" });
-    const { client, subdomain } = await this.loginFor(claims.sub);
+    const { client, subdomain } = await this.loginFor(claims.sub, "Benutzername, Passwort oder Subdomain ist falsch.");
     try {
       await replyToMessage(client.session, subdomain, eventId, text);
     } catch (error) {
@@ -348,7 +365,7 @@ export class EdupageDataService {
     if (!Number.isInteger(eventId) || !Number.isInteger(idx) || (idx as number) < 0) {
       throw new BadRequestException({ error: "Bitte event_id und idx als Zahl angeben.", code: "VALIDATION" });
     }
-    const { client, subdomain } = await this.loginFor(claims.sub);
+    const { client, subdomain } = await this.loginFor(claims.sub, "Benutzername, Passwort oder Subdomain ist falsch.");
     const event = await this.resolveEvent(client, claims.sub, subdomain, eventId as number);
     if (!event) throw new NotFoundException({ error: "Nachricht nicht gefunden.", code: "NOT_FOUND" });
     this.attachmentUrl(event, subdomain, idx as number);
@@ -368,7 +385,7 @@ export class EdupageDataService {
   }
 
   async attachmentByClaims(claims: AuthClaims, eventId: number, idx: number) {
-    const { client, subdomain } = await this.loginFor(claims.sub);
+    const { client, subdomain } = await this.loginFor(claims.sub, "Benutzername, Passwort oder Subdomain ist falsch.");
     return this.downloadResolved(client, claims.sub, subdomain, eventId, idx);
   }
 
@@ -385,7 +402,7 @@ export class EdupageDataService {
       || payload.eventId !== String(eventId) || payload.idx !== String(idx)) {
       throw new UnauthorizedException({ error: "Ungültiges oder fehlendes Token.", code: "TOKEN_INVALID" });
     }
-    const { client, subdomain } = await this.loginFor(payload.accountId);
+    const { client, subdomain } = await this.loginFor(payload.accountId, "Benutzername, Passwort oder Subdomain ist falsch.");
     return this.downloadResolved(client, payload.accountId, subdomain, eventId, idx);
   }
 
@@ -407,6 +424,217 @@ export class EdupageDataService {
       if (detail.startsWith("EduPage meldet Fehler")) throw new HttpException({ error: detail, code: "UPSTREAM" }, 502);
       throw new HttpException({ error: `Download fehlgeschlagen: ${detail}`, code: "UPSTREAM" }, 502);
     }
+  }
+
+  // ------------------------------------------------ Hausaufgaben (N-C)
+
+  private async readHwStates(accountId: string, key: string): Promise<Map<string, boolean>> {
+    const rows = await this.prisma.localResourceState.findMany({ where: { accountId, resource: "homework", stateKey: key } });
+    const out = new Map<string, boolean>();
+    for (const row of rows) out.set(String(row.resourceId), row.value === true);
+    return out;
+  }
+
+  private async writeHwState(accountId: string, id: string | number, key: string, value: boolean): Promise<void> {
+    try {
+      await this.prisma.localResourceState.upsert({
+        where: { accountId_resource_resourceId_stateKey: { accountId, resource: "homework", resourceId: String(id), stateKey: key } },
+        update: { value },
+        create: { accountId, resource: "homework", resourceId: String(id), stateKey: key, value },
+      });
+    } catch {
+      /* best-effort wie Python */
+    }
+  }
+
+  private async removeHwState(accountId: string, id: string | number, key: string): Promise<void> {
+    try {
+      await this.prisma.localResourceState.deleteMany({ where: { accountId, resource: "homework", resourceId: String(id), stateKey: key } });
+    } catch {
+      /* best-effort wie Python */
+    }
+  }
+
+  private async buildHomeworkView(
+    client: EdupageClient, subdomain: string, accountId: string, username: string,
+    since: string, status: string, includeTests: boolean, q: string, force: boolean, today = new Date(),
+  ): Promise<{ items: Record<string, unknown>[]; counts: Record<string, number>; cacheInfo: string }> {
+    const { events, info } = await this.timelineEvents(client, subdomain, accountId, since, force);
+    const wanted = new Set(includeTests ? [...HOMEWORK_TYPES, ...EXAM_TYPES] : HOMEWORK_TYPES);
+    const doneState = await this.readHwStates(accountId, "done");
+    const trashState = await this.readHwStates(accountId, "trash");
+    const dicts: Record<string, unknown>[] = [];
+    for (const event of events) {
+      if (!wanted.has(event.eventType ?? "")) continue;
+      const override = doneState.get(String(event.eventId));
+      const effective = override === undefined ? event
+        : { ...event, isDone: override, doneAt: override ? (event.doneAt ?? new Date()) : null };
+      dicts.push(homeworkToDict(effective, today));
+    }
+    const hidden = new Set([...trashState.entries()].filter(([, value]) => value).map(([id]) => id));
+    const { visible, deleted } = markHidden(dicts, hidden);
+    const counts = {
+      offen: visible.filter((item) => item.status === "offen" || item.status === "heute fällig").length,
+      ueberfaellig: visible.filter((item) => item.status === "überfällig").length,
+      erledigt: visible.filter((item) => item.status === "erledigt").length,
+      papierkorb: deleted.length,
+    };
+    let items: Record<string, unknown>[];
+    if (status === "papierkorb") items = deleted;
+    else if (status === "alle") items = [...visible, ...deleted];
+    else items = [...visible];
+    if (status === "offen") items = items.filter((item) => item.status === "offen" || item.status === "heute fällig" || item.status === "ohne Datum");
+    else if (status === "überfällig") items = items.filter((item) => item.status === "überfällig");
+    else if (status === "erledigt") items = items.filter((item) => item.status === "erledigt");
+    items.sort((a, b) => {
+      const keys = (item: Record<string, unknown>): Array<string | number> =>
+        [homeworkRank(item), String(item.due) === "" ? 1 : 0, String(item.due ?? ""), String(item.assigned_iso ?? "")];
+      const left = keys(a);
+      const right = keys(b);
+      for (let index = 0; index < left.length; index += 1) {
+        if (left[index] !== right[index]) return (left[index] as string | number) < (right[index] as string | number) ? -1 : 1;
+      }
+      return 0;
+    });
+    const needle = q.slice(0, 200).trim().toLowerCase();
+    if (needle) {
+      items = items.filter((item) => {
+        const hay = ["title", "subject", "author", "description", "type_label"]
+          .map((key) => String(item[key] ?? "")).join(" ").toLowerCase();
+        return hay.includes(needle);
+      });
+    }
+    void username;
+    return { items, counts, cacheInfo: info };
+  }
+
+  private async homeworkDictById(accountId: string, eventId: number | string, today = new Date()): Promise<Record<string, unknown> | null> {
+    const cached = await this.readCache(accountId, "timeline");
+    if (!cached) return null;
+    const stored = (((cached.payload ?? {}) as { events?: StoredEvent[] }).events ?? []).map(reviveEvent);
+    const found = stored.find((event) => String(event.eventId) === String(eventId));
+    if (!found) return null;
+    try {
+      const doneState = await this.readHwStates(accountId, "done");
+      const trashState = await this.readHwStates(accountId, "trash");
+      const override = doneState.get(String(found.eventId));
+      const effective = override === undefined ? found
+        : { ...found, isDone: override, doneAt: override ? (found.doneAt ?? new Date()) : null };
+      const dict = homeworkToDict(effective, today);
+      dict.is_hidden = trashState.get(String(found.eventId)) === true;
+      return dict;
+    } catch {
+      return null;
+    }
+  }
+
+  async homeworkList(claims: AuthClaims, query: Record<string, unknown>) {
+    const { limit, offset } = parsePage(query);
+    const sinceRaw = query.since === undefined || query.since === null || String(query.since).trim() === ""
+      ? EARLIEST_DEFAULT : String(query.since).trim();
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(sinceRaw) || Number.isNaN(Date.parse(`${sinceRaw}T00:00:00Z`))) {
+      throw new BadRequestException({ error: "Ungültiges Datum (YYYY-MM-DD erwartet).", code: "VALIDATION" });
+    }
+    const status = (typeof query.status === "string" && query.status ? query.status : "alle").trim() || "alle";
+    if (!["alle", "offen", "überfällig", "erledigt", "papierkorb"].includes(status)) {
+      throw new BadRequestException({ error: "Ungültiger Status (alle, offen, überfällig, erledigt oder papierkorb erwartet).", code: "VALIDATION" });
+    }
+    let includeTests = false;
+    let force = false;
+    try {
+      includeTests = parseBoolFlag(query.include_tests, false);
+      force = parseBoolFlag(query.refresh, false);
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new BadRequestException({ error: detail, code: "VALIDATION" });
+    }
+    const q = typeof query.q === "string" ? query.q : "";
+    const { client, subdomain, username } = await this.loginFor(claims.sub);
+    let view;
+    try {
+      view = await this.buildHomeworkView(client, subdomain, claims.sub, username, sinceRaw, status, includeTests, q, force);
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new HttpException({ error: `Hausaufgaben konnten nicht geladen werden: ${detail}`, code: "UPSTREAM" }, 502);
+    }
+    return { ...page(view.items, { limit: String(limit), offset: String(offset) }), counts: view.counts, cache_info: view.cacheInfo };
+  }
+
+  async homeworkDone(claims: AuthClaims, eventId: string, body: unknown, today = new Date()) {
+    if (typeof body !== "object" || body === null || Array.isArray(body)) {
+      throw new BadRequestException({ error: "Ungültige Anfrage (JSON erwartet).", code: "VALIDATION" });
+    }
+    const input = body as Record<string, unknown>;
+    let done: boolean;
+    try {
+      done = parseBoolFlag(input.done ?? true, true);
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new BadRequestException({ error: detail, code: "VALIDATION" });
+    }
+    const { client, subdomain, username } = await this.loginFor(claims.sub);
+    let view;
+    try {
+      view = await this.buildHomeworkView(client, subdomain, claims.sub, username, EARLIEST_DEFAULT, "alle", true, "", false, today);
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new HttpException({ error: `Hausaufgaben konnten nicht geladen werden: ${detail}`, code: "UPSTREAM" }, 502);
+    }
+    if (!view.items.some((item) => String(item.id) === String(eventId))) {
+      throw new NotFoundException({ error: "Hausaufgabe nicht gefunden.", code: "NOT_FOUND" });
+    }
+    try {
+      await setHomeworkDone(client.session, subdomain, eventId, done);
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new HttpException({ error: `Status konnte nicht geändert werden: ${detail}`, code: "UPSTREAM" }, 502);
+    }
+    await this.writeHwState(claims.sub, eventId, "done", done);
+    const updated = await this.homeworkDictById(claims.sub, eventId, today);
+    if (!updated) throw new NotFoundException({ error: "Hausaufgabe nicht gefunden.", code: "NOT_FOUND" });
+    return updated;
+  }
+
+  async homeworkTrash(claims: AuthClaims, eventId: string, body: unknown, today = new Date()) {
+    if (typeof body !== "object" || body === null || Array.isArray(body)) {
+      throw new BadRequestException({ error: "Ungültige Anfrage (JSON erwartet).", code: "VALIDATION" });
+    }
+    const input = body as Record<string, unknown>;
+    const raw = input.hide ?? input.trash ?? true;
+    let hide: boolean;
+    try {
+      hide = parseBoolFlag(raw, true);
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new BadRequestException({ error: detail, code: "VALIDATION" });
+    }
+    const { client, subdomain, username } = await this.loginFor(claims.sub);
+    let view;
+    try {
+      view = await this.buildHomeworkView(client, subdomain, claims.sub, username, EARLIEST_DEFAULT, "alle", true, "", false, today);
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new HttpException({ error: `Hausaufgaben konnten nicht geladen werden: ${detail}`, code: "UPSTREAM" }, 502);
+    }
+    const current = view.items.find((item) => String(item.id) === String(eventId));
+    if (!current) throw new NotFoundException({ error: "Hausaufgabe nicht gefunden.", code: "NOT_FOUND" });
+    if (hide) {
+      await this.writeHwState(claims.sub, eventId, "trash", true);
+    } else {
+      if (HOMEWORK_TYPES.includes(String(current.type ?? ""))) {
+        try {
+          await setHomeworkDone(client.session, subdomain, eventId, false);
+        } catch (error) {
+          const detail = error instanceof Error ? error.message : String(error);
+          throw new HttpException({ error: `Aufgabe konnte nicht als offen markiert werden: ${detail}`, code: "UPSTREAM" }, 502);
+        }
+        await this.writeHwState(claims.sub, eventId, "done", false);
+      }
+      await this.removeHwState(claims.sub, eventId, "trash");
+    }
+    const updated = await this.homeworkDictById(claims.sub, eventId, today);
+    if (!updated) throw new NotFoundException({ error: "Hausaufgabe nicht gefunden.", code: "NOT_FOUND" });
+    return updated;
   }
 }
 

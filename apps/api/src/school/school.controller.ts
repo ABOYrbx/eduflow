@@ -76,11 +76,20 @@ export class SchoolController {
   }
 
   @UseGuards(AccessTokenGuard)
-  @Get("homework") homework(@Req() req: AuthenticatedRequest, @Query() query: Record<string, unknown>) { return this.demo.homework(req.authClaims, query); }
+  @Get("homework") homework(@Req() req: AuthenticatedRequest, @Query() query: Record<string, unknown>) {
+    if (useFakeProvider()) return this.demo.homework(req.authClaims, query);
+    return this.edupage.homeworkList(req.authClaims, query);
+  }
   @UseGuards(AccessTokenGuard)
-  @HttpCode(HttpStatus.OK) @Post("homework/:id/done") homeworkDone(@Param("id") id: string, @Body() body: unknown, @Req() req: AuthenticatedRequest) { return this.demo.homeworkChange(req.authClaims, id, "done", body); }
+  @HttpCode(HttpStatus.OK) @Post("homework/:id/done") homeworkDone(@Param("id") id: string, @Body() body: unknown, @Req() req: AuthenticatedRequest) {
+    if (useFakeProvider()) return this.demo.homeworkChange(req.authClaims, id, "done", body);
+    return this.edupage.homeworkDone(req.authClaims, id, body);
+  }
   @UseGuards(AccessTokenGuard)
-  @HttpCode(HttpStatus.OK) @Post("homework/:id/trash") homeworkTrash(@Param("id") id: string, @Body() body: unknown, @Req() req: AuthenticatedRequest) { return this.demo.homeworkChange(req.authClaims, id, "trash", body); }
+  @HttpCode(HttpStatus.OK) @Post("homework/:id/trash") homeworkTrash(@Param("id") id: string, @Body() body: unknown, @Req() req: AuthenticatedRequest) {
+    if (useFakeProvider()) return this.demo.homeworkChange(req.authClaims, id, "trash", body);
+    return this.edupage.homeworkTrash(req.authClaims, id, body);
+  }
   @UseGuards(AccessTokenGuard)
   @Get("timetable/day") timetableDay(@Query() query: Record<string, unknown>) { return this.demo.timetableDay(query); }
   @UseGuards(AccessTokenGuard)
