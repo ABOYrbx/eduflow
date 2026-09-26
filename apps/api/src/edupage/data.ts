@@ -8,6 +8,8 @@ import { downloadViaSession, fetchThread, replyToMessage, sendTimelineMessage } 
 import { EXAM_TYPES, HOMEWORK_TYPES, eventToDict, extractAttachments, homeworkRank, homeworkToDict, markHidden, norm, recipientsFromDbi } from "./serializers";
 import { MESSAGE_TYPES, TimelineEvent, fetchTimelineHistory } from "./timeline";
 import { GERMAN_WEEKDAYS, LessonDict, fetchDayPlan, isAlldayEvent, lessonToDict, mergeLernzeit, parseDayPlan } from "./timetable";
+import { ESSEN_BASE_URL, ESSEN_TTL_S, EssenUnavailable, WeekMenu, candidateUrls, defaultExtractPdfText, defaultFetchBytes, parseMenuPdf, weekKey, type ExtractPdfText, type FetchBytes } from "./essen";
+import { defaultFetchJson, getWetter, searchWetterCities, type FetchJson } from "./meta";
 import { SETTINGS_DEFAULTS, SETTINGS_SCHEMA, coerceSetting, settingsFromForm } from "./settings";
 import { fetchGradeData, gradeToDict, parseGrades } from "./grades";
 import { setHomeworkDone } from "./homework";
@@ -112,10 +114,21 @@ interface SessionContext {
 /** Echte EduPage-Daten für die Schul-Pakete (N-B; Fake bleibt unberührt). */
 @Injectable()
 export class EdupageDataService {
+  private readonly fetchBytes: FetchBytes;
+  private readonly extractPdfText: ExtractPdfText;
+  private readonly fetchJson: FetchJson;
+  /** Essens-Wochenpläne sind global (wie Python) und leben prozess-lokal. */
+  private readonly essenMemory = new Map<string, { savedAt: number; data: WeekMenu }>();
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly clientFactory: () => EdupageClient = () => new EdupageClient(),
-  ) {}
+    deps: { fetchBytes?: FetchBytes; extractPdfText?: ExtractPdfText; fetchJson?: FetchJson } = {},
+  ) {
+    this.fetchBytes = deps.fetchBytes ?? defaultFetchBytes;
+    this.extractPdfText = deps.extractPdfText ?? defaultExtractPdfText;
+    this.fetchJson = deps.fetchJson ?? defaultFetchJson;
+  }
 
   /** EduPage-Re-Login aus Tresor-Zugangsdaten (wie Python `_api_login`). */
   async loginFor(accountId: string, badCredentialsText?: string): Promise<SessionContext> {
@@ -787,6 +800,89 @@ export class EdupageDataService {
     return { ...page(dicts, { limit: String(limit), offset: String(offset) }), cache_info: "frisch geladen" };
   }
 
+  // ------------------------------------------------- Essen + Wetter (N-G)
+
+  private async weekMenu(today: Date, force: boolean): Promise<WeekMenu> {
+    const key = weekKey(today);
+    const match = /^(\d+)-W(\d+)$/.exec(key) ?? [];
+    const isoYear = Number.parseInt(match[1] ?? "0", 10);
+    const isoWeek = Number.parseInt(match[2] ?? "0", 10);
+    const entry = this.essenMemory.get(key);
+    const ageS = entry ? Math.max(0, Math.round((Date.now() - entry.savedAt) / 1000)) : null;
+    if (entry && !force && ageS !== null && ageS < ESSEN_TTL_S) {
+      return { ...entry.data, cached: true, cache_info: `aus Cache (${formatAge(ageS)} alt)` };
+    }
+    let lastErr = "Essenplan-PDF nicht gefunden.";
+    for (const url of candidateUrls(ESSEN_BASE_URL, isoYear, isoWeek)) {
+      const pdf = await this.fetchBytes(url);
+      if (!pdf) continue;
+      try {
+        const fresh = await parseMenuPdf(pdf, isoYear, isoWeek, this.extractPdfText, today);
+        fresh.source_url = url;
+        this.essenMemory.set(key, { savedAt: Date.now(), data: { ...fresh } });
+        return { ...fresh, cached: false, cache_info: "frisch geladen" };
+      } catch (error) {
+        if (error instanceof EssenUnavailable) {
+          lastErr = error.message;
+          if (lastErr.includes("pypdf")) break;
+          continue;
+        }
+        throw error;
+      }
+    }
+    if (entry) {
+      return { ...entry.data, cached: true, cache_info: `offline: Cache (${formatAge(ageS)} alt)` };
+    }
+    throw new EssenUnavailable(lastErr);
+  }
+
+  /** Wochen-Essensplan (braucht kein EduPage-Login, Port von `api_essen`). */
+  async essenMenu(query: Record<string, unknown>, today = new Date()) {
+    const force = query.refresh === "1";
+    try {
+      return await this.weekMenu(today, force);
+    } catch (error) {
+      if (error instanceof EssenUnavailable) {
+        throw new HttpException({ error: error.message, code: "UPSTREAM" }, 502);
+      }
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new HttpException({ error: `Essenplan konnte nicht geladen werden: ${detail}`, code: "UPSTREAM" }, 502);
+    }
+  }
+
+  /** Wetter-Proxy (Port von `api_wetter`). */
+  async weather(query: Record<string, unknown>) {
+    const coord = (value: unknown): number | null => {
+      if (typeof value !== "string" || !value.trim()) return null;
+      const num = Number(value);
+      return Number.isFinite(num) ? num : null;
+    };
+    const lat = coord(query.lat);
+    const lon = coord(query.lon);
+    const city = (typeof query.city === "string" ? query.city : "").trim().slice(0, 100);
+    if ((lat === null || lon === null) && !city) {
+      throw new BadRequestException({ error: "Bitte Koordinaten (?lat=..&lon=..) oder Stadt (?city=..) angeben.", code: "VALIDATION" });
+    }
+    const key = process.env.OPENWEATHER_KEY ?? "";
+    const { payload, status } = await getWetter(this.fetchJson, key, lat, lon, city);
+    if (status === 200) return payload;
+    const message = typeof payload.error === "string" ? payload.error : "Wetter derzeit nicht verfügbar.";
+    if (status === 400) throw new BadRequestException({ error: message, code: "VALIDATION" });
+    if (status === 503) throw new HttpException({ error: message, code: "CONFIG_MISSING" }, 503);
+    throw new HttpException({ error: message, code: "UPSTREAM" }, 502);
+  }
+
+  /** Wetter-Ortssuche (Port von `api_wetter_suche`). */
+  async searchCities(query: unknown) {
+    const text = (typeof query === "string" ? query : "").trim().slice(0, 100);
+    const key = process.env.OPENWEATHER_KEY ?? "";
+    const { payload, status } = await searchWetterCities(this.fetchJson, key, text);
+    if (status === 200) return payload;
+    const message = typeof payload.error === "string" ? payload.error : "Stadtsuche nicht verfügbar.";
+    if (status === 503) throw new HttpException({ error: message, code: "CONFIG_MISSING" }, 503);
+    throw new HttpException({ error: message, code: "UPSTREAM" }, 502);
+  }
+
   // --------------------------------------- Einstellungen + Cache (N-F)
 
   async settingsGet(claims: AuthClaims) {
@@ -841,7 +937,9 @@ export class EdupageDataService {
   async cacheClear(claims: AuthClaims) {
     try {
       const result = await this.prisma.resourceCache.deleteMany({ where: { accountId: claims.sub } });
-      return { status: "ok", cleared: result.count };
+      const essenCleared = this.essenMemory.size;
+      this.essenMemory.clear();
+      return { status: "ok", cleared: result.count + essenCleared };
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
       throw new HttpException({ error: `Cache konnte nicht gelöscht werden: ${detail}`, code: "UPSTREAM" }, 502);

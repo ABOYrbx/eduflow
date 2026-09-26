@@ -110,11 +110,20 @@ export class SchoolController {
     return this.edupage.gradesList(req.authClaims, query);
   }
   @UseGuards(AccessTokenGuard)
-  @Get("essen") meals() { return this.demo.meals(); }
+  @Get("essen") meals(@Query() query: Record<string, unknown>) {
+    if (useFakeProvider()) return this.demo.meals();
+    return this.edupage.essenMenu(query);
+  }
   @UseGuards(AccessTokenGuard)
-  @Get("wetter") weather(@Query() query: Record<string, unknown>) { return this.demo.weather(query); }
+  @Get("wetter") weather(@Query() query: Record<string, unknown>) {
+    if (useFakeProvider()) return this.demo.weather(query);
+    return this.edupage.weather(query);
+  }
   @UseGuards(AccessTokenGuard)
-  @Get("wetter/suche") searchCities(@Query("q") query: unknown) { return this.demo.searchCities(query); }
+  @Get("wetter/suche") searchCities(@Query("q") query: unknown) {
+    if (useFakeProvider()) return this.demo.searchCities(query);
+    return this.edupage.searchCities(query);
+  }
   @UseGuards(AccessTokenGuard)
   @Get("settings") settings(@Req() req: AuthenticatedRequest) {
     if (useFakeProvider()) return this.demo.settings(req.authClaims);
