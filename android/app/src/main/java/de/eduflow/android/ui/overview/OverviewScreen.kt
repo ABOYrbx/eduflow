@@ -44,6 +44,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -59,6 +60,7 @@ import de.eduflow.android.ui.common.AppHeader
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SectionLabel
+import de.eduflow.android.ui.theme.LocalEduFlowDark
 import de.eduflow.android.ui.timetable.AuthAwareError
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -332,9 +334,14 @@ private fun NowCard(
     onTimetable: () -> Unit,
 ) {
     val scheme = MaterialTheme.colorScheme
+    // Dark: schwarze Karte statt weißer Primär-Fläche (Light bleibt
+    // PNG-schwarz) — weiße Schrift dazu statt onPrimary.
+    val dark = LocalEduFlowDark.current
+    val cardColor = if (dark) Color.Black else scheme.primary
+    val contentColor = if (dark) Color.White else scheme.onPrimary
     Surface(
         shape = RoundedCornerShape(16.dp),
-        color = scheme.primary,
+        color = cardColor,
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -343,14 +350,14 @@ private fun NowCard(
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 1.2.sp,
-                color = scheme.onPrimary.copy(alpha = 0.7f),
+                color = contentColor.copy(alpha = 0.7f),
             )
             if (current == null && next == null) {
                 Text(
                     stringResource(R.string.overview_no_school),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = scheme.onPrimary,
+                    color = contentColor,
                 )
             } else {
                 current?.let {
@@ -358,7 +365,7 @@ private fun NowCard(
                         stringResource(R.string.overview_now_format, it.title, it.period, it.time),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = scheme.onPrimary,
+                        color = contentColor,
                     )
                 }
                 next?.let {
@@ -372,14 +379,14 @@ private fun NowCard(
                         )
                         else stringResource(R.string.overview_next_format, it.title, it.period, it.time),
                         fontSize = 13.sp,
-                        color = scheme.onPrimary.copy(alpha = 0.75f),
+                        color = contentColor.copy(alpha = 0.75f),
                     )
                 }
             }
             TextButton(
                 onClick = onTimetable,
                 colors = ButtonDefaults.textButtonColors(
-                    contentColor = scheme.onPrimary,
+                    contentColor = contentColor,
                 ),
             ) { Text(stringResource(R.string.overview_action_timetable)) }
         }
