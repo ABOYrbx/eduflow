@@ -25,6 +25,8 @@ files:
     translation: /android/app/src/main/res/values-%android_code%/strings.xml
     update_option: update_as_unapproved
 
-  # macOS String Catalog (alle Sprachen leben in derselben Datei)
+  # macOS String Catalog (alle Sprachen leben in derselben Datei;
+  # multilingual befreit vom Sprach-Platzhalter, siehe CLI-Doku).
   - source: /mac/EduFlow/Resources/Localizable.xcstrings
     translation: /mac/EduFlow/Resources/Localizable.xcstrings
+    multilingual: true
