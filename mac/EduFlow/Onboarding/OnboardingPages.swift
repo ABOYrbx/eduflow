@@ -17,6 +17,8 @@ public final class ServerCheckModel {
     public var checking = false
     public var result: ServerCheckResult = .none
     public var showSuccess = false
+    /// Blendet die Erfolgs-Animation nach manuellem Test wieder aus.
+    private var hideSuccessTask: Task<Void, Never>?
 
     private let store: TokenStore
     private let session: URLSession?
@@ -56,6 +58,29 @@ public final class ServerCheckModel {
     /// wird, damit kein veraltetes Ergebnis angezeigt wird).
     public func resetResult() {
         result = .none
+        cancelCelebration()
+    }
+
+    /// Erfolg feiern: großes Overlay-Häkchen einblenden und nach kurzer
+    /// Zeit von selbst ausblenden (manueller Test; `proceed()` navigiert
+    /// stattdessen weiter und braucht kein Ausblenden).
+    public func celebrate() {
+        hideSuccessTask?.cancel()
+        withAnimation(.spring(response: 0.45, dampingFraction: 0.55)) {
+            showSuccess = true
+        }
+        hideSuccessTask = Task {
+            try? await Task.sleep(for: .seconds(1))
+            guard !Task.isCancelled else { return }
+            showSuccess = false
+        }
+    }
+
+    /// Feier abbrechen (neuer Test, Zurücksetzen, Übernehmen).
+    public func cancelCelebration() {
+        hideSuccessTask?.cancel()
+        hideSuccessTask = nil
+        showSuccess = false
     }
 
     /// Weiter-Ablauf: testet direkt, zeigt bei Erfolg kurz das grüne
@@ -63,6 +88,7 @@ public final class ServerCheckModel {
     /// darf — bei Fehler bleibt die Seite mit Meldung stehen.
     @discardableResult
     public func proceed(reduceMotion: Bool) async -> Bool {
+        cancelCelebration()
         await check()
         guard case .ok = result else { return false }
         if !reduceMotion {
@@ -315,7 +341,12 @@ public struct OnboardingServerPage: View {
                 placeholder: TokenStore.defaultBaseURL,
                 icon: "server.rack"
             ) {
-                Task { await model.check() }
+                Task {
+                    await model.check()
+                    if case .ok = model.result {
+                        model.celebrate()
+                    }
+                }
             }
             .onChange(of: model.url) {
                 model.resetResult()
@@ -357,5 +388,26 @@ public struct OnboardingServerPage: View {
         .padding(.horizontal, 28)
         .frame(maxWidth: 560)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .overlay {
+            // Erfolgs-Overlay über allem: abgedunkelte Seite plus
+            // großer Haken auf weißer Plakette (blockiert kurz).
+            if model.showSuccess {
+                ZStack {
+                    Color.black.opacity(0.25)
+                    ZStack {
+                        Circle()
+                            .fill(Color.white)
+                            .frame(width: 200, height: 200)
+                            .shadow(color: .black.opacity(0.2), radius: 24)
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 140, weight: .bold))
+                            .foregroundStyle(EduFlowPalette.green)
+                    }
+                    .transition(.scale(scale: 0.3).combined(with: .opacity))
+                    .accessibilityHidden(true)
+                }
+            }
+        }
+        .animation(.spring(response: 0.45, dampingFraction: 0.55), value: model.showSuccess)
     }
 }
