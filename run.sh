@@ -106,6 +106,10 @@ if [ "$API_READY" -ne 1 ]; then
 fi
 
 printf 'API bereit: http://127.0.0.1:%s/api/v1\n' "$API_PORT"
+LAN_IP=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || hostname -I 2>/dev/null | awk '{print $1}')
+if [ -n "$LAN_IP" ]; then
+  printf 'Handy im gleichen WLAN: API http://%s:%s/api/v1 (in der App als Server eintragen), Web http://%s:%s/\n' "$LAN_IP" "$API_PORT" "$LAN_IP" "$WEB_PORT"
+fi
 printf 'Starte Weboberfläche auf Port %s …\n' "$WEB_PORT"
 printf 'Web: http://localhost:%s/ (%s)\n' "$WEB_PORT" "$LOGIN_HINT"
 API_SERVER_URL="http://127.0.0.1:$API_PORT" PORT="$WEB_PORT" npm run dev:web
