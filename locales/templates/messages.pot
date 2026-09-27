@@ -1,12 +1,1720 @@
-# EduFlow – gettext-Vorlage (Deutsch ist Source-Sprache)
+# Translations template for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
 #
-# Platzhalter, bis Schritt 2 aus plaene/LOKALISIERUNG.md umgesetzt ist
-# (Templates + app.py + api/*.py auf gettext umstellen, dann neu erzeugen):
-#   pybabel extract -F babel.cfg -o locales/templates/messages.pot .
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: EduFlow\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-09-27 13:26+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: app.py:436
+msgid "Montag"
+msgstr ""
+
+#: app.py:436
+msgid "Dienstag"
+msgstr ""
+
+#: app.py:437
+msgid "Mittwoch"
+msgstr ""
+
+#: app.py:437
+msgid "Donnerstag"
+msgstr ""
+
+#: app.py:438
+msgid "Freitag"
+msgstr ""
+
+#: app.py:438
+msgid "Samstag"
+msgstr ""
+
+#: app.py:439
+msgid "Sonntag"
+msgstr ""
+
+#: app.py:447
+msgid "Januar"
+msgstr ""
+
+#: app.py:447
+msgid "Februar"
+msgstr ""
+
+#: app.py:448
+msgid "März"
+msgstr ""
+
+#: app.py:448
+msgid "April"
+msgstr ""
+
+#: app.py:449
+msgid "Mai"
+msgstr ""
+
+#: app.py:449
+msgid "Juni"
+msgstr ""
+
+#: app.py:450
+msgid "Juli"
+msgstr ""
+
+#: app.py:450
+msgid "August"
+msgstr ""
+
+#: app.py:451
+msgid "September"
+msgstr ""
+
+#: app.py:451
+msgid "Oktober"
+msgstr ""
+
+#: app.py:452
+msgid "November"
+msgstr ""
+
+#: app.py:452
+msgid "Dezember"
+msgstr ""
+
+#: app.py:653
+msgid ""
+"Sicherheitsprüfung fehlgeschlagen. Bitte Seite neu laden und erneut "
+"versuchen."
+msgstr ""
+
+#: app.py:678
+msgid "Diese Sprache ist noch nicht verfügbar."
+msgstr ""
+
+#: app.py:1294 templates/compose.html:47 templates/compose.html:97
+msgid "Nachricht"
+msgstr ""
+
+#: app.py:1294
+msgid "Chat"
+msgstr ""
+
+#: app.py:1295
+msgid "Umfrage"
+msgstr ""
+
+#: app.py:1295
+msgid "Neuigkeit"
+msgstr ""
+
+#: app.py:1296
+msgid "Mitteilung"
+msgstr ""
+
+#: app.py:1296
+msgid "Hausaufgabe"
+msgstr ""
+
+#: app.py:1297
+msgid "Online-Test"
+msgstr ""
+
+#: app.py:1298
+msgid "Hausaufgaben-Status"
+msgstr ""
+
+#: app.py:1299
+msgid "Schularbeit"
+msgstr ""
+
+#: app.py:1299
+msgid "Test"
+msgstr ""
+
+#: app.py:1300
+msgid "Mündliche Prüfung"
+msgstr ""
+
+#: app.py:1301
+msgid "Projektprüfung"
+msgstr ""
+
+#: app.py:1302
+msgid "Wiederholungsprüfung"
+msgstr ""
+
+#: app.py:1303
+msgid "Testung"
+msgstr ""
+
+#: app.py:1304
+msgid "Prüfungszuweisung"
+msgstr ""
+
+#: app.py:1305
+msgid "Prüfungsergebnis"
+msgstr ""
+
+#: app.py:1306 templates/grades.html:101
+msgid "Note"
+msgstr ""
+
+#: app.py:1306
+msgid "Notendokument"
+msgstr ""
+
+#: app.py:1307
+msgid "Klassenbucheintrag"
+msgstr ""
+
+#: app.py:1308
+msgid "Klassenereignis"
+msgstr ""
+
+#: app.py:1309
+msgid "Besprechung"
+msgstr ""
+
+#: app.py:1310
+msgid "Kulturveranstaltung"
+msgstr ""
+
+#: app.py:1310
+msgid "Ereignis"
+msgstr ""
+
+#: app.py:1311
+msgid "Exkursion"
+msgstr ""
+
+#: app.py:1312
+msgid "Elternabend"
+msgstr ""
+
+#: app.py:1313
+msgid "Vorgang"
+msgstr ""
+
+#: app.py:1314
+msgid "Schulveranstaltung"
+msgstr ""
+
+#: app.py:1315
+msgid "Ausflug"
+msgstr ""
+
+#: app.py:1315
+msgid "Anmeldung"
+msgstr ""
+
+#: app.py:1316
+msgid "Versammlung"
+msgstr ""
+
+#: app.py:1316
+msgid "Freier Tag"
+msgstr ""
+
+#: app.py:1317
+msgid "Feiertag"
+msgstr ""
+
+#: app.py:1317
+msgid "Schulferien"
+msgstr ""
+
+#: app.py:1318
+msgid "Entfallene Stunde"
+msgstr ""
+
+#: app.py:1319
+msgid "Klassenlehrerstunde"
+msgstr ""
+
+#: app.py:1320
+msgid "Distanzunterricht"
+msgstr ""
+
+#: app.py:1320
+msgid "Unterricht"
+msgstr ""
+
+#: app.py:1321
+msgid "Projekt"
+msgstr ""
+
+#: app.py:1321
+msgid "Geplante Stunde"
+msgstr ""
+
+#: app.py:1322
+msgid "Sicherheitshinweis"
+msgstr ""
+
+#: app.py:1323
+msgid "Wiederholungsstunde"
+msgstr ""
+
+#: app.py:1324 templates/agenda.html:37 templates/compose.html:22
+#: templates/dashboard.html:23 templates/grades.html:23
+#: templates/homework.html:24 templates/overview.html:23
+#: templates/overview.html:79 templates/settings.html:23
+#: templates/timetable.html:38
+msgid "Stundenplan"
+msgstr ""
+
+#: app.py:1325
+msgid "Raumbuchung"
+msgstr ""
+
+#: app.py:1326
+msgid "Raumwechsel"
+msgstr ""
+
+#: app.py:1327
+msgid "Vertretung"
+msgstr ""
+
+#: app.py:1328
+msgid "Anstupser"
+msgstr ""
+
+#: app.py:1329
+msgid "Entschuldigung"
+msgstr ""
+
+#: app.py:1330
+msgid "Repräsentation"
+msgstr ""
+
+#: app.py:1331
+msgid "Fehlzeit"
+msgstr ""
+
+#: app.py:1332
+msgid "Essensguthaben"
+msgstr ""
+
+#: app.py:1333
+msgid "Essensausgabe"
+msgstr ""
+
+#: app.py:1334
+msgid "Speiseplan"
+msgstr ""
+
+#: app.py:1335
+msgid "Speiseplan (Verlauf)"
+msgstr ""
+
+#: app.py:1336
+msgid "Bestätigung"
+msgstr ""
+
+#: app.py:1336
+msgid "Wettbewerb"
+msgstr ""
+
+#: app.py:1337
+msgid "Fotoalbum"
+msgstr ""
+
+#: app.py:1337
+msgid "Zahlungen"
+msgstr ""
+
+#: app.py:1338
+msgid "Fundsache"
+msgstr ""
+
+#: app.py:1338
+msgid "Bienchen"
+msgstr ""
+
+#: app.py:1339
+msgid "Sonstiges"
+msgstr ""
+
+#: app.py:1340
+msgid "Anwesenheit (Verlauf)"
+msgstr ""
+
+#: app.py:1341
+msgid "Bienchen (Verlauf)"
+msgstr ""
+
+#: app.py:1342
+msgid "Cache (Verlauf)"
+msgstr ""
+
+#: app.py:1343
+msgid "Datenbank (Verlauf)"
+msgstr ""
+
+#: app.py:1344
+msgid "ISIC-Daten (Verlauf)"
+msgstr ""
+
+#: app.py:1345
+msgid "Pläne (Verlauf)"
+msgstr ""
+
+#: app.py:1346
+msgid "Wettbewerb (Verlauf)"
+msgstr ""
+
+#: app.py:1347
+msgid "Tagesplan (Verlauf)"
+msgstr ""
+
+#: app.py:1348
+msgid "Schuleinstellungen (Verlauf)"
+msgstr ""
+
+#: app.py:1349
+msgid "Finanzen (Verlauf)"
+msgstr ""
+
+#: app.py:1350
+msgid "Noten (Verlauf)"
+msgstr ""
+
+#: app.py:1351
+msgid "Hausaufgaben (Verlauf)"
+msgstr ""
+
+#: app.py:1352
+msgid "Gruppen (Verlauf)"
+msgstr ""
+
+#: app.py:1353
+msgid "Vorgang (Verlauf)"
+msgstr ""
+
+#: app.py:1354
+msgid "Vorgangsarten (Verlauf)"
+msgstr ""
+
+#: app.py:1355
+msgid "Einstellungen (Verlauf)"
+msgstr ""
+
+#: app.py:1356
+msgid "Vertretung (Verlauf)"
+msgstr ""
+
+#: app.py:1357
+msgid "Stundenplan (Verlauf)"
+msgstr ""
+
+#: app.py:1358
+msgid "Profilfoto (Verlauf)"
+msgstr ""
+
+#: app.py:1359
+msgid "Unbekannt"
+msgstr ""
+
+#: app.py:1584
+msgid "Bitte Benutzername und Passwort eingeben."
+msgstr ""
+
+#: api/auth.py:134 app.py:1590
+msgid "Falscher Benutzername, Passwort oder Subdomain."
+msgstr ""
+
+#: app.py:1593 app.py:1682 app.py:1886 app.py:2203 app.py:3224 app.py:3590
+msgid ""
+"EduFlow verlangt ein Captcha. Bitte einmal im Browser anmelden, dann "
+"erneut versuchen."
+msgstr ""
+
+#: app.py:1624
+msgid "2FA-Sitzung abgelaufen. Bitte erneut anmelden."
+msgstr ""
+
+#: app.py:1630
+msgid "Bitte den 2FA-Code aus E-Mail / App eingeben."
+msgstr ""
+
+#: app.py:1671 app.py:1880 app.py:1995 app.py:2060 app.py:2197 app.py:2867
+#: app.py:2941 app.py:2978 app.py:3173 app.py:3218 app.py:3584 app.py:3664
+msgid "Sitzung erfordert erneut 2FA. Bitte erneut anmelden."
+msgstr ""
+
+#: app.py:1676 app.py:3667 app.py:3814
+msgid "Anmeldung abgelaufen. Bitte erneut anmelden."
+msgstr ""
+
+#: app.py:1679 app.py:1883 app.py:2200 app.py:3176 app.py:3221 app.py:3587
+msgid "Gespeicherte Zugangsdaten sind ungültig. Bitte erneut anmelden."
+msgstr ""
+
+#: app.py:1711 app.py:1904 app.py:2214 app.py:3267 app.py:3326
+msgid "Nicht angemeldet. Bitte erneut anmelden."
+msgstr ""
+
+#: app.py:1989 app.py:2047
+msgid "Keine Aufgabe ausgewählt."
+msgstr ""
+
+#: app.py:1998 app.py:2063 app.py:2870 app.py:2944 app.py:2981 app.py:3670
+msgid "Anmeldung ungültig. Bitte erneut anmelden."
+msgstr ""
+
+#: app.py:2016
+msgid "Als erledigt markiert.Wieder geöffnet."
+msgstr ""
+
+#: app.py:2053
+msgid "Aufgabe in den Papierkorb verschoben."
+msgstr ""
+
+#: app.py:2090
+msgid "Aufgabe aus dem Papierkorb geholt und als offen markiert."
+msgstr ""
+
+#: app.py:2093
+msgid "Aufgabe aus dem Papierkorb geholt."
+msgstr ""
+
+#: app.py:2580
+msgid "Nichts Neues – alles bereits gelesen."
+msgstr ""
+
+#: app.py:2932
+msgid "Bitte mindestens einen Empfänger wählen."
+msgstr ""
+
+#: api/messages.py:337 app.py:2935
+msgid "Bitte einen Nachrichtentext eingeben."
+msgstr ""
+
+#: app.py:2969
+msgid "Keine Nachricht ausgewählt."
+msgstr ""
+
+#: api/messages.py:392 app.py:2972
+msgid "Bitte einen Antworttext eingeben."
+msgstr ""
+
+#: app.py:2999
+msgid "Antwort gesendet."
+msgstr ""
+
+#: app.py:3179
+msgid "EduFlow verlangt ein Captcha. Bitte einmal im Browser anmelden."
+msgstr ""
+
+#: app.py:3786
+msgid "Einstellungen gespeichert."
+msgstr ""
+
+#: app.py:3830
+msgid "Neuer API-Token erstellt – jetzt kopieren, er wird nur einmal gezeigt."
+msgstr ""
+
+#: app.py:3845
+msgid "Kein Token ausgewählt."
+msgstr ""
+
+#: app.py:3848
+msgid "API-Token widerrufen."
+msgstr ""
+
+#: api/auth.py:298 app.py:3850
+msgid "Token nicht gefunden."
+msgstr ""
+
+#: api/auth.py:107 api/auth.py:170
+msgid "Zu viele Versuche. Bitte später erneut versuchen."
+msgstr ""
+
+#: api/auth.py:111 api/auth.py:174 api/homework.py:258 api/homework.py:312
+msgid "Ungültige Anfrage (JSON erwartet)."
+msgstr ""
+
+#: api/auth.py:120
+msgid "Bitte Benutzername und Passwort angeben."
+msgstr ""
+
+#: api/auth.py:138
+msgid ""
+"EduPage verlangt ein Captcha. Bitte einmal im Browser anmelden, dann "
+"erneut versuchen."
+msgstr ""
+
+#: api/auth.py:179
+msgid "Bitte Zwischen-Token und Code angeben."
+msgstr ""
+
+#: api/auth.py:185
+msgid "Zwischenschritt abgelaufen. Bitte erneut anmelden."
+msgstr ""
+
+#: api/auth.py:190
+msgid "Der Code wurde nicht akzeptiert. Bitte erneut versuchen."
+msgstr ""
+
+#: api/auth.py:236 api/grades.py:44 api/timetable.py:66 api/timetable.py:73
+msgid "Sitzung erfordert erneut 2FA. Bitte erneut über /auth/login anmelden."
+msgstr ""
+
+#: api/auth.py:284
+#, python-brace-format
+msgid "Geräte konnten nicht geladen werden: {}"
+msgstr ""
+
+#: api/auth.py:295
+msgid "Bitte Token-ID angeben."
+msgstr ""
+
+#: api/core.py:247 api/messages.py:472 api/messages.py:500
+msgid "Token ist abgelaufen. Bitte erneut anmelden."
+msgstr ""
+
+#: api/core.py:249 api/messages.py:475 api/messages.py:489 api/messages.py:503
+msgid "Ungültiges oder fehlendes Token."
+msgstr ""
+
+#: api/homework.py:76
+msgid ""
+"Anmeldung erfordert Zwei-Faktor-Code. Bitte über /auth/login erneut "
+"anmelden."
+msgstr ""
+
+#: api/homework.py:221
+msgid ""
+"Ungültiger Status (alle, offen, überfällig, erledigt oder papierkorb "
+"erwartet)."
+msgstr ""
+
+#: api/homework.py:239 api/homework.py:277 api/homework.py:334
+msgid "Sitzung abgelaufen. Bitte erneut anmelden."
+msgstr ""
+
+#: api/homework.py:243 api/homework.py:281 api/homework.py:338
+#, python-brace-format
+msgid "Hausaufgaben konnten nicht geladen werden: {}"
+msgstr ""
+
+#: api/homework.py:284 api/homework.py:299 api/homework.py:346
+#: api/homework.py:373
+msgid "Hausaufgabe nicht gefunden."
+msgstr ""
+
+#: api/homework.py:290
+#, python-brace-format
+msgid "Status konnte nicht geändert werden: {}"
+msgstr ""
+
+#: api/homework.py:360
+#, python-brace-format
+msgid "Aufgabe konnte nicht als offen markiert werden: {}"
+msgstr ""
+
+#: api/messages.py:147
+msgid "Datum muss im Format JJJJ-MM-TT sein."
+msgstr ""
+
+#: api/messages.py:152
+#, python-format
+msgid "Unbekannter Nachrichtentyp. Gültig: %s., "
+msgstr ""
+
+#: api/messages.py:168
+#, python-format
+msgid "Nachrichten konnten nicht geladen werden: %s"
+msgstr ""
+
+#: api/messages.py:230
+#, python-format
+msgid "Thread konnte nicht geladen werden: %s"
+msgstr ""
+
+#: api/messages.py:261
+#, python-format
+msgid "Gelesen-Status konnte nicht gespeichert werden: %s"
+msgstr ""
+
+#: api/messages.py:285
+#, python-format
+msgid "Empfänger konnten nicht geladen werden: %s"
+msgstr ""
+
+#: api/messages.py:333
+msgid "Bitte mindestens einen gültigen Empfänger angeben."
+msgstr ""
+
+#: api/messages.py:346
+#, python-format
+msgid "Senden fehlgeschlagen: %s"
+msgstr ""
+
+#: api/messages.py:366
+msgid "Gesendet, aber die neue Nachricht wurde nicht gefunden."
+msgstr ""
+
+#: api/messages.py:403
+#, python-format
+msgid "Antwort fehlgeschlagen: %s"
+msgstr ""
+
+#: api/messages.py:416
+#, python-format
+msgid "Antwort wurde gesendet, der Thread konnte aber nicht geladen werden: %s"
+msgstr ""
+
+#: api/messages.py:523 api/messages.py:526
+msgid "Bitte event_id und idx als Zahl angeben."
+msgstr ""
+
+#: api/messages.py:562 api/messages.py:640
+msgid "Nachricht nicht gefunden."
+msgstr ""
+
+#: api/messages.py:568 api/messages.py:644
+msgid "Datei nicht gefunden."
+msgstr ""
+
+#: api/messages.py:575 api/messages.py:652
+msgid "Ungültiger Download-Link."
+msgstr ""
+
+#: api/messages.py:638 api/messages.py:658
+#, python-format
+msgid "Download fehlgeschlagen: %s"
+msgstr ""
+
+#: api/messages.py:661
+#, python-format
+msgid "EduPage meldet Fehler %s."
+msgstr ""
+
+#: api/meta.py:44
+msgid "Bitte Koordinaten (?lat=..&lon=..) oder Stadt (?city=..) angeben."
+msgstr ""
+
+#: api/school.py:93
+msgid "Vertretungsplan konnte nicht geladen werden."
+msgstr ""
+
+#: api/school.py:167
+msgid "Der Zeitraum darf höchstens ein Jahr umfassen."
+msgstr ""
+
+#: api/school.py:179
+msgid "Schultermine konnten nicht geladen werden."
+msgstr ""
+
+#: api/settings.py:54
+msgid "Ungültige Anfrage (JSON-Objekt erwartet)."
+msgstr ""
+
+#: api/timetable.py:93
+msgid "EduPage meldet: nicht angemeldet."
+msgstr ""
+
+#: templates/2fa.html:6
+msgid "EduFlow 2FA"
+msgstr ""
+
+#: templates/2fa.html:14 templates/login.html:14
+msgid "Farbschema wechseln"
+msgstr ""
+
+#: templates/2fa.html:14 templates/login.html:14
+msgid "☾"
+msgstr ""
+
+#: templates/2fa.html:17
+msgid "E"
+msgstr ""
+
+#: templates/2fa.html:18
+msgid "Zwei-Faktor-Code"
+msgstr ""
+
+#: templates/2fa.html:19
+msgid "EduFlow erfordert 2FA. Gib den Code aus deiner E-Mail / App ein."
+msgstr ""
+
+#: templates/2fa.html:27
+msgid "Code"
+msgstr ""
+
+#: templates/2fa.html:28
+msgid "2FA-Code"
+msgstr ""
+
+#: templates/2fa.html:29
+msgid "Bestätigen"
+msgstr ""
+
+#: templates/agenda.html:6
+msgid "EduFlow · Termine"
+msgstr ""
+
+#: templates/agenda.html:31 templates/compose.html:17
+#: templates/dashboard.html:17 templates/grades.html:17
+#: templates/homework.html:18 templates/overview.html:17
+#: templates/settings.html:17 templates/timetable.html:32
+msgid "EduFlow – Übersicht"
+msgstr ""
+
+#: templates/agenda.html:33 templates/compose.html:19
+#: templates/dashboard.html:19 templates/grades.html:19
+#: templates/homework.html:20 templates/overview.html:19
+#: templates/settings.html:19 templates/timetable.html:34
+msgid "Übersicht"
+msgstr ""
+
+#: templates/agenda.html:34 templates/compose.html:20
+#: templates/dashboard.html:20 templates/dashboard.html:49
+#: templates/grades.html:20 templates/homework.html:21
+#: templates/overview.html:20 templates/overview.html:153
+#: templates/settings.html:20 templates/timetable.html:35
+msgid "Nachrichten"
+msgstr ""
+
+#: templates/agenda.html:35 templates/compose.html:21
+#: templates/dashboard.html:21 templates/grades.html:21
+#: templates/homework.html:22 templates/homework.html:50
+#: templates/overview.html:21 templates/overview.html:97
+#: templates/settings.html:21 templates/timetable.html:36
+msgid "Hausaufgaben"
+msgstr ""
+
+#: templates/agenda.html:36 templates/dashboard.html:22
+#: templates/grades.html:22 templates/grades.html:49 templates/homework.html:23
+#: templates/overview.html:22 templates/settings.html:22
+#: templates/timetable.html:37
+msgid "Noten"
+msgstr ""
+
+#: templates/agenda.html:38 templates/compose.html:23
+#: templates/dashboard.html:24 templates/grades.html:24
+#: templates/homework.html:25 templates/overview.html:24
+#: templates/settings.html:24 templates/timetable.html:39
+msgid "Termine"
+msgstr ""
+
+#: templates/agenda.html:42 templates/compose.html:30
+#: templates/dashboard.html:31 templates/grades.html:31
+#: templates/homework.html:32 templates/overview.html:31
+#: templates/settings.html:31 templates/timetable.html:46
+msgid "Dein Profil"
+msgstr ""
+
+#: templates/agenda.html:42 templates/compose.html:31
+#: templates/dashboard.html:32 templates/grades.html:32
+#: templates/homework.html:33 templates/overview.html:32
+#: templates/settings.html:32 templates/timetable.html:47
+msgid "@"
+msgstr ""
+
+#: templates/agenda.html:43 templates/compose.html:34
+#: templates/dashboard.html:35 templates/grades.html:35
+#: templates/homework.html:36 templates/overview.html:35
+#: templates/settings.html:35 templates/settings.html:49
+#: templates/timetable.html:50
+msgid "Einstellungen"
+msgstr ""
+
+#: templates/agenda.html:44 templates/compose.html:37
+#: templates/dashboard.html:38 templates/grades.html:38
+#: templates/homework.html:39 templates/overview.html:38
+#: templates/settings.html:38 templates/timetable.html:53
+msgid "Abmelden"
+msgstr ""
+
+#: templates/agenda.html:49
+msgid "Schulalltag"
+msgstr ""
+
+#: templates/agenda.html:49
+msgid "Termine & Vertretungen"
+msgstr ""
+
+#: templates/agenda.html:49
+msgid ""
+"Prüfungen, Schulereignisse, Anwesenheitsmeldungen und Planänderungen an "
+"einem Ort."
+msgstr ""
+
+#: templates/agenda.html:53 templates/timetable.html:91
+msgid "← Vorwoche"
+msgstr ""
+
+#: templates/agenda.html:54 templates/timetable.html:80
+msgid "Woche"
+msgstr ""
+
+#: templates/agenda.html:55 templates/timetable.html:92
+msgid "Diese Woche"
+msgstr ""
+
+#: templates/agenda.html:56
+msgid "Nächste Woche →"
+msgstr ""
+
+#: templates/agenda.html:57
+msgid "Aktualisieren"
+msgstr ""
+
+#: templates/agenda.html:62
+msgid "Kalender & Prüfungen"
+msgstr ""
+
+#: templates/agenda.html:68
+msgid "Test / Prüfung"
+msgstr ""
+
+#: templates/agenda.html:68
+msgid "Anwesenheit"
+msgstr ""
+
+#: templates/agenda.html:68
+msgid "Schultermin"
+msgstr ""
+
+#: templates/agenda.html:70 templates/agenda.html:92
+#: templates/dashboard.html:200 templates/grades.html:126
+#: templates/homework.html:173 templates/overview.html:62
+#: templates/overview.html:104 templates/overview.html:106
+#: templates/overview.html:153 templates/overview.html:186
+#: templates/timetable.html:130 templates/timetable.html:155
+msgid "·"
+msgstr ""
+
+#: templates/agenda.html:75
+msgid "In diesem Zeitraum sind keine Termine eingetragen."
+msgstr ""
+
+#: templates/agenda.html:78
+msgid "Vertretungsplan"
+msgstr ""
+
+#: templates/agenda.html:84 templates/timetable.html:103
+msgid ". Std."
+msgstr ""
+
+#: templates/agenda.html:84
+msgid "Klasse"
+msgstr ""
+
+#: templates/agenda.html:85 templates/overview.html:65
+msgid "Entfällt"
+msgstr ""
+
+#: templates/agenda.html:85
+msgid "Neu"
+msgstr ""
+
+#: templates/agenda.html:85
+msgid "Geändert"
+msgstr ""
+
+#: templates/agenda.html:89
+msgid "Für diese Woche sind keine Vertretungen eingetragen."
+msgstr ""
+
+#: templates/agenda.html:92 templates/compose.html:106
+#: templates/dashboard.html:200 templates/grades.html:126
+#: templates/homework.html:173 templates/overview.html:186
+#: templates/settings.html:248 templates/timetable.html:155
+msgid "EduFlow Dashboard · lokal"
+msgstr ""
+
+#: templates/compose.html:6
+msgid "EduFlow Neue Nachricht"
+msgstr ""
+
+#: templates/compose.html:48
+msgid "Neue Nachricht"
+msgstr ""
+
+#: templates/compose.html:73 templates/compose.html:76
+msgid "Empfänger suchen"
+msgstr ""
+
+#: templates/compose.html:76
+msgid "Name tippen, z. B. Müller…"
+msgstr ""
+
+#: templates/compose.html:77
+msgid "Suche leeren"
+msgstr ""
+
+#: templates/compose.html:77 templates/overview.html:191
+msgid "×"
+msgstr ""
+
+#: templates/compose.html:83
+msgid "Empfänger"
+msgstr ""
+
+#: templates/compose.html:83
+msgid "0 gewählt"
+msgstr ""
+
+#: templates/compose.html:91
+msgid "Keine Empfänger geladen."
+msgstr ""
+
+#: templates/compose.html:94
+msgid "Keine Treffer – anders schreiben oder Suche leeren."
+msgstr ""
+
+#: templates/compose.html:98
+msgid "Deine Nachricht…"
+msgstr ""
+
+#: templates/compose.html:101
+msgid "Senden"
+msgstr ""
+
+#: templates/compose.html:102
+msgid "Abbrechen"
+msgstr ""
+
+#: templates/dashboard.html:6
+msgid "EduFlow Nachrichten"
+msgstr ""
+
+#: templates/dashboard.html:48
+msgid "Timeline"
+msgstr ""
+
+#: templates/dashboard.html:68
+msgid "Suchen"
+msgstr ""
+
+#: templates/dashboard.html:72
+msgid "Filter öffnen"
+msgstr ""
+
+#: templates/dashboard.html:72 templates/homework.html:71
+msgid "Filter"
+msgstr ""
+
+#: templates/dashboard.html:76
+msgid "Neue Nachricht schreiben"
+msgstr ""
+
+#: templates/dashboard.html:76
+msgid "+ Neu"
+msgstr ""
+
+#: templates/dashboard.html:80
+msgid "Typ"
+msgstr ""
+
+#: templates/dashboard.html:83
+msgid "alle Typen ("
+msgstr ""
+
+#: templates/dashboard.html:83 templates/dashboard.html:85
+#: templates/dashboard.html:175 templates/dashboard.html:181
+#: templates/grades.html:65 templates/homework.html:85
+#: templates/homework.html:95 templates/settings.html:220
+msgid ")"
+msgstr ""
+
+#: templates/dashboard.html:85 templates/grades.html:65
+msgid "("
+msgstr ""
+
+#: templates/dashboard.html:91 templates/homework.html:90
+msgid "Verlauf seit"
+msgstr ""
+
+#: templates/dashboard.html:94 templates/homework.html:94
+msgid "Neu laden"
+msgstr ""
+
+#: templates/dashboard.html:110 templates/homework.html:126
+#: templates/overview.html:114
+msgid "fällig:"
+msgstr ""
+
+#: templates/dashboard.html:111 templates/homework.html:127
+msgid "aufgegeben:"
+msgstr ""
+
+#: templates/dashboard.html:114 templates/dashboard.html:128
+#: templates/dashboard.html:137 templates/homework.html:130
+msgid "★ markiert"
+msgstr ""
+
+#: templates/dashboard.html:115 templates/homework.html:131
+msgid "✓"
+msgstr ""
+
+#: templates/dashboard.html:125
+msgid "…"
+msgstr ""
+
+#: templates/dashboard.html:129 templates/dashboard.html:138
+msgid "✓ erledigt"
+msgstr ""
+
+#: templates/dashboard.html:130 templates/dashboard.html:139
+#: templates/dashboard.html:170
+msgid "♥"
+msgstr ""
+
+#: templates/dashboard.html:136
+msgid "→"
+msgstr ""
+
+#: templates/dashboard.html:144 templates/homework.html:156
+msgid "Rohdaten"
+msgstr ""
+
+#: templates/dashboard.html:154
+msgid "Mehr laden"
+msgstr ""
+
+#: templates/dashboard.html:156
+msgid "Keine Einträge für diese Suche. Weniger Wörter oder anderen Typ versuchen."
+msgstr ""
+
+#: templates/dashboard.html:158
+msgid "Keine Einträge in diesem Zeitraum. Versuch ein früheres Datum."
+msgstr ""
+
+#: templates/dashboard.html:162
+msgid "Nachrichtendetail"
+msgstr ""
+
+#: templates/dashboard.html:164
+msgid "Keine Nachricht ausgewählt"
+msgstr ""
+
+#: templates/dashboard.html:165
+msgid "Wähle links eine Nachricht aus der Liste."
+msgstr ""
+
+#: templates/dashboard.html:169 templates/timetable.html:83
+msgid "← Zurück"
+msgstr ""
+
+#: templates/dashboard.html:170 templates/dashboard.html:177
+msgid "Likes anzeigen"
+msgstr ""
+
+#: templates/dashboard.html:170 templates/dashboard.html:175
+#: templates/dashboard.html:181
+msgid "0"
+msgstr ""
+
+#: templates/dashboard.html:175
+msgid "Likes ("
+msgstr ""
+
+#: templates/dashboard.html:181
+msgid "Antworten ("
+msgstr ""
+
+#: templates/dashboard.html:185
+msgid "Dateien"
+msgstr ""
+
+#: templates/dashboard.html:192
+msgid "Antworten"
+msgstr ""
+
+#: templates/dashboard.html:193
+msgid "Deine Antwort…"
+msgstr ""
+
+#: templates/dashboard.html:194
+msgid "Antwort senden"
+msgstr ""
+
+#: templates/grades.html:6
+msgid "EduFlow Noten"
+msgstr ""
+
+#: templates/grades.html:48
+msgid "Leistung"
+msgstr ""
+
+#: templates/grades.html:50
+msgid "Noten · Schnitt Ø"
+msgstr ""
+
+#: templates/grades.html:63
+msgid "Halbjahr"
+msgstr ""
+
+#: templates/grades.html:70
+msgid "Fach / Thema / Lehrer…"
+msgstr ""
+
+#: templates/grades.html:70
+msgid "Noten durchsuchen"
+msgstr ""
+
+#: templates/grades.html:72
+msgid "Frisch laden"
+msgstr ""
+
+#: templates/grades.html:86
+msgid "Gewichteter Fachschnitt"
+msgstr ""
+
+#: templates/grades.html:86
+msgid "Ø"
+msgstr ""
+
+#: templates/grades.html:88
+msgid "Kein 1–5-Schnitt"
+msgstr ""
+
+#: templates/grades.html:88 templates/timetable.html:133
+msgid "–"
+msgstr ""
+
+#: templates/grades.html:97
+msgid "Details"
+msgstr ""
+
+#: templates/grades.html:101
+msgid "Datum"
+msgstr ""
+
+#: templates/grades.html:101
+msgid "Thema"
+msgstr ""
+
+#: templates/grades.html:101
+msgid "Gewichtung"
+msgstr ""
+
+#: templates/grades.html:101
+msgid "Lehrer"
+msgstr ""
+
+#: templates/grades.html:101
+msgid "Klasse Ø"
+msgstr ""
+
+#: templates/grades.html:101
+msgid "Kommentar"
+msgstr ""
+
+#: templates/grades.html:123
+msgid "Keine Noten in diesem Zeitraum."
+msgstr ""
+
+#: templates/homework.html:6
+msgid "EduFlow Hausaufgaben"
+msgstr ""
+
+#: templates/homework.html:49
+msgid "Aufgaben"
+msgstr ""
+
+#: templates/homework.html:63
+msgid "geladen"
+msgstr ""
+
+#: templates/homework.html:64 templates/overview.html:103
+msgid "offen"
+msgstr ""
+
+#: templates/homework.html:65 templates/overview.html:105
+msgid "überfällig"
+msgstr ""
+
+#: templates/homework.html:66 templates/overview.html:107
+msgid "erledigt"
+msgstr ""
+
+#: templates/homework.html:74
+msgid "Suche"
+msgstr ""
+
+#: templates/homework.html:75
+msgid "Titel / Fach / Lehrer…"
+msgstr ""
+
+#: templates/homework.html:78
+msgid "Status"
+msgstr ""
+
+#: templates/homework.html:81
+msgid "alle"
+msgstr ""
+
+#: templates/homework.html:82
+msgid "nur offene"
+msgstr ""
+
+#: templates/homework.html:83
+msgid "nur überfällige"
+msgstr ""
+
+#: templates/homework.html:84
+msgid "nur erledigte"
+msgstr ""
+
+#: templates/homework.html:85 templates/homework.html:95
+msgid "Papierkorb ("
+msgstr ""
+
+#: templates/homework.html:93
+msgid "Tests/Prüfungen einbeziehen"
+msgstr ""
+
+#: templates/homework.html:101
+msgid "Einträge."
+msgstr ""
+
+#: templates/homework.html:102
+msgid "links wischen = fertig · rechts wischen = Papierkorb"
+msgstr ""
+
+#: templates/homework.html:109 templates/homework.html:125
+msgid "Gelöscht"
+msgstr ""
+
+#: templates/homework.html:115
+msgid "✕ Löschen"
+msgstr ""
+
+#: templates/homework.html:142
+msgid "Wiederherstellen (wird offen)"
+msgstr ""
+
+#: templates/homework.html:165
+msgid "Der Papierkorb ist leer."
+msgstr ""
+
+#: templates/homework.html:167
+msgid ""
+"Keine Hausaufgaben in diesem Zeitraum. Versuch ein früheres Datum oder "
+"aktiviere „Tests/Prüfungen einbeziehen“."
+msgstr ""
+
+#: templates/login.html:6
+msgid "EduFlow Anmeldung"
+msgstr ""
+
+#: templates/login.html:25
+msgid "Bei EduFlow anmelden"
+msgstr ""
+
+#: templates/login.html:33
+msgid "Schul-Subdomain"
+msgstr ""
+
+#: templates/login.html:34
+msgid "z. B. myschule"
+msgstr ""
+
+#: templates/login.html:35
+msgid "Benutzername"
+msgstr ""
+
+#: templates/login.html:37
+msgid "Passwort"
+msgstr ""
+
+#: templates/login.html:39
+msgid "Angemeldet bleiben (30 Tage)"
+msgstr ""
+
+#: templates/login.html:40
+msgid "Anmelden"
+msgstr ""
+
+#: templates/login.html:42
+msgid "Subdomain leer lassen für Auto-Erkennung über"
+msgstr ""
+
+#: templates/login.html:42
+msgid "portal.edupage.org"
+msgstr ""
+
+#: templates/login.html:42 templates/timetable.html:123
+msgid "."
+msgstr ""
+
+#: templates/overview.html:6
+msgid "EduFlow Übersicht"
+msgstr ""
+
+#: templates/overview.html:54
+msgid "Stunden heute"
+msgstr ""
+
+#: templates/overview.html:62
+msgid ". Std ·"
+msgstr ""
+
+#: templates/overview.html:62
+msgid "· Raum"
+msgstr ""
+
+#: templates/overview.html:64
+msgid "Jetzt"
+msgstr ""
+
+#: templates/overview.html:71
+msgid "Schulfrei"
+msgstr ""
+
+#: templates/overview.html:72
+msgid "kein Unterricht heute"
+msgstr ""
+
+#: templates/overview.html:78
+msgid "Vorherige Stunde"
+msgstr ""
+
+#: templates/overview.html:78 templates/overview.html:142
+msgid "‹"
+msgstr ""
+
+#: templates/overview.html:80
+msgid "Nächste Stunde"
+msgstr ""
+
+#: templates/overview.html:80 templates/overview.html:144
+msgid "›"
+msgstr ""
+
+#: templates/overview.html:99
+msgid "Alle Aufgaben"
+msgstr ""
+
+#: templates/overview.html:122
+msgid "Keine offenen Hausaufgaben. Sehr gut."
+msgstr ""
+
+#: templates/overview.html:129
+msgid "Mittagessen"
+msgstr ""
+
+#: templates/overview.html:131
+msgid "PDF"
+msgstr ""
+
+#: templates/overview.html:134 templates/overview.html:138
+#: templates/overview.html:192
+msgid "lädt…"
+msgstr ""
+
+#: templates/overview.html:142
+msgid "Vorheriger Tag"
+msgstr ""
+
+#: templates/overview.html:144
+msgid "Nächster Tag"
+msgstr ""
+
+#: templates/overview.html:153
+msgid "ungelesen"
+msgstr ""
+
+#: templates/overview.html:154
+msgid "Alle Nachrichten"
+msgstr ""
+
+#: templates/overview.html:162
+msgid "Keine neuen Nachrichten."
+msgstr ""
+
+#: templates/overview.html:168 templates/overview.html:171
+msgid "Wetter"
+msgstr ""
+
+#: templates/overview.html:170
+msgid "Wetterdetails öffnen"
+msgstr ""
+
+#: templates/overview.html:171
+msgid "☼"
+msgstr ""
+
+#: templates/overview.html:171
+msgid "Wetterdaten werden geladen …"
+msgstr ""
+
+#: templates/overview.html:190
+msgid "Wetterdetails"
+msgstr ""
+
+#: templates/overview.html:191
+msgid "Schließen"
+msgstr ""
+
+#: templates/settings.html:6
+msgid "EduFlow Einstellungen"
+msgstr ""
+
+#: templates/settings.html:48
+msgid "Profil"
+msgstr ""
+
+#: templates/settings.html:62
+msgid "Aussehen"
+msgstr ""
+
+#: templates/settings.html:63
+msgid "Wird sofort übernommen und gilt auf diesem Gerät."
+msgstr ""
+
+#: templates/settings.html:64 templates/settings.html:65
+msgid "Farbschema"
+msgstr ""
+
+#: templates/settings.html:68
+msgid "System"
+msgstr ""
+
+#: templates/settings.html:68
+msgid "Folgt Hell/Dunkel des Geräts"
+msgstr ""
+
+#: templates/settings.html:72
+msgid "Hell"
+msgstr ""
+
+#: templates/settings.html:72
+msgid "Immer helles Design"
+msgstr ""
+
+#: templates/settings.html:76
+msgid "Dunkel"
+msgstr ""
+
+#: templates/settings.html:76
+msgid "Immer dunkles Design"
+msgstr ""
+
+#: templates/settings.html:79 templates/settings.html:80
+msgid "Akzentfarbe"
+msgstr ""
+
+#: templates/settings.html:81
+msgid "Schwarz"
+msgstr ""
+
+#: templates/settings.html:82
+msgid "Blau"
+msgstr ""
+
+#: templates/settings.html:83
+msgid "Lila"
+msgstr ""
+
+#: templates/settings.html:84
+msgid "Petrol"
+msgstr ""
+
+#: templates/settings.html:85
+msgid "Grün"
+msgstr ""
+
+#: templates/settings.html:86
+msgid "Orange"
+msgstr ""
+
+#: templates/settings.html:87
+msgid "Rot"
+msgstr ""
+
+#: templates/settings.html:88
+msgid "Pink"
+msgstr ""
+
+#: templates/settings.html:90
+msgid "Übernommen."
+msgstr ""
+
+#: templates/settings.html:94
+msgid "Allgemein"
+msgstr ""
+
+#: templates/settings.html:95
+msgid "Gilt für deinen Account auf allen Geräten."
+msgstr ""
+
+#: templates/settings.html:144
+msgid "↑"
+msgstr ""
+
+#: templates/settings.html:145
+msgid "↓"
+msgstr ""
+
+#: templates/settings.html:150
+msgid "Mit den Pfeilen ordnest du die Bereiche auf der Übersicht."
+msgstr ""
+
+#: templates/settings.html:175
+msgid "Speichern"
+msgstr ""
+
+#: templates/settings.html:201
+msgid "API-Token"
+msgstr ""
+
+#: templates/settings.html:202
+msgid "Token für die Android-App ("
+msgstr ""
+
+#: templates/settings.html:202
+msgid "/api/v1"
+msgstr ""
+
+#: templates/settings.html:202
+msgid ", 30 Tage gültig). Trage es dort als"
+msgstr ""
+
+#: templates/settings.html:202
+msgid "Authorization: Bearer <Token>"
+msgstr ""
+
+#: templates/settings.html:202
+msgid "ein."
+msgstr ""
+
+#: templates/settings.html:204
+msgid "Neuer Token – jetzt kopieren, er wird nur einmal gezeigt:"
+msgstr ""
+
+#: templates/settings.html:207
+msgid "Kopieren"
+msgstr ""
+
+#: templates/settings.html:209
+msgid "Gerät:"
+msgstr ""
+
+#: templates/settings.html:209
+msgid "· gültig bis"
+msgstr ""
+
+#: templates/settings.html:214
+msgid "Gerätename (optional)"
+msgstr ""
+
+#: templates/settings.html:215
+msgid "z. B. Pixel 8"
+msgstr ""
+
+#: templates/settings.html:217
+msgid "Neuen Token erstellen"
+msgstr ""
+
+#: templates/settings.html:220
+msgid "Aktive Token ("
+msgstr ""
+
+#: templates/settings.html:225
+msgid "bis"
+msgstr ""
+
+#: templates/settings.html:229
+msgid "Widerrufen"
+msgstr ""
+
+#: templates/settings.html:235
+msgid "Noch keine aktiven Token für diesen Account."
+msgstr ""
+
+#: templates/settings.html:240
+msgid "Daten"
+msgstr ""
+
+#: templates/settings.html:241
+msgid ""
+"Der lokale API-Cache beschleunigt das Laden. Leeren lädt alles einmalig "
+"frisch – deine Einstellungen bleiben erhalten."
+msgstr ""
+
+#: templates/settings.html:244
+msgid "Cache jetzt leeren"
+msgstr ""
+
+#: templates/timetable.html:6
+msgid "EduFlow Stundenplan"
+msgstr ""
+
+#: templates/timetable.html:63
+msgid "Plan"
+msgstr ""
+
+#: templates/timetable.html:65
+msgid "Stunden diese Woche."
+msgstr ""
+
+#: templates/timetable.html:65
+msgid "Stunden."
+msgstr ""
+
+#: templates/timetable.html:79 templates/timetable.html:85
+msgid "Tag"
+msgstr ""
+
+#: templates/timetable.html:88
+msgid "Heute"
+msgstr ""
+
+#: templates/timetable.html:89
+msgid "Weiter →"
+msgstr ""
+
+#: templates/timetable.html:93
+msgid "Nächste →"
+msgstr ""
+
+#: templates/timetable.html:104 templates/timetable.html:131
+msgid "entfällt"
+msgstr ""
+
+#: templates/timetable.html:105
+msgid "Event"
+msgstr ""
+
+#: templates/timetable.html:106
+msgid "online"
+msgstr ""
+
+#: templates/timetable.html:108 templates/timetable.html:130
+msgid "Raum"
+msgstr ""
+
+#: templates/timetable.html:119
+msgid "heute"
+msgstr ""
+
+#: templates/timetable.html:142
+msgid "Kein Unterricht in dieser Woche."
+msgstr ""
+
+#: templates/timetable.html:151
+msgid "Kein Stundenplan für diesen Tag (Wochenende / Ferien / kein Unterricht?)."
+msgstr ""
+
+#: tests/test_api_core.py:29
+msgid "Kaputt."
+msgstr ""
+

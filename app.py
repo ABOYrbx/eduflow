@@ -33,7 +33,7 @@ import requests
 from flask import (
     Flask,
     Response,
-    flash,
+    flash as _flask_flash,
     g,
     jsonify,
     redirect,
@@ -52,6 +52,17 @@ from edupage_api.exceptions import (
     NotLoggedInException,
 )
 from edupage_api.people import EduAccount
+from localization import (
+    TemplateTextTranslationExtension,
+    _l10n_markup,
+    available_locales,
+    get_locale,
+    locale_name,
+    ngettext,
+    normalize_locale,
+    select_locale,
+    translate_static,
+)
 
 import cache as apicache
 import essen as essenplan
@@ -126,6 +137,73 @@ except Exception:
     pass
 
 BASE_DIR = Path(__file__).resolve().parent
+
+# Deutsch ist Quellsprache und sicherer Fallback. Andere Sprachen sind erst
+# auswählbar, wenn Crowdin eine nicht-leere, kompilierte messages.mo liefert.
+app.config.update(
+    BABEL_DEFAULT_LOCALE="de",
+    BABEL_TRANSLATION_DIRECTORIES=str(BASE_DIR / "locales"),
+)
+
+
+def _available_locales():
+    return available_locales(BASE_DIR / "locales")
+
+
+def _select_locale():
+    enabled = _available_locales()
+    saved = normalize_locale(request.cookies.get("eduflow_locale", ""))
+    if saved in enabled:
+        return saved
+
+    for language, _quality in request.accept_languages:
+        candidate = normalize_locale(language)
+        if candidate in enabled:
+            return candidate
+        base = candidate.split("_", 1)[0]
+        if base in enabled:
+            return base
+    return "de"
+
+
+@app.before_request
+def _set_request_locale():
+    g.locale = select_locale(
+        request.cookies.get("eduflow_locale", ""),
+        request.accept_languages,
+        _available_locales(),
+    )
+
+
+app.jinja_env.add_extension(TemplateTextTranslationExtension)
+app.jinja_env.globals["_l10n_markup"] = _l10n_markup
+
+
+def flash(message, category="message", *args, **kwargs):
+    """Translate known static UI messages while preserving dynamic details."""
+    return _flask_flash(translate_static(str(message)), category, *args, **kwargs)
+
+
+@app.context_processor
+def _localization_context():
+    locales = _available_locales()
+    return {
+        "current_locale": str(get_locale()),
+        "available_locales": locales,
+        "locale_name": locale_name,
+        "homework_status_label": homework_status_label,
+    }
+
+
+@app.after_request
+def _localization_headers(response):
+    try:
+        response.headers["Content-Language"] = get_locale()
+        response.vary.add("Cookie")
+        response.vary.add("Accept-Language")
+    except Exception:
+        pass
+    return response
 
 
 # ------------------------------------------------------- Server-Timing
@@ -352,6 +430,30 @@ GERMAN_MONTHS = ["Januar", "Februar", "März", "April", "Mai", "Juni",
                  "Dezember"]
 
 
+def weekday_label(index: int) -> str:
+    """Localized weekday label; weekday indices remain Monday-first."""
+    labels = (
+        translate_static("Montag"), translate_static("Dienstag"),
+        translate_static("Mittwoch"), translate_static("Donnerstag"),
+        translate_static("Freitag"), translate_static("Samstag"),
+        translate_static("Sonntag"),
+    )
+    return labels[index]
+
+
+def month_label(index: int) -> str:
+    """Localized month name for the one-based calendar month."""
+    labels = (
+        translate_static("Januar"), translate_static("Februar"),
+        translate_static("März"), translate_static("April"),
+        translate_static("Mai"), translate_static("Juni"),
+        translate_static("Juli"), translate_static("August"),
+        translate_static("September"), translate_static("Oktober"),
+        translate_static("November"), translate_static("Dezember"),
+    )
+    return labels[index - 1]
+
+
 def pretty_timestamp(ts: datetime) -> str:
     """Menschenlesbarer Zeitstempel statt Technik-Format:
     "Heute · 10:00", "Gestern · 10:00", "Montag · 10:00",
@@ -364,12 +466,12 @@ def pretty_timestamp(ts: datetime) -> str:
     time_part = ts.strftime("%H:%M")
     delta = (today - d).days
     if delta == 0:
-        return f"Heute · {time_part}"
+        return f"{translate_static('Heute')} · {time_part}"
     if delta == 1:
-        return f"Gestern · {time_part}"
+        return f"{translate_static('Gestern')} · {time_part}"
     if 1 < delta < 7:
-        return f"{GERMAN_WEEKDAYS[d.weekday()]} · {time_part}"
-    month = GERMAN_MONTHS[d.month - 1]
+        return f"{weekday_label(d.weekday())} · {time_part}"
+    month = month_label(d.month)
     if d.year == today.year:
         return f"{d.day}. {month} · {time_part}"
     return f"{d.day}. {month} {d.year} · {time_part}"
@@ -559,6 +661,29 @@ def csrf_protect(view):
 # In Templates als {{ csrf_token() }} nutzbar (Aufruf erst beim Rendern,
 # also mit Request-Kontext – trotz Registrierung auf Modulebene ok).
 app.jinja_env.globals["csrf_token"] = csrf_token
+app.jinja_env.globals["gettext"] = translate_static
+app.jinja_env.globals["_"] = translate_static
+app.jinja_env.globals["ngettext"] = ngettext
+
+
+@app.route("/language", methods=["POST"])
+@csrf_protect
+def set_language():
+    """Persist an explicitly selected locale without enabling empty catalogs."""
+    requested = normalize_locale(request.form.get("locale", ""))
+    destination = request.form.get("next", "/")
+    if not destination.startswith("/") or destination.startswith("//"):
+        destination = "/"
+    if requested not in _available_locales():
+        flash("Diese Sprache ist noch nicht verfügbar.", "error")
+        return redirect(destination)
+
+    response = redirect(destination)
+    response.set_cookie(
+        "eduflow_locale", requested, max_age=365 * 24 * 60 * 60,
+        httponly=True, secure=request.is_secure, samesite="Lax",
+    )
+    return response
 
 
 def _norm_subdomain(subdomain: str) -> str:
@@ -1157,7 +1282,115 @@ TYPE_LABELS = {
 
 
 def type_label(t: str) -> str:
-    return TYPE_LABELS.get(t, t)
+    """Translate known event labels without translating provider-supplied text."""
+    label = TYPE_LABELS.get(t)
+    if label is None:
+        return t
+    return _translated_type_label(t, label)
+
+
+def _translated_type_label(kind: str, source: str) -> str:
+    labels = {
+        "sprava": translate_static("Nachricht"), "chat": translate_static("Chat"),
+        "anketa": translate_static("Umfrage"), "news": translate_static("Neuigkeit"),
+        "genotif": translate_static("Mitteilung"), "homework": translate_static("Hausaufgabe"),
+        "etesthw": translate_static("Online-Test"),
+        "homeworkstudentstav": translate_static("Hausaufgaben-Status"),
+        "bexam": translate_static("Schularbeit"), "sexam": translate_static("Test"),
+        "oexam": translate_static("Mündliche Prüfung"),
+        "pexam": translate_static("Projektprüfung"),
+        "rexam": translate_static("Wiederholungsprüfung"),
+        "testing": translate_static("Testung"),
+        "testpridelenie": translate_static("Prüfungszuweisung"),
+        "testvysledok": translate_static("Prüfungsergebnis"),
+        "znamka": translate_static("Note"), "znamkydoc": translate_static("Notendokument"),
+        "other_cb": translate_static("Klassenbucheintrag"),
+        "ctevent": translate_static("Klassenereignis"),
+        "bmeeting": translate_static("Besprechung"),
+        "culture": translate_static("Kulturveranstaltung"), "event": translate_static("Ereignis"),
+        "excursion": translate_static("Exkursion"),
+        "parentsevening": translate_static("Elternabend"),
+        "process": translate_static("Vorgang"),
+        "schoolevent": translate_static("Schulveranstaltung"),
+        "trip": translate_static("Ausflug"), "signin": translate_static("Anmeldung"),
+        "meeting": translate_static("Versammlung"), "freeday": translate_static("Freier Tag"),
+        "holiday": translate_static("Feiertag"), "sholiday": translate_static("Schulferien"),
+        "ttcancel": translate_static("Entfallene Stunde"),
+        "ctlesson": translate_static("Klassenlehrerstunde"),
+        "distant": translate_static("Distanzunterricht"), "lesson": translate_static("Unterricht"),
+        "project": translate_static("Projekt"), "plesson": translate_static("Geplante Stunde"),
+        "other_safety": translate_static("Sicherheitshinweis"),
+        "rlesson": translate_static("Wiederholungsstunde"),
+        "timetable": translate_static("Stundenplan"),
+        "bookroom": translate_static("Raumbuchung"),
+        "changeroom": translate_static("Raumwechsel"),
+        "substitution": translate_static("Vertretung"),
+        "pipnutie": translate_static("Anstupser"),
+        "ospravedlnenka": translate_static("Entschuldigung"),
+        "representation": translate_static("Repräsentation"),
+        "student_absent": translate_static("Fehlzeit"),
+        "strava_kredit": translate_static("Essensguthaben"),
+        "strava_vydaj": translate_static("Essensausgabe"),
+        "stravamenu": translate_static("Speiseplan"),
+        "h_stravamenu": translate_static("Speiseplan (Verlauf)"),
+        "confirmation": translate_static("Bestätigung"), "contest": translate_static("Wettbewerb"),
+        "album": translate_static("Fotoalbum"), "payments": translate_static("Zahlungen"),
+        "lost": translate_static("Fundsache"), "vcelicka": translate_static("Bienchen"),
+        "other": translate_static("Sonstiges"),
+        "h_attendance": translate_static("Anwesenheit (Verlauf)"),
+        "h_vcelicka": translate_static("Bienchen (Verlauf)"),
+        "h_clearcache": translate_static("Cache (Verlauf)"),
+        "h_cleardbi": translate_static("Datenbank (Verlauf)"),
+        "h_clearisicdata": translate_static("ISIC-Daten (Verlauf)"),
+        "h_clearplany": translate_static("Pläne (Verlauf)"),
+        "h_contest": translate_static("Wettbewerb (Verlauf)"),
+        "h_dailyplan": translate_static("Tagesplan (Verlauf)"),
+        "h_edusettings": translate_static("Schuleinstellungen (Verlauf)"),
+        "h_financie": translate_static("Finanzen (Verlauf)"),
+        "h_znamky": translate_static("Noten (Verlauf)"),
+        "h_homework": translate_static("Hausaufgaben (Verlauf)"),
+        "h_igroups": translate_static("Gruppen (Verlauf)"),
+        "h_process": translate_static("Vorgang (Verlauf)"),
+        "h_processtypes": translate_static("Vorgangsarten (Verlauf)"),
+        "h_settings": translate_static("Einstellungen (Verlauf)"),
+        "h_substitution": translate_static("Vertretung (Verlauf)"),
+        "h_timetable": translate_static("Stundenplan (Verlauf)"),
+        "h_userphoto": translate_static("Profilfoto (Verlauf)"),
+        "unknown": translate_static("Unbekannt"),
+    }
+    return labels.get(kind, translate_static(source))
+
+
+def homework_status_label(status: str) -> str:
+    """Translate UI labels while status identifiers used for filtering stay fixed."""
+    labels = {
+        "überfällig": "überfällig", "heute fällig": "heute fällig",
+        "offen": "offen", "erledigt": "erledigt", "ohne Datum": "ohne Datum",
+    }
+    source = labels.get(status)
+    return translate_static(source) if source else status
+
+
+def _localized_type_labels() -> dict:
+    return {kind: _translated_type_label(kind, label)
+            for kind, label in TYPE_LABELS.items()}
+
+
+def localized_settings_schema() -> list:
+    """Translate labels only; setting keys/values remain stable API identifiers."""
+    localized = []
+    for spec in SETTINGS_SCHEMA:
+        item = dict(spec)
+        for key in ("label", "hint", "placeholder", "section"):
+            if item.get(key):
+                item[key] = translate_static(item[key])
+        if item.get("options"):
+            item["options"] = [
+                (value, translate_static(label))
+                for value, label in item["options"]
+            ]
+        localized.append(item)
+    return localized
 
 
 # Slowakische Auto-Texte des EduPage-Servers (Noten, Ereignisse, Tests,
@@ -1465,7 +1698,7 @@ def dashboard():
             n_requests=0,
             cache_info="",
             attach_map={},
-            type_labels=TYPE_LABELS,
+            type_labels=_localized_type_labels(),
             q=q,
         )
 
@@ -1494,7 +1727,7 @@ def dashboard():
             n_requests=0,
             cache_info="",
             attach_map={},
-            type_labels=TYPE_LABELS,
+            type_labels=_localized_type_labels(),
             q=q,
         )
 
@@ -1586,7 +1819,7 @@ def dashboard():
         n_requests=n_requests,
         cache_info=cache_info,
         attach_map=attach_map,
-        type_labels=TYPE_LABELS,
+        type_labels=_localized_type_labels(),
         q=q,
     )
 
@@ -1659,7 +1892,7 @@ def hausaufgaben():
             items=[], total=0, n_offen=0, n_ueber=0, n_erledigt=0, n_hidden=0,
             error=f"Konnte Hausaufgaben nicht laden: {e}",
             first_source=None, last_source=None, oldest_label="",
-            n_requests=0, cache_info="", type_labels=TYPE_LABELS,
+            n_requests=0, cache_info="", type_labels=_localized_type_labels(),
         )
 
     try:
@@ -1677,7 +1910,7 @@ def hausaufgaben():
             items=[], total=0, n_offen=0, n_ueber=0, n_erledigt=0, n_hidden=0,
             error=f"Konnte Hausaufgaben nicht laden: {e}",
             first_source=None, last_source=None, oldest_label="",
-            n_requests=0, cache_info="", type_labels=TYPE_LABELS,
+            n_requests=0, cache_info="", type_labels=_localized_type_labels(),
         )
 
     wanted = set(HOMEWORK_TYPES)
@@ -1730,7 +1963,7 @@ def hausaufgaben():
         n_erledigt=n_erledigt, n_hidden=n_hidden, error=None,
         first_source=first_source, last_source=last_source,
         oldest_label=oldest_label, n_requests=n_requests,
-        cache_info=cache_info, type_labels=TYPE_LABELS,
+        cache_info=cache_info, type_labels=_localized_type_labels(),
     )
 
 
@@ -1937,7 +2170,7 @@ def uebersicht():
     username = session["username"]
     subdomain = session["subdomain"]
     now = datetime.now()
-    now_date = f"{GERMAN_WEEKDAYS[now.weekday()]}, {now.strftime('%d.%m.%Y')}"
+    now_date = f"{weekday_label(now.weekday())}, {now.strftime('%d.%m.%Y')}"
 
     def _fail(error):
         try:
@@ -2186,7 +2419,7 @@ def get_wetter_payload(lat, lon, city):
         tz = 0
     tomorrow = _owm_aggregate_day(fc, 1) or {}
     day3 = _owm_aggregate_day(fc, 2) or {}
-    day3["label"] = GERMAN_WEEKDAYS[(date.today() + timedelta(days=2)).weekday()]
+    day3["label"] = weekday_label((date.today() + timedelta(days=2)).weekday())
     today_pop = _owm_aggregate_day(fc, 0)
 
     hourly = []
@@ -2768,9 +3001,10 @@ def nachricht_antworten():
 
 
 # ------------------------------------------------------- Stundenplan
-
 GERMAN_WEEKDAYS = ["Montag", "Dienstag", "Mittwoch", "Donnerstag",
-                   "Freitag", "Samstag", "Sonntag"]
+                    "Freitag", "Samstag", "Sonntag"]
+
+
 
 
 def lesson_to_dict(lesson) -> dict:
@@ -2976,7 +3210,7 @@ def stundenplan():
     force_refresh = request.args.get("refresh", "0") == "1"
     prev_day = (day - timedelta(days=1)).isoformat()
     next_day = (day + timedelta(days=1)).isoformat()
-    day_label = f"{GERMAN_WEEKDAYS[day.weekday()]} {day.strftime('%d.%m.%Y')}"
+    day_label = f"{weekday_label(day.weekday())} {day.strftime('%d.%m.%Y')}"
 
     try:
         edupage, username, subdomain = get_logged_in_edupage()
@@ -3017,8 +3251,8 @@ def stundenplan():
                 day_lessons = [l for l in day_lessons if not _is_allday_event(l)]
                 week.append({
                     "date": d.isoformat(),
-                    "label": f"{GERMAN_WEEKDAYS[d.weekday()]} {d.strftime('%d.%m.%Y')}",
-                    "day_name": GERMAN_WEEKDAYS[d.weekday()],
+                    "label": f"{weekday_label(d.weekday())} {d.strftime('%d.%m.%Y')}",
+                    "day_name": weekday_label(d.weekday()),
                     "day_date": d.strftime("%d.%m."),
                     "is_today": d == date.today(),
                     "lessons": day_lessons,
@@ -3559,7 +3793,7 @@ def einstellungen():
     new_token = session.pop("new_api_token", None)
     return render_template(
         "settings.html", username=username, subdomain=subdomain,
-        schema=SETTINGS_SCHEMA, values=user_settings(), error=None,
+        schema=localized_settings_schema(), values=user_settings(), error=None,
         api_tokens=list_user_tokens(subdomain, username),
         new_api_token=new_token,
     )

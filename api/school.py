@@ -38,7 +38,7 @@ def _change_dict(change):
 
 def build_substitutions(edupage, selected):
     monday = selected - timedelta(days=selected.weekday())
-    from app import GERMAN_WEEKDAYS
+    from app import weekday_label
     user_class = ""
     try:
         student_id = getattr(edupage, "_selected_child_id", None) or edupage.get_user_id()
@@ -61,7 +61,7 @@ def build_substitutions(edupage, selected):
                        if str(getattr(item, "change_class", "")) == user_class]
         days.append({
             "date": current.isoformat(),
-            "day_label": f"{GERMAN_WEEKDAYS[current.weekday()]} "
+            "day_label": f"{weekday_label(current.weekday())} "
                          f"{current.strftime('%d.%m.%Y')}",
             "changes": [_change_dict(item) for item in changes],
         })

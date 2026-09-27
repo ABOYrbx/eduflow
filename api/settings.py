@@ -41,8 +41,8 @@ def _merged_values(uhash: str) -> dict:
 @bp.route("/settings", methods=["GET"])
 @token_required
 def api_settings_get():
-    from app import SETTINGS_SCHEMA
-    return {"schema": SETTINGS_SCHEMA,
+    from app import localized_settings_schema
+    return {"schema": localized_settings_schema(),
             "values": _merged_values(_uhash())}, 200
 
 

@@ -24,6 +24,8 @@ from typing import Optional
 from cryptography.fernet import Fernet
 from flask import g, jsonify, request
 
+from localization import localize_api_error
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 CACHE_DIR = BASE_DIR / ".cache"
 _TOKEN_PATH = CACHE_DIR / "api_tokens.json"
@@ -283,7 +285,7 @@ ERROR_CODES = frozenset({
 
 def api_error(message: str, code: str, status: int = 400):
     """Zentrale Fehlerantwort: immer {error, code} plus HTTP-Status."""
-    return jsonify({"error": message, "code": code}), status
+    return jsonify({"error": localize_api_error(message), "code": code}), status
 
 
 def edupage_login_error(exc):

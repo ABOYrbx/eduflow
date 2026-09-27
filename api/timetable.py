@@ -102,7 +102,7 @@ def _load_day(edupage, subdomain: str, username: str, day: date,
 @bp.route("/timetable/day", methods=["GET"])
 @token_required
 def api_timetable_day():
-    from app import GERMAN_WEEKDAYS, merge_lernzeit
+    from app import merge_lernzeit, weekday_label
     try:
         day = _parse_day(request.args.get("day", ""))
     except ValueError as e:
@@ -122,7 +122,7 @@ def api_timetable_day():
 
     return {
         "day": day.isoformat(),
-        "day_label": f"{GERMAN_WEEKDAYS[day.weekday()]} "
+        "day_label": f"{weekday_label(day.weekday())} "
                      f"{day.strftime('%d.%m.%Y')}",
         "prev_day": (day - timedelta(days=1)).isoformat(),
         "next_day": (day + timedelta(days=1)).isoformat(),
@@ -190,5 +190,5 @@ def api_timetable_week():
 
 
 def _day_name(day: date) -> str:
-    from app import GERMAN_WEEKDAYS
-    return GERMAN_WEEKDAYS[day.weekday()]
+    from app import weekday_label
+    return weekday_label(day.weekday())

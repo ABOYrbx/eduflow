@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de">
+<html lang="{{ current_locale }}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -121,7 +121,7 @@
           <h3>{{ h.title }}</h3>
           <div class="meta">
             <span class="tag tag-muted">{{ h.type_label }}</span>
-            <span class="tag {{ h.tag_class }}">{{ h.status }}</span>
+            <span class="tag {{ h.tag_class }}">{{ homework_status_label(h.status) }}</span>
             {% if h.is_hidden %}<span class="tag tag-gray">Gelöscht</span>{% endif %}
             <span>fällig: <strong>{{ h.due_display }}</strong></span>
             <span>aufgegeben: {{ h.assigned }}</span>
