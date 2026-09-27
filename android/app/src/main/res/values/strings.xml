@@ -35,9 +35,6 @@
     <!-- Auth / Login -->
     <string name="auth_demo_banner">Demo-Modus · nur synthetische Beispieldaten</string>
     <string name="auth_step_format">Schritt %1$d von %2$d</string>
-    <string name="auth_hint_school">Zu welcher Schule gehörst du?</string>
-    <string name="auth_label_subdomain">Subdomain (optional)</string>
-    <string name="auth_placeholder_subdomain">z. B. musterschule</string>
     <string name="auth_hint_username">Wie heißt du bei EduPage?</string>
     <string name="auth_label_username">Benutzername</string>
     <string name="auth_placeholder_username">z. B. max.muster</string>

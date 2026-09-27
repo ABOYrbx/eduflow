@@ -16,7 +16,7 @@ export function LoginForm() {
     const response = await fetch(pending ? "/api/auth/2fa" : "/api/auth/login", {
       method: "POST", headers: { "content-type": "application/json" },
       body: JSON.stringify(pending ? { code: String(form.get("code") ?? "") } : {
-        subdomain: String(form.get("subdomain") ?? ""), username: String(form.get("username") ?? ""),
+        subdomain: "", username: String(form.get("username") ?? ""),
         password: String(form.get("password") ?? ""), device: "EduFlow Web", remember: form.has("remember"),
       }),
     }).catch(() => null);
@@ -35,8 +35,6 @@ export function LoginForm() {
         <label htmlFor="code">{t("login.codeLabel")}</label>
         <input className="input-pill" id="code" name="code" placeholder={t("login.codePlaceholder")} inputMode="numeric" autoComplete="one-time-code" required autoFocus />
       </> : <>
-        <label htmlFor="subdomain">{t("login.subdomainLabel")}</label>
-        <input className="input-pill" id="subdomain" name="subdomain" placeholder={t("login.subdomainPlaceholder")} autoComplete="organization" defaultValue="demo" />
         <label htmlFor="username">{t("login.usernameLabel")}</label>
         <input className="input-pill" id="username" name="username" autoComplete="username" required />
         <label htmlFor="password">{t("login.passwordLabel")}</label>

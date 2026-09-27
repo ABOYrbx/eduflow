@@ -75,7 +75,6 @@ fun LoginScreen(
     isDemo: Boolean = false,
     showServerStep: Boolean = true,
 ) {
-    var subdomain by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var device by remember { mutableStateOf(defaultDeviceName()) }
@@ -99,7 +98,7 @@ fun LoginScreen(
 
     val loading = state is LoginUiState.Loading
     val loginError = state as? LoginUiState.Error
-    val stepCount = if (showServerStep) 5 else 4
+    val stepCount = if (showServerStep) 4 else 3
     val lastStep = stepCount - 1
 
     Column(
@@ -162,18 +161,14 @@ fun LoginScreen(
                 Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
                     when (page) {
                         0 -> {
-                            StepHint(stringResource(R.string.auth_hint_school))
-                            LoginField(stringResource(R.string.auth_label_subdomain), subdomain, { subdomain = it }, stringResource(R.string.auth_placeholder_subdomain), KeyboardType.Uri)
-                        }
-                        1 -> {
                             StepHint(stringResource(R.string.auth_hint_username))
                             LoginField(stringResource(R.string.auth_label_username), username, { username = it; vm.consumeLoginError() }, stringResource(R.string.auth_placeholder_username), KeyboardType.Text)
                         }
-                        2 -> {
+                        1 -> {
                             StepHint(stringResource(R.string.auth_hint_password))
                             LoginField(stringResource(R.string.auth_label_password), password, { password = it; vm.consumeLoginError() }, stringResource(R.string.auth_placeholder_password), KeyboardType.Password, password = true)
                         }
-                        3 -> {
+                        2 -> {
                             StepHint(stringResource(R.string.auth_hint_device))
                             LoginField(stringResource(R.string.auth_label_device), device, { device = it }, stringResource(R.string.auth_placeholder_device), KeyboardType.Text)
                         }
@@ -237,7 +232,7 @@ fun LoginScreen(
                         if (showServerStep) {
                             onBaseUrlChange(server.trim().trimEnd('/').ifBlank { TokenStore.DEFAULT_BASE_URL.trimEnd('/') })
                         }
-                        vm.login(username, password, subdomain, device)
+                        vm.login(username, password, device)
                     }
                 },
                 enabled = !loading,
@@ -255,7 +250,6 @@ fun LoginScreen(
                 onClick = {
                     scope.launch {
                         onStartDemo()
-                        subdomain = "demo"
                         username = "demo"
                         password = "demo"
                         step = lastStep
@@ -271,8 +265,8 @@ fun LoginScreen(
 }
 
 private fun canAdvance(step: Int, username: String, password: String): Boolean = when (step) {
-    1 -> username.isNotBlank()
-    2 -> password.isNotEmpty()
+    0 -> username.isNotBlank()
+    1 -> password.isNotEmpty()
     else -> true
 }
 
