@@ -61,28 +61,28 @@
         "trashHomework": "Aufgabe in Papierkorb legen oder wiederherstellen",
         "validationDescription": "Validierungsfehler",
         "weather": "Wetter",
-        "weatherSearch": "Wetter-Ortssuche"
+        "weatherSearch": "Weather location search"
     },
     "geo": {
-        "badCoords": "bad coords",
+        "badCoords": "Bad coordinates",
         "citySearch": "Städte konnten gerade nicht gesucht werden.",
         "citySetup": "Die Stadtsuche ist nicht eingerichtet.",
         "coords": "Bitte Koordinaten (?lat=..&lon=..) oder Stadt (?city=..) angeben.",
         "noKey": "Kein API-Key (OPENWEATHER_KEY in .env eintragen)"
     },
     "homework": {
-        "notFound": "Hausaufgabe nicht gefunden."
+        "notFound": "Homework not found."
     },
     "messages": {
-        "attachment": "Dateianhang nicht gefunden.",
-        "badLink": "Ungültiger Download-Link.",
-        "eventIdx": "Bitte event_id und idx als Zahl angeben.",
-        "noBody": "Bitte einen Nachrichtentext eingeben.",
-        "noRecipients": "Bitte mindestens einen gültigen Empfänger angeben.",
-        "noReply": "Bitte einen Antworttext eingeben.",
-        "noReplyAlt": "Bitte einen Antworttext angeben.",
-        "notFound": "Nachricht nicht gefunden.",
-        "recipientsBody": "Bitte gültige Empfänger und einen Nachrichtentext angeben.",
+        "attachment": "Attachment not found.",
+        "badLink": "Invalid download link.",
+        "eventIdx": "Please specify event_id and idx as a number.",
+        "noBody": "Please enter a message body.",
+        "noRecipients": "Please specify at least one valid recipient.",
+        "noReply": "Please enter a reply text.",
+        "noReplyAlt": "Please enter a reply text.",
+        "notFound": "Message not found.",
+        "recipientsBody": "Please specify valid recipients and a message body.",
         "sentNotFound": "Gesendet, aber die neue Nachricht wurde nicht gefunden.",
         "unknownType": "Unbekannter Nachrichtentyp.",
         "unknownTypeValid": "Unbekannter Nachrichtentyp. Gültig: anketa, chat, genotif, news, sprava."
