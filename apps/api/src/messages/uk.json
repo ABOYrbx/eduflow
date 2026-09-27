@@ -35,7 +35,6 @@
         "clearCache": "Cache leeren",
         "createDeviceToken": "Geräte-Token erstellen",
         "doHomework": "Aufgabe erledigen oder öffnen",
-        "grades": "Noten",
         "homeworkList": "Hausaufgabenliste",
         "issueDownloadToken": "Kurzzeit-Download-Token ausstellen",
         "liveness": "Liveness-Probe",
@@ -60,7 +59,6 @@
         "timetableWeek": "Wochenstundenplan",
         "trashHomework": "Aufgabe in Papierkorb legen oder wiederherstellen",
         "validationDescription": "Validierungsfehler",
-        "weather": "Wetter",
         "weatherSearch": "Wetter-Ortssuche"
     },
     "geo": {
@@ -107,7 +105,6 @@
         "optOverdue": "Nur überfällige",
         "optTimetable": "Stundenplan",
         "optTrash": "Papierkorb",
-        "optUebersicht": "Übersicht",
         "ovHomeworkLabel": "Übersicht: max. offene Hausaufgaben",
         "ovOrderLabel": "Reihenfolge der Übersicht",
         "ovUnreadLabel": "Übersicht: max. ungelesene Nachrichten",
@@ -124,7 +121,6 @@
         "bool": "Ungültiger Wahrheitswert (true/false erwartet).",
         "dateFormat": "Das Datum muss im Format JJJJ-MM-TT angegeben werden.",
         "dateFormatShort": "Datum muss im Format JJJJ-MM-TT sein.",
-        "invalid": "Ungültige Anfrage.",
         "invalidDate": "Ungültiges Datum (YYYY-MM-DD erwartet).",
         "json": "Ungültige Anfrage (JSON erwartet).",
         "jsonObject": "Ungültige Anfrage (JSON-Objekt erwartet).",
