@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Quellen nach Crowdin hochladen
-        uses: crowdin/crowdin-github-action@v2
+        uses: crowdin/crowdin-github-action@v3
         with:
           upload_sources: true
           upload_translations: false
