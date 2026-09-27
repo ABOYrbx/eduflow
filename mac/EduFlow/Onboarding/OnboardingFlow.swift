@@ -17,25 +17,32 @@ public struct OnboardingFlow: View {
     }
 
     public var body: some View {
-        Group {
-            if let pending = pending2FA {
-                TwoFAView(
-                    store: store,
-                    pendingToken: pending,
-                    onLoggedIn: finish,
-                    onBack: { pending2FA = nil }
-                )
-                .padding(20)
-            } else {
-                VStack(spacing: 0) {
-                    pageView(for: page)
-                        .id(page)
-                        .transition(
-                            .asymmetric(
-                                insertion: .move(edge: .trailing).combined(with: .opacity),
-                                removal: .move(edge: .leading).combined(with: .opacity)
+        ZStack {
+            // Partikel über die ganze App während des Onboardings —
+            // einfach im Hintergrund auf allen Seiten (dieser Flow
+            // existiert nach dem Onboarding nicht).
+            OnboardingParticleBackground()
+            Group {
+                if let pending = pending2FA {
+                    TwoFAView(
+                        store: store,
+                        pendingToken: pending,
+                        onLoggedIn: finish,
+                        onBack: { pending2FA = nil },
+                        transparentBackground: true
+                    )
+                    .padding(20)
+                } else {
+                    VStack(spacing: 0) {
+                        pageView(for: page)
+                            .id(page)
+                            .transition(
+                                .asymmetric(
+                                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                                    removal: .move(edge: .leading).combined(with: .opacity)
+                                )
                             )
-                        )
+                    }
                 }
             }
         }
@@ -62,9 +69,11 @@ public struct OnboardingFlow: View {
             LoginView(
                 store: store,
                 onTwoFA: { pending2FA = $0 },
-                onLoggedIn: finish
+                onLoggedIn: finish,
+                showsServerStep: false,
+                transparentBackground: true,
+                onboardingLayout: true
             )
-            .padding(.vertical, 8)
         }
     }
 
