@@ -240,7 +240,7 @@ private struct TopPillNav: View {
         .popover(isPresented: $profileMenuOpen, arrowEdge: .top) {
             VStack(alignment: .leading, spacing: 14) {
                 HStack(spacing: 12) {
-                    Text(String(store.username.prefix(1).uppercased()))
+                    Text(verbatim: String(store.username.prefix(1).uppercased()))
                         .font(UberFont.text(16, weight: .heavy))
                         .frame(width: 42, height: 42)
                         .background(EduFlowPalette.surface2(scheme))
@@ -248,7 +248,7 @@ private struct TopPillNav: View {
                         .clipShape(.circle)
                     VStack(alignment: .leading, spacing: 3) {
                         Text("Dein Profil").font(UberFont.text(14, weight: .bold))
-                        Text("\(store.username) @ \(store.subdomain)")
+                        Text(verbatim: "\(store.username) @ \(store.subdomain)")
                             .font(UberFont.text(12))
                             .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     }
@@ -281,7 +281,7 @@ private struct TopPillNav: View {
         action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
-            Label(title, systemImage: icon)
+            Label(LocalizedStringKey(title), systemImage: icon)
                 .font(UberFont.text(13, weight: .medium))
                 .foregroundStyle(isDestructive ? Color.red : EduFlowPalette.ink(scheme))
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -301,7 +301,7 @@ private struct NavPill: View {
 
     var body: some View {
         Button(action: action) {
-            Text(title)
+            Text(LocalizedStringKey(title))
                 .font(UberFont.text(15, weight: .semibold))
                 .padding(.vertical, 10)
                 .padding(.horizontal, 16)

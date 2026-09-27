@@ -340,7 +340,7 @@ public struct OnboardingServerPage: View {
                             Text("Fehlgeschlagen")
                         }
                     case .none:
-                        Text(model.checking ? "Prüft …" : "Verbindung testen")
+                        (model.checking ? Text("Prüft …") : Text("Verbindung testen"))
                     }
                 }
             }
@@ -362,7 +362,7 @@ public struct OnboardingServerPage: View {
                             .font(.system(size: 20, weight: .bold))
                             .foregroundStyle(EduFlowPalette.green)
                     } else {
-                        Text(model.checking ? "Prüft …" : "Übernehmen & weiter")
+                        (model.checking ? Text("Prüft …") : Text("Übernehmen & weiter"))
                     }
                 }
             }

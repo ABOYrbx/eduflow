@@ -793,6 +793,17 @@
         }
       }
     },
+    "Jetzt": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jetzt"
+          }
+        }
+      }
+    },
     "Kalender": {
       "comment": "UI-Literal",
       "localizations": {

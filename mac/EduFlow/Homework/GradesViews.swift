@@ -130,10 +130,10 @@ private struct GradeChip: View {
 
     var body: some View {
         VStack(spacing: 1) {
-            Text(grade.gradeDisplay ?? "–")
+            Text(verbatim: grade.gradeDisplay ?? "–")
                 .font(UberFont.text(16, weight: .heavy))
                 .monospacedDigit()
-            Text(shortDate(grade.dateDisplay))
+            Text(verbatim: shortDate(grade.dateDisplay))
                 .font(UberFont.text(10, weight: .bold))
                 .opacity(0.85)
         }
@@ -185,7 +185,7 @@ private struct GradeTable: View {
             ForEach(grades, id: \.uid) { grade in
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(grade.title ?? "Note")
+                        (grade.title == nil ? Text("Note") : Text(verbatim: grade.title!))
                             .font(UberFont.text(13, weight: .semibold))
                         if let teacher = grade.teacher, !teacher.isEmpty {
                             Text(teacher)
@@ -199,14 +199,14 @@ private struct GradeTable: View {
                         }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    Text(grade.gradeDisplay ?? "–")
+                    Text(verbatim: grade.gradeDisplay ?? "–")
                         .font(UberFont.text(13, weight: .bold))
                         .frame(width: 60)
-                    Text(grade.dateDisplay ?? "–")
+                    Text(verbatim: grade.dateDisplay ?? "–")
                         .font(UberFont.text(12))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                         .frame(width: 90)
-                    Text(grade.gradeSub ?? "")
+                    Text(verbatim: grade.gradeSub ?? "")
                         .font(UberFont.text(12))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                         .frame(maxWidth: .infinity, alignment: .leading)

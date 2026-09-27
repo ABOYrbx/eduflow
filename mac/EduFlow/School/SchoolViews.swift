@@ -258,7 +258,7 @@ struct SchoolView: View {
     }
 
     private func emptyCard(_ text: String) -> some View {
-        Text(text).font(UberFont.text(14)).foregroundStyle(EduFlowPalette.inkMuted(scheme))
+        Text(LocalizedStringKey(text)).font(UberFont.text(14)).foregroundStyle(EduFlowPalette.inkMuted(scheme))
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(18)
             .background(EduFlowPalette.card(scheme))
