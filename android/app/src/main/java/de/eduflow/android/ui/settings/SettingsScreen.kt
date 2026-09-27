@@ -46,6 +46,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -608,8 +610,10 @@ private fun AccentDotsRow(
     ) {
         Accents.forEach { opt ->
             val isSel = opt.key == selected
+            val label = accentLabel(opt.key)
             Box(
                 modifier = Modifier.size(26.dp)
+                    .semantics { contentDescription = label }
                     .border(
                         width = if (isSel) 2.dp else 1.dp,
                         color = if (isSel) MaterialTheme.colorScheme.onSurface
@@ -626,6 +630,20 @@ private fun AccentDotsRow(
 
 private fun initialsOf(name: String): String =
     name.split(" ", " ").mapNotNull { it.firstOrNull()?.toString() }.take(2).joinToString("")
+
+/** Deutsche Labels für die Akzent-Keys (TalkBack) via Ressourcen. */
+@Composable
+private fun accentLabel(key: String): String = when (key) {
+    "black" -> stringResource(R.string.common_accent_black)
+    "blue" -> stringResource(R.string.common_accent_blue)
+    "violet" -> stringResource(R.string.common_accent_violet)
+    "teal" -> stringResource(R.string.common_accent_teal)
+    "green" -> stringResource(R.string.common_accent_green)
+    "orange" -> stringResource(R.string.common_accent_orange)
+    "red" -> stringResource(R.string.common_accent_red)
+    "pink" -> stringResource(R.string.common_accent_pink)
+    else -> key
+}
 
 /** Deutsche Labels für die Server-Keys (Startseite, Aufgabenfilter) via Ressourcen. */
 @Composable
