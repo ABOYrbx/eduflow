@@ -39,7 +39,7 @@ function main() {
     `PORT=${dotenvQuote("8000")}`,
     `JWT_ACCESS_SECRET=${dotenvQuote(jwt)}`,
     `CREDENTIAL_ENCRYPTION_KEY=${dotenvQuote(encryptionKey)}`,
-    `EDUFLOW_PROVIDER=${dotenvQuote("fake")}`,
+    `EDUFLOW_PROVIDER=${dotenvQuote("edupage")}`,
     "",
   ].join("\n");
 
