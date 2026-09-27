@@ -221,9 +221,7 @@
 
     <!-- Übersicht -->
     <string name="overview_customize">Übersicht anpassen</string>
-    <string name="overview_customize_desc">Lege fest, welche Bereiche zuerst erscheinen.</string>
-    <string name="overview_move_up_desc">Nach oben</string>
-    <string name="overview_move_down_desc">Nach unten</string>
+    <string name="overview_customize_desc">Lege fest, welche Bereiche zuerst erscheinen. Zum Verschieben am Griff gedrückt halten und ziehen.</string>
     <string name="overview_messages_count_format">Nachrichten · %1$d</string>
     <string name="overview_action_all">Alle</string>
     <string name="overview_homework_count_format">%1$d offen · %2$d überfällig</string>
@@ -231,6 +229,9 @@
     <string name="overview_section_lunch">Mittagessen</string>
     <string name="overview_action_timetable">Stundenplan</string>
     <string name="overview_clock_label">UHRZEIT</string>
+    <!-- Datumszeile unter „Home" (EEEE = Wochentag, dd/MM/yyyy = Datum:
+         Musterbuchstaben nicht übersetzen, nur Reihenfolge anpassen). -->
+    <string name="home_date_format">EEEE, dd.MM.yyyy</string>
     <string name="overview_today_hours">STUNDEN HEUTE</string>
     <string name="overview_no_school">Schulfrei — kein Unterricht heute.</string>
     <string name="overview_now_format">Jetzt: %1$s (%2$s. Std · %3$s)</string>
@@ -264,6 +265,7 @@
     <string name="overview_order_homework">Hausaufgaben</string>
     <string name="overview_order_weather">Wetter</string>
     <string name="overview_order_lunch">Mittagessen</string>
+    <string name="overview_drag_handle_desc">Ziehen zum Sortieren</string>
     <string name="overview_due_suffix_format"> · fällig: %1$s</string>
     <string name="overview_subject_suffix_format"> · %1$s</string>
     <string name="overview_day_date_format">%1$s · %2$s</string>

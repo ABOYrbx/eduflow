@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,6 +24,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -61,6 +63,7 @@ import de.eduflow.android.ui.common.LoadingBox
 import de.eduflow.android.ui.common.PrimaryButton
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SectionLabel
+import de.eduflow.android.ui.overview.OverviewOrder
 import de.eduflow.android.ui.common.StatusPill
 import de.eduflow.android.ui.theme.Accents
 
@@ -115,6 +118,8 @@ fun SettingsScreen(
     var notifyNews by remember { mutableStateOf(NotifyPrefs.isEnabled(context)) }
     var showPrivacy by remember { mutableStateOf(false) }
     var saveStateObserved by remember { mutableStateOf(false) }
+    var showOrderEditor by remember { mutableStateOf(false) }
+    var draftOrder by remember { mutableStateOf(OverviewOrder.default) }
 
     // Frisch laden beim Öffnen (VM wird im NavGraph eager erzeugt,
     // ggf. noch ohne Token geladen).
@@ -334,7 +339,48 @@ fun SettingsScreen(
                     },
                     placeholder = stringResource(R.string.settings_homework_placeholder),
                 )
+                Spacer(Modifier.height(12.dp))
+                TextButton(onClick = {
+                    draftOrder = OverviewOrder.parse(v.ovOrder)
+                    showOrderEditor = true
+                }) {
+                    Icon(Icons.Filled.Tune, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.overview_customize))
+                }
             }
+        }
+
+        if (showOrderEditor) {
+            AlertDialog(
+                onDismissRequest = { showOrderEditor = false },
+                title = { Text(stringResource(R.string.overview_customize)) },
+                text = {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            stringResource(R.string.overview_customize_desc),
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                        OverviewOrderEditor(
+                            order = draftOrder,
+                            onOrderChange = { draftOrder = it },
+                            modifier = Modifier.fillMaxWidth().heightIn(max = 340.dp),
+                        )
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = {
+                        vm.update(v.copy(ovOrder = OverviewOrder.serialize(draftOrder)))
+                        vm.save()
+                        showOrderEditor = false
+                    }) { Text(stringResource(R.string.common_save)) }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showOrderEditor = false }) {
+                        Text(stringResource(R.string.common_cancel))
+                    }
+                },
+            )
         }
 
         SectionLabel(stringResource(R.string.settings_weather_section))

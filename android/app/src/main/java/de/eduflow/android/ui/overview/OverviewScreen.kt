@@ -23,10 +23,10 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Thunderstorm
 import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.filled.WbSunny
-import androidx.compose.material.icons.filled.Tune
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material3.AlertDialog
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -65,6 +65,7 @@ import de.eduflow.android.ui.timetable.AuthAwareError
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlinx.coroutines.delay
 
 /**
@@ -76,8 +77,10 @@ import kotlinx.coroutines.delay
  * Hausaufgaben (`ov_homework`-Limit), Mittagessen mit ‹ ›-Pager
  * (Mo–Fr, Start heute). Inhalte wie `/` (Web-Übersicht, Logik im
  * ViewModel — hier nur Anzeige); Abschnittsköpfe verlinken auf die
- * Listen; 401-Verhalten → Login.
+ * Listen; 401-Verhalten → Login. Aktualisieren läuft über
+ * Pull-to-Refresh (von oben ziehen) über den gesamten Inhalt.
  */
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun OverviewScreen(
     viewModel: OverviewViewModel,
@@ -92,13 +95,13 @@ fun OverviewScreen(
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsState()
-    var showOrderEditor by remember { mutableStateOf(false) }
-    var draftOrder by remember(state.settings.ovOrder) {
-        mutableStateOf(OverviewOrder.parse(state.settings.ovOrder))
-    }
-    val todayLabel = remember {
+    // Wochentag immer deutsch (System-Sprache wird ignoriert, wie macOS
+    // mit de_DE); Muster kommt aus strings.xml und ist damit via Crowdin
+    // pro Sprache anpassbar.
+    val datePattern = stringResource(R.string.home_date_format)
+    val todayLabel = remember(datePattern) {
         try {
-            LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, dd.MM.yyyy"))
+            LocalDate.now().format(DateTimeFormatter.ofPattern(datePattern, Locale.GERMAN))
         } catch (_: Exception) {
             ""
         }
@@ -111,13 +114,6 @@ fun OverviewScreen(
         )
         Spacer(Modifier.height(12.dp))
         ScreenHead(title = stringResource(R.string.bottom_home), subtitle = todayLabel)
-        TextButton(onClick = {
-            draftOrder = OverviewOrder.parse(state.settings.ovOrder)
-            showOrderEditor = true
-        }) {
-            Icon(Icons.Filled.Tune, contentDescription = null, modifier = Modifier.size(16.dp))
-            Text(stringResource(R.string.overview_customize))
-        }
         Spacer(Modifier.height(12.dp))
 
         state.error?.let { err ->
@@ -139,11 +135,16 @@ fun OverviewScreen(
                 horizontalArrangement = Arrangement.Center,
             ) { CircularProgressIndicator() }
         } else {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier.weight(1f),
-            ) {
-                item { LiveClockCard(onRefresh = viewModel::refresh, refreshing = state.isLoading) }
+            val pullState = rememberPullRefreshState(
+                refreshing = state.isLoading,
+                onRefresh = viewModel::refresh,
+            )
+            Box(modifier = Modifier.weight(1f).pullRefresh(pullState)) {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                item { LiveClockCard() }
                 item {
                     NowCard(
                         current = state.currentLesson,
@@ -178,45 +179,14 @@ fun OverviewScreen(
                     }
                 }
                 item { Spacer(Modifier.height(88.dp)) }
+                }
+                PullRefreshIndicator(
+                    refreshing = state.isLoading,
+                    state = pullState,
+                    modifier = Modifier.align(Alignment.TopCenter),
+                )
             }
         }
-    }
-
-    if (showOrderEditor) {
-        AlertDialog(
-            onDismissRequest = { if (!state.savingOverviewOrder) showOrderEditor = false },
-            title = { Text(stringResource(R.string.overview_customize)) },
-            text = {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(stringResource(R.string.overview_customize_desc), style = MaterialTheme.typography.bodySmall)
-                    draftOrder.forEachIndexed { index, key ->
-                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-                            Text(OverviewOrder.label(key), modifier = Modifier.weight(1f))
-                            IconButton(onClick = { draftOrder = OverviewOrder.move(draftOrder, index, -1) }, enabled = index > 0) {
-                                Icon(Icons.Filled.KeyboardArrowUp, contentDescription = stringResource(R.string.overview_move_up_desc))
-                            }
-                            IconButton(onClick = { draftOrder = OverviewOrder.move(draftOrder, index, 1) }, enabled = index < draftOrder.lastIndex) {
-                                Icon(Icons.Filled.KeyboardArrowDown, contentDescription = stringResource(R.string.overview_move_down_desc))
-                            }
-                        }
-                    }
-                }
-            },
-            confirmButton = {
-                TextButton(
-                    enabled = !state.savingOverviewOrder,
-                    onClick = {
-                        viewModel.saveOverviewOrder(draftOrder)
-                        showOrderEditor = false
-                    },
-                ) { Text(if (state.savingOverviewOrder) stringResource(R.string.common_saving) else stringResource(R.string.common_save)) }
-            },
-            dismissButton = {
-                TextButton(onClick = { showOrderEditor = false }, enabled = !state.savingOverviewOrder) {
-                    Text(stringResource(R.string.common_cancel))
-                }
-            },
-        )
     }
 }
 
@@ -281,12 +251,9 @@ private fun LunchOverviewSection(state: OverviewUiState, viewModel: OverviewView
     }
 }
 
-/** Uhr-Karte (live, jede Sekunde, deutsches Format) + Aktualisieren. */
+/** Uhr-Karte (live, jede Sekunde, deutsches Format). */
 @Composable
-private fun LiveClockCard(
-    onRefresh: () -> Unit,
-    refreshing: Boolean,
-) {
+private fun LiveClockCard() {
     var now by remember { mutableStateOf(LocalDateTime.now()) }
     LaunchedEffect(Unit) {
         while (true) {
@@ -318,9 +285,6 @@ private fun LiveClockCard(
                     fontWeight = FontWeight.ExtraBold,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
-            }
-            IconButton(onClick = onRefresh, enabled = !refreshing) {
-                Icon(Icons.Filled.Refresh, contentDescription = stringResource(R.string.common_reload))
             }
         }
     }
