@@ -151,6 +151,26 @@ private struct SparkleView: NSViewRepresentable {
     func updateNSView(_ nsView: SparkleNSView, context: Context) {}
 }
 
+/// Partikel über die ganze App während des Onboardings: füllt das
+/// Fenster und liegt hinter dem Inhalt (dezent wie die Logo-Funken).
+/// Wird ausschließlich im `OnboardingFlow` eingebettet, respektiert
+/// Reduce Motion und fängt keine Klicks ab.
+struct OnboardingParticleBackground: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        if !reduceMotion {
+            SparkleView()
+                .opacity(0.35)
+                .blur(radius: 1)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .ignoresSafeArea()
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
+        }
+    }
+}
+
 /// Seite 1: nur Logo mit Hallo-Animation (plus Weiter-Button).
 public struct OnboardingWelcomePage: View {
     @Environment(\.colorScheme) private var scheme
@@ -274,19 +294,6 @@ public struct OnboardingServerPage: View {
         self.onNext = onNext
     }
 
-    /// Statusfarbe des Test-Knopfs: grün bei Erfolg, rot bei Fehler,
-    /// sonst Standard (der Stil malt Tinte).
-    private var testButtonStyle: PillStyle {
-        switch model.result {
-        case .ok:
-            .smallSuccess
-        case .failed:
-            .smallError
-        case .none:
-            .smallLight
-        }
-    }
-
     public var body: some View {
         VStack(spacing: 0) {
             Spacer()
@@ -315,59 +322,34 @@ public struct OnboardingServerPage: View {
             }
             .padding(.top, 20)
             .riseIn(delay: 0.2)
-            switch model.result {
-            case .none, .ok:
-                Color.clear.frame(height: 10)
-            case .failed(let message):
-                Notice(message)
-                    .foregroundStyle(EduFlowPalette.red)
-                    .padding(.top, 10)
-            }
-            Spacer()
-            Button {
-                Task { await model.check() }
-            } label: {
-                Group {
-                    switch model.result {
-                    case .ok:
-                        HStack(spacing: 6) {
-                            Image(systemName: "checkmark.circle.fill")
-                            Text("Verbunden")
-                        }
-                    case .failed:
-                        HStack(spacing: 6) {
-                            Image(systemName: "xmark.circle.fill")
-                            Text("Fehlgeschlagen")
-                        }
-                    case .none:
-                        (model.checking ? Text("Prüft …") : Text("Verbindung testen"))
-                    }
+            Group {
+                if case .failed(let message) = model.result {
+                    Notice(message)
+                        .foregroundStyle(EduFlowPalette.red)
+                        .padding(.top, 10)
+                } else if case .ok = model.result {
+                    // Großer grüner Haken bei erfolgreichem Test —
+                    // gleiche Sprache wie „EduFlow ist bereit".
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 64, weight: .bold))
+                        .foregroundStyle(EduFlowPalette.green)
+                        .frame(height: 84)
+                        .transition(.scale(scale: 0.4).combined(with: .opacity))
+                } else {
+                    Color.clear.frame(height: 84)
                 }
             }
-            .buttonStyle(UberButtonStyle(testButtonStyle))
-            .hoverLift()
-            .disabled(model.checking || model.showSuccess)
-            .padding(.bottom, 10)
-            .riseIn(delay: 0.24)
-            Button {
+            .animation(.spring(response: 0.45, dampingFraction: 0.55), value: model.result)
+            Spacer()
+            // Ein Knopf in voller Breite wie auf Seite 1 — die Prüfung
+            // läuft beim Übernehmen automatisch (Fehler bleiben stehen).
+            PillButton(model.checking ? "Prüft …" : model.showSuccess ? "Verbunden" : "Übernehmen & weiter") {
                 Task { @MainActor in
                     if await model.proceed(reduceMotion: reduceMotion) {
                         onNext()
                     }
                 }
-            } label: {
-                Group {
-                    if model.showSuccess {
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.system(size: 20, weight: .bold))
-                            .foregroundStyle(EduFlowPalette.green)
-                    } else {
-                        (model.checking ? Text("Prüft …") : Text("Übernehmen & weiter"))
-                    }
-                }
             }
-            .buttonStyle(UberButtonStyle())
-            .hoverLift()
             .disabled(model.checking || model.showSuccess)
             .riseIn(delay: 0.3)
         }
