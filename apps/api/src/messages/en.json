@@ -35,7 +35,6 @@
         "clearCache": "Cache empty",
         "createDeviceToken": "Creating Device Tokens",
         "doHomework": "Complete or open task",
-        "grades": "Notes",
         "homeworkList": "Homework Listing",
         "issueDownloadToken": "Issuing short-term download tokens",
         "liveness": "Liveness sample",
@@ -60,7 +59,6 @@
         "timetableWeek": "Weekly hours schedule",
         "trashHomework": "Move homework to trash or restore",
         "validationDescription": "Validation error",
-        "weather": "Weather",
         "weatherSearch": "Weather location search"
     },
     "geo": {
@@ -107,7 +105,6 @@
         "optOverdue": "Only past due",
         "optTimetable": "Timetable",
         "optTrash": "Recycle bin",
-        "optUebersicht": "Summary",
         "ovHomeworkLabel": "Overview: max. open homework",
         "ovOrderLabel": "Order of the table",
         "ovUnreadLabel": "Overview: max. unread messages",
@@ -124,7 +121,6 @@
         "bool": "Invalid truth value (true/false expected).",
         "dateFormat": "The date must be given in the format YYYY-MM-DD.",
         "dateFormatShort": "Date must be in the format YYYY-MM-DD.",
-        "invalid": "Invalid question.",
         "invalidDate": "Invalid date (YYYY-MM-DD expected).",
         "json": "Invalid request (JSON expected).",
         "jsonObject": "Invalid request (JSON object expected).",
