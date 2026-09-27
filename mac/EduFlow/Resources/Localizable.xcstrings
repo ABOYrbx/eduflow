@@ -418,8 +418,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Abmelden"
+            "state" : "translated",
+            "value" : "Deregistration"
           }
         },
         "es" : {
@@ -973,8 +973,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Alle Aufgaben"
+            "state" : "translated",
+            "value" : "All tasks"
           }
         },
         "es" : {
@@ -1343,8 +1343,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Alle Nachrichten"
+            "state" : "translated",
+            "value" : "All messages"
           }
         },
         "es" : {
@@ -2268,8 +2268,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Anmelden"
+            "state" : "translated",
+            "value" : "Declarations"
           }
         },
         "es" : {
@@ -3563,8 +3563,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Benutzername"
+            "state" : "translated",
+            "value" : "User name"
           }
         },
         "es" : {
@@ -3933,8 +3933,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bestätigen"
+            "state" : "translated",
+            "value" : "Confirmation"
           }
         },
         "es" : {
@@ -4118,7 +4118,7 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Code"
           }
         },
@@ -4858,8 +4858,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Dateien"
+            "state" : "translated",
+            "value" : "Files"
           }
         },
         "es" : {
@@ -8188,8 +8188,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Entfällt"
+            "state" : "translated",
+            "value" : "Not applicable"
           }
         },
         "es" : {
@@ -8743,8 +8743,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Erledigt"
+            "state" : "translated",
+            "value" : "Completed"
           }
         },
         "es" : {
@@ -11333,8 +11333,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Gelöscht"
+            "state" : "translated",
+            "value" : "Deleted"
           }
         },
         "es" : {
@@ -12443,8 +12443,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hausaufgaben"
+            "state" : "translated",
+            "value" : "Homework"
           }
         },
         "es" : {
@@ -12998,8 +12998,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Heute"
+            "state" : "translated",
+            "value" : "Today"
           }
         },
         "es" : {
@@ -17068,8 +17068,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Morgen"
+            "state" : "translated",
+            "value" : "Morning"
           }
         },
         "es" : {
@@ -17253,8 +17253,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Nachrichten"
+            "state" : "translated",
+            "value" : "News"
           }
         },
         "es" : {
@@ -17623,8 +17623,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Neu laden"
+            "state" : "translated",
+            "value" : "Reloading"
           }
         },
         "es" : {
@@ -18178,8 +18178,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Noten"
+            "state" : "translated",
+            "value" : "Notes"
           }
         },
         "es" : {
@@ -18363,8 +18363,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Nur erledigte"
+            "state" : "translated",
+            "value" : "Only completed"
           }
         },
         "es" : {
@@ -18548,8 +18548,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Nur offene"
+            "state" : "translated",
+            "value" : "Only open"
           }
         },
         "es" : {
@@ -18918,8 +18918,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Nur überfällige"
+            "state" : "translated",
+            "value" : "Only past due"
           }
         },
         "es" : {
@@ -20028,7 +20028,7 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Online"
           }
         },
@@ -20398,8 +20398,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Papierkorb"
+            "state" : "translated",
+            "value" : "Recycle bin"
           }
         },
         "es" : {
@@ -20583,8 +20583,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Passwort"
+            "state" : "translated",
+            "value" : "Password"
           }
         },
         "es" : {
@@ -23913,8 +23913,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Speichern"
+            "state" : "translated",
+            "value" : "Storage"
           }
         },
         "es" : {
@@ -24838,7 +24838,7 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Status"
           }
         },
@@ -25208,8 +25208,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Stundenplan"
+            "state" : "translated",
+            "value" : "Timetable"
           }
         },
         "es" : {
@@ -25578,8 +25578,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Suche"
+            "state" : "translated",
+            "value" : "Search"
           }
         },
         "es" : {
@@ -29093,8 +29093,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Wetter"
+            "state" : "translated",
+            "value" : "Weather"
           }
         },
         "es" : {
@@ -29833,8 +29833,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Wieder öffnen"
+            "state" : "translated",
+            "value" : "Open again"
           }
         },
         "es" : {
@@ -30388,8 +30388,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Woche"
+            "state" : "translated",
+            "value" : "Week"
           }
         },
         "es" : {
@@ -32608,8 +32608,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "kein Unterricht heute"
+            "state" : "translated",
+            "value" : "no lessons today"
           }
         },
         "es" : {
@@ -32793,8 +32793,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "offen"
+            "state" : "translated",
+            "value" : "open"
           }
         },
         "es" : {
@@ -32978,8 +32978,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "erledigt"
+            "state" : "translated",
+            "value" : "completed"
           }
         },
         "es" : {
@@ -33348,8 +33348,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "überfällig"
+            "state" : "translated",
+            "value" : "overdue"
           }
         },
         "es" : {
@@ -34273,8 +34273,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Übersicht"
+            "state" : "translated",
+            "value" : "Summary"
           }
         },
         "es" : {
@@ -36123,8 +36123,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Zwischenschritt abgelaufen. Bitte erneut anmelden."
+            "state" : "translated",
+            "value" : "Intermediate step elapsed. Please register again."
           }
         },
         "es" : {
@@ -36308,8 +36308,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Der Code wurde nicht akzeptiert. Bitte erneut versuchen."
+            "state" : "translated",
+            "value" : "The code was not accepted. Please try again."
           }
         },
         "es" : {
@@ -36493,8 +36493,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Falscher Benutzername, Passwort oder Subdomain."
+            "state" : "translated",
+            "value" : "Wrong username, password or subdomain."
           }
         },
         "es" : {
@@ -36863,8 +36863,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "EduPage verlangt ein Captcha. Bitte einmal im Browser anmelden."
+            "state" : "translated",
+            "value" : "EduPage requires a captcha. Please register once in the browser."
           }
         },
         "es" : {
@@ -37048,8 +37048,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Nicht gefunden."
+            "state" : "translated",
+            "value" : "Not found."
           }
         },
         "es" : {
@@ -37233,8 +37233,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Zu viele Versuche. Bitte später erneut versuchen."
+            "state" : "translated",
+            "value" : "Too many attempts. Please try again later."
           }
         },
         "es" : {
@@ -37418,8 +37418,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Server-Schlüssel fehlt. Bitte später erneut versuchen."
+            "state" : "translated",
+            "value" : "Server keys are missing. Please try again later."
           }
         },
         "es" : {
@@ -39823,8 +39823,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Anmelden"
+            "state" : "translated",
+            "value" : "Declarations"
           }
         },
         "es" : {
@@ -40008,8 +40008,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Zwei-Faktor-Code"
+            "state" : "translated",
+            "value" : "Two-factor code"
           }
         },
         "es" : {
@@ -40193,8 +40193,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Übersicht"
+            "state" : "translated",
+            "value" : "Summary"
           }
         },
         "es" : {
@@ -42598,8 +42598,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Nachricht"
+            "state" : "translated",
+            "value" : "Message"
           }
         },
         "es" : {
@@ -43523,8 +43523,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Nachrichten"
+            "state" : "translated",
+            "value" : "News"
           }
         },
         "es" : {
@@ -44448,8 +44448,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hausaufgaben"
+            "state" : "translated",
+            "value" : "Homework"
           }
         },
         "es" : {
@@ -45188,8 +45188,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Noten"
+            "state" : "translated",
+            "value" : "Notes"
           }
         },
         "es" : {
@@ -45928,8 +45928,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Stundenplan"
+            "state" : "translated",
+            "value" : "Timetable"
           }
         },
         "es" : {
@@ -49073,8 +49073,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Cache leeren"
+            "state" : "translated",
+            "value" : "Cache empty"
           }
         },
         "es" : {
@@ -49998,8 +49998,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Übersicht"
+            "state" : "translated",
+            "value" : "Summary"
           }
         },
         "es" : {
@@ -50368,8 +50368,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Nachrichten"
+            "state" : "translated",
+            "value" : "News"
           }
         },
         "es" : {
@@ -50738,8 +50738,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Hausaufgaben"
+            "state" : "translated",
+            "value" : "Homework"
           }
         },
         "es" : {
@@ -51108,8 +51108,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Noten"
+            "state" : "translated",
+            "value" : "Notes"
           }
         },
         "es" : {
@@ -51478,8 +51478,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Stundenplan"
+            "state" : "translated",
+            "value" : "Timetable"
           }
         },
         "es" : {
@@ -52218,8 +52218,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Nur offene"
+            "state" : "translated",
+            "value" : "Only open"
           }
         },
         "es" : {
@@ -52588,8 +52588,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Nur überfällige"
+            "state" : "translated",
+            "value" : "Only past due"
           }
         },
         "es" : {
@@ -52958,8 +52958,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Nur erledigte"
+            "state" : "translated",
+            "value" : "Only completed"
           }
         },
         "es" : {
@@ -53328,8 +53328,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Papierkorb"
+            "state" : "translated",
+            "value" : "Recycle bin"
           }
         },
         "es" : {
@@ -55548,8 +55548,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Benutzername"
+            "state" : "translated",
+            "value" : "User name"
           }
         },
         "es" : {
@@ -56103,8 +56103,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Passwort"
+            "state" : "translated",
+            "value" : "Password"
           }
         },
         "es" : {
@@ -57398,7 +57398,7 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Code"
           }
         },
@@ -58138,8 +58138,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Suche"
+            "state" : "translated",
+            "value" : "Search"
           }
         },
         "es" : {
@@ -58323,7 +58323,7 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Status"
           }
         },
@@ -59433,8 +59433,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Erledigt"
+            "state" : "translated",
+            "value" : "Completed"
           }
         },
         "es" : {
@@ -59618,8 +59618,8 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Papierkorb"
+            "state" : "translated",
+            "value" : "Recycle bin"
           }
         },
         "es" : {
