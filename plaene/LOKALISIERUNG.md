@@ -33,11 +33,10 @@ Strings + 3 Plurals, macOS 341 Katalog-Keys (Source-Sprache `de`).
 
 ## Sync-Ablauf
 
-- Quellen → Crowdin: automatisch (GitHub-App syncet `main` laufend; Action
-  `upload-sources` lädt bei Push mit geänderten Quellen zusätzlich hoch).
+- Quellen → Crowdin: automatisch, die GitHub-App syncet `main` laufend.
+  (Die frühere Sync-Action ist entfernt, die App macht alles allein.)
 - Übersetzungen → Repo: automatisch per Sync-Schedule der GitHub-App als PR
-  (Review-Pflicht, kein Auto-Merge). Der Download-Job der Action ist entfernt,
-  damit nicht zwei Bots konkurrierende PRs erzeugen.
+  (Review-Pflicht, kein Auto-Merge).
 - `update_option: update_as_unapproved` erhält Übersetzungen bei kleinen
   Quelltext-Korrekturen (z. B. Tippfehler).
 - Sync-Commits der App enthalten `[ci skip]` (Crowdin-Standard).
