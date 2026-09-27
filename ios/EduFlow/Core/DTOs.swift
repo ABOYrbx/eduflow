@@ -2,8 +2,8 @@ import Foundation
 
 // MARK: - EduFlow API v1 DTOs (Paket 0)
 //
-// 1:1 zu den Web-Dicts (app.py event_to_dict, homework_to_dict,
-// lesson_to_dict, grade_to_dict, essen.py, get_wetter_payload).
+// 1:1 zu den Web-Dicts (event_to_dict, homework_to_dict,
+// lesson_to_dict, grade_to_dict, get_wetter_payload).
 // Unbekannte Felder werden ignoriert, fehlende sind nil — das
 // garantiert Web- und App-Parität (wie Android ignoreUnknownKeys).
 
@@ -398,34 +398,7 @@ enum GradesAverage {
     }
 }
 
-// MARK: Essen und Wetter
-
-struct EssenDish: Decodable {
-    var text: String?
-    var price: String?
-}
-
-struct EssenDay: Decodable {
-    var date: String?
-    var dishes: [EssenDish]?
-    var note: String?
-}
-
-/// GET /essen → Woche, Label, PDF-Quelle, Tage, heute (öffentlich + Cache).
-struct EssenResponse: Decodable {
-    var week: String?
-    var label: String?
-    var sourceUrl: String?
-    var days: [String: EssenDay]?
-    var today: String?
-    var cached: Bool?
-    var cacheInfo: String?
-}
-
-/// Wochentage in fester Reihenfolge (wie essen.py DAY_NAMES).
-enum EssenDays {
-    static let order = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"]
-}
+// MARK: Wetter
 
 struct WetterDay: Decodable {
     var max: Int?

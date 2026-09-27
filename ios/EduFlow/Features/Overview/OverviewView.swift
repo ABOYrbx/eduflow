@@ -5,8 +5,7 @@ import SwiftUI
 // Header, „Home"-Titel + Datum, Uhr-Karte, Jetzt-Karte in
 // Primär-Farbe (Jetzt / Als Nächstes), Wetterkarte (nur wenn
 // `ov_wetter` an), neueste Nachrichten (`ov_unread`-Limit), offene
-// Hausaufgaben (`ov_homework`-Limit), Mittagessen mit ‹ ›-Pager
-// (Mo–Fr, Start heute). Inhalte wie `/` (Web-Übersicht, Logik im
+// Hausaufgaben (`ov_homework`-Limit). Inhalte wie `/` (Web-Übersicht, Logik im
 // ViewModel — hier nur Anzeige); 401 → Login (Abmelden).
 
 struct OverviewView: View {
@@ -50,8 +49,7 @@ struct OverviewView: View {
                     }
 
                     if viewModel.isLoading && viewModel.messages.isEmpty
-                        && viewModel.homework.isEmpty && viewModel.lessonsToday.isEmpty
-                        && viewModel.essen == nil {
+                        && viewModel.homework.isEmpty && viewModel.lessonsToday.isEmpty {
                         ProgressView()
                             .frame(maxWidth: .infinity, alignment: .center)
                             .padding(32)
@@ -63,7 +61,6 @@ struct OverviewView: View {
                         }
                         messagesSection
                         homeworkSection
-                        essenSection
                         if !viewModel.cacheInfo.isEmpty {
                             Text(viewModel.cacheInfo)
                                 .font(.caption)
@@ -260,74 +257,6 @@ struct OverviewView: View {
                                 .foregroundStyle(Color.rMuted)
                         }
                     }
-                }
-            }
-        }
-    }
-
-    // MARK: Mittagessen (Tages-Blätterer mit ‹ ›, Mo–Fr)
-
-    @ViewBuilder
-    private var essenSection: some View {
-        HStack {
-            SectionLabel(text: "Mittagessen")
-            Spacer()
-        }
-        EduCard {
-            VStack(alignment: .leading, spacing: 4) {
-                if let label = viewModel.essen?.label?.nilIfEmpty {
-                    Text(label)
-                        .font(.caption)
-                        .foregroundStyle(Color.rMuted)
-                }
-                let dayName = EssenDays.order[safe: viewModel.essenIndex] ?? ""
-                let day = viewModel.essen?.days?[dayName]
-                HStack {
-                    Button { viewModel.stepEssen(-1) } label: {
-                        Image(systemName: "chevron.left")
-                            .foregroundStyle(Color.rInk)
-                            .frame(width: 28, height: 28)
-                    }
-                    .buttonStyle(.plain)
-                    .disabled(viewModel.essenIndex <= 0)
-                    Text(dayName + ((day?.date).map { " · \($0)" } ?? ""))
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(Color.rInk)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    Button { viewModel.stepEssen(1) } label: {
-                        Image(systemName: "chevron.right")
-                            .foregroundStyle(Color.rInk)
-                            .frame(width: 28, height: 28)
-                    }
-                    .buttonStyle(.plain)
-                    .disabled(viewModel.essenIndex >= EssenDays.order.count - 1)
-                }
-                if let dishes = day?.dishes, !dishes.isEmpty {
-                    ForEach(dishes.indices, id: \.self) { i in
-                        Text("• \(dishes[i].text ?? "–")"
-                            + ((dishes[i].price).map { " — \($0)" } ?? ""))
-                            .font(.callout)
-                            .foregroundStyle(Color.rInk)
-                    }
-                } else {
-                    Text("Kein Essen für diesen Tag.")
-                        .font(.callout)
-                        .foregroundStyle(Color.rMuted)
-                }
-                if let note = day?.note?.nilIfEmpty {
-                    Text(note)
-                        .font(.caption)
-                        .foregroundStyle(Color.rMuted)
-                }
-                if viewModel.essen?.sourceUrl?.isEmpty == false {
-                    Text("PDF-Link vorhanden")
-                        .font(.caption)
-                        .foregroundStyle(Color.rMuted)
-                }
-                if let info = viewModel.essen?.cacheInfo?.nilIfEmpty {
-                    Text(info)
-                        .font(.caption)
-                        .foregroundStyle(Color.rMuted)
                 }
             }
         }
