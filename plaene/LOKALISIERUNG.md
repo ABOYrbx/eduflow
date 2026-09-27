@@ -74,5 +74,9 @@ bewusst deutsch, siehe unten; Branch `l10n/xcstrings-all-languages`).
    Android → `values/strings.xml`, macOS → `xcstrings` (+ `NSLocalizedString`
    bei dynamischen Stellen).
 2. `code`-Vokabular und Status-/Typ-Werte stabil halten (siehe oben).
-3. Abnahmen: `npm test` + `npm run typecheck` (Root), Gradle
+3. Web: Neue Crowdin-Sprache = Import + Eintrag in `apps/web/src/lib/locales.ts`
+   ergänzen (sonst fällt `t()` auf Deutsch zurück); Katalog-Änderungen brauchen
+   einen Web-Rebuild (JSONs sind gebündelt). Neue UI-Strings brauchen nur
+   `de.json` — andere Kataloge fallen pro Key auf Deutsch zurück.
+4. Abnahmen: `npm test` + `npm run typecheck` (Root), Gradle
    `:app:assembleDebug :app:testDebugUnitTest`, `xcodebuild … test`.
