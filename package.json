@@ -10,7 +10,7 @@
     "dev:api": "npm run start:dev --workspace @eduflow/api",
     "dev:web": "npm run dev --workspace @eduflow/web",
     "build": "npm run build --workspace @eduflow/contracts && npm run build --workspace @eduflow/api && npm run build --workspace @eduflow/web",
-    "test": "npm run test --workspace @eduflow/api && npm run test --workspace @eduflow/contracts",
+    "test": "npm run test --workspace @eduflow/api && npm run test --workspace @eduflow/web && npm run test --workspace @eduflow/contracts",
     "typecheck": "npm run typecheck --workspace @eduflow/api && npm run typecheck --workspace @eduflow/web && npm run typecheck --workspace @eduflow/contracts",
     "db:generate": "npm run db:generate --workspace @eduflow/api",
     "db:migrate": "npm run db:migrate --workspace @eduflow/api",
