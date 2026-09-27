@@ -343,15 +343,15 @@
     <string name="common_accent_pink">Pink</string>
     <!-- Plurale -->
     <plurals name="settings_devices_count">
-        <item quantity="one">%1$d Gerät</item>
+        <item quantity="one">%1$d Geräte</item>
         <item quantity="other">%1$d Geräte</item>
     </plurals>
     <plurals name="more_cache_cleared">
-        <item quantity="one">%1$d Datei gelöscht</item>
-        <item quantity="other">%1$d Dateien gelöscht</item>
+        <item quantity="one">%1$d Dateien gelöscht</item>
+        <item quantity="other">%1$d fichiers supprimés</item>
     </plurals>
     <plurals name="grades_notes_count">
         <item quantity="one">Ø %1$s · %2$d Note</item>
-        <item quantity="other">Ø %1$s · %2$d Noten</item>
+        <item quantity="other">Ø %1$s · %2$d notes</item>
     </plurals>
 </resources>
