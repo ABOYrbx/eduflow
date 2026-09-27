@@ -6,7 +6,7 @@ const cookieOptions = { httpOnly: true, secure: process.env.NODE_ENV === "produc
 
 async function forward(request: NextRequest, context: Context) {
   const { path } = await context.params;
-  const origin = process.env.API_SERVER_URL ?? "http://127.0.0.1:8000";
+  const origin = process.env.API_SERVER_URL ?? "http://127.0.0.1:3000";
   const target = new URL(`${origin}/api/v1/${path.map(encodeURIComponent).join("/")}`);
   request.nextUrl.searchParams.forEach((value, key) => target.searchParams.append(key, value));
   const access = request.cookies.get("eduflow_access")?.value;

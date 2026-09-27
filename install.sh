@@ -322,5 +322,5 @@ run_step 'Wende additive Datenbankmigrationen an' \
   'Die Datenbankmigrationen konnten nicht angewendet werden.' npm run db:deploy
 
 printf '\nInstallation abgeschlossen. Start mit ./run.sh\n'
-printf 'Weboberfläche: http://localhost:3000/ (Anmelden mit deinem EduPage-Account)\n'
+printf 'Weboberfläche: http://localhost:8000/ (Anmelden mit deinem EduPage-Account)\n'
 printf 'Demo-Modus (ohne echten Account): ./run.sh --demo, Login demo / demo\n'

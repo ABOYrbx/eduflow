@@ -156,7 +156,7 @@ struct CoreTests {
 
     @Test("Standard-Basis-URL zeigt auf lokalen Server")
     func defaultBaseURLIsLocal() {
-        #expect(TokenStore.defaultBaseURL == "http://127.0.0.1:8000/api/v1/")
+        #expect(TokenStore.defaultBaseURL == "http://127.0.0.1:3000/api/v1/")
     }
 
     @Test("Alle Routenpfade sind gesetzt")

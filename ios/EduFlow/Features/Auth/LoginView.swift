@@ -84,7 +84,7 @@ struct LoginView: View {
                             .font(.callout)
                     } else {
                         LoginField(label: "Server (…/api/v1/)", placeholder: store.baseURL, text: $baseURL)
-                        Text("Simulator: http://127.0.0.1:8000/api/v1/ — kein 10.0.2.2 nötig.")
+                        Text("Simulator: http://127.0.0.1:3000/api/v1/ — kein 10.0.2.2 nötig.")
                             .font(.caption)
                             .foregroundStyle(Color.rMuted)
                         PrimaryButton(

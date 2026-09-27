@@ -2,12 +2,12 @@
 # EduFlow starten – echte Version (NestJS-API mit EduPage-Provider + Next.js-Web).
 #
 # Verwendung:
-#   ./run.sh            echte Version: API http://127.0.0.1:8000, Web http://localhost:3000
+#   ./run.sh            echte Version: API http://127.0.0.1:3000, Web http://localhost:8000
 #   ./run.sh --demo     Demo-Version (Fake-Provider): API :8101, Web :3100, Login demo / demo
 #   ./run.sh --help     diese Hilfe
 #
 # Eigene Ports (werden geprüft, nie still gewechselt):
-#   API_PORT=8000 WEB_PORT=3000 ./run.sh
+#   API_PORT=3000 WEB_PORT=8000 ./run.sh
 set -eu
 
 ROOT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
@@ -35,8 +35,8 @@ if [ "$MODE" = demo ]; then
   LOGIN_HINT='Demo-Login: demo / demo (2FA-Demo: demo-2fa / demo, Code 123456)'
 else
   PROVIDER=edupage
-  API_PORT=${API_PORT:-8000}
-  WEB_PORT=${WEB_PORT:-3000}
+  API_PORT=${API_PORT:-3000}
+  WEB_PORT=${WEB_PORT:-8000}
   LOGIN_HINT='Anmelden mit deinem EduPage-Account (Subdomain + Benutzername + Passwort)'
 fi
 

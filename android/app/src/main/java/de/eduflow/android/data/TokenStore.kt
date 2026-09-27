@@ -196,7 +196,7 @@ class TokenStore(private val context: Context) {
 
     companion object {
         /** Default aus android/gradle.properties (eduflow.defaultBaseUrl). */
-        const val DEFAULT_BASE_URL = "http://10.0.2.2:8000/api/v1/"
+        const val DEFAULT_BASE_URL = "http://10.0.2.2:3000/api/v1/"
         const val DEMO_BASE_URL = "http://10.0.2.2:8101/api/v1/"
 
         /** Aussehen-Werte wie im Web (static/theme.js: system/light/dark). */

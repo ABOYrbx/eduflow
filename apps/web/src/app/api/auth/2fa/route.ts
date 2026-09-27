@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
   const input: unknown = await request.json().catch(() => null);
   const code = typeof input === "object" && input !== null && "code" in input ? (input as { code?: unknown }).code : undefined;
   if (!pending || typeof code !== "string" || !code) return NextResponse.json({ error: t("auth2fa.missingCode"), code: "PENDING_INVALID" }, { status: 401 });
-  const origin = process.env.API_SERVER_URL ?? "http://127.0.0.1:8000";
+  const origin = process.env.API_SERVER_URL ?? "http://127.0.0.1:3000";
   const upstream = await fetch(`${origin}/api/v1/auth/2fa`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ pending_token: pending, code }) }).catch(() => null);
   const payload = await upstream?.json().catch(() => ({})) as Record<string, unknown> | undefined;
   if (!upstream || !payload) return NextResponse.json({ error: t("common.upstreamUnreachable"), code: "UPSTREAM" }, { status: 502 });

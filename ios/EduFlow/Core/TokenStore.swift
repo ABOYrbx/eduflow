@@ -10,7 +10,7 @@ import Foundation
 @MainActor
 final class TokenStore: ObservableObject {
     /// Default: Simulator teilt sich das Mac-Netz (kein 10.0.2.2 nötig).
-    static let defaultBaseURL = "http://127.0.0.1:8000/api/v1/"
+    static let defaultBaseURL = "http://127.0.0.1:3000/api/v1/"
 
     @Published private(set) var token = ""
     @Published private(set) var expires = ""

@@ -36,7 +36,7 @@ function main() {
   const databaseUrl = `postgresql://${encode(username)}:${encode(password)}@${hostname}:${port}/${encode(database)}?schema=public`;
   const config = [
     `DATABASE_URL=${dotenvQuote(databaseUrl)}`,
-    `PORT=${dotenvQuote("8000")}`,
+    `PORT=${dotenvQuote("3000")}`,
     `JWT_ACCESS_SECRET=${dotenvQuote(jwt)}`,
     `CREDENTIAL_ENCRYPTION_KEY=${dotenvQuote(encryptionKey)}`,
     `EDUFLOW_PROVIDER=${dotenvQuote("edupage")}`,
