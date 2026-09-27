@@ -145,7 +145,7 @@ public struct LoginView: View {
                 autofocus: true
             ) { advance() }
         default:
-            stepHint(NSLocalizedString("auth_hint_server", value: "Wo läuft dein Server?", comment: "Anmeldung: Serverhinweis"))
+            stepHint(NSLocalizedString("Wo läuft dein Server?", value: "Wo läuft dein Server?", comment: "Anmeldung: Serverhinweis"))
             AuthLabel(NSLocalizedString("auth_label_server", value: "Server-URL", comment: "Anmeldung: Server-Label"))
             UberTextField(
                 text: $vm.baseURL,

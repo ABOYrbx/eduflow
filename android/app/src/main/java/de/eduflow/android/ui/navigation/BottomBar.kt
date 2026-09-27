@@ -58,7 +58,7 @@ val BottomTabs = listOf(
     BottomTab(Routes.HOMEWORK, R.string.bottom_tasks, Icons.AutoMirrored.Filled.Assignment),
     BottomTab(Routes.MESSAGES, R.string.bottom_messages, Icons.Filled.MailOutline),
     BottomTab(Routes.TIMETABLE, R.string.bottom_plan, Icons.Filled.CalendarMonth),
-    BottomTab(Routes.MORE, R.string.bottom_more, Icons.Filled.MoreHoriz),
+    BottomTab(Routes.MORE, R.string.more_title, Icons.Filled.MoreHoriz),
 )
 
 /** Aktiver Tab zur Route (Thread/Verfassen zählen zu Nachrichten,

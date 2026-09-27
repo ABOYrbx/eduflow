@@ -48,7 +48,7 @@ public struct MessagesView: View {
     private var searchbar: some View {
         VStack(spacing: 8) {
             HStack {
-                TextField(NSLocalizedString("messages_search_placeholder", value: "Suchen", comment: "Nachrichten: Suche Platzhalter"), text: $vm.query)
+                TextField(NSLocalizedString("grades_search_placeholder", value: "Suchen", comment: "Nachrichten: Suche Platzhalter"), text: $vm.query)
                     .font(UberFont.text(15, weight: .medium))
                     .autocorrectionDisabled()
                     .onSubmit {
@@ -130,7 +130,7 @@ public struct MessagesView: View {
                         .riseIn(delay: Double(min(index, 8)) * 0.06)
                     }
                     if vm.canLoadMore {
-                        Button(vm.isLoadingMore ? "Lädt …" : String(format: NSLocalizedString("messages_load_more", value: "Mehr laden (%d/%d)", comment: "Nachrichten: mehr laden"), vm.items.count, vm.total)) {
+                        Button(vm.isLoadingMore ? "Lädt …" : String(format: NSLocalizedString("grades_load_more", value: "Mehr laden (%d/%d)", comment: "Nachrichten: mehr laden"), vm.items.count, vm.total)) {
                             Task { await vm.loadMore(onSessionExpired: onSessionExpired) }
                         }
                         .buttonStyle(UberButtonStyle(.smallLight))
@@ -462,7 +462,7 @@ public struct ComposeView: View {
                         Text(String(format: NSLocalizedString("messages_recipients_chosen", value: "Empfänger (%d gewählt)", comment: "Nachrichten: Empfängerzahl"), vm.selected.count))
                             .font(UberFont.text(12, weight: .bold))
                             .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                        TextField(NSLocalizedString("messages_compose_search_placeholder", value: "Suche", comment: "Nachrichten: Empfängersuche Platzhalter"), text: $vm.search)
+                        TextField(NSLocalizedString("Suche", value: "Suche", comment: "Nachrichten: Empfängersuche Platzhalter"), text: $vm.search)
                             .uberInput()
                             .autocorrectionDisabled()
                         if vm.isLoading {
@@ -514,7 +514,7 @@ public struct ComposeView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle(NSLocalizedString("messages_nav_compose", value: "Neue Nachricht", comment: "Nachrichten: Verfassen-Titel"))
+        .navigationTitle(NSLocalizedString("Neue Nachricht", value: "Neue Nachricht", comment: "Nachrichten: Verfassen-Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
     }
 }

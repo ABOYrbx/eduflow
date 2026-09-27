@@ -68,7 +68,7 @@ public struct OverviewView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle(NSLocalizedString("overview_nav", value: "Übersicht", comment: "Übersicht: Titel"))
+        .navigationTitle(NSLocalizedString("Übersicht", value: "Übersicht", comment: "Übersicht: Titel"))
         .onReceive(clockTimer) { now = $0 }
         .task { await vm.load(onSessionExpired: onSessionExpired) }
         .refreshable { await vm.load(refresh: true, onSessionExpired: onSessionExpired) }

@@ -149,7 +149,7 @@ fun SettingsScreen(
             Text(msg, color = MaterialTheme.colorScheme.error)
             PrimaryButton(text = stringResource(R.string.common_retry), onClick = { vm.reload() })
             if (isDemo) {
-                SectionLabel(stringResource(R.string.settings_demo_section))
+                SectionLabel(stringResource(R.string.more_demo_title))
                 Text(stringResource(R.string.settings_demo_text))
             } else {
                 SectionLabel(stringResource(R.string.settings_server_section))
@@ -337,7 +337,7 @@ fun SettingsScreen(
             }
         }
 
-        SectionLabel(stringResource(R.string.settings_weather_section))
+        SectionLabel(stringResource(R.string.overview_order_weather))
         EduCard(modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.fillMaxWidth().padding(16.dp)) {
                 var city by remember(v.wetterCity) { mutableStateOf(v.wetterCity) }
@@ -649,19 +649,19 @@ private fun accentLabel(key: String): String = when (key) {
 @Composable
 private fun landingLabel(key: String): String = when (key) {
     "uebersicht" -> stringResource(R.string.settings_landing_overview)
-    "dashboard" -> stringResource(R.string.settings_landing_messages)
-    "hausaufgaben" -> stringResource(R.string.settings_landing_tasks)
-    "noten" -> stringResource(R.string.settings_landing_grades)
-    "stundenplan" -> stringResource(R.string.settings_landing_plan)
+    "dashboard" -> stringResource(R.string.messages_title)
+    "hausaufgaben" -> stringResource(R.string.bottom_tasks)
+    "noten" -> stringResource(R.string.grades_title)
+    "stundenplan" -> stringResource(R.string.bottom_plan)
     else -> key
 }
 
 @Composable
 private fun hwStatusLabel(key: String): String = when (key) {
-    "alle" -> stringResource(R.string.settings_hwstatus_all)
-    "offen" -> stringResource(R.string.settings_hwstatus_open)
-    "überfällig" -> stringResource(R.string.settings_hwstatus_overdue)
-    "erledigt" -> stringResource(R.string.settings_hwstatus_done)
-    "papierkorb" -> stringResource(R.string.settings_hwstatus_trash)
+    "alle" -> stringResource(R.string.homework_filter_all)
+    "offen" -> stringResource(R.string.homework_filter_open)
+    "überfällig" -> stringResource(R.string.homework_filter_overdue)
+    "erledigt" -> stringResource(R.string.homework_filter_done)
+    "papierkorb" -> stringResource(R.string.homework_swipe_trash)
     else -> key
 }

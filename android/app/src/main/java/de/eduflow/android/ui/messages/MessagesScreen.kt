@@ -109,7 +109,7 @@ fun MessagesScreen(
                 placeholder = stringResource(R.string.messages_search_placeholder),
             )
             Spacer(Modifier.height(10.dp))
-            val filterAll = stringResource(R.string.messages_filter_all)
+            val filterAll = stringResource(R.string.homework_filter_all)
             val filterUnread = stringResource(R.string.messages_filter_unread)
             val filterFiles = stringResource(R.string.messages_filter_files)
             val filterOptions = listOf(filterAll, filterUnread, filterFiles)
@@ -533,7 +533,7 @@ fun ComposeScreen(
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
             }
             ScreenHead(
-                title = stringResource(R.string.messages_compose_title),
+                title = stringResource(R.string.messages_new_desc),
                 subtitle = stringResource(R.string.messages_compose_subtitle),
             )
         }
@@ -653,7 +653,7 @@ private fun MessageAuthError(
                 TextButton(
                     onClick = onReLogin,
                     colors = ButtonDefaults.textButtonColors(contentColor = Color.White),
-                ) { Text(stringResource(R.string.common_relogin)) }
+                ) { Text(stringResource(R.string.auth_login)) }
             } else {
                 TextButton(
                     onClick = onDismiss,

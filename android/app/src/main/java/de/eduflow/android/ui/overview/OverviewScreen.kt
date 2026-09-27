@@ -218,7 +218,7 @@ private fun MessagesOverviewSection(messages: List<MessageDto>, total: Int, onMe
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         SectionHeadRow(
             label = stringResource(R.string.overview_messages_count_format, total),
-            action = stringResource(R.string.overview_action_all),
+            action = stringResource(R.string.homework_filter_all),
             onAction = onMessages,
         )
         if (messages.isEmpty()) {
@@ -238,7 +238,7 @@ private fun HomeworkOverviewSection(
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         SectionHeadRow(
-            label = stringResource(R.string.overview_homework_count_format, counts.offen, counts.ueberfaellig),
+            label = stringResource(R.string.homework_section_open_format, counts.offen, counts.ueberfaellig),
             action = stringResource(R.string.overview_action_all_tasks),
             onAction = onHomework,
         )
@@ -355,7 +355,7 @@ private fun NowCard(
                 colors = ButtonDefaults.textButtonColors(
                     contentColor = scheme.onPrimary,
                 ),
-            ) { Text(stringResource(R.string.overview_action_timetable)) }
+            ) { Text(stringResource(R.string.timetable_title)) }
         }
     }
 }
@@ -509,7 +509,7 @@ private fun WetterCard(
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     WetterForecastDay(
-                        label = stringResource(R.string.overview_weather_today),
+                        label = stringResource(R.string.timetable_today),
                         icon = t.icon,
                         high = t.max,
                         low = t.min,

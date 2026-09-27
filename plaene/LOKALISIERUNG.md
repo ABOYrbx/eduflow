@@ -27,9 +27,10 @@ Datumsformate, Demo-Daten) — diese bleiben bewusst deutsch.
 | Android | `android/app/src/main/res/values/strings.xml` (`stringResource`) | `res/values-<android_code>/strings.xml` |
 | macOS | `mac/EduFlow/Resources/Localizable.xcstrings` (Source `de`, im Bundle registriert) | gleiche Datei (String Catalog) |
 
-Kennzahlen (Blätter/Entries gezählt): Web 295 Keys (13 Gruppen),
-Backend 115 Keys (Fehlertexte, Settings-Schema, API-Docs), Android 319
-Strings + 3 Plurals, macOS 336 Katalog-Keys (Source-Sprache `de`).
+Kennzahlen (Blätter/Entries gezählt, Duplikate vereint): Web 249 Keys
+(13 Gruppen), Backend 111 Keys (Fehlertexte, Settings-Schema, API-Docs),
+Android 288 Strings + 3 Plurals, macOS 260 Katalog-Keys
+(Source-Sprache `de`).
 
 ## Sync-Ablauf
 
