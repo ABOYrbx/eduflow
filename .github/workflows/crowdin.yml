@@ -3,6 +3,8 @@
 # - Push auf main lädt geänderte Quellen hoch (Deutsch ist Source + Fallback).
 # - Übersetzungs-PRs erstellt die Crowdin-GitHub-App per Sync-Schedule
 #   (der download-Job wurde entfernt, damit nicht zwei Bots konkurrieren).
+# - Direkter CLI-Aufruf statt Marketplace-Action: Der Runner konnte
+#   crowdin/crowdin-github-action nicht auflösen ("repository not found").
 # Benötigte GitHub-Secrets: CROWDIN_PROJECT_ID, CROWDIN_TOKEN.
 
 name: Crowdin Sync
@@ -19,21 +21,20 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
 
 jobs:
   upload-sources:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Crowdin-CLI laden
+        run: |
+          curl -fsSL -o crowdin https://github.com/crowdin/crowdin-cli/releases/download/5.3.0/crowdin-linux-x64
+          chmod +x crowdin
+          ./crowdin --version
       - name: Quellen nach Crowdin hochladen
-        uses: crowdin/crowdin-github-action@v3
-        with:
-          upload_sources: true
-          upload_translations: false
-          download_translations: false
+        run: ./crowdin upload sources --config crowdin.yml --token "$CROWDIN_TOKEN" --project-id "$CROWDIN_PROJECT_ID"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
           CROWDIN_TOKEN: ${{ secrets.CROWDIN_TOKEN }}
