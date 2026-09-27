@@ -8,8 +8,8 @@ English | [Deutsch](README.de.md)
 
 # EduFlow
 
-Local school dashboard for EduPage: messages, homework, timetable, grades, canteen & more.
-NestJS API + Next.js web UI + native Android and macOS apps.
+Local school dashboard for EduPage: messages, homework, timetable, grades & more.
+NestJS API + Next.js web UI + native Android and macOS apps.(iOS may come later)
 
 [![Stars](https://img.shields.io/github/stars/ABOYrbx/eduflow?style=for-the-badge)](https://github.com/ABOYrbx/eduflow/stargazers)
 [![Forks](https://img.shields.io/github/forks/ABOYrbx/eduflow?style=for-the-badge)](https://github.com/ABOYrbx/eduflow/network/members)
