@@ -13,13 +13,19 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -141,13 +147,28 @@ fun EduFlowNav(
         route != MESSAGES_COMPOSE_ROUTE
     val reducedMotion = LocalReducedMotion.current
 
+    // Scroll-Collapse der Bottom-Bar (alle Tabs): runter = nur Icons,
+    // hoch = voll. Schwelle gegen Zittern; Zielwechsel setzt zurück.
+    var barCollapsed by remember { mutableStateOf(false) }
+    val barScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+                val dy = available.y
+                if (dy < -12f) barCollapsed = true
+                else if (dy > 12f) barCollapsed = false
+                return Offset.Zero
+            }
+        }
+    }
+    LaunchedEffect(route) { barCollapsed = false }
+
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         contentColor = MaterialTheme.colorScheme.onBackground,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
     ) { _ ->
         CompositionLocalProvider(LocalEduFlowSession provides (session ?: Session())) {
-        Box(Modifier.fillMaxSize()) {
+        Box(Modifier.fillMaxSize().nestedScroll(barScrollConnection)) {
         NavHost(
             navController = nav,
             startDestination = start,
@@ -347,6 +368,7 @@ fun EduFlowNav(
             )
             EduFlowBottomBar(
                 currentRoute = route,
+                collapsed = barCollapsed,
                 onSection = { dest ->
                     nav.navigate(dest) {
                         popUpTo(nav.graph.findStartDestination().id) {
