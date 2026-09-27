@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -216,12 +217,17 @@ fun MessagesScreen(
                 }
             }
         }
+        // Über der Bottom-Bar (Pille + Systemleiste): 88dp frei, passend
+        // zum Listen-Spacer am Ende — der Knopf liegt nie unter der Bar.
         FloatingActionButton(
             onClick = onCompose,
             shape = CircleShape,
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
-            modifier = Modifier.align(Alignment.BottomEnd).padding(16.dp).size(56.dp),
+            modifier = Modifier.align(Alignment.BottomEnd)
+                .navigationBarsPadding()
+                .padding(end = 16.dp, bottom = 88.dp)
+                .size(56.dp),
         ) {
             Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.messages_new_desc))
         }
@@ -519,7 +525,9 @@ fun ComposeScreen(
         else state.recipients.filter { it.name.contains(filter, ignoreCase = true) }
     }
 
-    Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
+    // Verfassen läuft ohne Bottom-Bar (NavGraph blendet sie auf dieser
+    // Route aus); Systemleiste unten per navigationBarsPadding freihalten.
+    Column(modifier = modifier.fillMaxSize().navigationBarsPadding().padding(16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onBack) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))

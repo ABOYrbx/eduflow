@@ -53,6 +53,7 @@ import de.eduflow.android.ui.grades.gradesDestination
 import de.eduflow.android.ui.school.schoolDestination
 import de.eduflow.android.ui.homework.homeworkDestination
 import de.eduflow.android.ui.messages.messagesDestination
+import de.eduflow.android.ui.messages.MESSAGES_COMPOSE_ROUTE
 import de.eduflow.android.ui.more.MoreScreen
 import de.eduflow.android.ui.overview.overviewDestination
 import de.eduflow.android.ui.settings.DevicesScreen
@@ -131,11 +132,13 @@ fun EduFlowNav(
     }
 
     // Bottom-Bar aus dem Redesign-PNG — nur auf den Haupt-Routen,
-    // nicht auf Login/2FA.
+    // nicht auf Login/2FA und nicht beim Nachrichten-Verfassen
+    // (dort braucht der Senden-Knopf den Platz).
     val backStackEntry by nav.currentBackStackEntryAsState()
     val route = backStackEntry?.destination?.route
     val showBar = route != null &&
-        route != Routes.LOGIN && route != Routes.ONBOARDING && !route.startsWith("twofa")
+        route != Routes.LOGIN && route != Routes.ONBOARDING && !route.startsWith("twofa") &&
+        route != MESSAGES_COMPOSE_ROUTE
     val reducedMotion = LocalReducedMotion.current
 
     Scaffold(
