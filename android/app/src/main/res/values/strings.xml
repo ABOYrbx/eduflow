@@ -269,6 +269,12 @@
     <string name="overview_day_date_format">%1$s · %2$s</string>
     <string name="overview_dish_format">• %1$s</string>
     <string name="overview_dish_price_format"> — %1$s</string>
+    <string name="overview_essen_monday">Montag</string>
+    <string name="overview_essen_tuesday">Dienstag</string>
+    <string name="overview_essen_wednesday">Mittwoch</string>
+    <string name="overview_essen_thursday">Donnerstag</string>
+    <string name="overview_essen_friday">Freitag</string>
+    <string name="overview_weather_high_low_format">H %1$s  ·  T %2$s</string>
 
     <!-- Schulalltag -->
     <string name="school_title">Schulalltag</string>

@@ -128,6 +128,12 @@ private enum SchoolTab: String, CaseIterable, Identifiable {
     case agenda = "Kalender"
     case substitutions = "Vertretungen"
     var id: String { rawValue }
+    var displayName: String {
+        switch self {
+        case .agenda: return NSLocalizedString("school_tab_agenda", value: "Kalender", comment: "Schule: Tab Kalender")
+        case .substitutions: return NSLocalizedString("school_tab_substitutions", value: "Vertretungen", comment: "Schule: Tab Vertretungen")
+        }
+    }
 }
 
 struct SchoolView: View {
@@ -157,8 +163,8 @@ struct SchoolView: View {
                     .buttonStyle(.bordered)
                     .disabled(vm.isLoading)
                 }
-                Picker("Bereich", selection: $tab) {
-                    ForEach(SchoolTab.allCases) { Text($0.rawValue).tag($0) }
+                Picker(NSLocalizedString("school_picker_section", value: "Bereich", comment: "Schule: Bereichsfilter"), selection: $tab) {
+                    ForEach(SchoolTab.allCases) { Text($0.displayName).tag($0) }
                 }
                 .pickerStyle(.segmented)
                 if let error = vm.error {

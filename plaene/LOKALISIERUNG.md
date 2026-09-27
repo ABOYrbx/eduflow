@@ -11,6 +11,13 @@ Crowdin. Es gibt noch keine übersetzten UI-Texte; Crowdin liefert später nur
 Ergänzungen, kein Verhalten ändert sich. Die API-Fehler-`code`s werden nie
 übersetzt — nur die `error`-Texte.
 
+Android- und macOS-UI sind vollständig auf die Quelldateien umgestellt
+(keine Hardcodings mehr): Android nutzt `stringResource` aus
+`values/strings.xml`, macOS `LocalizedStringKey` aus dem String-Katalog.
+Ausgenommen bleiben nur die unten dokumentierten Fälle
+(ViewModel-Fallbacks ohne Context, Protokoll-Strings/Status,
+Datumsformate, Demo-Daten) — diese bleiben bewusst deutsch.
+
 ## Dateizuordnung (`crowdin.yml` im Root)
 
 | Plattform | Quelle im Repo (deutsch) | Übersetzung via Crowdin |
@@ -20,8 +27,9 @@ Ergänzungen, kein Verhalten ändert sich. Die API-Fehler-`code`s werden nie
 | Android | `android/app/src/main/res/values/strings.xml` (`stringResource`) | `res/values-<android_code>/strings.xml` |
 | macOS | `mac/EduFlow/Resources/Localizable.xcstrings` (Source `de`, im Bundle registriert) | gleiche Datei (String Catalog) |
 
-Kennzahlen: Web ~300 Keys, Backend ~110 Keys (Fehlertexte, Settings-Schema,
-API-Docs), Android ~310 Strings + 3 Plurals, macOS 271 Katalog-Keys.
+Kennzahlen (Blätter/Entries gezählt): Web 300 Keys (13 Gruppen),
+Backend 116 Keys (Fehlertexte, Settings-Schema, API-Docs), Android 333
+Strings + 3 Plurals, macOS 341 Katalog-Keys (Source-Sprache `de`).
 
 ## Sync-Ablauf
 

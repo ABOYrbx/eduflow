@@ -223,9 +223,9 @@ public struct OnboardingFeaturesPage: View {
                 .padding(.top, 12)
                 .riseIn(delay: 0.08)
             VStack(spacing: 10) {
-                featureRow(icon: "envelope", title: "Nachrichten & Threads", text: "Alle EduPage-Nachrichten im Mail-Layout — mit Likes, Antworten und Dateien.", delay: 0.14)
-                featureRow(icon: "checklist", title: "Hausaufgaben & Noten", text: "Fälligkeiten mit Zählern, Halbjahr-Tabs und Schnitt.", delay: 0.2)
-                featureRow(icon: "calendar", title: "Stundenplan, Essen & Wetter", text: "Tag und Woche, Mensa-Plan und Wetter auf der Übersicht.", delay: 0.26)
+                featureRow(icon: "envelope", title: NSLocalizedString("onboarding_feature_messages_title", value: "Nachrichten & Threads", comment: "Onboarding: Nachrichten Titel"), text: NSLocalizedString("onboarding_feature_messages_text", value: "Alle EduPage-Nachrichten im Mail-Layout — mit Likes, Antworten und Dateien.", comment: "Onboarding: Nachrichten Beschreibung"), delay: 0.14)
+                featureRow(icon: "checklist", title: NSLocalizedString("onboarding_feature_homework_title", value: "Hausaufgaben & Noten", comment: "Onboarding: Aufgaben Titel"), text: NSLocalizedString("onboarding_feature_homework_text", value: "Fälligkeiten mit Zählern, Halbjahr-Tabs und Schnitt.", comment: "Onboarding: Aufgaben Beschreibung"), delay: 0.2)
+                featureRow(icon: "calendar", title: NSLocalizedString("onboarding_feature_timetable_title", value: "Stundenplan, Essen & Wetter", comment: "Onboarding: Stundenplan Titel"), text: NSLocalizedString("onboarding_feature_timetable_text", value: "Tag und Woche, Mensa-Plan und Wetter auf der Übersicht.", comment: "Onboarding: Stundenplan Beschreibung"), delay: 0.26)
             }
             .padding(.top, 22)
             Spacer()

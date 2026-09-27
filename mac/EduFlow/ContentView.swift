@@ -185,7 +185,7 @@ private struct TopPillNav: View {
                         .padding(.vertical, 6)
                         .background(EduFlowPalette.surface2(scheme))
                         .clipShape(.capsule)
-                        .help("Nur synthetische Beispieldaten vom lokalen Fake-Server")
+                        .help(NSLocalizedString("content_demo_hint", value: "Nur synthetische Beispieldaten vom lokalen Fake-Server", comment: "Navigation: Demo-Hinweis"))
                 }
                 NavPill(title: "Übersicht", active: activeSection == .overview) {
                     onNavigate(.overview)

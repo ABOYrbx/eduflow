@@ -2992,6 +2992,765 @@
           }
         }
       }
+    },
+    "common_password_hide": {
+      "comment": "Passwort: verbergen",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passwort verbergen"
+          }
+        }
+      }
+    },
+    "common_password_show": {
+      "comment": "Passwort: anzeigen",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passwort anzeigen"
+          }
+        }
+      }
+    },
+    "content_demo_hint": {
+      "comment": "Navigation: Demo-Hinweis",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur synthetische Beispieldaten vom lokalen Fake-Server"
+          }
+        }
+      }
+    },
+    "settings_landing_overview_title": {
+      "comment": "Einstellungen: Startseite Übersicht",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Übersicht"
+          }
+        }
+      }
+    },
+    "settings_landing_overview_desc": {
+      "comment": "Einstellungen: Startseite Übersicht Beschreibung",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uhr, Nachrichten, Essen"
+          }
+        }
+      }
+    },
+    "settings_landing_messages_title": {
+      "comment": "Einstellungen: Startseite Nachrichten",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nachrichten"
+          }
+        }
+      }
+    },
+    "settings_landing_messages_desc": {
+      "comment": "Einstellungen: Startseite Nachrichten Beschreibung",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Direkt in die Nachrichten"
+          }
+        }
+      }
+    },
+    "settings_landing_homework_title": {
+      "comment": "Einstellungen: Startseite Aufgaben",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hausaufgaben"
+          }
+        }
+      }
+    },
+    "settings_landing_homework_desc": {
+      "comment": "Einstellungen: Startseite Aufgaben Beschreibung",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Direkt zu den Aufgaben"
+          }
+        }
+      }
+    },
+    "settings_landing_grades_title": {
+      "comment": "Einstellungen: Startseite Noten",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noten"
+          }
+        }
+      }
+    },
+    "settings_landing_grades_desc": {
+      "comment": "Einstellungen: Startseite Noten Beschreibung",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Direkt zu den Noten"
+          }
+        }
+      }
+    },
+    "settings_landing_timetable_title": {
+      "comment": "Einstellungen: Startseite Stundenplan",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stundenplan"
+          }
+        }
+      }
+    },
+    "settings_landing_timetable_desc": {
+      "comment": "Einstellungen: Startseite Stundenplan Beschreibung",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Direkt zum Stundenplan"
+          }
+        }
+      }
+    },
+    "settings_filter_all_title": {
+      "comment": "Einstellungen: Filter alle",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle"
+          }
+        }
+      }
+    },
+    "settings_filter_all_desc": {
+      "comment": "Einstellungen: Filter alle Beschreibung",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alles zeigen"
+          }
+        }
+      }
+    },
+    "settings_filter_open_title": {
+      "comment": "Einstellungen: Filter offene",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur offene"
+          }
+        }
+      }
+    },
+    "settings_filter_open_desc": {
+      "comment": "Einstellungen: Filter offene Beschreibung",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ohne erledigte"
+          }
+        }
+      }
+    },
+    "settings_filter_overdue_title": {
+      "comment": "Einstellungen: Filter überfällige",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur überfällige"
+          }
+        }
+      }
+    },
+    "settings_filter_overdue_desc": {
+      "comment": "Einstellungen: Filter überfällige Beschreibung",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frist vorbei"
+          }
+        }
+      }
+    },
+    "settings_filter_done_title": {
+      "comment": "Einstellungen: Filter erledigte",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nur erledigte"
+          }
+        }
+      }
+    },
+    "settings_filter_done_desc": {
+      "comment": "Einstellungen: Filter erledigte Beschreibung",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fertige Aufgaben"
+          }
+        }
+      }
+    },
+    "settings_filter_trash_title": {
+      "comment": "Einstellungen: Filter Papierkorb",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Papierkorb"
+          }
+        }
+      }
+    },
+    "settings_filter_trash_desc": {
+      "comment": "Einstellungen: Filter Papierkorb Beschreibung",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ausgeblendete"
+          }
+        }
+      }
+    },
+    "settings_toggle_hw_tests": {
+      "comment": "Einstellungen: Tests einbeziehen",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tests und Prüfungen einbeziehen"
+          }
+        }
+      }
+    },
+    "settings_toggle_wetter_map": {
+      "comment": "Einstellungen: Wetterkarte",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wetterkarte anzeigen"
+          }
+        }
+      }
+    },
+    "settings_toggle_dev_options": {
+      "comment": "Einstellungen: Entwickleroptionen",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Entwickleroptionen aktivieren"
+          }
+        }
+      }
+    },
+    "settings_toggle_onboarding_restart": {
+      "comment": "Einstellungen: Onboarding erneut",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Onboarding erneut durchlaufen"
+          }
+        }
+      }
+    },
+    "settings_wetter_city_placeholder": {
+      "comment": "Einstellungen: Wetterstadt Platzhalter",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wetter: Stadt (optional)"
+          }
+        }
+      }
+    },
+    "settings_baseurl_placeholder": {
+      "comment": "Einstellungen: Basis-URL Platzhalter",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Basis-URL"
+          }
+        }
+      }
+    },
+    "auth_hint_school": {
+      "comment": "Anmeldung: Schulhinweis",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zu welcher Schule gehörst du?"
+          }
+        }
+      }
+    },
+    "auth_label_subdomain": {
+      "comment": "Anmeldung: Subdomain-Label",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subdomain (optional)"
+          }
+        }
+      }
+    },
+    "auth_placeholder_subdomain": {
+      "comment": "Anmeldung: Subdomain-Platzhalter",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "z. B. musterschule"
+          }
+        }
+      }
+    },
+    "auth_hint_username": {
+      "comment": "Anmeldung: Benutzerhinweis",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wie heißt du bei EduPage?"
+          }
+        }
+      }
+    },
+    "auth_label_username": {
+      "comment": "Anmeldung: Benutzername-Label",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Benutzername"
+          }
+        }
+      }
+    },
+    "auth_placeholder_username": {
+      "comment": "Anmeldung: Benutzername-Platzhalter",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "z. B. max.muster"
+          }
+        }
+      }
+    },
+    "auth_hint_password": {
+      "comment": "Anmeldung: Passworthinweis",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Und dein Passwort?"
+          }
+        }
+      }
+    },
+    "auth_label_password": {
+      "comment": "Anmeldung: Passwort-Label",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passwort"
+          }
+        }
+      }
+    },
+    "auth_placeholder_password": {
+      "comment": "Anmeldung: Passwort-Platzhalter",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Passwort eingeben"
+          }
+        }
+      }
+    },
+    "auth_hint_device": {
+      "comment": "Anmeldung: Gerätehinweis",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Welches Gerät meldest du an?"
+          }
+        }
+      }
+    },
+    "auth_label_device": {
+      "comment": "Anmeldung: Gerät-Label",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gerät (optional)"
+          }
+        }
+      }
+    },
+    "auth_placeholder_device": {
+      "comment": "Anmeldung: Gerät-Platzhalter",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "z. B. MacBook"
+          }
+        }
+      }
+    },
+    "auth_hint_server": {
+      "comment": "Anmeldung: Serverhinweis",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wo läuft dein Server?"
+          }
+        }
+      }
+    },
+    "auth_label_server": {
+      "comment": "Anmeldung: Server-Label",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server-URL"
+          }
+        }
+      }
+    },
+    "auth_label_code": {
+      "comment": "Anmeldung: Code-Label",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Code"
+          }
+        }
+      }
+    },
+    "auth_placeholder_code": {
+      "comment": "Anmeldung: Code-Platzhalter",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "6-stelliger Code"
+          }
+        }
+      }
+    },
+    "messages_search_placeholder": {
+      "comment": "Nachrichten: Suche Platzhalter",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suchen"
+          }
+        }
+      }
+    },
+    "messages_picker_type": {
+      "comment": "Nachrichten: Typfilter",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Typ"
+          }
+        }
+      }
+    },
+    "messages_compose_search_placeholder": {
+      "comment": "Nachrichten: Empfängersuche Platzhalter",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suche"
+          }
+        }
+      }
+    },
+    "homework_picker_status": {
+      "comment": "Hausaufgaben: Statusfilter",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Status"
+          }
+        }
+      }
+    },
+    "homework_search_placeholder": {
+      "comment": "Hausaufgaben: Suche Platzhalter",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suchen"
+          }
+        }
+      }
+    },
+    "homework_toggle_tests": {
+      "comment": "Hausaufgaben: Tests einbeziehen",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tests einbeziehen"
+          }
+        }
+      }
+    },
+    "homework_filter_all": {
+      "comment": "Hausaufgaben: Filter alle",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle"
+          }
+        }
+      }
+    },
+    "homework_filter_open": {
+      "comment": "Hausaufgaben: Filter offene",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Offen"
+          }
+        }
+      }
+    },
+    "homework_filter_overdue": {
+      "comment": "Hausaufgaben: Filter überfällige",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Überfällig"
+          }
+        }
+      }
+    },
+    "homework_filter_done": {
+      "comment": "Hausaufgaben: Filter erledigte",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Erledigt"
+          }
+        }
+      }
+    },
+    "homework_filter_trash": {
+      "comment": "Hausaufgaben: Filter Papierkorb",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Papierkorb"
+          }
+        }
+      }
+    },
+    "grades_picker_halfyear": {
+      "comment": "Noten: Halbjahrfilter",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Halbjahr"
+          }
+        }
+      }
+    },
+    "grades_search_placeholder": {
+      "comment": "Noten: Suche Platzhalter",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suchen"
+          }
+        }
+      }
+    },
+    "school_picker_section": {
+      "comment": "Schule: Bereichsfilter",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bereich"
+          }
+        }
+      }
+    },
+    "school_tab_agenda": {
+      "comment": "Schule: Tab Kalender",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kalender"
+          }
+        }
+      }
+    },
+    "school_tab_substitutions": {
+      "comment": "Schule: Tab Vertretungen",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vertretungen"
+          }
+        }
+      }
+    },
+    "onboarding_feature_messages_title": {
+      "comment": "Onboarding: Nachrichten Titel",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nachrichten & Threads"
+          }
+        }
+      }
+    },
+    "onboarding_feature_messages_text": {
+      "comment": "Onboarding: Nachrichten Beschreibung",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle EduPage-Nachrichten im Mail-Layout — mit Likes, Antworten und Dateien."
+          }
+        }
+      }
+    },
+    "onboarding_feature_homework_title": {
+      "comment": "Onboarding: Aufgaben Titel",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hausaufgaben & Noten"
+          }
+        }
+      }
+    },
+    "onboarding_feature_homework_text": {
+      "comment": "Onboarding: Aufgaben Beschreibung",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fälligkeiten mit Zählern, Halbjahr-Tabs und Schnitt."
+          }
+        }
+      }
+    },
+    "onboarding_feature_timetable_title": {
+      "comment": "Onboarding: Stundenplan Titel",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stundenplan, Essen & Wetter"
+          }
+        }
+      }
+    },
+    "onboarding_feature_timetable_text": {
+      "comment": "Onboarding: Stundenplan Beschreibung",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tag und Woche, Mensa-Plan und Wetter auf der Übersicht."
+          }
+        }
+      }
+    },
+    "heute fällig": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "heute fällig"
+          }
+        }
+      }
+    },
+    "ohne Datum": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ohne Datum"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

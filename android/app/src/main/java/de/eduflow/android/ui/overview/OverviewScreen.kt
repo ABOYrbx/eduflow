@@ -269,7 +269,7 @@ private fun LunchOverviewSection(state: OverviewUiState, viewModel: OverviewView
         EssenPager(
             label = state.essen?.label.orEmpty(), sourceUrl = state.essen?.source_url.orEmpty(),
             cacheInfo = state.essen?.cache_info.orEmpty(),
-            dayName = EssenDays.ORDER.getOrNull(state.essenIndex).orEmpty(),
+            dayName = localizedEssenDay(state.essenIndex),
             date = state.essen?.days?.get(EssenDays.ORDER.getOrNull(state.essenIndex))?.date.orEmpty(),
             dishes = state.essen?.days?.get(EssenDays.ORDER.getOrNull(state.essenIndex))?.dishes.orEmpty(),
             note = state.essen?.days?.get(EssenDays.ORDER.getOrNull(state.essenIndex))?.note.orEmpty(),
@@ -277,6 +277,17 @@ private fun LunchOverviewSection(state: OverviewUiState, viewModel: OverviewView
             onPrev = { viewModel.stepEssen(-1) }, onNext = { viewModel.stepEssen(1) },
         )
     }
+}
+
+/** Wochentag für den Essens-Pager lokalisiert; Lookup bleibt über EssenDays.ORDER (Server-Keys). */
+@Composable
+private fun localizedEssenDay(index: Int): String = when (index) {
+    0 -> stringResource(R.string.overview_essen_monday)
+    1 -> stringResource(R.string.overview_essen_tuesday)
+    2 -> stringResource(R.string.overview_essen_wednesday)
+    3 -> stringResource(R.string.overview_essen_thursday)
+    4 -> stringResource(R.string.overview_essen_friday)
+    else -> EssenDays.ORDER.getOrNull(index).orEmpty()
 }
 
 /** Uhr-Karte (live, jede Sekunde, deutsches Format) + Aktualisieren. */
@@ -493,7 +504,11 @@ private fun WetterCard(
                                 maxLines = 1,
                             )
                             Text(
-                                "H ${t.max?.let { "$it°" } ?: "–"}  ·  T ${t.min?.let { "$it°" } ?: "–"}",
+                                stringResource(
+                                    R.string.overview_weather_high_low_format,
+                                    t.max?.let { "$it°" } ?: "–",
+                                    t.min?.let { "$it°" } ?: "–",
+                                ),
                                 fontSize = 12.sp,
                                 color = scheme.onPrimaryContainer.copy(alpha = 0.7f),
                             )

@@ -48,7 +48,7 @@ public struct MessagesView: View {
     private var searchbar: some View {
         VStack(spacing: 8) {
             HStack {
-                TextField("Suchen", text: $vm.query)
+                TextField(NSLocalizedString("messages_search_placeholder", value: "Suchen", comment: "Nachrichten: Suche Platzhalter"), text: $vm.query)
                     .font(UberFont.text(15, weight: .medium))
                     .autocorrectionDisabled()
                     .onSubmit {
@@ -65,7 +65,7 @@ public struct MessagesView: View {
                         .clipShape(.circle)
                 }
                 .buttonStyle(.plain)
-                Picker("Typ", selection: $vm.type) {
+                Picker(NSLocalizedString("messages_picker_type", value: "Typ", comment: "Nachrichten: Typfilter"), selection: $vm.type) {
                     ForEach(MessageTypes.all, id: \.self) { type in
                         Text(MessageTypes.label(type)).tag(type)
                     }
@@ -462,7 +462,7 @@ public struct ComposeView: View {
                         Text(String(format: NSLocalizedString("messages_recipients_chosen", value: "Empfänger (%d gewählt)", comment: "Nachrichten: Empfängerzahl"), vm.selected.count))
                             .font(UberFont.text(12, weight: .bold))
                             .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                        TextField("Suche", text: $vm.search)
+                        TextField(NSLocalizedString("messages_compose_search_placeholder", value: "Suche", comment: "Nachrichten: Empfängersuche Platzhalter"), text: $vm.search)
                             .uberInput()
                             .autocorrectionDisabled()
                         if vm.isLoading {

@@ -70,11 +70,11 @@ public struct SettingsView: View {
                     .font(UberFont.text(19, weight: .heavy))
                     .tracking(-0.4)
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
-                    RadioCard(title: "Übersicht", desc: "Uhr, Nachrichten, Essen", value: "uebersicht", selection: $vm.values.landing)
-                    RadioCard(title: "Nachrichten", desc: "Direkt in die Nachrichten", value: "dashboard", selection: $vm.values.landing)
-                    RadioCard(title: "Hausaufgaben", desc: "Direkt zu den Aufgaben", value: "hausaufgaben", selection: $vm.values.landing)
-                    RadioCard(title: "Noten", desc: "Direkt zu den Noten", value: "noten", selection: $vm.values.landing)
-                    RadioCard(title: "Stundenplan", desc: "Direkt zum Stundenplan", value: "stundenplan", selection: $vm.values.landing)
+                    RadioCard(title: NSLocalizedString("settings_landing_overview_title", value: "Übersicht", comment: "Einstellungen: Startseite Übersicht"), desc: NSLocalizedString("settings_landing_overview_desc", value: "Uhr, Nachrichten, Essen", comment: "Einstellungen: Startseite Übersicht Beschreibung"), value: "uebersicht", selection: $vm.values.landing)
+                    RadioCard(title: NSLocalizedString("settings_landing_messages_title", value: "Nachrichten", comment: "Einstellungen: Startseite Nachrichten"), desc: NSLocalizedString("settings_landing_messages_desc", value: "Direkt in die Nachrichten", comment: "Einstellungen: Startseite Nachrichten Beschreibung"), value: "dashboard", selection: $vm.values.landing)
+                    RadioCard(title: NSLocalizedString("settings_landing_homework_title", value: "Hausaufgaben", comment: "Einstellungen: Startseite Aufgaben"), desc: NSLocalizedString("settings_landing_homework_desc", value: "Direkt zu den Aufgaben", comment: "Einstellungen: Startseite Aufgaben Beschreibung"), value: "hausaufgaben", selection: $vm.values.landing)
+                    RadioCard(title: NSLocalizedString("settings_landing_grades_title", value: "Noten", comment: "Einstellungen: Startseite Noten"), desc: NSLocalizedString("settings_landing_grades_desc", value: "Direkt zu den Noten", comment: "Einstellungen: Startseite Noten Beschreibung"), value: "noten", selection: $vm.values.landing)
+                    RadioCard(title: NSLocalizedString("settings_landing_timetable_title", value: "Stundenplan", comment: "Einstellungen: Startseite Stundenplan"), desc: NSLocalizedString("settings_landing_timetable_desc", value: "Direkt zum Stundenplan", comment: "Einstellungen: Startseite Stundenplan Beschreibung"), value: "stundenplan", selection: $vm.values.landing)
                 }
             }
         }
@@ -92,13 +92,13 @@ public struct SettingsView: View {
                     .textCase(.uppercase)
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
-                    RadioCard(title: "Alle", desc: "Alles zeigen", value: "alle", selection: $vm.values.hwStatus)
-                    RadioCard(title: "Nur offene", desc: "Ohne erledigte", value: "offen", selection: $vm.values.hwStatus)
-                    RadioCard(title: "Nur überfällige", desc: "Frist vorbei", value: "überfällig", selection: $vm.values.hwStatus)
-                    RadioCard(title: "Nur erledigte", desc: "Fertige Aufgaben", value: "erledigt", selection: $vm.values.hwStatus)
-                    RadioCard(title: "Papierkorb", desc: "Ausgeblendete", value: "papierkorb", selection: $vm.values.hwStatus)
+                    RadioCard(title: NSLocalizedString("settings_filter_all_title", value: "Alle", comment: "Einstellungen: Filter alle"), desc: NSLocalizedString("settings_filter_all_desc", value: "Alles zeigen", comment: "Einstellungen: Filter alle Beschreibung"), value: "alle", selection: $vm.values.hwStatus)
+                    RadioCard(title: NSLocalizedString("settings_filter_open_title", value: "Nur offene", comment: "Einstellungen: Filter offene"), desc: NSLocalizedString("settings_filter_open_desc", value: "Ohne erledigte", comment: "Einstellungen: Filter offene Beschreibung"), value: "offen", selection: $vm.values.hwStatus)
+                    RadioCard(title: NSLocalizedString("settings_filter_overdue_title", value: "Nur überfällige", comment: "Einstellungen: Filter überfällige"), desc: NSLocalizedString("settings_filter_overdue_desc", value: "Frist vorbei", comment: "Einstellungen: Filter überfällige Beschreibung"), value: "überfällig", selection: $vm.values.hwStatus)
+                    RadioCard(title: NSLocalizedString("settings_filter_done_title", value: "Nur erledigte", comment: "Einstellungen: Filter erledigte"), desc: NSLocalizedString("settings_filter_done_desc", value: "Fertige Aufgaben", comment: "Einstellungen: Filter erledigte Beschreibung"), value: "erledigt", selection: $vm.values.hwStatus)
+                    RadioCard(title: NSLocalizedString("settings_filter_trash_title", value: "Papierkorb", comment: "Einstellungen: Filter Papierkorb"), desc: NSLocalizedString("settings_filter_trash_desc", value: "Ausgeblendete", comment: "Einstellungen: Filter Papierkorb Beschreibung"), value: "papierkorb", selection: $vm.values.hwStatus)
                 }
-                Toggle("Tests und Prüfungen einbeziehen", isOn: $vm.values.hwTests)
+                Toggle(NSLocalizedString("settings_toggle_hw_tests", value: "Tests und Prüfungen einbeziehen", comment: "Einstellungen: Tests einbeziehen"), isOn: $vm.values.hwTests)
                     .font(UberFont.text(14, weight: .medium))
                     .tint(accent.resolved(scheme))
             }
@@ -115,10 +115,10 @@ public struct SettingsView: View {
                     .font(UberFont.text(14, weight: .medium))
                 Stepper(String(format: NSLocalizedString("settings_max_homework", value: "Max. offene Hausaufgaben: %d", comment: "Einstellungen: offene Hausaufgaben"), vm.values.ovHomework), value: $vm.values.ovHomework, in: 1...50)
                     .font(UberFont.text(14, weight: .medium))
-                Toggle("Wetterkarte anzeigen", isOn: $vm.values.ovWetter)
+                Toggle(NSLocalizedString("settings_toggle_wetter_map", value: "Wetterkarte anzeigen", comment: "Einstellungen: Wetterkarte"), isOn: $vm.values.ovWetter)
                     .font(UberFont.text(14, weight: .medium))
                     .tint(accent.resolved(scheme))
-                TextField("Wetter: Stadt (optional)", text: $vm.values.wetterCity)
+                TextField(NSLocalizedString("settings_wetter_city_placeholder", value: "Wetter: Stadt (optional)", comment: "Einstellungen: Wetterstadt Platzhalter"), text: $vm.values.wetterCity)
                     .uberInput()
                     .autocorrectionDisabled()
             }
@@ -175,7 +175,7 @@ public struct SettingsView: View {
                         .font(UberFont.text(13))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 } else {
-                    TextField("Basis-URL", text: $vm.baseURL)
+                    TextField(NSLocalizedString("settings_baseurl_placeholder", value: "Basis-URL", comment: "Einstellungen: Basis-URL Platzhalter"), text: $vm.baseURL)
                         .uberInput()
                         .autocorrectionDisabled()
                     Button("Übernehmen") { vm.applyBaseURL() }
@@ -192,12 +192,12 @@ public struct SettingsView: View {
                 Text("Entwickleroptionen")
                     .font(UberFont.text(19, weight: .heavy))
                     .tracking(-0.4)
-                Toggle("Entwickleroptionen aktivieren", isOn: $developerOptionsEnabled)
+                Toggle(NSLocalizedString("settings_toggle_dev_options", value: "Entwickleroptionen aktivieren", comment: "Einstellungen: Entwickleroptionen"), isOn: $developerOptionsEnabled)
                     .font(UberFont.text(14, weight: .medium))
                     .tint(accent.resolved(scheme))
 
                 if developerOptionsEnabled {
-                    Toggle("Onboarding erneut durchlaufen", isOn: onboardingRestartBinding)
+                    Toggle(NSLocalizedString("settings_toggle_onboarding_restart", value: "Onboarding erneut durchlaufen", comment: "Einstellungen: Onboarding erneut"), isOn: onboardingRestartBinding)
                         .font(UberFont.text(14, weight: .medium))
                         .tint(accent.resolved(scheme))
                         .disabled(vm.isLoggingOut)
