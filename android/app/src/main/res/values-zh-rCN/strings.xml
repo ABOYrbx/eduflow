@@ -8,12 +8,10 @@
     <string name="common_profile_default_account">Konto</string>
     <string name="common_profile_default_domain">EduPage</string>
     <string name="common_profile_subtitle_format">%1$s @ %2$s</string>
-    <string name="common_menu_settings">Einstellungen</string>
     <string name="common_menu_logout">Abmelden</string>
     <string name="common_retry">Erneut versuchen</string>
     <string name="common_reload">Neu laden</string>
     <string name="common_refresh_desc">Aktualisieren</string>
-    <string name="common_relogin">Anmelden</string>
     <string name="common_ok">OK</string>
     <string name="common_back">Zurück</string>
     <string name="common_next">Weiter</string>
@@ -28,7 +26,6 @@
     <string name="bottom_tasks">Aufgaben</string>
     <string name="bottom_messages">Nachr.</string>
     <string name="bottom_plan">Plan</string>
-    <string name="bottom_more">Mehr</string>
     <!-- Auth / Login -->
     <string name="auth_demo_banner">Demo-Modus · nur synthetische Beispieldaten</string>
     <string name="auth_step_format">Schritt %1$d von %2$d</string>
@@ -80,7 +77,6 @@
     <!-- Einstellungen -->
     <string name="settings_title">Einstellungen</string>
     <string name="settings_subtitle">Dein EduFlow-Konto</string>
-    <string name="settings_demo_section">Demo-Modus</string>
     <string name="settings_demo_text">Es werden ausschließlich synthetische Beispieldaten vom lokalen Demo-Server geladen.</string>
     <string name="settings_server_section">Server</string>
     <string name="settings_server_placeholder">Server (…/api/v1/)</string>
@@ -103,7 +99,6 @@
     <string name="settings_hwtests_label">Tests und Prüfungen einbeziehen</string>
     <string name="settings_unread_placeholder">Max. ungelesene Nachrichten (1–50)</string>
     <string name="settings_homework_placeholder">Max. offene Hausaufgaben (1–50)</string>
-    <string name="settings_weather_section">Wetter</string>
     <string name="settings_weather_show">Wetterkarte anzeigen</string>
     <string name="settings_weather_sub">Auf der Übersicht in Android und im Web</string>
     <string name="settings_weather_city_placeholder">Stadt für Wetterkarte (z. B. Berlin)</string>
@@ -121,15 +116,6 @@
     <string name="settings_dev_onboarding">Onboarding erneut durchlaufen</string>
     <string name="settings_dev_onboarding_sub">Meldet dich ab und startet die Einführung neu.</string>
     <string name="settings_landing_overview">Übersicht</string>
-    <string name="settings_landing_messages">Nachrichten</string>
-    <string name="settings_landing_tasks">Aufgaben</string>
-    <string name="settings_landing_grades">Noten</string>
-    <string name="settings_landing_plan">Plan</string>
-    <string name="settings_hwstatus_all">Alle</string>
-    <string name="settings_hwstatus_open">Offen</string>
-    <string name="settings_hwstatus_overdue">Überfällig</string>
-    <string name="settings_hwstatus_done">Erledigt</string>
-    <string name="settings_hwstatus_trash">Papierkorb</string>
     <!-- Geräte -->
     <string name="devices_title">Geräte</string>
     <string name="devices_subtitle">Angemeldete Geräte verwalten</string>
@@ -173,13 +159,10 @@
     <string name="homework_swipe_restore">Wiederherstellen</string>
     <string name="homework_reopen_desc">Wieder öffnen</string>
     <string name="homework_title_format">Hausaufgabe #%1$d</string>
-    <string name="homework_status_trash">Papierkorb</string>
-    <string name="homework_status_open">Offen</string>
     <!-- Nachrichten -->
     <string name="messages_title">Nachrichten</string>
     <string name="messages_subtitle">Mitteilungen aus deiner Schule</string>
     <string name="messages_search_placeholder">Nachrichten durchsuchen</string>
-    <string name="messages_filter_all">Alle</string>
     <string name="messages_filter_unread">Ungelesen</string>
     <string name="messages_filter_files">Mit Dateien</string>
     <string name="messages_count_format">%1$d von %2$d Nachrichten</string>
@@ -202,7 +185,6 @@
     <string name="messages_reply_placeholder">Antworten …</string>
     <string name="messages_sending">Wird gesendet …</string>
     <string name="messages_reply_send">Antworten</string>
-    <string name="messages_compose_title">Neue Nachricht</string>
     <string name="messages_compose_subtitle">Lehrer und Mitschüler wählen</string>
     <string name="messages_recipient_search">Empfänger suchen</string>
     <string name="messages_recipients_format">%1$d Empfänger gewählt</string>
@@ -214,10 +196,7 @@
     <string name="overview_move_up_desc">Nach oben</string>
     <string name="overview_move_down_desc">Nach unten</string>
     <string name="overview_messages_count_format">Nachrichten · %1$d</string>
-    <string name="overview_action_all">Alle</string>
-    <string name="overview_homework_count_format">%1$d offen · %2$d überfällig</string>
     <string name="overview_action_all_tasks">Alle Aufgaben</string>
-    <string name="overview_action_timetable">Stundenplan</string>
     <string name="overview_clock_label">UHRZEIT</string>
     <string name="overview_today_hours">STUNDEN HEUTE</string>
     <string name="overview_no_school">Schulfrei — kein Unterricht heute.</string>
@@ -239,13 +218,10 @@
     <string name="overview_weather_feels">GEFÜHLT</string>
     <string name="overview_weather_wind">WIND</string>
     <string name="overview_weather_next_days">DIE NÄCHSTEN TAGE</string>
-    <string name="overview_weather_today">Heute</string>
     <string name="overview_weather_tomorrow">Morgen</string>
     <string name="overview_weather_day3">Übermorgen</string>
     <string name="overview_messages_empty">Keine neuen Nachrichten.</string>
     <string name="overview_homework_empty">Keine offenen Hausaufgaben. Sehr gut.</string>
-    <string name="overview_order_messages">Nachrichten</string>
-    <string name="overview_order_homework">Hausaufgaben</string>
     <string name="overview_order_weather">Wetter</string>
     <string name="overview_due_suffix_format"> · fällig: %1$s</string>
     <string name="overview_subject_suffix_format"> · %1$s</string>
@@ -293,19 +269,12 @@
     <string name="more_subtitle">Weitere Bereiche</string>
     <string name="more_school_title">Termine &amp; Vertretungen</string>
     <string name="more_school_sub">Prüfungen, Schulereignisse und Änderungen</string>
-    <string name="more_grades_title">Noten</string>
-    <string name="more_grades_sub">Deine Leistungen nach Fach</string>
-    <string name="more_settings_title">Einstellungen</string>
     <string name="more_settings_sub">Darstellung, Konto und Server</string>
-    <string name="more_devices_title">Geräte</string>
-    <string name="more_devices_sub">Angemeldete Geräte verwalten</string>
     <string name="more_demo_title">Demo-Modus</string>
     <string name="more_demo_sub">Nur Beispieldaten · keine echten Schulverbindungen</string>
-    <string name="more_server_title">Server-URL</string>
     <string name="more_server_fallback">Server für API-Anfragen</string>
     <string name="more_cache_title">Cache leeren</string>
     <string name="more_cache_default">Zwischengespeicherte Daten löschen</string>
-    <string name="more_logout_title">Abmelden</string>
     <string name="more_logout_sub">Von diesem Gerät abmelden</string>
     <string name="more_server_dialog_desc">Server für API-Anfragen (…/api/v1/).</string>
     <!-- Validierung (clientseitig: Quelle der deutschen ViewModel-Fallbacks in
