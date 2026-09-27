@@ -17,7 +17,7 @@ NestJS API + Next.js web UI + native Android and macOS apps.
 [![PRs](https://img.shields.io/github/issues-pr/ABOYrbx/eduflow?style=for-the-badge)](https://github.com/ABOYrbx/eduflow/pulls)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
-[View Demo](#demo-mode) · [Report Bug](https://github.com/ABOYrbx/eduflow/issues/new?labels=bug) · [Request Feature](https://github.com/ABOYrbx/eduflow/issues/new?labels=enhancement)
+[View Demo](#demo-mode) · [Report Bug](https://github.com/ABOYrbx/eduflow/issues/new?labels=bug) · [Request Feature](https://github.com/ABOYrbx/eduflow/issues/new?labels=enhancement) · [Documentation](https://a-dev.gitbook.io/eduflow)
 
 </div>
 
