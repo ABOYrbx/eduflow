@@ -331,6 +331,32 @@
     <string name="more_logout_sub">Von diesem Gerät abmelden</string>
     <string name="more_server_dialog_desc">Server für API-Anfragen (…/api/v1/).</string>
 
+    <!-- Validierung (clientseitig: Quelle der deutschen ViewModel-Fallbacks in
+         ui/auth/AuthViewModel, ui/messages/MessagesViewModel,
+         ui/overview/OverviewViewModel — Laufzeit-Fallback bleibt dort
+         hartkodiert, damit Unit-Tests ohne Context laufen) -->
+    <string name="auth_error_credentials">Bitte Benutzername und Passwort angeben.</string>
+    <string name="twofa_error_empty">Bitte Code angeben.</string>
+    <string name="messages_compose_no_recipient">Bitte mindestens einen gültigen Empfänger wählen.</string>
+    <string name="messages_compose_no_body">Bitte einen Nachrichtentext eingeben.</string>
+    <string name="overview_weather_no_city">Bitte eine Stadt eingeben.</string>
+
+    <!-- Fehler-Fallbacks (Quelle der deutschen Texte in
+         data/ErrorMapper.messageFor — Backend-Texte haben Vorrang,
+         Laufzeit-Fallback bleibt dort hartkodiert für Context-freie Tests) -->
+    <string name="error_validation">Ungültige Eingabe. Bitte prüfen und erneut versuchen.</string>
+    <string name="error_token_invalid">Sitzung ungültig. Bitte erneut anmelden.</string>
+    <string name="error_token_expired">Sitzung abgelaufen. Bitte erneut anmelden.</string>
+    <string name="error_pending_invalid">Zwischenschritt abgelaufen. Bitte erneut anmelden.</string>
+    <string name="error_invalid_code">Der Code wurde nicht akzeptiert. Bitte erneut versuchen.</string>
+    <string name="error_bad_credentials">Falsche Anmeldedaten. Bitte Benutzername, Passwort und Subdomain prüfen.</string>
+    <string name="error_edupage_2fa">EduPage verlangt erneut einen Code. Bitte neu anmelden.</string>
+    <string name="error_captcha_required">EduPage verlangt ein Captcha. Bitte einmal im Browser anmelden.</string>
+    <string name="error_not_found">Nicht gefunden.</string>
+    <string name="error_rate_limited">Zu viele Versuche. Bitte später erneut versuchen.</string>
+    <string name="error_config_missing">Server-Schlüssel fehlt. Bitte später erneut versuchen.</string>
+    <string name="error_upstream">Anmeldung fehlgeschlagen. Bitte später erneut versuchen.</string>
+
     <!-- Akzentfarben -->
     <string name="common_accent_black">Schwarz</string>
     <string name="common_accent_blue">Blau</string>
