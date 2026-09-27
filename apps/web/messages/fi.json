@@ -193,13 +193,11 @@
         "done": "erledigt",
         "dueLabel": "fällig:",
         "emptyHomework": "Keine offenen Hausaufgaben. Sehr gut.",
-        "emptyMenu": "Speiseplan wird geladen.",
         "emptyMessages": "Keine neuen Nachrichten.",
         "free": "Schulfrei",
         "homework": "Hausaufgaben",
         "loading": "Wird geladen",
         "loadingTimetable": "Stundenplan wird geladen.",
-        "lunch": "Mittagessen",
         "messages": "Nachrichten",
         "newMessages": "{count} neu",
         "nextLesson": "Nächste Stunde",
@@ -215,9 +213,7 @@
         "tomorrow": "Morgen",
         "weather": "Wetter",
         "weatherHint": "Ort in den Einstellungen festlegen",
-        "weatherUnavailable": "Wetterdaten nicht verfügbar",
-        "weekPlan": "Wochenplan",
-        "weekPlanDays": "{count} Tage im Wochenplan"
+        "weatherUnavailable": "Wetterdaten nicht verfügbar"
     },
     "settings": {
         "accentApplied": "Akzentfarbe übernommen.",
@@ -253,7 +249,6 @@
         "noDevices": "Keine angemeldeten Geräte.",
         "orderHint": "Mit den Pfeilen ordnest du die Bereiche auf der Übersicht.",
         "orderHomework": "Hausaufgaben",
-        "orderLunch": "Mittagessen",
         "orderMessages": "Nachrichten",
         "orderWeather": "Wetter",
         "refreshLabel": "Refresh",
