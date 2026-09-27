@@ -59,7 +59,6 @@ public struct APIClient: Sendable {
         public static let timetableWeek = "timetable/week"
         public static let schoolAgenda = "school/agenda"
         public static let substitutionsWeek = "substitutions/week"
-        public static let essen = "essen"
         public static let wetter = "wetter"
     }
 

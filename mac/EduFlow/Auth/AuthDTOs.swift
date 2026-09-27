@@ -241,7 +241,7 @@ public struct SettingsValues: Equatable, Sendable {
     public var hwTests = false
     public var ovUnread = 10
     public var ovHomework = 10
-    public var ovOrder = "messages,homework,weather,lunch"
+    public var ovOrder = "messages,homework,weather"
     public var ovWetter = true
     public var wetterCity = ""
 
@@ -267,7 +267,7 @@ public struct SettingsValues: Equatable, Sendable {
             out.ovHomework = min(max(raw, 1), 50)
         }
         if let raw = values["ov_order"]?.string {
-            let valid = ["messages", "homework", "weather", "lunch"]
+            let valid = ["messages", "homework", "weather"]
             let parsed = raw.split(separator: ",").map(String.init).filter { valid.contains($0) }
             out.ovOrder = (parsed + valid.filter { !parsed.contains($0) }).joined(separator: ",")
         }

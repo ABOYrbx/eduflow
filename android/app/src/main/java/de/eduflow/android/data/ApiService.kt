@@ -26,7 +26,7 @@ import retrofit2.http.Streaming
  * programmieren nur gegen dieses Interface, sonst nichts.
  *
  * Paket A nutzt: auth/..., me, devices, settings, cache-clear, health.
- * Pakete B–D nutzen: messages, homework, timetable, grades, essen, wetter
+ * Pakete B–D nutzen: messages, homework, timetable, grades, wetter
  * (Payloads als JsonObject = Web-Dicts 1:1, keine eigenen Serializer).
  */
 interface ApiService {
@@ -145,7 +145,7 @@ interface ApiService {
         @Query("refresh") refresh: Int? = null,
     ): Response<JsonObject>
 
-    // ---- Paket D: Stundenplan + Essen/Wetter ----
+    // ---- Paket D: Stundenplan + Wetter ----
     @GET("timetable/day")
     suspend fun timetableDay(
         @Query("day") day: String? = null,
@@ -169,9 +169,6 @@ interface ApiService {
     suspend fun substitutionsWeek(
         @Query("day") day: String,
     ): Response<JsonObject>
-
-    @GET("essen")
-    suspend fun essen(@Query("refresh") refresh: Int? = null): Response<JsonObject>
 
     @GET("wetter")
     suspend fun wetter(

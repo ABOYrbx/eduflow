@@ -9,8 +9,6 @@ import de.eduflow.android.data.ErrorMapper
 import de.eduflow.android.data.MetaRepository
 import de.eduflow.android.data.SettingsRepository
 import de.eduflow.android.data.TimetableRepository
-import de.eduflow.android.data.dto.EssenDays
-import de.eduflow.android.data.dto.EssenResponse
 import de.eduflow.android.data.dto.HomeworkCounts
 import de.eduflow.android.data.dto.HomeworkDto
 import de.eduflow.android.data.dto.LessonDto
@@ -39,9 +37,6 @@ data class OverviewUiState(
     val lessonsToday: List<LessonDto> = emptyList(),
     val currentLesson: LessonDto? = null,
     val nextLesson: LessonDto? = null,
-    val essen: EssenResponse? = null,
-    /** Pager-Position im Essensplan (Mo–Fr, Start: heute). */
-    val essenIndex: Int = 0,
     val wetter: WetterResponse? = null,
     val wetterCity: String = "",
     val wetterLoading: Boolean = false,
@@ -61,7 +56,7 @@ private fun Throwable.toApiException(): ApiException =
  * Wiederverwendet die Listen aus B/C gegen das frozen [ApiService]:
  * neueste Nachrichten (ov_unread-Limit), offene Hausaufgaben
  * (ov_homework-Limit, überfällig zuerst wie im Web), heutige Stunden
- * (aktuelle/nächste wie im Web), Essen-heute, Wetterkarte.
+ * (aktuelle/nächste wie im Web), Wetterkarte.
  */
 class OverviewViewModel(
     private val api: () -> ApiService,
@@ -115,7 +110,6 @@ class OverviewViewModel(
                 )
             }
             val timetableJob = async { timetableRepo.day() }
-            val essenJob = async { metaRepo.essen() }
             // Wetter nur bei Anzeige-Wunsch und gespeicherter Stadt laden.
             // Der Ort wird ausschließlich in den Account-Einstellungen gepflegt.
             val wetterJob = async {
@@ -142,10 +136,6 @@ class OverviewViewModel(
                     it.copy(lessonsToday = lessons, currentLesson = current, nextLesson = next)
                 }
             }.onFailure { e -> firstError = firstError ?: e.toApiException() }
-            essenJob.await().onSuccess { menu ->
-                val start = menu.today?.let { EssenDays.ORDER.indexOf(it) }?.takeIf { it >= 0 } ?: 0
-                _state.update { it.copy(essen = menu, essenIndex = start) }
-            }.onFailure { e -> firstError = firstError ?: e.toApiException() }
             wetterJob.await()?.onSuccess { wetter ->
                 _state.update { it.copy(wetter = wetter, wetterLoading = false, wetterError = null) }
             }?.onFailure { e ->
@@ -171,13 +161,6 @@ class OverviewViewModel(
             } catch (e: Exception) {
                 _state.update { it.copy(savingOverviewOrder = false, error = e.toApiException()) }
             }
-        }
-    }
-
-    /** Essens-Pager (‹ › unten, wie im Web, Mo–Fr). */
-    fun stepEssen(delta: Int) {
-        _state.update {
-            it.copy(essenIndex = (it.essenIndex + delta).coerceIn(0, EssenDays.ORDER.size - 1))
         }
     }
 

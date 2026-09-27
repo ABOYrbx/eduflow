@@ -190,7 +190,7 @@ fun EduFlowNav(
             )
         }
         // Paket D: Startseite (Uhr, ungelesen, offene HA, Stunden,
-        // Essen, Wetter). 401-Verhalten: zurück zum Login.
+        // Wetter). 401-Verhalten: zurück zum Login.
         overviewDestination(api, nav, onReLogin = {
             settingsVm.logout {
                 nav.navigate(Routes.LOGIN) { popUpTo(nav.graph.id) { inclusive = true } }

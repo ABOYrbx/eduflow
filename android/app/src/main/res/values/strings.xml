@@ -63,8 +63,8 @@
     <string name="onboarding_feat1_desc">Alle EduPage-Nachrichten im Mail-Layout — mit Likes, Antworten und Dateien.</string>
     <string name="onboarding_feat2_title">Hausaufgaben &amp; Noten</string>
     <string name="onboarding_feat2_desc">Fälligkeiten mit Zählern, Halbjahr-Tabs und Schnitt.</string>
-    <string name="onboarding_feat3_title">Stundenplan, Essen &amp; Wetter</string>
-    <string name="onboarding_feat3_desc">Tag und Woche, Mensa-Plan und Wetter auf der Übersicht.</string>
+    <string name="onboarding_feat3_title">Stundenplan &amp; Wetter</string>
+    <string name="onboarding_feat3_desc">Tag und Woche und Wetter auf der Übersicht.</string>
     <string name="onboarding_server_sub">Trage ein, wo EduFlow als Server läuft.</string>
     <string name="onboarding_connected">Verbunden</string>
     <string name="onboarding_unreachable">Server nicht erreichbar. Prüfe die Adresse und versuche es erneut.</string>
@@ -228,7 +228,6 @@
     <string name="overview_action_all">Alle</string>
     <string name="overview_homework_count_format">%1$d offen · %2$d überfällig</string>
     <string name="overview_action_all_tasks">Alle Aufgaben</string>
-    <string name="overview_section_lunch">Mittagessen</string>
     <string name="overview_action_timetable">Stundenplan</string>
     <string name="overview_clock_label">UHRZEIT</string>
     <string name="overview_today_hours">STUNDEN HEUTE</string>
@@ -254,26 +253,13 @@
     <string name="overview_weather_today">Heute</string>
     <string name="overview_weather_tomorrow">Morgen</string>
     <string name="overview_weather_day3">Übermorgen</string>
-    <string name="overview_prev_day_desc">Vorheriger Tag</string>
-    <string name="overview_next_day_desc">Nächster Tag</string>
-    <string name="overview_no_food">Kein Essen für diesen Tag.</string>
-    <string name="overview_pdf_available">PDF-Link vorhanden</string>
     <string name="overview_messages_empty">Keine neuen Nachrichten.</string>
     <string name="overview_homework_empty">Keine offenen Hausaufgaben. Sehr gut.</string>
     <string name="overview_order_messages">Nachrichten</string>
     <string name="overview_order_homework">Hausaufgaben</string>
     <string name="overview_order_weather">Wetter</string>
-    <string name="overview_order_lunch">Mittagessen</string>
     <string name="overview_due_suffix_format"> · fällig: %1$s</string>
     <string name="overview_subject_suffix_format"> · %1$s</string>
-    <string name="overview_day_date_format">%1$s · %2$s</string>
-    <string name="overview_dish_format">• %1$s</string>
-    <string name="overview_dish_price_format"> — %1$s</string>
-    <string name="overview_essen_monday">Montag</string>
-    <string name="overview_essen_tuesday">Dienstag</string>
-    <string name="overview_essen_wednesday">Mittwoch</string>
-    <string name="overview_essen_thursday">Donnerstag</string>
-    <string name="overview_essen_friday">Freitag</string>
     <string name="overview_weather_high_low_format">H %1$s  ·  T %2$s</string>
 
     <!-- Schulalltag -->

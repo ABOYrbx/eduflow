@@ -1,9 +1,6 @@
 import { EdupageDataService } from "./data";
-import type { FetchBytes } from "./essen";
 
-const MENU_TEXT = "Speisekarte Montag 14.9. bis Freitag 18.9.2026\nMontag: Suppe 3,50 €\nDienstag: Nudeln 5,20 €\n";
-
-describe("EdupageDataService (Paket N-G, Python-Parität)", () => {
+describe("EdupageDataService (Paket N-G: Wetter, Python-Parität)", () => {
   const oldKey = process.env.OPENWEATHER_KEY;
   const prisma = {
     userAccount: { findUnique: jest.fn(async () => null) },
@@ -22,29 +19,6 @@ describe("EdupageDataService (Paket N-G, Python-Parität)", () => {
   afterAll(() => {
     if (oldKey === undefined) delete process.env.OPENWEATHER_KEY;
     else process.env.OPENWEATHER_KEY = oldKey;
-  });
-
-  const withMenu = (fetchBytes: FetchBytes) =>
-    new EdupageDataService(prisma as never, undefined, { fetchBytes, extractPdfText: async () => MENU_TEXT });
-
-  it("lädt Essen frisch, aus dem Cache und offline wie Python", async () => {
-    const seen: string[] = [];
-    const serviceWithPdf = withMenu(async (url: string) => {
-      seen.push(url);
-      return url.includes("/2026/09/") ? Buffer.from("%PDF-1.4 daten") : null;
-    });
-    const today = new Date(2026, 8, 16, 12, 0, 0);
-    const fresh = await serviceWithPdf.essenMenu({}, today) as unknown as { week: string; cached: boolean; cache_info: string; source_url: string };
-    expect(fresh).toMatchObject({ week: "2026-W38", cached: false, cache_info: "frisch geladen" });
-    expect(fresh.source_url).toContain("38.-KW.pdf");
-    const cached = await serviceWithPdf.essenMenu({}, today) as unknown as { cached: boolean; cache_info: string };
-    expect(cached.cached).toBe(true);
-    expect(cached.cache_info).toMatch(/^aus Cache/);
-    expect(seen).toHaveLength(1);
-    const forced = await serviceWithPdf.essenMenu({ refresh: "1" }, today) as unknown as { cached: boolean };
-    expect(forced.cached).toBe(false);
-    const offline = withMenu(async () => null);
-    await expect(offline.essenMenu({}, today)).rejects.toMatchObject({ response: { code: "UPSTREAM" } });
   });
 
   it("validiert Wetter-Anfragen und mappt Fehler wie Python", async () => {
