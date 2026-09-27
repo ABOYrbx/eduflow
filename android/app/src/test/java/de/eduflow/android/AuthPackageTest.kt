@@ -492,9 +492,6 @@ private class FakeApi(
     override suspend fun substitutionsWeek(day: String): Response<JsonObject> =
         throw UnsupportedOperationException("Schulalltag")
 
-    override suspend fun essen(refresh: Int?): Response<JsonObject> =
-        throw UnsupportedOperationException("Paket D")
-
     override suspend fun wetter(
         lat: Double?,
         lon: Double?,

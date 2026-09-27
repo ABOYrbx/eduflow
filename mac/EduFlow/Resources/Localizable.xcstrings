@@ -991,17 +991,6 @@
         }
       }
     },
-    "Mittagessen": {
-      "comment": "UI-Literal",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mittagessen"
-          }
-        }
-      }
-    },
     "Mittwoch": {
       "comment": "UI-Literal",
       "localizations": {
@@ -1519,17 +1508,6 @@
         }
       }
     },
-    "Stundenplan, Essen & Wetter": {
-      "comment": "UI-Literal",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Stundenplan, Essen & Wetter"
-          }
-        }
-      }
-    },
     "Subdomain (optional)": {
       "comment": "UI-Literal",
       "localizations": {
@@ -1570,17 +1548,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tag"
-          }
-        }
-      }
-    },
-    "Tag und Woche, Mensa-Plan und Wetter auf der Übersicht.": {
-      "comment": "UI-Literal",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tag und Woche, Mensa-Plan und Wetter auf der Übersicht."
           }
         }
       }
@@ -1669,17 +1636,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Typ"
-          }
-        }
-      }
-    },
-    "Uhr, Nachrichten, Essen": {
-      "comment": "UI-Literal",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Uhr, Nachrichten, Essen"
           }
         }
       }
@@ -2487,17 +2443,6 @@
         }
       }
     },
-    "overview_week_label": {
-      "comment": "Übersicht: Essenswoche",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Woche %@"
-          }
-        }
-      }
-    },
     "overview_weather_in_city": {
       "comment": "Übersicht: Wetterstadt",
       "localizations": {
@@ -3043,7 +2988,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Uhr, Nachrichten, Essen"
+            "value": "Uhr, Nachrichten, Wetter"
           }
         }
       }
@@ -3714,7 +3659,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Stundenplan, Essen & Wetter"
+            "value": "Stundenplan & Wetter"
           }
         }
       }
@@ -3725,7 +3670,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tag und Woche, Mensa-Plan und Wetter auf der Übersicht."
+            "value": "Tag und Woche und Wetter auf der Übersicht."
           }
         }
       }

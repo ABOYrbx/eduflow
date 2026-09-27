@@ -3,49 +3,12 @@ package de.eduflow.android.data.dto
 import kotlinx.serialization.Serializable
 
 /**
- * Essen und Wetter 1:1 zu den Web-Dicts (essen.py get_week_menu,
- * app.py get_wetter_payload).
+ * Wetter 1:1 zu den Web-Dicts (app.py get_wetter_payload).
  *
- * Essen: GET /api/v1/essen -> EssenResponse (braucht kein EduPage-Login,
- * öffentliche Quelle plus Wochen-Cache).
  * Wetter: GET /api/v1/wetter -> WetterResponse (Schlüssel bleibt
  * serverseitig; ohne Ort VALIDATION, ohne Schlüssel CONFIG_MISSING).
  * (siehe api/meta.py, BACKEND.md §8 / Paket F).
  */
-@Serializable
-data class EssenDish(
-    val text: String = "",
-    val price: String = "",
-)
-
-@Serializable
-data class EssenDay(
-    val date: String = "",
-    val dishes: List<EssenDish> = emptyList(),
-    val note: String = "",
-)
-
-/** Wochentage als Map (Montag–Freitag, wie der Server liefert). */
-@Serializable
-data class EssenResponse(
-    val week: String = "",
-    val label: String = "",
-    val source_url: String = "",
-    val days: Map<String, EssenDay> = emptyMap(),
-    val today: String? = null,
-    val cached: Boolean = false,
-    val cache_info: String = "",
-) {
-    /** Heute als Tagesname (Mo–Fr) oder null (Wochenende/fremde Woche). */
-    val todayMenu: EssenDay?
-        get() = today?.let { days[it] }
-}
-
-/** Wochentage in fester Reihenfolge (wie essen.py DAY_NAMES). */
-object EssenDays {
-    val ORDER = listOf("Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag")
-}
-
 @Serializable
 data class WetterDay(
     val max: Int? = null,

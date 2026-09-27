@@ -17,7 +17,7 @@ export interface SettingSpec {
   hint?: string;
 }
 
-export const OVERVIEW_SECTION_KEYS = ["messages", "homework", "weather", "lunch"];
+export const OVERVIEW_SECTION_KEYS = ["messages", "homework", "weather"];
 
 export const SETTINGS_SCHEMA: SettingSpec[] = [
   { key: "landing", kind: "select", label: "Startseite nach Anmeldung",
@@ -29,7 +29,7 @@ export const SETTINGS_SCHEMA: SettingSpec[] = [
   { key: "hw_tests", kind: "bool", label: "Hausaufgaben: Tests und Prüfungen standardmäßig einbeziehen", default: false },
   { key: "ov_unread", kind: "int", label: "Übersicht: max. ungelesene Nachrichten", min: 1, max: 50, default: 10 },
   { key: "ov_homework", kind: "int", label: "Übersicht: max. offene Hausaufgaben", min: 1, max: 50, default: 10 },
-  { key: "ov_order", kind: "order", section: "Übersicht", label: "Reihenfolge der Übersicht", default: "messages,homework,weather,lunch" },
+  { key: "ov_order", kind: "order", section: "Übersicht", label: "Reihenfolge der Übersicht", default: "messages,homework,weather" },
   { key: "ov_wetter", kind: "bool", section: "Wetter", label: "Wetterkarte auf der Übersicht anzeigen",
     hint: "Gilt für die Weboberfläche und die Android-App.", default: true },
   { key: "wetter_city", kind: "text", section: "Wetter", label: "Wetter: Stadt",

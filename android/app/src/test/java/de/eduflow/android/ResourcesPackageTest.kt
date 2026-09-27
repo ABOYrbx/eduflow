@@ -64,7 +64,6 @@ class ResourcesPackageTest {
         var gradesJson = """{"items":[],"total":0,"limit":50,"offset":0,"cache_info":""}"""
         var dayJson = """{"day":"","lessons":[]}"""
         var weekJson = """{"day":"","monday":"","days":[]}"""
-        var essenJson = """{"week":"","days":{}}"""
         var wetterJson = """{"city":""}"""
         var lastWetter: Map<String, Any?> = emptyMap()
 
@@ -148,8 +147,6 @@ class ResourcesPackageTest {
 
         override suspend fun substitutionsWeek(day: String): Response<JsonObject> =
             Response.success(obj("""{"days":[]}"""))
-
-        override suspend fun essen(refresh: Int?): Response<JsonObject> = Response.success(obj(essenJson))
 
         override suspend fun wetter(lat: Double?, lon: Double?, city: String?): Response<JsonObject> {
             lastWetter = mapOf("lat" to lat, "lon" to lon, "city" to city)
@@ -351,7 +348,7 @@ class ResourcesPackageTest {
         Unit
     }
 
-    // ---- Stundenplan + Essen/Wetter (Paket D) --------------------------
+    // ---- Stundenplan + Wetter (Paket D) --------------------------
 
     @Test
     fun timetableDay_decodesLessons() = runBlocking {
@@ -375,20 +372,6 @@ class ResourcesPackageTest {
         val week = TimetableRepository(api = { fake }).week().getOrThrow()
         assertEquals("2026-09-21", week.monday)
         assertTrue(week.days.single().is_today)
-        Unit
-    }
-
-    @Test
-    fun essen_decodesWeekAndToday() = runBlocking {
-        val fake = FakeResourceApi().apply {
-            essenJson = """{"week":"2026-W39","label":"KW 39","source_url":"https://x/y.pdf",
-                "days":{"Montag":{"date":"2026-09-21","dishes":[{"text":"Pasta","price":"3,50 €"}],"note":""},
-                "Dienstag":{"date":"2026-09-22","dishes":[],"note":"Feiertag"}},
-                "today":"Montag","cached":false,"cache_info":"frisch"}"""
-        }
-        val menu = MetaRepository(api = { fake }).essen().getOrThrow()
-        assertEquals("Pasta", menu.todayMenu?.dishes?.single()?.text)
-        assertEquals("3,50 €", menu.todayMenu?.dishes?.single()?.price)
         Unit
     }
 

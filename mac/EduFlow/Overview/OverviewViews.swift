@@ -1,8 +1,8 @@
 import SwiftUI
 
 /// Startseite 1:1 wie `/uebersicht`: Uhr + Wetter + schwarze Jetzt-Karte
-/// oben, darunter zwei Spalten (Hausaufgaben | Mittagessen) mit
-/// Kennzahlen-Band, Karten und Tages-Blätterer.
+/// oben, darunter Nachrichten und Hausaufgaben mit
+/// Kennzahlen-Band und Karten.
 public struct OverviewView: View {
     @Environment(\.colorScheme) private var scheme
     @Environment(\.uberAccent) private var accent
@@ -11,7 +11,7 @@ public struct OverviewView: View {
     @State private var lessonIndex = 0
     @State private var showWetter = false
     @State private var showLayoutEditor = false
-    @State private var layoutDraft = ["messages", "homework", "weather", "lunch"]
+    @State private var layoutDraft = ["messages", "homework", "weather"]
     private let onNavigate: (Route) -> Void
     private let onSessionExpired: () -> Void
 
@@ -58,7 +58,6 @@ public struct OverviewView: View {
                     case "messages": messagesColumn
                     case "homework": homeworkColumn
                     case "weather": if vm.settings.ovWetter { weatherCard.frame(height: 150) }
-                    case "lunch": essenColumn
                     default: Color.clear.frame(height: 0)
                     }
                 }
@@ -294,15 +293,6 @@ public struct OverviewView: View {
 
     // MARK: - Spalten (`.ov-grid`)
 
-    private var columns: some View {
-        VStack(spacing: 24) {
-            homeworkColumn
-                .riseIn(delay: 0.08)
-            essenColumn
-                .riseIn(delay: 0.14)
-        }
-    }
-
     private var messagesColumn: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
@@ -347,7 +337,7 @@ public struct OverviewView: View {
     }
 
     private static func normalizedOrder(_ raw: String) -> [String] {
-        let valid = ["messages", "homework", "weather", "lunch"]
+        let valid = ["messages", "homework", "weather"]
         let parsed = raw.split(separator: ",").map(String.init).filter { valid.contains($0) }
         let unique = parsed.reduce(into: [String]()) { result, key in
             if !result.contains(key) { result.append(key) }
@@ -461,135 +451,6 @@ public struct OverviewView: View {
         }
     }
 
-    private var essenColumn: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("Mittagessen")
-                    .font(UberFont.text(20, weight: .heavy))
-                    .tracking(-0.5)
-                Spacer()
-                if let source = vm.essen.sourceUrl, !source.isEmpty, let url = URL(string: source) {
-                    Link("PDF", destination: url)
-                        .font(UberFont.text(13, weight: .bold))
-                        .padding(.vertical, 10)
-                        .padding(.horizontal, 18)
-                        .background(EduFlowPalette.card(scheme))
-                        .foregroundStyle(EduFlowPalette.ink(scheme))
-                        .clipShape(.capsule)
-                        .overlay {
-                            Capsule().stroke(EduFlowPalette.borderStrong(scheme), lineWidth: 1)
-                        }
-                }
-            }
-            .frame(minHeight: 36)
-            Text(String(format: NSLocalizedString("overview_week_label", value: "Woche %@", comment: "Übersicht: Essenswoche"), vm.essen.label ?? vm.essen.week ?? ""))
-                .font(UberFont.text(14, weight: .semibold))
-                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                .padding(.vertical, 14)
-                .padding(.horizontal, 18)
-                .frame(maxWidth: .infinity)
-                .background(EduFlowPalette.card(scheme))
-                .clipShape(.rect(cornerRadius: 14))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 14)
-                        .stroke(EduFlowPalette.border(scheme), lineWidth: 1)
-                }
-            VStack(alignment: .leading, spacing: 8) {
-                if let error = vm.essenError {
-                    Text(error.message)
-                        .font(UberFont.text(13))
-                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                } else {
-                    let dayName = EssenDays.order[min(vm.essenDay, EssenDays.order.count - 1)]
-                    let day = vm.essen.days?[dayName]
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack(alignment: .firstTextBaseline, spacing: 8) {
-                            Text(dayName)
-                                .font(UberFont.text(17, weight: .heavy))
-                                .tracking(-0.3)
-                            Text(formattedDayDate(day?.date))
-                                .font(UberFont.text(13, weight: .semibold))
-                                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                            if dayName == vm.essen.today {
-                                Tag("Heute", style: .solid)
-                            }
-                        }
-                        if let dishes = day?.dishes, !dishes.isEmpty {
-                            ForEach(dishes.indices, id: \.self) { index in
-                                HStack(alignment: .firstTextBaseline, spacing: 12) {
-                                    Text(dishes[index].text ?? "")
-                                        .font(UberFont.text(14))
-                                    Spacer()
-                                    Text(dishes[index].price ?? "")
-                                        .font(UberFont.text(14, weight: .heavy))
-                                        .monospacedDigit()
-                                }
-                                .padding(.vertical, 10)
-                                .padding(.horizontal, 14)
-                                .background(EduFlowPalette.surface1(scheme))
-                                .clipShape(.rect(cornerRadius: 12))
-                                .overlay {
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(EduFlowPalette.border(scheme), lineWidth: 1)
-                                }
-                            }
-                            if let note = day?.note, !note.isEmpty {
-                                Text(note)
-                                    .font(UberFont.text(13))
-                                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                            }
-                        } else {
-                            Text("Für diesen Tag steht nichts im Plan.")
-                                .font(UberFont.text(13))
-                                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                        }
-                    }
-                    .id(dayName)
-                    .transition(
-                        .asymmetric(
-                            insertion: .move(edge: .trailing).combined(with: .opacity),
-                            removal: .move(edge: .leading).combined(with: .opacity)
-                        )
-                    )
-                }
-                HStack {
-                    EssenArrow("‹") {
-                        withAnimation(.easeInOut(duration: 0.25)) {
-                            vm.essenDay = (vm.essenDay + EssenDays.order.count - 1) % EssenDays.order.count
-                        }
-                    }
-                    Spacer()
-                    Text(verbatim: vm.essen.days == nil ? "" : "\(vm.essenDay + 1) / \(EssenDays.order.count)")
-                        .font(UberFont.text(12, weight: .heavy))
-                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                    Spacer()
-                    EssenArrow("›") {
-                        withAnimation(.easeInOut(duration: 0.25)) {
-                            vm.essenDay = (vm.essenDay + 1) % EssenDays.order.count
-                        }
-                    }
-                }
-                .padding(.top, 12)
-            }
-            .padding(.vertical, 20)
-            .padding(.horizontal, 22)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(EduFlowPalette.card(scheme))
-            .clipShape(.rect(cornerRadius: 14))
-            .overlay {
-                RoundedRectangle(cornerRadius: 14)
-                    .stroke(EduFlowPalette.border(scheme), lineWidth: 1)
-            }
-        }
-        .frame(maxWidth: .infinity)
-    }
-
-    private func formattedDayDate(_ iso: String?) -> String {
-        let parts = (iso ?? "").split(separator: "-")
-        guard parts.count == 3, let day = Int(parts[2]), let month = Int(parts[1]) else { return "" }
-        return "\(day).\(month)."
-    }
-
     private var footer: some View {
         Text("EduFlow Dashboard · lokal")
             .font(UberFont.text(12))
@@ -613,7 +474,6 @@ private struct OverviewOrderEditor: View {
         "messages": "Nachrichten",
         "homework": "Hausaufgaben",
         "weather": "Wetter",
-        "lunch": "Mittagessen",
     ]
 
     var body: some View {
@@ -728,31 +588,6 @@ private struct NowArrow: View {
         }
         .buttonStyle(.plain)
         .foregroundStyle(.white)
-    }
-}
-
-/// Runder Pfeil im Essen-Blätterer (`.essen-arrow`).
-private struct EssenArrow: View {
-    @Environment(\.colorScheme) var scheme
-    let title: String
-    let action: () -> Void
-
-    init(_ title: String, action: @escaping () -> Void) {
-        self.title = title
-        self.action = action
-    }
-
-    var body: some View {
-        Button(action: action) {
-            Text(verbatim: title)
-                .font(.system(size: 18))
-                .foregroundStyle(EduFlowPalette.ink(scheme))
-                .frame(width: 32, height: 32)
-                .background(.clear)
-                .clipShape(.circle)
-                .overlay { Circle().stroke(EduFlowPalette.borderStrong(scheme), lineWidth: 1) }
-        }
-        .buttonStyle(.plain)
     }
 }
 

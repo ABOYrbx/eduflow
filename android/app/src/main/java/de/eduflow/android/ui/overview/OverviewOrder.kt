@@ -7,12 +7,11 @@ import de.eduflow.android.data.dto.SettingsDefaults
 
 /** Movable overview sections; the order string is stored with account settings. */
 object OverviewOrder {
-    val keys = listOf("messages", "homework", "weather", "lunch")
+    val keys = listOf("messages", "homework", "weather")
     val labelRes = mapOf(
         "messages" to R.string.overview_order_messages,
         "homework" to R.string.overview_order_homework,
         "weather" to R.string.overview_order_weather,
-        "lunch" to R.string.overview_order_lunch,
     )
 
     @Composable

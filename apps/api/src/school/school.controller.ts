@@ -116,11 +116,6 @@ export class SchoolController {
     return this.edupage.gradesList(req.authClaims, query);
   }
   @UseGuards(AccessTokenGuard)
-  @Get("essen") meals(@Query() query: Record<string, unknown>) {
-    if (useFakeProvider()) return this.demo.meals();
-    return this.edupage.essenMenu(query);
-  }
-  @UseGuards(AccessTokenGuard)
   @Get("wetter") weather(@Query() query: Record<string, unknown>) {
     if (useFakeProvider()) return this.demo.weather(query);
     return this.edupage.weather(query);

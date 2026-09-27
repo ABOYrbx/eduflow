@@ -43,7 +43,7 @@ object SettingsDefaults {
     const val HW_TESTS = false
     const val OV_UNREAD = 10
     const val OV_HOMEWORK = 10
-    const val OV_ORDER = "messages,homework,weather,lunch"
+    const val OV_ORDER = "messages,homework,weather"
     const val OV_WETTER = true
     const val WETTER_CITY = ""
     const val WETTER_CITY_MAX = 100
