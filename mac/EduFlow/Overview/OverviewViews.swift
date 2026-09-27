@@ -170,7 +170,7 @@ public struct OverviewView: View {
                     .opacity(0.6)
                 Spacer()
                 if slides.count > 1 {
-                    Text("\(lessonIndex + 1) / \(slides.count)")
+                    Text(verbatim: "\(lessonIndex + 1) / \(slides.count)")
                         .font(UberFont.text(11, weight: .heavy))
                         .tracking(0.6)
                         .padding(.vertical, 3)
@@ -324,7 +324,7 @@ public struct OverviewView: View {
                 ForEach(Array(vm.messages.prefix(5)), id: \.id) { message in
                     VStack(alignment: .leading, spacing: 6) {
                         HStack {
-                            Text(message.author.isEmpty ? "Schule" : message.author)
+                            (message.author.isEmpty ? Text("Schule") : Text(verbatim: message.author))
                                 .font(UberFont.text(14, weight: .bold))
                             Spacer()
                             Text(message.timestamp)
@@ -369,7 +369,7 @@ public struct OverviewView: View {
             .frame(minHeight: 36)
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                 HStack(spacing: 6) {
-                    Text("\(vm.messagesTotal)")
+                    Text(verbatim: "\(vm.messagesTotal)")
                         .font(UberFont.text(18, weight: .heavy))
                         .tracking(-0.5)
                     Text("ungelesen")
@@ -377,7 +377,7 @@ public struct OverviewView: View {
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 }
                 HStack(spacing: 6) {
-                    Text("\(vm.homeworkOpen)")
+                    Text(verbatim: "\(vm.homeworkOpen)")
                         .font(UberFont.text(18, weight: .heavy))
                         .tracking(-0.5)
                     Text("offen")
@@ -385,7 +385,7 @@ public struct OverviewView: View {
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 }
                 HStack(spacing: 6) {
-                    Text("\(vm.homeworkOverdue)")
+                    Text(verbatim: "\(vm.homeworkOverdue)")
                         .font(UberFont.text(18, weight: .heavy))
                         .foregroundStyle(EduFlowPalette.red)
                     Text("überfällig")
@@ -393,7 +393,7 @@ public struct OverviewView: View {
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 }
                 HStack(spacing: 6) {
-                    Text("\(vm.homeworkDone)")
+                    Text(verbatim: "\(vm.homeworkDone)")
                         .font(UberFont.text(18, weight: .heavy))
                         .foregroundStyle(EduFlowPalette.green)
                     Text("erledigt")
@@ -439,7 +439,7 @@ public struct OverviewView: View {
                                     .font(UberFont.text(13))
                                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                             }
-                            Text(item.description.isEmpty ? "(keine Beschreibung)" : item.description)
+                            (item.description.isEmpty ? Text("(keine Beschreibung)") : Text(verbatim: item.description))
                                 .font(UberFont.text(15))
                                 .lineSpacing(4)
                         }
@@ -559,7 +559,7 @@ public struct OverviewView: View {
                         }
                     }
                     Spacer()
-                    Text(vm.essen.days == nil ? "" : "\(vm.essenDay + 1) / \(EssenDays.order.count)")
+                    Text(verbatim: vm.essen.days == nil ? "" : "\(vm.essenDay + 1) / \(EssenDays.order.count)")
                         .font(UberFont.text(12, weight: .heavy))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     Spacer()
@@ -625,7 +625,7 @@ private struct OverviewOrderEditor: View {
                 .foregroundStyle(.secondary)
             ForEach(order.indices, id: \.self) { index in
                 HStack {
-                    Text(labels[order[index]] ?? order[index])
+                    Text(LocalizedStringKey(labels[order[index]] ?? order[index]))
                         .font(UberFont.text(15, weight: .semibold))
                     Spacer()
                     Button("↑") { order = OverviewOrderEditor.move(order, from: index, by: -1) }
@@ -679,7 +679,8 @@ private struct WetterDayCard: View {
 
     var body: some View {
         VStack(spacing: 2) {
-            Text(label.uppercased())
+            Text(LocalizedStringKey(label))
+                .textCase(.uppercase)
                 .font(UberFont.text(11, weight: .bold))
                 .tracking(1.2)
                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
@@ -691,14 +692,14 @@ private struct WetterDayCard: View {
                 }
                 .frame(width: 52, height: 52)
             }
-            Text(big)
+            Text(verbatim: big)
                 .font(UberFont.text(24, weight: .heavy))
                 .tracking(-0.5)
                 .monospacedDigit()
-            Text(cond)
+            Text(verbatim: cond)
                 .font(UberFont.text(12, weight: .semibold))
                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-            Text("☂ \(pop.map { "\($0) %" } ?? "–")")
+            Text(verbatim: "☂ \(pop.map { "\($0) %" } ?? "–")")
                 .font(UberFont.text(12, weight: .semibold))
                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
         }
@@ -718,7 +719,7 @@ private struct NowArrow: View {
 
     var body: some View {
         Button(action: action) {
-            Text(title)
+            Text(verbatim: title)
                 .font(.system(size: 18))
                 .frame(width: 32, height: 32)
                 .background(.white.opacity(0.001))
@@ -743,7 +744,7 @@ private struct EssenArrow: View {
 
     var body: some View {
         Button(action: action) {
-            Text(title)
+            Text(verbatim: title)
                 .font(.system(size: 18))
                 .foregroundStyle(EduFlowPalette.ink(scheme))
                 .frame(width: 32, height: 32)
@@ -778,10 +779,10 @@ private struct WetterSheet: View {
                 }
                 if let today = wetter.today {
                     HStack(alignment: .firstTextBaseline, spacing: 12) {
-                        Text("\(today.temp ?? 0)°")
+                        Text(verbatim: "\(today.temp ?? 0)°")
                             .font(UberFont.text(44, weight: .heavy))
                             .tracking(-1)
-                        Text("\(today.desc ?? "") · \(today.max ?? 0)°/\(today.min ?? 0)°")
+                        Text(verbatim: "\(today.desc ?? "") · \(today.max ?? 0)°/\(today.min ?? 0)°")
                             .font(UberFont.text(14))
                             .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     }
@@ -794,13 +795,13 @@ private struct WetterSheet: View {
                             ForEach(hours.indices, id: \.self) { index in
                                 let hour = hours[index]
                                 VStack(spacing: 2) {
-                                    Text(index == 0 ? "Jetzt" : (hour.time ?? ""))
+                                    (index == 0 ? Text("Jetzt") : Text(verbatim: hour.time ?? ""))
                                         .font(UberFont.text(11, weight: .bold))
                                         .tracking(1.2)
                                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                                    Text("\(hour.temp ?? 0)°")
+                                    Text(verbatim: "\(hour.temp ?? 0)°")
                                         .font(UberFont.text(16, weight: .heavy))
-                                    Text("☂ \(hour.pop.map { "\($0) %" } ?? "–")")
+                                    Text(verbatim: "☂ \(hour.pop.map { "\($0) %" } ?? "–")")
                                         .font(UberFont.text(12, weight: .semibold))
                                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                                 }
@@ -848,11 +849,12 @@ private struct WetterDetail: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 2) {
-            Text(label.uppercased())
+            Text(LocalizedStringKey(label))
+                .textCase(.uppercase)
                 .font(UberFont.text(11, weight: .bold))
                 .tracking(1.2)
                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-            Text(value.isEmpty ? "–" : value)
+            Text(verbatim: value.isEmpty ? "–" : value)
                 .font(UberFont.text(16, weight: .heavy))
         }
         .frame(maxWidth: .infinity, alignment: .leading)

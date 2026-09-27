@@ -83,7 +83,7 @@ public struct PillButton: View {
 
     public var body: some View {
         Button(action: action) {
-            Text(title)
+            Text(LocalizedStringKey(title))
         }
         .buttonStyle(UberButtonStyle(style))
         .modifier(LightBorderIfNeeded(style: style))
@@ -198,7 +198,7 @@ public struct Tag: View {
     }
 
     public var body: some View {
-        Text(text)
+        Text(LocalizedStringKey(text))
             .font(UberFont.text(11, weight: .bold))
             .padding(.vertical, 5)
             .padding(.horizontal, 12)
@@ -257,7 +257,8 @@ public struct Eyebrow: View {
     }
 
     public var body: some View {
-        Text(text.uppercased())
+        Text(LocalizedStringKey(text))
+            .textCase(.uppercase)
             .font(UberFont.text(12, weight: .bold))
             .tracking(1.4)
             .padding(.vertical, 6)
@@ -286,12 +287,12 @@ public struct PageHead: View {
             if let eyebrow {
                 Eyebrow(eyebrow)
             }
-            Text(title)
+            Text(LocalizedStringKey(title))
                 .font(UberFont.text(34, weight: .heavy))
                 .tracking(-1.5)
                 .lineLimit(2)
             if let stats {
-                Text(stats)
+                Text(LocalizedStringKey(stats))
                     .font(UberFont.text(15, weight: .medium))
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
             }
@@ -324,11 +325,12 @@ public struct StatCard: View {
 
     public var body: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(number)
+            Text(verbatim: number)
                 .font(UberFont.text(30, weight: .heavy))
                 .tracking(-0.8)
                 .foregroundStyle(numberColor)
-            Text(label.uppercased())
+            Text(LocalizedStringKey(label))
+                .textCase(.uppercase)
                 .font(UberFont.text(12, weight: .semibold))
                 .tracking(0.8)
                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
@@ -398,7 +400,7 @@ public struct UberTextField: View {
             TextField(
                 "",
                 text: $text,
-                prompt: Text(placeholder)
+                prompt: Text(LocalizedStringKey(placeholder))
                     .font(UberFont.text(14, weight: .medium))
                     .foregroundStyle(EduFlowPalette.inkDim(scheme))
             )
@@ -551,7 +553,7 @@ public struct UberSecureField: View {
     }
 
     private var promptText: Text {
-        Text(placeholder)
+        Text(LocalizedStringKey(placeholder))
             .font(UberFont.text(14, weight: .medium))
             .foregroundStyle(EduFlowPalette.inkDim(scheme))
     }
@@ -605,7 +607,7 @@ public struct Notice: View {
     }
 
     public var body: some View {
-        Text(text)
+        Text(verbatim: text)
             .font(UberFont.text(14, weight: .medium))
             .padding(.vertical, 14)
             .padding(.horizontal, 18)
@@ -649,7 +651,7 @@ public struct ErrorView: View {
     public var body: some View {
         VStack(spacing: 12) {
             Spacer()
-            Text(message)
+            Text(verbatim: message)
                 .font(UberFont.text(15))
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 24)
@@ -672,7 +674,7 @@ public struct EmptyView: View {
     public var body: some View {
         VStack {
             Spacer()
-            Text(message)
+            Text(LocalizedStringKey(message))
                 .font(UberFont.text(15))
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -790,7 +792,7 @@ public struct HelloGreeting: View {
     public var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 0) {
             ForEach(Array(text.enumerated()), id: \.offset) { index, char in
-                Text(String(char))
+                Text(verbatim: String(char))
                     .font(UberFont.text(fontSize, weight: .heavy))
                     .tracking(-1.5)
                     .foregroundStyle(EduFlowPalette.ink(scheme))
@@ -845,7 +847,7 @@ public struct BrandMark: View {
                     .frame(width: size, height: size)
                     .clipShape(.rect(cornerRadius: size * 0.31))
             } else {
-                Text("E")
+                Text(verbatim: "E")
                     .font(UberFont.text(size * 0.58, weight: .black))
                     .foregroundStyle(accent.resolvedInk(scheme))
                     .frame(width: size, height: size)
@@ -879,7 +881,7 @@ public struct AppLogo: View {
                         y: 4
                     )
             } else {
-                Text("E")
+                Text(verbatim: "E")
                     .font(UberFont.text(34, weight: .black))
                     .foregroundStyle(accent.resolvedInk(scheme))
                     .frame(width: 92, height: 92)

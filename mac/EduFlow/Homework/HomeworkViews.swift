@@ -61,7 +61,7 @@ public struct HomeworkView: View {
                                         .font(UberFont.text(13))
                                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                                 }
-                                Text(item.description.isEmpty ? "(keine Beschreibung)" : item.description)
+                                (item.description.isEmpty ? Text("(keine Beschreibung)") : Text(verbatim: item.description))
                                     .font(UberFont.text(15))
                                     .lineSpacing(4)
                                 HStack(spacing: 8) {

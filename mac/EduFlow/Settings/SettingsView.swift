@@ -167,7 +167,7 @@ public struct SettingsView: View {
     private var serverSection: some View {
         UberCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text(store.isDemo ? "Demo-Modus" : "Server")
+                (store.isDemo ? Text("Demo-Modus") : Text("Server"))
                     .font(UberFont.text(19, weight: .heavy))
                     .tracking(-0.4)
                 if store.isDemo {

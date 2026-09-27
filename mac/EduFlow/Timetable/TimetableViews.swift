@@ -163,7 +163,7 @@ public struct DayView: View {
                         if let lesson = day.lessons.first(where: { $0.period == period || $0.rowPeriod == period }) {
                             LessonCell(lesson: lesson)
                         } else {
-                            Text("–")
+                            Text(verbatim: "–")
                                 .font(UberFont.text(12))
                                 .foregroundStyle(EduFlowPalette.inkDim(scheme))
                                 .frame(maxWidth: .infinity, minHeight: 66)
@@ -269,7 +269,7 @@ public struct LessonRow: View {
                 Text(lesson.title)
                     .font(UberFont.text(14, weight: .bold))
                     .strikethrough(lesson.isCancelled)
-                Text("\(lesson.time) · \(lesson.teachers) · \(lesson.rooms)")
+                Text(verbatim: "\(lesson.time) · \(lesson.teachers) · \(lesson.rooms)")
                     .font(UberFont.text(12))
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 HStack(spacing: 6) {

@@ -159,7 +159,7 @@ private struct MessageRow: View {
         Button(action: action) {
             VStack(alignment: .leading, spacing: 4) {
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    Text(message.author.isEmpty ? "(unbekannt)" : message.author)
+                    (message.author.isEmpty ? Text("(unbekannt)") : Text(verbatim: message.author))
                         .font(UberFont.text(14, weight: .heavy))
                         .tracking(-0.2)
                         .lineLimit(1)
@@ -178,12 +178,12 @@ private struct MessageRow: View {
                             Tag(message.typeLabel, style: .muted)
                         }
                         if message.reactionCount > 0 {
-                            Text("♥ \(message.reactionCount)")
+                            Text(verbatim: "♥ \(message.reactionCount)")
                                 .font(UberFont.text(12, weight: .semibold))
                                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                         }
                         if !message.attachments.isEmpty {
-                            Text("📎 \(message.attachments.count)")
+                            Text(verbatim: "📎 \(message.attachments.count)")
                                 .font(UberFont.text(12, weight: .semibold))
                                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                         }
@@ -259,7 +259,7 @@ public struct ThreadDetail: View {
             } else {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack(spacing: 8) {
-                        Text(message.author.isEmpty ? "(unbekannt)" : message.author)
+                        (message.author.isEmpty ? Text("(unbekannt)") : Text(verbatim: message.author))
                             .font(UberFont.text(15, weight: .bold))
                         Spacer()
                         Text(message.timestamp)

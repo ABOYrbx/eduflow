@@ -39,9 +39,9 @@ public struct DevicesView: View {
                         ForEach(Array(vm.devices.enumerated()), id: \.element.id) { index, device in
                             HStack(spacing: 10) {
                                 VStack(alignment: .leading, spacing: 2) {
-                                    Text(device.device.isEmpty ? "Unbekanntes Gerät" : device.device)
+                                    (device.device.isEmpty ? Text("Unbekanntes Gerät") : Text(verbatim: device.device))
                                         .font(UberFont.text(14, weight: .bold))
-                                    Text("\(device.short) · \(device.created)")
+                                    Text(verbatim: "\(device.short) · \(device.created)")
                                         .font(UberFont.text(12))
                                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                                     Text(String(format: NSLocalizedString("devices_valid_until", value: "Gültig bis %@", comment: "Geräte: Gültigkeit"), device.expires))
