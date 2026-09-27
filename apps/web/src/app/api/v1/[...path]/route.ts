@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { t } from "../../../../lib/i18n";
+import "../../../../lib/locales";
+import { parseAcceptLanguage, resolveLocale, t } from "../../../../lib/i18n";
 
 type Context = { params: Promise<{ path: string[] }> };
 const cookieOptions = { httpOnly: true, secure: process.env.NODE_ENV === "production", sameSite: "lax" as const, path: "/", maxAge: 60 * 60 * 24 * 30 };
 
 async function forward(request: NextRequest, context: Context) {
+  const locale = resolveLocale([
+    request.cookies.get("eduflow_locale")?.value ?? null,
+    ...parseAcceptLanguage(request.headers.get("accept-language")),
+  ]);
   const { path } = await context.params;
   const origin = process.env.API_SERVER_URL ?? "http://127.0.0.1:3000";
   const target = new URL(`${origin}/api/v1/${path.map(encodeURIComponent).join("/")}`);
@@ -18,7 +23,7 @@ async function forward(request: NextRequest, context: Context) {
   const body = request.method === "GET" || request.method === "HEAD" ? undefined : await request.arrayBuffer();
   let upstream = await fetch(target, { method: request.method, headers, body, cache: "no-store" }).catch(() => null);
   const response = upstream ? new NextResponse(upstream.body, { status: upstream.status, headers: { "content-type": upstream.headers.get("content-type") ?? "application/json" } })
-    : NextResponse.json({ error: t("common.upstreamUnreachable"), code: "UPSTREAM" }, { status: 502 });
+    : NextResponse.json({ error: t("common.upstreamUnreachable", undefined, locale), code: "UPSTREAM" }, { status: 502 });
   if (upstream?.status === 401 && refresh) {
     const renewed = await fetch(`${origin}/api/v1/auth/refresh`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ refresh_token: refresh }) }).catch(() => null);
     const tokens = await renewed?.json().catch(() => ({})) as Record<string, unknown> | undefined;
