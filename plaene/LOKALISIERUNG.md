@@ -7,8 +7,9 @@ Projektgrenzen). iOS ist ausgenommen (zurückgestellt).
 
 Deutsch ist überall Source-Sprache **und** Fallback. Alle nutzersichtbaren
 UI-Strings liegen in Quelldateien und erscheinen nach dem nächsten Sync in
-Crowdin. Es gibt noch keine übersetzten UI-Texte; Crowdin liefert später nur
-Ergänzungen, kein Verhalten ändert sich. Die API-Fehler-`code`s werden nie
+Crowdin. Für macOS liegen englische Übersetzungen bereits im Katalog
+(Branch `l10n/xcstrings-all-languages`); für Web/Backend/Android liefert
+Crowdin später nur Ergänzungen, kein Verhalten ändert sich. Die API-Fehler-`code`s werden nie
 übersetzt — nur die `error`-Texte.
 
 ## Dateizuordnung (`crowdin.yml` im Root)
@@ -21,7 +22,10 @@ Ergänzungen, kein Verhalten ändert sich. Die API-Fehler-`code`s werden nie
 | macOS | `mac/EduFlow/Resources/Localizable.xcstrings` (Source `de`, im Bundle registriert) | gleiche Datei (String Catalog) |
 
 Kennzahlen: Web ~300 Keys, Backend ~110 Keys (Fehlertexte, Settings-Schema,
-API-Docs), Android ~310 Strings + 3 Plurals, macOS 271 Katalog-Keys.
+API-Docs), Android ~310 Strings + 3 Plurals, macOS 275 Katalog-Keys
+(Source-Sprache `de`) plus Übersetzungen für alle UI-Texte auf Englisch,
+Türkisch, Polnisch und Französisch (Status-/Typ-/Aktions-Codes bleiben
+bewusst deutsch, siehe unten; Branch `l10n/xcstrings-all-languages`).
 
 ## Sync-Ablauf
 
