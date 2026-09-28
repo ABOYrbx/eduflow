@@ -26,17 +26,13 @@
     <string name="bottom_tasks">Tasks</string>
     <string name="bottom_messages">Messages.</string>
     <string name="bottom_plan">Plan</string>
-    <string name="bottom_more">Mehr</string>
+    <string name="bottom_more">More</string>
     <string name="bottom_grades">Noten</string>
     <string name="bottom_school">Termine</string>
     <string name="navbar_move_up">Nach oben</string>
     <string name="navbar_move_down">Nach unten</string>
     <!-- Auth / Login -->
-    <string name="auth_demo_banner">Demo-Mode · only fake Data</string>
     <string name="auth_step_format">Step %1$d of %2$d</string>
-    <string name="auth_hint_school">Which school do you belong to</string>
-    <string name="auth_label_subdomain">Subdomain (optional)</string>
-    <string name="auth_placeholder_subdomain">e.g. yourschool</string>
     <string name="auth_hint_username">What is your EduPage name?</string>
     <string name="auth_label_username">Username</string>
     <string name="auth_placeholder_username">e.g. max.muster</string>
@@ -52,8 +48,6 @@
     <string name="auth_privacy_note">Local Tool — Data stays on your machine.</string>
     <string name="auth_login_loading">Login …</string>
     <string name="auth_login">Sign in</string>
-    <string name="auth_demo_leave">Leave Demo</string>
-    <string name="auth_demo_view">Watch Demo</string>
     <!-- Onboarding -->
     <string name="onboarding_greeting">Hello!</string>
     <string name="onboarding_language_title">Sprache wählen</string>
