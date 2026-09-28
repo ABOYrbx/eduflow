@@ -10,6 +10,7 @@ venv/
 /apps/api/dist/
 /apps/api/coverage/
 /apps/web/.next/
+/apps/web/.next-demo/
 /apps/web/out/
 /apps/api/node_modules/
 /apps/web/node_modules/

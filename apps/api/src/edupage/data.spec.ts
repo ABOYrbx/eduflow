@@ -148,6 +148,20 @@ describe("EdupageDataService (Paket N-B, Python-Parität)", () => {
     expect(sent).toMatchObject({ id: 777, text: "Neu" });
   });
 
+  it("sendet an Schüler mit nicht-numerischem dbi-Schlüssel", async () => {
+    const home = '<html><script>userhome({"subdomain":"demo","id":7,"dbi":{"teachers":{"5":{"firstname":"Anna","lastname":"Lehrerin","classroomid":"3"}},"students":{"s-12":{"firstname":"Lena","lastname":"B","numberinclass":4}}}});</script></html>';
+    const extra = [{ timelineid: "777", typ: "sprava", timestamp: "2026-09-23 09:00:00", text: "Neu", user_meno: "*", vlastnik_meno: "Ich", data: "{}", removed: "0" }];
+    const routes = baseRoutes([...timelineItems(), ...extra]);
+    routes["GET https://demo.edupage.org/user"] = { status: 200, url: "https://demo.edupage.org/user", text: home };
+    const svc = new EdupageDataService(prisma as never, factoryFor(routes));
+    const recs = await svc.recipients(claims, {}) as unknown as { items: { id: string }[] };
+    expect(recs.items.map((item) => item.id)).toEqual(["Teacher5", "Students-12"]);
+    const sent = await svc.send(claims, { recipients: ["Students-12"], body: "Hallo" }) as unknown as { id: number };
+    expect(sent).toMatchObject({ id: 777 });
+    await expect(svc.send(claims, { recipients: ["Unbekannt1"], body: "Hallo" }))
+      .rejects.toMatchObject({ response: { error: "Bitte mindestens einen gültigen Empfänger angeben." } });
+  });
+
   it("antwortet und frischt den Thread auf", async () => {
     await expect(service.reply(claims, 101, {})).rejects.toMatchObject({ response: { error: "Bitte einen Antworttext eingeben." } });
     const answered = await service.reply(claims, 101, { body: "Gerne" }) as unknown as { cached: boolean; summary: unknown };

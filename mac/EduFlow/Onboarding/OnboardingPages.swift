@@ -17,6 +17,8 @@ public final class ServerCheckModel {
     public var checking = false
     public var result: ServerCheckResult = .none
     public var showSuccess = false
+    /// Blendet die Erfolgs-Animation nach manuellem Test wieder aus.
+    private var hideSuccessTask: Task<Void, Never>?
 
     private let store: TokenStore
     private let session: URLSession?
@@ -56,6 +58,29 @@ public final class ServerCheckModel {
     /// wird, damit kein veraltetes Ergebnis angezeigt wird).
     public func resetResult() {
         result = .none
+        cancelCelebration()
+    }
+
+    /// Erfolg feiern: großes Overlay-Häkchen einblenden und nach kurzer
+    /// Zeit von selbst ausblenden (manueller Test; `proceed()` navigiert
+    /// stattdessen weiter und braucht kein Ausblenden).
+    public func celebrate() {
+        hideSuccessTask?.cancel()
+        withAnimation(.spring(response: 0.45, dampingFraction: 0.55)) {
+            showSuccess = true
+        }
+        hideSuccessTask = Task {
+            try? await Task.sleep(for: .seconds(1))
+            guard !Task.isCancelled else { return }
+            showSuccess = false
+        }
+    }
+
+    /// Feier abbrechen (neuer Test, Zurücksetzen, Übernehmen).
+    public func cancelCelebration() {
+        hideSuccessTask?.cancel()
+        hideSuccessTask = nil
+        showSuccess = false
     }
 
     /// Weiter-Ablauf: testet direkt, zeigt bei Erfolg kurz das grüne
@@ -63,6 +88,7 @@ public final class ServerCheckModel {
     /// darf — bei Fehler bleibt die Seite mit Meldung stehen.
     @discardableResult
     public func proceed(reduceMotion: Bool) async -> Bool {
+        cancelCelebration()
         await check()
         guard case .ok = result else { return false }
         if !reduceMotion {
@@ -151,12 +177,177 @@ private struct SparkleView: NSViewRepresentable {
     func updateNSView(_ nsView: SparkleNSView, context: Context) {}
 }
 
+/// Partikel über die ganze App während des Onboardings: füllt das
+/// Fenster und liegt hinter dem Inhalt (dezent wie die Logo-Funken).
+/// Wird ausschließlich im `OnboardingFlow` eingebettet, respektiert
+/// Reduce Motion und fängt keine Klicks ab.
+struct OnboardingParticleBackground: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    var body: some View {
+        if !reduceMotion {
+            SparkleView()
+                .opacity(0.35)
+                .blur(radius: 1)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .ignoresSafeArea()
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
+        }
+    }
+}
+
+/// Seite 2: Sprachauswahl mit Übersetzungsstand. Die Auswahl landet im
+/// System-Schlüssel `AppleLanguages` und wird nach einem Neustart aktiv —
+/// geändert Weiter startet die App dafür neu, unverändert geht es weiter.
+public struct OnboardingLanguagePage: View {
+    @Environment(\.colorScheme) private var scheme
+    @Environment(\.uberAccent) private var accent
+    @State private var selected: String?
+    @State private var rows = AppLocalizations.coverage()
+    public let onNext: () -> Void
+
+    public init(onNext: @escaping () -> Void) {
+        _selected = State(initialValue: AppLanguage.override)
+        self.onNext = onNext
+    }
+
+    private var changed: Bool { selected != AppLanguage.override }
+
+    /// Zeilen-Codes, aktuelle Sprache zuerst, Rest nach Eigenname sortiert.
+    private var orderedCodes: [String] {
+        let codes = rows.map(\.code)
+        let current = AppLanguage.current
+        return codes.sorted {
+            if ($0 == current) != ($1 == current) { return $0 == current }
+            return AppLanguage.nativeName($0).localizedCaseInsensitiveCompare(AppLanguage.nativeName($1)) == .orderedAscending
+        }
+    }
+
+    private func percent(of code: String) -> Int? {
+        rows.first { $0.code == code }?.percent
+    }
+
+    public var body: some View {
+        VStack(spacing: 0) {
+            Text("Sprache wählen")
+                .font(UberFont.text(30, weight: .heavy))
+                .tracking(-1.2)
+                .padding(.top, 12)
+                .riseIn(delay: 0.08)
+            Text("EduFlow spricht deine Sprache. Die Auswahl wird nach einem Neustart aktiv.")
+                .font(UberFont.text(14))
+                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                .multilineTextAlignment(.center)
+                .lineSpacing(3)
+                .padding(.top, 10)
+                .padding(.horizontal, 24)
+                .riseIn(delay: 0.14)
+            ScrollView {
+                VStack(spacing: 10) {
+                    languageRow(
+                        code: nil,
+                        name: "System",
+                        detail: "Folgt der Systemsprache",
+                        percent: nil,
+                        selected: selected == nil
+                    )
+                    ForEach(orderedCodes, id: \.self) { code in
+                        languageRow(
+                            code: code,
+                            name: AppLanguage.nativeName(code),
+                            detail: nil,
+                            percent: percent(of: code),
+                            selected: selected == code
+                        )
+                    }
+                }
+            }
+            .padding(.top, 20)
+            .riseIn(delay: 0.2)
+            PillButton(changed ? "Übernehmen & neu starten" : "Weiter") {
+                if changed {
+                    AppLanguage.set(selected)
+                    NSApplication.shared.terminate(nil)
+                } else {
+                    onNext()
+                }
+            }
+            .riseIn(delay: 0.3)
+        }
+        .padding(.vertical, 24)
+        .padding(.horizontal, 28)
+        .frame(maxWidth: 560)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    private func languageRow(
+        code: String?,
+        name: String,
+        detail: String?,
+        percent: Int?,
+        selected: Bool
+    ) -> some View {
+        UberCard {
+            Button(action: { self.selected = code }) {
+                HStack(spacing: 14) {
+                    ZStack {
+                        Circle()
+                            .stroke(EduFlowPalette.borderStrong(scheme), lineWidth: 2)
+                            .frame(width: 22, height: 22)
+                        if selected {
+                            Circle()
+                                .fill(accent.resolved(scheme))
+                                .frame(width: 12, height: 12)
+                        }
+                    }
+                    VStack(alignment: .leading, spacing: 3) {
+                        HStack {
+                            Text(name)
+                                .font(UberFont.text(15, weight: .heavy))
+                                .tracking(-0.2)
+                            Spacer()
+                            if let percent {
+                                Text("\(percent) %")
+                                    .font(UberFont.text(13))
+                                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                            }
+                        }
+                        if let percent {
+                            GeometryReader { geometry in
+                                ZStack(alignment: .leading) {
+                                    Capsule()
+                                        .fill(EduFlowPalette.surface2(scheme))
+                                        .frame(height: 4)
+                                    Capsule()
+                                        .fill(accent.resolved(scheme))
+                                        .frame(width: geometry.size.width * CGFloat(percent) / 100, height: 4)
+                                }
+                            }
+                            .frame(height: 4)
+                        }
+                        if let detail {
+                            Text(detail)
+                                .font(UberFont.text(13))
+                                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                                .lineSpacing(2)
+                        }
+                    }
+                }
+            }
+            .buttonStyle(.plain)
+        }
+        .riseIn(delay: 0.2)
+    }
+}
+
 /// Seite 1: nur Logo mit Hallo-Animation (plus Weiter-Button).
 public struct OnboardingWelcomePage: View {
     @Environment(\.colorScheme) private var scheme
     @Environment(\.uberAccent) private var accent
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var showButton = false
+    @State private var greetings = AppLocalizations.greetings(fallback: ["Hallo!"])
     public let onNext: () -> Void
 
     public init(onNext: @escaping () -> Void) {
@@ -166,7 +357,7 @@ public struct OnboardingWelcomePage: View {
     public var body: some View {
         VStack(spacing: 0) {
             Spacer()
-            HelloGreeting()
+            HelloGreeting(cycleGreetings: greetings)
             ZStack {
                 if !reduceMotion {
                     SparkleView()
@@ -204,7 +395,7 @@ public struct OnboardingWelcomePage: View {
     }
 }
 
-/// Seite 2: drei Funktions-Karten mit SF Symbols.
+/// Seite 3: drei Funktions-Karten mit SF Symbols.
 public struct OnboardingFeaturesPage: View {
     @Environment(\.colorScheme) private var scheme
     @Environment(\.uberAccent) private var accent
@@ -262,7 +453,7 @@ public struct OnboardingFeaturesPage: View {
     }
 }
 
-/// Seite 3: Server-URL (optional) mit Verbindungstest ohne Speichern.
+/// Seite 4: Server-URL (optional) mit Verbindungstest ohne Speichern.
 public struct OnboardingServerPage: View {
     @Environment(\.colorScheme) private var scheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -272,19 +463,6 @@ public struct OnboardingServerPage: View {
     public init(store: TokenStore, onNext: @escaping () -> Void) {
         _model = State(initialValue: ServerCheckModel(store: store))
         self.onNext = onNext
-    }
-
-    /// Statusfarbe des Test-Knopfs: grün bei Erfolg, rot bei Fehler,
-    /// sonst Standard (der Stil malt Tinte).
-    private var testButtonStyle: PillStyle {
-        switch model.result {
-        case .ok:
-            .smallSuccess
-        case .failed:
-            .smallError
-        case .none:
-            .smallLight
-        }
     }
 
     public var body: some View {
@@ -308,66 +486,46 @@ public struct OnboardingServerPage: View {
                 placeholder: TokenStore.defaultBaseURL,
                 icon: "server.rack"
             ) {
-                Task { await model.check() }
+                Task {
+                    await model.check()
+                    if case .ok = model.result {
+                        model.celebrate()
+                    }
+                }
             }
             .onChange(of: model.url) {
                 model.resetResult()
             }
             .padding(.top, 20)
             .riseIn(delay: 0.2)
-            switch model.result {
-            case .none, .ok:
-                Color.clear.frame(height: 10)
-            case .failed(let message):
-                Notice(message)
-                    .foregroundStyle(EduFlowPalette.red)
-                    .padding(.top, 10)
-            }
-            Spacer()
-            Button {
-                Task { await model.check() }
-            } label: {
-                Group {
-                    switch model.result {
-                    case .ok:
-                        HStack(spacing: 6) {
-                            Image(systemName: "checkmark.circle.fill")
-                            Text("Verbunden")
-                        }
-                    case .failed:
-                        HStack(spacing: 6) {
-                            Image(systemName: "xmark.circle.fill")
-                            Text("Fehlgeschlagen")
-                        }
-                    case .none:
-                        (model.checking ? Text("Prüft …") : Text("Verbindung testen"))
-                    }
+            Group {
+                if case .failed(let message) = model.result {
+                    Notice(message)
+                        .foregroundStyle(EduFlowPalette.red)
+                        .padding(.top, 10)
+                } else if case .ok = model.result {
+                    // Großer grüner Haken bei erfolgreichem Test —
+                    // gleiche Sprache wie „EduFlow ist bereit".
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 64, weight: .bold))
+                        .foregroundStyle(EduFlowPalette.green)
+                        .frame(height: 84)
+                        .transition(.scale(scale: 0.4).combined(with: .opacity))
+                } else {
+                    Color.clear.frame(height: 84)
                 }
             }
-            .buttonStyle(UberButtonStyle(testButtonStyle))
-            .hoverLift()
-            .disabled(model.checking || model.showSuccess)
-            .padding(.bottom, 10)
-            .riseIn(delay: 0.24)
-            Button {
+            .animation(.spring(response: 0.45, dampingFraction: 0.55), value: model.result)
+            Spacer()
+            // Ein Knopf in voller Breite wie auf Seite 1 — die Prüfung
+            // läuft beim Übernehmen automatisch (Fehler bleiben stehen).
+            PillButton(model.checking ? "Prüft …" : model.showSuccess ? "Verbunden" : "Übernehmen & weiter") {
                 Task { @MainActor in
                     if await model.proceed(reduceMotion: reduceMotion) {
                         onNext()
                     }
                 }
-            } label: {
-                Group {
-                    if model.showSuccess {
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.system(size: 20, weight: .bold))
-                            .foregroundStyle(EduFlowPalette.green)
-                    } else {
-                        (model.checking ? Text("Prüft …") : Text("Übernehmen & weiter"))
-                    }
-                }
             }
-            .buttonStyle(UberButtonStyle())
-            .hoverLift()
             .disabled(model.checking || model.showSuccess)
             .riseIn(delay: 0.3)
         }
@@ -375,5 +533,26 @@ public struct OnboardingServerPage: View {
         .padding(.horizontal, 28)
         .frame(maxWidth: 560)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .overlay {
+            // Erfolgs-Overlay über allem: abgedunkelte Seite plus
+            // großer Haken auf weißer Plakette (blockiert kurz).
+            if model.showSuccess {
+                ZStack {
+                    Color.black.opacity(0.25)
+                    ZStack {
+                        Circle()
+                            .fill(Color.white)
+                            .frame(width: 200, height: 200)
+                            .shadow(color: .black.opacity(0.2), radius: 24)
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 140, weight: .bold))
+                            .foregroundStyle(EduFlowPalette.green)
+                    }
+                    .transition(.scale(scale: 0.3).combined(with: .opacity))
+                    .accessibilityHidden(true)
+                }
+            }
+        }
+        .animation(.spring(response: 0.45, dampingFraction: 0.55), value: model.showSuccess)
     }
 }

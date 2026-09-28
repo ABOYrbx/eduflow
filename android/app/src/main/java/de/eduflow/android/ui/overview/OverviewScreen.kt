@@ -1,5 +1,12 @@
 package de.eduflow.android.ui.overview
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,17 +20,22 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AcUnit
 import androidx.compose.material.icons.filled.Cloud
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Thunderstorm
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.filled.WbSunny
-import androidx.compose.material.icons.filled.Tune
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -37,11 +49,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -56,10 +73,12 @@ import de.eduflow.android.ui.common.AppHeader
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SectionLabel
+import de.eduflow.android.ui.theme.LocalEduFlowDark
 import de.eduflow.android.ui.timetable.AuthAwareError
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 import kotlinx.coroutines.delay
 
 /**
@@ -70,8 +89,10 @@ import kotlinx.coroutines.delay
  * `ov_wetter` an), neueste Nachrichten (`ov_unread`-Limit), offene
  * Hausaufgaben (`ov_homework`-Limit). Inhalte wie `/` (Web-Übersicht,
  * Logik im ViewModel — hier nur Anzeige); Abschnittsköpfe verlinken
- * auf die Listen; 401-Verhalten → Login.
+ * auf die Listen; 401-Verhalten → Login. Aktualisieren läuft über
+ * Pull-to-Refresh (von oben ziehen) über den gesamten Inhalt.
  */
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun OverviewScreen(
     viewModel: OverviewViewModel,
@@ -90,9 +111,13 @@ fun OverviewScreen(
     var draftOrder by remember(state.settings.ovOrder) {
         mutableStateOf(OverviewOrder.parse(state.settings.ovOrder))
     }
-    val todayLabel = remember {
+    // Wochentag immer deutsch (System-Sprache wird ignoriert, wie macOS
+    // mit de_DE); Muster kommt aus strings.xml und ist damit via Crowdin
+    // pro Sprache anpassbar.
+    val datePattern = stringResource(R.string.home_date_format)
+    val todayLabel = remember(datePattern) {
         try {
-            LocalDate.now().format(DateTimeFormatter.ofPattern("EEEE, dd.MM.yyyy"))
+            LocalDate.now().format(DateTimeFormatter.ofPattern(datePattern, Locale.GERMAN))
         } catch (_: Exception) {
             ""
         }
@@ -110,6 +135,7 @@ fun OverviewScreen(
             showOrderEditor = true
         }) {
             Icon(Icons.Filled.Tune, contentDescription = null, modifier = Modifier.size(16.dp))
+            Spacer(Modifier.width(8.dp))
             Text(stringResource(R.string.overview_customize))
         }
         Spacer(Modifier.height(12.dp))
@@ -133,11 +159,16 @@ fun OverviewScreen(
                 horizontalArrangement = Arrangement.Center,
             ) { CircularProgressIndicator() }
         } else {
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier.weight(1f),
-            ) {
-                item { LiveClockCard(onRefresh = viewModel::refresh, refreshing = state.isLoading) }
+            val pullState = rememberPullRefreshState(
+                refreshing = state.isLoading,
+                onRefresh = viewModel::refresh,
+            )
+            Box(modifier = Modifier.weight(1f).pullRefresh(pullState)) {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                item { LiveClockCard() }
                 item {
                     NowCard(
                         current = state.currentLesson,
@@ -171,6 +202,12 @@ fun OverviewScreen(
                     }
                 }
                 item { Spacer(Modifier.height(88.dp)) }
+                }
+                PullRefreshIndicator(
+                    refreshing = state.isLoading,
+                    state = pullState,
+                    modifier = Modifier.align(Alignment.TopCenter),
+                )
             }
         }
     }
@@ -255,10 +292,7 @@ private fun HomeworkOverviewSection(
 
 /** Uhr-Karte (live, jede Sekunde, deutsches Format) + Aktualisieren. */
 @Composable
-private fun LiveClockCard(
-    onRefresh: () -> Unit,
-    refreshing: Boolean,
-) {
+private fun LiveClockCard() {
     var now by remember { mutableStateOf(LocalDateTime.now()) }
     LaunchedEffect(Unit) {
         while (true) {
@@ -291,14 +325,11 @@ private fun LiveClockCard(
                     color = MaterialTheme.colorScheme.onSurface,
                 )
             }
-            IconButton(onClick = onRefresh, enabled = !refreshing) {
-                Icon(Icons.Filled.Refresh, contentDescription = stringResource(R.string.common_reload))
-            }
         }
     }
 }
 
-/** Aktuelle/nächste Stunde — Karte in Primär-Farbe (wie Noten-Schnitt). */
+/** Aktuelle/nächste Stunde — gleiche Karte wie die Uhr (EduCard). */
 @Composable
 private fun NowCard(
     current: LessonDto?,
@@ -306,9 +337,14 @@ private fun NowCard(
     onTimetable: () -> Unit,
 ) {
     val scheme = MaterialTheme.colorScheme
+    // Dark: schwarze Karte statt weißer Primär-Fläche (Light bleibt
+    // PNG-schwarz) — weiße Schrift dazu statt onPrimary.
+    val dark = LocalEduFlowDark.current
+    val cardColor = if (dark) Color.Black else scheme.primary
+    val contentColor = if (dark) Color.White else scheme.onPrimary
     Surface(
         shape = RoundedCornerShape(16.dp),
-        color = scheme.primary,
+        color = cardColor,
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -317,14 +353,14 @@ private fun NowCard(
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 1.2.sp,
-                color = scheme.onPrimary.copy(alpha = 0.7f),
+                color = contentColor.copy(alpha = 0.7f),
             )
             if (current == null && next == null) {
                 Text(
                     stringResource(R.string.overview_no_school),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = scheme.onPrimary,
+                    color = contentColor,
                 )
             } else {
                 current?.let {
@@ -332,7 +368,7 @@ private fun NowCard(
                         stringResource(R.string.overview_now_format, it.title, it.period, it.time),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = scheme.onPrimary,
+                        color = contentColor,
                     )
                 }
                 next?.let {
@@ -346,14 +382,14 @@ private fun NowCard(
                         )
                         else stringResource(R.string.overview_next_format, it.title, it.period, it.time),
                         fontSize = 13.sp,
-                        color = scheme.onPrimary.copy(alpha = 0.75f),
+                        color = contentColor.copy(alpha = 0.75f),
                     )
                 }
             }
             TextButton(
                 onClick = onTimetable,
                 colors = ButtonDefaults.textButtonColors(
-                    contentColor = scheme.onPrimary,
+                    contentColor = contentColor,
                 ),
             ) { Text(stringResource(R.string.timetable_title)) }
         }

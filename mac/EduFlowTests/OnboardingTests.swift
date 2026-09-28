@@ -43,6 +43,56 @@ struct OnboardingTests {
         #expect(OnboardingState.sanitizedBaseURL("   ") == TokenStore.defaultBaseURL)
     }
 
+    @Test("Sprachwahl schreibt Override und System leert ihn")
+    func appLanguageOverride() {
+        let keys = ["de.eduflow.appLanguage", "AppleLanguages"]
+        let saved = keys.map { UserDefaults.standard.object(forKey: $0) }
+        defer {
+            for (key, value) in zip(keys, saved) {
+                if let value {
+                    UserDefaults.standard.set(value, forKey: key)
+                } else {
+                    UserDefaults.standard.removeObject(forKey: key)
+                }
+            }
+        }
+        for key in keys { UserDefaults.standard.removeObject(forKey: key) }
+        #expect(AppLanguage.override == nil)
+        AppLanguage.set("fr")
+        #expect(AppLanguage.override == "fr")
+        #expect(AppLanguage.current == "fr")
+        AppLanguage.set(nil)
+        #expect(AppLanguage.override == nil)
+    }
+
+    @Test("Coverage-Daten sind konsistent (Prozente, Eigennamen)")
+    func localeCoverageData() {
+        #expect(!localeCoverage.isEmpty)
+        for row in localeCoverage {
+            #expect(row.percent >= 0 && row.percent <= 100)
+            #expect(row.translated <= row.total && row.total > 0)
+            #expect(!AppLanguage.nativeName(row.code).isEmpty)
+        }
+        #expect(localeCoverage.contains { $0.code == "de" && $0.percent == 100 })
+    }
+
+    @Test("Sprachcodes werden gefiltert und sortiert erkannt")
+    func availableCodesFiltering() {
+        #expect(AppLocalizations.availableCodes(from: ["en", "fr", "Base", "zh-Hans", "", "pt-BR"]) == ["en", "fr"])
+        #expect(AppLocalizations.availableCodes(from: []) == [])
+    }
+
+    @Test("Zufallszyklus ohne direkten Wiederholer")
+    func shuffledCycle() {
+        #expect(AppLocalizations.shuffledCycle(count: 0, notStartingWith: nil) == [])
+        #expect(AppLocalizations.shuffledCycle(count: 1, notStartingWith: 0) == [0])
+        for _ in 0..<50 {
+            let order = AppLocalizations.shuffledCycle(count: 5, notStartingWith: 2)
+            #expect(order.sorted() == [0, 1, 2, 3, 4])
+            #expect(order.first != 2)
+        }
+    }
+
     @Test("Health-Abfrage liefert Version gegen Stub")
     func healthCheckOk() async throws {
         MockURLProtocol.handler = { request in

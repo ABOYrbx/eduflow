@@ -17,6 +17,10 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import android.app.Activity
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +40,7 @@ import androidx.compose.material.icons.filled.Dns
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -43,6 +48,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -55,6 +61,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -76,16 +83,13 @@ import androidx.compose.runtime.withFrameNanos
 import kotlin.math.floor
 import kotlin.math.sin
 
-/** Onboarding: Willkommen → Funktionen → Server prüfen → EduPage-Login. */
+/** Onboarding: Willkommen → Sprache → Funktionen → Server prüfen → EduPage-Login. */
 @Composable
 fun OnboardingFlow(
     vm: AuthViewModel,
     baseUrl: String,
     onBaseUrlChange: suspend (String) -> Unit,
     onTwoFa: (String) -> Unit,
-    onStartDemo: suspend () -> Unit,
-    onStopDemo: suspend () -> Unit,
-    isDemo: Boolean = false,
 ) {
     var page by remember { mutableIntStateOf(0) }
     val reducedMotion = LocalReducedMotion.current
@@ -103,16 +107,14 @@ fun OnboardingFlow(
         ) { current ->
             when (current) {
                 0 -> WelcomePage(onNext = { page = 1 })
-                1 -> FeaturesPage(onNext = { page = 2 })
-                2 -> ServerPage(baseUrl = baseUrl, onApply = { url -> onBaseUrlChange(url); page = 3 })
+                1 -> LanguagePage(onNext = { page = 2 })
+                2 -> FeaturesPage(onNext = { page = 3 })
+                3 -> ServerPage(baseUrl = baseUrl, onApply = { url -> onBaseUrlChange(url); page = 4 })
                 else -> LoginScreen(
                     vm = vm,
                     baseUrl = baseUrl,
                     onBaseUrlChange = onBaseUrlChange,
                     onTwoFa = onTwoFa,
-                    onStartDemo = onStartDemo,
-                    onStopDemo = onStopDemo,
-                    isDemo = isDemo,
                     showServerStep = false,
                 )
             }
@@ -130,6 +132,10 @@ fun OnboardingFlow(
 private fun WelcomePage(onNext: () -> Unit) {
     val reducedMotion = LocalReducedMotion.current
     val density = LocalDensity.current
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val greetings = remember {
+        AppLocale.availableLocales(context).map { AppLocale.greetingFor(it, context) }.distinct()
+    }
     var showButton by remember { mutableStateOf(reducedMotion) }
     LaunchedEffect(reducedMotion) {
         if (reducedMotion) showButton = true else {
@@ -142,7 +148,7 @@ private fun WelcomePage(onNext: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(Modifier.weight(1f))
-        HelloGreeting()
+        HelloGreeting(greetings)
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier.fillMaxWidth().height(280.dp).padding(top = 8.dp).riseIn(index = 10),
@@ -170,14 +176,149 @@ private fun WelcomePage(onNext: () -> Unit) {
     }
 }
 
+/** Sprachauswahl als zweite Onboarding-Seite: Liste mit Stand, Auswahl + Weiter übernimmt sofort (Activity-Neustart). */
 @Composable
-private fun HelloGreeting() {
+private fun LanguagePage(onNext: () -> Unit) {
+    val scheme = MaterialTheme.colorScheme
+    val context = LocalContext.current
+    val activity = context as? Activity
+    var selected by remember { mutableStateOf(AppLocale.current(context)) }
+    val current = AppLocale.current(context)
+    val changed = selected != current
+    val codes = remember(selected) {
+        buildList {
+            add(null)
+            addAll(AppLocale.availableLocales(context).sortedWith(
+                compareBy({ it != current }, { AppLocale.nativeName(it).lowercase() }),
+            ))
+        }
+    }
+    Column(
+        modifier = Modifier.fillMaxSize().padding(horizontal = 28.dp, vertical = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            stringResource(R.string.onboarding_language_title),
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Black,
+            letterSpacing = (-1.2).sp,
+            textAlign = TextAlign.Center,
+            color = scheme.onBackground,
+            modifier = Modifier.padding(top = 12.dp).riseIn(index = 2),
+        )
+        Text(
+            stringResource(R.string.onboarding_language_sub),
+            fontSize = 14.sp,
+            lineHeight = 20.sp,
+            textAlign = TextAlign.Center,
+            color = scheme.onSurfaceVariant,
+            modifier = Modifier.padding(top = 10.dp, start = 24.dp, end = 24.dp).riseIn(index = 3),
+        )
+        Column(
+            modifier = Modifier.fillMaxWidth().weight(1f).verticalScroll(rememberScrollState()).padding(top = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            codes.forEach { code ->
+                val isSelected = selected == code
+                EduCard(modifier = Modifier.fillMaxWidth()) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth().padding(16.dp).clickable { selected = code },
+                    ) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.size(22.dp)
+                                .border(2.dp, scheme.outline, CircleShape)
+                                .padding(5.dp)
+                                .clip(CircleShape)
+                                .background(if (isSelected) scheme.primary else Color.Transparent),
+                        ) {}
+                        Column(Modifier.padding(start = 14.dp).weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    if (code == null) stringResource(R.string.onboarding_language_system)
+                                    else AppLocale.nativeName(code),
+                                    fontSize = 15.sp,
+                                    fontWeight = FontWeight.Black,
+                                    letterSpacing = (-0.2).sp,
+                                    color = scheme.onSurface,
+                                    modifier = Modifier.weight(1f),
+                                )
+                                if (code != null) {
+                                    Text(
+                                        "${AppLocale.coverageFor(code).percent} %",
+                                        fontSize = 13.sp,
+                                        color = scheme.onSurfaceVariant,
+                                    )
+                                }
+                            }
+                            if (code != null) {
+                                LinearProgressIndicator(
+                                    progress = { AppLocale.coverageFor(code).percent / 100f },
+                                    modifier = Modifier.fillMaxWidth().height(4.dp).clip(CircleShape),
+                                )
+                            } else {
+                                Text(
+                                    stringResource(R.string.onboarding_language_system_desc),
+                                    fontSize = 13.sp,
+                                    color = scheme.onSurfaceVariant,
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        PrimaryButton(
+            text = stringResource(
+                if (changed) R.string.onboarding_language_apply_restart else R.string.common_next,
+            ),
+            onClick = {
+                if (changed) activity?.let { AppLocale.set(it, selected) } ?: onNext()
+                else onNext()
+            },
+            modifier = Modifier.riseIn(index = 7),
+        )
+    }
+}
+
+@Composable
+private fun HelloGreeting(greetings: List<String> = emptyList()) {
+    val reduced = LocalReducedMotion.current
+    val scheme = MaterialTheme.colorScheme
+    val fallback = stringResource(R.string.onboarding_greeting)
+    val list = remember(greetings) { greetings.ifEmpty { listOf(fallback) }.distinct() }
+    var order by remember(list) { mutableStateOf(AppLocale.shuffledCycle(list.size, null)) }
+    var position by remember(list) { mutableIntStateOf(0) }
+    val scope = rememberCoroutineScope()
+    key(order, position) {
+        GreetingText(text = list[order[position % order.size]]) {
+            scope.launch {
+                delay(2_000)
+                val next = position + 1
+                if (next >= order.size) {
+                    order = AppLocale.shuffledCycle(list.size, order.lastOrNull())
+                    position = 0
+                } else {
+                    position = next
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun GreetingText(text: String, onDone: () -> Unit) {
     val reduced = LocalReducedMotion.current
     val scheme = MaterialTheme.colorScheme
     var waveVisible by remember { mutableStateOf(reduced) }
-    LaunchedEffect(reduced) {
+    LaunchedEffect(text) {
+        if (!reduced) delay(text.length * 70L + 100L)
+        onDone()
+    }
+    LaunchedEffect(reduced, text) {
         if (reduced) waveVisible = true else {
-            delay(6 * 70L)
+            delay(text.length * 70L)
             waveVisible = true
         }
     }
@@ -192,8 +333,7 @@ private fun HelloGreeting() {
         angle
     }
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-        val greeting = stringResource(R.string.onboarding_greeting)
-        greeting.forEachIndexed { index, char ->
+        text.forEachIndexed { index, char ->
             var visible by remember { mutableStateOf(reduced) }
             LaunchedEffect(reduced) {
                 if (reduced) visible = true else {

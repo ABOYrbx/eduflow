@@ -1,5 +1,6 @@
 package de.eduflow.android
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Build
 import androidx.activity.ComponentActivity
@@ -18,6 +19,11 @@ import de.eduflow.android.ui.theme.accentByKey
 class MainActivity : ComponentActivity() {
 
     private lateinit var store: TokenStore
+
+    /** App-Sprache aus der Onboarding-Auswahl anwenden (System = Standard). */
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(de.eduflow.android.ui.auth.AppLocale.wrap(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

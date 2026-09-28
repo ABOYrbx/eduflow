@@ -17,7 +17,7 @@ import Foundation
 public final class TokenStore: @unchecked Sendable {
     /// Default aus der Plan-Datei (lokaler Server, kein Emulator-Loopback).
     public static let defaultBaseURL = "http://127.0.0.1:3000/api/v1/"
-    public static let demoBaseURL = "http://127.0.0.1:8101/api/v1/"
+    public static let demoBaseURL = "http://127.0.0.1:3100/api/v1/"
 
     private static let defaultsBaseURL = "de.eduflow.baseURL"
     private static let defaultsSubdomain = "de.eduflow.subdomain"

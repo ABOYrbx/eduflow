@@ -1,8 +1,8 @@
 import SwiftUI
 
-/// Onboarding-Ablauf (nur erster Start): Willkommen → Funktionen →
-/// Server (optional) → Anmelden. Die Anmeldung ist die bestehende
-/// Login-Ansicht inklusive Zwei-Faktor-Pfad; bei Erfolg wird das
+/// Onboarding-Ablauf (nur erster Start): Willkommen → Sprache →
+/// Funktionen → Server (optional) → Anmelden. Die Anmeldung ist die
+/// bestehende Login-Ansicht inklusive Zwei-Faktor-Pfad; bei Erfolg wird das
 /// Flag gesetzt und zur Landing-Route navigiert.
 public struct OnboardingFlow: View {
     @Environment(\.colorScheme) private var scheme
@@ -17,25 +17,32 @@ public struct OnboardingFlow: View {
     }
 
     public var body: some View {
-        Group {
-            if let pending = pending2FA {
-                TwoFAView(
-                    store: store,
-                    pendingToken: pending,
-                    onLoggedIn: finish,
-                    onBack: { pending2FA = nil }
-                )
-                .padding(20)
-            } else {
-                VStack(spacing: 0) {
-                    pageView(for: page)
-                        .id(page)
-                        .transition(
-                            .asymmetric(
-                                insertion: .move(edge: .trailing).combined(with: .opacity),
-                                removal: .move(edge: .leading).combined(with: .opacity)
+        ZStack {
+            // Partikel über die ganze App während des Onboardings —
+            // einfach im Hintergrund auf allen Seiten (dieser Flow
+            // existiert nach dem Onboarding nicht).
+            OnboardingParticleBackground()
+            Group {
+                if let pending = pending2FA {
+                    TwoFAView(
+                        store: store,
+                        pendingToken: pending,
+                        onLoggedIn: finish,
+                        onBack: { pending2FA = nil },
+                        transparentBackground: true
+                    )
+                    .padding(20)
+                } else {
+                    VStack(spacing: 0) {
+                        pageView(for: page)
+                            .id(page)
+                            .transition(
+                                .asymmetric(
+                                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                                    removal: .move(edge: .leading).combined(with: .opacity)
+                                )
                             )
-                        )
+                    }
                 }
             }
         }
@@ -55,16 +62,20 @@ public struct OnboardingFlow: View {
         case 0:
             OnboardingWelcomePage { go(to: 1) }
         case 1:
-            OnboardingFeaturesPage { go(to: 2) }
+            OnboardingLanguagePage { go(to: 2) }
         case 2:
-            OnboardingServerPage(store: store) { go(to: 3) }
+            OnboardingFeaturesPage { go(to: 3) }
+        case 3:
+            OnboardingServerPage(store: store) { go(to: 4) }
         default:
             LoginView(
                 store: store,
                 onTwoFA: { pending2FA = $0 },
-                onLoggedIn: finish
+                onLoggedIn: finish,
+                showsServerStep: false,
+                transparentBackground: true,
+                onboardingLayout: true
             )
-            .padding(.vertical, 8)
         }
     }
 

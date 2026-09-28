@@ -3,7 +3,7 @@
 #
 # Verwendung:
 #   ./run.sh                echte Version: API http://0.0.0.0:3000, Web http://0.0.0.0:8000
-#   ./run.sh --demo         Demo-Version (Fake-Provider): API :8101, Web :3100, Login demo / demo
+#   ./run.sh --demo         Demo-Version (Fake-Provider): API :3100, Web :8101, Login demo / demo
 #   ./run.sh --background   im Hintergrund laufen lassen (läuft weiter, auch wenn das Terminal zugeht)
 #   ./stop.sh               Hintergrunddienste wieder stoppen
 #   ./run.sh --help         diese Hilfe
@@ -35,13 +35,17 @@ done
 
 if [ "$MODE" = demo ]; then
   PROVIDER=fake
-  API_PORT=${API_PORT:-8101}
-  WEB_PORT=${WEB_PORT:-3100}
+  API_PORT=${API_PORT:-3100}
+  WEB_PORT=${WEB_PORT:-8101}
+  # Own build output so demo web runs next to the real web server:
+  # Next.js refuses a second `next dev` in one directory (dev lockfile).
+  WEB_DIST_DIR=${NEXT_DIST_DIR:-.next-demo}
   LOGIN_HINT='Demo-Login: demo / demo (2FA-Demo: demo-2fa / demo, Code 123456)'
 else
   PROVIDER=edupage
   API_PORT=${API_PORT:-3000}
   WEB_PORT=${WEB_PORT:-8000}
+  WEB_DIST_DIR=${NEXT_DIST_DIR:-.next}
   LOGIN_HINT='Anmelden mit deinem EduPage-Account (Subdomain + Benutzername + Passwort)'
 fi
 # Bindung an alle Interfaces (LAN/Handy erreichbar); per ENV einschränkbar.
@@ -198,4 +202,4 @@ printf 'Starte Weboberfläche auf %s:%s …\n' "$WEB_HOST" "$WEB_PORT"
 printf 'Web: http://localhost:%s/ (%s)\n' "$WEB_PORT" "$LOGIN_HINT"
 # Next direkt aufrufen (kein verschachteltes `npm run --workspace`, das die
 # --hostname/--port-Flags als Workspace-Verzeichnis fehlinterpretiert).
-API_SERVER_URL="http://127.0.0.1:$API_PORT" PORT="$WEB_PORT" "$ROOT_DIR/node_modules/.bin/next" dev "$ROOT_DIR/apps/web" --hostname "$WEB_HOST" --port "$WEB_PORT"
+API_SERVER_URL="http://127.0.0.1:$API_PORT" PORT="$WEB_PORT" NEXT_DIST_DIR="$WEB_DIST_DIR" "$ROOT_DIR/node_modules/.bin/next" dev "$ROOT_DIR/apps/web" --hostname "$WEB_HOST" --port "$WEB_PORT"

@@ -34,7 +34,7 @@ Die Migration benötigt Node.js 20.9+ und npm. `package-lock.json` und npm-Works
 
 Der Installer fragt nach PostgreSQL oder richtet eine lokale Datenbank ein, erstellt bei Bedarf eine lokale API-Konfiguration mit restriktiven Dateirechten, installiert npm-Abhängigkeiten, generiert Prisma Client und spielt versionierte Migrationen ein. Auf unterstützten Systemen (macOS/Homebrew oder Debian/Ubuntu/apt) kann die automatische PostgreSQL-Einrichtung Systempakete und Dienste installieren. Nur bewusst starten und die Fragen prüfen. `./install.sh -debug` zeigt detailliertere Setup-Ausgaben.
 
-`./run.sh` prüft `node`/`npm`/`curl`, eine vorhandene `npm install`-Ablage und die Datenbankkonfiguration, startet dann die TypeScript-NestJS-API **explizit mit Fake-Provider** auf Port 8101 (wartet auf `/api/v1/health`) und danach die Next.js-Weboberfläche, normalerweise Port 3000. Next.js wählt bei belegtem Port automatisch einen Folgeport. `Ctrl+C` beendet beide. Demo-Login: `demo` / `demo`; der separate 2FA-Pfad nutzt `demo-2fa` / `demo`, Code `123456`. Das sind synthetische Demo-Zugänge, keine EduPage-Konten.
+`./run.sh` (echt: API 3000, Web 8000) bzw. `./run.sh --demo` (Fake-Provider: API 3100, Web 8101) prüft `node`/`npm`/`curl`, eine vorhandene `npm install`-Ablage und die Datenbankkonfiguration, startet dann die TypeScript-NestJS-API (wartet auf `/api/v1/health`) und danach die Next.js-Weboberfläche. `Ctrl+C` beendet beide. Demo-Login: `demo` / `demo`; der separate 2FA-Pfad nutzt `demo-2fa` / `demo`, Code `123456`. Das sind synthetische Demo-Zugänge, keine EduPage-Konten.
 
 Weitere Befehle im Repository-Stamm:
 
@@ -56,13 +56,13 @@ Das Setup benötigt PostgreSQL-Konfiguration unter `apps/api/.env.local` oder `a
 | Variable | Verwendung |
 | --- | --- |
 | `DATABASE_URL` | Verbindung zur lokalen PostgreSQL-Datenbank. |
-| `PORT` | API-Port: standardmäßig 8000, im `run.sh`-Demo-Start 8101. |
+| `PORT` | API-Port: standardmäßig 3000, im `run.sh`-Demo-Start 3100. |
 | `JWT_ACCESS_SECRET` | Geheimer Schlüssel zum Signieren der Demo-JWTs; mindestens 32 Byte. |
 | `CREDENTIAL_ENCRYPTION_KEY` | Separater 32-Byte-Schlüssel (64 Hex-Zeichen) für die Credential-Vault-Verschlüsselung der gespeicherten EduPage-Zugangsdaten. |
 | `EDUFLOW_PROVIDER` | `fake` wählt den Demo-Schulprovider; jeder andere Wert den echten EduPage-Anbieter (Parität N-A–NI, Cutover N-J offen). |
 | `API_SERVER_URL` | NestJS-Ursprung für die Next.js-Serverrouten; deren Fallback ist `http://127.0.0.1:8000`. |
 
-**Hinweis:** `run.sh` startet die Demo-API auf Port 8101 und setzt `API_SERVER_URL` für den Web-Prozess entsprechend, damit der Browser-Webclient die Demo-API trifft.
+**Hinweis:** `run.sh --demo` startet die Demo-API auf Port 3100 und setzt `API_SERVER_URL` für den Web-Prozess entsprechend, damit der Browser-Webclient die Demo-API trifft.
 
 ## Tests und Builds
 
@@ -87,7 +87,7 @@ python3 tests/test_api_settings.py
 ### Android, macOS, iOS
 
 - Android-Projekt: `android/`; geplanter Offline-Lauf ist `:app:assembleDebug` und `:app:testDebugUnitTest`. Im Checkout ist kein startfähiger Gradle-Wrapper (`gradlew`/Wrapper-JAR) vorhanden; Gradle und Android-SDK müssen lokal eingerichtet sein. Bereichspläne nennen Gradle 8.7 und 59 Unit-Tests.
-- macOS: `xcodebuild -project mac/EduFlow.xcodeproj -scheme EduFlow -destination 'platform=macOS' test`. URL-Protocol-Stubs halten Tests offline. Die Dokumentationsdateien nennen widersprüchlich 52 beziehungsweise 53 Tests; Anzahl beim aktuellen Testlauf ermitteln.
+- macOS: `xcodebuild -project "mac/EduFlow Mac.xcodeproj" -scheme "EduFlow Mac" -destination 'platform=macOS' test`. URL-Protocol-Stubs halten Tests offline. Die Dokumentationsdateien nennen widersprüchlich 52 beziehungsweise 53 Tests; Anzahl beim aktuellen Testlauf ermitteln.
 - iOS: Projekt und Tests sind vorhanden, Arbeiten daran sind aber laut `AGENTS.md` zurückgestellt. Nur auf ausdrücklichen Auftrag bauen/ändern.
 
 ### TypeScript

@@ -26,6 +26,10 @@ import androidx.compose.material.icons.filled.AttachFile
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -55,6 +59,7 @@ import de.eduflow.android.R
 import de.eduflow.android.data.dto.ErrorCodes
 import de.eduflow.android.data.dto.MessageDto
 import de.eduflow.android.data.dto.MsgFilter
+import de.eduflow.android.data.dto.RecipientDto
 import de.eduflow.android.data.dto.bodyLine
 import de.eduflow.android.ui.common.AppHeader
 import de.eduflow.android.ui.common.AvatarDot
@@ -248,7 +253,7 @@ fun MessageCard(
             .clip(MaterialTheme.shapes.medium)
             .clickable(onClick = onOpenThread),
     ) {
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
             AvatarDot(initials = initialsOf(item.author.ifBlank { "–" }))
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
@@ -396,7 +401,10 @@ fun ThreadScreen(
                                     message?.id?.let { id -> onAttachment(id, idx) }
                                 },
                         ) {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                            ) {
                                 Icon(
                                     Icons.Filled.AttachFile,
                                     contentDescription = null,
@@ -513,16 +521,10 @@ fun ComposeScreen(
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsState()
-    var filter by remember { mutableStateOf("") }
 
     val sentId = state.sentId
     LaunchedEffect(sentId) {
         if (sentId != null) onSent(sentId)
-    }
-
-    val visible = remember(state.recipients, filter) {
-        if (filter.isBlank()) state.recipients
-        else state.recipients.filter { it.name.contains(filter, ignoreCase = true) }
     }
 
     // Verfassen läuft ohne Bottom-Bar (NavGraph blendet sie auf dieser
@@ -549,46 +551,15 @@ fun ComposeScreen(
             )
         }
 
-        SearchPill(
-            value = filter,
-            onValueChange = { filter = it },
-            placeholder = stringResource(R.string.messages_recipient_search),
+        RecipientDropdown(
+            recipients = state.recipients,
+            selectedIds = state.selectedIds,
+            isLoading = state.isLoadingRecipients,
+            onToggle = viewModel::toggleRecipient,
+            modifier = Modifier.fillMaxWidth(),
         )
 
         Spacer(Modifier.height(8.dp))
-
-        SectionLabel(stringResource(R.string.messages_recipients_format, state.selectedIds.size))
-
-        if (state.isLoadingRecipients) {
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
-                horizontalArrangement = Arrangement.Center,
-            ) { CircularProgressIndicator() }
-        } else {
-            LazyColumn(
-                modifier = Modifier.weight(1f).padding(top = 4.dp),
-                verticalArrangement = Arrangement.spacedBy(2.dp),
-            ) {
-                items(visible, key = { it.id }) { rec ->
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(
-                            checked = rec.id in state.selectedIds,
-                            onCheckedChange = { viewModel.toggleRecipient(rec.id) },
-                        )
-                        AvatarDot(initials = initialsOf(rec.name))
-                        Spacer(Modifier.width(10.dp))
-                        Column(Modifier.weight(1f)) {
-                            Text(rec.name, fontWeight = FontWeight.Medium)
-                            Text(
-                                rec.kind,
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        }
-                    }
-                }
-            }
-        }
 
         OutlinedTextField(
             value = state.body,
@@ -619,6 +590,97 @@ fun ComposeScreen(
             onClick = viewModel::send,
             enabled = !state.isSending,
         )
+    }
+}
+
+/**
+ * Empfänger-Dropdown (Mehrfachauswahl): geschlossen zeigt es die Anzahl der
+ * Auswahl, geöffnet Suche plus Checkbox-Liste. Auswahl schließt nicht.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun RecipientDropdown(
+    recipients: List<RecipientDto>,
+    selectedIds: Set<String>,
+    isLoading: Boolean,
+    onToggle: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var expanded by remember { mutableStateOf(false) }
+    var filter by remember { mutableStateOf("") }
+    val visible = remember(recipients, filter) {
+        if (filter.isBlank()) recipients
+        else recipients.filter { it.name.contains(filter, ignoreCase = true) }
+    }
+    val scheme = MaterialTheme.colorScheme
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = it },
+        modifier = modifier,
+    ) {
+        OutlinedTextField(
+            value = if (selectedIds.isEmpty()) "" else
+                stringResource(R.string.messages_recipients_format, selectedIds.size),
+            onValueChange = {},
+            readOnly = true,
+            singleLine = true,
+            placeholder = { Text(stringResource(R.string.messages_recipient_search)) },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            shape = RoundedCornerShape(16.dp),
+            textStyle = MaterialTheme.typography.bodyMedium,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = scheme.surface,
+                unfocusedContainerColor = scheme.surface,
+                unfocusedBorderColor = scheme.outlineVariant,
+                focusedBorderColor = scheme.primary,
+                cursorColor = scheme.primary,
+            ),
+            modifier = Modifier.fillMaxWidth().clickable { expanded = true },
+        )
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+        ) {
+            OutlinedTextField(
+                value = filter,
+                onValueChange = { filter = it },
+                singleLine = true,
+                placeholder = { Text(stringResource(R.string.messages_recipient_search)) },
+                shape = RoundedCornerShape(16.dp),
+                textStyle = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp),
+            )
+            if (isLoading) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    horizontalArrangement = Arrangement.Center,
+                ) { CircularProgressIndicator(Modifier.size(20.dp)) }
+            } else {
+                visible.forEach { rec ->
+                    DropdownMenuItem(
+                        text = {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Checkbox(
+                                    checked = rec.id in selectedIds,
+                                    onCheckedChange = null,
+                                )
+                                AvatarDot(initials = initialsOf(rec.name))
+                                Spacer(Modifier.width(10.dp))
+                                Column(Modifier.weight(1f)) {
+                                    Text(rec.name, fontWeight = FontWeight.Medium)
+                                    Text(
+                                        rec.kind,
+                                        style = MaterialTheme.typography.labelSmall,
+                                        color = scheme.onSurfaceVariant,
+                                    )
+                                }
+                            }
+                        },
+                        onClick = { onToggle(rec.id) },
+                    )
+                }
+            }
+        }
     }
 }
 
