@@ -34,7 +34,7 @@ class AuthViewModel(private val repo: AuthRepository) : ViewModel() {
     private val _loggedOut = MutableStateFlow(false)
     val loggedOut: StateFlow<Boolean> = _loggedOut
 
-    fun login(username: String, password: String, subdomain: String, device: String = "") {
+    fun login(username: String, password: String, device: String = "") {
         if (username.isBlank() || password.isBlank()) {
             _login.value = LoginUiState.Error(
                 "Bitte Benutzername und Passwort angeben.", ErrorCodes.VALIDATION,
@@ -44,7 +44,8 @@ class AuthViewModel(private val repo: AuthRepository) : ViewModel() {
         _login.value = LoginUiState.Loading
         viewModelScope.launch {
             try {
-                when (val r = repo.login(username, password, subdomain, device)) {
+                // Subdomain leer: Server löst die Schule automatisch auf.
+                when (val r = repo.login(username, password, "", device)) {
                     is de.eduflow.android.data.LoginResult.LoggedIn -> {
                         _login.value = LoginUiState.Idle
                     }

@@ -1,5 +1,12 @@
 package de.eduflow.android.ui.overview
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
@@ -27,7 +35,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,12 +46,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -60,7 +70,6 @@ import de.eduflow.android.ui.common.AppHeader
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SectionLabel
-import de.eduflow.android.ui.theme.LocalEduFlowDark
 import de.eduflow.android.ui.timetable.AuthAwareError
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -290,7 +299,7 @@ private fun LiveClockCard() {
     }
 }
 
-/** Aktuelle/nächste Stunde — Karte in Primär-Farbe (wie Noten-Schnitt). */
+/** Aktuelle/nächste Stunde — gleiche Karte wie die Uhr (EduCard). */
 @Composable
 private fun NowCard(
     current: LessonDto?,
@@ -298,15 +307,43 @@ private fun NowCard(
     onTimetable: () -> Unit,
 ) {
     val scheme = MaterialTheme.colorScheme
-    // Dark: schwarze Karte statt weißer Primär-Fläche (Light bleibt
-    // PNG-schwarz) — weiße Schrift dazu statt onPrimary.
-    val dark = LocalEduFlowDark.current
-    val cardColor = if (dark) Color.Black else scheme.primary
-    val contentColor = if (dark) Color.White else scheme.onPrimary
-    Surface(
-        shape = RoundedCornerShape(16.dp),
-        color = cardColor,
-        modifier = Modifier.fillMaxWidth(),
+    // Seiten: aktuelle Stunde, dann nächste (wischen für nächste).
+    val pages = listOfNotNull(
+        current?.let { it to true },
+        next?.let { it to false },
+    )
+    var page by remember(
+        current?.title, current?.period, current?.time,
+        next?.title, next?.period, next?.time,
+    ) { mutableIntStateOf(0) }
+    var forward by remember { mutableStateOf(true) }
+    var dragX by remember { mutableFloatStateOf(0f) }
+    val density = LocalDensity.current
+    val safePage = page.coerceIn(0, (pages.size - 1).coerceAtLeast(0))
+    EduCard(
+        modifier = Modifier.fillMaxWidth().pointerInput(pages.size, safePage) {
+            if (pages.size < 2) return@pointerInput
+            detectHorizontalDragGestures(
+                onDragStart = { dragX = 0f },
+                onDragEnd = {
+                    val threshold = with(density) { 48.dp.toPx() }
+                    if (dragX <= -threshold && safePage < pages.lastIndex) {
+                        forward = true
+                        page = safePage + 1
+                    } else if (dragX >= threshold && safePage > 0) {
+                        forward = false
+                        page = safePage - 1
+                    }
+                    dragX = 0f
+                },
+                onDragCancel = { dragX = 0f },
+                onHorizontalDrag = { change, amount ->
+                    change.consume()
+                    dragX += amount
+                },
+            )
+        },
+        onClick = onTimetable,
     ) {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
@@ -314,45 +351,60 @@ private fun NowCard(
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 1.2.sp,
-                color = contentColor.copy(alpha = 0.7f),
+                color = scheme.onSurfaceVariant,
             )
-            if (current == null && next == null) {
+            if (pages.isEmpty()) {
                 Text(
                     stringResource(R.string.overview_no_school),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = contentColor,
+                    color = scheme.onSurface,
                 )
             } else {
-                current?.let {
+                AnimatedContent(
+                    targetState = safePage,
+                    transitionSpec = {
+                        val direction = if (forward) 1 else -1
+                        (slideInHorizontally { it * direction } + fadeIn()) togetherWith
+                            (slideOutHorizontally { -it * direction } + fadeOut())
+                    },
+                    label = "now-page",
+                ) { index ->
+                    val (lesson, isCurrent) = pages[index]
                     Text(
-                        stringResource(R.string.overview_now_format, it.title, it.period, it.time),
+                        if (isCurrent) {
+                            stringResource(R.string.overview_now_format, lesson.title, lesson.period, lesson.time)
+                        } else if (lesson.rooms.isNotBlank()) {
+                            stringResource(
+                                R.string.overview_next_room_format,
+                                lesson.title,
+                                lesson.period,
+                                lesson.time,
+                                lesson.rooms,
+                            )
+                        } else {
+                            stringResource(R.string.overview_next_format, lesson.title, lesson.period, lesson.time)
+                        },
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = contentColor,
+                        color = scheme.onSurface,
                     )
                 }
-                next?.let {
-                    Text(
-                        if (it.rooms.isNotBlank()) stringResource(
-                            R.string.overview_next_room_format,
-                            it.title,
-                            it.period,
-                            it.time,
-                            it.rooms,
-                        )
-                        else stringResource(R.string.overview_next_format, it.title, it.period, it.time),
-                        fontSize = 13.sp,
-                        color = contentColor.copy(alpha = 0.75f),
-                    )
+                if (pages.size > 1) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+                        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                    ) {
+                        repeat(pages.size) { i ->
+                            Surface(
+                                shape = CircleShape,
+                                color = if (i == safePage) scheme.primary else scheme.outlineVariant,
+                                modifier = Modifier.size(width = if (i == safePage) 24.dp else 8.dp, height = 8.dp),
+                            ) {}
+                        }
+                    }
                 }
             }
-            TextButton(
-                onClick = onTimetable,
-                colors = ButtonDefaults.textButtonColors(
-                    contentColor = contentColor,
-                ),
-            ) { Text(stringResource(R.string.overview_action_timetable)) }
         }
     }
 }

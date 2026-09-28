@@ -178,8 +178,10 @@ object MessageTypes {
 }
 
 /**
- * Empfänger-ID-Format wie serverseitig (app.py _RECIPIENT_ID_RE):
- * Teacher|Student|StudentOnly|Parent|Rodic|Ucitel + Zahl.
+ * Empfänger-ID-Format wie serverseitig erwartet (Teacher|Student|… + Schlüssel).
+ * Reine Format-Referenz für Tests — kein Sende-Gate: Die Auswahl stammt aus
+ * der Server-Empfängerliste, der Server prüft Mitgliedschaft (dbi-Schlüssel
+ * sind nicht überall rein numerisch).
  */
 object RecipientIds {
     private val PATTERN =

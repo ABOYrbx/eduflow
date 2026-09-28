@@ -191,9 +191,13 @@ class OverviewViewModel(
         /**
          * Aktuelle/nächste Stunde wie im Web (uebersicht): laufende nicht
          * entfallene Stunde, sonst nächste kommende (keine Events).
+         * `now` ist injizierbar, damit Tests mit fester Uhrzeit laufen
+         * (relativ zu now() wäre der Mitternachtsumbruch flaky).
          */
-        fun currentAndNext(lessons: List<LessonDto>): Pair<LessonDto?, LessonDto?> {
-            val now = LocalTime.now()
+        fun currentAndNext(
+            lessons: List<LessonDto>,
+            now: LocalTime = LocalTime.now(),
+        ): Pair<LessonDto?, LessonDto?> {
             var current: LessonDto? = null
             var next: LessonDto? = null
             for (lesson in lessons) {

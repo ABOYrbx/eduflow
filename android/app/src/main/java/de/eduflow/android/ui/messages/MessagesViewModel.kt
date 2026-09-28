@@ -307,7 +307,10 @@ class ComposeViewModel(
 
     fun send() {
         val s = _state.value
-        val ids = RecipientIds.clean(s.selectedIds.toList())
+        // IDs stammen aus der Server-Empfängerliste und werden dort erneut
+        // geprüft — hier nur leere/Doppelte entfernen, kein Format-Raten
+        // (dbi-Schlüssel sind nicht überall rein numerisch).
+        val ids = s.selectedIds.map { it.trim() }.filter { it.isNotEmpty() }.distinct()
         val body = s.body.trim()
         if (ids.isEmpty()) {
             _state.update {
