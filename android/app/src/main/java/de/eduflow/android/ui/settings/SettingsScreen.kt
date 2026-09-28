@@ -63,6 +63,7 @@ import de.eduflow.android.ui.common.LoadingBox
 import de.eduflow.android.ui.common.PrimaryButton
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SectionLabel
+import de.eduflow.android.ui.navigation.NavTabs
 import de.eduflow.android.ui.overview.OverviewOrder
 import de.eduflow.android.ui.common.StatusPill
 import de.eduflow.android.ui.theme.Accents
@@ -120,6 +121,8 @@ fun SettingsScreen(
     var saveStateObserved by remember { mutableStateOf(false) }
     var showOrderEditor by remember { mutableStateOf(false) }
     var draftOrder by remember { mutableStateOf(OverviewOrder.default) }
+    var showNavEditor by remember { mutableStateOf(false) }
+    var draftTabs by remember { mutableStateOf(NavTabs.default) }
 
     // Frisch laden beim Öffnen (VM wird im NavGraph eager erzeugt,
     // ggf. noch ohne Token geladen).
@@ -235,6 +238,58 @@ fun SettingsScreen(
                 )
                 Spacer(Modifier.height(8.dp))
                 AccentDotsRow(selected = accentKey, onSelect = vm::setAccent)
+        SectionLabel(stringResource(R.string.settings_navbar_section))
+        EduCard(modifier = Modifier.fillMaxWidth()) {
+            Column(Modifier.fillMaxWidth().padding(16.dp)) {
+                val navTabs by vm.navTabs.collectAsState()
+                Text(
+                    stringResource(R.string.settings_navbar_desc),
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Spacer(Modifier.height(4.dp))
+                TextButton(onClick = {
+                    draftTabs = NavTabs.parse(navTabs)
+                    showNavEditor = true
+                }) {
+                    Icon(Icons.Filled.Tune, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.settings_navbar_customize))
+                }
+            }
+        }
+
+        if (showNavEditor) {
+            AlertDialog(
+                onDismissRequest = { showNavEditor = false },
+                title = { Text(stringResource(R.string.settings_navbar_section)) },
+                text = {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            stringResource(R.string.settings_navbar_desc),
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                        NavBarEditor(
+                            selected = draftTabs,
+                            onSelectionChange = { draftTabs = NavTabs.parse(it.joinToString(",")) },
+                            modifier = Modifier.fillMaxWidth().heightIn(max = 340.dp),
+                        )
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = {
+                        vm.setNavTabs(draftTabs)
+                        showNavEditor = false
+                    }) { Text(stringResource(R.string.common_save)) }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showNavEditor = false }) {
+                        Text(stringResource(R.string.common_cancel))
+                    }
+                },
+            )
+        }
+
             }
         }
 

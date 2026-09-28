@@ -31,6 +31,10 @@
     <string name="bottom_messages">Nachr.</string>
     <string name="bottom_plan">Plan</string>
     <string name="bottom_more">Mehr</string>
+    <string name="bottom_grades">Noten</string>
+    <string name="bottom_school">Termine</string>
+    <string name="navbar_move_up">Nach oben</string>
+    <string name="navbar_move_down">Nach unten</string>
 
     <!-- Auth / Login -->
     <string name="auth_demo_banner">Demo-Modus · nur synthetische Beispieldaten</string>
@@ -58,6 +62,11 @@
 
     <!-- Onboarding -->
     <string name="onboarding_greeting">Hallo!</string>
+    <string name="onboarding_language_title">Sprache wählen</string>
+    <string name="onboarding_language_sub">EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen.</string>
+    <string name="onboarding_language_apply_restart">Übernehmen &amp; neu starten</string>
+    <string name="onboarding_language_system">System</string>
+    <string name="onboarding_language_system_desc">Folgt der Systemsprache</string>
     <string name="onboarding_features_title">Alles an einem Ort.</string>
     <string name="onboarding_feat1_title">Nachrichten &amp; Threads</string>
     <string name="onboarding_feat1_desc">Alle EduPage-Nachrichten im Mail-Layout — mit Likes, Antworten und Dateien.</string>
@@ -109,6 +118,12 @@
     <string name="settings_hwtests_label">Tests und Prüfungen einbeziehen</string>
     <string name="settings_unread_placeholder">Max. ungelesene Nachrichten (1–50)</string>
     <string name="settings_homework_placeholder">Max. offene Hausaufgaben (1–50)</string>
+    <string name="settings_navbar_section">Navigationsleiste</string>
+    <string name="settings_navbar_customize">Leiste anpassen</string>
+    <string name="settings_navbar_desc">Wähle bis zu fünf Bereiche für die Leiste und sortiere sie mit den Pfeilen. „Mehr“ bleibt immer angepinnt.</string>
+    <string name="settings_navbar_shown">Angezeigt (%1$d/%2$d)</string>
+    <string name="settings_navbar_add">Hinzufügen</string>
+    <string name="settings_navbar_max">Maximal fünf Bereiche — erst einen abwählen.</string>
     <string name="settings_weather_section">Wetter</string>
     <string name="settings_weather_show">Wetterkarte anzeigen</string>
     <string name="settings_weather_sub">Auf der Übersicht in Android und im Web</string>

@@ -91,6 +91,9 @@ fun EduFlowNav(
     val settingsVm: SettingsViewModel = viewModel(key = "settings") {
         SettingsViewModel(settingsRepo, authRepo, store)
     }
+    // Editierbare Belegung aus den Einstellungen (Mehr immer angepinnt).
+    val navTabsRaw by settingsVm.navTabs.collectAsState()
+    val bottomTabs = remember(navTabsRaw) { tabsForSelection(NavTabs.parse(navTabsRaw)) }
 
     val start = when {
         session?.isLoggedIn == true -> Routes.OVERVIEW
@@ -354,6 +357,7 @@ fun EduFlowNav(
                     }
                 },
                 modifier = Modifier.align(Alignment.BottomCenter).navigationBarsPadding(),
+                tabs = bottomTabs,
             )
         }
         }

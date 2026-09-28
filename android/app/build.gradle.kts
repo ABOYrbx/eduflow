@@ -54,6 +54,8 @@ dependencies {
 
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended")
+    // Nur für Pull-to-Refresh auf der Übersicht (BOM-verwaltete Version).
+    implementation("androidx.compose.material:material")
     implementation("androidx.compose.ui:ui-tooling-preview")
     debugImplementation("androidx.compose.ui:ui-tooling")
 

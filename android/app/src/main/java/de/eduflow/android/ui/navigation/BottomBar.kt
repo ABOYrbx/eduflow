@@ -47,6 +47,7 @@ import de.eduflow.android.ui.theme.LocalReducedMotion
 // weichen, runden Glaskapsel unter Icon und Bezeichnung.
 data class BottomTab(val route: String, val labelRes: Int, val icon: ImageVector)
 
+/** Standard-Belegung (Home, Aufgaben, Nachr., Plan, Mehr). */
 val BottomTabs = listOf(
     BottomTab(Routes.OVERVIEW, R.string.bottom_home, Icons.Filled.Home),
     BottomTab(Routes.HOMEWORK, R.string.bottom_tasks, Icons.AutoMirrored.Filled.Assignment),
@@ -55,17 +56,35 @@ val BottomTabs = listOf(
     BottomTab(Routes.MORE, R.string.bottom_more, Icons.Filled.MoreHoriz),
 )
 
+private val MoreTab = BottomTab(Routes.MORE, R.string.bottom_more, Icons.Filled.MoreHoriz)
+
+/**
+ * Tabs aus gespeicherter Auswahl: gewählte Inhalte in Reihenfolge, Mehr
+ * immer fest angepinnt (Abmelden/Geräte bleiben erreichbar).
+ */
+fun tabsForSelection(routes: List<String>): List<BottomTab> =
+    NavTabs.parse(routes.joinToString(",")).map { route ->
+        BottomTab(route, NavTabs.labelRes[route] ?: R.string.bottom_home, NavTabs.iconFor(route))
+    } + MoreTab
+
 /** Aktiver Tab zur Route (Thread/Verfassen zählen zu Nachrichten,
- * Noten/Einstellungen/Geräte zu Mehr). */
-fun tabForRoute(route: String?): String? = when {
-    route == null -> null
-    route == Routes.OVERVIEW -> Routes.OVERVIEW
-    route == Routes.HOMEWORK -> Routes.HOMEWORK
-    route == Routes.TIMETABLE -> Routes.TIMETABLE
-    route.startsWith(Routes.MESSAGES) -> Routes.MESSAGES
-    route == Routes.GRADES || route == Routes.SCHOOL || route == Routes.SETTINGS ||
-        route == Routes.DEVICES || route == Routes.MORE -> Routes.MORE
-    else -> null
+ * Einstellungen/Geräte/Mehr zu Mehr; Noten/Termine zum eigenen Tab,
+ * sonst zum Mehr-Tab als Rückfall). */
+fun tabForRoute(route: String?, tabs: List<BottomTab> = BottomTabs): String? {
+    val target = when {
+        route == null -> null
+        route == Routes.OVERVIEW -> Routes.OVERVIEW
+        route == Routes.HOMEWORK -> Routes.HOMEWORK
+        route == Routes.TIMETABLE -> Routes.TIMETABLE
+        route.startsWith(Routes.MESSAGES) -> Routes.MESSAGES
+        route == Routes.GRADES -> Routes.GRADES
+        route == Routes.SCHOOL -> Routes.SCHOOL
+        route == Routes.SETTINGS || route == Routes.DEVICES || route == Routes.MORE -> Routes.MORE
+        else -> null
+    } ?: return null
+    // Ziel ohne sichtbaren Tab (z. B. Noten geöffnet, aber abgewählt)
+    // fällt auf Mehr zurück; Mehr ist immer sichtbar.
+    return if (target == Routes.MORE || tabs.any { it.route == target }) target else Routes.MORE
 }
 
 @Composable
@@ -73,16 +92,17 @@ fun EduFlowBottomBar(
     currentRoute: String?,
     onSection: (String) -> Unit,
     modifier: Modifier = Modifier,
+    tabs: List<BottomTab> = BottomTabs,
 ) {
     val scheme = MaterialTheme.colorScheme
     val darkTheme = LocalEduFlowDark.current
-    val activeIndex = BottomTabs.indexOfFirst { it.route == tabForRoute(currentRoute) }
+    val activeIndex = tabs.indexOfFirst { it.route == tabForRoute(currentRoute, tabs) }
     val reduceMotion = LocalReducedMotion.current
     val slotColor = if (darkTheme) Color(0xFF262626) else Color(0xFFECECEE)
 
     Box(modifier = modifier.fillMaxWidth().padding(horizontal = 5.dp, vertical = 4.dp)) {
         BoxWithConstraints(Modifier.fillMaxWidth().height(56.dp)) {
-            val slotWidth = maxWidth / BottomTabs.size
+            val slotWidth = maxWidth / tabs.size
             val targetOffset = if (activeIndex >= 0) slotWidth * activeIndex + 5.dp else -slotWidth
             val animatedOffset by animateDpAsState(
                 targetValue = targetOffset,
@@ -123,8 +143,8 @@ fun EduFlowBottomBar(
             }
 
             Row(Modifier.fillMaxWidth().height(56.dp)) {
-                BottomTabs.forEach { tab ->
-                    val selected = tab.route == tabForRoute(currentRoute)
+                tabs.forEach { tab ->
+                    val selected = tab.route == tabForRoute(currentRoute, tabs)
                     BottomTabItem(
                         tab = tab,
                         selected = selected,
