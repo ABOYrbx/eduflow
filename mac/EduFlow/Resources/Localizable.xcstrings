@@ -17,10 +17,10 @@
             "value" : "‹ Back"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "‹ Geri"
+            "value" : "‹ Retour"
           }
         },
         "pl" : {
@@ -29,10 +29,10 @@
             "value" : "‹ Wstecz"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "‹ Retour"
+            "value" : "‹ Geri"
           }
         }
       }
@@ -52,10 +52,10 @@
             "value" : "(no description)"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "(açıklama yok)"
+            "value" : "(sans description)"
           }
         },
         "pl" : {
@@ -64,10 +64,10 @@
             "value" : "(brak opisu)"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "(sans description)"
+            "value" : "(açıklama yok)"
           }
         }
       }
@@ -87,10 +87,10 @@
             "value" : "(unknown)"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "(bilinmiyor)"
+            "value" : "(inconnu)"
           }
         },
         "pl" : {
@@ -99,13 +99,16 @@
             "value" : "(nieznane)"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "(inconnu)"
+            "value" : "(bilinmiyor)"
           }
         }
       }
+    },
+    "%@ %%" : {
+
     },
     "← Vorwoche" : {
       "comment" : "UI-Literal",
@@ -123,10 +126,10 @@
             "value" : "← Previous week"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "← Önceki hafta"
+            "value" : "← Semaine précédente"
           }
         },
         "pl" : {
@@ -135,10 +138,10 @@
             "value" : "← Poprzedni tydzień"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "← Semaine précédente"
+            "value" : "← Önceki hafta"
           }
         }
       }
@@ -159,10 +162,10 @@
             "value" : "6-digit code"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "6 haneli kod"
+            "value" : "Code à 6 chiffres"
           }
         },
         "pl" : {
@@ -171,10 +174,10 @@
             "value" : "6-cyfrowy kod"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Code à 6 chiffres"
+            "value" : "6 haneli kod"
           }
         }
       }
@@ -195,10 +198,10 @@
             "value" : "Cancel"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İptal"
+            "value" : "Annuler"
           }
         },
         "pl" : {
@@ -207,10 +210,10 @@
             "value" : "Anuluj"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Annuler"
+            "value" : "İptal"
           }
         }
       }
@@ -231,10 +234,10 @@
             "value" : "Sign out"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çıkış yap"
+            "value" : "Se déconnecter"
           }
         },
         "pl" : {
@@ -243,10 +246,10 @@
             "value" : "Wyloguj się"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Se déconnecter"
+            "value" : "Çıkış yap"
           }
         }
       }
@@ -267,10 +270,10 @@
             "value" : "Signing out …"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çıkış yapılıyor …"
+            "value" : "Déconnexion …"
           }
         },
         "pl" : {
@@ -279,10 +282,10 @@
             "value" : "Wylogowywanie …"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Déconnexion …"
+            "value" : "Çıkış yapılıyor …"
           }
         }
       }
@@ -303,10 +306,10 @@
             "value" : "All"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tümü"
+            "value" : "Tout"
           }
         },
         "pl" : {
@@ -315,10 +318,10 @@
             "value" : "Wszystkie"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tout"
+            "value" : "Tümü"
           }
         }
       }
@@ -339,10 +342,10 @@
             "value" : "Mark all as read"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tümünü okundu olarak işaretle"
+            "value" : "Tout marquer comme lu"
           }
         },
         "pl" : {
@@ -351,10 +354,10 @@
             "value" : "Oznacz wszystkie jako przeczytane"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tout marquer comme lu"
+            "value" : "Tümünü okundu olarak işaretle"
           }
         }
       }
@@ -375,10 +378,10 @@
             "value" : "All homework"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tüm ödevler"
+            "value" : "Tous les devoirs"
           }
         },
         "pl" : {
@@ -387,10 +390,10 @@
             "value" : "Wszystkie zadania"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tous les devoirs"
+            "value" : "Tüm ödevler"
           }
         }
       }
@@ -411,10 +414,10 @@
             "value" : "All EduPage messages in a mail layout — with likes, replies and files."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tüm EduPage mesajları posta düzeninde — beğeniler, yanıtlar ve dosyalar ile."
+            "value" : "Tous les messages EduPage en présentation e-mail — avec mentions, réponses et fichiers."
           }
         },
         "pl" : {
@@ -423,10 +426,10 @@
             "value" : "Wszystkie wiadomości EduPage w układzie poczty — z polubieniami, odpowiedziami i plikami."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tous les messages EduPage en présentation e-mail — avec mentions, réponses et fichiers."
+            "value" : "Tüm EduPage mesajları posta düzeninde — beğeniler, yanıtlar ve dosyalar ile."
           }
         }
       }
@@ -447,10 +450,10 @@
             "value" : "All messages"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tüm mesajlar"
+            "value" : "Tous les messages"
           }
         },
         "pl" : {
@@ -459,10 +462,10 @@
             "value" : "Wszystkie wiadomości"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tous les messages"
+            "value" : "Tüm mesajlar"
           }
         }
       }
@@ -482,10 +485,10 @@
             "value" : "Everything in one place."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Her şey tek bir yerde."
+            "value" : "Tout au même endroit."
           }
         },
         "pl" : {
@@ -494,10 +497,10 @@
             "value" : "Wszystko w jednym miejscu."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tout au même endroit."
+            "value" : "Her şey tek bir yerde."
           }
         }
       }
@@ -518,10 +521,10 @@
             "value" : "Show all"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tümünü göster"
+            "value" : "Tout afficher"
           }
         },
         "pl" : {
@@ -530,10 +533,10 @@
             "value" : "Pokaż wszystko"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tout afficher"
+            "value" : "Tümünü göster"
           }
         }
       }
@@ -554,10 +557,10 @@
             "value" : "Mark as done"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tamamlandı olarak işaretle"
+            "value" : "Marquer comme terminé"
           }
         },
         "pl" : {
@@ -566,10 +569,10 @@
             "value" : "Oznacz jako wykonane"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Marquer comme terminé"
+            "value" : "Tamamlandı olarak işaretle"
           }
         }
       }
@@ -590,10 +593,10 @@
             "value" : "Sign in"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Giriş yap"
+            "value" : "Se connecter"
           }
         },
         "pl" : {
@@ -602,10 +605,10 @@
             "value" : "Zaloguj się"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Se connecter"
+            "value" : "Giriş yap"
           }
         }
       }
@@ -626,10 +629,10 @@
             "value" : "Signing in …"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Giriş yapılıyor …"
+            "value" : "Connexion …"
           }
         },
         "pl" : {
@@ -638,10 +641,10 @@
             "value" : "Logowanie …"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Connexion …"
+            "value" : "Giriş yapılıyor …"
           }
         }
       }
@@ -661,10 +664,10 @@
             "value" : "Write a reply"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yanıt yaz"
+            "value" : "Écrire une réponse"
           }
         },
         "pl" : {
@@ -673,10 +676,10 @@
             "value" : "Napisz odpowiedź"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Écrire une réponse"
+            "value" : "Yanıt yaz"
           }
         }
       }
@@ -697,10 +700,10 @@
             "value" : "Replies"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yanıtlar"
+            "value" : "Réponses"
           }
         },
         "pl" : {
@@ -709,10 +712,10 @@
             "value" : "Odpowiedzi"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Réponses"
+            "value" : "Yanıtlar"
           }
         }
       }
@@ -733,10 +736,10 @@
             "value" : "Hidden"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gizli"
+            "value" : "Masqués"
           }
         },
         "pl" : {
@@ -745,10 +748,10 @@
             "value" : "Ukryte"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Masqués"
+            "value" : "Gizli"
           }
         }
       }
@@ -768,10 +771,10 @@
             "value" : "Appearance"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Görünüm"
+            "value" : "Apparence"
           }
         },
         "pl" : {
@@ -780,10 +783,10 @@
             "value" : "Wygląd"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apparence"
+            "value" : "Görünüm"
           }
         }
       }
@@ -803,10 +806,10 @@
             "value" : "Two-factor code"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İki faktörlü kod"
+            "value" : "Code à deux facteurs"
           }
         },
         "pl" : {
@@ -815,10 +818,10 @@
             "value" : "Kod dwuskładnikowy"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Code à deux facteurs"
+            "value" : "İki faktörlü kod"
           }
         }
       }
@@ -838,10 +841,10 @@
             "value" : "Sign in"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Giriş yap"
+            "value" : "Se connecter"
           }
         },
         "pl" : {
@@ -850,10 +853,10 @@
             "value" : "Zaloguj się"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Se connecter"
+            "value" : "Giriş yap"
           }
         }
       }
@@ -873,10 +876,10 @@
             "value" : "Server: %@"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sunucu: %@"
+            "value" : "Serveur : %@"
           }
         },
         "pl" : {
@@ -885,10 +888,10 @@
             "value" : "Serwer: %@"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Serveur : %@"
+            "value" : "Sunucu: %@"
           }
         }
       }
@@ -908,10 +911,10 @@
             "value" : "Step %d of %d"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Adım %d / %d"
+            "value" : "Étape %d sur %d"
           }
         },
         "pl" : {
@@ -920,10 +923,10 @@
             "value" : "Krok %d z %d"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Étape %d sur %d"
+            "value" : "Adım %d / %d"
           }
         }
       }
@@ -944,10 +947,10 @@
             "value" : "Base URL"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Temel URL"
+            "value" : "URL de base"
           }
         },
         "pl" : {
@@ -956,10 +959,10 @@
             "value" : "Bazowy URL"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "URL de base"
+            "value" : "Temel URL"
           }
         }
       }
@@ -980,10 +983,10 @@
             "value" : "Username"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kullanıcı adı"
+            "value" : "Nom d’utilisateur"
           }
         },
         "pl" : {
@@ -992,10 +995,10 @@
             "value" : "Nazwa użytkownika"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nom d’utilisateur"
+            "value" : "Kullanıcı adı"
           }
         }
       }
@@ -1016,10 +1019,10 @@
             "value" : "Section"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bölüm"
+            "value" : "Section"
           }
         },
         "pl" : {
@@ -1028,10 +1031,10 @@
             "value" : "Sekcja"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Section"
+            "value" : "Bölüm"
           }
         }
       }
@@ -1052,10 +1055,10 @@
             "value" : "Confirm"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Onayla"
+            "value" : "Confirmer"
           }
         },
         "pl" : {
@@ -1064,10 +1067,10 @@
             "value" : "Potwierdź"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Confirmer"
+            "value" : "Onayla"
           }
         }
       }
@@ -1088,10 +1091,10 @@
             "value" : "Code"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kod"
+            "value" : "Code"
           }
         },
         "pl" : {
@@ -1100,10 +1103,10 @@
             "value" : "Kod"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Code"
+            "value" : "Kod"
           }
         }
       }
@@ -1123,10 +1126,10 @@
             "value" : "Enter the code from your email or app."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "E-postanızdaki veya uygulamadaki kodu girin."
+            "value" : "Saisis le code de ton e-mail ou de ton appli."
           }
         },
         "pl" : {
@@ -1135,10 +1138,10 @@
             "value" : "Wpisz kod z e-maila lub aplikacji."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Saisis le code de ton e-mail ou de ton appli."
+            "value" : "E-postanızdaki veya uygulamadaki kodu girin."
           }
         }
       }
@@ -1158,10 +1161,10 @@
             "value" : "Enter code"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kodu gir"
+            "value" : "Saisir le code"
           }
         },
         "pl" : {
@@ -1170,10 +1173,10 @@
             "value" : "Wpisz kod"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Saisir le code"
+            "value" : "Kodu gir"
           }
         }
       }
@@ -1193,10 +1196,10 @@
             "value" : "Black"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Siyah"
+            "value" : "Noir"
           }
         },
         "pl" : {
@@ -1205,10 +1208,10 @@
             "value" : "Czarny"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Noir"
+            "value" : "Siyah"
           }
         }
       }
@@ -1228,10 +1231,10 @@
             "value" : "Blue"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mavi"
+            "value" : "Bleu"
           }
         },
         "pl" : {
@@ -1240,10 +1243,10 @@
             "value" : "Niebieski"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bleu"
+            "value" : "Mavi"
           }
         }
       }
@@ -1263,10 +1266,10 @@
             "value" : "Green"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yeşil"
+            "value" : "Vert"
           }
         },
         "pl" : {
@@ -1275,10 +1278,10 @@
             "value" : "Zielony"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vert"
+            "value" : "Yeşil"
           }
         }
       }
@@ -1298,10 +1301,10 @@
             "value" : "Orange"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Turuncu"
+            "value" : "Orange"
           }
         },
         "pl" : {
@@ -1310,10 +1313,10 @@
             "value" : "Pomarańczowy"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Orange"
+            "value" : "Turuncu"
           }
         }
       }
@@ -1333,10 +1336,10 @@
             "value" : "Pink"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pembe"
+            "value" : "Rose"
           }
         },
         "pl" : {
@@ -1345,10 +1348,10 @@
             "value" : "Różowy"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rose"
+            "value" : "Pembe"
           }
         }
       }
@@ -1368,10 +1371,10 @@
             "value" : "Red"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kırmızı"
+            "value" : "Rouge"
           }
         },
         "pl" : {
@@ -1380,10 +1383,10 @@
             "value" : "Czerwony"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rouge"
+            "value" : "Kırmızı"
           }
         }
       }
@@ -1403,10 +1406,10 @@
             "value" : "Teal"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Petrol"
+            "value" : "Sarcelle"
           }
         },
         "pl" : {
@@ -1415,10 +1418,10 @@
             "value" : "Morski"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sarcelle"
+            "value" : "Petrol"
           }
         }
       }
@@ -1438,10 +1441,10 @@
             "value" : "Violet"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mor"
+            "value" : "Violet"
           }
         },
         "pl" : {
@@ -1450,10 +1453,10 @@
             "value" : "Fioletowy"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Violet"
+            "value" : "Mor"
           }
         }
       }
@@ -1464,7 +1467,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Falscher Benutzername, Passwort oder Subdomain."
+            "value" : "Falscher Benutzername oder Passwort."
           }
         },
         "en" : {
@@ -1473,10 +1476,10 @@
             "value" : "Wrong username, password or subdomain."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kullanıcı adı, parola veya alt alan adı yanlış."
+            "value" : "Nom d’utilisateur, mot de passe ou sous-domaine incorrect."
           }
         },
         "pl" : {
@@ -1485,10 +1488,10 @@
             "value" : "Błędna nazwa użytkownika, hasło lub subdomena."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nom d’utilisateur, mot de passe ou sous-domaine incorrect."
+            "value" : "Kullanıcı adı, parola veya alt alan adı yanlış."
           }
         }
       }
@@ -1508,10 +1511,10 @@
             "value" : "EduPage requires a captcha. Please sign in via browser once."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "EduPage bir captcha istiyor. Lütfen tarayıcıdan bir kez giriş yapın."
+            "value" : "EduPage exige un captcha. Connecte-toi une fois dans le navigateur."
           }
         },
         "pl" : {
@@ -1520,10 +1523,10 @@
             "value" : "EduPage wymaga captchy. Zaloguj się raz w przeglądarce."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "EduPage exige un captcha. Connecte-toi une fois dans le navigateur."
+            "value" : "EduPage bir captcha istiyor. Lütfen tarayıcıdan bir kez giriş yapın."
           }
         }
       }
@@ -1543,10 +1546,10 @@
             "value" : "Server key missing. Please try again later."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sunucu anahtarı eksik. Lütfen daha sonra tekrar deneyin."
+            "value" : "Clé serveur manquante. Réessaie plus tard."
           }
         },
         "pl" : {
@@ -1555,10 +1558,10 @@
             "value" : "Brak klucza serwera. Spróbuj ponownie później."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Clé serveur manquante. Réessaie plus tard."
+            "value" : "Sunucu anahtarı eksik. Lütfen daha sonra tekrar deneyin."
           }
         }
       }
@@ -1578,10 +1581,10 @@
             "value" : "EduPage requires a code again. Please sign in again."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "EduPage yeniden kod istiyor. Lütfen tekrar giriş yapın."
+            "value" : "EduPage redemande un code. Reconnecte-toi."
           }
         },
         "pl" : {
@@ -1590,10 +1593,10 @@
             "value" : "EduPage ponownie wymaga kodu. Zaloguj się ponownie."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "EduPage redemande un code. Reconnecte-toi."
+            "value" : "EduPage yeniden kod istiyor. Lütfen tekrar giriş yapın."
           }
         }
       }
@@ -1613,10 +1616,10 @@
             "value" : "The code was not accepted. Please try again."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kod kabul edilmedi. Lütfen tekrar deneyin."
+            "value" : "Code refusé. Réessaie."
           }
         },
         "pl" : {
@@ -1625,10 +1628,10 @@
             "value" : "Kod nie został zaakceptowany. Spróbuj ponownie."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Code refusé. Réessaie."
+            "value" : "Kod kabul edilmedi. Lütfen tekrar deneyin."
           }
         }
       }
@@ -1648,10 +1651,10 @@
             "value" : "Not found."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bulunamadı."
+            "value" : "Introuvable."
           }
         },
         "pl" : {
@@ -1660,10 +1663,10 @@
             "value" : "Nie znaleziono."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Introuvable."
+            "value" : "Bulunamadı."
           }
         }
       }
@@ -1683,10 +1686,10 @@
             "value" : "Intermediate step expired. Please sign in again."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ara adımın süresi doldu. Lütfen tekrar giriş yapın."
+            "value" : "Étape intermédiaire expirée. Reconnecte-toi."
           }
         },
         "pl" : {
@@ -1695,10 +1698,10 @@
             "value" : "Krok pośredni wygasł. Zaloguj się ponownie."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Étape intermédiaire expirée. Reconnecte-toi."
+            "value" : "Ara adımın süresi doldu. Lütfen tekrar giriş yapın."
           }
         }
       }
@@ -1718,10 +1721,10 @@
             "value" : "Too many attempts. Please try again later."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çok fazla deneme. Lütfen daha sonra tekrar deneyin."
+            "value" : "Trop de tentatives. Réessaie plus tard."
           }
         },
         "pl" : {
@@ -1730,10 +1733,10 @@
             "value" : "Zbyt wiele prób. Spróbuj ponownie później."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Trop de tentatives. Réessaie plus tard."
+            "value" : "Çok fazla deneme. Lütfen daha sonra tekrar deneyin."
           }
         }
       }
@@ -1753,10 +1756,10 @@
             "value" : "Session expired. Please sign in again."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Oturumun süresi doldu. Lütfen tekrar giriş yapın."
+            "value" : "Session expirée. Reconnecte-toi."
           }
         },
         "pl" : {
@@ -1765,10 +1768,10 @@
             "value" : "Sesja wygasła. Zaloguj się ponownie."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Session expirée. Reconnecte-toi."
+            "value" : "Oturumun süresi doldu. Lütfen tekrar giriş yapın."
           }
         }
       }
@@ -1788,10 +1791,10 @@
             "value" : "Session invalid. Please sign in again."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Oturum geçersiz. Lütfen tekrar giriş yapın."
+            "value" : "Session invalide. Reconnecte-toi."
           }
         },
         "pl" : {
@@ -1800,10 +1803,10 @@
             "value" : "Sesja nieprawidłowa. Zaloguj się ponownie."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Session invalide. Reconnecte-toi."
+            "value" : "Oturum geçersiz. Lütfen tekrar giriş yapın."
           }
         }
       }
@@ -1823,10 +1826,10 @@
             "value" : "Request failed. Please try again later."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İstek başarısız oldu. Lütfen daha sonra tekrar deneyin."
+            "value" : "Requête échouée. Réessaie plus tard."
           }
         },
         "pl" : {
@@ -1835,10 +1838,10 @@
             "value" : "Żądanie nie powiodło się. Spróbuj ponownie później."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Requête échouée. Réessaie plus tard."
+            "value" : "İstek başarısız oldu. Lütfen daha sonra tekrar deneyin."
           }
         }
       }
@@ -1858,10 +1861,10 @@
             "value" : "Invalid input. Please check and try again."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geçersiz giriş. Lütfen kontrol edip tekrar deneyin."
+            "value" : "Saisie invalide. Vérifie et réessaie."
           }
         },
         "pl" : {
@@ -1870,10 +1873,10 @@
             "value" : "Nieprawidłowe dane. Sprawdź i spróbuj ponownie."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Saisie invalide. Vérifie et réessaie."
+            "value" : "Geçersiz giriş. Lütfen kontrol edip tekrar deneyin."
           }
         }
       }
@@ -1893,10 +1896,10 @@
             "value" : "Open profile menu"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Profil menüsünü aç"
+            "value" : "Ouvrir le menu profil"
           }
         },
         "pl" : {
@@ -1905,10 +1908,10 @@
             "value" : "Otwórz menu profilu"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ouvrir le menu profil"
+            "value" : "Profil menüsünü aç"
           }
         }
       }
@@ -1928,10 +1931,10 @@
             "value" : "Files"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dosyalar"
+            "value" : "Fichiers"
           }
         },
         "pl" : {
@@ -1940,10 +1943,10 @@
             "value" : "Pliki"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fichiers"
+            "value" : "Dosyalar"
           }
         }
       }
@@ -1963,10 +1966,10 @@
             "value" : "Date"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tarih"
+            "value" : "Date"
           }
         },
         "pl" : {
@@ -1975,10 +1978,10 @@
             "value" : "Data"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Date"
+            "value" : "Tarih"
           }
         }
       }
@@ -1998,10 +2001,10 @@
             "value" : "Your profile"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Profilin"
+            "value" : "Ton profil"
           }
         },
         "pl" : {
@@ -2010,10 +2013,10 @@
             "value" : "Twój profil"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ton profil"
+            "value" : "Profilin"
           }
         }
       }
@@ -2033,10 +2036,10 @@
             "value" : "DEMO"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "DEMO"
+            "value" : "DÉMO"
           }
         },
         "pl" : {
@@ -2045,10 +2048,10 @@
             "value" : "DEMO"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "DÉMO"
+            "value" : "DEMO"
           }
         }
       }
@@ -2069,10 +2072,10 @@
             "value" : "View demo"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Demoyu görüntüle"
+            "value" : "Voir la démo"
           }
         },
         "pl" : {
@@ -2081,10 +2084,10 @@
             "value" : "Zobacz demo"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Voir la démo"
+            "value" : "Demoyu görüntüle"
           }
         }
       }
@@ -2105,10 +2108,10 @@
             "value" : "Leave demo"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Demodan çık"
+            "value" : "Quitter la démo"
           }
         },
         "pl" : {
@@ -2117,10 +2120,10 @@
             "value" : "Opuść demo"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quitter la démo"
+            "value" : "Demodan çık"
           }
         }
       }
@@ -2140,10 +2143,10 @@
             "value" : "Demo mode"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Demo modu"
+            "value" : "Mode démo"
           }
         },
         "pl" : {
@@ -2152,10 +2155,10 @@
             "value" : "Tryb demo"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mode démo"
+            "value" : "Demo modu"
           }
         }
       }
@@ -2175,10 +2178,10 @@
             "value" : "Demo mode · synthetic sample data only"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Demo modu · yalnızca örnek veriler"
+            "value" : "Mode démo · données d’exemple uniquement"
           }
         },
         "pl" : {
@@ -2187,10 +2190,10 @@
             "value" : "Tryb demo · tylko przykładowe dane"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mode démo · données d’exemple uniquement"
+            "value" : "Demo modu · yalnızca örnek veriler"
           }
         }
       }
@@ -2210,10 +2213,10 @@
             "value" : "Details"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ayrıntılar"
+            "value" : "Détails"
           }
         },
         "pl" : {
@@ -2222,10 +2225,10 @@
             "value" : "Szczegóły"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Détails"
+            "value" : "Ayrıntılar"
           }
         }
       }
@@ -2245,10 +2248,10 @@
             "value" : "%d sessions"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d oturum"
+            "value" : "%d sessions"
           }
         },
         "pl" : {
@@ -2257,10 +2260,10 @@
             "value" : "%d sesji"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d sessions"
+            "value" : "%d oturum"
           }
         }
       }
@@ -2280,10 +2283,10 @@
             "value" : "Valid until %@"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geçerlilik: %@"
+            "value" : "Valide jusqu’au %@"
           }
         },
         "pl" : {
@@ -2292,10 +2295,10 @@
             "value" : "Ważne do %@"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Valide jusqu’au %@"
+            "value" : "Geçerlilik: %@"
           }
         }
       }
@@ -2316,10 +2319,10 @@
             "value" : "Tuesday"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Salı"
+            "value" : "Mardi"
           }
         },
         "pl" : {
@@ -2328,10 +2331,10 @@
             "value" : "Wtorek"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mardi"
+            "value" : "Salı"
           }
         }
       }
@@ -2352,10 +2355,10 @@
             "value" : "Go to messages"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mesajlara git"
+            "value" : "Aller aux messages"
           }
         },
         "pl" : {
@@ -2364,10 +2367,10 @@
             "value" : "Przejdź do wiadomości"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aller aux messages"
+            "value" : "Mesajlara git"
           }
         }
       }
@@ -2388,10 +2391,10 @@
             "value" : "Go to homework"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ödevlere git"
+            "value" : "Aller aux devoirs"
           }
         },
         "pl" : {
@@ -2400,10 +2403,10 @@
             "value" : "Przejdź do zadań"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aller aux devoirs"
+            "value" : "Ödevlere git"
           }
         }
       }
@@ -2424,10 +2427,10 @@
             "value" : "Go to grades"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Notlara git"
+            "value" : "Aller aux notes"
           }
         },
         "pl" : {
@@ -2436,10 +2439,10 @@
             "value" : "Przejdź do ocen"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aller aux notes"
+            "value" : "Notlara git"
           }
         }
       }
@@ -2460,10 +2463,10 @@
             "value" : "Go to timetable"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ders programına git"
+            "value" : "Aller à l’emploi du temps"
           }
         },
         "pl" : {
@@ -2472,10 +2475,10 @@
             "value" : "Przejdź do planu lekcji"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aller à l’emploi du temps"
+            "value" : "Ders programına git"
           }
         }
       }
@@ -2496,10 +2499,10 @@
             "value" : "Thursday"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Perşembe"
+            "value" : "Jeudi"
           }
         },
         "pl" : {
@@ -2508,15 +2511,16 @@
             "value" : "Czwartek"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jeudi"
+            "value" : "Perşembe"
           }
         }
       }
     },
     "EduFlow" : {
+      "comment" : "UI-Literal",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2530,7 +2534,7 @@
             "value" : "EduFlow"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "EduFlow"
@@ -2542,14 +2546,13 @@
             "value" : "EduFlow"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "EduFlow"
           }
         }
-      },
-      "comment" : "UI-Literal"
+      }
     },
     "EduFlow Dashboard · lokal" : {
       "comment" : "UI-Literal",
@@ -2566,10 +2569,10 @@
             "value" : "EduFlow Dashboard · local"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "EduFlow Panosu · yerel"
+            "value" : "Tableau de bord EduFlow · local"
           }
         },
         "pl" : {
@@ -2578,15 +2581,16 @@
             "value" : "Panel EduFlow · lokalnie"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tableau de bord EduFlow · local"
+            "value" : "EduFlow Panosu · yerel"
           }
         }
       }
     },
     "EduFlow ist bereit" : {
+      "comment" : "UI-Literal",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -2600,10 +2604,10 @@
             "value" : "EduFlow is ready"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "EduFlow hazır"
+            "value" : "EduFlow est prêt"
           }
         },
         "pl" : {
@@ -2612,14 +2616,30 @@
             "value" : "EduFlow jest gotowy"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "EduFlow est prêt"
+            "value" : "EduFlow hazır"
           }
         }
-      },
-      "comment" : "UI-Literal"
+      }
+    },
+    "EduFlow spricht deine Sprache. Die Auswahl wird nach einem Neustart aktiv." : {
+      "comment" : "Onboarding: Sprachauswahl",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EduFlow spricht deine Sprache. Die Auswahl wird nach einem Neustart aktiv."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EduFlow speaks your language. The choice applies after a restart."
+          }
+        }
+      }
     },
     "Einstellungen" : {
       "comment" : "UI-Literal",
@@ -2637,10 +2657,10 @@
             "value" : "Settings"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ayarlar"
+            "value" : "Réglages"
           }
         },
         "pl" : {
@@ -2649,10 +2669,10 @@
             "value" : "Ustawienia"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Réglages"
+            "value" : "Ayarlar"
           }
         }
       }
@@ -2673,10 +2693,10 @@
             "value" : "Cancellation"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İptal"
+            "value" : "Annulation"
           }
         },
         "pl" : {
@@ -2685,10 +2705,10 @@
             "value" : "Odwołanie"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Annulation"
+            "value" : "İptal"
           }
         }
       }
@@ -2709,10 +2729,10 @@
             "value" : "Cancelled"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İptal edildi"
+            "value" : "Annulé"
           }
         },
         "pl" : {
@@ -2721,10 +2741,10 @@
             "value" : "Odwołane"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Annulé"
+            "value" : "İptal edildi"
           }
         }
       }
@@ -2745,10 +2765,10 @@
             "value" : "Remove"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kaldır"
+            "value" : "Supprimer"
           }
         },
         "pl" : {
@@ -2757,10 +2777,10 @@
             "value" : "Usuń"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Supprimer"
+            "value" : "Kaldır"
           }
         }
       }
@@ -2780,10 +2800,10 @@
             "value" : "Developer options"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geliştirici seçenekleri"
+            "value" : "Options développeur"
           }
         },
         "pl" : {
@@ -2792,10 +2812,10 @@
             "value" : "Opcje programisty"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Options développeur"
+            "value" : "Geliştirici seçenekleri"
           }
         }
       }
@@ -2816,10 +2836,10 @@
             "value" : "Enable developer options"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geliştirici seçeneklerini etkinleştir"
+            "value" : "Activer les options développeur"
           }
         },
         "pl" : {
@@ -2828,10 +2848,10 @@
             "value" : "Włącz opcje programisty"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Activer les options développeur"
+            "value" : "Geliştirici seçeneklerini etkinleştir"
           }
         }
       }
@@ -2875,10 +2895,10 @@
             "value" : "Reload"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yeniden yükle"
+            "value" : "Recharger"
           }
         },
         "pl" : {
@@ -2887,10 +2907,10 @@
             "value" : "Załaduj ponownie"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Recharger"
+            "value" : "Yeniden yükle"
           }
         }
       }
@@ -2911,10 +2931,10 @@
             "value" : "Try again"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tekrar dene"
+            "value" : "Réessayer"
           }
         },
         "pl" : {
@@ -2923,10 +2943,10 @@
             "value" : "Spróbuj ponownie"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Réessayer"
+            "value" : "Tekrar dene"
           }
         }
       }
@@ -2946,10 +2966,10 @@
             "value" : "Only synthetic sample data is loaded from the local demo server."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yerel demo sunucusundan yalnızca örnek veriler yükleniyor."
+            "value" : "Seules des données d’exemple sont chargées depuis le serveur de démo local."
           }
         },
         "pl" : {
@@ -2958,10 +2978,10 @@
             "value" : "Ładowane są wyłącznie przykładowe dane z lokalnego serwera demo."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Seules des données d’exemple sont chargées depuis le serveur de démo local."
+            "value" : "Yerel demo sunucusundan yalnızca örnek veriler yükleniyor."
           }
         }
       }
@@ -2993,10 +3013,10 @@
             "value" : "Due dates with counters, semester tabs and average."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sayaçlı teslim tarihleri, dönem sekmeleri ve ortalama."
+            "value" : "Échéances avec compteurs, onglets de semestre et moyenne."
           }
         },
         "pl" : {
@@ -3005,10 +3025,10 @@
             "value" : "Terminy z licznikami, zakładkami semestru i średnią."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Échéances avec compteurs, onglets de semestre et moyenne."
+            "value" : "Sayaçlı teslim tarihleri, dönem sekmeleri ve ortalama."
           }
         }
       }
@@ -3029,10 +3049,10 @@
             "value" : "Failed"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Başarısız"
+            "value" : "Échoué"
           }
         },
         "pl" : {
@@ -3041,10 +3061,10 @@
             "value" : "Niepowodzenie"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Échoué"
+            "value" : "Başarısız"
           }
         }
       }
@@ -3065,10 +3085,10 @@
             "value" : "Done"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bitti"
+            "value" : "Terminé"
           }
         },
         "pl" : {
@@ -3077,10 +3097,10 @@
             "value" : "Gotowe"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Terminé"
+            "value" : "Bitti"
           }
         }
       }
@@ -3101,10 +3121,10 @@
             "value" : "Completed homework"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tamamlanan ödevler"
+            "value" : "Devoirs terminés"
           }
         },
         "pl" : {
@@ -3113,10 +3133,28 @@
             "value" : "Ukończone zadania"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Devoirs terminés"
+            "value" : "Tamamlanan ödevler"
+          }
+        }
+      }
+    },
+    "Folgt der Systemsprache" : {
+      "comment" : "Onboarding: Sprachauswahl",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folgt der Systemsprache"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Follows the system language"
           }
         }
       }
@@ -3137,10 +3175,10 @@
             "value" : "Friday"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cuma"
+            "value" : "Vendredi"
           }
         },
         "pl" : {
@@ -3149,10 +3187,10 @@
             "value" : "Piątek"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vendredi"
+            "value" : "Cuma"
           }
         }
       }
@@ -3173,10 +3211,10 @@
             "value" : "Past due"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Süresi geçti"
+            "value" : "Délai dépassé"
           }
         },
         "pl" : {
@@ -3185,10 +3223,10 @@
             "value" : "Termin minął"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Délai dépassé"
+            "value" : "Süresi geçti"
           }
         }
       }
@@ -3209,10 +3247,10 @@
             "value" : "No substitutions scheduled for this week."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu hafta için yedek ders girilmedi."
+            "value" : "Aucun remplacement prévu cette semaine."
           }
         },
         "pl" : {
@@ -3221,10 +3259,10 @@
             "value" : "Na ten tydzień nie zaplanowano zastępstw."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aucun remplacement prévu cette semaine."
+            "value" : "Bu hafta için yedek ders girilmedi."
           }
         }
       }
@@ -3244,10 +3282,10 @@
             "value" : "Nothing scheduled for this day."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu gün için planda bir şey yok."
+            "value" : "Rien de prévu ce jour-là."
           }
         },
         "pl" : {
@@ -3256,10 +3294,10 @@
             "value" : "Na ten dzień nic nie zaplanowano."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rien de prévu ce jour-là."
+            "value" : "Bu gün için planda bir şey yok."
           }
         }
       }
@@ -3280,10 +3318,10 @@
             "value" : "Feels like"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hissedilen"
+            "value" : "Ressenti"
           }
         },
         "pl" : {
@@ -3292,10 +3330,10 @@
             "value" : "Odczuwalna"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ressenti"
+            "value" : "Hissedilen"
           }
         }
       }
@@ -3316,10 +3354,10 @@
             "value" : "Share downloaded file"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "İndirilen dosyayı paylaş"
+            "value" : "Partager le fichier téléchargé"
           }
         },
         "pl" : {
@@ -3328,10 +3366,10 @@
             "value" : "Udostępnij pobrany plik"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Partager le fichier téléchargé"
+            "value" : "İndirilen dosyayı paylaş"
           }
         }
       }
@@ -3352,10 +3390,10 @@
             "value" : "Deleted"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Silindi"
+            "value" : "Supprimé"
           }
         },
         "pl" : {
@@ -3364,10 +3402,10 @@
             "value" : "Usunięto"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Supprimé"
+            "value" : "Silindi"
           }
         }
       }
@@ -3388,10 +3426,10 @@
             "value" : "Device (optional)"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cihaz (isteğe bağlı)"
+            "value" : "Appareil (facultatif)"
           }
         },
         "pl" : {
@@ -3400,10 +3438,10 @@
             "value" : "Urządzenie (opcjonalnie)"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Appareil (facultatif)"
+            "value" : "Cihaz (isteğe bağlı)"
           }
         }
       }
@@ -3424,10 +3462,10 @@
             "value" : "Devices"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cihazlar"
+            "value" : "Appareils"
           }
         },
         "pl" : {
@@ -3436,10 +3474,10 @@
             "value" : "Urządzenia"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Appareils"
+            "value" : "Cihazlar"
           }
         }
       }
@@ -3460,10 +3498,10 @@
             "value" : "Manage devices"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cihazları yönet"
+            "value" : "Gérer les appareils"
           }
         },
         "pl" : {
@@ -3472,10 +3510,10 @@
             "value" : "Zarządzaj urządzeniami"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gérer les appareils"
+            "value" : "Cihazları yönet"
           }
         }
       }
@@ -3495,10 +3533,10 @@
             "value" : "Average: %@"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ortalama: %@"
+            "value" : "Moyenne : %@"
           }
         },
         "pl" : {
@@ -3507,10 +3545,10 @@
             "value" : "Średnia: %@"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Moyenne : %@"
+            "value" : "Ortalama: %@"
           }
         }
       }
@@ -3530,10 +3568,10 @@
             "value" : "All"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tümü"
+            "value" : "Total"
           }
         },
         "pl" : {
@@ -3542,10 +3580,10 @@
             "value" : "Razem"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Total"
+            "value" : "Tümü"
           }
         }
       }
@@ -3565,10 +3603,10 @@
             "value" : "Semester %d (%d/%@)"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d. Dönem %d/%@"
+            "value" : "Semestre %d (%d/%@)"
           }
         },
         "pl" : {
@@ -3577,10 +3615,10 @@
             "value" : "Semestr %d (%d/%@)"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Semestre %d (%d/%@)"
+            "value" : "%d. Dönem %d/%@"
           }
         }
       }
@@ -3600,10 +3638,10 @@
             "value" : "Load more (%d/%d)"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Daha fazla yükle (%d/%d)"
+            "value" : "Charger plus (%d/%d)"
           }
         },
         "pl" : {
@@ -3612,10 +3650,10 @@
             "value" : "Wczytaj więcej (%d/%d)"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Charger plus (%d/%d)"
+            "value" : "Daha fazla yükle (%d/%d)"
           }
         }
       }
@@ -3635,10 +3673,10 @@
             "value" : "Grades"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Notlar"
+            "value" : "Notes"
           }
         },
         "pl" : {
@@ -3647,10 +3685,10 @@
             "value" : "Oceny"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Notes"
+            "value" : "Notlar"
           }
         }
       }
@@ -3670,10 +3708,10 @@
             "value" : "%d grades"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d not"
+            "value" : "%d notes"
           }
         },
         "pl" : {
@@ -3682,10 +3720,10 @@
             "value" : "%d ocen"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d notes"
+            "value" : "%d not"
           }
         }
       }
@@ -3705,10 +3743,10 @@
             "value" : "Other"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diğer"
+            "value" : "Autre"
           }
         },
         "pl" : {
@@ -3717,10 +3755,10 @@
             "value" : "Inne"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Autre"
+            "value" : "Diğer"
           }
         }
       }
@@ -3741,10 +3779,10 @@
             "value" : "Semester"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dönem"
+            "value" : "Semestre"
           }
         },
         "pl" : {
@@ -3753,10 +3791,10 @@
             "value" : "Semestr"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Semestre"
+            "value" : "Dönem"
           }
         }
       }
@@ -3777,10 +3815,10 @@
             "value" : "Hello!"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Merhaba!"
+            "value" : "Salut !"
           }
         },
         "pl" : {
@@ -3789,10 +3827,10 @@
             "value" : "Cześć!"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Salut !"
+            "value" : "Merhaba!"
           }
         }
       }
@@ -3812,10 +3850,10 @@
             "value" : "Homework"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ödevler"
+            "value" : "Devoirs"
           }
         },
         "pl" : {
@@ -3824,10 +3862,10 @@
             "value" : "Zadania domowe"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Devoirs"
+            "value" : "Ödevler"
           }
         }
       }
@@ -3848,10 +3886,10 @@
             "value" : "Homework & grades"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ödevler ve notlar"
+            "value" : "Devoirs et notes"
           }
         },
         "pl" : {
@@ -3860,10 +3898,10 @@
             "value" : "Zadania i oceny"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Devoirs et notes"
+            "value" : "Ödevler ve notlar"
           }
         }
       }
@@ -3883,10 +3921,10 @@
             "value" : "Light and dark follow the system. Accent color:"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Açık ve koyu sistemi takip eder. Vurgu rengi:"
+            "value" : "Clair et sombre suivent le système. Couleur d’accent :"
           }
         },
         "pl" : {
@@ -3895,10 +3933,10 @@
             "value" : "Jasny i ciemny podążają za systemem. Kolor akcentu:"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Clair et sombre suivent le système. Couleur d’accent :"
+            "value" : "Açık ve koyu sistemi takip eder. Vurgu rengi:"
           }
         }
       }
@@ -3919,10 +3957,10 @@
             "value" : "Today"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bugün"
+            "value" : "Aujourd’hui"
           }
         },
         "pl" : {
@@ -3931,10 +3969,10 @@
             "value" : "Dzisiaj"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aujourd’hui"
+            "value" : "Bugün"
           }
         }
       }
@@ -3954,10 +3992,10 @@
             "value" : "%d homework"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d ödev"
+            "value" : "%d devoirs"
           }
         },
         "pl" : {
@@ -3966,10 +4004,10 @@
             "value" : "%d zadań"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d devoirs"
+            "value" : "%d ödev"
           }
         }
       }
@@ -3989,10 +4027,10 @@
             "value" : "Load more (%d/%d)"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Daha fazla yükle (%d/%d)"
+            "value" : "Charger plus (%d/%d)"
           }
         },
         "pl" : {
@@ -4001,10 +4039,10 @@
             "value" : "Wczytaj więcej (%d/%d)"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Charger plus (%d/%d)"
+            "value" : "Daha fazla yükle (%d/%d)"
           }
         }
       }
@@ -4024,10 +4062,10 @@
             "value" : "Homework"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ödevler"
+            "value" : "Devoirs"
           }
         },
         "pl" : {
@@ -4036,10 +4074,10 @@
             "value" : "Zadania domowe"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Devoirs"
+            "value" : "Ödevler"
           }
         }
       }
@@ -4060,10 +4098,10 @@
             "value" : "Move to trash"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çöp kutusuna taşı"
+            "value" : "Mettre à la corbeille"
           }
         },
         "pl" : {
@@ -4072,10 +4110,10 @@
             "value" : "Przenieś do kosza"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mettre à la corbeille"
+            "value" : "Çöp kutusuna taşı"
           }
         }
       }
@@ -4095,10 +4133,10 @@
             "value" : "Now"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Şimdi"
+            "value" : "Maintenant"
           }
         },
         "pl" : {
@@ -4107,10 +4145,10 @@
             "value" : "Teraz"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Maintenant"
+            "value" : "Şimdi"
           }
         }
       }
@@ -4131,10 +4169,10 @@
             "value" : "Calendar"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Takvim"
+            "value" : "Calendrier"
           }
         },
         "pl" : {
@@ -4143,10 +4181,10 @@
             "value" : "Kalendarz"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Calendrier"
+            "value" : "Takvim"
           }
         }
       }
@@ -4166,10 +4204,10 @@
             "value" : "no classes today"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "bugün ders yok"
+            "value" : "pas cours aujourd’hui"
           }
         },
         "pl" : {
@@ -4178,10 +4216,10 @@
             "value" : "dzisiaj brak lekcji"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "pas cours aujourd’hui"
+            "value" : "bugün ders yok"
           }
         }
       }
@@ -4201,10 +4239,10 @@
             "value" : "No homework."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ödev yok."
+            "value" : "Pas de devoirs."
           }
         },
         "pl" : {
@@ -4213,10 +4251,10 @@
             "value" : "Brak zadań domowych."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pas de devoirs."
+            "value" : "Ödev yok."
           }
         }
       }
@@ -4236,10 +4274,10 @@
             "value" : "No likes."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Beğeni yok."
+            "value" : "Pas de mentions."
           }
         },
         "pl" : {
@@ -4248,10 +4286,10 @@
             "value" : "Brak polubień."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pas de mentions."
+            "value" : "Beğeni yok."
           }
         }
       }
@@ -4271,10 +4309,10 @@
             "value" : "No messages."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mesaj yok."
+            "value" : "Pas de messages."
           }
         },
         "pl" : {
@@ -4283,10 +4321,10 @@
             "value" : "Brak wiadomości."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pas de messages."
+            "value" : "Mesaj yok."
           }
         }
       }
@@ -4306,10 +4344,10 @@
             "value" : "No new messages."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yeni mesaj yok."
+            "value" : "Pas de nouveaux messages."
           }
         },
         "pl" : {
@@ -4318,10 +4356,10 @@
             "value" : "Brak nowych wiadomości."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pas de nouveaux messages."
+            "value" : "Yeni mesaj yok."
           }
         }
       }
@@ -4341,10 +4379,10 @@
             "value" : "No grades."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Not yok."
+            "value" : "Pas de notes."
           }
         },
         "pl" : {
@@ -4353,10 +4391,10 @@
             "value" : "Brak ocen."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pas de notes."
+            "value" : "Not yok."
           }
         }
       }
@@ -4376,10 +4414,10 @@
             "value" : "No open homework. Well done."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bekleyen ödev yok. Çok güzel."
+            "value" : "Pas de devoirs en cours. Très bien."
           }
         },
         "pl" : {
@@ -4388,10 +4426,10 @@
             "value" : "Brak otwartych zadań. Bardzo dobrze."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pas de devoirs en cours. Très bien."
+            "value" : "Bekleyen ödev yok. Çok güzel."
           }
         }
       }
@@ -4412,10 +4450,10 @@
             "value" : "No school events or exams in this period."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu dönemde okul etkinliği veya sınav yok."
+            "value" : "Aucun événement scolaire ni examen sur cette période."
           }
         },
         "pl" : {
@@ -4424,10 +4462,10 @@
             "value" : "Brak wydarzeń szkolnych i sprawdzianów w tym okresie."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aucun événement scolaire ni examen sur cette période."
+            "value" : "Bu dönemde okul etkinliği veya sınav yok."
           }
         }
       }
@@ -4447,10 +4485,10 @@
             "value" : "No other sessions."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Başka oturum yok."
+            "value" : "Pas d’autres sessions."
           }
         },
         "pl" : {
@@ -4459,10 +4497,10 @@
             "value" : "Brak innych sesji."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pas d’autres sessions."
+            "value" : "Başka oturum yok."
           }
         }
       }
@@ -4483,10 +4521,10 @@
             "value" : "Load"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yükle"
+            "value" : "Charger"
           }
         },
         "pl" : {
@@ -4495,10 +4533,10 @@
             "value" : "Wczytaj"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Charger"
+            "value" : "Yükle"
           }
         }
       }
@@ -4519,10 +4557,10 @@
             "value" : "Loading …"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yükleniyor …"
+            "value" : "Chargement …"
           }
         },
         "pl" : {
@@ -4531,10 +4569,10 @@
             "value" : "Wczytywanie …"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Chargement …"
+            "value" : "Yükleniyor …"
           }
         }
       }
@@ -4554,10 +4592,10 @@
             "value" : "Choose which sections appear first."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hangi bölümlerin önce görüneceğini seç."
+            "value" : "Choisis les sections affichées en premier."
           }
         },
         "pl" : {
@@ -4566,10 +4604,10 @@
             "value" : "Wybierz, które sekcje pojawiają się najpierw."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Choisis les sections affichées en premier."
+            "value" : "Hangi bölümlerin önce görüneceğini seç."
           }
         }
       }
@@ -4590,10 +4628,10 @@
             "value" : "Study time"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Etüt"
+            "value" : "Heure d’étude"
           }
         },
         "pl" : {
@@ -4602,10 +4640,10 @@
             "value" : "Czas nauki"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Heure d’étude"
+            "value" : "Etüt"
           }
         }
       }
@@ -4625,10 +4663,10 @@
             "value" : "Local tool — credentials stay on this Mac."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yerel araç — giriş bilgileri bu Mac'te kalır."
+            "value" : "Outil local — les identifiants restent sur ce Mac."
           }
         },
         "pl" : {
@@ -4637,10 +4675,10 @@
             "value" : "Narzędzie lokalne — dane logowania zostają na tym Macu."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Outil local — les identifiants restent sur ce Mac."
+            "value" : "Yerel araç — giriş bilgileri bu Mac'te kalır."
           }
         }
       }
@@ -4661,10 +4699,10 @@
             "value" : "Pressure"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Basınç"
+            "value" : "Pression"
           }
         },
         "pl" : {
@@ -4673,10 +4711,10 @@
             "value" : "Ciśnienie"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pression"
+            "value" : "Basınç"
           }
         }
       }
@@ -4697,10 +4735,10 @@
             "value" : "Humidity"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nem"
+            "value" : "Humidité"
           }
         },
         "pl" : {
@@ -4709,10 +4747,10 @@
             "value" : "Wilgotność"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Humidité"
+            "value" : "Nem"
           }
         }
       }
@@ -4732,10 +4770,10 @@
             "value" : "Signs you out and restarts the introduction."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çıkış yapar ve tanıtımı yeniden başlatır."
+            "value" : "Te déconnecte et relance l’introduction."
           }
         },
         "pl" : {
@@ -4744,10 +4782,10 @@
             "value" : "Wylogowuje i ponownie uruchamia wprowadzenie."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Te déconnecte et relance l’introduction."
+            "value" : "Çıkış yapar ve tanıtımı yeniden başlatır."
           }
         }
       }
@@ -4767,10 +4805,10 @@
             "value" : "%d messages"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d mesaj"
+            "value" : "%d messages"
           }
         },
         "pl" : {
@@ -4779,10 +4817,10 @@
             "value" : "%d wiadomości"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d messages"
+            "value" : "%d mesaj"
           }
         }
       }
@@ -4802,10 +4840,10 @@
             "value" : "Load more (%d/%d)"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Daha fazla yükle (%d/%d)"
+            "value" : "Charger plus (%d/%d)"
           }
         },
         "pl" : {
@@ -4814,10 +4852,10 @@
             "value" : "Wczytaj więcej (%d/%d)"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Charger plus (%d/%d)"
+            "value" : "Daha fazla yükle (%d/%d)"
           }
         }
       }
@@ -4837,10 +4875,10 @@
             "value" : "%d marked as read."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d okundu olarak işaretlendi."
+            "value" : "%d marqués comme lus."
           }
         },
         "pl" : {
@@ -4849,10 +4887,10 @@
             "value" : "Oznaczono jako przeczytane: %d."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%d marqués comme lus."
+            "value" : "%d okundu olarak işaretlendi."
           }
         }
       }
@@ -4872,10 +4910,10 @@
             "value" : "New message"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yeni mesaj"
+            "value" : "Nouveau message"
           }
         },
         "pl" : {
@@ -4884,10 +4922,10 @@
             "value" : "Nowa wiadomość"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nouveau message"
+            "value" : "Yeni mesaj"
           }
         }
       }
@@ -4907,10 +4945,10 @@
             "value" : "Messages"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mesajlar"
+            "value" : "Messages"
           }
         },
         "pl" : {
@@ -4919,10 +4957,10 @@
             "value" : "Wiadomości"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Messages"
+            "value" : "Mesajlar"
           }
         }
       }
@@ -4942,10 +4980,10 @@
             "value" : "Thread"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dizi"
+            "value" : "Fil"
           }
         },
         "pl" : {
@@ -4954,10 +4992,10 @@
             "value" : "Wątek"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fil"
+            "value" : "Dizi"
           }
         }
       }
@@ -4977,10 +5015,10 @@
             "value" : "Recipients (%d selected)"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alıcılar (%d seçildi)"
+            "value" : "Destinataires (%d choisis)"
           }
         },
         "pl" : {
@@ -4989,10 +5027,10 @@
             "value" : "Odbiorcy (wybrano: %d)"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Destinataires (%d choisis)"
+            "value" : "Alıcılar (%d seçildi)"
           }
         }
       }
@@ -5012,10 +5050,10 @@
             "value" : "Replies (%d)"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yanıtlar (%d)"
+            "value" : "Réponses (%d)"
           }
         },
         "pl" : {
@@ -5024,10 +5062,10 @@
             "value" : "Odpowiedzi (%d)"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Réponses (%d)"
+            "value" : "Yanıtlar (%d)"
           }
         }
       }
@@ -5113,10 +5151,10 @@
             "value" : "Lunch"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Öğle yemeği"
+            "value" : "Déjeuner"
           }
         },
         "pl" : {
@@ -5125,10 +5163,10 @@
             "value" : "Obiad"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Déjeuner"
+            "value" : "Öğle yemeği"
           }
         }
       }
@@ -5149,10 +5187,10 @@
             "value" : "Wednesday"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çarşamba"
+            "value" : "Mercredi"
           }
         },
         "pl" : {
@@ -5161,10 +5199,10 @@
             "value" : "Środa"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mercredi"
+            "value" : "Çarşamba"
           }
         }
       }
@@ -5185,10 +5223,10 @@
             "value" : "Monday"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pazartesi"
+            "value" : "Lundi"
           }
         },
         "pl" : {
@@ -5197,10 +5235,10 @@
             "value" : "Poniedziałek"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lundi"
+            "value" : "Pazartesi"
           }
         }
       }
@@ -5221,10 +5259,10 @@
             "value" : "Tomorrow"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yarın"
+            "value" : "Demain"
           }
         },
         "pl" : {
@@ -5233,10 +5271,10 @@
             "value" : "Jutro"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Demain"
+            "value" : "Yarın"
           }
         }
       }
@@ -5257,10 +5295,10 @@
             "value" : "Messages"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mesajlar"
+            "value" : "Messages"
           }
         },
         "pl" : {
@@ -5269,10 +5307,10 @@
             "value" : "Wiadomości"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Messages"
+            "value" : "Mesajlar"
           }
         }
       }
@@ -5293,10 +5331,10 @@
             "value" : "Messages & threads"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mesajlar ve diziler"
+            "value" : "Messages et fils"
           }
         },
         "pl" : {
@@ -5305,10 +5343,10 @@
             "value" : "Wiadomości i wątki"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Messages et fils"
+            "value" : "Mesajlar ve diziler"
           }
         }
       }
@@ -5329,10 +5367,10 @@
             "value" : "Next →"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sonraki →"
+            "value" : "Suivant →"
           }
         },
         "pl" : {
@@ -5341,10 +5379,10 @@
             "value" : "Dalej →"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Suivant →"
+            "value" : "Sonraki →"
           }
         }
       }
@@ -5364,10 +5402,10 @@
             "value" : "Next 24 hours"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Önümüzdeki 24 saat"
+            "value" : "Prochaines 24 heures"
           }
         },
         "pl" : {
@@ -5376,10 +5414,10 @@
             "value" : "Najbliższe 24 godziny"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Prochaines 24 heures"
+            "value" : "Önümüzdeki 24 saat"
           }
         }
       }
@@ -5400,10 +5438,10 @@
             "value" : "Reload"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yeniden yükle"
+            "value" : "Actualiser"
           }
         },
         "pl" : {
@@ -5412,10 +5450,10 @@
             "value" : "Odśwież"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Actualiser"
+            "value" : "Yeniden yükle"
           }
         }
       }
@@ -5436,10 +5474,10 @@
             "value" : "New message"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yeni mesaj"
+            "value" : "Nouveau message"
           }
         },
         "pl" : {
@@ -5448,10 +5486,10 @@
             "value" : "Nowa wiadomość"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nouveau message"
+            "value" : "Yeni mesaj"
           }
         }
       }
@@ -5471,10 +5509,10 @@
             "value" : "Grade"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Not"
+            "value" : "Note"
           }
         },
         "pl" : {
@@ -5483,10 +5521,10 @@
             "value" : "Ocena"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Note"
+            "value" : "Not"
           }
         }
       }
@@ -5507,10 +5545,10 @@
             "value" : "Grades"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Notlar"
+            "value" : "Notes"
           }
         },
         "pl" : {
@@ -5519,10 +5557,10 @@
             "value" : "Oceny"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Notes"
+            "value" : "Notlar"
           }
         }
       }
@@ -5543,10 +5581,10 @@
             "value" : "Only done"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yalnızca bitenler"
+            "value" : "Terminés uniquement"
           }
         },
         "pl" : {
@@ -5555,10 +5593,10 @@
             "value" : "Tylko wykonane"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Terminés uniquement"
+            "value" : "Yalnızca bitenler"
           }
         }
       }
@@ -5579,10 +5617,10 @@
             "value" : "Only open"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yalnızca bekleyenler"
+            "value" : "En cours uniquement"
           }
         },
         "pl" : {
@@ -5591,10 +5629,10 @@
             "value" : "Tylko otwarte"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "En cours uniquement"
+            "value" : "Yalnızca bekleyenler"
           }
         }
       }
@@ -5615,10 +5653,10 @@
             "value" : "Only synthetic sample data from the local fake server"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yerel sahte sunucudan yalnızca örnek veriler"
+            "value" : "Données d’exemple uniquement depuis le faux serveur local"
           }
         },
         "pl" : {
@@ -5627,10 +5665,10 @@
             "value" : "Tylko przykładowe dane z lokalnego serwera testowego"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Données d’exemple uniquement depuis le faux serveur local"
+            "value" : "Yerel sahte sunucudan yalnızca örnek veriler"
           }
         }
       }
@@ -5651,10 +5689,10 @@
             "value" : "Only overdue"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yalnızca gecikenler"
+            "value" : "En retard uniquement"
           }
         },
         "pl" : {
@@ -5663,10 +5701,10 @@
             "value" : "Tylko zaległe"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "En retard uniquement"
+            "value" : "Yalnızca gecikenler"
           }
         }
       }
@@ -5710,10 +5748,10 @@
             "value" : "Without done"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bitenler hariç"
+            "value" : "Sans les terminés"
           }
         },
         "pl" : {
@@ -5722,10 +5760,10 @@
             "value" : "Bez wykonanych"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sans les terminés"
+            "value" : "Bitenler hariç"
           }
         }
       }
@@ -5746,10 +5784,10 @@
             "value" : "Run onboarding again"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tanıtımı yeniden başlat"
+            "value" : "Relancer l’introduction"
           }
         },
         "pl" : {
@@ -5758,10 +5796,46 @@
             "value" : "Uruchom ponownie wprowadzenie"
           }
         },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tanıtımı yeniden başlat"
+          }
+        }
+      }
+    },
+    "onboarding_greeting" : {
+      "comment" : "Onboarding: Begrüßung je Sprache (Hallo-Zyklus)",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hallo!"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hello!"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Relancer l’introduction"
+            "value" : "Bonjour !"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cześć!"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merhaba!"
           }
         }
       }
@@ -5781,10 +5855,10 @@
             "value" : "Online"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çevrimiçi"
+            "value" : "En ligne"
           }
         },
         "pl" : {
@@ -5793,10 +5867,10 @@
             "value" : "Online"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "En ligne"
+            "value" : "Çevrimiçi"
           }
         }
       }
@@ -5816,10 +5890,10 @@
             "value" : "Please enter a city in settings."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lütfen ayarlardan bir şehir girin."
+            "value" : "Saisis une ville dans les réglages."
           }
         },
         "pl" : {
@@ -5828,10 +5902,10 @@
             "value" : "Wpisz miasto w ustawieniach."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Saisis une ville dans les réglages."
+            "value" : "Lütfen ayarlardan bir şehir girin."
           }
         }
       }
@@ -5851,10 +5925,10 @@
             "value" : "%@. period · %@%@%@"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@. ders · %@%@%@"
+            "value" : "%@. cours · %@%@%@"
           }
         },
         "pl" : {
@@ -5863,10 +5937,10 @@
             "value" : "%@. lekcja · %@%@%@"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@. cours · %@%@%@"
+            "value" : "%@. ders · %@%@%@"
           }
         }
       }
@@ -5886,10 +5960,10 @@
             "value" : " · Room %@"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : " · Oda %@"
+            "value" : " · Salle %@"
           }
         },
         "pl" : {
@@ -5898,10 +5972,10 @@
             "value" : " · Sala %@"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : " · Salle %@"
+            "value" : " · Oda %@"
           }
         }
       }
@@ -5921,7 +5995,7 @@
             "value" : " · %@"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : " · %@"
@@ -5933,7 +6007,7 @@
             "value" : " · %@"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : " · %@"
@@ -5956,10 +6030,10 @@
             "value" : "Messages · %d"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mesajlar · %d"
+            "value" : "Messages · %d"
           }
         },
         "pl" : {
@@ -5968,10 +6042,10 @@
             "value" : "Wiadomości · %d"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Messages · %d"
+            "value" : "Mesajlar · %d"
           }
         }
       }
@@ -5991,10 +6065,10 @@
             "value" : "Overview"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Genel bakış"
+            "value" : "Aperçu"
           }
         },
         "pl" : {
@@ -6003,10 +6077,10 @@
             "value" : "Przegląd"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aperçu"
+            "value" : "Genel bakış"
           }
         }
       }
@@ -6026,10 +6100,10 @@
             "value" : "Weather in %@"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ hava durumu"
+            "value" : "Météo à %@"
           }
         },
         "pl" : {
@@ -6038,10 +6112,10 @@
             "value" : "Pogoda w %@"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Météo à %@"
+            "value" : "%@ hava durumu"
           }
         }
       }
@@ -6061,10 +6135,10 @@
             "value" : "Week %@"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ haftası"
+            "value" : "Semaine %@"
           }
         },
         "pl" : {
@@ -6073,10 +6147,10 @@
             "value" : "Tydzień %@"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Semaine %@"
+            "value" : "%@ haftası"
           }
         }
       }
@@ -6097,10 +6171,10 @@
             "value" : "Trash"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Çöp kutusu"
+            "value" : "Corbeille"
           }
         },
         "pl" : {
@@ -6109,10 +6183,10 @@
             "value" : "Kosz"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Corbeille"
+            "value" : "Çöp kutusu"
           }
         }
       }
@@ -6133,10 +6207,10 @@
             "value" : "Password"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Parola"
+            "value" : "Mot de passe"
           }
         },
         "pl" : {
@@ -6145,10 +6219,10 @@
             "value" : "Hasło"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mot de passe"
+            "value" : "Parola"
           }
         }
       }
@@ -6169,10 +6243,10 @@
             "value" : "Show password"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Parolayı göster"
+            "value" : "Afficher le mot de passe"
           }
         },
         "pl" : {
@@ -6181,10 +6255,10 @@
             "value" : "Pokaż hasło"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Afficher le mot de passe"
+            "value" : "Parolayı göster"
           }
         }
       }
@@ -6205,10 +6279,10 @@
             "value" : "Enter password"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Parolayı gir"
+            "value" : "Saisir le mot de passe"
           }
         },
         "pl" : {
@@ -6217,10 +6291,10 @@
             "value" : "Wpisz hasło"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Saisir le mot de passe"
+            "value" : "Parolayı gir"
           }
         }
       }
@@ -6241,10 +6315,10 @@
             "value" : "Hide password"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Parolayı gizle"
+            "value" : "Masquer le mot de passe"
           }
         },
         "pl" : {
@@ -6253,10 +6327,10 @@
             "value" : "Ukryj hasło"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Masquer le mot de passe"
+            "value" : "Parolayı gizle"
           }
         }
       }
@@ -6277,7 +6351,7 @@
             "value" : "PDF"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "PDF"
@@ -6289,7 +6363,7 @@
             "value" : "PDF"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "PDF"
@@ -6313,10 +6387,10 @@
             "value" : "Checking …"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Denetleniyor …"
+            "value" : "Vérification …"
           }
         },
         "pl" : {
@@ -6325,10 +6399,10 @@
             "value" : "Sprawdzanie …"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vérification …"
+            "value" : "Denetleniyor …"
           }
         }
       }
@@ -6349,10 +6423,10 @@
             "value" : "Checking …"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Denetleniyor …"
+            "value" : "Vérification …"
           }
         },
         "pl" : {
@@ -6361,10 +6435,10 @@
             "value" : "Sprawdzanie …"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vérification …"
+            "value" : "Denetleniyor …"
           }
         }
       }
@@ -6385,10 +6459,10 @@
             "value" : "Close"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kapat"
+            "value" : "Fermer"
           }
         },
         "pl" : {
@@ -6397,10 +6471,10 @@
             "value" : "Zamknij"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fermer"
+            "value" : "Kapat"
           }
         }
       }
@@ -6453,10 +6527,10 @@
             "value" : "Class %@"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sınıf %@"
+            "value" : "Classe %@"
           }
         },
         "pl" : {
@@ -6465,10 +6539,10 @@
             "value" : "Klasa %@"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Classe %@"
+            "value" : "Sınıf %@"
           }
         }
       }
@@ -6521,10 +6595,10 @@
             "value" : "Events & substitutions"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Etkinlikler ve yedek dersler"
+            "value" : "Événements et remplacements"
           }
         },
         "pl" : {
@@ -6533,10 +6607,10 @@
             "value" : "Wydarzenia i zastępstwa"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Événements et remplacements"
+            "value" : "Etkinlikler ve yedek dersler"
           }
         }
       }
@@ -6556,10 +6630,10 @@
             "value" : "Week of %@"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ haftasından itibaren"
+            "value" : "Semaine du %@"
           }
         },
         "pl" : {
@@ -6568,10 +6642,10 @@
             "value" : "Tydzień od %@"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Semaine du %@"
+            "value" : "%@ haftasından itibaren"
           }
         }
       }
@@ -6591,10 +6665,10 @@
             "value" : "School life"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Okul hayatı"
+            "value" : "Vie scolaire"
           }
         },
         "pl" : {
@@ -6603,10 +6677,10 @@
             "value" : "Życie szkoły"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vie scolaire"
+            "value" : "Okul hayatı"
           }
         }
       }
@@ -6626,10 +6700,10 @@
             "value" : "School"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Okul"
+            "value" : "École"
           }
         },
         "pl" : {
@@ -6638,10 +6712,10 @@
             "value" : "Szkoła"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "École"
+            "value" : "Okul"
           }
         }
       }
@@ -6661,10 +6735,10 @@
             "value" : "No school"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Okul yok"
+            "value" : "Pas école"
           }
         },
         "pl" : {
@@ -6673,10 +6747,10 @@
             "value" : "Wolne od szkoły"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pas école"
+            "value" : "Okul yok"
           }
         }
       }
@@ -6696,10 +6770,10 @@
             "value" : "No school."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Okul yok."
+            "value" : "Pas école."
           }
         },
         "pl" : {
@@ -6708,10 +6782,10 @@
             "value" : "Wolne od szkoły."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pas école."
+            "value" : "Okul yok."
           }
         }
       }
@@ -6732,10 +6806,10 @@
             "value" : "Send"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gönder"
+            "value" : "Envoyer"
           }
         },
         "pl" : {
@@ -6744,10 +6818,10 @@
             "value" : "Wyślij"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Envoyer"
+            "value" : "Gönder"
           }
         }
       }
@@ -6768,10 +6842,10 @@
             "value" : "Sending …"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gönderiliyor …"
+            "value" : "Envoi …"
           }
         },
         "pl" : {
@@ -6780,10 +6854,10 @@
             "value" : "Wysyłanie …"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Envoi …"
+            "value" : "Gönderiliyor …"
           }
         }
       }
@@ -6803,10 +6877,10 @@
             "value" : "Server"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sunucu"
+            "value" : "Serveur"
           }
         },
         "pl" : {
@@ -6815,13 +6889,16 @@
             "value" : "Serwer"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Serveur"
+            "value" : "Sunucu"
           }
         }
       }
+    },
+    "Server und Gerät sind eingetragen.\nJetzt nur noch anmelden." : {
+
     },
     "Server-URL" : {
       "comment" : "UI-Literal",
@@ -6839,10 +6916,10 @@
             "value" : "Server URL"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sunucu URL'si"
+            "value" : "URL du serveur"
           }
         },
         "pl" : {
@@ -6851,15 +6928,17 @@
             "value" : "URL serwera"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "URL du serveur"
+            "value" : "Sunucu URL'si"
           }
         }
       }
     },
     "Server, Schule und Gerät sind eingetragen.\nJetzt nur noch anmelden." : {
+      "comment" : "UI-Literal",
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6873,10 +6952,10 @@
             "value" : "Server, school and device are set.\nNow just sign in."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sunucu, okul ve cihaz kaydedildi.\nŞimdi giriş yapman yeterli."
+            "value" : "Serveur, école et appareil enregistrés.\nIl ne reste qu’à te connecter."
           }
         },
         "pl" : {
@@ -6885,14 +6964,13 @@
             "value" : "Serwer, szkoła i urządzenie zapisane.\nTeraz wystarczy się zalogować."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Serveur, école et appareil enregistrés.\nIl ne reste qu’à te connecter."
+            "value" : "Sunucu, okul ve cihaz kaydedildi.\nŞimdi giriş yapman yeterli."
           }
         }
-      },
-      "comment" : "UI-Literal"
+      }
     },
     "settings_cache_clear" : {
       "comment" : "Einstellungen: Cache leeren",
@@ -6909,10 +6987,10 @@
             "value" : "Clear cache"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Önbelleği temizle"
+            "value" : "Vider le cache"
           }
         },
         "pl" : {
@@ -6921,10 +6999,10 @@
             "value" : "Wyczyść pamięć podręczną"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vider le cache"
+            "value" : "Önbelleği temizle"
           }
         }
       }
@@ -6944,10 +7022,10 @@
             "value" : "Clearing cache …"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Önbellek temizleniyor …"
+            "value" : "Vidage du cache …"
           }
         },
         "pl" : {
@@ -6956,10 +7034,10 @@
             "value" : "Czyszczenie …"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vidage du cache …"
+            "value" : "Önbellek temizleniyor …"
           }
         }
       }
@@ -6979,10 +7057,10 @@
             "value" : "Cache cleared (%d files)."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Önbellek temizlendi (%d dosya)."
+            "value" : "Cache vidé (%d fichiers)."
           }
         },
         "pl" : {
@@ -6991,10 +7069,10 @@
             "value" : "Wyczyszczono (%d plików)."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cache vidé (%d fichiers)."
+            "value" : "Önbellek temizlendi (%d dosya)."
           }
         }
       }
@@ -7014,10 +7092,10 @@
             "value" : "Devices"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cihazlar"
+            "value" : "Appareils"
           }
         },
         "pl" : {
@@ -7026,10 +7104,10 @@
             "value" : "Urządzenia"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Appareils"
+            "value" : "Cihazlar"
           }
         }
       }
@@ -7049,10 +7127,10 @@
             "value" : "Max. open homework: %d"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "En fazla bekleyen ödev: %d"
+            "value" : "Devoirs en cours max. : %d"
           }
         },
         "pl" : {
@@ -7061,10 +7139,10 @@
             "value" : "Maks. otwartych zadań: %d"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Devoirs en cours max. : %d"
+            "value" : "En fazla bekleyen ödev: %d"
           }
         }
       }
@@ -7084,10 +7162,10 @@
             "value" : "Max. unread messages: %d"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "En fazla okunmamış mesaj: %d"
+            "value" : "Non lus max. : %d"
           }
         },
         "pl" : {
@@ -7096,10 +7174,10 @@
             "value" : "Maks. nieprzeczytanych: %d"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Non lus max. : %d"
+            "value" : "En fazla okunmamış mesaj: %d"
           }
         }
       }
@@ -7119,10 +7197,10 @@
             "value" : "Settings"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ayarlar"
+            "value" : "Réglages"
           }
         },
         "pl" : {
@@ -7131,10 +7209,10 @@
             "value" : "Ustawienia"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Réglages"
+            "value" : "Ayarlar"
           }
         }
       }
@@ -7155,10 +7233,10 @@
             "value" : "View"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Görünüm"
+            "value" : "Vue"
           }
         },
         "pl" : {
@@ -7167,10 +7245,10 @@
             "value" : "Widok"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vue"
+            "value" : "Görünüm"
           }
         }
       }
@@ -7191,10 +7269,10 @@
             "value" : "Sunrise"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gün doğumu"
+            "value" : "Lever du soleil"
           }
         },
         "pl" : {
@@ -7203,10 +7281,10 @@
             "value" : "Wschód słońca"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lever du soleil"
+            "value" : "Gün doğumu"
           }
         }
       }
@@ -7227,10 +7305,10 @@
             "value" : "Sunset"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gün batımı"
+            "value" : "Coucher du soleil"
           }
         },
         "pl" : {
@@ -7239,10 +7317,10 @@
             "value" : "Zachód słońca"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Coucher du soleil"
+            "value" : "Gün batımı"
           }
         }
       }
@@ -7263,10 +7341,10 @@
             "value" : "Save"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kaydet"
+            "value" : "Enregistrer"
           }
         },
         "pl" : {
@@ -7275,10 +7353,10 @@
             "value" : "Zapisz"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enregistrer"
+            "value" : "Kaydet"
           }
         }
       }
@@ -7299,10 +7377,10 @@
             "value" : "Saving …"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kaydediliyor …"
+            "value" : "Enregistrement …"
           }
         },
         "pl" : {
@@ -7311,10 +7389,10 @@
             "value" : "Zapisywanie …"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enregistrement …"
+            "value" : "Kaydediliyor …"
           }
         }
       }
@@ -7335,10 +7413,10 @@
             "value" : "Saving …"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kaydediliyor …"
+            "value" : "Enregistrement …"
           }
         },
         "pl" : {
@@ -7347,10 +7425,27 @@
             "value" : "Zapisywanie …"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enregistrement …"
+            "value" : "Kaydediliyor …"
+          }
+        }
+      }
+    },
+    "Sprache wählen" : {
+      "comment" : "Onboarding: Sprachauswahl",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprache wählen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose language"
           }
         }
       }
@@ -7370,10 +7465,10 @@
             "value" : "Default filter"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Varsayılan filtre"
+            "value" : "Filtre par défaut"
           }
         },
         "pl" : {
@@ -7382,10 +7477,10 @@
             "value" : "Filtr domyślny"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Filtre par défaut"
+            "value" : "Varsayılan filtre"
           }
         }
       }
@@ -7405,10 +7500,10 @@
             "value" : "Start page after sign-in"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Girişten sonraki ana sayfa"
+            "value" : "Page d’accueil après connexion"
           }
         },
         "pl" : {
@@ -7417,10 +7512,10 @@
             "value" : "Strona startowa po zalogowaniu"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Page d’accueil après connexion"
+            "value" : "Girişten sonraki ana sayfa"
           }
         }
       }
@@ -7440,10 +7535,10 @@
             "value" : "Status"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Durum"
+            "value" : "Statut"
           }
         },
         "pl" : {
@@ -7452,10 +7547,10 @@
             "value" : "Status"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Statut"
+            "value" : "Durum"
           }
         }
       }
@@ -7475,10 +7570,10 @@
             "value" : "Classes today"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bugünkü dersler"
+            "value" : "Cours du jour"
           }
         },
         "pl" : {
@@ -7487,10 +7582,10 @@
             "value" : "Dzisiejsze lekcje"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cours du jour"
+            "value" : "Bugünkü dersler"
           }
         }
       }
@@ -7511,10 +7606,10 @@
             "value" : "Timetable"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ders programı"
+            "value" : "Emploi du temps"
           }
         },
         "pl" : {
@@ -7523,10 +7618,10 @@
             "value" : "Plan lekcji"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Emploi du temps"
+            "value" : "Ders programı"
           }
         }
       }
@@ -7547,10 +7642,10 @@
             "value" : "Timetable, lunch & weather"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ders programı, yemek ve hava durumu"
+            "value" : "Emploi du temps, cantine et météo"
           }
         },
         "pl" : {
@@ -7559,46 +7654,10 @@
             "value" : "Plan lekcji, jedzenie i pogoda"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Emploi du temps, cantine et météo"
-          }
-        }
-      }
-    },
-    "Subdomain (optional)" : {
-      "comment" : "UI-Literal",
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Subdomain (optional)"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Subdomain (optional)"
-          }
-        },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alt alan adı (isteğe bağlı)"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Subdomena (opcjonalnie)"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sous-domaine (facultatif)"
+            "value" : "Ders programı, yemek ve hava durumu"
           }
         }
       }
@@ -7618,10 +7677,10 @@
             "value" : "Search"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ara"
+            "value" : "Rechercher"
           }
         },
         "pl" : {
@@ -7630,10 +7689,10 @@
             "value" : "Szukaj"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rechercher"
+            "value" : "Ara"
           }
         }
       }
@@ -7654,10 +7713,10 @@
             "value" : "Search"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ara"
+            "value" : "Rechercher"
           }
         },
         "pl" : {
@@ -7666,10 +7725,28 @@
             "value" : "Szukaj"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rechercher"
+            "value" : "Ara"
+          }
+        }
+      }
+    },
+    "System" : {
+      "comment" : "Onboarding: Sprachauswahl",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
           }
         }
       }
@@ -7690,10 +7767,10 @@
             "value" : "Day"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gün"
+            "value" : "Jour"
           }
         },
         "pl" : {
@@ -7702,10 +7779,10 @@
             "value" : "Dzień"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jour"
+            "value" : "Gün"
           }
         }
       }
@@ -7726,10 +7803,10 @@
             "value" : "Day and week, canteen plan and weather on the overview."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Genel bakışta gün ve hafta, yemekhane planı ve hava durumu."
+            "value" : "Jour et semaine, menu de la cantine et météo sur l’aperçu."
           }
         },
         "pl" : {
@@ -7738,10 +7815,10 @@
             "value" : "Dzień i tydzień, plan stołówki i pogoda w przeglądzie."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Jour et semaine, menu de la cantine et météo sur l’aperçu."
+            "value" : "Genel bakışta gün ve hafta, yemekhane planı ve hava durumu."
           }
         }
       }
@@ -7762,10 +7839,10 @@
             "value" : "Events"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Etkinlikler"
+            "value" : "Événements"
           }
         },
         "pl" : {
@@ -7774,10 +7851,10 @@
             "value" : "Wydarzenia"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Événements"
+            "value" : "Etkinlikler"
           }
         }
       }
@@ -7797,10 +7874,10 @@
             "value" : "Events and schedule changes"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Etkinlikler ve program değişiklikleri"
+            "value" : "Événements et changements de planning"
           }
         },
         "pl" : {
@@ -7809,10 +7886,10 @@
             "value" : "Wydarzenia i zmiany planu"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Événements et changements de planning"
+            "value" : "Etkinlikler ve program değişiklikleri"
           }
         }
       }
@@ -7833,10 +7910,10 @@
             "value" : "Include tests"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Testleri dahil et"
+            "value" : "Inclure les devoirs notés"
           }
         },
         "pl" : {
@@ -7845,10 +7922,10 @@
             "value" : "Uwzględnij testy"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Inclure les devoirs notés"
+            "value" : "Testleri dahil et"
           }
         }
       }
@@ -7869,10 +7946,10 @@
             "value" : "Include tests and exams"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Testleri ve sınavları dahil et"
+            "value" : "Inclure devoirs notés et examens"
           }
         },
         "pl" : {
@@ -7881,10 +7958,10 @@
             "value" : "Uwzględnij testy i sprawdziany"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Inclure devoirs notés et examens"
+            "value" : "Testleri ve sınavları dahil et"
           }
         }
       }
@@ -7904,10 +7981,10 @@
             "value" : "Text"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Metin"
+            "value" : "Texte"
           }
         },
         "pl" : {
@@ -7916,10 +7993,10 @@
             "value" : "Tekst"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Texte"
+            "value" : "Metin"
           }
         }
       }
@@ -7939,10 +8016,10 @@
             "value" : "Timetable"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ders programı"
+            "value" : "Emploi du temps"
           }
         },
         "pl" : {
@@ -7951,10 +8028,10 @@
             "value" : "Plan lekcji"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Emploi du temps"
+            "value" : "Ders programı"
           }
         }
       }
@@ -7974,10 +8051,10 @@
             "value" : "Title"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Başlık"
+            "value" : "Titre"
           }
         },
         "pl" : {
@@ -7986,10 +8063,10 @@
             "value" : "Tytuł"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Titre"
+            "value" : "Başlık"
           }
         }
       }
@@ -8009,10 +8086,10 @@
             "value" : "Enter where EduFlow runs as server."
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "EduFlow'un sunucu olarak nerede çalıştığını gir."
+            "value" : "Indique où EduFlow tourne comme serveur."
           }
         },
         "pl" : {
@@ -8021,10 +8098,10 @@
             "value" : "Wpisz, gdzie EduFlow działa jako serwer."
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Indique où EduFlow tourne comme serveur."
+            "value" : "EduFlow'un sunucu olarak nerede çalıştığını gir."
           }
         }
       }
@@ -8045,10 +8122,10 @@
             "value" : "Type"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tür"
+            "value" : "Type"
           }
         },
         "pl" : {
@@ -8057,10 +8134,10 @@
             "value" : "Typ"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Type"
+            "value" : "Tür"
           }
         }
       }
@@ -8104,10 +8181,10 @@
             "value" : "Day after tomorrow"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Öbür gün"
+            "value" : "Après-demain"
           }
         },
         "pl" : {
@@ -8116,10 +8193,10 @@
             "value" : "Pojutrze"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Après-demain"
+            "value" : "Öbür gün"
           }
         }
       }
@@ -8140,10 +8217,10 @@
             "value" : "Apply"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uygula"
+            "value" : "Appliquer"
           }
         },
         "pl" : {
@@ -8152,10 +8229,28 @@
             "value" : "Zastosuj"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Appliquer"
+            "value" : "Uygula"
+          }
+        }
+      }
+    },
+    "Übernehmen & neu starten" : {
+      "comment" : "Onboarding: Sprachauswahl",
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übernehmen & neu starten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apply & restart"
           }
         }
       }
@@ -8176,10 +8271,10 @@
             "value" : "Apply & continue"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uygula ve devam et"
+            "value" : "Appliquer et continuer"
           }
         },
         "pl" : {
@@ -8188,10 +8283,10 @@
             "value" : "Zastosuj i dalej"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Appliquer et continuer"
+            "value" : "Uygula ve devam et"
           }
         }
       }
@@ -8211,10 +8306,10 @@
             "value" : "Overview"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Genel bakış"
+            "value" : "Aperçu"
           }
         },
         "pl" : {
@@ -8223,10 +8318,10 @@
             "value" : "Przegląd"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aperçu"
+            "value" : "Genel bakış"
           }
         }
       }
@@ -8246,10 +8341,10 @@
             "value" : "Customize overview"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Genel bakışı özelleştir"
+            "value" : "Personnaliser l’aperçu"
           }
         },
         "pl" : {
@@ -8258,10 +8353,10 @@
             "value" : "Dostosuj przegląd"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Personnaliser l’aperçu"
+            "value" : "Genel bakışı özelleştir"
           }
         }
       }
@@ -8282,10 +8377,10 @@
             "value" : "Clock, messages, lunch"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Saat, mesajlar, yemek"
+            "value" : "Horloge, messages, cantine"
           }
         },
         "pl" : {
@@ -8294,10 +8389,10 @@
             "value" : "Zegar, wiadomości, jedzenie"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Horloge, messages, cantine"
+            "value" : "Saat, mesajlar, yemek"
           }
         }
       }
@@ -8317,10 +8412,10 @@
             "value" : "Unknown device"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bilinmeyen cihaz"
+            "value" : "Appareil inconnu"
           }
         },
         "pl" : {
@@ -8329,10 +8424,10 @@
             "value" : "Nieznane urządzenie"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Appareil inconnu"
+            "value" : "Bilinmeyen cihaz"
           }
         }
       }
@@ -8353,10 +8448,10 @@
             "value" : "And your password?"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Parolan nedir?"
+            "value" : "Et ton mot de passe ?"
           }
         },
         "pl" : {
@@ -8365,10 +8460,10 @@
             "value" : "A twoje hasło?"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Et ton mot de passe ?"
+            "value" : "Parolan nedir?"
           }
         }
       }
@@ -8400,10 +8495,10 @@
             "value" : "Test connection"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bağlantıyı dene"
+            "value" : "Tester la connexion"
           }
         },
         "pl" : {
@@ -8412,10 +8507,10 @@
             "value" : "Testuj połączenie"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tester la connexion"
+            "value" : "Bağlantıyı dene"
           }
         }
       }
@@ -8436,10 +8531,10 @@
             "value" : "Connected"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bağlandı"
+            "value" : "Connecté"
           }
         },
         "pl" : {
@@ -8448,10 +8543,10 @@
             "value" : "Połączono"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Connecté"
+            "value" : "Bağlandı"
           }
         }
       }
@@ -8472,10 +8567,10 @@
             "value" : "Substitutions"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yedek dersler"
+            "value" : "Remplacements"
           }
         },
         "pl" : {
@@ -8484,10 +8579,10 @@
             "value" : "Zastępstwa"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Remplacements"
+            "value" : "Yedek dersler"
           }
         }
       }
@@ -8508,10 +8603,10 @@
             "value" : "Continue"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Devam et"
+            "value" : "Continuer"
           }
         },
         "pl" : {
@@ -8520,10 +8615,10 @@
             "value" : "Dalej"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Continuer"
+            "value" : "Devam et"
           }
         }
       }
@@ -8544,10 +8639,10 @@
             "value" : "Continue ›"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Devam et ›"
+            "value" : "Continuer ›"
           }
         },
         "pl" : {
@@ -8556,10 +8651,10 @@
             "value" : "Dalej ›"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Continuer ›"
+            "value" : "Devam et ›"
           }
         }
       }
@@ -8580,10 +8675,10 @@
             "value" : "Which device are you signing in?"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hangi cihazla giriş yapıyorsun?"
+            "value" : "Quel appareil connectes-tu ?"
           }
         },
         "pl" : {
@@ -8592,10 +8687,10 @@
             "value" : "Które urządzenie logujesz?"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quel appareil connectes-tu ?"
+            "value" : "Hangi cihazla giriş yapıyorsun?"
           }
         }
       }
@@ -8616,10 +8711,10 @@
             "value" : "Weather"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hava durumu"
+            "value" : "Météo"
           }
         },
         "pl" : {
@@ -8628,10 +8723,10 @@
             "value" : "Pogoda"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Météo"
+            "value" : "Hava durumu"
           }
         }
       }
@@ -8652,10 +8747,10 @@
             "value" : "Weather: city (optional)"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hava durumu: şehir (isteğe bağlı)"
+            "value" : "Météo : ville (facultatif)"
           }
         },
         "pl" : {
@@ -8664,10 +8759,10 @@
             "value" : "Pogoda: miasto (opcjonalnie)"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Météo : ville (facultatif)"
+            "value" : "Hava durumu: şehir (isteğe bağlı)"
           }
         }
       }
@@ -8688,10 +8783,10 @@
             "value" : "Show weather map"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hava durumu kartını göster"
+            "value" : "Afficher la carte météo"
           }
         },
         "pl" : {
@@ -8700,10 +8795,10 @@
             "value" : "Pokaż kartę pogody"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Afficher la carte météo"
+            "value" : "Hava durumu kartını göster"
           }
         }
       }
@@ -8724,10 +8819,10 @@
             "value" : "What is your EduPage username?"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "EduPage'deki kullanıcı adın nedir?"
+            "value" : "Quel est ton nom sur EduPage ?"
           }
         },
         "pl" : {
@@ -8736,10 +8831,10 @@
             "value" : "Jaka jest twoja nazwa w EduPage?"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quel est ton nom sur EduPage ?"
+            "value" : "EduPage'deki kullanıcı adın nedir?"
           }
         }
       }
@@ -8760,10 +8855,10 @@
             "value" : "Reopen"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yeniden aç"
+            "value" : "Rouvrir"
           }
         },
         "pl" : {
@@ -8772,10 +8867,10 @@
             "value" : "Otwórz ponownie"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rouvrir"
+            "value" : "Yeniden aç"
           }
         }
       }
@@ -8796,10 +8891,10 @@
             "value" : "Wind"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Rüzgar"
+            "value" : "Vent"
           }
         },
         "pl" : {
@@ -8808,10 +8903,10 @@
             "value" : "Wiatr"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vent"
+            "value" : "Rüzgar"
           }
         }
       }
@@ -8831,10 +8926,10 @@
             "value" : "Where does your server run?"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sunucun nerede çalışıyor?"
+            "value" : "Où tourne ton serveur ?"
           }
         },
         "pl" : {
@@ -8843,10 +8938,10 @@
             "value" : "Gdzie działa twój serwer?"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Où tourne ton serveur ?"
+            "value" : "Sunucun nerede çalışıyor?"
           }
         }
       }
@@ -8867,10 +8962,10 @@
             "value" : "Week"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hafta"
+            "value" : "Semaine"
           }
         },
         "pl" : {
@@ -8879,10 +8974,10 @@
             "value" : "Tydzień"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Semaine"
+            "value" : "Hafta"
           }
         }
       }
@@ -8903,10 +8998,10 @@
             "value" : "Clouds"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bulutlar"
+            "value" : "Nuages"
           }
         },
         "pl" : {
@@ -8915,10 +9010,10 @@
             "value" : "Chmury"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nuages"
+            "value" : "Bulutlar"
           }
         }
       }
@@ -8939,10 +9034,10 @@
             "value" : "e.g. MacBook"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ör. MacBook"
+            "value" : "p. ex. MacBook"
           }
         },
         "pl" : {
@@ -8951,10 +9046,10 @@
             "value" : "np. MacBook"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "p. ex. MacBook"
+            "value" : "ör. MacBook"
           }
         }
       }
@@ -8975,10 +9070,10 @@
             "value" : "e.g. max.muster"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ör. max.muster"
+            "value" : "p. ex. max.muster"
           }
         },
         "pl" : {
@@ -8987,82 +9082,10 @@
             "value" : "np. max.muster"
           }
         },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "p. ex. max.muster"
-          }
-        }
-      }
-    },
-    "z. B. musterschule" : {
-      "comment" : "UI-Literal",
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "z. B. musterschule"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "e.g. musterschule"
-          }
-        },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ör. musterschule"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "np. musterschule"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "p. ex. musterschule"
-          }
-        }
-      }
-    },
-    "Zu welcher Schule gehörst du?" : {
-      "comment" : "UI-Literal",
-      "extractionState" : "stale",
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zu welcher Schule gehörst du?"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Which school do you belong to?"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hangi okula gidiyorsun?"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Do której szkoły chodzisz?"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "À quelle école appartiens-tu ?"
+            "value" : "ör. max.muster"
           }
         }
       }
@@ -9083,10 +9106,10 @@
             "value" : "Back"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geri"
+            "value" : "Retour"
           }
         },
         "pl" : {
@@ -9095,10 +9118,10 @@
             "value" : "Wstecz"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Retour"
+            "value" : "Geri"
           }
         }
       }
@@ -9119,10 +9142,10 @@
             "value" : "Back to sign-in"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Girişe dön"
+            "value" : "Retour à la connexion"
           }
         },
         "pl" : {
@@ -9131,10 +9154,10 @@
             "value" : "Wróć do logowania"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Retour à la connexion"
+            "value" : "Girişe dön"
           }
         }
       }
@@ -9155,10 +9178,10 @@
             "value" : "Restore"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geri al"
+            "value" : "Restaurer"
           }
         },
         "pl" : {
@@ -9167,10 +9190,10 @@
             "value" : "Przywróć"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Restaurer"
+            "value" : "Geri al"
           }
         }
       }
@@ -9191,10 +9214,10 @@
             "value" : "Restore (as open)"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geri al (bekleyen olarak)"
+            "value" : "Restaurer (comme en cours)"
           }
         },
         "pl" : {
@@ -9203,10 +9226,10 @@
             "value" : "Przywróć (jako otwarte)"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Restaurer (comme en cours)"
+            "value" : "Geri al (bekleyen olarak)"
           }
         }
       }
@@ -9226,10 +9249,10 @@
             "value" : "Extra"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ek"
+            "value" : "Supplément"
           }
         },
         "pl" : {
@@ -9238,10 +9261,10 @@
             "value" : "Dodatek"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Supplément"
+            "value" : "Ek"
           }
         }
       }
@@ -9261,10 +9284,10 @@
             "value" : "Cached"
           }
         },
-        "tr" : {
+        "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Önbelleğe alındı"
+            "value" : "En cache"
           }
         },
         "pl" : {
@@ -9273,10 +9296,10 @@
             "value" : "Zapisane w pamięci podręcznej"
           }
         },
-        "fr" : {
+        "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "En cache"
+            "value" : "Önbelleğe alındı"
           }
         }
       }

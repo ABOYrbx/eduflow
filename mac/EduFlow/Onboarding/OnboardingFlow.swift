@@ -1,8 +1,8 @@
 import SwiftUI
 
-/// Onboarding-Ablauf (nur erster Start): Willkommen → Funktionen →
-/// Server (optional) → Anmelden. Die Anmeldung ist die bestehende
-/// Login-Ansicht inklusive Zwei-Faktor-Pfad; bei Erfolg wird das
+/// Onboarding-Ablauf (nur erster Start): Willkommen → Sprache →
+/// Funktionen → Server (optional) → Anmelden. Die Anmeldung ist die
+/// bestehende Login-Ansicht inklusive Zwei-Faktor-Pfad; bei Erfolg wird das
 /// Flag gesetzt und zur Landing-Route navigiert.
 public struct OnboardingFlow: View {
     @Environment(\.colorScheme) private var scheme
@@ -62,9 +62,11 @@ public struct OnboardingFlow: View {
         case 0:
             OnboardingWelcomePage { go(to: 1) }
         case 1:
-            OnboardingFeaturesPage { go(to: 2) }
+            OnboardingLanguagePage { go(to: 2) }
         case 2:
-            OnboardingServerPage(store: store) { go(to: 3) }
+            OnboardingFeaturesPage { go(to: 3) }
+        case 3:
+            OnboardingServerPage(store: store) { go(to: 4) }
         default:
             LoginView(
                 store: store,

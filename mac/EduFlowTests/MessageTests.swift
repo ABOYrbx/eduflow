@@ -147,6 +147,9 @@ struct MessageTests {
         } catch let error as APIError {
             #expect(error.code == "VALIDATION")
         }
+        // Unbekannte IDs schickt der Client unverändert mit; der Server
+        // lehnt sie per Mitgliedschaft in der Empfängerliste ab.
+        stub(status: 400, body: #"{"error":"Bitte mindestens einen gültigen Empfänger angeben.","code":"VALIDATION"}"#)
         do {
             _ = try await repo.send(recipients: ["Quatsch"], body: "Hallo")
             Issue.record("Fehler erwartet")

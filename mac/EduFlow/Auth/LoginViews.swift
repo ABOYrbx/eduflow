@@ -21,7 +21,7 @@ public struct LoginView: View {
     /// anderen Onboarding-Schritte (Spacer oben/unten, kein Scrollen,
     /// 560er-Breite) statt der eigenständigen Login-Darstellung.
     private let onboardingLayout: Bool
-    private let totalSteps = 5
+    private let totalSteps = 4
 
     public init(
         store: TokenStore,
@@ -208,16 +208,6 @@ public struct LoginView: View {
     private var stepContent: some View {
         switch step {
         case 0:
-            stepHint("Zu welcher Schule gehörst du?")
-            AuthLabel("Subdomain (optional)")
-            UberTextField(
-                text: $vm.subdomain,
-                placeholder: "z. B. musterschule",
-                icon: "building.2",
-                autofocus: true
-            ) { advance() }
-            .onChange(of: vm.subdomain) { vm.clearError() }
-        case 1:
             stepHint("Wie heißt du bei EduPage?")
             AuthLabel("Benutzername")
             UberTextField(
@@ -228,7 +218,7 @@ public struct LoginView: View {
                 autofocus: true
             ) { advance() }
             .onChange(of: vm.username) { vm.clearError() }
-        case 2:
+        case 1:
             stepHint("Und dein Passwort?")
             AuthLabel("Passwort")
             UberSecureField(
@@ -239,7 +229,7 @@ public struct LoginView: View {
                 autofocus: true
             ) { advance() }
             .onChange(of: vm.password) { vm.clearError() }
-        case 3:
+        case 2:
             stepHint("Welches Gerät meldest du an?")
             AuthLabel("Gerät (optional)")
             UberTextField(
@@ -283,9 +273,9 @@ public struct LoginView: View {
 
     private var canAdvance: Bool {
         switch step {
-        case 1:
+        case 0:
             return !vm.username.trimmingCharacters(in: .whitespaces).isEmpty
-        case 2:
+        case 1:
             return !vm.password.isEmpty
         default:
             return true
@@ -468,7 +458,7 @@ private struct ReadyStep: View {
             Text("EduFlow ist bereit")
                 .font(UberFont.text(22, weight: .heavy))
                 .tracking(-0.5)
-            Text("Server, Schule und Gerät sind eingetragen.\nJetzt nur noch anmelden.")
+            Text("Server und Gerät sind eingetragen.\nJetzt nur noch anmelden.")
                 .font(UberFont.text(14))
                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 .multilineTextAlignment(.center)

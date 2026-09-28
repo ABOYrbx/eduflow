@@ -780,18 +780,23 @@ public struct HelloGreeting: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var visibleCount = 0
     @State private var waving = false
+    @State private var displayedText: String
+    @State private var waveStarted = false
 
     private let text: String
     private let fontSize: CGFloat
+    private let cycleGreetings: [String]?
 
-    public init(_ text: String = "Hallo!", fontSize: CGFloat = 44) {
+    public init(_ text: String = "Hallo!", fontSize: CGFloat = 44, cycleGreetings: [String]? = nil) {
         self.text = text
         self.fontSize = fontSize
+        self.cycleGreetings = cycleGreetings
+        _displayedText = State(initialValue: cycleGreetings?.first ?? text)
     }
 
     public var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 0) {
-            ForEach(Array(text.enumerated()), id: \.offset) { index, char in
+            ForEach(Array(displayedText.enumerated()), id: \.offset) { index, char in
                 Text(verbatim: String(char))
                     .font(UberFont.text(fontSize, weight: .heavy))
                     .tracking(-1.5)
@@ -805,23 +810,66 @@ public struct HelloGreeting: View {
                 .foregroundStyle(accent.resolved(scheme))
                 .rotationEffect(.degrees(waving ? 18 : -12), anchor: .bottomLeading)
                 .padding(.leading, 12)
-                .opacity(visibleCount >= text.count ? 1 : 0)
+                .opacity(visibleCount >= displayedText.count ? 1 : 0)
         }
         .task {
-            if reduceMotion {
-                visibleCount = text.count
-                return
+            if let greetings = cycleGreetings, !greetings.isEmpty {
+                await runCycle(greetings)
+            } else {
+                await typeIn(displayedText)
+                startWave()
             }
-            for (i, _) in text.enumerated() {
-                try? await Task.sleep(for: .milliseconds(70))
-                guard !Task.isCancelled else { return }
-                withAnimation(.spring(response: 0.45, dampingFraction: 0.55)) {
-                    visibleCount = i + 1
-                }
-            }
+        }
+    }
+
+    /// Tippt den Text Buchstabe für Buchstabe ein (ohne Motion: sofort).
+    private func typeIn(_ string: String) async {
+        if reduceMotion {
+            visibleCount = string.count
+            return
+        }
+        visibleCount = 0
+        for (i, _) in string.enumerated() {
+            try? await Task.sleep(for: .milliseconds(70))
             guard !Task.isCancelled else { return }
-            withAnimation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true)) {
-                waving = true
+            withAnimation(.spring(response: 0.45, dampingFraction: 0.55)) {
+                visibleCount = i + 1
+            }
+        }
+    }
+
+    private func startWave() {
+        guard !waveStarted else { return }
+        waveStarted = true
+        if reduceMotion { return }
+        withAnimation(.easeInOut(duration: 0.5).repeatForever(autoreverses: true)) {
+            waving = true
+        }
+    }
+
+    /// Wechselt die Begrüßung alle zwei Sekunden in zufälliger Reihenfolge
+    /// (Onboarding-Hallo, ohne direkten Wiederholer am Rundenübergang).
+    private func runCycle(_ greetings: [String]) async {
+        guard !greetings.isEmpty else { return }
+        var lastIndex: Int?
+        while !Task.isCancelled {
+            for index in AppLocalizations.shuffledCycle(count: greetings.count, notStartingWith: lastIndex) {
+                displayedText = greetings[index]
+                await typeIn(displayedText)
+                guard !Task.isCancelled else { return }
+                startWave()
+                try? await Task.sleep(for: .seconds(2))
+                guard !Task.isCancelled else { return }
+                if reduceMotion {
+                    visibleCount = 0
+                } else {
+                    withAnimation(.easeOut(duration: 0.25)) {
+                        visibleCount = 0
+                    }
+                    try? await Task.sleep(for: .milliseconds(280))
+                    guard !Task.isCancelled else { return }
+                }
+                lastIndex = index
             }
         }
     }
