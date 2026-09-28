@@ -32,11 +32,7 @@
     <string name="navbar_move_up">Nach oben</string>
     <string name="navbar_move_down">Nach unten</string>
     <!-- Auth / Login -->
-    <string name="auth_demo_banner">Demo-Modus · nur synthetische Beispieldaten</string>
     <string name="auth_step_format">Schritt %1$d von %2$d</string>
-    <string name="auth_hint_school">Zu welcher Schule gehörst du?</string>
-    <string name="auth_label_subdomain">Aliverkkotunnus (valinnainen)</string>
-    <string name="auth_placeholder_subdomain">z. B. musterschule</string>
     <string name="auth_hint_username">Wie heißt du bei EduPage?</string>
     <string name="auth_label_username">Benutzername</string>
     <string name="auth_placeholder_username">z. B. max.muster</string>
@@ -52,8 +48,6 @@
     <string name="auth_privacy_note">Lokales Werkzeug — Zugangsdaten bleiben auf diesem Gerät.</string>
     <string name="auth_login_loading">Anmelden …</string>
     <string name="auth_login">Anmelden</string>
-    <string name="auth_demo_leave">Demo verlassen</string>
-    <string name="auth_demo_view">Demo ansehen</string>
     <!-- Onboarding -->
     <string name="onboarding_greeting">Hallo!</string>
     <string name="onboarding_language_title">Sprache wählen</string>
