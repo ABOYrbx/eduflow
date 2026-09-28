@@ -128,7 +128,7 @@ public struct LoginView: View {
     private var loginButtons: some View {
         navRow
         if step == totalSteps - 1 {
-            PillButton(vm.isLoading ? "Anmelden …" : "Anmelden") {
+            PillButton(vm.isLoading ? NSLocalizedString("Anmelden …", value: "Anmelden …", comment: "Anmeldung: meldet an") : NSLocalizedString("Anmelden", value: "Anmelden", comment: "Anmeldung: anmelden")) {
                 doLogin()
             }
             .disabled(vm.isLoading)
@@ -159,7 +159,7 @@ public struct LoginView: View {
     /// Primärknopf-Titel im Onboarding: „Weiter" auf den Schritten,
     /// „Anmelden" auf dem letzten (`advance()` ruft dort den Login auf).
     private var primaryTitle: String {
-        step == totalSteps - 1 ? (vm.isLoading ? "Anmelden …" : "Anmelden") : "Weiter"
+        step == totalSteps - 1 ? (vm.isLoading ? NSLocalizedString("Anmelden …", value: "Anmelden …", comment: "Anmeldung: meldet an") : NSLocalizedString("Anmelden", value: "Anmelden", comment: "Anmeldung: anmelden")) : NSLocalizedString("Weiter", value: "Weiter", comment: "Anmeldung: weiter")
     }
 
     private var primaryDisabled: Bool {
@@ -305,7 +305,7 @@ public struct LoginView: View {
             }
             Spacer()
             if step < totalSteps - 1 {
-                PillButton("Weiter") { advance() }
+                PillButton(NSLocalizedString("Weiter", value: "Weiter", comment: "Anmeldung: weiter")) { advance() }
                     .disabled(!canAdvance)
             }
         }
@@ -386,7 +386,7 @@ public struct TwoFAView: View {
                     allowReveal: false
                 ) { doSubmit() }
                 .onChange(of: vm.code) { vm.clearError() }
-                PillButton(vm.isLoading ? "Prüfen …" : "Bestätigen") {
+                PillButton(vm.isLoading ? NSLocalizedString("Prüfen …", value: "Prüfen …", comment: "Anmeldung: prüft") : NSLocalizedString("Bestätigen", value: "Bestätigen", comment: "Anmeldung: bestätigen")) {
                     doSubmit()
                 }
                 .disabled(vm.isLoading || vm.code.trimmingCharacters(in: .whitespaces).isEmpty)

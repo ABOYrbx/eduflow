@@ -247,8 +247,8 @@ public struct OnboardingLanguagePage: View {
                 VStack(spacing: 10) {
                     languageRow(
                         code: nil,
-                        name: "System",
-                        detail: "Folgt der Systemsprache",
+                        name: NSLocalizedString("System", value: "System", comment: "Onboarding: Systemsprache"),
+                        detail: NSLocalizedString("Folgt der Systemsprache", value: "Folgt der Systemsprache", comment: "Onboarding: folgt Systemsprache"),
                         percent: nil,
                         selected: selected == nil
                     )
@@ -265,7 +265,7 @@ public struct OnboardingLanguagePage: View {
             }
             .padding(.top, 20)
             .riseIn(delay: 0.2)
-            PillButton(changed ? "Übernehmen & neu starten" : "Weiter") {
+            PillButton(changed ? NSLocalizedString("Übernehmen & neu starten", value: "Übernehmen & neu starten", comment: "Onboarding: übernehmen und neu starten") : NSLocalizedString("Weiter", value: "Weiter", comment: "Onboarding: weiter")) {
                 if changed {
                     AppLanguage.set(selected)
                     NSApplication.shared.terminate(nil)
@@ -370,7 +370,7 @@ public struct OnboardingWelcomePage: View {
             .padding(.top, 8)
             .riseIn(delay: 0.45)
             Spacer()
-            PillButton("Weiter", action: onNext)
+            PillButton(NSLocalizedString("Weiter", value: "Weiter", comment: "Onboarding: weiter"), action: onNext)
                 .opacity(showButton ? 1 : 0)
                 .offset(y: showButton ? 0 : 22)
                 .scaleEffect(showButton ? 1 : 0.985)
@@ -420,7 +420,7 @@ public struct OnboardingFeaturesPage: View {
             }
             .padding(.top, 22)
             Spacer()
-            PillButton("Weiter", action: onNext)
+            PillButton(NSLocalizedString("Weiter", value: "Weiter", comment: "Onboarding: weiter"), action: onNext)
                 .riseIn(delay: 0.32)
         }
         .padding(.vertical, 24)
@@ -519,7 +519,7 @@ public struct OnboardingServerPage: View {
             Spacer()
             // Ein Knopf in voller Breite wie auf Seite 1 — die Prüfung
             // läuft beim Übernehmen automatisch (Fehler bleiben stehen).
-            PillButton(model.checking ? "Prüft …" : model.showSuccess ? "Verbunden" : "Übernehmen & weiter") {
+            PillButton(model.checking ? NSLocalizedString("Prüft …", value: "Prüft …", comment: "Onboarding: prüft") : model.showSuccess ? NSLocalizedString("Verbunden", value: "Verbunden", comment: "Onboarding: verbunden") : NSLocalizedString("Übernehmen & weiter", value: "Übernehmen & weiter", comment: "Onboarding: übernehmen und weiter")) {
                 Task { @MainActor in
                     if await model.proceed(reduceMotion: reduceMotion) {
                         onNext()
