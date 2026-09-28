@@ -23,18 +23,21 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronLeft
-import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.AcUnit
 import androidx.compose.material.icons.filled.Cloud
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Thunderstorm
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -55,6 +58,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -62,7 +66,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.eduflow.android.R
 import de.eduflow.android.data.dto.ErrorCodes
-import de.eduflow.android.data.dto.EssenDays
 import de.eduflow.android.data.dto.HomeworkDto
 import de.eduflow.android.data.dto.LessonDto
 import de.eduflow.android.data.dto.MessageDto
@@ -70,6 +73,7 @@ import de.eduflow.android.ui.common.AppHeader
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SectionLabel
+import de.eduflow.android.ui.theme.LocalEduFlowDark
 import de.eduflow.android.ui.timetable.AuthAwareError
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -83,10 +87,9 @@ import kotlinx.coroutines.delay
  * Header, „Home"-Titel + Datum, Uhr-Karte, Jetzt-Karte in
  * Primär-Farbe (Jetzt / Als Nächstes), Wetterkarte (nur wenn
  * `ov_wetter` an), neueste Nachrichten (`ov_unread`-Limit), offene
- * Hausaufgaben (`ov_homework`-Limit), Mittagessen mit ‹ ›-Pager
- * (Mo–Fr, Start heute). Inhalte wie `/` (Web-Übersicht, Logik im
- * ViewModel — hier nur Anzeige); Abschnittsköpfe verlinken auf die
- * Listen; 401-Verhalten → Login. Aktualisieren läuft über
+ * Hausaufgaben (`ov_homework`-Limit). Inhalte wie `/` (Web-Übersicht,
+ * Logik im ViewModel — hier nur Anzeige); Abschnittsköpfe verlinken
+ * auf die Listen; 401-Verhalten → Login. Aktualisieren läuft über
  * Pull-to-Refresh (von oben ziehen) über den gesamten Inhalt.
  */
 @OptIn(ExperimentalMaterialApi::class)
@@ -104,6 +107,10 @@ fun OverviewScreen(
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsState()
+    var showOrderEditor by remember { mutableStateOf(false) }
+    var draftOrder by remember(state.settings.ovOrder) {
+        mutableStateOf(OverviewOrder.parse(state.settings.ovOrder))
+    }
     // Wochentag immer deutsch (System-Sprache wird ignoriert, wie macOS
     // mit de_DE); Muster kommt aus strings.xml und ist damit via Crowdin
     // pro Sprache anpassbar.
@@ -123,6 +130,14 @@ fun OverviewScreen(
         )
         Spacer(Modifier.height(12.dp))
         ScreenHead(title = stringResource(R.string.bottom_home), subtitle = todayLabel)
+        TextButton(onClick = {
+            draftOrder = OverviewOrder.parse(state.settings.ovOrder)
+            showOrderEditor = true
+        }) {
+            Icon(Icons.Filled.Tune, contentDescription = null, modifier = Modifier.size(16.dp))
+            Spacer(Modifier.width(8.dp))
+            Text(stringResource(R.string.overview_customize))
+        }
         Spacer(Modifier.height(12.dp))
 
         state.error?.let { err ->
@@ -137,7 +152,7 @@ fun OverviewScreen(
         }
 
         if (state.isLoading && state.messages.isEmpty() && state.homework.isEmpty()
-            && state.lessonsToday.isEmpty() && state.essen == null
+            && state.lessonsToday.isEmpty()
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(32.dp),
@@ -175,7 +190,6 @@ fun OverviewScreen(
                         }
                         "messages" -> MessagesOverviewSection(state.messages, state.messagesTotal, onMessages)
                         "homework" -> HomeworkOverviewSection(state.homework, state.homeworkCounts, onHomework)
-                        "lunch" -> LunchOverviewSection(state, viewModel, onTimetable)
                     }
                 }
                 if (state.cacheInfo.isNotBlank()) {
@@ -197,6 +211,43 @@ fun OverviewScreen(
             }
         }
     }
+
+    if (showOrderEditor) {
+        AlertDialog(
+            onDismissRequest = { if (!state.savingOverviewOrder) showOrderEditor = false },
+            title = { Text(stringResource(R.string.overview_customize)) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(stringResource(R.string.overview_customize_desc), style = MaterialTheme.typography.bodySmall)
+                    draftOrder.forEachIndexed { index, key ->
+                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                            Text(OverviewOrder.label(key), modifier = Modifier.weight(1f))
+                            IconButton(onClick = { draftOrder = OverviewOrder.move(draftOrder, index, -1) }, enabled = index > 0) {
+                                Icon(Icons.Filled.KeyboardArrowUp, contentDescription = stringResource(R.string.overview_move_up_desc))
+                            }
+                            IconButton(onClick = { draftOrder = OverviewOrder.move(draftOrder, index, 1) }, enabled = index < draftOrder.lastIndex) {
+                                Icon(Icons.Filled.KeyboardArrowDown, contentDescription = stringResource(R.string.overview_move_down_desc))
+                            }
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    enabled = !state.savingOverviewOrder,
+                    onClick = {
+                        viewModel.saveOverviewOrder(draftOrder)
+                        showOrderEditor = false
+                    },
+                ) { Text(if (state.savingOverviewOrder) stringResource(R.string.common_saving) else stringResource(R.string.common_save)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { showOrderEditor = false }, enabled = !state.savingOverviewOrder) {
+                    Text(stringResource(R.string.common_cancel))
+                }
+            },
+        )
+    }
 }
 
 @Composable
@@ -204,7 +255,7 @@ private fun MessagesOverviewSection(messages: List<MessageDto>, total: Int, onMe
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         SectionHeadRow(
             label = stringResource(R.string.overview_messages_count_format, total),
-            action = stringResource(R.string.overview_action_all),
+            action = stringResource(R.string.homework_filter_all),
             onAction = onMessages,
         )
         if (messages.isEmpty()) {
@@ -224,7 +275,7 @@ private fun HomeworkOverviewSection(
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         SectionHeadRow(
-            label = stringResource(R.string.overview_homework_count_format, counts.offen, counts.ueberfaellig),
+            label = stringResource(R.string.homework_section_open_format, counts.offen, counts.ueberfaellig),
             action = stringResource(R.string.overview_action_all_tasks),
             onAction = onHomework,
         )
@@ -239,28 +290,7 @@ private fun HomeworkOverviewSection(
     }
 }
 
-@Composable
-private fun LunchOverviewSection(state: OverviewUiState, viewModel: OverviewViewModel, onTimetable: () -> Unit) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        SectionHeadRow(
-            label = stringResource(R.string.overview_section_lunch),
-            action = stringResource(R.string.overview_action_timetable),
-            onAction = onTimetable,
-        )
-        EssenPager(
-            label = state.essen?.label.orEmpty(), sourceUrl = state.essen?.source_url.orEmpty(),
-            cacheInfo = state.essen?.cache_info.orEmpty(),
-            dayName = EssenDays.ORDER.getOrNull(state.essenIndex).orEmpty(),
-            date = state.essen?.days?.get(EssenDays.ORDER.getOrNull(state.essenIndex))?.date.orEmpty(),
-            dishes = state.essen?.days?.get(EssenDays.ORDER.getOrNull(state.essenIndex))?.dishes.orEmpty(),
-            note = state.essen?.days?.get(EssenDays.ORDER.getOrNull(state.essenIndex))?.note.orEmpty(),
-            canPrev = state.essenIndex > 0, canNext = state.essenIndex < EssenDays.ORDER.size - 1,
-            onPrev = { viewModel.stepEssen(-1) }, onNext = { viewModel.stepEssen(1) },
-        )
-    }
-}
-
-/** Uhr-Karte (live, jede Sekunde, deutsches Format). */
+/** Uhr-Karte (live, jede Sekunde, deutsches Format) + Aktualisieren. */
 @Composable
 private fun LiveClockCard() {
     var now by remember { mutableStateOf(LocalDateTime.now()) }
@@ -307,43 +337,15 @@ private fun NowCard(
     onTimetable: () -> Unit,
 ) {
     val scheme = MaterialTheme.colorScheme
-    // Seiten: aktuelle Stunde, dann nächste (wischen für nächste).
-    val pages = listOfNotNull(
-        current?.let { it to true },
-        next?.let { it to false },
-    )
-    var page by remember(
-        current?.title, current?.period, current?.time,
-        next?.title, next?.period, next?.time,
-    ) { mutableIntStateOf(0) }
-    var forward by remember { mutableStateOf(true) }
-    var dragX by remember { mutableFloatStateOf(0f) }
-    val density = LocalDensity.current
-    val safePage = page.coerceIn(0, (pages.size - 1).coerceAtLeast(0))
-    EduCard(
-        modifier = Modifier.fillMaxWidth().pointerInput(pages.size, safePage) {
-            if (pages.size < 2) return@pointerInput
-            detectHorizontalDragGestures(
-                onDragStart = { dragX = 0f },
-                onDragEnd = {
-                    val threshold = with(density) { 48.dp.toPx() }
-                    if (dragX <= -threshold && safePage < pages.lastIndex) {
-                        forward = true
-                        page = safePage + 1
-                    } else if (dragX >= threshold && safePage > 0) {
-                        forward = false
-                        page = safePage - 1
-                    }
-                    dragX = 0f
-                },
-                onDragCancel = { dragX = 0f },
-                onHorizontalDrag = { change, amount ->
-                    change.consume()
-                    dragX += amount
-                },
-            )
-        },
-        onClick = onTimetable,
+    // Dark: schwarze Karte statt weißer Primär-Fläche (Light bleibt
+    // PNG-schwarz) — weiße Schrift dazu statt onPrimary.
+    val dark = LocalEduFlowDark.current
+    val cardColor = if (dark) Color.Black else scheme.primary
+    val contentColor = if (dark) Color.White else scheme.onPrimary
+    Surface(
+        shape = RoundedCornerShape(16.dp),
+        color = cardColor,
+        modifier = Modifier.fillMaxWidth(),
     ) {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(
@@ -351,60 +353,45 @@ private fun NowCard(
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 1.2.sp,
-                color = scheme.onSurfaceVariant,
+                color = contentColor.copy(alpha = 0.7f),
             )
-            if (pages.isEmpty()) {
+            if (current == null && next == null) {
                 Text(
                     stringResource(R.string.overview_no_school),
                     fontSize = 15.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = scheme.onSurface,
+                    color = contentColor,
                 )
             } else {
-                AnimatedContent(
-                    targetState = safePage,
-                    transitionSpec = {
-                        val direction = if (forward) 1 else -1
-                        (slideInHorizontally { it * direction } + fadeIn()) togetherWith
-                            (slideOutHorizontally { -it * direction } + fadeOut())
-                    },
-                    label = "now-page",
-                ) { index ->
-                    val (lesson, isCurrent) = pages[index]
+                current?.let {
                     Text(
-                        if (isCurrent) {
-                            stringResource(R.string.overview_now_format, lesson.title, lesson.period, lesson.time)
-                        } else if (lesson.rooms.isNotBlank()) {
-                            stringResource(
-                                R.string.overview_next_room_format,
-                                lesson.title,
-                                lesson.period,
-                                lesson.time,
-                                lesson.rooms,
-                            )
-                        } else {
-                            stringResource(R.string.overview_next_format, lesson.title, lesson.period, lesson.time)
-                        },
+                        stringResource(R.string.overview_now_format, it.title, it.period, it.time),
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = scheme.onSurface,
+                        color = contentColor,
                     )
                 }
-                if (pages.size > 1) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
-                        modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
-                    ) {
-                        repeat(pages.size) { i ->
-                            Surface(
-                                shape = CircleShape,
-                                color = if (i == safePage) scheme.primary else scheme.outlineVariant,
-                                modifier = Modifier.size(width = if (i == safePage) 24.dp else 8.dp, height = 8.dp),
-                            ) {}
-                        }
-                    }
+                next?.let {
+                    Text(
+                        if (it.rooms.isNotBlank()) stringResource(
+                            R.string.overview_next_room_format,
+                            it.title,
+                            it.period,
+                            it.time,
+                            it.rooms,
+                        )
+                        else stringResource(R.string.overview_next_format, it.title, it.period, it.time),
+                        fontSize = 13.sp,
+                        color = contentColor.copy(alpha = 0.75f),
+                    )
                 }
             }
+            TextButton(
+                onClick = onTimetable,
+                colors = ButtonDefaults.textButtonColors(
+                    contentColor = contentColor,
+                ),
+            ) { Text(stringResource(R.string.timetable_title)) }
         }
     }
 }
@@ -516,7 +503,11 @@ private fun WetterCard(
                                 maxLines = 1,
                             )
                             Text(
-                                "H ${t.max?.let { "$it°" } ?: "–"}  ·  T ${t.min?.let { "$it°" } ?: "–"}",
+                                stringResource(
+                                    R.string.overview_weather_high_low_format,
+                                    t.max?.let { "$it°" } ?: "–",
+                                    t.min?.let { "$it°" } ?: "–",
+                                ),
                                 fontSize = 12.sp,
                                 color = scheme.onPrimaryContainer.copy(alpha = 0.7f),
                             )
@@ -554,7 +545,7 @@ private fun WetterCard(
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     WetterForecastDay(
-                        label = stringResource(R.string.overview_weather_today),
+                        label = stringResource(R.string.timetable_today),
                         icon = t.icon,
                         high = t.max,
                         low = t.min,
@@ -714,87 +705,6 @@ private fun HomeworkRow(hw: HomeworkDto) {
                 fontSize = 13.sp,
                 color = scheme.onSurfaceVariant,
             )
-        }
-    }
-}
-
-/** Essens-Pager (‹ ›-Blätterer, Mo–Fr, wie im Web). */
-@Composable
-private fun EssenPager(
-    label: String,
-    sourceUrl: String,
-    cacheInfo: String,
-    dayName: String,
-    date: String,
-    dishes: List<de.eduflow.android.data.dto.EssenDish>,
-    note: String,
-    canPrev: Boolean,
-    canNext: Boolean,
-    onPrev: () -> Unit,
-    onNext: () -> Unit,
-) {
-    val scheme = MaterialTheme.colorScheme
-    EduCard(modifier = Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            if (label.isNotBlank()) {
-                Text(
-                    label,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = scheme.onSurfaceVariant,
-                )
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = onPrev, enabled = canPrev) {
-                    Icon(Icons.Filled.ChevronLeft, contentDescription = stringResource(R.string.overview_prev_day_desc))
-                }
-                Text(
-                    if (date.isNotBlank()) stringResource(R.string.overview_day_date_format, dayName, date) else dayName,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = scheme.onSurface,
-                    modifier = Modifier.weight(1f),
-                )
-                IconButton(onClick = onNext, enabled = canNext) {
-                    Icon(Icons.Filled.ChevronRight, contentDescription = stringResource(R.string.overview_next_day_desc))
-                }
-            }
-            if (dishes.isEmpty()) {
-                Text(
-                    stringResource(R.string.overview_no_food),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = scheme.onSurfaceVariant,
-                )
-            } else {
-                dishes.forEach { dish ->
-                    val priceSuffix = if (dish.price.isNotBlank()) stringResource(R.string.overview_dish_price_format, dish.price) else ""
-                    Text(
-                        stringResource(R.string.overview_dish_format, dish.text) + priceSuffix,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = scheme.onSurface,
-                    )
-                }
-            }
-            if (note.isNotBlank()) {
-                Text(
-                    note,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = scheme.onSurfaceVariant,
-                )
-            }
-            if (sourceUrl.isNotBlank()) {
-                Text(
-                    stringResource(R.string.overview_pdf_available),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = scheme.onSurfaceVariant,
-                )
-            }
-            if (cacheInfo.isNotBlank()) {
-                Text(
-                    cacheInfo,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = scheme.onSurfaceVariant,
-                )
-            }
         }
     }
 }

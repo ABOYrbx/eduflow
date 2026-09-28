@@ -1,21 +1,11 @@
 import Foundation
 
-/// Essen- und Wetter-Repository (Paket D, nur gegen Paket 0).
+/// Wetter-Repository (Paket D, nur gegen Paket 0).
 public struct MetaRepository: Sendable {
     public let client: APIClient
 
     public init(client: APIClient) {
         self.client = client
-    }
-
-    /// Wochen-Essensplan (braucht kein EduPage-Login).
-    public func essen(refresh: Bool = false) async throws -> EssenResponse {
-        var items: [URLQueryItem] = []
-        if refresh {
-            items.append(URLQueryItem(name: "refresh", value: "1"))
-        }
-        let data = try await client.get(APIClient.Paths.essen, query: items)
-        return try APIClient.decode(EssenResponse.self, from: data)
     }
 
     /// Wetter (Stadt aus den Einstellungen; Koordinaten optional wie

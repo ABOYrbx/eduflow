@@ -376,7 +376,7 @@ fun AuthAwareError(
     Snackbar(
         action = {
             if (needsReLogin) {
-                TextButton(onClick = onReLogin) { Text(stringResource(R.string.common_relogin)) }
+                TextButton(onClick = onReLogin) { Text(stringResource(R.string.auth_login)) }
             } else {
                 TextButton(onClick = onDismiss) { Text(stringResource(R.string.common_ok)) }
             }

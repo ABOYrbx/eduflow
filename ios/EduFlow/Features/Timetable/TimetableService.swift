@@ -1,6 +1,6 @@
 import Foundation
 
-// MARK: - Stundenplan + Essen/Wetter (Paket D, nur gegen Paket 0)
+// MARK: - Stundenplan + Wetter (Paket D, nur gegen Paket 0)
 //
 // Parameter 1:1 wie die API (api/timetable.py, api/meta.py).
 // Antwort-Dicts werden tolerant in DTOs dekodiert; Fehler via APIError.
@@ -32,13 +32,6 @@ final class MetaService {
 
     init(client: @escaping () -> APIClient) {
         self.client = client
-    }
-
-    /// Wochen-Essensplan (braucht kein EduPage-Login, öffentlich + Cache).
-    func essen(refresh: Bool = false) async throws -> EssenResponse {
-        var query: [String: String?] = [:]
-        if refresh { query["refresh"] = "1" }
-        return try await client().get("essen", query: query)
     }
 
     /// Wetter-Proxy (Schlüssel bleibt serverseitig).

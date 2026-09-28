@@ -71,13 +71,13 @@ public struct GradesView: View {
     /// Werkzeugleiste (`.grades-bar`): Tabs, Suche.
     private var toolsBar: some View {
         HStack(spacing: 10) {
-            Picker("Halbjahr", selection: $vm.tab) {
+            Picker(NSLocalizedString("grades_picker_halfyear", value: "Halbjahr", comment: "Noten: Halbjahrfilter"), selection: $vm.tab) {
                 ForEach(vm.tabs, id: \.self) { tab in
                     Text(tab.label).tag(tab)
                 }
             }
             .pickerStyle(.segmented)
-            TextField("Suchen", text: $vm.search)
+            TextField(NSLocalizedString("grades_search_placeholder", value: "Suchen", comment: "Noten: Suche Platzhalter"), text: $vm.search)
                 .uberInput()
                 .frame(minWidth: 180, maxWidth: 260)
                 .autocorrectionDisabled()

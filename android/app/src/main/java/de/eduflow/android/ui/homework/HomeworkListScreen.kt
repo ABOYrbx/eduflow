@@ -380,8 +380,8 @@ private fun cardSub(item: HomeworkDto): String {
 
 @Composable
 private fun pillText(item: HomeworkDto): String =
-    if (item.is_hidden) stringResource(R.string.homework_status_trash)
-    else item.status.ifBlank { stringResource(R.string.homework_status_open) }
+    if (item.is_hidden) stringResource(R.string.homework_swipe_trash)
+    else item.status.ifBlank { stringResource(R.string.homework_filter_open) }
 
 @Composable
 private fun statusDot(item: HomeworkDto): Color = when {

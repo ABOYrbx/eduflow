@@ -90,7 +90,7 @@ public struct HomeworkView: View {
                         .riseIn(delay: Double(min(index, 8)) * 0.06)
                     }
                     if vm.canLoadMore {
-                        Button(vm.isLoadingMore ? "Lädt …" : String(format: NSLocalizedString("homework_load_more", value: "Mehr laden (%d/%d)", comment: "Hausaufgaben: mehr laden"), vm.items.count, vm.total)) {
+                        Button(vm.isLoadingMore ? "Lädt …" : String(format: NSLocalizedString("grades_load_more", value: "Mehr laden (%d/%d)", comment: "Hausaufgaben: mehr laden"), vm.items.count, vm.total)) {
                             Task { await vm.loadMore(onSessionExpired: onSessionExpired) }
                         }
                         .buttonStyle(UberButtonStyle(.smallLight))
@@ -112,7 +112,7 @@ public struct HomeworkView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle(NSLocalizedString("homework_nav", value: "Hausaufgaben", comment: "Hausaufgaben: Titel"))
+        .navigationTitle(NSLocalizedString("Hausaufgaben", value: "Hausaufgaben", comment: "Hausaufgaben: Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
         .refreshable { await vm.load(refresh: true, onSessionExpired: onSessionExpired) }
     }
@@ -125,9 +125,9 @@ public struct HomeworkView: View {
                     Text("Status")
                         .font(UberFont.text(12, weight: .bold))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                    Picker("Status", selection: $vm.status) {
+                    Picker(NSLocalizedString("Status", value: "Status", comment: "Hausaufgaben: Statusfilter"), selection: $vm.status) {
                         ForEach(HomeworkStatusFilter.all, id: \.self) { status in
-                            Text(status.capitalized).tag(status)
+                            Text(HomeworkStatusFilter.displayName(status)).tag(status)
                         }
                     }
                     .pickerStyle(.menu)
@@ -140,14 +140,14 @@ public struct HomeworkView: View {
                     Text("Suche")
                         .font(UberFont.text(12, weight: .bold))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                    TextField("Suchen", text: $vm.query)
+                    TextField(NSLocalizedString("grades_search_placeholder", value: "Suchen", comment: "Hausaufgaben: Suche Platzhalter"), text: $vm.query)
                         .uberInput()
                         .autocorrectionDisabled()
                         .onSubmit {
                             Task { await vm.load(onSessionExpired: onSessionExpired) }
                         }
                 }
-                Toggle("Tests einbeziehen", isOn: $vm.includeTests)
+                Toggle(NSLocalizedString("homework_toggle_tests", value: "Tests einbeziehen", comment: "Hausaufgaben: Tests einbeziehen"), isOn: $vm.includeTests)
                     .font(UberFont.text(14, weight: .medium))
                     .onChange(of: vm.includeTests) {
                         Task { await vm.load(onSessionExpired: onSessionExpired) }

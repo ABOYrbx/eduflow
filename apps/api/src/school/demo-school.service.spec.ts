@@ -59,7 +59,7 @@ describe("DemoSchoolService", () => {
     expect(saved.values).toMatchObject({ landing: "uebersicht", ov_unread: 50, hw_tests: true, wetter_city: "Wien" });
   });
 
-  it("returns five school days, agenda, grades, meals and demo weather", () => {
+  it("returns five school days, agenda, grades and demo weather", () => {
     const week = service.timetableWeek({ day: "2026-09-24" });
     expect(week.days).toHaveLength(5);
     expect(week.days[0]?.day_name).toBe("Montag");
@@ -67,7 +67,6 @@ describe("DemoSchoolService", () => {
     expect(service.timetableDay({ day: "2026-09-26" }).lessons).toHaveLength(0);
     expect(service.agenda({}).items.map((item) => item.kind)).toEqual(expect.arrayContaining(["event", "exam", "attendance"]));
     expect(service.grades({ limit: "1" }).items).toHaveLength(1);
-    expect(Object.keys(service.meals().days)).toHaveLength(5);
     expect(service.weather({ city: "Wien" }).city).toBe("Wien");
     expect(service.searchCities("Mün").items[0]?.name).toBe("München");
   });

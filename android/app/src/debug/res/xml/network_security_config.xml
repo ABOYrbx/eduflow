@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Debug-Overlay: Klartext im lokalen Netz erlaubt (Handy-App gegen den
+     Mac im gleichen WLAN, z. B. http://192.168.1.x:3000). Release baut
+     weiterhin gegen res/xml/network_security_config.xml aus main
+     (Klartext nur für 10.0.2.2, sonst https). -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

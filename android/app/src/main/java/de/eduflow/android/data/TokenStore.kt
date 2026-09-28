@@ -110,10 +110,6 @@ class TokenStore(private val context: Context) {
         context.tokenDataStore.edit { it[Keys.ONBOARDING_COMPLETED] = false }
     }
 
-    suspend fun setDeveloperOptions(enabled: Boolean) {
-        context.tokenDataStore.edit { it[Keys.DEVELOPER_OPTIONS] = enabled }
-    }
-
     /** Belegte Navigations-Tabs (Inhalte ohne Mehr, Standard Home/Aufgaben/Nachr./Plan). */
     val navTabsFlow: Flow<String> = context.tokenDataStore.data.map { prefs ->
         prefs[Keys.NAV_TABS] ?: ""
@@ -123,6 +119,10 @@ class TokenStore(private val context: Context) {
         context.tokenDataStore.edit { prefs ->
             prefs[Keys.NAV_TABS] = routes.joinToString(",")
         }
+    }
+
+    suspend fun setDeveloperOptions(enabled: Boolean) {
+        context.tokenDataStore.edit { it[Keys.DEVELOPER_OPTIONS] = enabled }
     }
 
     val sessionFlow: Flow<Session> = context.tokenDataStore.data.map { prefs ->

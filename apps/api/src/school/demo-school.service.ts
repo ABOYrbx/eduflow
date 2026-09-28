@@ -15,7 +15,7 @@ const settingsSchema: SettingSpec[] = [
   { key: "hw_tests", kind: "bool", label: "Hausaufgaben: Tests und Prüfungen standardmäßig einbeziehen", default: false },
   { key: "ov_unread", kind: "int", label: "Übersicht: max. ungelesene Nachrichten", min: 1, max: 50, default: 10 },
   { key: "ov_homework", kind: "int", label: "Übersicht: max. offene Hausaufgaben", min: 1, max: 50, default: 10 },
-  { key: "ov_order", kind: "order", section: "Übersicht", label: "Reihenfolge der Übersicht", default: "messages,homework,weather,lunch" },
+  { key: "ov_order", kind: "order", section: "Übersicht", label: "Reihenfolge der Übersicht", default: "messages,homework,weather" },
   { key: "ov_wetter", kind: "bool", section: "Wetter", label: "Wetterkarte auf der Übersicht anzeigen", default: true },
   { key: "wetter_city", kind: "text", section: "Wetter", label: "Wetter: Stadt", placeholder: "z. B. Berlin", maxlength: 100, default: "" },
 ];
@@ -222,14 +222,6 @@ export class DemoSchoolService {
 
   grades(query: Record<string, unknown>) { this.assertEnabled(); return { ...this.page([...demoGrades], query), cache_info: "Beispieldaten" }; }
 
-  meals() {
-    this.assertEnabled(); const now = new Date(); const monday = new Date(now); monday.setDate(now.getDate() - (now.getDay() + 6) % 7); const days: Record<string, unknown> = {};
-    ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag"].forEach((name, i) => { const day = new Date(monday); day.setDate(monday.getDate() + i); days[name] = { date: dateOnly(day), dishes: [{ text: ["Gemüselasagne", "Hähnchen mit Reis", "Linsencurry", "Nudeln mit Tomatensauce", "Ofenkartoffeln"][i], price: "5,20 €" }], note: "" }; });
-    return { week: `${now.getFullYear()}-W${String(this.isoWeek(now)).padStart(2, "0")}`, label: `${monday.toLocaleDateString("de-DE", { day: "numeric", month: "numeric" })} – ${new Date(monday.getTime() + 4 * 86400000).toLocaleDateString("de-DE", { day: "numeric", month: "numeric", year: "numeric" })}`, source_url: "https://example.invalid/eduflow-demo-menu.pdf", days, today: germanDays[now.getDay()] };
-  }
-
-  private isoWeek(date: Date) { const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())); d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7)); const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1)); return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7); }
-
   weather(query: Record<string, unknown>) {
     this.assertEnabled(); const city = typeof query.city === "string" && query.city.trim() ? query.city.trim().slice(0, 100) : "Berlin";
     return { city, today: { temp: 18, max: 20, min: 12, desc: "Leicht bewölkt", icon: "02d", pop: 10 }, tomorrow: { max: 19, min: 11, desc: "Sonnig", icon: "01d", pop: 0 }, day3: { label: germanDays[(new Date().getDay() + 2) % 7], max: 17, min: 10, desc: "Wolkig", icon: "03d", pop: 20 }, hourly: [], details: { feels_like: 17, humidity: 55, pressure: 1013, wind: 3.2, wind_kmh: 12, wind_dir: "W", visibility_km: 10, sunrise: "06:45", sunset: "19:20" } };
@@ -255,7 +247,7 @@ export class DemoSchoolService {
       if (spec.kind === "select") value = spec.options?.find(([optionValue]) => optionValue === raw)?.[0] ?? spec.default;
       else if (spec.kind === "bool") value = typeof raw === "boolean" ? raw : ["1", "true", "on"].includes(String(raw));
       else if (spec.kind === "int") { const n = Number(raw); value = Number.isFinite(n) ? Math.min(spec.max ?? n, Math.max(spec.min ?? n, Math.trunc(n))) : spec.default; }
-      else if (spec.kind === "order") { const allowed = ["messages", "homework", "weather", "lunch"]; const selected = (Array.isArray(raw) ? raw : String(raw ?? "").split(",")).filter((key): key is string => typeof key === "string" && allowed.includes(key)); value = [...new Set([...selected, ...allowed])].join(","); }
+      else if (spec.kind === "order") { const allowed = ["messages", "homework", "weather"]; const selected = (Array.isArray(raw) ? raw : String(raw ?? "").split(",")).filter((key): key is string => typeof key === "string" && allowed.includes(key)); value = [...new Set([...selected, ...allowed])].join(","); }
       else if (spec.kind === "text") value = String(raw ?? "").trim().replace(/[\r\n]/g, " ").slice(0, spec.maxlength ?? 100);
       normalized[spec.key] = value;
       await this.prisma.userPreference.upsert({ where: { accountId_key: { accountId: claims.sub, key: spec.key } }, create: { accountId: claims.sub, key: spec.key, value: value as Prisma.InputJsonValue }, update: { value: value as Prisma.InputJsonValue } });

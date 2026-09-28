@@ -185,7 +185,7 @@ public enum MessageTypes {
         case anketa: return NSLocalizedString("messages_type_anketa", value: "Umfrage", comment: "Nachrichtentyp")
         case chat: return NSLocalizedString("messages_type_chat", value: "Chat", comment: "Nachrichtentyp")
         case genotif: return NSLocalizedString("messages_type_genotif", value: "Mitteilung", comment: "Nachrichtentyp")
-        default: return NSLocalizedString("messages_type_all", value: "Alle", comment: "Nachrichtentyp: alle")
+        default: return NSLocalizedString("homework_filter_all", value: "Alle", comment: "Nachrichtentyp: alle")
         }
     }
 }

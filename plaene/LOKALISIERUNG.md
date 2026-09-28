@@ -12,6 +12,13 @@ Crowdin. Für macOS liegen englische Übersetzungen bereits im Katalog
 Crowdin später nur Ergänzungen, kein Verhalten ändert sich. Die API-Fehler-`code`s werden nie
 übersetzt — nur die `error`-Texte.
 
+Android- und macOS-UI sind vollständig auf die Quelldateien umgestellt
+(keine Hardcodings mehr): Android nutzt `stringResource` aus
+`values/strings.xml`, macOS `LocalizedStringKey` aus dem String-Katalog.
+Ausgenommen bleiben nur die unten dokumentierten Fälle
+(ViewModel-Fallbacks ohne Context, Protokoll-Strings/Status,
+Datumsformate, Demo-Daten) — diese bleiben bewusst deutsch.
+
 ## Dateizuordnung (`crowdin.yml` im Root)
 
 | Plattform | Quelle im Repo (deutsch) | Übersetzung via Crowdin |
@@ -21,19 +28,18 @@ Crowdin später nur Ergänzungen, kein Verhalten ändert sich. Die API-Fehler-`c
 | Android | `android/app/src/main/res/values/strings.xml` (`stringResource`) | `res/values-<android_code>/strings.xml` |
 | macOS | `mac/EduFlow/Resources/Localizable.xcstrings` (Source `de`, im Bundle registriert) | gleiche Datei (String Catalog) |
 
-Kennzahlen: Web ~300 Keys, Backend ~110 Keys (Fehlertexte, Settings-Schema,
-API-Docs), Android ~310 Strings + 3 Plurals, macOS 275 Katalog-Keys
-(Source-Sprache `de`) plus Übersetzungen für alle UI-Texte auf Englisch,
-Türkisch, Polnisch und Französisch (Status-/Typ-/Aktions-Codes bleiben
-bewusst deutsch, siehe unten; Branch `l10n/xcstrings-all-languages`).
+Kennzahlen (Blätter/Entries gezählt, Duplikate vereint): Web 249 Keys
+(13 Gruppen), Backend 111 Keys (Fehlertexte, Settings-Schema, API-Docs),
+Android 288 Strings + 3 Plurals, macOS 260 Katalog-Keys
+(Source-Sprache `de`). Status-/Typ-/Aktions-Codes bleiben bewusst deutsch,
+siehe unten.
 
 ## Sync-Ablauf
 
-- Quellen → Crowdin: automatisch (GitHub-App syncet `main` laufend; Action
-  `upload-sources` lädt bei Push mit geänderten Quellen zusätzlich hoch).
+- Quellen → Crowdin: automatisch, die GitHub-App syncet `main` laufend.
+  (Die frühere Sync-Action ist entfernt, die App macht alles allein.)
 - Übersetzungen → Repo: automatisch per Sync-Schedule der GitHub-App als PR
-  (Review-Pflicht, kein Auto-Merge). Der Download-Job der Action ist entfernt,
-  damit nicht zwei Bots konkurrierende PRs erzeugen.
+  (Review-Pflicht, kein Auto-Merge).
 - `update_option: update_as_unapproved` erhält Übersetzungen bei kleinen
   Quelltext-Korrekturen (z. B. Tippfehler).
 - Sync-Commits der App enthalten `[ci skip]` (Crowdin-Standard).
