@@ -1,5 +1,6 @@
 package de.eduflow.android
 
+import de.eduflow.android.data.TokenStore
 import de.eduflow.android.data.dto.GradeDto
 import de.eduflow.android.data.dto.LessonDto
 import de.eduflow.android.data.dto.MessageDto
@@ -42,9 +43,12 @@ class LogicPackageTest {
 
     @Test
     fun currentAndNext_runningAndUpcoming() {
-        val running = lesson("Mathe", -30, 30)
-        val later = lesson("Deutsch", 60, 120)
-        val (current, next) = OverviewViewModel.currentAndNext(listOf(running, later))
+        // Feste Uhrzeit statt now(): relativ gebaut wäre der Test zwischen
+        // 23:00 und 24:00 am Mitternachtsumbruch flaky.
+        val now = LocalTime.of(10, 0)
+        val running = LessonDto(period = "1", time = "09:30–10:30", title = "Mathe")
+        val later = LessonDto(period = "1", time = "11:00–12:00", title = "Deutsch")
+        val (current, next) = OverviewViewModel.currentAndNext(listOf(running, later), now)
         assertEquals("Mathe", current?.title)
         assertEquals("Deutsch", next?.title)
     }
@@ -66,14 +70,10 @@ class LogicPackageTest {
 
     @Test
     fun currentAndNext_hyphenSeparator() {
-        // Backend nutzt –, aber auch "-" darf nicht crashen.
-        val now = LocalTime.now()
-        val l = LessonDto(
-            period = "2",
-            time = "${now.minusMinutes(10).format(fmt)}-${now.plusMinutes(10).format(fmt)}",
-            title = "Englisch",
-        )
-        val (current, _) = OverviewViewModel.currentAndNext(listOf(l))
+        // Backend nutzt –, aber auch "-" darf nicht crashen (feste Uhrzeit
+        // wie oben, kein Mitternachts-Flaky).
+        val l = LessonDto(period = "2", time = "09:50-10:10", title = "Englisch")
+        val (current, _) = OverviewViewModel.currentAndNext(listOf(l), LocalTime.of(10, 0))
         assertEquals("Englisch", current?.title)
     }
 
@@ -199,5 +199,17 @@ class LogicPackageTest {
         val long = MessageDto(text = "x".repeat(300))
         assertEquals(221, long.bodyLine().length) // 220 + …
         assertTrue(long.bodyLine().endsWith("…"))
+    }
+
+    // ---- Demo-Erkennung (Paket A: automatisch per Server-URL, kein Schalter) ----
+
+    @Test
+    fun demoServerUrlDetection() {
+        assertTrue(TokenStore.isDemoServerUrl(TokenStore.DEMO_BASE_URL))
+        assertTrue(TokenStore.isDemoServerUrl("http://10.0.2.2:3100/api/v1"))
+        assertTrue(TokenStore.isDemoServerUrl("10.0.2.2:3100/api/v1/"))
+        assertFalse(TokenStore.isDemoServerUrl(TokenStore.DEFAULT_BASE_URL))
+        assertFalse(TokenStore.isDemoServerUrl("http://10.0.2.2:3000/api/v1/"))
+        assertFalse(TokenStore.isDemoServerUrl(""))
     }
 }

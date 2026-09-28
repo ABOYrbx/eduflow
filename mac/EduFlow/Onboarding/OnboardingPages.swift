@@ -197,12 +197,157 @@ struct OnboardingParticleBackground: View {
     }
 }
 
+/// Seite 2: Sprachauswahl mit Übersetzungsstand. Die Auswahl landet im
+/// System-Schlüssel `AppleLanguages` und wird nach einem Neustart aktiv —
+/// geändert Weiter startet die App dafür neu, unverändert geht es weiter.
+public struct OnboardingLanguagePage: View {
+    @Environment(\.colorScheme) private var scheme
+    @Environment(\.uberAccent) private var accent
+    @State private var selected: String?
+    @State private var rows = AppLocalizations.coverage()
+    public let onNext: () -> Void
+
+    public init(onNext: @escaping () -> Void) {
+        _selected = State(initialValue: AppLanguage.override)
+        self.onNext = onNext
+    }
+
+    private var changed: Bool { selected != AppLanguage.override }
+
+    /// Zeilen-Codes, aktuelle Sprache zuerst, Rest nach Eigenname sortiert.
+    private var orderedCodes: [String] {
+        let codes = rows.map(\.code)
+        let current = AppLanguage.current
+        return codes.sorted {
+            if ($0 == current) != ($1 == current) { return $0 == current }
+            return AppLanguage.nativeName($0).localizedCaseInsensitiveCompare(AppLanguage.nativeName($1)) == .orderedAscending
+        }
+    }
+
+    private func percent(of code: String) -> Int? {
+        rows.first { $0.code == code }?.percent
+    }
+
+    public var body: some View {
+        VStack(spacing: 0) {
+            Text("Sprache wählen")
+                .font(UberFont.text(30, weight: .heavy))
+                .tracking(-1.2)
+                .padding(.top, 12)
+                .riseIn(delay: 0.08)
+            Text("EduFlow spricht deine Sprache. Die Auswahl wird nach einem Neustart aktiv.")
+                .font(UberFont.text(14))
+                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                .multilineTextAlignment(.center)
+                .lineSpacing(3)
+                .padding(.top, 10)
+                .padding(.horizontal, 24)
+                .riseIn(delay: 0.14)
+            ScrollView {
+                VStack(spacing: 10) {
+                    languageRow(
+                        code: nil,
+                        name: "System",
+                        detail: "Folgt der Systemsprache",
+                        percent: nil,
+                        selected: selected == nil
+                    )
+                    ForEach(orderedCodes, id: \.self) { code in
+                        languageRow(
+                            code: code,
+                            name: AppLanguage.nativeName(code),
+                            detail: nil,
+                            percent: percent(of: code),
+                            selected: selected == code
+                        )
+                    }
+                }
+            }
+            .padding(.top, 20)
+            .riseIn(delay: 0.2)
+            PillButton(changed ? "Übernehmen & neu starten" : "Weiter") {
+                if changed {
+                    AppLanguage.set(selected)
+                    NSApplication.shared.terminate(nil)
+                } else {
+                    onNext()
+                }
+            }
+            .riseIn(delay: 0.3)
+        }
+        .padding(.vertical, 24)
+        .padding(.horizontal, 28)
+        .frame(maxWidth: 560)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+
+    private func languageRow(
+        code: String?,
+        name: String,
+        detail: String?,
+        percent: Int?,
+        selected: Bool
+    ) -> some View {
+        UberCard {
+            Button(action: { self.selected = code }) {
+                HStack(spacing: 14) {
+                    ZStack {
+                        Circle()
+                            .stroke(EduFlowPalette.borderStrong(scheme), lineWidth: 2)
+                            .frame(width: 22, height: 22)
+                        if selected {
+                            Circle()
+                                .fill(accent.resolved(scheme))
+                                .frame(width: 12, height: 12)
+                        }
+                    }
+                    VStack(alignment: .leading, spacing: 3) {
+                        HStack {
+                            Text(name)
+                                .font(UberFont.text(15, weight: .heavy))
+                                .tracking(-0.2)
+                            Spacer()
+                            if let percent {
+                                Text("\(percent) %")
+                                    .font(UberFont.text(13))
+                                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                            }
+                        }
+                        if let percent {
+                            GeometryReader { geometry in
+                                ZStack(alignment: .leading) {
+                                    Capsule()
+                                        .fill(EduFlowPalette.surface2(scheme))
+                                        .frame(height: 4)
+                                    Capsule()
+                                        .fill(accent.resolved(scheme))
+                                        .frame(width: geometry.size.width * CGFloat(percent) / 100, height: 4)
+                                }
+                            }
+                            .frame(height: 4)
+                        }
+                        if let detail {
+                            Text(detail)
+                                .font(UberFont.text(13))
+                                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                                .lineSpacing(2)
+                        }
+                    }
+                }
+            }
+            .buttonStyle(.plain)
+        }
+        .riseIn(delay: 0.2)
+    }
+}
+
 /// Seite 1: nur Logo mit Hallo-Animation (plus Weiter-Button).
 public struct OnboardingWelcomePage: View {
     @Environment(\.colorScheme) private var scheme
     @Environment(\.uberAccent) private var accent
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var showButton = false
+    @State private var greetings = AppLocalizations.greetings(fallback: ["Hallo!"])
     public let onNext: () -> Void
 
     public init(onNext: @escaping () -> Void) {
@@ -212,7 +357,7 @@ public struct OnboardingWelcomePage: View {
     public var body: some View {
         VStack(spacing: 0) {
             Spacer()
-            HelloGreeting()
+            HelloGreeting(cycleGreetings: greetings)
             ZStack {
                 if !reduceMotion {
                     SparkleView()
@@ -250,7 +395,7 @@ public struct OnboardingWelcomePage: View {
     }
 }
 
-/// Seite 2: drei Funktions-Karten mit SF Symbols.
+/// Seite 3: drei Funktions-Karten mit SF Symbols.
 public struct OnboardingFeaturesPage: View {
     @Environment(\.colorScheme) private var scheme
     @Environment(\.uberAccent) private var accent
@@ -308,7 +453,7 @@ public struct OnboardingFeaturesPage: View {
     }
 }
 
-/// Seite 3: Server-URL (optional) mit Verbindungstest ohne Speichern.
+/// Seite 4: Server-URL (optional) mit Verbindungstest ohne Speichern.
 public struct OnboardingServerPage: View {
     @Environment(\.colorScheme) private var scheme
     @Environment(\.accessibilityReduceMotion) private var reduceMotion

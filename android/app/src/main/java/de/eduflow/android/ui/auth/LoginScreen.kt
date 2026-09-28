@@ -63,19 +63,15 @@ import de.eduflow.android.ui.common.PrimaryButton
 import de.eduflow.android.ui.theme.LocalReducedMotion
 import kotlinx.coroutines.launch
 
-/** Fünfstufige Anmeldung wie auf dem Mac: Schule, Benutzername, Passwort, Gerät, Server. */
+/** Vierstufige Anmeldung wie auf dem Mac: Benutzername, Passwort, Gerät, Server. */
 @Composable
 fun LoginScreen(
     vm: AuthViewModel,
     baseUrl: String,
     onBaseUrlChange: suspend (String) -> Unit,
     onTwoFa: (pending: String) -> Unit,
-    onStartDemo: suspend () -> Unit,
-    onStopDemo: suspend () -> Unit,
-    isDemo: Boolean = false,
     showServerStep: Boolean = true,
 ) {
-    var subdomain by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var device by remember { mutableStateOf(defaultDeviceName()) }
@@ -99,7 +95,7 @@ fun LoginScreen(
 
     val loading = state is LoginUiState.Loading
     val loginError = state as? LoginUiState.Error
-    val stepCount = if (showServerStep) 5 else 4
+    val stepCount = if (showServerStep) 4 else 3
     val lastStep = stepCount - 1
 
     Column(
@@ -119,15 +115,6 @@ fun LoginScreen(
                     .shadow(12.dp, androidx.compose.foundation.shape.RoundedCornerShape(22.dp)),
             )
             Text(stringResource(R.string.app_name), fontSize = 28.sp, fontWeight = FontWeight.Black, letterSpacing = (-0.8).sp, color = scheme.onBackground, modifier = Modifier.padding(top = 20.dp))
-            if (isDemo) {
-                Text(
-                    stringResource(R.string.auth_demo_banner),
-                    fontSize = 12.sp,
-                    color = scheme.primary,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(top = 8.dp),
-                )
-            }
 
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(top = 14.dp)) {
                 repeat(stepCount) { index ->
@@ -162,18 +149,14 @@ fun LoginScreen(
                 Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
                     when (page) {
                         0 -> {
-                            StepHint(stringResource(R.string.auth_hint_school))
-                            LoginField(stringResource(R.string.auth_label_subdomain), subdomain, { subdomain = it }, stringResource(R.string.auth_placeholder_subdomain), KeyboardType.Uri)
-                        }
-                        1 -> {
                             StepHint(stringResource(R.string.auth_hint_username))
                             LoginField(stringResource(R.string.auth_label_username), username, { username = it; vm.consumeLoginError() }, stringResource(R.string.auth_placeholder_username), KeyboardType.Text)
                         }
-                        2 -> {
+                        1 -> {
                             StepHint(stringResource(R.string.auth_hint_password))
                             LoginField(stringResource(R.string.auth_label_password), password, { password = it; vm.consumeLoginError() }, stringResource(R.string.auth_placeholder_password), KeyboardType.Password, password = true)
                         }
-                        3 -> {
+                        2 -> {
                             StepHint(stringResource(R.string.auth_hint_device))
                             LoginField(stringResource(R.string.auth_label_device), device, { device = it }, stringResource(R.string.auth_placeholder_device), KeyboardType.Text)
                         }
@@ -237,42 +220,18 @@ fun LoginScreen(
                         if (showServerStep) {
                             onBaseUrlChange(server.trim().trimEnd('/').ifBlank { TokenStore.DEFAULT_BASE_URL.trimEnd('/') })
                         }
-                        vm.login(username, password, subdomain, device)
+                        vm.login(username, password, device)
                     }
                 },
                 enabled = !loading,
             )
         }
-        if (isDemo) {
-            TextButton(
-                onClick = { scope.launch { onStopDemo(); vm.consumeLoginError() } },
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-            ) {
-                Text(stringResource(R.string.auth_demo_leave), color = scheme.onSurfaceVariant)
-            }
-        } else {
-            TextButton(
-                onClick = {
-                    scope.launch {
-                        onStartDemo()
-                        subdomain = "demo"
-                        username = "demo"
-                        password = "demo"
-                        step = lastStep
-                    }
-                },
-                enabled = !loading,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-            ) {
-                Text(stringResource(R.string.auth_demo_view), color = scheme.onSurfaceVariant)
-            }
-        }
     }
 }
 
 private fun canAdvance(step: Int, username: String, password: String): Boolean = when (step) {
-    1 -> username.isNotBlank()
-    2 -> password.isNotEmpty()
+    0 -> username.isNotBlank()
+    1 -> password.isNotEmpty()
     else -> true
 }
 

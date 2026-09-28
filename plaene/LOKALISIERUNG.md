@@ -84,5 +84,13 @@ siehe unten.
    ergänzen (sonst fällt `t()` auf Deutsch zurück); Katalog-Änderungen brauchen
    einen Web-Rebuild (JSONs sind gebündelt). Neue UI-Strings brauchen nur
    `de.json` — andere Kataloge fallen pro Key auf Deutsch zurück.
-4. Abnahmen: `npm test` + `npm run typecheck` (Root), Gradle
+4. macOS: Die Sprachauswahl im Onboarding (`OnboardingLanguagePage`,
+   Override via `AppleLanguages` + Neustart, Logik in `AppLanguage`) zeigt
+   den Stand aus `localeCoverage` in `OnboardingState.swift`. Bei neuen
+   Sprachen/Keys dort neu berechnen:
+   Nenner = Keys mit de-Wert ungleich en-Wert, Zähler = davon Keys mit
+   eigenem Wert in der Sprache (Deutsch als Quelle zählt als vollständig).
+   Neue UI-Strings auf der Seite als deutsche Literale wie auf den
+   Nachbarseiten; Katalog-Einträge (de+en) ergänzen.
+5. Abnahmen: `npm test` + `npm run typecheck` (Root), Gradle
    `:app:assembleDebug :app:testDebugUnitTest`, `xcodebuild … test`.

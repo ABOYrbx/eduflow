@@ -21,7 +21,7 @@ public struct LoginView: View {
     /// anderen Onboarding-Schritte (Spacer oben/unten, kein Scrollen,
     /// 560er-Breite) statt der eigenständigen Login-Darstellung.
     private let onboardingLayout: Bool
-    private let totalSteps = 5
+    private let totalSteps = 4
 
     public init(
         store: TokenStore,
@@ -208,16 +208,6 @@ public struct LoginView: View {
     private var stepContent: some View {
         switch step {
         case 0:
-            stepHint(NSLocalizedString("auth_hint_school", value: "Zu welcher Schule gehörst du?", comment: "Anmeldung: Schulhinweis"))
-            AuthLabel(NSLocalizedString("auth_label_subdomain", value: "Subdomain (optional)", comment: "Anmeldung: Subdomain-Label"))
-            UberTextField(
-                text: $vm.subdomain,
-                placeholder: NSLocalizedString("auth_placeholder_subdomain", value: "z. B. musterschule", comment: "Anmeldung: Subdomain-Platzhalter"),
-                icon: "building.2",
-                autofocus: true
-            ) { advance() }
-            .onChange(of: vm.subdomain) { vm.clearError() }
-        case 1:
             stepHint(NSLocalizedString("auth_hint_username", value: "Wie heißt du bei EduPage?", comment: "Anmeldung: Benutzerhinweis"))
             AuthLabel(NSLocalizedString("auth_label_username", value: "Benutzername", comment: "Anmeldung: Benutzername-Label"))
             UberTextField(
@@ -228,7 +218,7 @@ public struct LoginView: View {
                 autofocus: true
             ) { advance() }
             .onChange(of: vm.username) { vm.clearError() }
-        case 2:
+        case 1:
             stepHint(NSLocalizedString("auth_hint_password", value: "Und dein Passwort?", comment: "Anmeldung: Passworthinweis"))
             AuthLabel(NSLocalizedString("auth_label_password", value: "Passwort", comment: "Anmeldung: Passwort-Label"))
             UberSecureField(
@@ -239,7 +229,7 @@ public struct LoginView: View {
                 autofocus: true
             ) { advance() }
             .onChange(of: vm.password) { vm.clearError() }
-        case 3:
+        case 2:
             stepHint(NSLocalizedString("auth_hint_device", value: "Welches Gerät meldest du an?", comment: "Anmeldung: Gerätehinweis"))
             AuthLabel(NSLocalizedString("auth_label_device", value: "Gerät (optional)", comment: "Anmeldung: Gerät-Label"))
             UberTextField(
@@ -283,9 +273,9 @@ public struct LoginView: View {
 
     private var canAdvance: Bool {
         switch step {
-        case 1:
+        case 0:
             return !vm.username.trimmingCharacters(in: .whitespaces).isEmpty
-        case 2:
+        case 1:
             return !vm.password.isEmpty
         default:
             return true
@@ -468,7 +458,7 @@ private struct ReadyStep: View {
             Text("EduFlow ist bereit")
                 .font(UberFont.text(22, weight: .heavy))
                 .tracking(-0.5)
-            Text("Server, Schule und Gerät sind eingetragen.\nJetzt nur noch anmelden.")
+            Text("Server und Gerät sind eingetragen.\nJetzt nur noch anmelden.")
                 .font(UberFont.text(14))
                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 .multilineTextAlignment(.center)

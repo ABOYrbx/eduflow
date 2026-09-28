@@ -185,22 +185,16 @@ fun EduFlowNav(
             OnboardingFlow(
                 vm = authVm,
                 baseUrl = session?.baseUrl ?: TokenStore.DEFAULT_BASE_URL,
-                onBaseUrlChange = { url -> store.setBaseUrl(url) },
+                onBaseUrlChange = { url -> scope.launch { store.setBaseUrl(url) } },
                 onTwoFa = { pending -> nav.navigate(Routes.twoFa(pending)) },
-                onStartDemo = { store.setDemoMode(true) },
-                onStopDemo = { store.setDemoMode(false) },
-                isDemo = session?.isDemo == true,
             )
         }
         composable(Routes.LOGIN) {
             LoginScreen(
                 vm = authVm,
                 baseUrl = session?.baseUrl ?: TokenStore.DEFAULT_BASE_URL,
-                onBaseUrlChange = { url -> store.setBaseUrl(url) },
+                onBaseUrlChange = { url -> scope.launch { store.setBaseUrl(url) } },
                 onTwoFa = { pending -> nav.navigate(Routes.twoFa(pending)) },
-                onStartDemo = { store.setDemoMode(true) },
-                onStopDemo = { store.setDemoMode(false) },
-                isDemo = session?.isDemo == true,
             )
         }
         composable(
@@ -378,7 +372,6 @@ fun EduFlowNav(
                             saveState = true
                         }
                         launchSingleTop = true
-                        restoreState = true
                     }
                 },
                 modifier = Modifier.align(Alignment.BottomCenter).navigationBarsPadding(),

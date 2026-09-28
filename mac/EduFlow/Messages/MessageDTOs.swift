@@ -190,7 +190,10 @@ public enum MessageTypes {
     }
 }
 
-/// Empfänger-ID-Format wie serverseitig (`app.py` `_RECIPIENT_ID_RE`).
+/// Empfänger-ID-Format wie serverseitig erwartet (Teacher|Student|… + Schlüssel).
+/// Reine Format-Referenz für Tests — kein Sende-Gate: Die Auswahl stammt aus
+/// der Server-Empfängerliste, der Server prüft Mitgliedschaft (dbi-Schlüssel
+/// sind nicht überall rein numerisch).
 /// Reine Logik (offline testbar, ohne Netzwerk).
 public enum RecipientIDs {
     public static func isValid(_ id: String) -> Bool {

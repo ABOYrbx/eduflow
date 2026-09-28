@@ -2,7 +2,7 @@
 
 Der Demomodus ist für Vorführungen und Screenshots gedacht. Android und macOS
 verbinden sich dafür ausschließlich mit dem lokalen Fake-Backend auf Port
-8101. Es zeigt fest eingebaute Beispieldaten und verwendet keine EduPage-
+3100. Es zeigt fest eingebaute Beispieldaten und verwendet keine EduPage-
 Anmeldedaten. Ist der Demo-Server nicht erreichbar, zeigen die Apps einen
 Verbindungsfehler; sie wechseln nicht auf den echten Server.
 
@@ -10,9 +10,9 @@ Verbindungsfehler; sie wechseln nicht auf den echten Server.
 
 1. Das Monorepo einmalig gemäß [Migrationsanleitung](../migration/README.md)
    lokal einrichten.
-2. Im Projektordner `./run.sh` starten. Das Skript setzt für die API explizit
-   `EDUFLOW_PROVIDER=fake`, startet sie auf Port `8101` und die Weboberfläche
-   auf Port `3000`.
+2. Im Projektordner `./run.sh --demo` starten. Das Skript setzt für die API explizit
+   `EDUFLOW_PROVIDER=fake`, startet sie auf Port `3100` und die Weboberfläche
+   auf Port `8101`.
 3. In der EduFlow-Weboberfläche oder in der Android- bzw. macOS-App
    **Demo ansehen** wählen.
 
@@ -20,8 +20,8 @@ Die Clients nutzen diese festen Adressen:
 
 | Client | Demo-API |
 |---|---|
-| Android-Emulator | `http://10.0.2.2:8101/api/v1/` |
-| macOS | `http://127.0.0.1:8101/api/v1/` |
+| Android-Emulator | `http://10.0.2.2:3100/api/v1/` |
+| macOS | `http://127.0.0.1:3100/api/v1/` |
 
 ## Testkonten
 
@@ -43,7 +43,8 @@ ist, können die Apps die Serveradresse nicht ändern.
 
 ## Abgrenzung
 
-Der Demo-Modus setzt voraus, dass `./run.sh` die API als Fake-Provider auf dem
-lokalen Port `8101` gestartet hat. Die nativen Apps rufen in diesem Modus
+Der Demo-Modus setzt voraus, dass `./run.sh --demo` die API als Fake-Provider auf dem
+lokalen Port `3100` gestartet hat (Weboberfläche auf `8101`, echte Version auf
+`3000`/`8000` — beide Modi können gleichzeitig laufen). Die nativen Apps rufen in diesem Modus
 keinen EduPage-Endpunkt und keinen Wetterdienst direkt auf. Die echten lokalen
 Python-App und ihre Sitzungen werden für die Demo nicht verwendet.

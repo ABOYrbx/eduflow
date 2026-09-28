@@ -26,6 +26,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -58,7 +62,6 @@ import de.eduflow.android.data.TokenStore
 import de.eduflow.android.data.dto.SettingsDefaults
 import de.eduflow.android.ui.common.AvatarDot
 import de.eduflow.android.ui.common.EduCard
-import de.eduflow.android.ui.common.FilterChips
 import de.eduflow.android.ui.common.LoadingBox
 import de.eduflow.android.ui.common.PrimaryButton
 import de.eduflow.android.ui.common.ScreenHead
@@ -290,6 +293,58 @@ fun SettingsScreen(
             }
         }
 
+        SectionLabel(stringResource(R.string.settings_navbar_section))
+        EduCard(modifier = Modifier.fillMaxWidth()) {
+            Column(Modifier.fillMaxWidth().padding(16.dp)) {
+                val navTabs by vm.navTabs.collectAsState()
+                Text(
+                    stringResource(R.string.settings_navbar_desc),
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Spacer(Modifier.height(4.dp))
+                TextButton(onClick = {
+                    draftTabs = NavTabs.parse(navTabs)
+                    showNavEditor = true
+                }) {
+                    Icon(Icons.Filled.Tune, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.settings_navbar_customize))
+                }
+            }
+        }
+
+        if (showNavEditor) {
+            AlertDialog(
+                onDismissRequest = { showNavEditor = false },
+                title = { Text(stringResource(R.string.settings_navbar_section)) },
+                text = {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            stringResource(R.string.settings_navbar_desc),
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                        NavBarEditor(
+                            selected = draftTabs,
+                            onSelectionChange = { draftTabs = NavTabs.parse(it.joinToString(",")) },
+                            modifier = Modifier.fillMaxWidth().heightIn(max = 340.dp),
+                        )
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = {
+                        vm.setNavTabs(draftTabs)
+                        showNavEditor = false
+                    }) { Text(stringResource(R.string.common_save)) }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showNavEditor = false }) {
+                        Text(stringResource(R.string.common_cancel))
+                    }
+                },
+            )
+        }
+
         SectionLabel(stringResource(R.string.settings_notifications))
         EduCard(modifier = Modifier.fillMaxWidth()) {
             Row(
@@ -322,17 +377,10 @@ fun SettingsScreen(
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 Spacer(Modifier.height(8.dp))
-                val landingOptions = SettingsDefaults.LANDING_OPTIONS.map { key ->
-                    key to landingLabel(key)
-                }
-                FilterChips(
-                    options = landingOptions.map { it.second },
-                    selected = landingOptions.firstOrNull { it.first == v.landing }?.second ?: v.landing,
-                    onSelect = { label ->
-                        landingOptions.firstOrNull { it.second == label }?.let {
-                            vm.update(v.copy(landing = it.first))
-                        }
-                    },
+                SettingsDropdown(
+                    options = SettingsDefaults.LANDING_OPTIONS.map { key -> key to landingLabel(key) },
+                    selectedKey = v.landing,
+                    onSelectKey = { key -> vm.update(v.copy(landing = key)) },
                 )
                 Spacer(Modifier.height(12.dp))
                 Text(
@@ -341,17 +389,10 @@ fun SettingsScreen(
                     color = MaterialTheme.colorScheme.onSurface,
                 )
                 Spacer(Modifier.height(8.dp))
-                val hwStatusOptions = SettingsDefaults.HW_STATUS_OPTIONS.map { key ->
-                    key to hwStatusLabel(key)
-                }
-                FilterChips(
-                    options = hwStatusOptions.map { it.second },
-                    selected = hwStatusOptions.firstOrNull { it.first == v.hwStatus }?.second ?: v.hwStatus,
-                    onSelect = { label ->
-                        hwStatusOptions.firstOrNull { it.second == label }?.let {
-                            vm.update(v.copy(hwStatus = it.first))
-                        }
-                    },
+                SettingsDropdown(
+                    options = SettingsDefaults.HW_STATUS_OPTIONS.map { key -> key to hwStatusLabel(key) },
+                    selectedKey = v.hwStatus,
+                    onSelectKey = { key -> vm.update(v.copy(hwStatus = key)) },
                 )
                 Spacer(Modifier.height(12.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -702,8 +743,61 @@ private fun accentLabel(key: String): String = when (key) {
     else -> key
 }
 
-/** Deutsche Labels für die Server-Keys (Startseite, Aufgabenfilter) via Ressourcen. */
+/**
+ * Auswahlmenü (Dropdown) für Schlüssel-Wert-Optionen (Startseite,
+ * Aufgabenfilter): zeigt das deutsche Label der aktuellen Wahl,
+ * klappt die Alternativen unten auf.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
+private fun SettingsDropdown(
+    options: List<Pair<String, String>>,
+    selectedKey: String,
+    onSelectKey: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var expanded by remember { mutableStateOf(false) }
+    val selectedLabel = options.firstOrNull { it.first == selectedKey }?.second ?: selectedKey
+    val scheme = MaterialTheme.colorScheme
+    ExposedDropdownMenuBox(
+        expanded = expanded,
+        onExpandedChange = { expanded = it },
+        modifier = modifier,
+    ) {
+        OutlinedTextField(
+            value = selectedLabel,
+            onValueChange = {},
+            readOnly = true,
+            singleLine = true,
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            shape = RoundedCornerShape(16.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = scheme.surface,
+                unfocusedContainerColor = scheme.surface,
+                unfocusedBorderColor = scheme.outlineVariant,
+                focusedBorderColor = scheme.primary,
+                cursorColor = scheme.primary,
+            ),
+            modifier = Modifier.fillMaxWidth().clickable { expanded = true },
+        )
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+        ) {
+            options.forEach { (key, label) ->
+                DropdownMenuItem(
+                    text = { Text(label) },
+                    onClick = {
+                        onSelectKey(key)
+                        expanded = false
+                    },
+                )
+            }
+        }
+    }
+}
+
+/** Deutsche Labels für die Server-Keys (Startseite, Aufgabenfilter) via Ressourcen. */@Composable
 private fun landingLabel(key: String): String = when (key) {
     "uebersicht" -> stringResource(R.string.settings_landing_overview)
     "dashboard" -> stringResource(R.string.messages_title)

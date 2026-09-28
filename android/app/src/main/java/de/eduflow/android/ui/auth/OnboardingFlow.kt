@@ -90,9 +90,6 @@ fun OnboardingFlow(
     baseUrl: String,
     onBaseUrlChange: suspend (String) -> Unit,
     onTwoFa: (String) -> Unit,
-    onStartDemo: suspend () -> Unit,
-    onStopDemo: suspend () -> Unit,
-    isDemo: Boolean = false,
 ) {
     var page by remember { mutableIntStateOf(0) }
     val reducedMotion = LocalReducedMotion.current
@@ -118,9 +115,6 @@ fun OnboardingFlow(
                     baseUrl = baseUrl,
                     onBaseUrlChange = onBaseUrlChange,
                     onTwoFa = onTwoFa,
-                    onStartDemo = onStartDemo,
-                    onStopDemo = onStopDemo,
-                    isDemo = isDemo,
                     showServerStep = false,
                 )
             }

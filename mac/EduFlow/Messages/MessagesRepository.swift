@@ -72,18 +72,27 @@ public struct MessagesRepository: Sendable {
 
     /// Senden (leere Empfänger oder leerer Text melden clientseitig
     /// Validierung; Antwort ist die neue Nachricht und erscheint sofort).
+    /// IDs stammen aus der Server-Empfängerliste und werden dort erneut
+    /// geprüft — hier nur leere/Doppelte entfernen, kein Format-Raten
+    /// (dbi-Schlüssel sind nicht überall rein numerisch).
     @discardableResult
     public func send(recipients: [String], body: String) async throws -> MessageDTO {
-        let valid = RecipientIDs.clean(recipients)
+        var seen: [String] = []
+        for entry in recipients {
+            let id = entry.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !id.isEmpty, !seen.contains(id) {
+                seen.append(id)
+            }
+        }
         let text = body.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !valid.isEmpty, !text.isEmpty else {
+        guard !seen.isEmpty, !text.isEmpty else {
             throw APIError(
                 code: ErrorCodes.validation,
                 message: APIError.germanFallback(for: ErrorCodes.validation)
             )
         }
         let payload = try APIClient.jsonData([
-            "recipients": valid,
+            "recipients": seen,
             "body": text,
         ] as [String: Any])
         let data = try await client.post(APIClient.Paths.sendMessage, body: payload)

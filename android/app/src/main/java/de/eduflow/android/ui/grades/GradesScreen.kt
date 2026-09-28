@@ -10,8 +10,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
@@ -47,6 +50,7 @@ import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SearchPill
 import de.eduflow.android.ui.common.SectionLabel
 import de.eduflow.android.ui.common.StatusPill
+import de.eduflow.android.ui.theme.LocalEduFlowDark
 import de.eduflow.android.ui.theme.GradeAmber
 import de.eduflow.android.ui.theme.GradeBlue
 import de.eduflow.android.ui.theme.GradeGray
@@ -75,6 +79,11 @@ fun GradesScreen(
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsState()
+    // Schnitt-Karte kollabiert beim Scrollen, damit die Noten Platz haben.
+    val listState = rememberLazyListState()
+    val collapseTarget =
+        if (listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 60) 1f else 0f
+    val collapseFraction by animateFloatAsState(collapseTarget, tween(220), label = "avg-collapse")
 
     Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
         AppHeader(
@@ -87,7 +96,7 @@ fun GradesScreen(
             subtitle = stringResource(R.string.grades_subtitle),
         )
         Spacer(Modifier.height(12.dp))
-        AverageCard(avgDisplay = state.avgDisplay)
+        AverageCard(avgDisplay = state.avgDisplay, compactFraction = collapseFraction)
         Spacer(Modifier.height(12.dp))
         SearchPill(
             value = state.query,
@@ -161,6 +170,7 @@ fun GradesScreen(
             }
         } else {
             LazyColumn(
+                state = listState,
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier.weight(1f),
             ) {
@@ -197,36 +207,46 @@ fun GradesScreen(
     }
 }
 
-/** Schnitt-Karte in Primär-Farbe (Light schwarz / Dark weiß, wie im PNG). */
+/** Schnitt-Karte: Light Primär (PNG-schwarz), Dark schwarz statt weißer Fläche.
+ * Kollabiert beim Scrollen (compactFraction 0..1): Zahl 34→20sp, weniger
+ * Padding, Untertitel blendet aus. */
 @Composable
-private fun AverageCard(avgDisplay: String) {
+private fun AverageCard(avgDisplay: String, compactFraction: Float = 0f) {
     val scheme = MaterialTheme.colorScheme
+    // Wie NowCard auf der Übersicht: Dark schwarze Karte statt weißer
+    // Primär-Fläche, weiße Schrift dazu statt onPrimary.
+    val dark = LocalEduFlowDark.current
+    val cardColor = if (dark) Color.Black else scheme.primary
+    val contentColor = if (dark) Color.White else scheme.onPrimary
+    val f = compactFraction.coerceIn(0f, 1f)
     Surface(
         shape = RoundedCornerShape(16.dp),
-        color = scheme.primary,
+        color = cardColor,
         modifier = Modifier.fillMaxWidth(),
     ) {
-        Column(Modifier.padding(20.dp)) {
+        Column(Modifier.padding(horizontal = 20.dp, vertical = (20 - 8 * f).dp)) {
             Text(
                 stringResource(R.string.grades_avg_title),
                 fontSize = 11.sp,
                 fontWeight = FontWeight.Bold,
                 letterSpacing = 1.2.sp,
-                color = scheme.onPrimary.copy(alpha = 0.7f),
+                color = contentColor.copy(alpha = 0.7f),
             )
-            Spacer(Modifier.height(4.dp))
+            Spacer(Modifier.height((4 - 2 * f).dp.coerceAtLeast(0.dp)))
             Text(
                 avgDisplay,
-                fontSize = 34.sp,
+                fontSize = (34 - 14 * f).sp,
                 fontWeight = FontWeight.ExtraBold,
-                color = scheme.onPrimary,
+                color = contentColor,
             )
-            Spacer(Modifier.height(2.dp))
-            Text(
-                stringResource(R.string.grades_avg_sub),
-                fontSize = 13.sp,
-                color = scheme.onPrimary.copy(alpha = 0.7f),
-            )
+            if (f < 0.5f) {
+                Spacer(Modifier.height(2.dp))
+                Text(
+                    stringResource(R.string.grades_avg_sub),
+                    fontSize = 13.sp,
+                    color = contentColor.copy(alpha = 0.7f),
+                )
+            }
         }
     }
 }

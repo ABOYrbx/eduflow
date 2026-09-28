@@ -43,7 +43,7 @@ public struct APIError: LocalizedError, Sendable {
         case ErrorCodes.invalidCode:
             return NSLocalizedString("common_error_invalid_code", value: "Der Code wurde nicht akzeptiert. Bitte erneut versuchen.", comment: "Fehler: Code nicht akzeptiert")
         case ErrorCodes.badCredentials:
-            return NSLocalizedString("common_error_bad_credentials", value: "Falscher Benutzername, Passwort oder Subdomain.", comment: "Fehler: falsche Zugangsdaten")
+            return NSLocalizedString("common_error_bad_credentials", value: "Falscher Benutzername oder Passwort.", comment: "Fehler: falsche Zugangsdaten")
         case ErrorCodes.edupage2FA:
             return NSLocalizedString("common_error_edupage_2fa", value: "EduPage verlangt erneut einen Code. Bitte neu anmelden.", comment: "Fehler: EduPage verlangt Code")
         case ErrorCodes.captchaRequired:

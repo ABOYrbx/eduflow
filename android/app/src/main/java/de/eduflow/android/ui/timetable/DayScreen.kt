@@ -2,6 +2,7 @@ package de.eduflow.android.ui.timetable
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,9 +32,14 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -79,7 +85,7 @@ fun DayScreen(
         (day.day == day.today || day.day == LocalDate.now().toString())
     val nowUid = if (isTodayShown && day != null) runningUid(day.lessons) else null
 
-    Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
+    Column(modifier = modifier.fillMaxSize().padding(16.dp).swipeToStep(viewModel::step)) {
         AppHeader(
             onSettings = onOpenSettings,
             onLogout = onLogout,
@@ -382,6 +388,33 @@ fun AuthAwareError(
 /** Eindeutiger Schlüssel einer Stunde (auch paketweit für die Woche). */
 internal fun lessonKey(lesson: LessonDto): String =
     lesson.period + lesson.time + lesson.title
+
+/**
+ * Horizontal durch Tage/Woche wischen (links = weiter, rechts = zurück) —
+ * zusätzlich zu den ‹ ›-Knöpfen im Kopf.
+ */
+@Composable
+internal fun Modifier.swipeToStep(onStep: (Int) -> Unit): Modifier {
+    val thresholdPx = with(LocalDensity.current) { 64.dp.toPx() }
+    var dragX by remember { mutableFloatStateOf(0f) }
+    return this.pointerInput(Unit) {
+        detectHorizontalDragGestures(
+            onDragStart = { dragX = 0f },
+            onDragEnd = {
+                when {
+                    dragX <= -thresholdPx -> onStep(1)
+                    dragX >= thresholdPx -> onStep(-1)
+                }
+                dragX = 0f
+            },
+            onDragCancel = { dragX = 0f },
+            onHorizontalDrag = { change, dragAmount ->
+                change.consume()
+                dragX += dragAmount
+            },
+        )
+    }
+}
 
 private fun startOf(time: String): String {
     val idx = listOf(time.indexOf('–'), time.indexOf('-')).filter { it >= 0 }.minOrNull()
