@@ -55,6 +55,14 @@ class SettingsViewModel(
     val developerOptions: StateFlow<Boolean> = store.developerOptionsFlow
         .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
+    /** Navigationsleisten-Belegung (gerätelokal, Mehr immer angepinnt). */
+    val navTabs: StateFlow<String> = store.navTabsFlow
+        .stateIn(viewModelScope, SharingStarted.Eagerly, "")
+
+    fun setNavTabs(routes: List<String>) {
+        viewModelScope.launch { store.setNavTabs(routes) }
+    }
+
     /** Sitzung für die Profil-Karte (Name, Schule – nie den Token zeigen). */
     val session: StateFlow<Session> = store.sessionFlow
         .stateIn(viewModelScope, SharingStarted.Eagerly, Session())

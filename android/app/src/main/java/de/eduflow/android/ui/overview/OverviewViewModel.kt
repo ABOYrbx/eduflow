@@ -44,7 +44,6 @@ data class OverviewUiState(
     val isLoading: Boolean = false,
     val error: ApiException? = null,
     val cacheInfo: String = "",
-    val savingOverviewOrder: Boolean = false,
 )
 
 private fun Throwable.toApiException(): ApiException =

@@ -7,8 +7,9 @@ Projektgrenzen). iOS ist ausgenommen (zurückgestellt).
 
 Deutsch ist überall Source-Sprache **und** Fallback. Alle nutzersichtbaren
 UI-Strings liegen in Quelldateien und erscheinen nach dem nächsten Sync in
-Crowdin. Es gibt noch keine übersetzten UI-Texte; Crowdin liefert später nur
-Ergänzungen, kein Verhalten ändert sich. Die API-Fehler-`code`s werden nie
+Crowdin. Für macOS liegen englische Übersetzungen bereits im Katalog
+(Branch `l10n/xcstrings-all-languages`); für Web/Backend/Android liefert
+Crowdin später nur Ergänzungen, kein Verhalten ändert sich. Die API-Fehler-`code`s werden nie
 übersetzt — nur die `error`-Texte.
 
 Android- und macOS-UI sind vollständig auf die Quelldateien umgestellt
@@ -30,7 +31,8 @@ Datumsformate, Demo-Daten) — diese bleiben bewusst deutsch.
 Kennzahlen (Blätter/Entries gezählt, Duplikate vereint): Web 249 Keys
 (13 Gruppen), Backend 111 Keys (Fehlertexte, Settings-Schema, API-Docs),
 Android 288 Strings + 3 Plurals, macOS 260 Katalog-Keys
-(Source-Sprache `de`).
+(Source-Sprache `de`). Status-/Typ-/Aktions-Codes bleiben bewusst deutsch,
+siehe unten.
 
 ## Sync-Ablauf
 
@@ -78,5 +80,9 @@ Android 288 Strings + 3 Plurals, macOS 260 Katalog-Keys
    Android → `values/strings.xml`, macOS → `xcstrings` (+ `NSLocalizedString`
    bei dynamischen Stellen).
 2. `code`-Vokabular und Status-/Typ-Werte stabil halten (siehe oben).
-3. Abnahmen: `npm test` + `npm run typecheck` (Root), Gradle
+3. Web: Neue Crowdin-Sprache = Import + Eintrag in `apps/web/src/lib/locales.ts`
+   ergänzen (sonst fällt `t()` auf Deutsch zurück); Katalog-Änderungen brauchen
+   einen Web-Rebuild (JSONs sind gebündelt). Neue UI-Strings brauchen nur
+   `de.json` — andere Kataloge fallen pro Key auf Deutsch zurück.
+4. Abnahmen: `npm test` + `npm run typecheck` (Root), Gradle
    `:app:assembleDebug :app:testDebugUnitTest`, `xcodebuild … test`.

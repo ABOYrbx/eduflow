@@ -75,6 +75,9 @@ class TokenStore(private val context: Context) {
         val ONBOARDING_VERSION = intPreferencesKey("onboarding_version")
         val DEVELOPER_OPTIONS = booleanPreferencesKey("developer_options")
         val DEMO_MODE = booleanPreferencesKey("demo_mode")
+        // Navigationsleisten-Belegung (Paket F, gerätelokal wie Theme/Akzent):
+        // kommagetrennte Routen der Inhalte, Mehr ist immer angepinnt.
+        val NAV_TABS = stringPreferencesKey("nav_tabs")
     }
 
     /** Aussehen-Wahl: "system" (Standard), "light" oder "dark". */
@@ -105,6 +108,17 @@ class TokenStore(private val context: Context) {
 
     suspend fun resetOnboarding() {
         context.tokenDataStore.edit { it[Keys.ONBOARDING_COMPLETED] = false }
+    }
+
+    /** Belegte Navigations-Tabs (Inhalte ohne Mehr, Standard Home/Aufgaben/Nachr./Plan). */
+    val navTabsFlow: Flow<String> = context.tokenDataStore.data.map { prefs ->
+        prefs[Keys.NAV_TABS] ?: ""
+    }
+
+    suspend fun setNavTabs(routes: List<String>) {
+        context.tokenDataStore.edit { prefs ->
+            prefs[Keys.NAV_TABS] = routes.joinToString(",")
+        }
     }
 
     suspend fun setDeveloperOptions(enabled: Boolean) {

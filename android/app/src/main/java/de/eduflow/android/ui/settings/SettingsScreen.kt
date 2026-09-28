@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,6 +24,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -61,6 +63,7 @@ import de.eduflow.android.ui.common.LoadingBox
 import de.eduflow.android.ui.common.PrimaryButton
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SectionLabel
+import de.eduflow.android.ui.navigation.NavTabs
 import de.eduflow.android.ui.common.StatusPill
 import de.eduflow.android.ui.theme.Accents
 
@@ -115,6 +118,8 @@ fun SettingsScreen(
     var notifyNews by remember { mutableStateOf(NotifyPrefs.isEnabled(context)) }
     var showPrivacy by remember { mutableStateOf(false) }
     var saveStateObserved by remember { mutableStateOf(false) }
+    var showNavEditor by remember { mutableStateOf(false) }
+    var draftTabs by remember { mutableStateOf(NavTabs.default) }
 
     // Frisch laden beim Öffnen (VM wird im NavGraph eager erzeugt,
     // ggf. noch ohne Token geladen).
@@ -230,6 +235,58 @@ fun SettingsScreen(
                 )
                 Spacer(Modifier.height(8.dp))
                 AccentDotsRow(selected = accentKey, onSelect = vm::setAccent)
+        SectionLabel(stringResource(R.string.settings_navbar_section))
+        EduCard(modifier = Modifier.fillMaxWidth()) {
+            Column(Modifier.fillMaxWidth().padding(16.dp)) {
+                val navTabs by vm.navTabs.collectAsState()
+                Text(
+                    stringResource(R.string.settings_navbar_desc),
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Spacer(Modifier.height(4.dp))
+                TextButton(onClick = {
+                    draftTabs = NavTabs.parse(navTabs)
+                    showNavEditor = true
+                }) {
+                    Icon(Icons.Filled.Tune, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.settings_navbar_customize))
+                }
+            }
+        }
+
+        if (showNavEditor) {
+            AlertDialog(
+                onDismissRequest = { showNavEditor = false },
+                title = { Text(stringResource(R.string.settings_navbar_section)) },
+                text = {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            stringResource(R.string.settings_navbar_desc),
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                        NavBarEditor(
+                            selected = draftTabs,
+                            onSelectionChange = { draftTabs = NavTabs.parse(it.joinToString(",")) },
+                            modifier = Modifier.fillMaxWidth().heightIn(max = 340.dp),
+                        )
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = {
+                        vm.setNavTabs(draftTabs)
+                        showNavEditor = false
+                    }) { Text(stringResource(R.string.common_save)) }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showNavEditor = false }) {
+                        Text(stringResource(R.string.common_cancel))
+                    }
+                },
+            )
+        }
+
             }
         }
 

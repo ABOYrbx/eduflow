@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
@@ -297,7 +298,12 @@ fun LessonCard(
     val scheme = MaterialTheme.colorScheme
     val cancelledText = cancelledLine(lesson)
     val lessonSubText = lessonSub(lesson)
-    EduCard(modifier = modifier.fillMaxWidth()) {
+    // Stunden-Zeilen grau wie im PNG (surfaceVariant statt Karten-Weiß).
+    Surface(
+        shape = RoundedCornerShape(16.dp),
+        color = scheme.surfaceVariant,
+        modifier = modifier.fillMaxWidth(),
+    ) {
         if (lesson.is_cancelled) {
             Text(
                 cancelledText,
