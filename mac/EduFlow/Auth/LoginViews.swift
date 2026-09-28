@@ -208,50 +208,50 @@ public struct LoginView: View {
     private var stepContent: some View {
         switch step {
         case 0:
-            stepHint("Zu welcher Schule gehörst du?")
-            AuthLabel("Subdomain (optional)")
+            stepHint(NSLocalizedString("auth_hint_school", value: "Zu welcher Schule gehörst du?", comment: "Anmeldung: Schulhinweis"))
+            AuthLabel(NSLocalizedString("auth_label_subdomain", value: "Subdomain (optional)", comment: "Anmeldung: Subdomain-Label"))
             UberTextField(
                 text: $vm.subdomain,
-                placeholder: "z. B. musterschule",
+                placeholder: NSLocalizedString("auth_placeholder_subdomain", value: "z. B. musterschule", comment: "Anmeldung: Subdomain-Platzhalter"),
                 icon: "building.2",
                 autofocus: true
             ) { advance() }
             .onChange(of: vm.subdomain) { vm.clearError() }
         case 1:
-            stepHint("Wie heißt du bei EduPage?")
-            AuthLabel("Benutzername")
+            stepHint(NSLocalizedString("auth_hint_username", value: "Wie heißt du bei EduPage?", comment: "Anmeldung: Benutzerhinweis"))
+            AuthLabel(NSLocalizedString("auth_label_username", value: "Benutzername", comment: "Anmeldung: Benutzername-Label"))
             UberTextField(
                 text: $vm.username,
-                placeholder: "z. B. max.muster",
+                placeholder: NSLocalizedString("auth_placeholder_username", value: "z. B. max.muster", comment: "Anmeldung: Benutzername-Platzhalter"),
                 icon: "person",
                 isError: vm.error != nil,
                 autofocus: true
             ) { advance() }
             .onChange(of: vm.username) { vm.clearError() }
         case 2:
-            stepHint("Und dein Passwort?")
-            AuthLabel("Passwort")
+            stepHint(NSLocalizedString("auth_hint_password", value: "Und dein Passwort?", comment: "Anmeldung: Passworthinweis"))
+            AuthLabel(NSLocalizedString("auth_label_password", value: "Passwort", comment: "Anmeldung: Passwort-Label"))
             UberSecureField(
                 text: $vm.password,
-                placeholder: "Passwort eingeben",
+                placeholder: NSLocalizedString("auth_placeholder_password", value: "Passwort eingeben", comment: "Anmeldung: Passwort-Platzhalter"),
                 icon: "lock",
                 isError: vm.error != nil,
                 autofocus: true
             ) { advance() }
             .onChange(of: vm.password) { vm.clearError() }
         case 3:
-            stepHint("Welches Gerät meldest du an?")
-            AuthLabel("Gerät (optional)")
+            stepHint(NSLocalizedString("auth_hint_device", value: "Welches Gerät meldest du an?", comment: "Anmeldung: Gerätehinweis"))
+            AuthLabel(NSLocalizedString("auth_label_device", value: "Gerät (optional)", comment: "Anmeldung: Gerät-Label"))
             UberTextField(
                 text: $vm.device,
-                placeholder: "z. B. MacBook",
+                placeholder: NSLocalizedString("auth_placeholder_device", value: "z. B. MacBook", comment: "Anmeldung: Gerät-Platzhalter"),
                 icon: "desktopcomputer",
                 autofocus: true
             ) { advance() }
         default:
             if showsServerStep {
-                stepHint("Wo läuft dein Server?")
-                AuthLabel("Server-URL")
+                stepHint(NSLocalizedString("Wo läuft dein Server?", value: "Wo läuft dein Server?", comment: "Anmeldung: Serverhinweis"))
+                AuthLabel(NSLocalizedString("auth_label_server", value: "Server-URL", comment: "Anmeldung: Server-Label"))
                 UberTextField(
                     text: $vm.baseURL,
                     placeholder: TokenStore.defaultBaseURL,
@@ -386,10 +386,10 @@ public struct TwoFAView: View {
                     Notice(error.message)
                         .padding(.bottom, 6)
                 }
-                AuthLabel("Code")
+                AuthLabel(NSLocalizedString("auth_label_code", value: "Code", comment: "Anmeldung: Code-Label"))
                 UberSecureField(
                     text: $vm.code,
-                    placeholder: "6-stelliger Code",
+                    placeholder: NSLocalizedString("auth_placeholder_code", value: "6-stelliger Code", comment: "Anmeldung: Code-Platzhalter"),
                     icon: "key",
                     isError: vm.error != nil,
                     autofocus: true,

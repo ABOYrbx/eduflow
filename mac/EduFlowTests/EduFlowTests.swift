@@ -174,10 +174,10 @@ struct CoreTests {
             APIClient.Paths.downloadToken, APIClient.Paths.homework, APIClient.Paths.homeworkDone(3),
             APIClient.Paths.homeworkTrash(3), APIClient.Paths.grades,
             APIClient.Paths.timetableDay, APIClient.Paths.timetableWeek,
-            APIClient.Paths.essen, APIClient.Paths.wetter,
+            APIClient.Paths.wetter,
         ]
-        #expect(paths.count == 27)
-        #expect(Set(paths).count == 27)
+        #expect(paths.count == 26)
+        #expect(Set(paths).count == 26)
         for path in paths {
             #expect(!path.isEmpty)
             #expect(!path.hasPrefix("/"))

@@ -6,7 +6,7 @@ import Foundation
 // Wiederverwendet die Listen aus B/C gegen Paket 0:
 // neueste Nachrichten (ov_unread-Limit), offene Hausaufgaben
 // (ov_homework-Limit, überfällig zuerst wie im Web), heutige Stunden
-// (aktuelle/nächste wie im Web), Essen-heute, Wetterkarte.
+// (aktuelle/nächste wie im Web), Wetterkarte.
 
 @MainActor
 final class OverviewViewModel: ObservableObject {
@@ -18,9 +18,6 @@ final class OverviewViewModel: ObservableObject {
     @Published var lessonsToday: [Lesson] = []
     @Published var currentLesson: Lesson?
     @Published var nextLesson: Lesson?
-    @Published var essen: EssenResponse?
-    /// Pager-Position im Essensplan (Mo–Fr, Start: heute).
-    @Published var essenIndex = 0
     @Published var wetter: WetterResponse?
     @Published var wetterCity = ""
     @Published var wetterLoading = false
@@ -97,19 +94,6 @@ final class OverviewViewModel: ObservableObject {
         } catch {
             firstError = firstError ?? APIError(code: "UPSTREAM", message: APIError.message(for: "UPSTREAM"), httpStatus: 0)
         }
-        do {
-            let menu = try await metaService.essen()
-            essen = menu
-            if let today = menu.today, let idx = EssenDays.order.firstIndex(of: today) {
-                essenIndex = idx
-            } else {
-                essenIndex = 0
-            }
-        } catch let e as APIError {
-            firstError = firstError ?? e
-        } catch {
-            firstError = firstError ?? APIError(code: "UPSTREAM", message: APIError.message(for: "UPSTREAM"), httpStatus: 0)
-        }
         // Wetter nur bei Anzeige-Wunsch und hinterlegter Stadt automatisch
         // laden (Stadt aus den Einstellungen); sonst manuell per Karte.
         if settings.ovWetter,
@@ -124,11 +108,6 @@ final class OverviewViewModel: ObservableObject {
         }
         self.error = firstError
         isLoading = false
-    }
-
-    /// Essens-Pager (‹ › unten, wie im Web, Mo–Fr).
-    func stepEssen(_ delta: Int) {
-        essenIndex = min(max(essenIndex + delta, 0), EssenDays.order.count - 1)
     }
 
     /// Wetter laden (Ort per Stadt; Schlüssel bleibt serverseitig).

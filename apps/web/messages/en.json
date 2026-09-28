@@ -287,7 +287,8 @@
     },
     "theme": {
         "toDark": "Switch to dark mode",
-        "toLight": "Switch to Bright Mode"
+        "toLight": "Switch to Bright Mode",
+        "language": "Language"
     },
     "timetable": {
         "actionAdd": "New",

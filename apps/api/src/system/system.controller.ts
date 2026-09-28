@@ -24,7 +24,7 @@ export class SystemController {
       "/api/v1/homework/{id}/trash": { post: post("Aufgabe in Papierkorb legen oder wiederherstellen") },
       "/api/v1/timetable/day": { get: get("Tagesstundenplan") }, "/api/v1/timetable/week": { get: get("Wochenstundenplan") },
       "/api/v1/substitutions/week": { get: get("Vertretungsplan") }, "/api/v1/school/agenda": { get: get("Schultermine, Prüfungen und Anwesenheit") },
-      "/api/v1/grades": { get: get("Noten") }, "/api/v1/essen": { get: get("Essensplan") },
+      "/api/v1/grades": { get: get("Noten") },
       "/api/v1/wetter": { get: get("Wetter") }, "/api/v1/wetter/suche": { get: get("Wetter-Ortssuche") },
       "/api/v1/settings": { get: get("Einstellungen lesen"), put: post("Einstellungen speichern") }, "/api/v1/cache-clear": { post: post("Cache leeren") },
     };

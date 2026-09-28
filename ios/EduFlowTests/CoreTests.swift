@@ -120,19 +120,7 @@ final class CoreTests: XCTestCase {
         XCTAssertTrue(week.weekLabel.hasPrefix("Woche "))
     }
 
-    // MARK: Essen und Wetter (api/meta.py)
-
-    func testEssenDecoding() throws {
-        let essen = try decode(EssenResponse.self, """
-        {"week": "2026-W39", "label": "21.9. – 25.9.2026",
-         "source_url": "https://example.invalid/menu.pdf",
-         "days": {"Donnerstag": {"date": "2026-09-24",
-                  "dishes": [{"text": "Gericht", "price": "7,90 €"}], "note": ""}},
-         "today": "Donnerstag", "cached": true, "cache_info": "aus Cache"}
-        """)
-        XCTAssertEqual(essen.days?["Donnerstag"]?.dishes?.first?.price, "7,90 €")
-        XCTAssertEqual(essen.today, "Donnerstag")
-    }
+    // MARK: Wetter
 
     func testWetterDecoding() throws {
         let wetter = try decode(WetterResponse.self, """

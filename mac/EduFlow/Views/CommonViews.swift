@@ -520,7 +520,7 @@ public struct UberSecureField: View {
                         .foregroundStyle(EduFlowPalette.inkDim(scheme))
                 }
                 .buttonStyle(.plain)
-                .help(revealed ? "Passwort verbergen" : "Passwort anzeigen")
+                .help(revealed ? NSLocalizedString("common_password_hide", value: "Passwort verbergen", comment: "Passwort: verbergen") : NSLocalizedString("common_password_show", value: "Passwort anzeigen", comment: "Passwort: anzeigen"))
             } else if !text.isEmpty {
                 Button { text = "" } label: {
                     Image(systemName: "xmark.circle.fill")

@@ -138,7 +138,7 @@ fun AppHeader(
                 }
                 androidx.compose.material3.HorizontalDivider()
                 DropdownMenuItem(
-                    text = { Text(stringResource(R.string.common_menu_settings)) },
+                    text = { Text(stringResource(R.string.settings_title)) },
                     onClick = { menuOpen = false; onSettings() },
                 )
                 DropdownMenuItem(

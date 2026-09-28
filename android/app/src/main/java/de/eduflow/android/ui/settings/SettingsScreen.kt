@@ -64,7 +64,6 @@ import de.eduflow.android.ui.common.PrimaryButton
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SectionLabel
 import de.eduflow.android.ui.navigation.NavTabs
-import de.eduflow.android.ui.overview.OverviewOrder
 import de.eduflow.android.ui.common.StatusPill
 import de.eduflow.android.ui.theme.Accents
 
@@ -119,8 +118,6 @@ fun SettingsScreen(
     var notifyNews by remember { mutableStateOf(NotifyPrefs.isEnabled(context)) }
     var showPrivacy by remember { mutableStateOf(false) }
     var saveStateObserved by remember { mutableStateOf(false) }
-    var showOrderEditor by remember { mutableStateOf(false) }
-    var draftOrder by remember { mutableStateOf(OverviewOrder.default) }
     var showNavEditor by remember { mutableStateOf(false) }
     var draftTabs by remember { mutableStateOf(NavTabs.default) }
 
@@ -157,7 +154,7 @@ fun SettingsScreen(
             Text(msg, color = MaterialTheme.colorScheme.error)
             PrimaryButton(text = stringResource(R.string.common_retry), onClick = { vm.reload() })
             if (isDemo) {
-                SectionLabel(stringResource(R.string.settings_demo_section))
+                SectionLabel(stringResource(R.string.more_demo_title))
                 Text(stringResource(R.string.settings_demo_text))
             } else {
                 SectionLabel(stringResource(R.string.settings_server_section))
@@ -394,51 +391,10 @@ fun SettingsScreen(
                     },
                     placeholder = stringResource(R.string.settings_homework_placeholder),
                 )
-                Spacer(Modifier.height(12.dp))
-                TextButton(onClick = {
-                    draftOrder = OverviewOrder.parse(v.ovOrder)
-                    showOrderEditor = true
-                }) {
-                    Icon(Icons.Filled.Tune, contentDescription = null, modifier = Modifier.size(16.dp))
-                    Spacer(Modifier.width(8.dp))
-                    Text(stringResource(R.string.overview_customize))
-                }
             }
         }
 
-        if (showOrderEditor) {
-            AlertDialog(
-                onDismissRequest = { showOrderEditor = false },
-                title = { Text(stringResource(R.string.overview_customize)) },
-                text = {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(
-                            stringResource(R.string.overview_customize_desc),
-                            style = MaterialTheme.typography.bodySmall,
-                        )
-                        OverviewOrderEditor(
-                            order = draftOrder,
-                            onOrderChange = { draftOrder = it },
-                            modifier = Modifier.fillMaxWidth().heightIn(max = 340.dp),
-                        )
-                    }
-                },
-                confirmButton = {
-                    TextButton(onClick = {
-                        vm.update(v.copy(ovOrder = OverviewOrder.serialize(draftOrder)))
-                        vm.save()
-                        showOrderEditor = false
-                    }) { Text(stringResource(R.string.common_save)) }
-                },
-                dismissButton = {
-                    TextButton(onClick = { showOrderEditor = false }) {
-                        Text(stringResource(R.string.common_cancel))
-                    }
-                },
-            )
-        }
-
-        SectionLabel(stringResource(R.string.settings_weather_section))
+        SectionLabel(stringResource(R.string.overview_order_weather))
         EduCard(modifier = Modifier.fillMaxWidth()) {
             Column(Modifier.fillMaxWidth().padding(16.dp)) {
                 var city by remember(v.wetterCity) { mutableStateOf(v.wetterCity) }
@@ -750,19 +706,19 @@ private fun accentLabel(key: String): String = when (key) {
 @Composable
 private fun landingLabel(key: String): String = when (key) {
     "uebersicht" -> stringResource(R.string.settings_landing_overview)
-    "dashboard" -> stringResource(R.string.settings_landing_messages)
-    "hausaufgaben" -> stringResource(R.string.settings_landing_tasks)
-    "noten" -> stringResource(R.string.settings_landing_grades)
-    "stundenplan" -> stringResource(R.string.settings_landing_plan)
+    "dashboard" -> stringResource(R.string.messages_title)
+    "hausaufgaben" -> stringResource(R.string.bottom_tasks)
+    "noten" -> stringResource(R.string.grades_title)
+    "stundenplan" -> stringResource(R.string.bottom_plan)
     else -> key
 }
 
 @Composable
 private fun hwStatusLabel(key: String): String = when (key) {
-    "alle" -> stringResource(R.string.settings_hwstatus_all)
-    "offen" -> stringResource(R.string.settings_hwstatus_open)
-    "überfällig" -> stringResource(R.string.settings_hwstatus_overdue)
-    "erledigt" -> stringResource(R.string.settings_hwstatus_done)
-    "papierkorb" -> stringResource(R.string.settings_hwstatus_trash)
+    "alle" -> stringResource(R.string.homework_filter_all)
+    "offen" -> stringResource(R.string.homework_filter_open)
+    "überfällig" -> stringResource(R.string.homework_filter_overdue)
+    "erledigt" -> stringResource(R.string.homework_filter_done)
+    "papierkorb" -> stringResource(R.string.homework_swipe_trash)
     else -> key
 }

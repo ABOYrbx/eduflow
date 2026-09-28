@@ -88,20 +88,20 @@ fun MoreScreen(
         )
         MoreRow(
             icon = Icons.Filled.Grade,
-            title = stringResource(R.string.more_grades_title),
-            subtitle = stringResource(R.string.more_grades_sub),
+            title = stringResource(R.string.grades_title),
+            subtitle = stringResource(R.string.grades_subtitle),
             onClick = onGrades,
         )
         MoreRow(
             icon = Icons.Filled.Settings,
-            title = stringResource(R.string.more_settings_title),
+            title = stringResource(R.string.settings_title),
             subtitle = stringResource(R.string.more_settings_sub),
             onClick = onSettings,
         )
         MoreRow(
             icon = Icons.Filled.PhoneAndroid,
-            title = stringResource(R.string.more_devices_title),
-            subtitle = stringResource(R.string.more_devices_sub),
+            title = stringResource(R.string.devices_title),
+            subtitle = stringResource(R.string.devices_subtitle),
             onClick = onDevices,
         )
         if (isDemo) {
@@ -114,7 +114,7 @@ fun MoreScreen(
         } else {
             MoreRow(
                 icon = Icons.Filled.Dns,
-                title = stringResource(R.string.more_server_title),
+                title = stringResource(R.string.auth_label_server),
                 subtitle = baseUrl.ifBlank { stringResource(R.string.more_server_fallback) },
                 onClick = {
                     serverDraft = baseUrl
@@ -131,7 +131,7 @@ fun MoreScreen(
         )
         MoreRow(
             icon = Icons.AutoMirrored.Filled.Logout,
-            title = stringResource(R.string.more_logout_title),
+            title = stringResource(R.string.common_menu_logout),
             subtitle = stringResource(R.string.more_logout_sub),
             onClick = onLogout,
             destructive = true,
@@ -142,7 +142,7 @@ fun MoreScreen(
         val scheme = MaterialTheme.colorScheme
         AlertDialog(
             onDismissRequest = { showServer = false },
-            title = { Text(stringResource(R.string.more_server_title)) },
+            title = { Text(stringResource(R.string.auth_label_server)) },
             text = {
                 Column {
                     Text(

@@ -1,7 +1,7 @@
 import Foundation
 
 /// Übersichts-Logik (Paket D): Uhr, ungelesene Nachrichten, offene
-/// Hausaufgaben, aktuelle/nächste Stunde, Essen-heute, Wetterkarte.
+/// Hausaufgaben, aktuelle/nächste Stunde, Wetterkarte.
 /// Wiederverwendet die Listen aus den Paketen B und C (keine eigene
 /// Server-Logik); Teilergebnisse bleiben sichtbar, Fehler werden
 /// einzeln gemeldet.
@@ -19,9 +19,6 @@ public final class OverviewViewModel {
     public var homeworkError: APIError?
     public var lessons: [Lesson] = []
     public var lessonsError: APIError?
-    public var essen = EssenResponse()
-    public var essenError: APIError?
-    public var essenDay = 0
     public var wetter = WetterResponse()
     public var wetterError: APIError?
     public var isLoading = false
@@ -54,11 +51,8 @@ public final class OverviewViewModel {
         async let dayTask = Self.capture {
             try await TimetableRepository(client: client).day(nil, refresh: refresh)
         }
-        async let essenTask = Self.capture {
-            try await MetaRepository(client: client).essen(refresh: refresh)
-        }
-        let (messagesResult, homeworkResult, dayResult, essenResult) =
-            await (messagesTask, homeworkTask, dayTask, essenTask)
+        let (messagesResult, homeworkResult, dayResult) =
+            await (messagesTask, homeworkTask, dayTask)
         var expired = false
         switch messagesResult {
         case .success(let page):
@@ -91,15 +85,6 @@ public final class OverviewViewModel {
             lessonsError = error
             expired = expired || SessionRecovery.forceLogout(error: error, isLoggedIn: store.isLoggedIn)
         }
-        switch essenResult {
-        case .success(let response):
-            essen = response
-            essenError = nil
-            essenDay = Self.essenStartDay(response: response)
-        case .failure(let error):
-            // Essen braucht kein Login: nur Fehlertext, nie Abmelden.
-            essenError = error
-        }
         await loadWetter(client: client, expired: &expired)
         if expired {
             store.clear()
@@ -111,7 +96,7 @@ public final class OverviewViewModel {
         isSavingOrder = true
         orderSaveError = nil
         defer { isSavingOrder = false }
-        let valid = ["messages", "homework", "weather", "lunch"]
+        let valid = ["messages", "homework", "weather"]
         let unique = order.filter { valid.contains($0) }.reduce(into: [String]()) { result, key in
             if !result.contains(key) { result.append(key) }
         }
@@ -171,12 +156,6 @@ public final class OverviewViewModel {
         let minutes = calendar.component(.hour, from: now) * 60
             + calendar.component(.minute, from: now)
         return CurrentLesson.of(lessons, nowMinutes: minutes)
-    }
-
-    /// Essens-Blätterer startet beim heutigen Tag (sonst Montag).
-    nonisolated public static func essenStartDay(response: EssenResponse) -> Int {
-        guard let today = response.today else { return 0 }
-        return max(EssenDays.order.firstIndex(of: today) ?? 0, 0)
     }
 
     private static func capture<T>(_ work: () async throws -> T) async -> Result<T, APIError> {

@@ -4,8 +4,8 @@ import Testing
 
 /// Paket-D-Tests (offline, stubbendes URL-Protokoll, kein echtes Login).
 ///
-/// Prüfen Routenform aller vier Endpunkte (Tages- und Wochenschlüssel,
-/// Essenswoche mit Preisen und Quelle, Wetter-Payload), Lernzeit-Blöcke
+/// Prüfen Routenform aller drei Endpunkte (Tages- und Wochenschlüssel,
+/// Wetter-Payload), Lernzeit-Blöcke
 /// und Kennzeichen gegen Stub wie im Web, Zeit- und Datumsableitungen
 /// gegen bekannte Werte, aktuelle und nächste Stunde gegen feste Zeiten,
 /// Wetter-Fehlercodes, Paginierung wo vorhanden und 401-Verhalten.
@@ -105,25 +105,6 @@ struct TimetableTests {
         let evening = CurrentLesson.of(lessons, nowMinutes: 20 * 60)
         #expect(evening.current == nil)
         #expect(evening.next == nil)
-    }
-
-    @Test("Essenswoche mit Preisen und Quelle")
-    func essenDecodes() async throws {
-        MockURLProtocol.handler = { request in
-            #expect(request.value(forHTTPHeaderField: "Authorization") == "Bearer abc")
-            let url = try #require(request.url)
-            #expect(url.path.hasSuffix("essen"))
-            let data = #"{"week":"2024-W36","label":"2.9. – 6.9.2024","source_url":"https://example.test/plan.pdf","days":{"Montag":{"date":"2024-09-02","dishes":[{"text":"Suppe","price":"3,50 €"}],"note":""}},"today":"Montag","cached":false}"#
-                .data(using: .utf8)!
-            let response = HTTPURLResponse(
-                url: url, statusCode: 200, httpVersion: nil, headerFields: nil)!
-            return (data, response)
-        }
-        let essen = try await MetaRepository(client: client()).essen()
-        #expect(essen.week == "2024-W36")
-        #expect(essen.days?["Montag"]?.dishes?.first?.price == "3,50 €")
-        #expect(essen.sourceUrl == "https://example.test/plan.pdf")
-        #expect(OverviewViewModel.essenStartDay(response: essen) == 0)
     }
 
     @Test("Wetter-Payload und Fehlercodes")

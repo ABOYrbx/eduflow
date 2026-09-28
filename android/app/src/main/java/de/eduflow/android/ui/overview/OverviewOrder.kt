@@ -7,16 +7,15 @@ import de.eduflow.android.data.dto.SettingsDefaults
 
 /** Movable overview sections; the order string is stored with account settings. */
 object OverviewOrder {
-    val keys = listOf("messages", "homework", "weather", "lunch")
+    val keys = listOf("messages", "homework", "weather")
     val labelRes = mapOf(
-        "messages" to R.string.overview_order_messages,
-        "homework" to R.string.overview_order_homework,
+        "messages" to R.string.messages_title,
+        "homework" to R.string.homework_title,
         "weather" to R.string.overview_order_weather,
-        "lunch" to R.string.overview_order_lunch,
     )
 
     @Composable
-    fun label(key: String): String = stringResource(labelRes[key] ?: R.string.overview_order_messages)
+    fun label(key: String): String = stringResource(labelRes[key] ?: R.string.messages_title)
 
     fun parse(raw: String): List<String> {
         val parsed = raw.split(',').map(String::trim).filter { it in keys }.distinct()

@@ -8,8 +8,8 @@ English | [Deutsch](README.de.md)
 
 # EduFlow
 
-Local school dashboard for EduPage: messages, homework, timetable, grades, canteen & more.
-NestJS API + Next.js web UI + native Android and macOS apps.
+Local school dashboard for EduPage: messages, homework, timetable, grades & more.
+NestJS API + Next.js web UI + native Android and macOS apps.(iOS may come later)
 
 [![Stars](https://img.shields.io/github/stars/ABOYrbx/eduflow?style=for-the-badge)](https://github.com/ABOYrbx/eduflow/stargazers)
 [![Forks](https://img.shields.io/github/forks/ABOYrbx/eduflow?style=for-the-badge)](https://github.com/ABOYrbx/eduflow/network/members)
@@ -17,7 +17,7 @@ NestJS API + Next.js web UI + native Android and macOS apps.
 [![PRs](https://img.shields.io/github/issues-pr/ABOYrbx/eduflow?style=for-the-badge)](https://github.com/ABOYrbx/eduflow/pulls)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 
-[View Demo](#demo-mode) · [Report Bug](https://github.com/ABOYrbx/eduflow/issues/new?labels=bug) · [Request Feature](https://github.com/ABOYrbx/eduflow/issues/new?labels=enhancement)
+[View Demo](#demo-mode) · [Report Bug](https://github.com/ABOYrbx/eduflow/issues/new?labels=bug) · [Request Feature](https://github.com/ABOYrbx/eduflow/issues/new?labels=enhancement) · [Documentation](https://a-dev.gitbook.io/eduflow)
 
 </div>
 

@@ -1,5 +1,7 @@
 # EduFlow – Projektdokumentation
 
+# Dokumentation momentan wegen großer Änderung nicht aktuell und zu nutzen.
+
 Diese Dokumentation beschreibt den im Repository sichtbaren Aufbau und Funktionsumfang von EduFlow. Sie ergänzt die Arbeitsregeln und Detailpläne; sie ersetzt keine davon. Aktualisierungsstand ist der Node-Paritätsstand N0–NI (Cutover N-J offen).
 
 ## Schnellnavigation

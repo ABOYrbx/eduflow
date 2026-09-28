@@ -19,7 +19,9 @@ async function bootstrap(): Promise<void> {
   app.setGlobalPrefix("api/v1");
   app.useGlobalFilters(new ApiExceptionFilter());
   const port = Number(process.env.PORT ?? "3000");
-  await app.listen(port, "127.0.0.1");
+  // 0.0.0.0 = auch im LAN erreichbar (Handy-App); per API_HOST einschränkbar.
+  const host = process.env.API_HOST ?? "0.0.0.0";
+  await app.listen(port, host);
 }
 
 void bootstrap();
