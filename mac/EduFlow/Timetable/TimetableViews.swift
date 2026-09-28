@@ -274,13 +274,13 @@ public struct LessonRow: View {
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 HStack(spacing: 6) {
                     if lesson.isCancelled {
-                        Tag("Entfall", style: .muted)
+                        Tag(NSLocalizedString("Entfall", value: "Entfall", comment: "Stundenplan: Entfall"), style: .muted)
                     }
                     if lesson.isOnline {
                         Tag("Online", style: .blue)
                     }
                     if lesson.isLernzeit {
-                        Tag("Lernzeit", style: .muted)
+                        Tag(NSLocalizedString("Lernzeit", value: "Lernzeit", comment: "Stundenplan: Lernzeit"), style: .muted)
                     }
                 }
             }
