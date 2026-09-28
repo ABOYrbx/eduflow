@@ -12,7 +12,7 @@
         "kindAttendance": "Attendance",
         "kindEvent": "Event",
         "kindExam": "Exam",
-        "lessonHour": "{lesson}. period",
+        "lessonHour": "{lesson}. Period.",
         "loadingCal": "Loading calendar …",
         "nextWeek": "Next →",
         "planChange": "Schedule change",
