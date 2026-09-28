@@ -21,7 +21,7 @@
         "tokenInvalid": "Ungültiges oder fehlendes Token.",
         "tokenMissing": "Token fehlt oder ist ungültig.",
         "tokenNotFound": "Token nicht gefunden.",
-        "tokenRejected": "Token ungue ltig."
+        "tokenRejected": "Token ungültig."
     },
     "common": {
         "badRequest": "Ungültige Anfrage.",
@@ -62,7 +62,7 @@
         "weatherSearch": "Wetter-Ortssuche"
     },
     "geo": {
-        "badCoords": "错误的coords",
+        "badCoords": "bad coords",
         "citySearch": "Städte konnten gerade nicht gesucht werden.",
         "citySetup": "Die Stadtsuche ist nicht eingerichtet.",
         "coords": "Bitte Koordinaten (?lat=..&lon=..) oder Stadt (?city=..) angeben.",
@@ -73,7 +73,7 @@
     },
     "messages": {
         "attachment": "Dateianhang nicht gefunden.",
-        "badLink": "Unguiding longer download-link。",
+        "badLink": "Ungültiger Download-Link.",
         "eventIdx": "Bitte event_id und idx als Zahl angeben.",
         "noBody": "Bitte einen Nachrichtentext eingeben.",
         "noRecipients": "Bitte mindestens einen gültigen Empfänger angeben.",
@@ -92,19 +92,19 @@
     "settings": {
         "cityHint": "Auswahl gilt für die Wetterkarte auf Web und Android.",
         "cityLabel": "Wetter: Stadt",
-        "cityPlaceholder": "B. Berlin",
+        "cityPlaceholder": "z. B. Berlin",
         "hwStatusLabel": "Hausaufgaben: Standardfilter",
         "hwTestsLabel": "Hausaufgaben: Tests und Prüfungen standardmäßig einbeziehen",
         "landingLabel": "Startseite nach Anmeldung",
         "optAll": "Alle",
         "optDashboard": "Nachrichten",
         "optDone": "Nur erledigte",
-        "optGrades": "留言",
+        "optGrades": "Noten",
         "optHomework": "Hausaufgaben",
         "optOpen": "Nur offene",
         "optOverdue": "Nur überfällige",
         "optTimetable": "Stundenplan",
-        "optTrash": "帕皮尔科尔布文",
+        "optTrash": "Papierkorb",
         "ovHomeworkLabel": "Übersicht: max. offene Hausaufgaben",
         "ovOrderLabel": "Reihenfolge der Übersicht",
         "ovUnreadLabel": "Übersicht: max. ungelesene Nachrichten",
