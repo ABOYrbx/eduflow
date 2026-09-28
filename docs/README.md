@@ -26,7 +26,7 @@ Das Repository enthält derzeit zwei nebeneinander bestehende Implementierungen:
 1. **Python-Referenzanwendung:** Flask in `app.py`, gemeinsame JSON-API in `api/`, Web-Templates unter `templates/`. Sie ist die aktuelle Referenz für EduPage-Integration und den stabilen `/api/v1`-Vertrag.
 2. **TypeScript-Migration:** NestJS unter `apps/api/`, Next.js unter `apps/web/` und gemeinsame Verträge unter `packages/contracts/`. Neben dem Fake-Schulprovider für lokale Demo (`EDUFLOW_PROVIDER=fake`) ist ein echter EduPage-Anbieter implementiert (Paritätspakete N0–NI: Auth, Nachrichten, Aufgaben, Stundenplan, Noten, Einstellungen, Essen/Wetter, Schulalltag, provider-neutrales Web) — drahtkompatibel zu `/api/v1`. Der Cutover (N-J: Live-Abgleich mit echten Zugangsdaten, App-Umschaltung, Python-Archivierung) ist noch **offen**; bis zur Abnahme bleibt die Python-Anwendung das Live-Backend.
 
-`./run.sh` startet ausdrücklich die TypeScript-Demo mit Fake-Provider auf Port 8101 und die Next.js-Weboberfläche. Die Python-Anwendung startet getrennt mit `python3 app.py` auf Port 8000. Die beiden Modi nicht verwechseln; Details: [Entwicklung](ENTWICKLUNG.md) und [Migration](MIGRATION.md).
+`./run.sh --demo` startet ausdrücklich die TypeScript-Demo mit Fake-Provider auf Port 3100 und die Next.js-Weboberfläche auf Port 8101. Die Python-Anwendung startet getrennt mit `python3 app.py` auf Port 8000. Die beiden Modi nicht verwechseln; Details: [Entwicklung](ENTWICKLUNG.md) und [Migration](MIGRATION.md).
 
 ## Arbeitsregeln und Quellenhierarchie
 

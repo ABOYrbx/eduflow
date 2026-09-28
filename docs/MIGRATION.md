@@ -15,7 +15,7 @@ Die ausführliche Ausgangs- und Phasenplanung liegt in `migration/README.md` (re
 | Schulprovider | `apps/api/src/edupage/`, `apps/api/src/school/demo-school.service.ts` | Echter Anbieter (Protokoll, Sitzung, Timeline, Bereiche N-A–NI) plus Fake-Anbieter nur für Demo (`EDUFLOW_PROVIDER=fake`, Logins `demo`/`demo`). |
 | Web | `apps/web/` | Next.js 16, React 19, provider-neutrale Server-API-Routen, HttpOnly-Session-Cookies und Dashboard-Oberfläche. |
 | Contracts | `packages/contracts/` | API-Präfix, Fehlercodes, Page-Typ und Type-Guard. |
-| Installer/Demo | `install.sh`, `run.sh`, `migration/` | Interaktiver lokaler Setup-Assistent und Start der Fake-Demo (API 8101, Web 3000). |
+| Installer/Demo | `install.sh`, `run.sh`, `migration/` | Interaktiver lokaler Setup-Assistent und Start der Fake-Demo per `./run.sh --demo` (API 3100, Web 8101). |
 
 Der Stack ist drahtkompatibel zu Python-`/api/v1` (gleiche Routen, DTOs, Fehlercodes und Auth-Abläufe im Echtpfad). `EDUFLOW_PROVIDER=fake` bleibt eine bewusste Demo-Grenze: Nur dort gelten synthetische Daten und Demo-Logins; jeder andere Wert wählt den echten EduPage-Anbieter.
 
@@ -65,7 +65,7 @@ Voraussetzungen, Installer-Verhalten und Befehle stehen vollständig unter [Entw
 ./run.sh
 ```
 
-Der dokumentierte Start bleibt die Fake-Demo: `./install.sh` richtet PostgreSQL und lokale API-Konfiguration ein, `./run.sh` prüft Abhängigkeiten und Datenbankkonfiguration, startet die Fake-API auf Port 8101 (wartet auf `/api/v1/health`) und danach die Weboberfläche, normalerweise Port 3000. `Ctrl+C` beendet beide. Demo-Konten: `demo` / `demo`; 2FA-Demo: `demo-2fa` / `demo`, Code `123456`. Ausschließlich synthetische Demodaten verwenden. `run.sh` setzt `API_SERVER_URL` für Next.js dabei auf `http://127.0.0.1:8101`.
+Der dokumentierte Start bleibt die Fake-Demo: `./install.sh` richtet PostgreSQL und lokale API-Konfiguration ein, `./run.sh --demo` prüft Abhängigkeiten und Datenbankkonfiguration, startet die Fake-API auf Port 3100 (wartet auf `/api/v1/health`) und danach die Weboberfläche auf Port 8101. `Ctrl+C` beendet beide. Demo-Konten: `demo` / `demo`; 2FA-Demo: `demo-2fa` / `demo`, Code `123456`. Ausschließlich synthetische Demodaten verwenden. `run.sh` setzt `API_SERVER_URL` für Next.js dabei auf `http://127.0.0.1:3100`.
 
 Für Qualitätsprüfungen aus dem Stamm:
 

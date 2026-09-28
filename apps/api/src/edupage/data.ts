@@ -26,8 +26,6 @@ const EARLIEST_DEFAULT = "2000-01-01";
 const bearerError = (): UnauthorizedException =>
   new UnauthorizedException({ error: "Ungültiges oder fehlendes Token.", code: "TOKEN_INVALID" });
 
-const recipientIdPattern = /^(Teacher|Student|StudentOnly|Parent|Rodic|Ucitel)\d+$/i;
-
 interface StoredEvent {
   eventId: number;
   timestamp: string;
@@ -327,27 +325,33 @@ export class EdupageDataService {
 
   // ---------------------------------------------------------- Senden
 
-  private cleanRecipients(raw: unknown): string[] {
+  /** Roh-Eingabe normalisieren (trimmen, leere/Dubletten raus), ohne Format-Raten. */
+  private normalizeRecipients(raw: unknown): string[] {
     const list = typeof raw === "string" ? raw.split(",") : Array.isArray(raw) ? raw : [];
     const seen = new Set<string>();
-    const valid: string[] = [];
+    const picked: string[] = [];
     for (const entry of list) {
       const id = typeof entry === "string" ? entry.trim() : "";
       if (id && !seen.has(id)) {
         seen.add(id);
-        if (recipientIdPattern.test(id)) valid.push(id);
+        picked.push(id);
       }
     }
-    return valid;
+    return picked;
   }
 
   async send(claims: AuthClaims, body: unknown) {
     const input = (typeof body === "object" && body !== null && !Array.isArray(body) ? body : {}) as Record<string, unknown>;
-    const valid = this.cleanRecipients(input.recipients);
+    const picked = this.normalizeRecipients(input.recipients);
     const text = typeof input.body === "string" ? input.body.trim().slice(0, 5000) : "";
-    if (!valid.length) throw new BadRequestException({ error: "Bitte mindestens einen gültigen Empfänger angeben.", code: "VALIDATION" });
+    if (!picked.length) throw new BadRequestException({ error: "Bitte mindestens einen gültigen Empfänger angeben.", code: "VALIDATION" });
     if (!text) throw new BadRequestException({ error: "Bitte einen Nachrichtentext eingeben.", code: "VALIDATION" });
-    const { client, subdomain } = await this.loginFor(claims.sub, "Benutzername, Passwort oder Subdomain ist falsch.");
+    const { client, subdomain, loginData } = await this.loginFor(claims.sub, "Benutzername, Passwort oder Subdomain ist falsch.");
+    // Nur IDs aus der eigenen Empfängerliste zulassen (Mitgliedschaft statt
+    // Format-Raten: dbi-Schlüssel sind nicht überall rein numerisch).
+    const known = new Set(recipientsFromDbi((loginData as Record<string, unknown> | null)?.dbi ?? {}).map((item) => item.id));
+    const valid = picked.filter((id) => known.has(id));
+    if (!valid.length) throw new BadRequestException({ error: "Bitte mindestens einen gültigen Empfänger angeben.", code: "VALIDATION" });
     let newId: number;
     try {
       newId = await sendTimelineMessage(client.session, subdomain, valid, text);
