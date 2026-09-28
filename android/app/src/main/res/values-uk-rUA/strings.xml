@@ -26,6 +26,11 @@
     <string name="bottom_tasks">Aufgaben</string>
     <string name="bottom_messages">Nachr.</string>
     <string name="bottom_plan">План</string>
+    <string name="bottom_more">Mehr</string>
+    <string name="bottom_grades">Noten</string>
+    <string name="bottom_school">Termine</string>
+    <string name="navbar_move_up">Nach oben</string>
+    <string name="navbar_move_down">Nach unten</string>
     <!-- Auth / Login -->
     <string name="auth_demo_banner">Demo-Modus · nur synthetische Beispieldaten</string>
     <string name="auth_step_format">Schritt %1$d von %2$d</string>
@@ -51,6 +56,11 @@
     <string name="auth_demo_view">Demo ansehen</string>
     <!-- Onboarding -->
     <string name="onboarding_greeting">Гелло!</string>
+    <string name="onboarding_language_title">Sprache wählen</string>
+    <string name="onboarding_language_sub">EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen.</string>
+    <string name="onboarding_language_apply_restart">Übernehmen &amp; neu starten</string>
+    <string name="onboarding_language_system">System</string>
+    <string name="onboarding_language_system_desc">Folgt der Systemsprache</string>
     <string name="onboarding_features_title">Alles an einem Ort.</string>
     <string name="onboarding_feat1_title">Nachrichten &amp; Threads</string>
     <string name="onboarding_feat1_desc">Alle EduPage-Nachrichten im Mail-Layout — mit Likes, Antworten und Dateien.</string>
@@ -99,6 +109,12 @@
     <string name="settings_hwtests_label">Tests und Prüfungen einbeziehen</string>
     <string name="settings_unread_placeholder">Max. ungelesene Nachrichten (1–50)</string>
     <string name="settings_homework_placeholder">Max. offene Hausaufgaben (1–50)</string>
+    <string name="settings_navbar_section">Navigationsleiste</string>
+    <string name="settings_navbar_customize">Leiste anpassen</string>
+    <string name="settings_navbar_desc">Wähle bis zu fünf Bereiche für die Leiste und sortiere sie mit den Pfeilen. „Mehr“ bleibt immer angepinnt.</string>
+    <string name="settings_navbar_shown">Angezeigt (%1$d/%2$d)</string>
+    <string name="settings_navbar_add">Hinzufügen</string>
+    <string name="settings_navbar_max">Maximal fünf Bereiche — erst einen abwählen.</string>
     <string name="settings_weather_show">Wetterkarte anzeigen</string>
     <string name="settings_weather_sub">Auf der Übersicht in Android und im Web</string>
     <string name="settings_weather_city_placeholder">Stadt für Wetterkarte (z. B. Berlin)</string>
@@ -198,6 +214,9 @@
     <string name="overview_messages_count_format">Nachrichten · %1$d</string>
     <string name="overview_action_all_tasks">Alle Aufgaben</string>
     <string name="overview_clock_label">UHRZEIT</string>
+    <!-- Datumszeile unter „Home" (EEEE = Wochentag, dd/MM/yyyy = Datum:
+         Musterbuchstaben nicht übersetzen, nur Reihenfolge anpassen). -->
+    <string name="home_date_format">EEEE, dd.MM.yyyy</string>
     <string name="overview_today_hours">STUNDEN HEUTE</string>
     <string name="overview_no_school">Schulfrei — kein Unterricht heute.</string>
     <string name="overview_now_format">Jetzt: %1$s (%2$s. Std · %3$s)</string>
@@ -223,6 +242,8 @@
     <string name="overview_messages_empty">Keine neuen Nachrichten.</string>
     <string name="overview_homework_empty">Keine offenen Hausaufgaben. Sehr gut.</string>
     <string name="overview_order_weather">Wetter</string>
+    <string name="overview_order_lunch">Mittagessen</string>
+    <string name="overview_drag_handle_desc">Ziehen zum Sortieren</string>
     <string name="overview_due_suffix_format"> · fällig: %1$s</string>
     <string name="overview_subject_suffix_format"> · %1$s</string>
     <string name="overview_weather_high_low_format">H %1$s  · T %2$s</string>
