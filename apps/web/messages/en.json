@@ -12,7 +12,7 @@
     "kindAttendance": "Attendance",
     "kindEvent": "Event",
     "kindExam": "Exam",
-    "lessonHour": "{lesson}. period",
+    "lessonHour": "{lesson}. Period.",
     "loadingCal": "Loading calendar …",
     "nextWeek": "Next →",
     "planChange": "Schedule change",
@@ -57,13 +57,16 @@
     "searchAria": "Search grades",
     "searchPlaceholder": "Subject / Topic / Teacher…",
     "title": "Grades",
-    "weightOnce": "×1",
-    "weightLabel": "Weighting"
+    "weightLabel": "Weighting",
+    "weightOnce": "×1"
   },
   "homework": {
+    "assignedLabel": "assigned:",
+    "deleted": "Deleted",
     "detail": "Manage due dates and mark tasks as completed.",
     "done": "Done",
     "doneBtn": "Done",
+    "dueLabel": "due:",
     "empty": "No homework during this period. Try an earlier date or activate tests/exams.",
     "entriesLabel": "Entries",
     "eyebrow": "HOMEWORK",
@@ -91,10 +94,7 @@
     "trashBtn": "Trash",
     "trashEmpty": "The trash is empty.",
     "trashLabel": "Trash",
-    "trashWithCount": "Trash ({count})",
-    "deleted": "Deleted",
-    "dueLabel": "due:",
-    "assignedLabel": "assigned:"
+    "trashWithCount": "Trash ({count})"
   },
   "login": {
     "backToLogin": "Back to Login",
@@ -104,10 +104,10 @@
     "connectionFailed": "Connection to the server failed.",
     "passwordLabel": "Password",
     "remember": "Stay signed in (30 days)",
-    "submit2fa": "Confirm",
-    "submitLogin": "Sign in",
     "subdomainLabel": "School subdomain",
     "subdomainPlaceholder": "e.g. my-school",
+    "submit2fa": "Confirm",
+    "submitLogin": "Sign in",
     "title": "Sign in to EduFlow",
     "twoFaSub": "EduFlow requires 2FA. Enter the code from your sign-in.",
     "twoFaTitle": "Two-factor code",
@@ -117,6 +117,7 @@
     "allMessages": "All messages",
     "allTypes": "All types",
     "attachFailed": "Attachment could not be loaded.",
+    "back": "Back",
     "conversation": "Conversation",
     "detail": "Read messages, respond and write new messages.",
     "detailTitle": "Message",
@@ -135,6 +136,7 @@
     "new": "+ New",
     "newMessage": "New message",
     "newMessageBtn": "+ New message",
+    "next": "Next",
     "noRecipients": "No matching recipients.",
     "noSelection": "No message selected",
     "page": "Page {n}",
@@ -162,9 +164,7 @@
     "typeMessages": "Messages",
     "typeNews": "News",
     "typeNotices": "Announcements",
-    "typePolls": "Polls",
-    "back": "Back",
-    "next": "Next"
+    "typePolls": "Polls"
   },
   "meta": {
     "description": "Local School Dashboard"
@@ -219,11 +219,21 @@
   },
   "settings": {
     "accentApplied": "Accent color applied.",
+    "accentBlack": "Black",
+    "accentBlue": "Blue",
+    "accentGreen": "Green",
+    "accentOrange": "Orange",
+    "accentPink": "Pink",
+    "accentRed": "Red",
+    "accentTeal": "Teal",
     "accentTitle": "Accent color",
+    "accentViolet": "Purple",
     "accessLabel": "Access",
+    "accessTokenLabel": "Access token",
     "apiNote": "Create credentials for another EduFlow client. Tokens are valid for 30 days and are shown only once right after creation.",
     "apiTitle": "API token",
     "cacheCleared": "{count} Cache entries cleared.",
+    "cityPlaceholder": "Enter city",
     "citySearchFailed": "City search currently not available.",
     "clearCache": "Clear cache now",
     "colorScheme": "Color scheme",
@@ -254,10 +264,11 @@
     "orderMessages": "Messages",
     "orderWeather": "Weather",
     "refreshLabel": "Refresh",
+    "refreshTokenLabel": "Refresh token",
     "revokeDevice": "Sign out",
     "revoked": "Device signed out.",
-    "saved": "Settings saved.",
     "save": "Save",
+    "saved": "Settings saved.",
     "saving": "Saving …",
     "schemeApplied": "Color scheme applied.",
     "schemeDark": "Dark",
@@ -275,23 +286,12 @@
     "title": "Settings",
     "tokenCreated": "Token created. Copy the value now; it is shown only once.",
     "unnamedDevice": "Unnamed device",
-    "validUntil": "Valid until {date}",
-    "accentBlack": "Black",
-    "accentBlue": "Blue",
-    "accentViolet": "Purple",
-    "accentTeal": "Teal",
-    "accentGreen": "Green",
-    "accentOrange": "Orange",
-    "accentRed": "Red",
-    "accentPink": "Pink",
-    "cityPlaceholder": "Enter city",
-    "accessTokenLabel": "Access token",
-    "refreshTokenLabel": "Refresh token"
+    "validUntil": "Valid until {date}"
   },
   "theme": {
+    "language": "Language",
     "toDark": "Switch to dark mode",
-    "toLight": "Switch to light mode",
-    "language": "Language"
+    "toLight": "Switch to light mode"
   },
   "timetable": {
     "actionAdd": "New",
@@ -319,9 +319,9 @@
     "thisWeek": "This week",
     "titleFallback": "Timetable",
     "todayBtn": "Today",
+    "todayTag": "today",
     "viewAria": "View",
     "weekDetail": "{count} lessons this week.",
-    "weekTab": "Week",
-    "todayTag": "today"
+    "weekTab": "Week"
   }
 }
