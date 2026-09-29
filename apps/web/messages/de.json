@@ -33,7 +33,14 @@
     "noText": "(kein Text)",
     "requestFailed": "Die Anfrage ist fehlgeschlagen.",
     "school": "Schule",
-    "upstreamUnreachable": "Der Server ist nicht erreichbar."
+    "upstreamUnreachable": "Der Server ist nicht erreichbar.",
+    "pickDate": "Datum wählen",
+    "today": "Heute",
+    "clear": "Leeren",
+    "prevMonth": "Vorheriger Monat",
+    "nextMonth": "Nächster Monat",
+    "search": "Suchen",
+    "clearSearch": "Suche leeren"
   },
   "grades": {
     "avgTitle": "Gewichteter Betreff Durchschnitt",

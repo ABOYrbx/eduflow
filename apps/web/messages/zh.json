@@ -33,7 +33,14 @@
     "noText": "(无文本)",
     "requestFailed": "请求失败。",
     "school": "学校",
-    "upstreamUnreachable": "服务器不可用。"
+    "upstreamUnreachable": "服务器不可用。",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "平均加权主题",

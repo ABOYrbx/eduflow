@@ -33,7 +33,14 @@
     "noText": "(ingen tekst)",
     "requestFailed": "Forespørselen mislyktes.",
     "school": "Skole",
-    "upstreamUnreachable": "Serveren er ikke tilgjengelig."
+    "upstreamUnreachable": "Serveren er ikke tilgjengelig.",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "Vektet pasientgjennomsnitt",

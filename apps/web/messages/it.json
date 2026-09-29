@@ -33,7 +33,14 @@
     "noText": "(nessun testo)",
     "requestFailed": "Richiesta non riuscita.",
     "school": "Scuola",
-    "upstreamUnreachable": "Il server non è raggiungibile"
+    "upstreamUnreachable": "Il server non è raggiungibile",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "Media dell'oggetto ponderata",

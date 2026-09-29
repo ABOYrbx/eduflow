@@ -33,7 +33,14 @@
     "noText": "(ingen tekst)",
     "requestFailed": "Anmodningen mislykkedes.",
     "school": "Skole",
-    "upstreamUnreachable": "Serveren er utilgængelig."
+    "upstreamUnreachable": "Serveren er utilgængelig.",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "Vejet emne gennemsnit",

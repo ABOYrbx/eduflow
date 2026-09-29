@@ -33,7 +33,14 @@
     "noText": "(немає тексту)",
     "requestFailed": "Не вдалося виконати запит.",
     "school": "Школа",
-    "upstreamUnreachable": "Сервер недоступний."
+    "upstreamUnreachable": "Сервер недоступний.",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "Середня за вагою",

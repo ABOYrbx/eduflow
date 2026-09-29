@@ -33,7 +33,14 @@
     "noText": "(χωρίς κείμενο)",
     "requestFailed": "Το αίτημα απέτυχε.",
     "school": "Σχολείο",
-    "upstreamUnreachable": "Ο διακομιστής δεν είναι προσβάσιμος."
+    "upstreamUnreachable": "Ο διακομιστής δεν είναι προσβάσιμος.",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "Σταθμισμένος μέσος όρος θέματος",

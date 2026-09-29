@@ -597,6 +597,49 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 .picker-check{flex:0 0 auto;font-size:13px;font-weight:800;color:var(--accent)}
 .filter-select{width:180px}
 
+/* ---------- Eigener Kalender (statt input[type=date]) ---------- */
+.cal{position:absolute;z-index:130;left:0;top:calc(100% + 6px);width:min(292px,calc(100vw - 48px));background:#fff;border:1px solid var(--border);border-radius:16px;box-shadow:0 16px 44px rgba(0,0,0,.16);padding:12px}
+[data-theme="dark"] .cal{background:#101010;box-shadow:0 16px 44px rgba(0,0,0,.62)}
+.cal-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.cal-title{font-size:14px;font-weight:800;letter-spacing:-.2px}
+.cal-nav{width:28px;height:28px;display:grid;place-items:center;border:1px solid var(--border);border-radius:9px;background:var(--surface-1);color:var(--ink);cursor:pointer;transition:background .14s,border-color .14s}
+.cal-nav:hover{background:var(--surface-2);border-color:var(--border-strong)}
+.cal-nav:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.cal-week,.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cal-week{margin-bottom:4px}
+.cal-week span{text-align:center;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-muted);padding:2px 0}
+.cal-day{height:32px;display:grid;place-items:center;border:0;border-radius:9px;background:transparent;color:var(--ink);font:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:background .12s,color .12s}
+.cal-day:hover:not(:disabled){background:var(--surface-1)}
+.cal-day.is-out{color:var(--ink-dim);font-weight:500}
+.cal-day[data-today]{box-shadow:inset 0 0 0 1.5px var(--border-strong)}
+.cal-day.is-picked{background:var(--accent);color:var(--accent-ink);font-weight:800}
+.cal-day:disabled{opacity:.3;cursor:not-allowed}
+.cal-day:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.cal-foot{display:flex;gap:6px;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.cal-foot .btn-sm{padding:7px 12px;font-size:12px}
+
+/* ---------- Eigene Stepper (statt Browser-Pfeile im Zahlenfeld) ---------- */
+input[type="number"]{-moz-appearance:textfield;appearance:textfield}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.num-field{position:relative;min-width:0}
+.num-field .input-pill{width:100%;padding-right:38px}
+.num-step{position:absolute;right:6px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:1px}
+.num-btn{width:24px;height:15px;display:grid;place-items:center;border:0;border-radius:5px;background:transparent;color:var(--ink-muted);cursor:pointer;transition:background .12s,color .12s}
+.num-btn:hover:not(:disabled){background:var(--surface-2);color:var(--ink)}
+.num-btn:disabled{opacity:.25;cursor:not-allowed}
+
+/* ---------- Suchfeld ohne Browser-Knopf ---------- */
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration{-webkit-appearance:none;appearance:none}
+.search-wrap{position:relative;display:flex;align-items:center;min-width:0}
+.search-wrap>.ico{position:absolute;left:16px;z-index:1;pointer-events:none;color:var(--ink-muted)}
+.search-wrap input[type="search"]{width:100%;padding-left:40px;padding-right:36px}
+.search-wrap input[type="search"]::-webkit-search-cancel-button{display:none}
+.search-clear{position:absolute;right:12px;width:22px;height:22px;display:grid;place-items:center;border:0;border-radius:50%;background:var(--surface-2);color:var(--ink-muted);cursor:pointer;transition:background .14s,color .14s}
+.search-clear:hover{background:var(--border);color:var(--ink)}
+.search-clear:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
 /* Sprachwahl in den Einstellungen: volle Breite wie ein Feld. */
 .lang-block{position:relative}
 .lang-block .lang-btn{width:100%;justify-content:space-between;padding:12px 40px 12px 18px;font-size:14px;font-weight:600;box-shadow:none}

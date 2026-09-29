@@ -33,7 +33,14 @@
     "noText": "(bez textu)",
     "requestFailed": "Požadavek se nezdařil.",
     "school": "Ústav",
-    "upstreamUnreachable": "Server je nedostupný."
+    "upstreamUnreachable": "Server je nedostupný.",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "Průměr váženého subjektu",
