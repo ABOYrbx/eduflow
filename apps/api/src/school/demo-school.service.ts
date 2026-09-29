@@ -78,12 +78,16 @@ export class DemoSchoolService {
     return this.page(items, query);
   }
 
-  async thread(claims: AuthClaims, id: number) {
-    this.assertEnabled();
+  private threadPayload(id: number) {
     const root = this.sentMessages.find((item) => item.id === id);
     if (!root) throw new NotFoundException({ error: "Nachricht nicht gefunden.", code: "NOT_FOUND" });
     const reply = this.sentMessages.find((item) => item.additional_data.textReply === String(id));
     return { likes: [{ name: "Lea Beispiel", date: "25.09.2026 14:12" }], replies: reply ? [{ name: reply.author, date: reply.timestamp, text: reply.text }] : [], reply_ids: reply ? [String(reply.id)] : [], summary: { total: 1 + Number(Boolean(reply)), likes: 1, replies: Number(Boolean(reply)), seen: 1 }, cached: true };
+  }
+
+  async thread(claims: AuthClaims, id: number) {
+    this.assertEnabled();
+    return this.threadPayload(id);
   }
 
   async markMessagesRead(claims: AuthClaims) {
@@ -117,7 +121,11 @@ export class DemoSchoolService {
     if (!text) throw new BadRequestException({ error: "Bitte einen Antworttext angeben.", code: "VALIDATION" });
     const now = new Date(); const stamp = now.toISOString().slice(0, 19).replace("T", " ");
     const reply = { id: 4999 + this.sentMessages.length, timestamp: stamp, timestamp_iso: now.toISOString(), sort_key: now.toISOString(), text, author: "Demo-Schüler", recipient: root.author, type: root.type, type_label: root.type_label, additional_data: { textReply: String(id) }, is_starred: false, is_done: false, done_at: "", reaction_count: 0, created_at: now.toISOString(), is_removed: false };
-    this.sentMessages.push(reply); return reply;
+    this.sentMessages.push(reply);
+    // Wie der Echt-Provider (edupage/data.ts): Thread frisch zurückgeben,
+    // nicht das Nachrichten-Objekt (Web ignoriert den Body, Mac/Android
+    // dekodieren ThreadResponse tolerant).
+    return { ...this.threadPayload(id), cached: false };
   }
 
   async issueDownload(claims: AuthClaims, id: number, idx: number) {
