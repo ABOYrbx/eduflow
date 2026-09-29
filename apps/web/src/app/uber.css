@@ -95,6 +95,17 @@ select.input-pill{appearance:none;-webkit-appearance:none;padding-right:38px;cur
 .select-wrap::after{content:"";position:absolute;right:16px;top:50%;width:8px;height:8px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:translateY(-70%) rotate(45deg);pointer-events:none}
 .select-wrap select{width:100%}
 .check{display:flex;gap:8px;align-items:center;font-size:14px;font-weight:500;padding-bottom:13px}
+/* Eigene Kästchen statt der Browser-Darstellung; das echte input bleibt
+   für Tastatur, Formular und Screenreader erhalten. */
+.check input[type="checkbox"]{appearance:none;-webkit-appearance:none;flex:0 0 20px;width:20px;height:20px;margin:0;display:grid;place-content:center;border:1.5px solid var(--border-strong);border-radius:6px;background:#fff;cursor:pointer;transition:background .15s,border-color .15s,transform .12s}
+.check input[type="checkbox"]::after{content:"";width:11px;height:11px;transform:scale(0);transform-origin:center;clip-path:polygon(14% 44%,0 65%,50% 100%,100% 16%,80% 0%,43% 62%);background:var(--accent-ink);transition:transform .12s ease}
+.check input[type="checkbox"]:checked{background:var(--accent);border-color:var(--accent)}
+.check input[type="checkbox"]:checked::after{transform:scale(1)}
+.check input[type="checkbox"]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.check input[type="checkbox"]:active{transform:scale(.94)}
+/* Dark-Override bewusst nur für den unmarkierten Zustand, sonst hat es
+   dieselbe Spezifität wie :checked und gewinnt per Reihenfolge. */
+[data-theme="dark"] .check input[type="checkbox"]:not(:checked){background:#101010}
 .check input{width:18px;height:18px;accent-color:var(--accent)}
 
 /* ---------- Meta + Tags (Pills) ---------- */
