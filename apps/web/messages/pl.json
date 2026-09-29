@@ -94,7 +94,8 @@
     "trashBtn": "Kosz",
     "trashEmpty": "Kosz jest pusty.",
     "trashLabel": "Kosz",
-    "trashWithCount": "Kosz ({count})"
+    "trashWithCount": "Kosz ({count})",
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "Powrót do logowania",
