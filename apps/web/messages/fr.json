@@ -95,7 +95,7 @@
     "trashEmpty": "La corbeille est vide.",
     "trashLabel": "Corbeille",
     "trashWithCount": "Corbeille ({count})",
-    "dueToday": "due today"
+    "dueToday": "à faire aujourd'hui"
   },
   "login": {
     "backToLogin": "Retour à la connexion",
