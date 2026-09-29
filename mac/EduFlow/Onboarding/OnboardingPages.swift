@@ -212,13 +212,12 @@ public struct OnboardingLanguagePage: View {
         self.onNext = onNext
     }
 
-    /// Zeilen-Codes, aktuelle Sprache zuerst, Rest nach Eigenname sortiert.
+    /// Zeilen-Codes stabil nach Eigenname sortiert (kein Umsortieren bei
+    /// Auswahl, sonst springt die getappte Zeile weg und wirkt falsch).
     private var orderedCodes: [String] {
         let codes = rows.map(\.code)
-        let current = AppLanguage.current
         return codes.sorted {
-            if ($0 == current) != ($1 == current) { return $0 == current }
-            return AppLanguage.nativeName($0).localizedCaseInsensitiveCompare(AppLanguage.nativeName($1)) == .orderedAscending
+            AppLanguage.nativeName($0).localizedCaseInsensitiveCompare(AppLanguage.nativeName($1)) == .orderedAscending
         }
     }
 
@@ -284,12 +283,13 @@ public struct OnboardingLanguagePage: View {
         percent: Int?,
         selected: Bool
     ) -> some View {
-        UberCard {
-            Button(action: {
-                // Sofort anwenden: persistieren + laufender Prozess (kein Neustart).
-                AppLanguage.set(code)
-                self.selected = code
-            }) {
+        // Ganze Box klickbar: der Button umschließt die Karte, nicht umgekehrt.
+        Button(action: {
+            // Sofort anwenden: persistieren + laufender Prozess (kein Neustart).
+            AppLanguage.set(code)
+            self.selected = code
+        }) {
+            UberCard {
                 HStack(spacing: 14) {
                     ZStack {
                         Circle()
@@ -335,8 +335,9 @@ public struct OnboardingLanguagePage: View {
                     }
                 }
             }
-            .buttonStyle(.plain)
         }
+        .buttonStyle(.plain)
+        .accessibilityLabel(name)
         .riseIn(delay: 0.2)
     }
 }
