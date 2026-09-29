@@ -69771,6 +69771,3521 @@
           }
         }
       }
+    },
+    "settings_navbar_title": {
+      "comment": "Einstellungen: Navigationsleiste Titel",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Navigationsleiste"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Navigation bar"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Navigationsleiste"
+          }
+        }
+      }
+    },
+    "settings_navbar_desc": {
+      "comment": "Einstellungen: Navigationsleiste Beschreibung",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose which sections appear on top and in which order. Events stay reachable via the profile menu even without a tab."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar."
+          }
+        }
+      }
+    },
+    "settings_navbar_available": {
+      "comment": "Einstellungen: verfügbare Bereiche",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verfügbar"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Available"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Verfügbar"
+          }
+        }
+      }
+    },
+    "settings_ov_order_title": {
+      "comment": "Einstellungen: Reihenfolge Titel",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Section order"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Reihenfolge der Bereiche"
+          }
+        }
+      }
+    },
+    "settings_ov_order_hint": {
+      "comment": "Einstellungen: Reihenfolge Hinweis",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Applied when you save."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wird mit „Speichern“ übernommen."
+          }
+        }
+      }
+    },
+    "grades_weight_once": {
+      "comment": "Noten: Gewichtung einfach",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weighting ×1"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung ×1"
+          }
+        }
+      }
+    },
+    "grades_weight_format": {
+      "comment": "Noten: Gewichtung mit Wert",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gewichtung %@"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weighting %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung %@"
+          }
+        }
+      }
+    },
+    "onboarding_language_subtitle": {
+      "comment": "Onboarding: Sprachauswahl Untertitel",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EduFlow speaks your language. The choice applies immediately."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen."
+          }
+        }
+      }
+    },
+    "Nach oben": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach oben"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move up"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach oben"
+          }
+        }
+      }
+    },
+    "Nach unten": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach unten"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move down"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nach unten"
+          }
+        }
+      }
+    },
+    "Hinzufügen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hinzufügen"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Hinzufügen"
+          }
+        }
+      }
+    },
+    "Bereich nach oben verschieben": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move section up"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach oben verschieben"
+          }
+        }
+      }
+    },
+    "Bereich nach unten verschieben": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move section down"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich nach unten verschieben"
+          }
+        }
+      }
+    },
+    "Bereich aus der Leiste entfernen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove section from the bar"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich aus der Leiste entfernen"
+          }
+        }
+      }
+    },
+    "Bereich zur Leiste hinzufügen": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add section to the bar"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Bereich zur Leiste hinzufügen"
+          }
+        }
+      }
+    },
+    "Thema": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thema"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Topic"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Thema"
+          }
+        }
+      }
+    },
+    "Gewichtung": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gewichtung"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weighting"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gewichtung"
+          }
+        }
+      }
+    },
+    "Klasse Ø": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Klasse Ø"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Class Ø"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Klasse Ø"
+          }
+        }
+      }
+    },
+    "Veranstaltung": {
+      "comment": "UI-Literal",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Veranstaltung"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Event"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Veranstaltung"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

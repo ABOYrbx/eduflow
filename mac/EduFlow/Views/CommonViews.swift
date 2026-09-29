@@ -168,7 +168,7 @@ public struct IconButton: View {
         .disabled(disabled)
         .opacity(disabled ? 0.35 : 1)
         .accessibilityLabel(LocalizedStringKey(label))
-        .help(help ?? label)
+        .help(LocalizedStringKey(help ?? label))
         .onHover { hovering = $0 && !disabled }
     }
 }

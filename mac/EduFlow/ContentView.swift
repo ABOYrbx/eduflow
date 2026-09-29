@@ -255,7 +255,7 @@ private struct TopPillNav: View {
                     profileMenuOpen = false
                     onNavigate(.devices)
                 }
-                profileAction("Termine & Vertretungen", icon: "calendar") {
+                profileAction(NSLocalizedString("school_nav", value: "Termine & Vertretungen", comment: "Schule: Titel"), icon: "calendar") {
                     profileMenuOpen = false
                     onNavigate(.school)
                 }

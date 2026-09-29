@@ -85,10 +85,10 @@ public struct SettingsView: View {
     private var navigationSection: some View {
         UberCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Navigationsleiste")
+                Text(NSLocalizedString("settings_navbar_title", value: "Navigationsleiste", comment: "Einstellungen: Navigationsleiste Titel"))
                     .font(UberFont.text(19, weight: .heavy))
                     .tracking(-0.4)
-                Text("Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar.")
+                Text(NSLocalizedString("settings_navbar_desc", value: "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar.", comment: "Einstellungen: Navigationsleiste Beschreibung"))
                     .font(UberFont.text(13))
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 ForEach(Array(topBarOrder.enumerated()), id: \.element.id) { index, section in
@@ -113,7 +113,7 @@ public struct SettingsView: View {
                 }
                 let hidden = TopBarSection.allCases.filter { !topBarOrder.contains($0) }
                 if !hidden.isEmpty {
-                    Text("Verfügbar")
+                    Text(NSLocalizedString("settings_navbar_available", value: "Verfügbar", comment: "Einstellungen: verfügbare Bereiche"))
                         .font(UberFont.text(13, weight: .bold))
                         .tracking(0.8)
                         .textCase(.uppercase)
@@ -178,7 +178,7 @@ public struct SettingsView: View {
                 TextField(NSLocalizedString("settings_wetter_city_placeholder", value: "Wetter: Stadt (optional)", comment: "Einstellungen: Wetterstadt Platzhalter"), text: $vm.values.wetterCity)
                     .uberInput()
                     .autocorrectionDisabled()
-                Text("Reihenfolge der Bereiche")
+                Text(NSLocalizedString("settings_ov_order_title", value: "Reihenfolge der Bereiche", comment: "Einstellungen: Reihenfolge Titel"))
                     .font(UberFont.text(13, weight: .bold))
                     .tracking(0.8)
                     .textCase(.uppercase)
@@ -187,7 +187,7 @@ public struct SettingsView: View {
                 let order = parsedOverviewOrder()
                 ForEach(Array(order.enumerated()), id: \.offset) { index, key in
                     HStack(spacing: 4) {
-                        Text(Self.overviewOrderLabels[key] ?? key)
+                        Text(LocalizedStringKey(Self.overviewOrderLabels[key] ?? key))
                             .font(UberFont.text(14, weight: .semibold))
                         Spacer()
                         IconButton(icon: "chevron.up", label: "Nach oben", help: "Bereich nach oben verschieben", disabled: index == 0) {
@@ -199,7 +199,7 @@ public struct SettingsView: View {
                     }
                     .padding(.vertical, 4)
                 }
-                Text("Wird mit „Speichern“ übernommen.")
+                Text(NSLocalizedString("settings_ov_order_hint", value: "Wird mit „Speichern“ übernommen.", comment: "Einstellungen: Reihenfolge Hinweis"))
                     .font(UberFont.text(12))
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
             }
