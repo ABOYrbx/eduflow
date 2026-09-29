@@ -5,12 +5,11 @@ Projektgrenzen). iOS ist ausgenommen (zurückgestellt).
 
 ## Stand: Quellen befüllt, Crowdin kann übersetzen
 
-Deutsch ist überall Source-Sprache **und** Fallback. Alle nutzersichtbaren
-UI-Strings liegen in Quelldateien und erscheinen nach dem nächsten Sync in
-Crowdin. Für macOS liegen englische Übersetzungen bereits im Katalog
-(Branch `l10n/xcstrings-all-languages`); für Web/Backend/Android liefert
-Crowdin später nur Ergänzungen, kein Verhalten ändert sich. Die API-Fehler-`code`s werden nie
-übersetzt — nur die `error`-Texte.
+Englisch ist überall Source-Sprache **und** Fallback; Deutsch ist normale
+Zielsprache (Crowdin). Alle nutzersichtbaren UI-Strings liegen in
+Quelldateien und erscheinen nach dem nächsten Sync in Crowdin. Der
+macOS-Katalog hat Source-Sprache `en` (de/en je 100 %). Die
+API-Fehler-`code`s werden nie übersetzt — nur die `error`-Texte.
 
 Android- und macOS-UI sind vollständig auf die Quelldateien umgestellt
 (keine Hardcodings mehr): Android nutzt `stringResource` aus
@@ -23,10 +22,10 @@ Datumsformate, Demo-Daten) — diese bleiben bewusst deutsch.
 
 | Plattform | Quelle im Repo (deutsch) | Übersetzung via Crowdin |
 |---|---|---|
-| Web (Next.js) | `apps/web/messages/de.json` (`t()` aus `src/lib/i18n.ts`) | `apps/web/messages/<locale>.json` |
-| Backend (NestJS) | `apps/api/src/messages/de.json` (`t()` aus `src/i18n.ts`) | `apps/api/src/messages/<locale>.json` |
-| Android | `android/app/src/main/res/values/strings.xml` (`stringResource`) | `res/values-<android_code>/strings.xml` |
-| macOS | `mac/EduFlow/Resources/Localizable.xcstrings` (Source `de`, im Bundle registriert) | gleiche Datei (String Catalog) |
+| Web (Next.js) | `apps/web/messages/en.json` (`t()` aus `src/lib/i18n.ts`) | `apps/web/messages/<locale>.json` (inkl. `de.json`) |
+| Backend (NestJS) | `apps/api/src/messages/en.json` (`t()` aus `src/i18n.ts`) | `apps/api/src/messages/<locale>.json` (inkl. `de.json`) |
+| Android | `android/app/src/main/res/values/strings.xml` (Inhalt englisch, `stringResource`) | `res/values-<android_code>/strings.xml` (inkl. `values-de/`) |
+| macOS | `mac/EduFlow/Resources/Localizable.xcstrings` (Source `en`, im Bundle registriert) | gleiche Datei (String Catalog) |
 
 Kennzahlen (Blätter/Entries gezählt, Duplikate vereint): Web 249 Keys
 (13 Gruppen), Backend 111 Keys (Fehlertexte, Settings-Schema, API-Docs),
@@ -48,7 +47,9 @@ siehe unten.
 
 ## Was du manuell in Crowdin / GitHub tun musst
 
-1. Crowdin-Projekt anlegen (privat, Source-Sprache Deutsch). ✅ (erledigt)
+1. Crowdin-Projekt (privat): Source-Sprache in den Projekt-Settings auf
+   Englisch umstellen (war Deutsch). ⏳ (offen — solange das nicht
+   umgestellt ist, zeigt Crowdin deutsche Ausgangstexte)
 2. Crowdin-GitHub-App für `ABOYrbx/eduflow` installieren (nur `main`,
    Service-Branch `l10n_main`, Sync-Schedule täglich). ✅ (erledigt)
 3. In GitHub unter Settings → Secrets: `CROWDIN_PROJECT_ID` und
@@ -76,20 +77,22 @@ siehe unten.
 ## Regeln für neue Strings (PR-Checkliste)
 
 1. Neue UI-Strings gehören immer in die Quelldatei der Plattform
-   (keine Hardcodings): Web → `messages/de.json`, Backend → `src/messages/de.json`,
+   (keine Hardcodings): Web → `messages/en.json`, Backend → `src/messages/en.json`,
    Android → `values/strings.xml`, macOS → `xcstrings` (+ `NSLocalizedString`
-   bei dynamischen Stellen).
+   bei dynamischen Stellen). Die deutschen Kataloge (`de.json`, `values-de/`)
+   werden von Crowdin verwaltet — dort nicht von Hand editieren (wird beim
+   Sync überschrieben).
 2. `code`-Vokabular und Status-/Typ-Werte stabil halten (siehe oben).
 3. Web: Neue Crowdin-Sprache = Import + Eintrag in `apps/web/src/lib/locales.ts`
-   ergänzen (sonst fällt `t()` auf Deutsch zurück); Katalog-Änderungen brauchen
+   ergänzen (sonst fällt `t()` auf Englisch zurück); Katalog-Änderungen brauchen
    einen Web-Rebuild (JSONs sind gebündelt). Neue UI-Strings brauchen nur
-   `de.json` — andere Kataloge fallen pro Key auf Deutsch zurück.
+   `en.json` — andere Kataloge fallen pro Key auf Englisch zurück.
 4. macOS: Die Sprachauswahl im Onboarding (`OnboardingLanguagePage`,
    Override via `AppleLanguages` + Neustart, Logik in `AppLanguage`) zeigt
    den Stand aus `localeCoverage` in `OnboardingState.swift`. Bei neuen
    Sprachen/Keys dort neu berechnen:
    Nenner = Keys mit de-Wert ungleich en-Wert, Zähler = davon Keys mit
-   eigenem Wert in der Sprache (Deutsch als Quelle zählt als vollständig).
+   eigenem Wert in der Sprache (die Quellsprache zählt als vollständig).
    Neue UI-Strings auf der Seite als deutsche Literale wie auf den
    Nachbarseiten; Katalog-Einträge (de+en) ergänzen.
 5. Abnahmen: `npm test` + `npm run typecheck` (Root), Gradle
