@@ -196,15 +196,18 @@ private struct GradeChip: View {
         .help(chipHint)
     }
 
-    /// Tooltip wie im Web: Thema · Datum · Gewichtung.
+    /// Tooltip wie im Web: Thema · Datum · Gewichtung (lokalisiert).
     private var chipHint: String {
         let topic = (grade.title ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         let date = (grade.dateDisplay ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         let weight = (grade.weightDisplay ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        let fallbackTopic = NSLocalizedString("Note", value: "Note", comment: "UI-Literal")
+        let weightOnce = NSLocalizedString("grades_weight_once", value: "Gewichtung ×1", comment: "Noten: Gewichtung einfach")
+        let weightFormat = NSLocalizedString("grades_weight_format", value: "Gewichtung %@", comment: "Noten: Gewichtung mit Wert")
         let parts = [
-            topic.isEmpty ? "Note" : topic,
+            topic.isEmpty ? fallbackTopic : topic,
             date.isEmpty ? nil : date,
-            weight.isEmpty ? "Gewichtung ×1" : "Gewichtung \(weight)",
+            weight.isEmpty ? weightOnce : String(format: weightFormat, weight),
         ].compactMap { $0 }
         return parts.joined(separator: " · ")
     }

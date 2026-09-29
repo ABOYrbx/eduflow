@@ -233,7 +233,7 @@ public struct OnboardingLanguagePage: View {
                 .tracking(-1.2)
                 .padding(.top, 12)
                 .riseIn(delay: 0.08)
-            Text("EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen.")
+            Text(NSLocalizedString("onboarding_language_subtitle", value: "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen.", comment: "Onboarding: Sprachauswahl Untertitel"))
                 .font(UberFont.text(14))
                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 .multilineTextAlignment(.center)

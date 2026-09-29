@@ -480,7 +480,7 @@ public struct OverviewView: View {
                                 .tracking(-0.3)
                             HStack(spacing: 8) {
                                 Tag(item.status, style: statusTag(item.status))
-                                (Text("fällig: ")
+                                (Text(NSLocalizedString("homework_due_prefix", value: "fällig: ", comment: "Hausaufgaben: fällig-Präfix"))
                                     + Text(item.dueDisplay).bold())
                                     .font(UberFont.text(13))
                                 if !item.subject.isEmpty {
@@ -492,7 +492,7 @@ public struct OverviewView: View {
                                     .font(UberFont.text(13))
                                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                             }
-                            (item.description.isEmpty ? Text("(keine Beschreibung)") : Text(verbatim: item.description))
+                            (item.description.isEmpty ? Text(NSLocalizedString("homework_no_description", value: "(keine Beschreibung)", comment: "Hausaufgaben: keine Beschreibung")) : Text(verbatim: item.description))
                                 .font(UberFont.text(15))
                                 .lineSpacing(4)
                         }
