@@ -617,6 +617,10 @@ input[type="search"]::-webkit-search-decoration{-webkit-appearance:none;appearan
 .picker-option .ico{opacity:.9}
 
 /* ---------- Editor für die Übersichts-Abschnitte ---------- */
+.sec-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:6px 6px 6px 10px;border-radius:11px;background:var(--surface-2);border:1px solid var(--border)}
+.sec-bar.is-dragging{border-color:var(--ink);box-shadow:0 8px 22px rgba(0,0,0,.14)}
+.sec-bar.is-off{opacity:.6}
+.sec-bar-name{flex:1;min-width:0;font-size:13px;font-weight:800;letter-spacing:-.1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ov-toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:4px 0 14px}
 .ov-toolbar .btn-sm{padding:9px 16px}
 .ov-toolbar-status{font-size:13px;color:var(--ink-muted);line-height:1.5;min-width:0}
@@ -638,7 +642,11 @@ input[type="search"]::-webkit-search-decoration{-webkit-appearance:none;appearan
 .sec-btn:disabled{opacity:.28;cursor:not-allowed}
 .sec-btn[aria-pressed="true"]{background:var(--surface-2);color:var(--ink);border-color:var(--border-strong)}
 .sec-warn{margin:10px 0 0;font-size:13px;color:var(--ink-muted)}
-.ov-grid.is-editing .ov-col{transition:opacity .2s}
+.ov-grid.is-editing{gap:14px}
+.ov-grid.is-editing .ov-slot{padding:10px;border:1px dashed var(--border-strong);border-radius:16px;background:var(--surface-1)}
+.ov-grid.is-editing .ov-slot.is-ghost{opacity:.45}
+.ov-grid.is-editing .ov-col{transition:opacity .2s,transform .16s}
+.ov-grid.is-editing .ov-slot.is-lifted .ov-col{transform:scale(.99);opacity:.7}
 
 /* Einmal angezeigter API-Token: monospace, umbrechbar, mit Kopieren-Button. */
 .token-box{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border:1px dashed var(--border-strong);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:var(--surface-1)}
@@ -707,7 +715,10 @@ body.wx-open{overflow:hidden}
 .now-card .s{font-size:13px;font-weight:500;opacity:.75}
 [data-theme="dark"] .now-card{background:#101010;color:#fff;border:1px solid var(--border)}
 [data-theme="dark"] .now-card:hover{background:#1F1F1F}
-.ov-grid{display:flex;flex-direction:column;gap:24px;align-items:stretch;margin-top:24px}
+/* 12 Spalten: ein Abschnitt nimmt entweder die volle Breite oder die Haelfte. */
+.ov-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:24px;align-items:start;margin-top:24px}
+.ov-slot{grid-column:span var(--span,12);min-width:0;display:flex;flex-direction:column;gap:10px}
+.ov-slot:empty{display:none}
 .ov-col{min-width:0}
 .ov-col .weather-card{flex:initial;min-height:118px}
 .overview-message{margin-bottom:10px}
@@ -737,6 +748,10 @@ body.wx-open{overflow:hidden}
 [data-theme="dark"] .clock-card{background:#101010}
 @media(max-width:900px){
   .ov-grid{grid-template-columns:1fr}
+  /* Unterhalb von 900px ist keine halbe Breite mehr sinnvoll: sonst legt
+     der Raster implizite Spalten an und die Karten werden schmaler als
+     die volle Breite, aber nicht wirklich halb. */
+  .ov-slot{grid-column:1 / -1}
 }
 @media(max-width:720px){
   .ov-top{flex-wrap:wrap}

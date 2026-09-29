@@ -236,7 +236,9 @@
     "editorHidden": "Hidden",
     "editorDrag": "Drag to move",
     "editorReset": "Reset",
-    "editorEmpty": "All sections are hidden. Turn at least one back on."
+    "editorEmpty": "All sections are hidden. Turn at least one back on.",
+    "editorWide": "Full width",
+    "editorNarrow": "Half width"
   },
   "settings": {
     "accentApplied": "已应用首选颜色。",

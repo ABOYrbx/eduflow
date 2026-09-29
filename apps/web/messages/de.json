@@ -236,7 +236,9 @@
     "editorHidden": "Ausgeblendet",
     "editorDrag": "Zum Verschieben ziehen",
     "editorReset": "Zurücksetzen",
-    "editorEmpty": "Alle Abschnitte sind ausgeblendet. Schalte mindestens einen wieder ein."
+    "editorEmpty": "Alle Abschnitte sind ausgeblendet. Schalte mindestens einen wieder ein.",
+    "editorWide": "Volle Breite",
+    "editorNarrow": "Halbe Breite"
   },
   "settings": {
     "accentApplied": "Akzentfarbe angewendet.",
