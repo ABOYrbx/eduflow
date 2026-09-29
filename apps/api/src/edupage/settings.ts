@@ -7,7 +7,7 @@
 import { t } from "../i18n";
 export interface SettingSpec {
   key: string;
-  kind: "select" | "bool" | "int" | "order" | "text";
+  kind: "select" | "bool" | "int" | "order" | "text" | "hidden";
   label: string;
   options?: Array<[string, string]>;
   default: unknown;
@@ -34,6 +34,8 @@ export const SETTINGS_SCHEMA: SettingSpec[] = [
   { key: "ov_unread", kind: "int", label: t("settings.ovUnreadLabel"), min: 1, max: 50, default: 10 },
   { key: "ov_homework", kind: "int", label: t("settings.ovHomeworkLabel"), min: 1, max: 50, default: 10 },
   { key: "ov_order", kind: "order", section: t("settings.sectionUebersicht"), label: t("settings.ovOrderLabel"), default: "messages,homework,weather" },
+  { key: "ov_hidden", kind: "hidden", section: t("settings.sectionUebersicht"), label: t("settings.ovHiddenLabel"),
+    hint: t("settings.ovHiddenHint"), default: "" },
   { key: "ov_wetter", kind: "bool", section: t("settings.sectionWetter"), label: t("settings.ovWetterLabel"),
     hint: t("settings.ovWetterHint"), default: true },
   { key: "wetter_city", kind: "text", section: t("settings.sectionWetter"), label: t("settings.cityLabel"),
@@ -73,6 +75,15 @@ export function coerceSetting(spec: SettingSpec, value: unknown): unknown {
         if (!ordered.includes(key)) ordered.push(key);
       }
       return ordered.join(",");
+    }
+    if (spec.kind === "hidden") {
+      const raw = Array.isArray(value) ? value : String(value ?? "").split(",");
+      const hidden: string[] = [];
+      for (const item of raw) {
+        const key = String(item).trim();
+        if (OVERVIEW_SECTION_KEYS.includes(key) && !hidden.includes(key)) hidden.push(key);
+      }
+      return hidden.join(",");
     }
     if (spec.kind === "text") {
       const base = value ? String(value) : "";
