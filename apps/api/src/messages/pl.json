@@ -103,6 +103,8 @@
     "hwStatusLabel": "Praca domowa: standardowy filtr",
     "hwTestsLabel": "Praca domowa: domyślnie włączaj testy i egzaminy",
     "landingLabel": "Strona startowa po zalogowaniu",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "Wszystkie",
     "optDashboard": "Wiadomości",
     "optDone": "Tylko zakończone",
@@ -118,7 +120,8 @@
     "ovWetterHint": "Stosuje się do interfejsu internetowego i aplikacji Android.",
     "ovWetterLabel": "Pokaż mapę pogody w przeglądzie",
     "sectionUebersicht": "Przegląd",
-    "sectionWetter": "Pogoda"
+    "sectionWetter": "Pogoda",
+    "timeFormatLabel": "Clock: Time format"
   },
   "upstream": {
     "agendaFailed": "Wydarzenia szkolne nie mogły zostać załadowane: {detail}",

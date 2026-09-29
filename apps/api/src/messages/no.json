@@ -103,6 +103,8 @@
     "hwStatusLabel": "Hjemme: Standardfilter",
     "hwTestsLabel": "Hjemme: Inkluder tester og eksamener som standard",
     "landingLabel": "Start side etter pålogging",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "Alle",
     "optDashboard": "Meldinger",
     "optDone": "Bare ferdig",
@@ -118,7 +120,8 @@
     "ovWetterHint": "Gjelder webgrensesnittet og Android-appen.",
     "ovWetterLabel": "Vis værkart på oversikten",
     "sectionUebersicht": "Oversikt",
-    "sectionWetter": "Vær"
+    "sectionWetter": "Vær",
+    "timeFormatLabel": "Clock: Time format"
   },
   "upstream": {
     "agendaFailed": "Skolearrangementer kunne ikke lastes: {detail}",

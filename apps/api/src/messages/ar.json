@@ -103,6 +103,8 @@
     "hwStatusLabel": "الواجبات المنزلية: الفلتر القياسي",
     "hwTestsLabel": "الواجبات المنزلية: تشمل الاختبارات والامتحانات بشكل افتراضي",
     "landingLabel": "Startseite nach Anmeldung",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "كل",
     "optDashboard": "الرسائل",
     "optDone": "تم فقط",
@@ -118,7 +120,8 @@
     "ovWetterHint": "ينطبق على واجهة الويب وتطبيق الأندرويد.",
     "ovWetterLabel": "إظهار خريطة الطقس على النظرة العامة",
     "sectionUebersicht": "Übersicht",
-    "sectionWetter": "Wetter"
+    "sectionWetter": "Wetter",
+    "timeFormatLabel": "Clock: Time format"
   },
   "upstream": {
     "agendaFailed": "لا يمكن تحميل الأحداث المدرسية: {detail}",

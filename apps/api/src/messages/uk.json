@@ -103,6 +103,8 @@
     "hwStatusLabel": "Домашня робота: Стандартний фільтр",
     "hwTestsLabel": "Homework: Включити тести та екзамени за замовчуванням",
     "landingLabel": "Стартова сторінка після входу",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "Всі",
     "optDashboard": "Повідомлення",
     "optDone": "Тільки зроблено",
@@ -118,7 +120,8 @@
     "ovWetterHint": "Застосовується до веб-інтерфейсу та додатка Android.",
     "ovWetterLabel": "Відображення карти погоди на огляді",
     "sectionUebersicht": "Перегляд попереднього контакту",
-    "sectionWetter": "Погода"
+    "sectionWetter": "Погода",
+    "timeFormatLabel": "Clock: Time format"
   },
   "upstream": {
     "agendaFailed": "School events could not be loaded: {detail}",

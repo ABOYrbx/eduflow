@@ -103,6 +103,8 @@
     "hwStatusLabel": "Hausarbeit: Standardfilter",
     "hwTestsLabel": "Hausarbeit: Standardmäßig Tests und Prüfungen einbeziehen",
     "landingLabel": "Seite nach Anmeldung starten",
+    "opt12h": "12 Stunden",
+    "opt24h": "24 Stunden",
     "optAll": "Alle",
     "optDashboard": "Nachrichten",
     "optDone": "Nur fertig",
@@ -118,7 +120,8 @@
     "ovWetterHint": "Gilt für die Webschnittstelle und die Android-App.",
     "ovWetterLabel": "Wetter-Karte in der Übersicht anzeigen",
     "sectionUebersicht": "Übersicht",
-    "sectionWetter": "Wetter"
+    "sectionWetter": "Wetter",
+    "timeFormatLabel": "Uhr: Zeitformat"
   },
   "upstream": {
     "agendaFailed": "Schulereignisse konnten nicht geladen werden: {detail}",

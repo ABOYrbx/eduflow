@@ -216,7 +216,18 @@
     "tomorrow": "Morgen",
     "weather": "Wetter",
     "weatherHint": "Ort in den Einstellungen festlegen",
-    "weatherUnavailable": "Wetterdaten nicht verfügbar"
+    "weatherUnavailable": "Wetterdaten nicht verfügbar",
+    "editorToggle": "Arrange",
+    "editorHint": "Drag a section to move it, or use the arrows. Hide what you do not need.",
+    "editorDone": "Done",
+    "editorSaving": "Saving…",
+    "editorSaved": "Layout saved",
+    "editorHide": "Hide section",
+    "editorShow": "Show section",
+    "editorHidden": "Hidden",
+    "editorDrag": "Drag to move",
+    "editorReset": "Reset",
+    "editorEmpty": "All sections are hidden. Turn at least one back on."
   },
   "settings": {
     "accentApplied": "Akzentfarbe übernommen.",
@@ -287,7 +298,9 @@
     "title": "Einstellungen",
     "tokenCreated": "Token created. Copy the value now; it is shown only once.",
     "unnamedDevice": "Unbenanntes Gerät",
-    "validUntil": "Gültig bis {date}."
+    "validUntil": "Gültig bis {date}.",
+    "languageTitle": "Language",
+    "languageHint": "Applies right away. The choice is remembered on this device."
   },
   "theme": {
     "language": "Sprache",

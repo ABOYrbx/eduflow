@@ -103,6 +103,8 @@
     "hwStatusLabel": "主页工作: 标准过滤器",
     "hwTestsLabel": "主页工作: 默认包括测试和测试",
     "landingLabel": "登录后开始页面",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "所有的",
     "optDashboard": "留言",
     "optDone": "仅完成",
@@ -118,7 +120,8 @@
     "ovWetterHint": "应用于网页界面和 Android 应用程序。",
     "ovWetterLabel": "在概览中显示天气地图",
     "sectionUebersicht": "概览",
-    "sectionWetter": "天气情况"
+    "sectionWetter": "天气情况",
+    "timeFormatLabel": "Clock: Time format"
   },
   "upstream": {
     "agendaFailed": "School events could not be loaded: {detail}",

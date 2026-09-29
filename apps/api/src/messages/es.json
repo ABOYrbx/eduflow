@@ -103,6 +103,8 @@
     "hwStatusLabel": "Casa: Filtro estándar",
     "hwTestsLabel": "Inicio: Incluye pruebas y exámenes por defecto",
     "landingLabel": "Página de inicio después de iniciar sesión",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "Todos",
     "optDashboard": "Mensajes",
     "optDone": "Sólo hecho",
@@ -118,7 +120,8 @@
     "ovWetterHint": "Se aplica a la interfaz web y a la aplicación Android.",
     "ovWetterLabel": "Mostrar mapa del tiempo en la vista general",
     "sectionUebersicht": "Resumen",
-    "sectionWetter": "Clima"
+    "sectionWetter": "Clima",
+    "timeFormatLabel": "Clock: Time format"
   },
   "upstream": {
     "agendaFailed": "No se pudieron cargar los eventos de la escuela: {detail}",

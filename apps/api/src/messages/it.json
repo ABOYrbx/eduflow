@@ -103,6 +103,8 @@
     "hwStatusLabel": "Homework: Filtro standard",
     "hwTestsLabel": "Homework: Includi test ed esami per impostazione predefinita",
     "landingLabel": "Pagina iniziale dopo l'accesso",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "Tutti",
     "optDashboard": "Messaggi",
     "optDone": "Completato solo",
@@ -118,7 +120,8 @@
     "ovWetterHint": "Si applica all'interfaccia web e all'app Android.",
     "ovWetterLabel": "Visualizza la mappa meteo nella panoramica",
     "sectionUebersicht": "Panoramica",
-    "sectionWetter": "Meteo"
+    "sectionWetter": "Meteo",
+    "timeFormatLabel": "Clock: Time format"
   },
   "upstream": {
     "agendaFailed": "Gli eventi scolastici non possono essere caricati: {detail}",
