@@ -10,6 +10,7 @@ import de.eduflow.android.data.dto.bodyLine
 import de.eduflow.android.data.dto.buildGradeTerms
 import de.eduflow.android.data.dto.currentTermKey
 import de.eduflow.android.data.dto.deNum
+import de.eduflow.android.data.dto.displayGradeTermLabel
 import de.eduflow.android.data.dto.gradeTermKey
 import de.eduflow.android.data.dto.gradeTermLabel
 import de.eduflow.android.data.dto.gradesAverage
@@ -131,6 +132,44 @@ class LogicPackageTest {
         assertEquals("1. Halbjahr 25/26", gradeTermLabel("2025-H1"))
         assertEquals("2. Halbjahr 25/26", gradeTermLabel("2025-H2"))
         assertEquals("kaputt", gradeTermLabel("kaputt"))
+    }
+
+    @Test
+    fun termLabel_customFormat() {
+        // UI übergibt das übersetzte grades_term_label_format (Platzhalter
+        // %1$d = Halbjahr, %2$s/%3$s = Kurzjahre).
+        assertEquals("Semester 1 25/26", gradeTermLabel("2025-H1", "Semester %1\$d %2\$s/%3\$s"))
+        assertEquals("kaputt", gradeTermLabel("kaputt", "Semester %1\$d %2\$s/%3\$s"))
+        // Kaputtes Format fällt auf Deutsch zurück, crasht nie.
+        assertEquals("1. Halbjahr 25/26", gradeTermLabel("2025-H1", "%q-nonsens"))
+    }
+
+    @Test
+    fun displayTermLabel_allAndTerms() {
+        assertEquals("Gesamt", displayGradeTermLabel("alle"))
+        assertEquals("All", displayGradeTermLabel("alle", "All", "Semester %1\$d %2\$s/%3\$s"))
+        assertEquals("Semester 2 25/26", displayGradeTermLabel("2025-H2", "All", "Semester %1\$d %2\$s/%3\$s"))
+    }
+
+    @Test
+    fun buildGradeTerms_customLabels() {
+        val items = listOf(
+            grade("M", 2.0, iso = "2025-11-03"),
+            grade("D", 3.0, iso = "2026-03-01"),
+        )
+        val terms = buildGradeTerms(items, "2025-H1", allLabel = "All", termFormat = "Semester %1\$d %2\$s/%3\$s")
+        assertEquals(listOf("2025-H2", "2025-H1", "alle"), terms.map { it.key })
+        assertEquals("Semester 2 25/26", terms.first().label)
+        assertEquals("All", terms.last().label)
+    }
+
+    @Test
+    fun groupGradesBySubject_customOtherLabel() {
+        val items = listOf(
+            grade("", 1.0, iso = "2025-11-02"),
+        )
+        val groups = groupGradesBySubject(items, otherLabel = "Other")
+        assertEquals(listOf("Other"), groups.map { it.subject })
     }
 
     @Test

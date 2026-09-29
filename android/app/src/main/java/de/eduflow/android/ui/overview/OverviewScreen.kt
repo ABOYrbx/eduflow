@@ -75,6 +75,7 @@ import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SectionLabel
 import de.eduflow.android.ui.theme.LocalEduFlowDark
 import de.eduflow.android.ui.timetable.AuthAwareError
+import de.eduflow.android.ui.timetable.localizedApiMessage
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -142,7 +143,7 @@ fun OverviewScreen(
 
         state.error?.let { err ->
             AuthAwareError(
-                message = "${err.message} (${err.code})",
+                message = "${localizedApiMessage(err.code, err.message, err.messageRes)} (${err.code})",
                 needsReLogin = err.code in
                     listOf(ErrorCodes.TOKEN_INVALID, ErrorCodes.TOKEN_EXPIRED, ErrorCodes.EDUPAGE_2FA),
                 onReLogin = onReLogin,
@@ -183,7 +184,9 @@ fun OverviewScreen(
                                 city = state.wetterCity,
                                 wetter = state.wetter,
                                 loading = state.wetterLoading,
-                                error = state.wetterError?.let { "${it.message} (${it.code})" },
+                                error = state.wetterError?.let {
+                                    "${localizedApiMessage(it.code, it.message, it.messageRes)} (${it.code})"
+                                },
                                 onLoad = viewModel::loadWetter,
                                 onConfigure = onOpenSettings,
                             )

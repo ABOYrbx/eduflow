@@ -45,6 +45,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.eduflow.android.R
+import de.eduflow.android.data.ErrorMapper
 import de.eduflow.android.data.dto.ErrorCodes
 import de.eduflow.android.data.dto.LessonDto
 import de.eduflow.android.data.dto.TimetableView
@@ -121,7 +122,7 @@ fun DayScreen(
 
         state.error?.let { err ->
             AuthAwareError(
-                message = "${err.message} (${err.code})",
+                message = "${localizedApiMessage(err.code, err.message, err.messageRes)} (${err.code})",
                 needsReLogin = err.code in
                     listOf(ErrorCodes.TOKEN_INVALID, ErrorCodes.TOKEN_EXPIRED, ErrorCodes.EDUPAGE_2FA),
                 onReLogin = onReLogin,
@@ -357,6 +358,24 @@ fun LessonCard(
             }
         }
     }
+}
+
+/**
+ * Lokalisierte Anzeige eines API-Fehlers für alle Fehler-Snackbars
+ * (auch von School/Overview/Messages importiert).
+ *
+ * - [messageRes] gesetzt (clientseitige Validierung aus den ViewModels):
+ *   übersetzter String per Ressource.
+ * - Sonst: Stammt [message] aus dem kontextfreien ErrorMapper-Fallback
+ *   (kein Backend-Text), wird der übersetzte `error_*`-String gezeigt,
+ *   sonst der Backend-Text (hat Vorrang). Der Vergleich nutzt
+ *   ErrorMapper.messageFor — hier steht kein deutsches Literal.
+ */
+@Composable
+fun localizedApiMessage(code: String, message: String, messageRes: Int? = null): String {
+    messageRes?.let { return stringResource(it) }
+    return if (message == ErrorMapper.messageFor(code)) stringResource(ErrorMapper.stringResFor(code))
+    else message
 }
 
 /**

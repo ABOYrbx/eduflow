@@ -95,7 +95,7 @@ fun WeekScreen(
 
         state.error?.let { err ->
             AuthAwareError(
-                message = "${err.message} (${err.code})",
+                message = "${localizedApiMessage(err.code, err.message, err.messageRes)} (${err.code})",
                 needsReLogin = err.code in
                     listOf(ErrorCodes.TOKEN_INVALID, ErrorCodes.TOKEN_EXPIRED, ErrorCodes.EDUPAGE_2FA),
                 onReLogin = onReLogin,

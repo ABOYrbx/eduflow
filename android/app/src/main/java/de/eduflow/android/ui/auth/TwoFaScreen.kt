@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import de.eduflow.android.R
 import de.eduflow.android.ui.common.PrimaryButton
 import de.eduflow.android.ui.common.SectionLabel
+import de.eduflow.android.ui.timetable.localizedApiMessage
 
 // 2FA-Screen aus dem Redesign-PNG (Paket A, Screen 06, „2 VON 2"):
 /// Code-Feld + „Bestätigen", zurück zum Login. Logik unverändert.
@@ -90,8 +91,9 @@ fun TwoFaScreen(
             modifier = Modifier.fillMaxWidth(),
         )
         if (state is TwoFaUiState.Error) {
+            val err = state as TwoFaUiState.Error
             Text(
-                (state as TwoFaUiState.Error).message,
+                localizedApiMessage(err.code, err.message, err.messageRes),
                 color = scheme.error,
                 style = MaterialTheme.typography.bodyMedium,
             )
