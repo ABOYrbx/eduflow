@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { t } from "../../lib/i18n";
+import { useLocale } from "../../lib/locale-context";
 
 type LoginReply = { status?: string; error?: string; code?: string; message?: string };
 
@@ -9,6 +10,7 @@ export function LoginForm() {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  useLocale(); // abonniert den Sprachwechsel, damit alle t()-Texte neu rendern
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setBusy(true); setError("");

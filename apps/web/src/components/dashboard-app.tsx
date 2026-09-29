@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { FormEvent, Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { localeTag, t } from "../lib/i18n";
+import { useLocale } from "../lib/locale-context";
 
 declare global {
   interface Window {
@@ -27,7 +28,9 @@ type AgendaItem = { id: number; kind: string; date: string; title?: string; text
 type Settings = { schema: Array<{ key: string; kind: string; label: string; options?: string[][]; default: unknown; min?: number; max?: number; hint?: string; maxlength?: number; section?: string; placeholder?: string }>; values: Record<string, unknown> };
 type Weather = { city: string; today: { temp: number; max: number; min: number; desc: string; icon: string }; tomorrow: { max: number; min: number; desc: string; icon?: string }; day3: { max: number; min: number; desc: string; icon?: string } };
 
-const nav = [{ href: "/", label: t("nav.overview") }, { href: "/messages", label: t("nav.messages") }, { href: "/homework", label: t("nav.homework") }, { href: "/grades", label: t("nav.grades") }, { href: "/timetable", label: t("nav.timetable") }, { href: "/agenda", label: t("nav.agenda") }];
+/** Navigation — bewusst als Funktion, damit `t()` erst beim Rendern liest
+ *  und ein Sprachwechsel die Beschriftungen mitnimmt. */
+const nav = () => [{ href: "/", label: t("nav.overview") }, { href: "/messages", label: t("nav.messages") }, { href: "/homework", label: t("nav.homework") }, { href: "/grades", label: t("nav.grades") }, { href: "/timetable", label: t("nav.timetable") }, { href: "/agenda", label: t("nav.agenda") }];
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`/api/v1${path}`, { ...init, cache: "no-store", headers: { ...(init?.body ? { "content-type": "application/json" } : {}), ...init?.headers } });
@@ -74,13 +77,15 @@ function Empty({ children }: { children: string }) { return <p className="empty"
 
 export function DashboardApp({ username }: { username: string }) {
   const path = usePathname(); const router = useRouter();
-  const active = path === "/mehr" ? "Mehr" : nav.find((item) => item.href === path)?.label ?? t("nav.settings");
+  useLocale(); // abonniert den Sprachwechsel, damit alle t()-Texte neu rendern
+  const items = nav();
+  const active = path === "/mehr" ? "Mehr" : items.find((item) => item.href === path)?.label ?? t("nav.settings");
   const [logoutError, setLogoutError] = useState("");
   async function logout() { const response = await fetch("/api/auth/logout", { method: "POST" }); if (response.ok) router.replace("/login"); else setLogoutError(t("nav.logoutFailed")); }
   return <>
     <div className="nav-wrap"><div className="container nav">
       <Link className="nav-logo" href="/" aria-label={t("nav.logoAria")}><img src="/icons/icon.png" alt="" /></Link>
-      <nav className="nav-mid" aria-label={t("nav.mainAria")}>{nav.map((item) => <Link className={`nav-pill ${active === item.label ? "active" : ""}`} key={item.href} href={item.href}>{item.label}</Link>)}</nav>
+      <nav className="nav-mid" aria-label={t("nav.mainAria")}>{items.map((item) => <Link className={`nav-pill ${active === item.label ? "active" : ""}`} key={item.href} href={item.href}>{item.label}</Link>)}</nav>
       <div className="nav-cta"><div className="profile-wrap">
         <button className="avatar-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label={t("nav.profileAria")} title={username}>{username.slice(0, 1).toLocaleUpperCase(localeTag())}</button>
         <div className="profile-menu" role="menu"><div className="pm-head"><div className="t">{t("nav.profileTitle")}</div><div className="u">{username}</div></div><div className="pm-div" />

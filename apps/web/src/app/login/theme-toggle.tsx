@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { LOCALE_EVENT, NATIVE_NAMES, localeCookie, normalizeLocaleTag, setActiveLocale, t } from "../../lib/i18n";
+import { useLocale } from "../../lib/locale-context";
 
 declare global {
   interface Window {
@@ -16,6 +17,7 @@ export function ThemeToggle() {
   const [coverage, setCoverage] = useState<Record<string, number>>({});
   const [langOpen, setLangOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
+  useLocale(); // abonniert den Sprachwechsel, damit die Beschriftungen neu rendern
 
   useEffect(() => {
     setDark(document.documentElement.dataset.theme === "dark");
