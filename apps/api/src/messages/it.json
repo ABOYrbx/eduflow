@@ -121,7 +121,9 @@
     "ovWetterLabel": "Visualizza la mappa meteo nella panoramica",
     "sectionUebersicht": "Panoramica",
     "sectionWetter": "Meteo",
-    "timeFormatLabel": "Clock: Time format"
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor."
   },
   "upstream": {
     "agendaFailed": "Gli eventi scolastici non possono essere caricati: {detail}",

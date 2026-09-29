@@ -121,7 +121,9 @@
     "ovWetterLabel": "Εμφάνιση χάρτη καιρού στην επισκόπηση",
     "sectionUebersicht": "Επισκόπηση",
     "sectionWetter": "Καιρός",
-    "timeFormatLabel": "Clock: Time format"
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor."
   },
   "upstream": {
     "agendaFailed": "School events could not be loaded: {detail}",

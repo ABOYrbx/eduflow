@@ -121,7 +121,9 @@
     "ovWetterLabel": "Wetter-Karte in der Übersicht anzeigen",
     "sectionUebersicht": "Übersicht",
     "sectionWetter": "Wetter",
-    "timeFormatLabel": "Uhr: Zeitformat"
+    "timeFormatLabel": "Uhr: Zeitformat",
+    "ovHiddenLabel": "Ausgeblendete Abschnitte",
+    "ovHiddenHint": "Abschnitte, die du im Übersichts-Editor ausgeschaltet hast."
   },
   "upstream": {
     "agendaFailed": "Schulereignisse konnten nicht geladen werden: {detail}",

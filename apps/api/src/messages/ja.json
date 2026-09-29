@@ -121,7 +121,9 @@
     "ovWetterLabel": "概要に天気図を表示する",
     "sectionUebersicht": "概要",
     "sectionWetter": "天気",
-    "timeFormatLabel": "Clock: Time format"
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor."
   },
   "upstream": {
     "agendaFailed": "スクールイベントをロードできませんでした: {detail}",

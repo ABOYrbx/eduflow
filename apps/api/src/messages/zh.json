@@ -121,7 +121,9 @@
     "ovWetterLabel": "在概览中显示天气地图",
     "sectionUebersicht": "概览",
     "sectionWetter": "天气情况",
-    "timeFormatLabel": "Clock: Time format"
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor."
   },
   "upstream": {
     "agendaFailed": "School events could not be loaded: {detail}",

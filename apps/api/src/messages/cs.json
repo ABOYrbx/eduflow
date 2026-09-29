@@ -121,7 +121,9 @@
     "ovWetterLabel": "Zobrazit mapu počasí v přehledu",
     "sectionUebersicht": "Přehled",
     "sectionWetter": "Počasí",
-    "timeFormatLabel": "Clock: Time format"
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor."
   },
   "upstream": {
     "agendaFailed": "Události ve škole nelze načíst. {detail}",

@@ -121,7 +121,9 @@
     "ovWetterLabel": "إظهار خريطة الطقس على النظرة العامة",
     "sectionUebersicht": "Übersicht",
     "sectionWetter": "Wetter",
-    "timeFormatLabel": "Clock: Time format"
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor."
   },
   "upstream": {
     "agendaFailed": "لا يمكن تحميل الأحداث المدرسية: {detail}",

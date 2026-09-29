@@ -121,7 +121,9 @@
     "ovWetterLabel": "Pokaż mapę pogody w przeglądzie",
     "sectionUebersicht": "Przegląd",
     "sectionWetter": "Pogoda",
-    "timeFormatLabel": "Clock: Time format"
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor."
   },
   "upstream": {
     "agendaFailed": "Wydarzenia szkolne nie mogły zostać załadowane: {detail}",

@@ -121,7 +121,9 @@
     "ovWetterLabel": "Показать карту погоды в обзоре",
     "sectionUebersicht": "Общий обзор",
     "sectionWetter": "Погода",
-    "timeFormatLabel": "Clock: Time format"
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor."
   },
   "upstream": {
     "agendaFailed": "Не удалось загрузить школьные мероприятия: {detail}",

@@ -121,7 +121,9 @@
     "ovWetterLabel": "Mostrar mapa del tiempo en la vista general",
     "sectionUebersicht": "Resumen",
     "sectionWetter": "Clima",
-    "timeFormatLabel": "Clock: Time format"
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor."
   },
   "upstream": {
     "agendaFailed": "No se pudieron cargar los eventos de la escuela: {detail}",

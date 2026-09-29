@@ -121,7 +121,9 @@
     "ovWetterLabel": "Visa väderkarta på översikten",
     "sectionUebersicht": "Översikt",
     "sectionWetter": "Väder",
-    "timeFormatLabel": "Clock: Time format"
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor."
   },
   "upstream": {
     "agendaFailed": "Skolevenemang kunde inte laddas: {detail}",

@@ -121,7 +121,9 @@
     "ovWetterLabel": "Näytä sääkartta yleiskatsauksessa",
     "sectionUebersicht": "Yleiskatsaus",
     "sectionWetter": "Sää",
-    "timeFormatLabel": "Clock: Time format"
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor."
   },
   "upstream": {
     "agendaFailed": "Koulutapahtumia ei voitu ladata: {detail}",
