@@ -135,6 +135,7 @@
     <string name="devices_created_format">Erstellt: %1$s</string>
     <string name="devices_expires_format">La&lt;unk&gt; uft ab: %1$s</string>
     <string name="devices_remove">Entfernen</string>
+    <string name="device_default_name">Android emulator</string>
     <!-- Noten -->
     <string name="grades_title">Poznámka</string>
     <string name="grades_subtitle">Deine Leistungen nach Fach</string>
@@ -151,6 +152,11 @@
     <string name="grades_weight_default">×1</string>
     <string name="grades_teacher_format">Lehrer: %1$s</string>
     <string name="grades_class_avg_format">Klasse Ø %1$s</string>
+    <string name="grades_term_all">All</string>
+    <!-- Halbjahr-Name: %1$d = Halbjahr (1/2), %2$s/%3$s = Kurzjahre (25/26);
+         Musterbuchstaben nicht übersetzen, nur Worte/Reihenfolge anpassen. -->
+    <string name="grades_term_label_format">Semester %1$d %2$s/%3$s</string>
+    <string name="grades_subject_other">Other</string>
     <!-- Hausaufgaben -->
     <string name="homework_title">Hausaufgaben</string>
     <string name="homework_subtitle">Deine Aufgaben im Überblick</string>
@@ -236,7 +242,6 @@
     <string name="overview_messages_empty">Keine neuen Nachrichten.</string>
     <string name="overview_homework_empty">Keine offenen Hausaufgaben. Sehr gut.</string>
     <string name="overview_order_weather">Wetter</string>
-    <string name="overview_order_lunch">Mittagessen</string>
     <string name="overview_drag_handle_desc">Ziehen zum Sortieren</string>
     <string name="overview_due_suffix_format"> · fällig: %1$s</string>
     <string name="overview_subject_suffix_format"> · %1$s</string>
@@ -292,18 +297,19 @@
     <string name="more_cache_default">Zwischengespeicherte Daten löschen</string>
     <string name="more_logout_sub">Von diesem Gerät abmelden</string>
     <string name="more_server_dialog_desc">Server für API-Anfragen (…/api/v1/).</string>
-    <!-- Validierung (clientseitig: Quelle der deutschen ViewModel-Fallbacks in
-         ui/auth/AuthViewModel, ui/messages/MessagesViewModel,
-         ui/overview/OverviewViewModel — Laufzeit-Fallback bleibt dort
-         hartkodiert, damit Unit-Tests ohne Context laufen) -->
+    <!-- Validierung (clientseitig): Die ViewModels (ui/auth/AuthViewModel,
+         ui/messages/MessagesViewModel, ui/overview/OverviewViewModel) liefern
+         Code + deutschen Fallback-Text (kontextfrei für Unit-Tests) plus
+         messageRes — Compose löst per stringResource an den Call-Sites auf. -->
     <string name="auth_error_credentials">Bitte Benutzername und Passwort angeben.</string>
     <string name="twofa_error_empty">Bitte Code angeben.</string>
     <string name="messages_compose_no_recipient">Bitte mindestens einen gültigen Empfänger wählen.</string>
     <string name="messages_compose_no_body">Bitte einen Nachrichtentext eingeben.</string>
     <string name="overview_weather_no_city">Bitte eine Stadt eingeben.</string>
-    <!-- Fehler-Fallbacks (Quelle der deutschen Texte in
-         data/ErrorMapper.messageFor — Backend-Texte haben Vorrang,
-         Laufzeit-Fallback bleibt dort hartkodiert für Context-freie Tests) -->
+    <!-- Fehler-Fallbacks: data/ErrorMapper.messageFor liefert den deutschen
+         Fallback (Backend-Texte haben Vorrang, kontextfrei für Unit-Tests);
+         data/ErrorMapper.stringResFor mappt Codes auf diese Keys, Compose
+         löst per localizedApiMessage (ui/timetable/DayScreen.kt) auf. -->
     <string name="error_validation">Ungültige Eingabe. Bitte prüfen und erneut versuchen.</string>
     <string name="error_token_invalid">Sitzung ungültig. Bitte erneut anmelden.</string>
     <string name="error_token_expired">Sitzung abgelaufen. Bitte erneut anmelden.</string>
