@@ -48,7 +48,7 @@ describe("settings (Port von app.py + api/settings.py, Paket N-F)", () => {
   });
 
   it("speichert gegen Schema validiert wie Python", async () => {
-    await expect(service.settingsPut(claims, null)).rejects.toMatchObject({ response: { error: "Ungültige Anfrage (JSON-Objekt erwartet)." } });
+    await expect(service.settingsPut(claims, null)).rejects.toMatchObject({ response: { error: "Invalid request (JSON object expected)." } });
     const saved = await service.settingsPut(claims, { landing: "noten", hw_tests: true, ov_unread: "7", wetter_city: "  Berlin\n" }) as unknown as { values: Record<string, unknown> };
     expect(saved.values).toMatchObject({ landing: "noten", hw_tests: true, ov_unread: 7, wetter_city: "Berlin" });
     const reread = await service.settingsGet(claims) as unknown as { values: Record<string, unknown> };

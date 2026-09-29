@@ -3,6 +3,7 @@ import { createHash, randomBytes } from "node:crypto";
 import { Prisma } from "@prisma/client";
 import { page as paginate, parsePage } from "../common/pagination";
 import { PrismaService } from "../prisma/prisma.service";
+import { t } from "../i18n";
 import { AuthClaims } from "../auth/auth.service";
 import { demoGrades, demoHomework, demoLessons, demoMessages, demoRecipients } from "../testing/demo-data";
 
@@ -10,14 +11,14 @@ const messageTypes = ["sprava", "news", "anketa", "chat", "genotif"];
 const homeworkTypes = ["homework", "bexam", "sexam", "oexam", "pexam", "rexam", "testing", "etesthw", "testpridelenie"];
 export interface SettingSpec { key: string; kind: string; label: string; options?: [string, string][]; default: unknown; min?: number; max?: number; section?: string; placeholder?: string; maxlength?: number; }
 const settingsSchema: SettingSpec[] = [
-  { key: "landing", kind: "select", label: "Startseite nach Anmeldung", options: [["uebersicht", "Übersicht"], ["dashboard", "Nachrichten"], ["hausaufgaben", "Hausaufgaben"], ["noten", "Noten"], ["stundenplan", "Stundenplan"]], default: "uebersicht" },
-  { key: "hw_status", kind: "select", label: "Hausaufgaben: Standardfilter", options: [["alle", "Alle"], ["offen", "Nur offene"], ["überfällig", "Nur überfällige"], ["erledigt", "Nur erledigte"], ["papierkorb", "Papierkorb"]], default: "alle" },
-  { key: "hw_tests", kind: "bool", label: "Hausaufgaben: Tests und Prüfungen standardmäßig einbeziehen", default: false },
-  { key: "ov_unread", kind: "int", label: "Übersicht: max. ungelesene Nachrichten", min: 1, max: 50, default: 10 },
-  { key: "ov_homework", kind: "int", label: "Übersicht: max. offene Hausaufgaben", min: 1, max: 50, default: 10 },
-  { key: "ov_order", kind: "order", section: "Übersicht", label: "Reihenfolge der Übersicht", default: "messages,homework,weather" },
-  { key: "ov_wetter", kind: "bool", section: "Wetter", label: "Wetterkarte auf der Übersicht anzeigen", default: true },
-  { key: "wetter_city", kind: "text", section: "Wetter", label: "Wetter: Stadt", placeholder: "z. B. Berlin", maxlength: 100, default: "" },
+  { key: "landing", kind: "select", label: t("settings.landingLabel"), options: [["uebersicht", t("settings.sectionUebersicht")], ["dashboard", t("settings.optDashboard")], ["hausaufgaben", t("settings.optHomework")], ["noten", t("settings.optGrades")], ["stundenplan", t("settings.optTimetable")]], default: "uebersicht" },
+  { key: "hw_status", kind: "select", label: t("settings.hwStatusLabel"), options: [["alle", t("settings.optAll")], ["offen", t("settings.optOpen")], ["überfällig", t("settings.optOverdue")], ["erledigt", t("settings.optDone")], ["papierkorb", t("settings.optTrash")]], default: "alle" },
+  { key: "hw_tests", kind: "bool", label: t("settings.hwTestsLabel"), default: false },
+  { key: "ov_unread", kind: "int", label: t("settings.ovUnreadLabel"), min: 1, max: 50, default: 10 },
+  { key: "ov_homework", kind: "int", label: t("settings.ovHomeworkLabel"), min: 1, max: 50, default: 10 },
+  { key: "ov_order", kind: "order", section: t("settings.sectionUebersicht"), label: t("settings.ovOrderLabel"), default: "messages,homework,weather" },
+  { key: "ov_wetter", kind: "bool", section: t("settings.sectionWetter"), label: t("settings.ovWetterLabel"), default: true },
+  { key: "wetter_city", kind: "text", section: t("settings.sectionWetter"), label: t("settings.cityLabel"), placeholder: t("settings.cityPlaceholder"), maxlength: 100, default: "" },
 ];
 const defaults: Record<string, unknown> = Object.fromEntries(settingsSchema.map((item) => [item.key, item.default]));
 const hash = (text: string) => createHash("sha256").update(text).digest("hex");
@@ -27,9 +28,9 @@ const germanDays = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "
 const germanMonths = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 const parseDate = (input: unknown, fallback: Date): Date => {
   if (input === undefined || input === "") return fallback;
-  if (typeof input !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(input) || Number.isNaN(Date.parse(`${input}T00:00:00Z`))) throw new BadRequestException({ error: "Datum muss im Format JJJJ-MM-TT sein.", code: "VALIDATION" });
+  if (typeof input !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(input) || Number.isNaN(Date.parse(`${input}T00:00:00Z`))) throw new BadRequestException({ error: t("validation.dateFormatShort"), code: "VALIDATION" });
   const value = new Date(`${input}T00:00:00Z`);
-  if (value.toISOString().slice(0, 10) !== input) throw new BadRequestException({ error: "Datum muss im Format JJJJ-MM-TT sein.", code: "VALIDATION" });
+  if (value.toISOString().slice(0, 10) !== input) throw new BadRequestException({ error: t("validation.dateFormatShort"), code: "VALIDATION" });
   return value;
 };
 
@@ -41,7 +42,7 @@ export class DemoSchoolService {
   constructor(private readonly prisma: PrismaService) {}
 
   assertEnabled(): void {
-    if (process.env.EDUFLOW_PROVIDER !== "fake") throw new ForbiddenException({ error: "Der EduPage-Anbieter ist noch nicht eingerichtet.", code: "CONFIG_MISSING" });
+    if (process.env.EDUFLOW_PROVIDER !== "fake") throw new ForbiddenException({ error: t("auth.providerMissing"), code: "CONFIG_MISSING" });
   }
 
   private validatePage(query: Record<string, unknown>) {
@@ -66,7 +67,7 @@ export class DemoSchoolService {
     this.assertEnabled();
     const since = parseDate(query.since, new Date("2000-01-01T00:00:00Z"));
     const type = typeof query.type === "string" ? query.type : "";
-    if (type && !messageTypes.includes(type)) throw new BadRequestException({ error: "Unbekannter Nachrichtentyp.", code: "VALIDATION" });
+    if (type && !messageTypes.includes(type)) throw new BadRequestException({ error: t("messages.unknownType"), code: "VALIDATION" });
     const words = norm(typeof query.q === "string" ? query.q.slice(0, 200) : "").split(/\s+/).filter(Boolean);
     const items = this.sentMessages.filter((message) => {
       if (!messageTypes.includes(message.type) || message.additional_data.textReply) return false;
@@ -80,7 +81,7 @@ export class DemoSchoolService {
 
   private threadPayload(id: number) {
     const root = this.sentMessages.find((item) => item.id === id);
-    if (!root) throw new NotFoundException({ error: "Nachricht nicht gefunden.", code: "NOT_FOUND" });
+    if (!root) throw new NotFoundException({ error: t("messages.notFound"), code: "NOT_FOUND" });
     const reply = this.sentMessages.find((item) => item.additional_data.textReply === String(id));
     return { likes: [{ name: "Lea Beispiel", date: "25.09.2026 14:12" }], replies: reply ? [{ name: reply.author, date: reply.timestamp, text: reply.text }] : [], reply_ids: reply ? [String(reply.id)] : [], summary: { total: 1 + Number(Boolean(reply)), likes: 1, replies: Number(Boolean(reply)), seen: 1 }, cached: true };
   }
@@ -102,11 +103,11 @@ export class DemoSchoolService {
 
   async sendMessage(body: unknown) {
     this.assertEnabled();
-    if (typeof body !== "object" || body === null || Array.isArray(body)) throw new BadRequestException({ error: "Ungültige Anfrage (JSON-Objekt erwartet).", code: "VALIDATION" });
+    if (typeof body !== "object" || body === null || Array.isArray(body)) throw new BadRequestException({ error: t("validation.jsonObject"), code: "VALIDATION" });
     const input = body as Record<string, unknown>;
     const recipients = Array.isArray(input.recipients) ? input.recipients.filter((item): item is string => typeof item === "string") : [];
     const text = typeof input.body === "string" ? input.body.trim() : "";
-    if (!recipients.length || !text || recipients.some((id) => !demoRecipients.some((recipient) => recipient.id === id))) throw new BadRequestException({ error: "Bitte gültige Empfänger und einen Nachrichtentext angeben.", code: "VALIDATION" });
+    if (!recipients.length || !text || recipients.some((id) => !demoRecipients.some((recipient) => recipient.id === id))) throw new BadRequestException({ error: t("messages.recipientsBody"), code: "VALIDATION" });
     const now = new Date(); const stamp = now.toISOString().slice(0, 19).replace("T", " ");
     const message = { id: 4999 + this.sentMessages.length, timestamp: stamp, timestamp_iso: now.toISOString(), sort_key: now.toISOString(), text, author: "Demo-Schüler", recipient: recipients.map((id) => demoRecipients.find((r) => r.id === id)?.name).join(", "), type: "sprava", type_label: "Nachricht", additional_data: {}, is_starred: false, is_done: false, done_at: "", reaction_count: 0, created_at: now.toISOString(), is_removed: false };
     this.sentMessages.unshift(message);
@@ -116,9 +117,9 @@ export class DemoSchoolService {
   async reply(id: number, body: unknown) {
     this.assertEnabled();
     const root = this.sentMessages.find((item) => item.id === id);
-    if (!root) throw new NotFoundException({ error: "Nachricht nicht gefunden.", code: "NOT_FOUND" });
+    if (!root) throw new NotFoundException({ error: t("messages.notFound"), code: "NOT_FOUND" });
     const text = typeof body === "object" && body !== null && "body" in body && typeof (body as { body?: unknown }).body === "string" ? (body as { body: string }).body.trim() : "";
-    if (!text) throw new BadRequestException({ error: "Bitte einen Antworttext angeben.", code: "VALIDATION" });
+    if (!text) throw new BadRequestException({ error: t("messages.noReplyAlt"), code: "VALIDATION" });
     const now = new Date(); const stamp = now.toISOString().slice(0, 19).replace("T", " ");
     const reply = { id: 4999 + this.sentMessages.length, timestamp: stamp, timestamp_iso: now.toISOString(), sort_key: now.toISOString(), text, author: "Demo-Schüler", recipient: root.author, type: root.type, type_label: root.type_label, additional_data: { textReply: String(id) }, is_starred: false, is_done: false, done_at: "", reaction_count: 0, created_at: now.toISOString(), is_removed: false };
     this.sentMessages.push(reply);
@@ -131,7 +132,7 @@ export class DemoSchoolService {
   async issueDownload(claims: AuthClaims, id: number, idx: number) {
     this.assertEnabled();
     const item = this.sentMessages.find((message) => message.id === id);
-    if (!item || idx !== 0 || typeof item.additional_data.filename !== "string") throw new NotFoundException({ error: "Dateianhang nicht gefunden.", code: "NOT_FOUND" });
+    if (!item || idx !== 0 || typeof item.additional_data.filename !== "string") throw new NotFoundException({ error: t("messages.attachment"), code: "NOT_FOUND" });
     const token = randomBytes(24).toString("hex");
     this.downloads.set(hash(token), { accountId: claims.sub, id, idx, expires: Date.now() + 5 * 60_000 });
     return { download_token: token, expires_in: 300 };
@@ -141,13 +142,13 @@ export class DemoSchoolService {
     this.assertEnabled();
     if (!claims && token) {
       const grant = this.downloads.get(hash(token));
-      if (!grant || grant.expires < Date.now() || grant.id !== id || grant.idx !== idx) throw new NotFoundException({ error: "Dateianhang nicht gefunden.", code: "NOT_FOUND" });
+      if (!grant || grant.expires < Date.now() || grant.id !== id || grant.idx !== idx) throw new NotFoundException({ error: t("messages.attachment"), code: "NOT_FOUND" });
       this.downloads.delete(hash(token));
       claims = { sub: grant.accountId, jti: "", tokenUse: "access" };
     }
-    if (!claims) throw new NotFoundException({ error: "Dateianhang nicht gefunden.", code: "NOT_FOUND" });
+    if (!claims) throw new NotFoundException({ error: t("messages.attachment"), code: "NOT_FOUND" });
     const item = this.sentMessages.find((message) => message.id === id);
-    if (!item || idx !== 0 || typeof item.additional_data.filename !== "string") throw new NotFoundException({ error: "Dateianhang nicht gefunden.", code: "NOT_FOUND" });
+    if (!item || idx !== 0 || typeof item.additional_data.filename !== "string") throw new NotFoundException({ error: t("messages.attachment"), code: "NOT_FOUND" });
     return { filename: item.additional_data.filename, content: Buffer.from("EduFlow-Demo: Beispielanhang\n", "utf8") };
   }
 
@@ -166,7 +167,7 @@ export class DemoSchoolService {
     });
     const counts = { offen: all.filter((item) => !item.is_hidden && ["offen", "heute fällig"].includes(item.status)).length, ueberfaellig: all.filter((item) => !item.is_hidden && item.status === "überfällig").length, erledigt: all.filter((item) => !item.is_hidden && item.status === "erledigt").length, papierkorb: all.filter((item) => item.is_hidden).length };
     const status = typeof query.status === "string" ? query.status : "alle";
-    if (!["alle", "offen", "überfällig", "erledigt", "papierkorb"].includes(status)) throw new BadRequestException({ error: "Ungültiger Status.", code: "VALIDATION" });
+    if (!["alle", "offen", "überfällig", "erledigt", "papierkorb"].includes(status)) throw new BadRequestException({ error: t("validation.status"), code: "VALIDATION" });
     const q = norm(typeof query.q === "string" ? query.q : "");
     all = all.filter((item) => {
       const hidden = item.is_hidden;
@@ -184,7 +185,7 @@ export class DemoSchoolService {
   async homeworkChange(claims: AuthClaims, id: string, mode: "done" | "trash", body: unknown) {
     this.assertEnabled();
     const item = demoHomework.find((entry) => String(entry.id) === id);
-    if (!item) throw new NotFoundException({ error: "Hausaufgabe nicht gefunden.", code: "NOT_FOUND" });
+    if (!item) throw new NotFoundException({ error: t("homework.notFound"), code: "NOT_FOUND" });
     const input = typeof body === "object" && body !== null ? body as Record<string, unknown> : {};
     if (mode === "done") {
       const done = typeof input.done === "boolean" ? input.done : true;
@@ -219,7 +220,7 @@ export class DemoSchoolService {
 
   agenda(query: Record<string, unknown>) {
     this.assertEnabled(); const now = new Date(); const since = parseDate(query.since, new Date(now.getTime() - 30 * 86400000)); const until = parseDate(query.until, new Date(now.getTime() + 60 * 86400000));
-    if (until < since || (until.getTime() - since.getTime()) / 86400000 > 366) throw new BadRequestException({ error: "Der Zeitraum darf höchstens ein Jahr umfassen.", code: "VALIDATION" });
+    if (until < since || (until.getTime() - since.getTime()) / 86400000 > 366) throw new BadRequestException({ error: t("validation.yearRange"), code: "VALIDATION" });
     const items = [
       { id: 7101, kind: "event", date: dateOnly(new Date(now.getTime() + 3 * 86400000)), text: "Elternabend", title: "Elternabend", author: "Schule", type: "parentsevening", timestamp_iso: now.toISOString() },
       { id: 7102, kind: "exam", date: dateOnly(new Date(now.getTime() + 5 * 86400000)), text: "Lernzielkontrolle: Kräfte", title: "Lernzielkontrolle: Kräfte", subject: "Physik", type: "bexam", due: dateOnly(new Date(now.getTime() + 5 * 86400000)), assigned_iso: now.toISOString() },
@@ -248,7 +249,7 @@ export class DemoSchoolService {
   }
 
   async saveSettings(claims: AuthClaims, body: unknown) {
-    this.assertEnabled(); if (typeof body !== "object" || body === null || Array.isArray(body)) throw new BadRequestException({ error: "Ungültige Anfrage (JSON-Objekt erwartet).", code: "VALIDATION" });
+    this.assertEnabled(); if (typeof body !== "object" || body === null || Array.isArray(body)) throw new BadRequestException({ error: t("validation.jsonObject"), code: "VALIDATION" });
     const current = await this.settings(claims); const input = { ...current.values, ...(body as Record<string, unknown>) } as Record<string, unknown>; const normalized: Record<string, unknown> = {};
     for (const spec of settingsSchema) {
       const raw = input[spec.key]; let value = raw;

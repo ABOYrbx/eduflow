@@ -1,4 +1,5 @@
 /** Wetter-Proxy (Port von `app.py`, Paket N-G). Key bleibt serverseitig. */
+import { t } from "../i18n";
 
 export type FetchJson = (url: string, params: Record<string, string>, timeoutMs: number) => Promise<{ status: number; json: unknown }>;
 
@@ -113,9 +114,9 @@ export async function getWetter(fetchJson: FetchJson, key: string, lat: number |
   } else if (city) {
     params.q = city;
   } else {
-    return { payload: { error: "bad coords" }, status: 400 };
+    return { payload: { error: t("geo.badCoords") }, status: 400 };
   }
-  if (!key) return { payload: { error: "Kein API-Key (OPENWEATHER_KEY in .env eintragen)" }, status: 503 };
+  if (!key) return { payload: { error: t("geo.noKey") }, status: 503 };
   let cur: Record<string, unknown>;
   let forecast: Record<string, unknown>;
   try {
@@ -193,11 +194,11 @@ export async function getWetter(fetchJson: FetchJson, key: string, lat: number |
 export async function searchWetterCities(fetchJson: FetchJson, key: string, query: string): Promise<{ payload: Record<string, unknown>; status: number }> {
   const text = String(query ?? "").trim().slice(0, 100);
   if (text.length < 2) return { payload: { items: [] }, status: 200 };
-  if (!key) return { payload: { error: "Die Stadtsuche ist nicht eingerichtet." }, status: 503 };
+  if (!key) return { payload: { error: t("geo.citySetup") }, status: 503 };
   try {
     const response = await fetchJson("https://api.openweathermap.org/geo/1.0/direct", { q: text, limit: "5", appid: key }, 5000);
     if (response.status !== 200 || !Array.isArray(response.json)) {
-      return { payload: { error: "Städte konnten gerade nicht gesucht werden." }, status: 502 };
+      return { payload: { error: t("geo.citySearch") }, status: 502 };
     }
     const items: Record<string, unknown>[] = [];
     for (const raw of response.json.slice(0, 5)) {
@@ -215,7 +216,7 @@ export async function searchWetterCities(fetchJson: FetchJson, key: string, quer
     }
     return { payload: { items }, status: 200 };
   } catch {
-    return { payload: { error: "Städte konnten gerade nicht gesucht werden." }, status: 502 };
+    return { payload: { error: t("geo.citySearch") }, status: 502 };
   }
 }
 

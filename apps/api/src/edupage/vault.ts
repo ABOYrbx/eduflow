@@ -1,5 +1,6 @@
 import { createCipheriv, createDecipheriv, randomBytes } from "node:crypto";
 import { HttpException, HttpStatus } from "@nestjs/common";
+import { t } from "../i18n";
 
 /** Passwort-Tresor (Paket N-A): AES-256-GCM wie `CredentialVault`.
  *
@@ -22,7 +23,7 @@ function keyBytes(): Buffer {
   const key = candidates.find((candidate) => candidate.length === 32);
   if (!key) {
     throw new HttpException(
-      { error: "Server-Schlüssel fehlt. Bitte später erneut versuchen.", code: "CONFIG_MISSING" },
+      { error: t("auth.serverKey"), code: "CONFIG_MISSING" },
       HttpStatus.SERVICE_UNAVAILABLE,
     );
   }

@@ -27,20 +27,20 @@ describe("parsePage (Parität zu api/core.py)", () => {
   });
 
   it("meldet nicht-ganze Zahlen wie Python", () => {
-    expect(messageOf(() => parsePage({ limit: "viel" }))).toBe("Limit und Offset müssen ganze Zahlen sein.");
-    expect(messageOf(() => parsePage({ offset: "2.5" }))).toBe("Limit und Offset müssen ganze Zahlen sein.");
-    expect(messageOf(() => parsePage({ limit: "" }))).toBe("Limit und Offset müssen ganze Zahlen sein.");
-    expect(messageOf(() => parsePage({ limit: "50.0" }))).toBe("Limit und Offset müssen ganze Zahlen sein.");
+    expect(messageOf(() => parsePage({ limit: "viel" }))).toBe("Limit and offset must be integers.");
+    expect(messageOf(() => parsePage({ offset: "2.5" }))).toBe("Limit and offset must be integers.");
+    expect(messageOf(() => parsePage({ limit: "" }))).toBe("Limit and offset must be integers.");
+    expect(messageOf(() => parsePage({ limit: "50.0" }))).toBe("Limit and offset must be integers.");
   });
 
   it("meldet Limit außerhalb 1..200 wie Python", () => {
-    expect(messageOf(() => parsePage({ limit: "0" }))).toBe("Limit muss zwischen 1 und 200 liegen.");
-    expect(messageOf(() => parsePage({ limit: "201" }))).toBe("Limit muss zwischen 1 und 200 liegen.");
-    expect(messageOf(() => parsePage({ limit: "-5" }))).toBe("Limit muss zwischen 1 und 200 liegen.");
+    expect(messageOf(() => parsePage({ limit: "0" }))).toBe("Limit must be between 1 and 200.");
+    expect(messageOf(() => parsePage({ limit: "201" }))).toBe("Limit must be between 1 and 200.");
+    expect(messageOf(() => parsePage({ limit: "-5" }))).toBe("Limit must be between 1 and 200.");
   });
 
   it("meldet negativen Offset wie Python", () => {
-    expect(messageOf(() => parsePage({ offset: "-1" }))).toBe("Offset darf nicht negativ sein.");
+    expect(messageOf(() => parsePage({ offset: "-1" }))).toBe("Offset must not be negative.");
   });
 });
 

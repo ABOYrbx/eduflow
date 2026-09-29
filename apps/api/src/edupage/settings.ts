@@ -1,8 +1,10 @@
 /** Einstellungs-Schema (Port von `app.py`, Paket N-F).
  *
  * Form, Labels und Defaults sind wortgleich mit Python; `options` liegen
- * als `[Wert, Label]`-Paare vor (Flask-Tupel → JSON-Arrays).
+ * als `[Wert, Label]`-Paare vor (Flask-Tupel → JSON-Arrays). Labels kommen
+ * aus dem i18n-Katalog (Englisch als Quelle).
  */
+import { t } from "../i18n";
 export interface SettingSpec {
   key: string;
   kind: "select" | "bool" | "int" | "order" | "text";
@@ -20,20 +22,20 @@ export interface SettingSpec {
 export const OVERVIEW_SECTION_KEYS = ["messages", "homework", "weather"];
 
 export const SETTINGS_SCHEMA: SettingSpec[] = [
-  { key: "landing", kind: "select", label: "Startseite nach Anmeldung",
-    options: [["uebersicht", "Übersicht"], ["dashboard", "Nachrichten"], ["hausaufgaben", "Hausaufgaben"], ["noten", "Noten"], ["stundenplan", "Stundenplan"]],
+  { key: "landing", kind: "select", label: t("settings.landingLabel"),
+    options: [["uebersicht", t("settings.sectionUebersicht")], ["dashboard", t("settings.optDashboard")], ["hausaufgaben", t("settings.optHomework")], ["noten", t("settings.optGrades")], ["stundenplan", t("settings.optTimetable")]],
     default: "uebersicht" },
-  { key: "hw_status", kind: "select", label: "Hausaufgaben: Standardfilter",
-    options: [["alle", "Alle"], ["offen", "Nur offene"], ["überfällig", "Nur überfällige"], ["erledigt", "Nur erledigte"], ["papierkorb", "Papierkorb"]],
+  { key: "hw_status", kind: "select", label: t("settings.hwStatusLabel"),
+    options: [["alle", t("settings.optAll")], ["offen", t("settings.optOpen")], ["überfällig", t("settings.optOverdue")], ["erledigt", t("settings.optDone")], ["papierkorb", t("settings.optTrash")]],
     default: "alle" },
-  { key: "hw_tests", kind: "bool", label: "Hausaufgaben: Tests und Prüfungen standardmäßig einbeziehen", default: false },
-  { key: "ov_unread", kind: "int", label: "Übersicht: max. ungelesene Nachrichten", min: 1, max: 50, default: 10 },
-  { key: "ov_homework", kind: "int", label: "Übersicht: max. offene Hausaufgaben", min: 1, max: 50, default: 10 },
-  { key: "ov_order", kind: "order", section: "Übersicht", label: "Reihenfolge der Übersicht", default: "messages,homework,weather" },
-  { key: "ov_wetter", kind: "bool", section: "Wetter", label: "Wetterkarte auf der Übersicht anzeigen",
-    hint: "Gilt für die Weboberfläche und die Android-App.", default: true },
-  { key: "wetter_city", kind: "text", section: "Wetter", label: "Wetter: Stadt",
-    placeholder: "z. B. Berlin", maxlength: 100, hint: "Auswahl gilt für die Wetterkarte auf Web und Android.", default: "" },
+  { key: "hw_tests", kind: "bool", label: t("settings.hwTestsLabel"), default: false },
+  { key: "ov_unread", kind: "int", label: t("settings.ovUnreadLabel"), min: 1, max: 50, default: 10 },
+  { key: "ov_homework", kind: "int", label: t("settings.ovHomeworkLabel"), min: 1, max: 50, default: 10 },
+  { key: "ov_order", kind: "order", section: t("settings.sectionUebersicht"), label: t("settings.ovOrderLabel"), default: "messages,homework,weather" },
+  { key: "ov_wetter", kind: "bool", section: t("settings.sectionWetter"), label: t("settings.ovWetterLabel"),
+    hint: t("settings.ovWetterHint"), default: true },
+  { key: "wetter_city", kind: "text", section: t("settings.sectionWetter"), label: t("settings.cityLabel"),
+    placeholder: t("settings.cityPlaceholder"), maxlength: 100, hint: t("settings.cityHint"), default: "" },
 ];
 
 export const SETTINGS_DEFAULTS: Record<string, unknown> = Object.fromEntries(SETTINGS_SCHEMA.map((spec) => [spec.key, spec.default]));

@@ -27,7 +27,7 @@ describe("EdupageDataService (Paket N-G: Wetter, Python-Parität)", () => {
       return { status: 200, json: { cod: 200, name: "X", timezone: 0, weather: [{ description: "klar", icon: "01d" }], main: { temp: 10, temp_max: 11, temp_min: 9 }, wind: {}, clouds: {}, sys: {} } };
     };
     const weatherService = new EdupageDataService(prisma as never, undefined, { fetchJson: json });
-    await expect(weatherService.weather({})).rejects.toMatchObject({ response: { error: "Bitte Koordinaten (?lat=..&lon=..) oder Stadt (?city=..) angeben.", code: "VALIDATION" } });
+    await expect(weatherService.weather({})).rejects.toMatchObject({ response: { error: "Please specify coordinates (?lat=..&lon=..) or city (?city=..).", code: "VALIDATION" } });
     await expect(weatherService.weather({ lat: "52", lon: "13" })).rejects.toMatchObject({ response: { code: "CONFIG_MISSING" } });
     process.env.OPENWEATHER_KEY = "key";
     const ok = await weatherService.weather({ city: "Berlin" }) as unknown as { city: string };

@@ -96,7 +96,7 @@ describe("EdupageDataService (Paket N-H, Python-Parität)", () => {
     expect(week.days).toHaveLength(5);
     expect(week.days[0]?.day_label).toBe("Montag 14.09.2026");
     expect(week.days[0]?.changes).toEqual([{ class: "5A", lesson: "1", title: "Mathe", action: "change" }]);
-    await expect(service.substitutionsWeek(claims, { day: "kein Datum" })).rejects.toMatchObject({ response: { error: "Das Datum muss im Format JJJJ-MM-TT angegeben werden." } });
+    await expect(service.substitutionsWeek(claims, { day: "kein Datum" })).rejects.toMatchObject({ response: { error: "The date must be given in the format YYYY-MM-DD." } });
   });
 
   it("baut die Agenda mit Arten, Fenster und Sortierung wie Python", async () => {
@@ -110,6 +110,6 @@ describe("EdupageDataService (Paket N-H, Python-Parität)", () => {
     ]);
     expect(agenda.total).toBe(3);
     expect(agenda.cache_info).toBe("frisch geladen");
-    await expect(service.agenda(claims, { since: "2026-09-30", until: "2026-09-15" })).rejects.toMatchObject({ response: { error: "Der Zeitraum darf höchstens ein Jahr umfassen." } });
+    await expect(service.agenda(claims, { since: "2026-09-30", until: "2026-09-15" })).rejects.toMatchObject({ response: { error: "The period must not span more than one year." } });
   });
 });

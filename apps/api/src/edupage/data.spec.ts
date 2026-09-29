@@ -110,9 +110,9 @@ describe("EdupageDataService (Paket N-B, Python-Parität)", () => {
     const paged = await service.messages(claims, { limit: "1", offset: "1" }) as unknown as { items: { id: number }[]; limit: number; offset: number };
     expect(paged.items.map((item) => item.id)).toEqual([101]);
     expect(paged).toMatchObject({ limit: 1, offset: 1, total: 2 });
-    await expect(service.messages(claims, { type: "homework" })).rejects.toMatchObject({ response: { code: "VALIDATION", error: "Unbekannter Nachrichtentyp. Gültig: anketa, chat, genotif, news, sprava." } });
+    await expect(service.messages(claims, { type: "homework" })).rejects.toMatchObject({ response: { code: "VALIDATION", error: "Unknown message type. Valid: anketa, chat, genotif, news, sprava." } });
     await expect(service.messages(claims, { since: "gestern" })).rejects.toMatchObject({ response: { code: "VALIDATION" } });
-    await expect(service.messages(claims, { limit: "0" })).rejects.toMatchObject({ response: { error: "Limit muss zwischen 1 und 200 liegen." } });
+    await expect(service.messages(claims, { limit: "0" })).rejects.toMatchObject({ response: { error: "Limit must be between 1 and 200." } });
   });
 
   it("liefert Threads frisch und aus dem Cache", async () => {
@@ -140,8 +140,8 @@ describe("EdupageDataService (Paket N-B, Python-Parität)", () => {
   });
 
   it("validiert Senden und liefert die neue Nachricht", async () => {
-    await expect(service.send(claims, {})).rejects.toMatchObject({ response: { error: "Bitte mindestens einen gültigen Empfänger angeben." } });
-    await expect(service.send(claims, { recipients: ["Teacher5"], body: "  " })).rejects.toMatchObject({ response: { error: "Bitte einen Nachrichtentext eingeben." } });
+    await expect(service.send(claims, {})).rejects.toMatchObject({ response: { error: "Please specify at least one valid recipient." } });
+    await expect(service.send(claims, { recipients: ["Teacher5"], body: "  " })).rejects.toMatchObject({ response: { error: "Please enter a message body." } });
     const extra = [{ timelineid: "777", typ: "sprava", timestamp: "2026-09-23 09:00:00", text: "Neu", user_meno: "*", vlastnik_meno: "Ich", data: "{}", removed: "0" }];
     service = new EdupageDataService(prisma as never, factoryFor(baseRoutes([...timelineItems(), ...extra])));
     const sent = await service.send(claims, { recipients: ["Teacher5", "Teacher5", "x"], body: "Hallo" }) as unknown as { id: number; text: string };
@@ -159,11 +159,11 @@ describe("EdupageDataService (Paket N-B, Python-Parität)", () => {
     const sent = await svc.send(claims, { recipients: ["Students-12"], body: "Hallo" }) as unknown as { id: number };
     expect(sent).toMatchObject({ id: 777 });
     await expect(svc.send(claims, { recipients: ["Unbekannt1"], body: "Hallo" }))
-      .rejects.toMatchObject({ response: { error: "Bitte mindestens einen gültigen Empfänger angeben." } });
+      .rejects.toMatchObject({ response: { error: "Please specify at least one valid recipient." } });
   });
 
   it("antwortet und frischt den Thread auf", async () => {
-    await expect(service.reply(claims, 101, {})).rejects.toMatchObject({ response: { error: "Bitte einen Antworttext eingeben." } });
+    await expect(service.reply(claims, 101, {})).rejects.toMatchObject({ response: { error: "Please enter a reply text." } });
     const answered = await service.reply(claims, 101, { body: "Gerne" }) as unknown as { cached: boolean; summary: unknown };
     expect(answered.cached).toBe(false);
     expect(answered.summary).toMatchObject({ replies: 1 });
@@ -184,7 +184,7 @@ describe("EdupageDataService (Paket N-B, Python-Parität)", () => {
 
   it("mappt Anmeldefehler mit N-B-Texten", async () => {
     const failing = new EdupageDataService(prisma as never, () => ({ login: async () => { throw new BadCredentialsError(); } }) as never);
-    await expect(failing.messages(claims, {})).rejects.toMatchObject({ response: { code: "BAD_CREDENTIALS", error: "Benutzername, Passwort oder Subdomain ist falsch." } });
+    await expect(failing.messages(claims, {})).rejects.toMatchObject({ response: { code: "BAD_CREDENTIALS", error: "Username, password or subdomain is incorrect." } });
     const needs2fa = new EdupageDataService(prisma as never, () => ({ login: async () => ({ outcome: "twofactor" }) }) as never);
     await expect(needs2fa.messages(claims, {})).rejects.toMatchObject({ response: { code: "EDUPAGE_2FA" } });
   });

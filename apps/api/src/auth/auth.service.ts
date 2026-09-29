@@ -5,10 +5,11 @@ import { PrismaService } from "../prisma/prisma.service";
 import { EdupageClient, TwoFactorFields } from "../edupage/client";
 import { BadCredentialsError, CaptchaError, SecondFactorFailedError } from "../edupage/errors";
 import { formatDateTime, hashToken, newOpaqueToken, opaqueExpiry } from "../edupage/tokens";
+import { t } from "../i18n";
 import { openPassword, sealPassword } from "../edupage/vault";
 
 const sha256 = (value: string): string => createHash("sha256").update(value).digest("hex");
-const bearerError = (): UnauthorizedException => new UnauthorizedException({ error: "Token ungültig.", code: "TOKEN_INVALID" });
+const bearerError = (): UnauthorizedException => new UnauthorizedException({ error: t("auth.tokenRejected"), code: "TOKEN_INVALID" });
 
 export interface AuthClaims { sub: string; jti: string; tokenUse: "access" | "refresh"; }
 const isExpired = (error: unknown): boolean => error instanceof Error && error.name === "TokenExpiredError";
@@ -47,7 +48,7 @@ export class AuthService {
   private checkLoginRate(ip: string): void {
     const now = Date.now(); const current = (this.loginAttempts.get(ip) ?? []).filter((time) => now - time < 10 * 60_000);
     current.push(now); this.loginAttempts.set(ip, current.slice(-40));
-    if (current.length > 20) throw new HttpException({ error: "Zu viele Versuche. Bitte später erneut versuchen.", code: "RATE_LIMITED" }, 429);
+    if (current.length > 20) throw new HttpException({ error: t("auth.rateLimited"), code: "RATE_LIMITED" }, 429);
   }
 
   private async issue(account: { id: string; subdomain: string; username: string }, device: string) {
@@ -67,13 +68,13 @@ export class AuthService {
 
   private edupageError(error: unknown): HttpException {
     if (error instanceof BadCredentialsError) {
-      return new UnauthorizedException({ error: "Falscher Benutzername, Passwort oder Subdomain.", code: "BAD_CREDENTIALS" });
+      return new UnauthorizedException({ error: t("auth.badCredentials"), code: "BAD_CREDENTIALS" });
     }
     if (error instanceof CaptchaError) {
-      return new ForbiddenException({ error: "EduPage verlangt ein Captcha. Bitte einmal im Browser anmelden, dann erneut versuchen.", code: "CAPTCHA_REQUIRED" });
+      return new ForbiddenException({ error: t("auth.captchaRetry"), code: "CAPTCHA_REQUIRED" });
     }
     const detail = error instanceof Error ? error.message : String(error);
-    return new HttpException({ error: `Anmeldung fehlgeschlagen: ${detail}`, code: "UPSTREAM" }, 502);
+    return new HttpException({ error: t("upstream.loginFailed", { detail }), code: "UPSTREAM" }, 502);
   }
 
   private async issueOpaque(account: { id: string; subdomain: string; username: string }, device: string) {
@@ -130,7 +131,7 @@ export class AuthService {
         expiresAt: new Date(Date.now() + 10 * 60 * 1000),
       } });
       return { status: "2fa_required", pending_token: pending,
-        message: "Zwei-Faktor-Code aus E-Mail oder App eingeben und an /auth/2fa senden." };
+        message: t("auth.twoFactorMessage") };
     }
     const account = await this.rememberAccount(result.subdomain, username, password);
     return this.issueOpaque({ id: account.id, subdomain: result.subdomain, username }, cleanDevice);
@@ -139,10 +140,10 @@ export class AuthService {
   private async authenticateOpaque(rawToken: string): Promise<AuthClaims> {
     const row = await this.prisma.apiToken.findUnique({ where: { accessTokenHash: hashToken(rawToken) } });
     if (!row || row.revokedAt) {
-      throw new UnauthorizedException({ error: "Ungültiges oder fehlendes Token.", code: "TOKEN_INVALID" });
+      throw new UnauthorizedException({ error: t("auth.tokenInvalid"), code: "TOKEN_INVALID" });
     }
     if (row.accessExpiresAt <= new Date()) {
-      throw new UnauthorizedException({ error: "Token ist abgelaufen. Bitte erneut anmelden.", code: "TOKEN_EXPIRED" });
+      throw new UnauthorizedException({ error: t("auth.tokenExpired"), code: "TOKEN_EXPIRED" });
     }
     await this.prisma.apiToken.update({ where: { id: row.id }, data: { lastUsedAt: new Date() } });
     return { sub: row.accountId, jti: row.id, tokenUse: "access" };
@@ -160,7 +161,7 @@ export class AuthService {
       throw this.edupageError(error);
     }
     if (result.outcome === "twofactor") {
-      throw new UnauthorizedException({ error: "Sitzung erfordert erneut 2FA. Bitte erneut über /auth/login anmelden.", code: "EDUPAGE_2FA" });
+      throw new UnauthorizedException({ error: t("auth.edupage2fa"), code: "EDUPAGE_2FA" });
     }
     const previous = await this.prisma.apiToken.findUnique({ where: { accessTokenHash: hashToken(rawToken) } });
     const issued = await this.issueOpaque(
@@ -173,19 +174,19 @@ export class AuthService {
   async login(input: unknown, clientIp = "unknown") {
     this.checkLoginRate(clientIp);
     if (typeof input !== "object" || input === null || Array.isArray(input)) {
-      throw new BadRequestException({ error: "Ungültige Anfrage (JSON erwartet).", code: "VALIDATION" });
+      throw new BadRequestException({ error: t("validation.json"), code: "VALIDATION" });
     }
     const body = input as Record<string, unknown>;
     const username = typeof body.username === "string" ? body.username.trim() : "";
     const password = typeof body.password === "string" ? body.password : "";
     const rawSubdomain = typeof body.subdomain === "string" ? body.subdomain.trim().toLowerCase() : "";
     const device = typeof body.device === "string" ? body.device : "";
-    if (!username || !password) throw new BadRequestException({ error: "Bitte Benutzername und Passwort angeben.", code: "VALIDATION" });
+    if (!username || !password) throw new BadRequestException({ error: t("auth.loginRequired"), code: "VALIDATION" });
 
     if (!this.isFake()) return this.edupageLogin(username, password, rawSubdomain || "login1", device);
     const subdomain = rawSubdomain || "demo";
     const validUser = username === "demo" || username === "demo-2fa";
-    if (!validUser || password !== "demo") throw new UnauthorizedException({ error: "Falscher Benutzername, Passwort oder Subdomain.", code: "BAD_CREDENTIALS" });
+    if (!validUser || password !== "demo") throw new UnauthorizedException({ error: t("auth.badCredentials"), code: "BAD_CREDENTIALS" });
     const account = await this.prisma.userAccount.upsert({
       where: { subdomain_username: { subdomain, username } },
       update: {}, create: { subdomain, username },
@@ -197,24 +198,24 @@ export class AuthService {
         accountId: account.id, opaqueTokenHash: sha256(pending), challenge,
         expiresAt: new Date(Date.now() + 10 * 60 * 1000),
       } });
-      return { status: "2fa_required", pending_token: pending, message: "Demo-Code 123456 eingeben." };
+      return { status: "2fa_required", pending_token: pending, message: t("auth.twoFactorDemo") };
     }
     return this.issue(account, device);
   }
 
   async finishTwoFactor(input: unknown, clientIp = "unknown") {
     this.checkLoginRate(clientIp);
-    if (typeof input !== "object" || input === null || Array.isArray(input)) throw new BadRequestException({ error: "Ungültige Anfrage.", code: "VALIDATION" });
+    if (typeof input !== "object" || input === null || Array.isArray(input)) throw new BadRequestException({ error: t("common.badRequest"), code: "VALIDATION" });
     const body = input as Record<string, unknown>;
     const token = typeof body.pending_token === "string" ? body.pending_token : "";
     const code = typeof body.code === "string" ? body.code : "";
-    if (!token || !code) throw new BadRequestException({ error: "Bitte Zwischen-Token und Code angeben.", code: "VALIDATION" });
+    if (!token || !code) throw new BadRequestException({ error: t("auth.pendingTokenCode"), code: "VALIDATION" });
     const pending = await this.prisma.pendingSecondFactor.findUnique({ where: { opaqueTokenHash: sha256(token) } });
-    if (!pending || pending.consumedAt || pending.expiresAt <= new Date() || !pending.accountId) throw new UnauthorizedException({ error: "Zwischenschritt abgelaufen. Bitte erneut anmelden.", code: "PENDING_INVALID" });
+    if (!pending || pending.consumedAt || pending.expiresAt <= new Date() || !pending.accountId) throw new UnauthorizedException({ error: t("auth.pendingInvalid"), code: "PENDING_INVALID" });
     if (!this.isFake()) return this.edupageFinish(pending, code);
-    if (code !== "123456") throw new UnauthorizedException({ error: "Der Code wurde nicht akzeptiert.", code: "INVALID_CODE" });
+    if (code !== "123456") throw new UnauthorizedException({ error: t("auth.invalidCode"), code: "INVALID_CODE" });
     const claimed = await this.prisma.pendingSecondFactor.updateMany({ where: { id: pending.id, consumedAt: null }, data: { consumedAt: new Date() } });
-    if (claimed.count !== 1) throw new UnauthorizedException({ error: "Zwischenschritt abgelaufen. Bitte erneut anmelden.", code: "PENDING_INVALID" });
+    if (claimed.count !== 1) throw new UnauthorizedException({ error: t("auth.pendingInvalid"), code: "PENDING_INVALID" });
     const account = await this.prisma.userAccount.findUnique({ where: { id: pending.accountId } });
     if (!account) throw bearerError();
     const challenge = JSON.parse(Buffer.from(pending.challenge).toString("utf8")) as { device?: string };
@@ -232,7 +233,7 @@ export class AuthService {
     if (!candidate || candidate.kind !== "edupage" || typeof candidate.subdomain !== "string"
       || typeof candidate.username !== "string" || typeof candidate.fields !== "object" || !candidate.fields
       || typeof candidate.cookies !== "object" || !candidate.cookies) {
-      throw new UnauthorizedException({ error: "Zwischenschritt abgelaufen. Bitte erneut anmelden.", code: "PENDING_INVALID" });
+      throw new UnauthorizedException({ error: t("auth.pendingInvalid"), code: "PENDING_INVALID" });
     }
     return candidate as EdupageChallenge;
   }
@@ -245,7 +246,7 @@ export class AuthService {
       await client.finishTwoFactor(challenge.subdomain, challenge.fields, code, challenge.username);
     } catch (error) {
       if (error instanceof SecondFactorFailedError) {
-        throw new UnauthorizedException({ error: "Der Code wurde nicht akzeptiert. Bitte erneut versuchen.", code: "INVALID_CODE" });
+        throw new UnauthorizedException({ error: t("auth.invalidCodeRetry"), code: "INVALID_CODE" });
       }
       throw this.edupageError(error);
     }
@@ -265,11 +266,11 @@ export class AuthService {
 
   async createDevice(claims: AuthClaims, input: unknown) {
     if (typeof input !== "object" || input === null || Array.isArray(input)) {
-      throw new BadRequestException({ error: "Ungültige Anfrage (JSON erwartet).", code: "VALIDATION" });
+      throw new BadRequestException({ error: t("validation.json"), code: "VALIDATION" });
     }
     const body = input as Record<string, unknown>;
     if (body.device !== undefined && typeof body.device !== "string") {
-      throw new BadRequestException({ error: "Der Gerätename muss Text sein.", code: "VALIDATION" });
+      throw new BadRequestException({ error: t("auth.deviceNameText"), code: "VALIDATION" });
     }
     const account = await this.prisma.userAccount.findUnique({ where: { id: claims.sub } });
     if (!account) throw bearerError();
@@ -283,7 +284,7 @@ export class AuthService {
       throw this.edupageError(error);
     }
     if (result.outcome === "twofactor") {
-      throw new UnauthorizedException({ error: "Sitzung erfordert erneut 2FA. Bitte erneut über /auth/login anmelden.", code: "EDUPAGE_2FA" });
+      throw new UnauthorizedException({ error: t("auth.edupage2fa"), code: "EDUPAGE_2FA" });
     }
     return this.issueOpaque({ id: account.id, subdomain: result.subdomain, username: account.username }, deviceName);
   }
@@ -298,7 +299,7 @@ export class AuthService {
       await this.prisma.apiToken.update({ where: { id: row.id }, data: { lastUsedAt: new Date() } });
       return claims;
     } catch (error) {
-      if (isExpired(error)) throw new UnauthorizedException({ error: "Token abgelaufen. Bitte erneut anmelden.", code: "TOKEN_EXPIRED" });
+      if (isExpired(error)) throw new UnauthorizedException({ error: t("auth.tokenExpiredShort"), code: "TOKEN_EXPIRED" });
       throw bearerError();
     }
   }
@@ -308,7 +309,7 @@ export class AuthService {
     let claims: AuthClaims;
     try { claims = await this.jwt.verifyAsync<AuthClaims>(rawToken); }
     catch (error) {
-      if (isExpired(error)) throw new UnauthorizedException({ error: "Token abgelaufen. Bitte erneut anmelden.", code: "TOKEN_EXPIRED" });
+      if (isExpired(error)) throw new UnauthorizedException({ error: t("auth.tokenExpiredShort"), code: "TOKEN_EXPIRED" });
       throw bearerError();
     }
     if (claims.tokenUse !== "refresh" && claims.tokenUse !== "access") throw bearerError();
@@ -348,13 +349,13 @@ export class AuthService {
   async revokeDevice(claims: AuthClaims, id: string) {
     if (!this.isFake()) {
       const clean = (id ?? "").trim();
-      if (!clean) throw new BadRequestException({ error: "Bitte Token-ID angeben.", code: "VALIDATION" });
+      if (!clean) throw new BadRequestException({ error: t("auth.tokenId"), code: "VALIDATION" });
       const result = await this.prisma.apiToken.updateMany({ where: { accountId: claims.sub, accessTokenHash: clean, revokedAt: null }, data: { revokedAt: new Date(), refreshTokenHash: null } });
-      if (!result.count) throw new NotFoundException({ error: "Token nicht gefunden.", code: "NOT_FOUND" });
+      if (!result.count) throw new NotFoundException({ error: t("auth.tokenNotFound"), code: "NOT_FOUND" });
       return { status: "ok" };
     }
     const result = await this.prisma.apiToken.updateMany({ where: { accountId: claims.sub, accessTokenHash: id, revokedAt: null }, data: { revokedAt: new Date(), refreshTokenHash: null } });
-    if (!result.count) throw new NotFoundException({ error: "Gerät nicht gefunden.", code: "NOT_FOUND" });
+    if (!result.count) throw new NotFoundException({ error: t("auth.deviceNotFound"), code: "NOT_FOUND" });
     return { status: "ok" };
   }
 }
