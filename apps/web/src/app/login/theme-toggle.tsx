@@ -34,8 +34,9 @@ export function ThemeToggle() {
 
   return (
     <>
+    <span className="auth-top-left select-wrap lang-wrap">
     <select
-      className="auth-top-left auth-lang-select"
+      className="btn btn-light btn-sm auth-lang-select"
       aria-label={t("theme.language")}
       value={locale}
       onChange={(event) => {
@@ -49,6 +50,7 @@ export function ThemeToggle() {
     >
       {supported.map((code) => <option key={code} value={code}>{NATIVE_NAMES[code] ?? code}</option>)}
     </select>
+    </span>
     <button
       className={`theme-toggle auth-top-right${dark ? " is-dark" : ""}`}
       type="button"
