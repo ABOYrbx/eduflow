@@ -110,7 +110,7 @@ public enum OnboardingState {
 }
 
 /// Übersetzungsstand einer Sprache aus dem String-Katalog (Zähler =
-/// Keys mit eigenem Wert, Nenner = Keys mit Übersetzungsbedarf; Deutsch
+/// Keys mit eigenem Wert, Nenner = Keys mit Übersetzungsbedarf; Englisch
 /// als Quelle zählt als vollständig). Per Skript aus
 /// `mac/EduFlow/Resources/Localizable.xcstrings` erzeugt, siehe
 /// `plaene/LOKALISIERUNG.md`.
@@ -228,14 +228,15 @@ public enum AppLocalizations {
         return found.isEmpty ? fallback : found
     }
 
-    /// Übersetzungsstand je Sprache aus den Tabellen (Nenner = Quell-Keys
-    /// mit Bedarf, Zähler = davon Keys mit eigenem Wert; Quelle zählt voll).
-    public static func coverage(sourceCode: String = "de", in bundle: Bundle = .main) -> [LocaleCoverage] {
-        guard let source = table(for: sourceCode, in: bundle),
+    /// Übersetzungsstand je Sprache aus den Tabellen (Nenner = Keys mit
+    /// unterschiedlichem Deutsch/Englisch-Wert, Zähler = davon Keys mit
+    /// eigenem Wert ungleich Englisch; Quelle zählt voll).
+    public static func coverage(sourceCode: String = "en", in bundle: Bundle = .main) -> [LocaleCoverage] {
+        guard let german = table(for: "de", in: bundle),
               let english = table(for: "en", in: bundle) else {
             return localeCoverage
         }
-        let denominator = source.keys.filter { english[$0] != source[$0] }
+        let denominator = english.keys.filter { german[$0] != english[$0] }
         guard !denominator.isEmpty else { return localeCoverage }
         return availableCodes(in: bundle).map { code in
             if code == sourceCode {
@@ -244,7 +245,7 @@ public enum AppLocalizations {
             guard let target = table(for: code, in: bundle) else {
                 return LocaleCoverage(code: code, translated: 0, total: denominator.count, percent: 0)
             }
-            let done = denominator.filter { target[$0] != nil && target[$0] != source[$0] }
+            let done = denominator.filter { target[$0] != nil && target[$0] != english[$0] }
             let percent = Int((Double(done.count) / Double(denominator.count) * 100).rounded())
             return LocaleCoverage(code: code, translated: done.count, total: denominator.count, percent: percent)
         }
