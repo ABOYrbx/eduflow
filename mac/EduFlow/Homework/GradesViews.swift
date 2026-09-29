@@ -38,7 +38,7 @@ public struct GradesView: View {
                             .riseIn(delay: Double(min(index, 8)) * 0.06)
                     }
                     if vm.canLoadMore {
-                        Button(vm.isLoadingMore ? "Lädt …" : String(format: NSLocalizedString("grades_load_more", value: "Mehr laden (%d/%d)", comment: "Noten: mehr laden"), vm.items.count, vm.total)) {
+                        Button(vm.isLoadingMore ? NSLocalizedString("Lädt …", value: "Lädt …", comment: "Noten: lädt") : String(format: NSLocalizedString("grades_load_more", value: "Mehr laden (%d/%d)", comment: "Noten: mehr laden"), vm.items.count, vm.total)) {
                             Task { await vm.loadMore(onSessionExpired: onSessionExpired) }
                         }
                         .buttonStyle(UberButtonStyle(.smallLight))

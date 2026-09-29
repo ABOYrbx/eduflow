@@ -328,7 +328,7 @@ public struct SettingsView: View {
 
     private var actionsSection: some View {
         VStack(spacing: 10) {
-            PillButton(vm.isSaving ? "Speichern …" : "Speichern") {
+            PillButton(vm.isSaving ? NSLocalizedString("Speichern …", value: "Speichern …", comment: "Einstellungen: Speichern läuft") : NSLocalizedString("Speichern", value: "Speichern", comment: "Einstellungen: Speichern")) {
                 Task { await vm.save(onSessionExpired: onSessionExpired) }
             }
             .disabled(vm.isSaving || vm.isLoading)
@@ -349,7 +349,7 @@ public struct SettingsView: View {
                     .buttonStyle(UberButtonStyle(.smallLight))
                     .hoverLift()
             }
-            Button(vm.isLoggingOut ? "Abmelden …" : "Abmelden") {
+            Button(vm.isLoggingOut ? NSLocalizedString("Abmelden …", value: "Abmelden …", comment: "Einstellungen: Abmelden läuft") : NSLocalizedString("Abmelden", value: "Abmelden", comment: "Einstellungen: Abmelden")) {
                 Task {
                     await vm.logout()
                     onLogout()

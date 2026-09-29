@@ -151,7 +151,7 @@ public enum AppLanguage {
 
     /// Wirksame Sprache: Override oder Systemsprache.
     public static var current: String {
-        override ?? Locale.current.languageCode ?? "en"
+        override ?? Locale.current.language.languageCode?.identifier ?? "en"
     }
 
     /// Sprachen aus dem String-Katalog (plus Systemsprache), sortiert.

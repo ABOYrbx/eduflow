@@ -337,7 +337,7 @@ struct SchoolView: View {
 
     @ViewBuilder private var agendaContent: some View {
         if vm.agenda.isEmpty {
-            emptyCard("Keine Schultermine oder Prüfungen in diesem Zeitraum.")
+            emptyCard(NSLocalizedString("Keine Schultermine oder Prüfungen in diesem Zeitraum.", value: "Keine Schultermine oder Prüfungen in diesem Zeitraum.", comment: "Schule: keine Termine"))
         } else {
             ForEach(vm.agenda) { item in
                 VStack(alignment: .leading, spacing: 6) {
@@ -367,7 +367,7 @@ struct SchoolView: View {
     @ViewBuilder private var substitutionsContent: some View {
         let daysWithChanges = vm.substitutions.filter { !$0.changes.isEmpty }
         if daysWithChanges.isEmpty {
-            emptyCard("Für diese Woche sind keine Vertretungen eingetragen.")
+            emptyCard(NSLocalizedString("Für diese Woche sind keine Vertretungen eingetragen.", value: "Für diese Woche sind keine Vertretungen eingetragen.", comment: "Schule: keine Vertretungen"))
         } else {
             ForEach(daysWithChanges) { day in
                 VStack(alignment: .leading, spacing: 8) {

@@ -728,7 +728,7 @@ public struct ErrorView: View {
                 .font(UberFont.text(15))
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 24)
-            PillButton("Erneut versuchen", action: onRetry)
+            PillButton(NSLocalizedString("Erneut versuchen", value: "Erneut versuchen", comment: "Fehler: erneut versuchen"), action: onRetry)
                 .padding(.horizontal, 24)
             Spacer()
         }

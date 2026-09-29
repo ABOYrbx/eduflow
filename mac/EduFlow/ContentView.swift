@@ -247,11 +247,11 @@ private struct TopPillNav: View {
                     }
                 }
                 Divider()
-                profileAction("Einstellungen", icon: "gearshape") {
+                profileAction(NSLocalizedString("Einstellungen", value: "Einstellungen", comment: "Navigation: Einstellungen"), icon: "gearshape") {
                     profileMenuOpen = false
                     onNavigate(.settings)
                 }
-                profileAction("Geräte", icon: "laptopcomputer.and.iphone") {
+                profileAction(NSLocalizedString("Geräte", value: "Geräte", comment: "Navigation: Geräte"), icon: "laptopcomputer.and.iphone") {
                     profileMenuOpen = false
                     onNavigate(.devices)
                 }
@@ -260,7 +260,7 @@ private struct TopPillNav: View {
                     onNavigate(.school)
                 }
                 Divider()
-                profileAction("Abmelden", icon: "rectangle.portrait.and.arrow.right", isDestructive: true) {
+                profileAction(NSLocalizedString("Abmelden", value: "Abmelden", comment: "Navigation: Abmelden"), icon: "rectangle.portrait.and.arrow.right", isDestructive: true) {
                     profileMenuOpen = false
                     onLogout()
                 }
