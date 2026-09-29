@@ -390,8 +390,17 @@ function DashboardApp({ username }) {
                                                 className: "pm-link",
                                                 href: "/settings",
                                                 role: "menuitem",
-                                                children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("nav.settings")
-                                            }, void 0, false, {
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                                        name: "gear"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                                        lineNumber: 147,
+                                                        columnNumber: 70
+                                                    }, this),
+                                                    (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("nav.settings")
+                                                ]
+                                            }, void 0, true, {
                                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                                 lineNumber: 147,
                                                 columnNumber: 11
@@ -681,8 +690,17 @@ function OverviewView({ username }) {
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                 className: "btn btn-primary btn-sm",
                                 href: "/homework",
-                                children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("overview.allTasks")
-                            }, void 0, false, {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                        name: "list"
+                                    }, void 0, false, {
+                                        fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                        lineNumber: 185,
+                                        columnNumber: 258
+                                    }, this),
+                                    (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("overview.allTasks")
+                                ]
+                            }, void 0, true, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 185,
                                 columnNumber: 200
@@ -708,7 +726,7 @@ function OverviewView({ username }) {
                                 }, void 0, false, {
                                     fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                     lineNumber: 185,
-                                    columnNumber: 339
+                                    columnNumber: 359
                                 }, this),
                                 " ",
                                 (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("homework.open")
@@ -716,7 +734,7 @@ function OverviewView({ username }) {
                         }, void 0, true, {
                             fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                             lineNumber: 185,
-                            columnNumber: 333
+                            columnNumber: 353
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                             className: "sep",
@@ -724,7 +742,7 @@ function OverviewView({ username }) {
                         }, void 0, false, {
                             fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                             lineNumber: 185,
-                            columnNumber: 403
+                            columnNumber: 423
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                             children: [
@@ -734,7 +752,7 @@ function OverviewView({ username }) {
                                 }, void 0, false, {
                                     fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                     lineNumber: 185,
-                                    columnNumber: 439
+                                    columnNumber: 459
                                 }, this),
                                 " ",
                                 (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("homework.overdue")
@@ -742,7 +760,7 @@ function OverviewView({ username }) {
                         }, void 0, true, {
                             fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                             lineNumber: 185,
-                            columnNumber: 433
+                            columnNumber: 453
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                             className: "sep",
@@ -750,7 +768,7 @@ function OverviewView({ username }) {
                         }, void 0, false, {
                             fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                             lineNumber: 185,
-                            columnNumber: 534
+                            columnNumber: 554
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                             children: [
@@ -760,7 +778,7 @@ function OverviewView({ username }) {
                                 }, void 0, false, {
                                     fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                     lineNumber: 185,
-                                    columnNumber: 570
+                                    columnNumber: 590
                                 }, this),
                                 " ",
                                 (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("homework.done")
@@ -768,13 +786,13 @@ function OverviewView({ username }) {
                         }, void 0, true, {
                             fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                             lineNumber: 185,
-                            columnNumber: 564
+                            columnNumber: 584
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                     lineNumber: 185,
-                    columnNumber: 301
+                    columnNumber: 321
                 }, this),
                 homework.slice(0, 5).map((task)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("article", {
                         className: `hw card ${task.status === "überfällig" ? "st-ueber" : task.status === "heute fällig" ? "st-heute" : task.is_done ? "st-erledigt" : "st-offen"} ${task.is_done ? "is-done" : ""}`,
@@ -784,7 +802,7 @@ function OverviewView({ username }) {
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 185,
-                                columnNumber: 909
+                                columnNumber: 929
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "meta",
@@ -795,7 +813,7 @@ function OverviewView({ username }) {
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 185,
-                                        columnNumber: 952
+                                        columnNumber: 972
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         className: "tag tag-blue",
@@ -803,7 +821,7 @@ function OverviewView({ username }) {
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 185,
-                                        columnNumber: 1005
+                                        columnNumber: 1025
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: [
@@ -814,26 +832,26 @@ function OverviewView({ username }) {
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                                 lineNumber: 185,
-                                                columnNumber: 1107
+                                                columnNumber: 1127
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 185,
-                                        columnNumber: 1076
+                                        columnNumber: 1096
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: task.teacher
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 185,
-                                        columnNumber: 1149
+                                        columnNumber: 1169
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 185,
-                                columnNumber: 930
+                                columnNumber: 950
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "text",
@@ -841,20 +859,20 @@ function OverviewView({ username }) {
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 185,
-                                columnNumber: 1182
+                                columnNumber: 1202
                             }, this)
                         ]
                     }, task.id, true, {
                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                         lineNumber: 185,
-                        columnNumber: 696
+                        columnNumber: 716
                     }, this)),
                 !homework.length && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Empty, {
                     children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("overview.emptyHomework")
                 }, void 0, false, {
                     fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                     lineNumber: 185,
-                    columnNumber: 1290
+                    columnNumber: 1310
                 }, this)
             ]
         }, "homework", true, {
@@ -899,8 +917,17 @@ function OverviewView({ username }) {
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                 className: "btn btn-light btn-sm",
                                 href: "/messages",
-                                children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("overview.allMessages")
-                            }, void 0, false, {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                        name: "list"
+                                    }, void 0, false, {
+                                        fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                        lineNumber: 186,
+                                        columnNumber: 345
+                                    }, this),
+                                    (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("overview.allMessages")
+                                ]
+                            }, void 0, true, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 186,
                                 columnNumber: 289
@@ -927,20 +954,20 @@ function OverviewView({ username }) {
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 186,
-                                        columnNumber: 500
+                                        columnNumber: 520
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                         children: message.timestamp
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 186,
-                                        columnNumber: 555
+                                        columnNumber: 575
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 186,
-                                columnNumber: 478
+                                columnNumber: 498
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "text",
@@ -948,20 +975,20 @@ function OverviewView({ username }) {
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 186,
-                                columnNumber: 593
+                                columnNumber: 613
                             }, this)
                         ]
                     }, message.id, true, {
                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                         lineNumber: 186,
-                        columnNumber: 418
+                        columnNumber: 438
                     }, this)),
                 !messages.length && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(Empty, {
                     children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("overview.emptyMessages")
                 }, void 0, false, {
                     fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                     lineNumber: 186,
-                    columnNumber: 690
+                    columnNumber: 710
                 }, this)
             ]
         }, "messages", true, {
@@ -1950,8 +1977,17 @@ function MessagesView() {
                                         className: "secondary",
                                         disabled: page === 0,
                                         onClick: ()=>setPage((p)=>Math.max(0, p - 1)),
-                                        children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("messages.back")
-                                    }, void 0, false, {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                                name: "left"
+                                            }, void 0, false, {
+                                                fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                                lineNumber: 220,
+                                                columnNumber: 188
+                                            }, this),
+                                            (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("messages.back")
+                                        ]
+                                    }, void 0, true, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 220,
                                         columnNumber: 85
@@ -1963,17 +1999,26 @@ function MessagesView() {
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 220,
-                                        columnNumber: 217
+                                        columnNumber: 237
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         className: "secondary",
                                         disabled: items.length < 20,
                                         onClick: ()=>setPage((p)=>p + 1),
-                                        children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("messages.next")
-                                    }, void 0, false, {
+                                        children: [
+                                            (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("messages.next"),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                                name: "right"
+                                            }, void 0, false, {
+                                                fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                                lineNumber: 220,
+                                                columnNumber: 404
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 220,
-                                        columnNumber: 267
+                                        columnNumber: 287
                                     }, this)
                                 ]
                             }, void 0, true, {
@@ -2016,8 +2061,17 @@ function MessagesView() {
                                     !selected && composeOpen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         className: "secondary",
                                         onClick: ()=>setComposeOpen(false),
-                                        children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("common.close")
-                                    }, void 0, false, {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                                name: "close"
+                                            }, void 0, false, {
+                                                fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                                lineNumber: 221,
+                                                columnNumber: 424
+                                            }, this),
+                                            (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("common.close")
+                                        ]
+                                    }, void 0, true, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 221,
                                         columnNumber: 356
@@ -2080,10 +2134,19 @@ function MessagesView() {
                                             messageAttachments(selected).map((name, idx)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                     className: "secondary attachment-button",
                                                     onClick: ()=>void download(selected, idx, name),
-                                                    children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("messages.loadFile", {
-                                                        name
-                                                    })
-                                                }, `${name}-${idx}`, false, {
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                                            name: "download"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                                            lineNumber: 222,
+                                                            columnNumber: 470
+                                                        }, this),
+                                                        (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("messages.loadFile", {
+                                                            name
+                                                        })
+                                                    ]
+                                                }, `${name}-${idx}`, true, {
                                                     fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                                     lineNumber: 222,
                                                     columnNumber: 348
@@ -2101,7 +2164,7 @@ function MessagesView() {
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                                 lineNumber: 222,
-                                                columnNumber: 534
+                                                columnNumber: 558
                                             }, this),
                                             thread.likes.map((like, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                     className: "muted",
@@ -2112,7 +2175,7 @@ function MessagesView() {
                                                 }, `${like.name}-${i}`, false, {
                                                     fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                                     lineNumber: 222,
-                                                    columnNumber: 602
+                                                    columnNumber: 626
                                                 }, this)),
                                             thread.replies.map((reply, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "reply",
@@ -2122,20 +2185,20 @@ function MessagesView() {
                                                         }, void 0, false, {
                                                             fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                                             lineNumber: 222,
-                                                            columnNumber: 798
+                                                            columnNumber: 822
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                             children: reply.text
                                                         }, void 0, false, {
                                                             fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                                             lineNumber: 222,
-                                                            columnNumber: 827
+                                                            columnNumber: 851
                                                         }, this)
                                                     ]
                                                 }, `${reply.name}-${i}`, true, {
                                                     fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                                     lineNumber: 222,
-                                                    columnNumber: 748
+                                                    columnNumber: 772
                                                 }, this)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
                                                 className: "stack-form",
@@ -2152,33 +2215,42 @@ function MessagesView() {
                                                             }, void 0, false, {
                                                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                                                 lineNumber: 222,
-                                                                columnNumber: 933
+                                                                columnNumber: 957
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                                         lineNumber: 222,
-                                                        columnNumber: 900
+                                                        columnNumber: 924
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                                         className: "primary",
-                                                        children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("messages.sendReply")
-                                                    }, void 0, false, {
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                                                name: "send"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                                                lineNumber: 222,
+                                                                columnNumber: 1052
+                                                            }, this),
+                                                            (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("messages.sendReply")
+                                                        ]
+                                                    }, void 0, true, {
                                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                                         lineNumber: 222,
-                                                        columnNumber: 1000
+                                                        columnNumber: 1024
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                                 lineNumber: 222,
-                                                columnNumber: 854
+                                                columnNumber: 878
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 222,
-                                        columnNumber: 532
+                                        columnNumber: 556
                                     }, this)
                                 ]
                             }, void 0, true, {
@@ -2200,20 +2272,20 @@ function MessagesView() {
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                                 lineNumber: 222,
-                                                columnNumber: 1176
+                                                columnNumber: 1220
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 222,
-                                        columnNumber: 1138
+                                        columnNumber: 1182
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                         children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("messages.recipients")
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 222,
-                                        columnNumber: 1360
+                                        columnNumber: 1404
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                         className: "recipient-list",
@@ -2228,7 +2300,7 @@ function MessagesView() {
                                                         }, void 0, false, {
                                                             fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                                             lineNumber: 222,
-                                                            columnNumber: 1516
+                                                            columnNumber: 1560
                                                         }, this),
                                                         " ",
                                                         recipient.name,
@@ -2238,13 +2310,13 @@ function MessagesView() {
                                                         }, void 0, false, {
                                                             fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                                             lineNumber: 222,
-                                                            columnNumber: 1616
+                                                            columnNumber: 1660
                                                         }, this)
                                                     ]
                                                 }, recipient.id, true, {
                                                     fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                                     lineNumber: 222,
-                                                    columnNumber: 1472
+                                                    columnNumber: 1516
                                                 }, this)),
                                             !filteredRecipients.length && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                 className: "muted",
@@ -2252,20 +2324,20 @@ function MessagesView() {
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                                 lineNumber: 222,
-                                                columnNumber: 1780
+                                                columnNumber: 1824
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 222,
-                                        columnNumber: 1401
+                                        columnNumber: 1445
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("small", {
                                         children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("messages.multipleHint")
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 222,
-                                        columnNumber: 1840
+                                        columnNumber: 1884
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                                         children: [
@@ -2279,27 +2351,36 @@ function MessagesView() {
                                             }, void 0, false, {
                                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                                 lineNumber: 222,
-                                                columnNumber: 1918
+                                                columnNumber: 1962
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 222,
-                                        columnNumber: 1883
+                                        columnNumber: 1927
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         className: "primary",
-                                        children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("messages.sendMessage")
-                                    }, void 0, false, {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                                name: "send"
+                                            }, void 0, false, {
+                                                fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                                lineNumber: 222,
+                                                columnNumber: 2104
+                                            }, this),
+                                            (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("messages.sendMessage")
+                                        ]
+                                    }, void 0, true, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 222,
-                                        columnNumber: 2032
+                                        columnNumber: 2076
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 222,
-                                columnNumber: 1093
+                                columnNumber: 1137
                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "detail-empty",
                                 children: [
@@ -2309,12 +2390,12 @@ function MessagesView() {
                                         }, void 0, false, {
                                             fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                             lineNumber: 222,
-                                            columnNumber: 2139
+                                            columnNumber: 2203
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 222,
-                                        columnNumber: 2136
+                                        columnNumber: 2200
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         className: "muted",
@@ -2322,22 +2403,31 @@ function MessagesView() {
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 222,
-                                        columnNumber: 2187
+                                        columnNumber: 2251
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         className: "btn btn-primary btn-sm",
                                         onClick: ()=>setComposeOpen(true),
-                                        children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("messages.newMessageBtn")
-                                    }, void 0, false, {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                                name: "pencil"
+                                            }, void 0, false, {
+                                                fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                                lineNumber: 222,
+                                                columnNumber: 2382
+                                            }, this),
+                                            (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("messages.newMessageBtn")
+                                        ]
+                                    }, void 0, true, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 222,
-                                        columnNumber: 2238
+                                        columnNumber: 2302
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 222,
-                                columnNumber: 2106
+                                columnNumber: 2170
                             }, this)
                         ]
                     }, void 0, true, {
@@ -2709,8 +2799,17 @@ function HomeworkView() {
                                 className: "btn btn-primary",
                                 type: "button",
                                 onClick: ()=>void load(),
-                                children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("homework.reload")
-                            }, void 0, false, {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                        name: "refresh"
+                                    }, void 0, false, {
+                                        fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                        lineNumber: 247,
+                                        columnNumber: 1277
+                                    }, this),
+                                    (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("homework.reload")
+                                ]
+                            }, void 0, true, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 247,
                                 columnNumber: 1199
@@ -2719,13 +2818,22 @@ function HomeworkView() {
                                 className: "btn btn-light",
                                 type: "button",
                                 onClick: ()=>setStatus("papierkorb"),
-                                children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("homework.trashWithCount", {
-                                    count: counts.papierkorb
-                                })
-                            }, void 0, false, {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                        name: "trash"
+                                    }, void 0, false, {
+                                        fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                        lineNumber: 247,
+                                        columnNumber: 1452
+                                    }, this),
+                                    (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("homework.trashWithCount", {
+                                        count: counts.papierkorb
+                                    })
+                                ]
+                            }, void 0, true, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 247,
-                                columnNumber: 1341
+                                columnNumber: 1364
                             }, this)
                         ]
                     }, void 0, true, {
@@ -2885,8 +2993,17 @@ function HomeworkView() {
                                                         className: `btn ${task.is_done ? "btn-light" : "btn-primary"} btn-sm`,
                                                         type: "button",
                                                         onClick: ()=>void change(task, task.is_hidden ? "trash" : "done"),
-                                                        children: task.is_hidden ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("homework.restore") : task.is_done ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("homework.reopen") : (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("homework.doneBtn")
-                                                    }, void 0, false, {
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                                                name: task.is_hidden ? "restore" : "check"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                                                lineNumber: 248,
+                                                                columnNumber: 1449
+                                                            }, this),
+                                                            task.is_hidden ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("homework.restore") : task.is_done ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("homework.reopen") : (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("homework.doneBtn")
+                                                        ]
+                                                    }, void 0, true, {
                                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                                         lineNumber: 248,
                                                         columnNumber: 1287
@@ -2895,11 +3012,20 @@ function HomeworkView() {
                                                         className: "btn btn-light btn-sm",
                                                         type: "button",
                                                         onClick: ()=>void change(task, "trash"),
-                                                        children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("homework.trashLabel")
-                                                    }, void 0, false, {
+                                                        children: [
+                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                                                name: "trash"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                                                lineNumber: 248,
+                                                                columnNumber: 1730
+                                                            }, this),
+                                                            (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("homework.trashLabel")
+                                                        ]
+                                                    }, void 0, true, {
                                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                                         lineNumber: 248,
-                                                        columnNumber: 1580
+                                                        columnNumber: 1632
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
@@ -2923,7 +3049,7 @@ function HomeworkView() {
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 248,
-                                columnNumber: 1756
+                                columnNumber: 1829
                             }, this)
                         ]
                     }, void 0, true, {
@@ -3113,8 +3239,17 @@ function GradesView() {
                                 className: "btn btn-light btn-sm",
                                 disabled: refreshing,
                                 onClick: ()=>void load(true),
-                                children: refreshing ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("common.loading") : (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("grades.refresh")
-                            }, void 0, false, {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                        name: "refresh"
+                                    }, void 0, false, {
+                                        fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                        lineNumber: 280,
+                                        columnNumber: 720
+                                    }, this),
+                                    refreshing ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("common.loading") : (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("grades.refresh")
+                                ]
+                            }, void 0, true, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 280,
                                 columnNumber: 625
@@ -3624,8 +3759,17 @@ function TimetableView() {
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 className: "btn btn-light btn-sm",
                                 onClick: ()=>addDay(-1),
-                                children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("timetable.backDay")
-                            }, void 0, false, {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                        name: "left"
+                                    }, void 0, false, {
+                                        fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                        lineNumber: 304,
+                                        columnNumber: 580
+                                    }, this),
+                                    (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("timetable.backDay")
+                                ]
+                            }, void 0, true, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 304,
                                 columnNumber: 512
@@ -3639,7 +3783,7 @@ function TimetableView() {
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 304,
-                                        columnNumber: 636
+                                        columnNumber: 656
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$date$2d$field$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DateField"], {
                                         id: "timetable-day",
@@ -3649,31 +3793,49 @@ function TimetableView() {
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 304,
-                                        columnNumber: 698
+                                        columnNumber: 718
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 304,
-                                columnNumber: 613
+                                columnNumber: 633
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 className: "btn btn-light btn-sm",
                                 onClick: ()=>setDay(new Date().toISOString().slice(0, 10)),
-                                children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("overview.today")
-                            }, void 0, false, {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                        name: "calendar"
+                                    }, void 0, false, {
+                                        fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                        lineNumber: 304,
+                                        columnNumber: 925
+                                    }, this),
+                                    (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("overview.today")
+                                ]
+                            }, void 0, true, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 304,
-                                columnNumber: 802
+                                columnNumber: 822
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 className: "btn btn-light btn-sm",
                                 onClick: ()=>addDay(1),
-                                children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("timetable.nextDay")
-                            }, void 0, false, {
+                                children: [
+                                    (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("timetable.nextDay"),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                        name: "right"
+                                    }, void 0, false, {
+                                        fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                        lineNumber: 304,
+                                        columnNumber: 1070
+                                    }, this)
+                                ]
+                            }, void 0, true, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 304,
-                                columnNumber: 935
+                                columnNumber: 979
                             }, this)
                         ]
                     }, void 0, true, {
@@ -3686,11 +3848,20 @@ function TimetableView() {
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 className: "btn btn-light btn-sm",
                                 onClick: ()=>addDay(-7),
-                                children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("agenda.prevWeek")
-                            }, void 0, false, {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                        name: "left"
+                                    }, void 0, false, {
+                                        fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                        lineNumber: 304,
+                                        columnNumber: 1202
+                                    }, this),
+                                    (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("agenda.prevWeek")
+                                ]
+                            }, void 0, true, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 304,
-                                columnNumber: 1069
+                                columnNumber: 1134
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 className: "btn btn-light btn-sm",
@@ -3699,22 +3870,31 @@ function TimetableView() {
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 304,
-                                columnNumber: 1168
+                                columnNumber: 1253
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 className: "btn btn-light btn-sm",
                                 onClick: ()=>addDay(7),
-                                children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("agenda.nextWeek")
-                            }, void 0, false, {
+                                children: [
+                                    (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("agenda.nextWeek"),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                        name: "right"
+                                    }, void 0, false, {
+                                        fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                        lineNumber: 304,
+                                        columnNumber: 1476
+                                    }, this)
+                                ]
+                            }, void 0, true, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 304,
-                                columnNumber: 1302
+                                columnNumber: 1387
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                         lineNumber: 304,
-                        columnNumber: 1044
+                        columnNumber: 1109
                     }, this)
                 ]
             }, void 0, true, {
@@ -4084,8 +4264,17 @@ function AgendaView() {
                         className: "btn btn-light btn-sm",
                         type: "button",
                         onClick: ()=>addWeek(-1),
-                        children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("agenda.prevWeek")
-                    }, void 0, false, {
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                name: "left"
+                            }, void 0, false, {
+                                fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                lineNumber: 316,
+                                columnNumber: 346
+                            }, this),
+                            (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("agenda.prevWeek")
+                        ]
+                    }, void 0, true, {
                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                         lineNumber: 316,
                         columnNumber: 263
@@ -4099,7 +4288,7 @@ function AgendaView() {
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 316,
-                                columnNumber: 400
+                                columnNumber: 420
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$date$2d$field$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["DateField"], {
                                 id: "agenda-day",
@@ -4109,42 +4298,69 @@ function AgendaView() {
                             }, void 0, false, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 316,
-                                columnNumber: 459
+                                columnNumber: 479
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                         lineNumber: 316,
-                        columnNumber: 377
+                        columnNumber: 397
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         className: "btn btn-light btn-sm",
                         type: "button",
                         onClick: ()=>setDay(today),
-                        children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("agenda.thisWeek")
-                    }, void 0, false, {
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                name: "calendar"
+                            }, void 0, false, {
+                                fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                lineNumber: 316,
+                                columnNumber: 663
+                            }, this),
+                            (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("agenda.thisWeek")
+                        ]
+                    }, void 0, true, {
                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                         lineNumber: 316,
-                        columnNumber: 558
+                        columnNumber: 578
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         className: "btn btn-light btn-sm",
                         type: "button",
                         onClick: ()=>addWeek(1),
-                        children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("agenda.nextWeek")
-                    }, void 0, false, {
+                        children: [
+                            (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("agenda.nextWeek"),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                name: "right"
+                            }, void 0, false, {
+                                fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                lineNumber: 316,
+                                columnNumber: 822
+                            }, this)
+                        ]
+                    }, void 0, true, {
                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                         lineNumber: 316,
-                        columnNumber: 674
+                        columnNumber: 718
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                         className: "btn btn-primary btn-sm",
                         type: "submit",
-                        children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("agenda.refresh")
-                    }, void 0, false, {
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                name: "refresh"
+                            }, void 0, false, {
+                                fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                lineNumber: 316,
+                                columnNumber: 909
+                            }, this),
+                            (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("agenda.refresh")
+                        ]
+                    }, void 0, true, {
                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                         lineNumber: 316,
-                        columnNumber: 787
+                        columnNumber: 852
                     }, this)
                 ]
             }, void 0, true, {
@@ -5507,8 +5723,17 @@ function SettingsView() {
                                         className: "btn btn-light btn-sm",
                                         type: "button",
                                         onClick: ()=>void copyToken(newToken.refresh_token ?? "", (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("settings.refreshTokenLabel")),
-                                        children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("settings.copy")
-                                    }, void 0, false, {
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$components$2f$icon$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Icon"], {
+                                                name: "copy"
+                                            }, void 0, false, {
+                                                fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
+                                                lineNumber: 391,
+                                                columnNumber: 733
+                                            }, this),
+                                            (0, __TURBOPACK__imported__module__$5b$project$5d2f$apps$2f$web$2f$src$2f$lib$2f$i18n$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["t"])("settings.copy")
+                                        ]
+                                    }, void 0, true, {
                                         fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                         lineNumber: 391,
                                         columnNumber: 584
@@ -5533,7 +5758,7 @@ function SettingsView() {
                             }, void 0, true, {
                                 fileName: "[project]/apps/web/src/components/dashboard-app.tsx",
                                 lineNumber: 391,
-                                columnNumber: 769
+                                columnNumber: 789
                             }, this)
                         ]
                     }, void 0, true, {
@@ -6013,6 +6238,11 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
     plus: "M12 5v14M5 12h14",
     search: "M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14ZM20 20l-4-4",
     sparkle: "M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z",
+    download: "M12 3v12M7 11l5 5 5-5M4 20h16",
+    send: "M21 3L3 10.5l7 3 3 7z",
+    gear: "M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM19.4 13a7.6 7.6 0 0 0 0-2l2-1.5-2-3.4-2.3 1a7.6 7.6 0 0 0-1.8-1L15 3.5h-4l-.3 2.6a7.6 7.6 0 0 0-1.8 1l-2.3-1-2 3.4L6.6 11a7.6 7.6 0 0 0 0 2l-2 1.5 2 3.4 2.3-1a7.6 7.6 0 0 0 1.8 1l.3 2.6h4l.3-2.6a7.6 7.6 0 0 0 1.8-1l2.3 1 2-3.4z",
+    list: "M4 6h16M4 12h16M4 18h16",
+    restore: "M4 12a8 8 0 1 0 2.3-5.6M4 4v4h4",
     left: "M14 6l-6 6 6 6",
     right: "M10 6l6 6-6 6"
 };
@@ -6035,12 +6265,12 @@ function Icon({ name, size = 16 }) {
                 d: index === 0 ? segment : `M${segment}`
             }, index, false, {
                 fileName: "[project]/apps/web/src/components/icon.tsx",
-                lineNumber: 57,
+                lineNumber: 62,
                 columnNumber: 9
             }, this))
     }, void 0, false, {
         fileName: "[project]/apps/web/src/components/icon.tsx",
-        lineNumber: 43,
+        lineNumber: 48,
         columnNumber: 5
     }, this);
 }

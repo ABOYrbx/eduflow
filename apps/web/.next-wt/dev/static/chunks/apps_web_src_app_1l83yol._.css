@@ -4135,6 +4135,7 @@ body.wx-open {
   border-radius: 9999px;
   justify-content: center;
   align-items: center;
+  gap: 6px;
   padding: 10px 18px;
   font-size: 13px;
   font-weight: 700;

@@ -36,7 +36,7 @@
 .stack-form textarea { border-radius: 14px; resize: vertical; }
 .stack-form select[multiple] { border-radius: 14px; }
 .stack-form small,.setting-row small { color: var(--ink-muted); font-size: 12px; font-weight: 500; }
-.primary,.secondary { display: inline-flex; align-items: center; justify-content: center; border-radius: 9999px; font-size: 13px; font-weight: 700; padding: 10px 18px; }
+.primary,.secondary { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-radius: 9999px; font-size: 13px; font-weight: 700; padding: 10px 18px; }
 .primary { background: var(--accent); color: var(--accent-ink); border: 0; }
 .primary:hover { background: var(--accent-hover); }
 .secondary { background: #fff; border: 1px solid var(--border-strong); color: var(--ink); }
