@@ -118,10 +118,7 @@
     "ovWetterHint": "Gilt für die Webschnittstelle und die Android-App.",
     "ovWetterLabel": "Wetter-Karte in der Übersicht anzeigen",
     "sectionUebersicht": "Übersicht",
-    "sectionWetter": "Wetter",
-    "opt12h": "12 Stunden",
-    "opt24h": "24 Stunden",
-    "timeFormatLabel": "Uhr: Zeitformat"
+    "sectionWetter": "Wetter"
   },
   "upstream": {
     "agendaFailed": "Schulereignisse konnten nicht geladen werden: {detail}",

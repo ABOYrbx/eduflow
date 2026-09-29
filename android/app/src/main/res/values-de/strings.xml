@@ -107,9 +107,6 @@
     <string name="settings_landing_label">Startseite nach Anmeldung</string>
     <string name="settings_hwfilter_label">Aufgaben: Standardfilter</string>
     <string name="settings_hwtests_label">Tests und Prüfungen einbeziehen</string>
-    <string name="settings_time_format_label">Uhrzeitformat</string>
-    <string name="settings_time_24h">24 Stunden</string>
-    <string name="settings_time_12h">12 Stunden</string>
     <string name="settings_unread_placeholder">Max. ungelesene Nachrichten (1–50)</string>
     <string name="settings_homework_placeholder">Max. offene Hausaufgaben (1–50)</string>
     <string name="settings_navbar_section">Navigationsleiste</string>

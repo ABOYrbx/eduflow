@@ -29,13 +29,13 @@
   "common": {
     "badRequest": "طلب غير صالح.",
     "failed": "فشل الطلب.",
-    "notFound": "Not found."
+    "notFound": "Nicht gefunden."
   },
   "docs": {
     "agenda": "الأحداث المدرسية والامتحانات والحضور",
     "apiContract": "عقد API",
     "authDescription": "خطأ في المصادقة",
-    "clearCache": "Clear cache",
+    "clearCache": "Cache leeren",
     "createDeviceToken": "إنشاء رمز الجهاز",
     "doHomework": "أكمل أو فتح المهمة",
     "grades": "Grades",
@@ -43,7 +43,7 @@
     "issueDownloadToken": "إصدار رمز التحميل القصير الأجل",
     "liveness": "مسبار الحياة",
     "loadAttachment": "تحميل مرفقات الرسالة",
-    "login": "Sign in",
+    "login": "Anmelden",
     "logout": "تسجيل الخروج",
     "markRead": "تحديد الرسائل كمقروءة",
     "messages": "قائمة الرسائل",
@@ -107,10 +107,10 @@
     "optDashboard": "الرسائل",
     "optDone": "تم فقط",
     "optGrades": "نوتن",
-    "optHomework": "Homework",
+    "optHomework": "Hausaufgaben",
     "optOpen": "فتح فقط",
     "optOverdue": "متأخرة فقط",
-    "optTimetable": "Timetable",
+    "optTimetable": "Stundenplan",
     "optTrash": "بابييركورب",
     "ovHomeworkLabel": "نظرة عامة: الحد الأقصى. افتح الواجبات المنزلية",
     "ovOrderLabel": "نظرة عامة على طلب القسم",
@@ -118,7 +118,7 @@
     "ovWetterHint": "ينطبق على واجهة الويب وتطبيق الأندرويد.",
     "ovWetterLabel": "إظهار خريطة الطقس على النظرة العامة",
     "sectionUebersicht": "Übersicht",
-    "sectionWetter": "Weather"
+    "sectionWetter": "Wetter"
   },
   "upstream": {
     "agendaFailed": "لا يمكن تحميل الأحداث المدرسية: {detail}",
