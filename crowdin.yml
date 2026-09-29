@@ -12,14 +12,14 @@ files:
   # Übersetzungen landen als weitere Kataloge neben en.json
   # (de.json ist jetzt normale Zielsprache und wird von Crowdin verwaltet).
   - source: /apps/web/messages/en.json
-    translation: /apps/web/messages/%two_letters_code%.json
+    translation: /apps/web/messages/%locale%.json
     update_option: update_as_unapproved
 
   # Backend (NestJS-Fehlermeldungen + Settings-Schema + API-Docs, `t()` aus
   # apps/api/src/i18n.ts). API-Fehler-`code`s werden nie übersetzt.
   # Quelle = englisch; de.json wird von Crowdin als Übersetzung verwaltet.
   - source: /apps/api/src/messages/en.json
-    translation: /apps/api/src/messages/%two_letters_code%.json
+    translation: /apps/api/src/messages/%locale%.json
     update_option: update_as_unapproved
 
   # Android (Quelle = englisch, values/strings.xml ist englisch,
