@@ -185,7 +185,9 @@
     "profileAria": "Άνοιγμα μενού προφίλ",
     "profileTitle": "Το προφίλ σας",
     "settings": "Ρυθμίσεις",
-    "timetable": "Χρονοδιάγραμμα"
+    "timetable": "Χρονοδιάγραμμα",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right"
   },
   "overview": {
     "allMessages": "Όλα τα μηνύματα",

@@ -185,7 +185,9 @@
     "profileAria": "Открыть меню профиля",
     "profileTitle": "Ваш профиль",
     "settings": "Настройки",
-    "timetable": "Расписание"
+    "timetable": "Расписание",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right"
   },
   "overview": {
     "allMessages": "Все сообщения",

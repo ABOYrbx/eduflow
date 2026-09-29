@@ -185,7 +185,9 @@
     "profileAria": "Åpne profilmeny",
     "profileTitle": "Din profil",
     "settings": "Innstillinger",
-    "timetable": "Tidsforløp"
+    "timetable": "Tidsforløp",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right"
   },
   "overview": {
     "allMessages": "Alle meldinger",

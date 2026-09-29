@@ -28,6 +28,8 @@ const PATHS = {
   plus: "M12 5v14M5 12h14",
   search: "M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14ZM20 20l-4-4",
   sparkle: "M12 3l2 5 5 2-5 2-2 5-2-5-5-2 5-2z",
+  left: "M14 6l-6 6 6 6",
+  right: "M10 6l6 6-6 6",
 } as const;
 
 export type IconName = keyof typeof PATHS;

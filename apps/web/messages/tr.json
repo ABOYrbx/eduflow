@@ -185,7 +185,9 @@
     "profileAria": "Profilmenü öffnen",
     "profileTitle": "Dein Profil",
     "settings": "Einstellungen",
-    "timetable": "Stundenplan"
+    "timetable": "Stundenplan",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right"
   },
   "overview": {
     "allMessages": "Alle Nachrichten",

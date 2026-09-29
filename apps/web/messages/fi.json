@@ -185,7 +185,9 @@
     "profileAria": "Avaa profiilivalikko",
     "profileTitle": "Profiilisi",
     "settings": "Asetukset",
-    "timetable": "Aikataulu"
+    "timetable": "Aikataulu",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right"
   },
   "overview": {
     "allMessages": "Kaikki viestit",

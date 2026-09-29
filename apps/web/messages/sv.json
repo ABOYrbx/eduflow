@@ -185,7 +185,9 @@
     "profileAria": "Öppna profilmenyn",
     "profileTitle": "Din profil",
     "settings": "Inställningar",
-    "timetable": "Tidtabell"
+    "timetable": "Tidtabell",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right"
   },
   "overview": {
     "allMessages": "Alla meddelanden",

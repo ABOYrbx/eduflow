@@ -185,7 +185,9 @@
     "profileAria": "Otwórz menu profilu",
     "profileTitle": "Twój profil",
     "settings": "Ustawienia",
-    "timetable": "Harmonogram"
+    "timetable": "Harmonogram",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right"
   },
   "overview": {
     "allMessages": "Wszystkie wiadomości",

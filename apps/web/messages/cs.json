@@ -185,7 +185,9 @@
     "profileAria": "Otevřít nabídku profilu",
     "profileTitle": "Váš profil",
     "settings": "Nastavení",
-    "timetable": "Rozvrh"
+    "timetable": "Rozvrh",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right"
   },
   "overview": {
     "allMessages": "Všechny zprávy",

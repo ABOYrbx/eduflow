@@ -185,7 +185,9 @@
     "profileAria": "فتح قائمة الملف الشخصي",
     "profileTitle": "ملفك الشخصي",
     "settings": "Einstellungen",
-    "timetable": "Stundenplan"
+    "timetable": "Stundenplan",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right"
   },
   "overview": {
     "allMessages": "جميع الرسائل",

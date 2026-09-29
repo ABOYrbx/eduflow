@@ -185,7 +185,9 @@
     "profileAria": "打开配置文件菜单",
     "profileTitle": "您的个人资料",
     "settings": "设置",
-    "timetable": "时间表"
+    "timetable": "时间表",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right"
   },
   "overview": {
     "allMessages": "所有消息",

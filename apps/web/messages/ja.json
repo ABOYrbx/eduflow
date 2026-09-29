@@ -185,7 +185,9 @@
     "profileAria": "プロファイルメニューを開く",
     "profileTitle": "あなたのプロフィール",
     "settings": "設定",
-    "timetable": "タイムテーブル"
+    "timetable": "タイムテーブル",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right"
   },
   "overview": {
     "allMessages": "すべてのメッセージ",

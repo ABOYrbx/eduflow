@@ -185,7 +185,9 @@
     "profileAria": "Відкрити меню профілю",
     "profileTitle": "Ваш профіль",
     "settings": "Налаштування",
-    "timetable": "Розклад"
+    "timetable": "Розклад",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right"
   },
   "overview": {
     "allMessages": "Усі повідомлення",

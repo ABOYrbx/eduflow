@@ -185,7 +185,9 @@
     "profileAria": "Abrir menú de perfil",
     "profileTitle": "Tu perfil",
     "settings": "Ajustes",
-    "timetable": "Horarios"
+    "timetable": "Horarios",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right"
   },
   "overview": {
     "allMessages": "Todos los mensajes",

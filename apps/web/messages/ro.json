@@ -185,7 +185,9 @@
     "profileAria": "Deschide meniul profilului",
     "profileTitle": "Profilul dvs.",
     "settings": "Setări",
-    "timetable": "Calendar"
+    "timetable": "Calendar",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right"
   },
   "overview": {
     "allMessages": "Toate mesajele",

@@ -185,7 +185,9 @@
     "profileAria": "Open profiel menu",
     "profileTitle": "Uw profiel",
     "settings": "Instellingen",
-    "timetable": "Tijdstip"
+    "timetable": "Tijdstip",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right"
   },
   "overview": {
     "allMessages": "Alle berichten",
