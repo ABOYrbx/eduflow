@@ -118,7 +118,10 @@
     "ovWetterHint": "Applies to the web interface and the Android app.",
     "ovWetterLabel": "Show weather map on the overview",
     "sectionUebersicht": "Overview",
-    "sectionWetter": "Weather"
+    "sectionWetter": "Weather",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
+    "timeFormatLabel": "Clock: Time format"
   },
   "upstream": {
     "agendaFailed": "School events could not be loaded: {detail}",

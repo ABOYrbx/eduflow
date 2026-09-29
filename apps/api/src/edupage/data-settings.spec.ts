@@ -33,8 +33,8 @@ describe("settings (Port von app.py + api/settings.py, Paket N-F)", () => {
 
   it("liefert Schema und Defaults wie Python", async () => {
     const got = await service.settingsGet(claims);
-    expect(got.schema).toHaveLength(8);
-    expect(got.values).toMatchObject({ landing: "uebersicht", hw_tests: false, ov_unread: 10, ov_order: "messages,homework,weather" });
+    expect(got.schema).toHaveLength(9);
+    expect(got.values).toMatchObject({ landing: "uebersicht", hw_tests: false, ov_unread: 10, ov_order: "messages,homework,weather", time_format: "24h" });
     expect(SETTINGS_DEFAULTS.ov_wetter).toBe(true);
   });
 
@@ -43,8 +43,9 @@ describe("settings (Port von app.py + api/settings.py, Paket N-F)", () => {
     prefs.set("ov_unread", "999");
     prefs.set("hw_tests", "on");
     prefs.set("ov_order", "weather,weather,news");
+    prefs.set("time_format", "13h");
     const got = await service.settingsGet(claims) as unknown as { values: Record<string, unknown> };
-    expect(got.values).toMatchObject({ landing: "dashboard", ov_unread: 50, hw_tests: true, ov_order: "weather,messages,homework" });
+    expect(got.values).toMatchObject({ landing: "dashboard", ov_unread: 50, hw_tests: true, ov_order: "weather,messages,homework", time_format: "24h" });
   });
 
   it("speichert gegen Schema validiert wie Python", async () => {
