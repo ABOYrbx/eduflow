@@ -26,7 +26,7 @@ public enum MessagePreview: Sendable {
                 return label
             }
         }
-        return NSLocalizedString("messages_type_sprava", value: "Nachricht", comment: "Nachrichten: Fallback-Betreff")
+        return NSLocalizedString("messages_type_sprava", value: "Message", comment: "Nachrichten: Fallback-Betreff")
     }
 
     public static func preview(for message: MessageDTO) -> String {
@@ -139,7 +139,7 @@ public final class MessagesViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
     }
@@ -163,7 +163,7 @@ public final class MessagesViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
     }
@@ -173,7 +173,7 @@ public final class MessagesViewModel {
         markedMessage = nil
         do {
             let marked = try await repo().markRead()
-            markedMessage = String(format: NSLocalizedString("messages_marked_read", value: "%d als gelesen markiert.", comment: "Nachrichten: als gelesen markiert"), marked)
+            markedMessage = String(format: NSLocalizedString("messages_marked_read", value: "%d marked as read.", comment: "Nachrichten: als gelesen markiert"), marked)
             seenIds.formUnion(items.map(\.id))
             persistSeen()
         } catch let apiError as APIError {
@@ -186,7 +186,7 @@ public final class MessagesViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
     }
@@ -230,7 +230,7 @@ public final class ThreadViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
     }
@@ -252,7 +252,7 @@ public final class ThreadViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
     }
@@ -274,7 +274,7 @@ public final class ThreadViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
     }
@@ -338,7 +338,7 @@ public final class ComposeViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
     }
@@ -361,7 +361,7 @@ public final class ComposeViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
     }
@@ -392,7 +392,7 @@ public final class ComposeViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
             return false
         }

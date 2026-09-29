@@ -60,12 +60,12 @@ public enum TopBarSection: String, CaseIterable, Identifiable, Sendable {
     /// String-Katalog unverändert weiter greift).
     public var title: String {
         switch self {
-        case .overview: return "Übersicht"
-        case .messages: return "Nachrichten"
-        case .homework: return "Hausaufgaben"
-        case .grades: return "Noten"
-        case .timetable: return "Stundenplan"
-        case .school: return "Termine"
+        case .overview: return "Overview"
+        case .messages: return "Messages"
+        case .homework: return "Homework"
+        case .grades: return "Grades"
+        case .timetable: return "Timetable"
+        case .school: return "Events"
         }
     }
 }

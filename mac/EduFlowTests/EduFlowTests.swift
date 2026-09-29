@@ -20,13 +20,13 @@ struct CoreTests {
         ])
     }
 
-    @Test("Deutsche Rückfalltexte sind gesetzt und leerfrei")
-    func germanFallbacksPresent() {
+    @Test("Englische Rückfalltexte sind gesetzt und leerfrei")
+    func englishFallbacksPresent() {
         for code in ErrorCodes.all {
-            let text = APIError.germanFallback(for: code)
+            let text = APIError.englishFallback(for: code)
             #expect(!text.isEmpty)
         }
-        #expect(!APIError.germanFallback(for: "UNBEKANNT").isEmpty)
+        #expect(!APIError.englishFallback(for: "UNBEKANNT").isEmpty)
     }
 
     @Test("Sitzungsfehler führen zum Login")

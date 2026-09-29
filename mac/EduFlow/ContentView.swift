@@ -185,7 +185,7 @@ private struct TopPillNav: View {
                         .padding(.vertical, 6)
                         .background(EduFlowPalette.surface2(scheme))
                         .clipShape(.capsule)
-                        .help(NSLocalizedString("content_demo_hint", value: "Nur synthetische Beispieldaten vom lokalen Fake-Server", comment: "Navigation: Demo-Hinweis"))
+                        .help(NSLocalizedString("content_demo_hint", value: "Only synthetic sample data from the local fake server", comment: "Navigation: Demo-Hinweis"))
                 }
                 ForEach(sections) { section in
                     NavPill(title: section.title, active: isActive(section)) {
@@ -228,7 +228,7 @@ private struct TopPillNav: View {
         .buttonStyle(.plain)
         .padding(6)
         .contentShape(.circle)
-        .accessibilityLabel(NSLocalizedString("common_profile_menu_open", value: "Profilmenü öffnen", comment: "Navigation: Profilmenü"))
+        .accessibilityLabel(NSLocalizedString("common_profile_menu_open", value: "Open profile menu", comment: "Navigation: Profilmenü"))
         .help("\(store.username) @ \(store.subdomain)")
         .popover(isPresented: $profileMenuOpen, arrowEdge: .top) {
             VStack(alignment: .leading, spacing: 14) {
@@ -240,27 +240,27 @@ private struct TopPillNav: View {
                         .foregroundStyle(EduFlowPalette.ink(scheme))
                         .clipShape(.circle)
                     VStack(alignment: .leading, spacing: 3) {
-                        Text("Dein Profil").font(UberFont.text(14, weight: .bold))
+                        Text("Your profile").font(UberFont.text(14, weight: .bold))
                         Text(verbatim: "\(store.username) @ \(store.subdomain)")
                             .font(UberFont.text(12))
                             .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     }
                 }
                 Divider()
-                profileAction(NSLocalizedString("Einstellungen", value: "Einstellungen", comment: "Navigation: Einstellungen"), icon: "gearshape") {
+                profileAction(NSLocalizedString("Settings", value: "Settings", comment: "Navigation: Einstellungen"), icon: "gearshape") {
                     profileMenuOpen = false
                     onNavigate(.settings)
                 }
-                profileAction(NSLocalizedString("Geräte", value: "Geräte", comment: "Navigation: Geräte"), icon: "laptopcomputer.and.iphone") {
+                profileAction(NSLocalizedString("Devices", value: "Devices", comment: "Navigation: Geräte"), icon: "laptopcomputer.and.iphone") {
                     profileMenuOpen = false
                     onNavigate(.devices)
                 }
-                profileAction(NSLocalizedString("school_nav", value: "Termine & Vertretungen", comment: "Schule: Titel"), icon: "calendar") {
+                profileAction(NSLocalizedString("school_nav", value: "Events & substitutions", comment: "Schule: Titel"), icon: "calendar") {
                     profileMenuOpen = false
                     onNavigate(.school)
                 }
                 Divider()
-                profileAction(NSLocalizedString("Abmelden", value: "Abmelden", comment: "Navigation: Abmelden"), icon: "rectangle.portrait.and.arrow.right", isDestructive: true) {
+                profileAction(NSLocalizedString("Sign out", value: "Sign out", comment: "Navigation: Abmelden"), icon: "rectangle.portrait.and.arrow.right", isDestructive: true) {
                     profileMenuOpen = false
                     onLogout()
                 }

@@ -66,7 +66,7 @@ public struct OverviewView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle(NSLocalizedString("Übersicht", value: "Übersicht", comment: "Übersicht: Titel"))
+        .navigationTitle(NSLocalizedString("Overview", value: "Overview", comment: "Übersicht: Titel"))
         .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { now = $0 }
         .task { await vm.load(onSessionExpired: onSessionExpired) }
         .refreshable { await vm.load(refresh: true, onSessionExpired: onSessionExpired) }
@@ -106,11 +106,11 @@ public struct OverviewView: View {
     /// Listen darunter, keine globalen Zähler).
     private var statsBand: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 170), spacing: 12)], spacing: 12) {
-            StatCard("\(vm.messagesTotal)", label: "Nachrichten")
-            StatCard("\(vm.homeworkOpen)", label: "Offen")
+            StatCard("\(vm.messagesTotal)", label: "Messages")
+            StatCard("\(vm.homeworkOpen)", label: "Open")
             StatCard(
                 "\(vm.homeworkOverdue)",
-                label: "Überfällig",
+                label: "Overdue",
                 tone: vm.homeworkOverdue > 0 ? .danger : .plain
             )
         }
@@ -119,7 +119,7 @@ public struct OverviewView: View {
     private var layoutRow: some View {
         HStack {
             Spacer()
-            Button("Übersicht anpassen") {
+            Button(NSLocalizedString("Customize overview", value: "Customize overview", comment: "UI-Literal")) {
                 layoutDraft = Self.normalizedOrder(vm.settings.ovOrder)
                 showLayoutEditor = true
             }
@@ -192,7 +192,7 @@ public struct OverviewView: View {
         Button { showWetter = vm.wetter.today != nil } label: {
             HStack(spacing: 0) {
                 WetterDayCard(
-                    label: "Heute",
+                    label: "Today",
                     big: vm.wetter.today.map { "\($0.temp ?? 0)°" } ?? "–",
                     cond: [vm.wetter.today?.desc, vm.wetter.today.map { "· \($0.max ?? 0)°/\($0.min ?? 0)°" }].compactMap { $0 }.joined(separator: " "),
                     icon: vm.wetter.today?.icon,
@@ -200,7 +200,7 @@ public struct OverviewView: View {
                 )
                 Divider()
                 WetterDayCard(
-                    label: "Morgen",
+                    label: "Tomorrow",
                     big: vm.wetter.tomorrow.map { "\($0.max ?? 0)°" } ?? "–",
                     cond: [vm.wetter.tomorrow?.desc, vm.wetter.tomorrow.map { "· \($0.max ?? 0)°/\($0.min ?? 0)°" }].compactMap { $0 }.joined(separator: " "),
                     icon: vm.wetter.tomorrow?.icon,
@@ -208,7 +208,7 @@ public struct OverviewView: View {
                 )
                 Divider()
                 WetterDayCard(
-                    label: vm.wetter.day3?.label ?? NSLocalizedString("Übermorgen", value: "Übermorgen", comment: "Übersicht: Übermorgen"),
+                    label: vm.wetter.day3?.label ?? NSLocalizedString("Day after tomorrow", value: "Day after tomorrow", comment: "Übersicht: Übermorgen"),
                     big: vm.wetter.day3.map { "\($0.max ?? 0)°" } ?? "–",
                     cond: [vm.wetter.day3?.desc, vm.wetter.day3.map { "· \($0.max ?? 0)°/\($0.min ?? 0)°" }].compactMap { $0 }.joined(separator: " "),
                     icon: vm.wetter.day3?.icon,
@@ -233,7 +233,7 @@ public struct OverviewView: View {
         let slides = vm.lessons.filter { !$0.isEvent }
         return VStack(alignment: .leading, spacing: 2) {
             HStack {
-                Text("Stunden heute")
+                Text("Classes today")
                     .font(UberFont.text(11, weight: .bold))
                     .tracking(1.6)
                     .opacity(0.6)
@@ -249,11 +249,11 @@ public struct OverviewView: View {
                 }
             }
             if slides.isEmpty {
-                Text("Schulfrei")
+                Text("No school")
                     .font(UberFont.text(30, weight: .heavy))
                     .tracking(-0.8)
                     .padding(.vertical, 4)
-                Text("kein Unterricht heute")
+                Text("no classes today")
                     .font(UberFont.text(13, weight: .medium))
                     .opacity(0.75)
             } else {
@@ -266,9 +266,9 @@ public struct OverviewView: View {
                         .lineLimit(1)
                         .padding(.vertical, 4)
                     Text(String(
-                        format: NSLocalizedString("overview_lesson_detail", value: "%@. Std · %@%@%@", comment: "Übersicht: Stundendetail"),
+                        format: NSLocalizedString("overview_lesson_detail", value: "%@. period · %@%@%@", comment: "Übersicht: Stundendetail"),
                         lesson.period, lesson.time,
-                        lesson.rooms.isEmpty ? "" : String(format: NSLocalizedString("overview_lesson_room", value: " · Raum %@", comment: "Übersicht: Raum"), lesson.rooms),
+                        lesson.rooms.isEmpty ? "" : String(format: NSLocalizedString("overview_lesson_room", value: " · Room %@", comment: "Übersicht: Raum"), lesson.rooms),
                         lesson.teachers.isEmpty ? "" : String(format: NSLocalizedString("overview_lesson_teachers", value: " · %@", comment: "Übersicht: Lehrkraft"), lesson.teachers)
                     ))
                         .font(UberFont.text(13, weight: .medium))
@@ -277,7 +277,7 @@ public struct OverviewView: View {
                         if isNow(lesson, pair: pair) {
                             HStack(spacing: 6) {
                                 PulseDot()
-                                Text("Jetzt")
+                                Text("Now")
                                     .font(UberFont.text(11, weight: .bold))
                             }
                             .padding(.vertical, 5)
@@ -287,7 +287,7 @@ public struct OverviewView: View {
                             .clipShape(.capsule)
                         }
                         if lesson.isCancelled {
-                            Tag(NSLocalizedString("Entfällt", value: "Entfällt", comment: "Übersicht: entfällt"), style: .muted)
+                            Tag(NSLocalizedString("Cancelled", value: "Cancelled", comment: "Übersicht: entfällt"), style: .muted)
                         }
                     }
                     .padding(.top, 8)
@@ -304,7 +304,7 @@ public struct OverviewView: View {
             HStack {
                 NowArrow("‹") { stepLesson(-1, count: slides.count) }
                 Spacer()
-                Button("Stundenplan") { onNavigate(.timetable) }
+                Button(NSLocalizedString("Timetable", value: "Timetable", comment: "Einstellungen: Startseite Stundenplan / Stundenplan: Titel")) { onNavigate(.timetable) }
                     .font(UberFont.text(13, weight: .bold))
                     .opacity(0.75)
                 Spacer()
@@ -366,16 +366,16 @@ public struct OverviewView: View {
     private var messagesColumn: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text(String(format: NSLocalizedString("overview_messages_total", value: "Nachrichten · %d", comment: "Übersicht: Nachrichtenzahl"), vm.messagesTotal))
+                Text(String(format: NSLocalizedString("overview_messages_total", value: "Messages · %d", comment: "Übersicht: Nachrichtenzahl"), vm.messagesTotal))
                     .font(UberFont.text(20, weight: .heavy))
                 Spacer()
-                Button("Alle Nachrichten") { onNavigate(.messages) }
+                Button(NSLocalizedString("All messages", value: "All messages", comment: "UI-Literal")) { onNavigate(.messages) }
                     .buttonStyle(UberButtonStyle(.smallLight))
             }
             if let error = vm.messagesError {
                 Notice(error.message)
             } else if vm.shownMessages.isEmpty {
-                Text(NSLocalizedString("overview_messages_empty", value: "Keine neuen Nachrichten.", comment: "Übersicht: keine Nachrichten"))
+                Text(NSLocalizedString("overview_messages_empty", value: "No new messages.", comment: "Übersicht: keine Nachrichten"))
                     .font(UberFont.text(14))
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -386,7 +386,7 @@ public struct OverviewView: View {
                 ForEach(vm.shownMessages, id: \.id) { message in
                     VStack(alignment: .leading, spacing: 6) {
                         HStack {
-                            (message.author.isEmpty ? Text("Schule") : Text(verbatim: message.author))
+                            (message.author.isEmpty ? Text("School") : Text(verbatim: message.author))
                                 .font(UberFont.text(14, weight: .bold))
                             Spacer()
                             Text(message.timestamp)
@@ -405,7 +405,7 @@ public struct OverviewView: View {
                     .overlay { RoundedRectangle(cornerRadius: 14).stroke(EduFlowPalette.border(scheme), lineWidth: 1) }
                 }
                 if vm.messagesHasMore {
-                    Button(String(format: NSLocalizedString("overview_more_messages", value: "+ %d weitere", comment: "Übersicht: weitere Nachrichten"), vm.messagesMoreCount)) {
+                    Button(String(format: NSLocalizedString("overview_more_messages", value: "+ %d more", comment: "Übersicht: weitere Nachrichten"), vm.messagesMoreCount)) {
                         onNavigate(.messages)
                     }
                     .buttonStyle(UberButtonStyle(.smallLight))
@@ -432,15 +432,15 @@ public struct OverviewView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .firstTextBaseline) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Hausaufgaben")
+                    Text("Homework")
                         .font(UberFont.text(20, weight: .heavy))
                         .tracking(-0.5)
-                    Text(String(format: NSLocalizedString("overview_homework_sub", value: "%d offen · %d überfällig", comment: "Übersicht: Hausaufgaben-Totale"), vm.homeworkTotalOpen, vm.homeworkTotalOverdue))
+                    Text(String(format: NSLocalizedString("overview_homework_sub", value: "%d open · %d overdue", comment: "Übersicht: Hausaufgaben-Totale"), vm.homeworkTotalOpen, vm.homeworkTotalOverdue))
                         .font(UberFont.text(13, weight: .medium))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 }
                 Spacer()
-                Button("Alle Aufgaben") { onNavigate(.homework) }
+                Button(NSLocalizedString("All homework", value: "All homework", comment: "UI-Literal")) { onNavigate(.homework) }
                     .buttonStyle(UberButtonStyle(.smallPrimary))
                     .hoverLift()
             }
@@ -451,19 +451,19 @@ public struct OverviewView: View {
                 // Leere Liste ehrlich erklären: Alle Zahlen stammen aus
                 // denselben Server-Totalen wie die Kopfzeile.
                 if vm.homeworkRelevantTotal > 0 {
-                    Text(NSLocalizedString("overview_homework_more_available", value: "Weitere Aufgaben vorhanden — alle ansehen.", comment: "Übersicht: weitere Aufgaben vorhanden"))
+                    Text(NSLocalizedString("overview_homework_more_available", value: "More tasks available — view all.", comment: "Übersicht: weitere Aufgaben vorhanden"))
                         .font(UberFont.text(15))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                         .frame(maxWidth: .infinity)
                         .padding(48)
                 } else if vm.homeworkDone > 0 {
-                    Text(NSLocalizedString("overview_homework_all_done", value: "Alle Hausaufgaben erledigt. Sehr gut.", comment: "Übersicht: alles erledigt"))
+                    Text(NSLocalizedString("overview_homework_all_done", value: "All homework done. Well done.", comment: "Übersicht: alles erledigt"))
                         .font(UberFont.text(15))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                         .frame(maxWidth: .infinity)
                         .padding(48)
                 } else {
-                    Text(NSLocalizedString("overview_homework_none", value: "Keine Hausaufgaben vorhanden.", comment: "Übersicht: keine Aufgaben"))
+                    Text(NSLocalizedString("overview_homework_none", value: "No homework available.", comment: "Übersicht: keine Aufgaben"))
                         .font(UberFont.text(15))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                         .frame(maxWidth: .infinity)
@@ -478,7 +478,7 @@ public struct OverviewView: View {
                                 .tracking(-0.3)
                             HStack(spacing: 8) {
                                 Tag(item.status, style: statusTag(item.status))
-                                (Text(NSLocalizedString("homework_due_prefix", value: "fällig: ", comment: "Hausaufgaben: fällig-Präfix"))
+                                (Text(NSLocalizedString("homework_due_prefix", value: "due: ", comment: "Hausaufgaben: fällig-Präfix"))
                                     + Text(item.dueDisplay).bold())
                                     .font(UberFont.text(13))
                                 if !item.subject.isEmpty {
@@ -490,7 +490,7 @@ public struct OverviewView: View {
                                     .font(UberFont.text(13))
                                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                             }
-                            (item.description.isEmpty ? Text(NSLocalizedString("homework_no_description", value: "(keine Beschreibung)", comment: "Hausaufgaben: keine Beschreibung")) : Text(verbatim: item.description))
+                            (item.description.isEmpty ? Text(NSLocalizedString("homework_no_description", value: "(no description)", comment: "Hausaufgaben: keine Beschreibung")) : Text(verbatim: item.description))
                                 .font(UberFont.text(15))
                                 .lineSpacing(4)
                         }
@@ -498,7 +498,7 @@ public struct OverviewView: View {
                     .riseIn(delay: Double(min(index, 8)) * 0.06)
                 }
                 if vm.homeworkHasMore {
-                    Button(String(format: NSLocalizedString("overview_more_homework", value: "+ %d weitere", comment: "Übersicht: weitere Aufgaben"), vm.homeworkMoreCount)) {
+                    Button(String(format: NSLocalizedString("overview_more_homework", value: "+ %d more", comment: "Übersicht: weitere Aufgaben"), vm.homeworkMoreCount)) {
                         onNavigate(.homework)
                     }
                     .buttonStyle(UberButtonStyle(.smallLight))
@@ -523,18 +523,18 @@ public struct OverviewView: View {
     private var footer: some View {
         VStack(spacing: 12) {
             HStack(spacing: 8) {
-                Button(NSLocalizedString("Nachrichten", value: "Nachrichten", comment: "Übersicht: Bereich Nachrichten")) { onNavigate(.messages) }
+                Button(NSLocalizedString("Messages", value: "Messages", comment: "Übersicht: Bereich Nachrichten")) { onNavigate(.messages) }
                     .buttonStyle(UberButtonStyle(.smallLight))
-                Button(NSLocalizedString("Hausaufgaben", value: "Hausaufgaben", comment: "Übersicht: Bereich Hausaufgaben")) { onNavigate(.homework) }
+                Button(NSLocalizedString("Homework", value: "Homework", comment: "Übersicht: Bereich Hausaufgaben")) { onNavigate(.homework) }
                     .buttonStyle(UberButtonStyle(.smallLight))
-                Button(NSLocalizedString("Stundenplan", value: "Stundenplan", comment: "Übersicht: Bereich Stundenplan")) { onNavigate(.timetable) }
+                Button(NSLocalizedString("Timetable", value: "Timetable", comment: "Übersicht: Bereich Stundenplan")) { onNavigate(.timetable) }
                     .buttonStyle(UberButtonStyle(.smallLight))
-                Button(NSLocalizedString("grades_nav", value: "Noten", comment: "Übersicht: Bereich Noten")) { onNavigate(.grades) }
+                Button(NSLocalizedString("grades_nav", value: "Grades", comment: "Übersicht: Bereich Noten")) { onNavigate(.grades) }
                     .buttonStyle(UberButtonStyle(.smallLight))
-                Button(NSLocalizedString("Einstellungen", value: "Einstellungen", comment: "Übersicht: Bereich Einstellungen")) { onNavigate(.settings) }
+                Button(NSLocalizedString("Settings", value: "Settings", comment: "Übersicht: Bereich Einstellungen")) { onNavigate(.settings) }
                     .buttonStyle(UberButtonStyle(.smallLight))
             }
-            Text("EduFlow Dashboard · lokal")
+            Text("EduFlow Dashboard · local")
                 .font(UberFont.text(12))
                 .foregroundStyle(EduFlowPalette.inkDim(scheme))
                 .frame(maxWidth: .infinity)
@@ -554,16 +554,16 @@ private struct OverviewOrderEditor: View {
     let onSave: () async -> Bool
 
     private let labels = [
-        "messages": NSLocalizedString("Nachrichten", value: "Nachrichten", comment: "Übersicht: Bereich Nachrichten"),
-        "homework": NSLocalizedString("Hausaufgaben", value: "Hausaufgaben", comment: "Übersicht: Bereich Aufgaben"),
-        "weather": NSLocalizedString("Wetter", value: "Wetter", comment: "Übersicht: Bereich Wetter"),
+        "messages": NSLocalizedString("Messages", value: "Messages", comment: "Übersicht: Bereich Nachrichten"),
+        "homework": NSLocalizedString("Homework", value: "Homework", comment: "Übersicht: Bereich Aufgaben"),
+        "weather": NSLocalizedString("Weather", value: "Weather", comment: "Übersicht: Bereich Wetter"),
     ]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
-            Text("Übersicht anpassen")
+            Text("Customize overview")
                 .font(UberFont.text(24, weight: .heavy))
-            Text("Lege fest, welche Bereiche zuerst erscheinen.")
+            Text("Choose which sections appear first.")
                 .font(UberFont.text(14))
                 .foregroundStyle(.secondary)
             ForEach(order.indices, id: \.self) { index in
@@ -586,10 +586,10 @@ private struct OverviewOrderEditor: View {
                     .foregroundStyle(EduFlowPalette.red)
             }
             HStack {
-                Button("Abbrechen") { dismiss() }
+                Button(NSLocalizedString("Cancel", value: "Cancel", comment: "UI-Literal")) { dismiss() }
                     .buttonStyle(UberButtonStyle(.smallLight))
                 Spacer()
-                Button(saving ? NSLocalizedString("Speichert …", value: "Speichert …", comment: "Übersicht: speichert") : NSLocalizedString("Speichern", value: "Speichern", comment: "Übersicht: speichern")) {
+                Button(saving ? NSLocalizedString("Saving overview …", value: "Saving overview …", comment: "Übersicht: speichert") : NSLocalizedString("Save", value: "Save", comment: "Übersicht: speichern")) {
                     Task { _ = await onSave() }
                 }
                     .buttonStyle(UberButtonStyle(.smallPrimary))
@@ -685,12 +685,12 @@ private struct WetterSheet: View {
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
                     Spacer()
-                    Button("Schließen") { dismiss() }
+                    Button(NSLocalizedString("Close", value: "Close", comment: "UI-Literal")) { dismiss() }
                         .buttonStyle(UberButtonStyle(.smallLight))
                         .hoverLift()
                 }
                 if let city = wetter.city, !city.isEmpty {
-                    Text(String(format: NSLocalizedString("overview_weather_in_city", value: "Wetter in %@", comment: "Übersicht: Wetterstadt"), city).uppercased())
+                    Text(String(format: NSLocalizedString("overview_weather_in_city", value: "Weather in %@", comment: "Übersicht: Wetterstadt"), city).uppercased())
                         .font(UberFont.text(11, weight: .bold))
                         .tracking(1.2)
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
@@ -706,14 +706,14 @@ private struct WetterSheet: View {
                     }
                 }
                 if let hours = wetter.hourly, !hours.isEmpty {
-                    Text("Nächste 24 Stunden")
+                    Text("Next 24 hours")
                         .font(UberFont.text(14, weight: .heavy))
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 8) {
                             ForEach(hours.indices, id: \.self) { index in
                                 let hour = hours[index]
                                 VStack(spacing: 2) {
-                                    (index == 0 ? Text("Jetzt") : Text(verbatim: hour.time ?? ""))
+                                    (index == 0 ? Text("Now") : Text(verbatim: hour.time ?? ""))
                                         .font(UberFont.text(11, weight: .bold))
                                         .tracking(1.2)
                                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
@@ -739,17 +739,17 @@ private struct WetterSheet: View {
                     Text("Details")
                         .font(UberFont.text(14, weight: .heavy))
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
-                        WetterDetail(label: "Gefühlt", value: details.feelsLike.map { "\($0)°" } ?? "–")
+                        WetterDetail(label: "Feels like", value: details.feelsLike.map { "\($0)°" } ?? "–")
                         WetterDetail(
                             label: "Wind",
                             value: [details.windKmh.map { "\($0) km/h" }, details.windDir].compactMap { $0 }.joined(separator: " ")
                         )
-                        WetterDetail(label: "Luftfeuchte", value: details.humidity.map { "\($0) %" } ?? "–")
-                        WetterDetail(label: "Luftdruck", value: details.pressure.map { "\($0) hPa" } ?? "–")
-                        WetterDetail(label: "Wolken", value: details.clouds.map { "\($0) %" } ?? "–")
-                        WetterDetail(label: "Sicht", value: details.visibilityKm.map { "\($0) km" } ?? "–")
-                        WetterDetail(label: "Sonnenaufgang", value: details.sunrise ?? "–")
-                        WetterDetail(label: "Sonnenuntergang", value: details.sunset ?? "–")
+                        WetterDetail(label: "Humidity", value: details.humidity.map { "\($0) %" } ?? "–")
+                        WetterDetail(label: "Pressure", value: details.pressure.map { "\($0) hPa" } ?? "–")
+                        WetterDetail(label: "Clouds", value: details.clouds.map { "\($0) %" } ?? "–")
+                        WetterDetail(label: "View", value: details.visibilityKm.map { "\($0) km" } ?? "–")
+                        WetterDetail(label: "Sunrise", value: details.sunrise ?? "–")
+                        WetterDetail(label: "Sunset", value: details.sunset ?? "–")
                     }
                 }
             }

@@ -1,7 +1,7 @@
 {
   "sourceLanguage": "en",
   "strings": {
-    "‹ Zurück": {
+    "‹ Back": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -557,7 +557,7 @@
         }
       }
     },
-    "← Vorwoche": {
+    "← Previous week": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -929,7 +929,7 @@
         }
       }
     },
-    "Abbrechen": {
+    "Cancel": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -1115,7 +1115,7 @@
         }
       }
     },
-    "Abmelden": {
+    "Sign out": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -1301,7 +1301,7 @@
         }
       }
     },
-    "Abmelden …": {
+    "Signing out …": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -1859,7 +1859,7 @@
         }
       }
     },
-    "Alle Aufgaben": {
+    "All homework": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -2231,7 +2231,7 @@
         }
       }
     },
-    "Alle Nachrichten": {
+    "All messages": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -2417,7 +2417,7 @@
         }
       }
     },
-    "Alles an einem Ort.": {
+    "Everything in one place.": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -2974,7 +2974,7 @@
         }
       }
     },
-    "Anmelden": {
+    "Sign in": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -3160,7 +3160,7 @@
         }
       }
     },
-    "Anmelden …": {
+    "Signing in …": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -3346,7 +3346,7 @@
         }
       }
     },
-    "Antwort schreiben": {
+    "Write a reply": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -3531,7 +3531,7 @@
         }
       }
     },
-    "Antworten": {
+    "Replies": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -3903,7 +3903,7 @@
         }
       }
     },
-    "Aussehen": {
+    "Appearance": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -7792,7 +7792,7 @@
         }
       }
     },
-    "Bestätigen": {
+    "Confirm": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -8164,7 +8164,7 @@
         }
       }
     },
-    "Code aus E-Mail oder App eingeben.": {
+    "Enter the code from your email or app.": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -8349,7 +8349,7 @@
         }
       }
     },
-    "Code eingeben": {
+    "Enter code": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -12974,7 +12974,7 @@
         }
       }
     },
-    "Dateien": {
+    "Files": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -13159,7 +13159,7 @@
         }
       }
     },
-    "Datum": {
+    "Date": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -13344,7 +13344,7 @@
         }
       }
     },
-    "Dein Profil": {
+    "Your profile": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -13714,7 +13714,7 @@
         }
       }
     },
-    "Demo ansehen": {
+    "View demo": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -13900,7 +13900,7 @@
         }
       }
     },
-    "Demo verlassen": {
+    "Leave demo": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -14271,7 +14271,7 @@
         }
       }
     },
-    "Demo-Modus · nur synthetische Beispieldaten": {
+    "Demo mode · synthetic sample data only": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -16162,7 +16162,7 @@
         }
       }
     },
-    "EduFlow Dashboard · lokal": {
+    "EduFlow Dashboard · local": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -16347,7 +16347,7 @@
         }
       }
     },
-    "EduFlow ist bereit": {
+    "EduFlow is ready": {
       "comment": "UI-Literal",
       "localizations": {
         "de": {
@@ -16399,7 +16399,7 @@
         }
       }
     },
-    "Einstellungen": {
+    "Settings": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -16585,7 +16585,7 @@
         }
       }
     },
-    "Entfall": {
+    "Cancellation": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -16771,7 +16771,7 @@
         }
       }
     },
-    "Entfällt": {
+    "Cancelled": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -16957,7 +16957,7 @@
         }
       }
     },
-    "Entfernen": {
+    "Remove": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -17143,7 +17143,7 @@
         }
       }
     },
-    "Entwickleroptionen": {
+    "Developer options": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -17699,7 +17699,7 @@
         }
       }
     },
-    "Erledigt": {
+    "Completed": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -17885,7 +17885,7 @@
         }
       }
     },
-    "Erneut laden": {
+    "Reload": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -18071,7 +18071,7 @@
         }
       }
     },
-    "Erneut versuchen": {
+    "Try again": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -18257,7 +18257,7 @@
         }
       }
     },
-    "Es werden ausschließlich synthetische Beispieldaten vom lokalen Demo-Server geladen.": {
+    "Only synthetic sample data is loaded from the local demo server.": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -18489,8 +18489,8 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
-            "value": "fällig: "
+            "state": "translated",
+            "value": "due: "
           }
         },
         "es": {
@@ -19371,7 +19371,7 @@
         }
       }
     },
-    "Folgt der Systemsprache": {
+    "Follows the system language": {
       "comment": "Onboarding: Sprachauswahl",
       "extractionState": "stale",
       "localizations": {
@@ -19761,7 +19761,7 @@
         }
       }
     },
-    "Für diese Woche sind keine Vertretungen eingetragen.": {
+    "No substitutions scheduled for this week.": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -20133,7 +20133,7 @@
         }
       }
     },
-    "Gefühlt": {
+    "Feels like": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -20319,7 +20319,7 @@
         }
       }
     },
-    "Geladene Datei teilen": {
+    "Share downloaded file": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -20877,7 +20877,7 @@
         }
       }
     },
-    "Geräte": {
+    "Devices": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -21063,7 +21063,7 @@
         }
       }
     },
-    "Geräte verwalten": {
+    "Manage devices": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -23286,7 +23286,7 @@
         }
       }
     },
-    "Hausaufgaben": {
+    "Homework": {
       "comment": "Einstellungen: Startseite Aufgaben\nHausaufgaben: Titel",
       "localizations": {
         "af": {
@@ -23657,7 +23657,7 @@
         }
       }
     },
-    "Hell und Dunkel folgt dem System. Akzentfarbe:": {
+    "Light and dark follow the system. Accent color:": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -23842,7 +23842,7 @@
         }
       }
     },
-    "Heute": {
+    "Today": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -24446,8 +24446,8 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
-            "value": "Alle"
+            "state": "translated",
+            "value": "All"
           }
         },
         "es": {
@@ -24816,8 +24816,8 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
-            "value": "Offen"
+            "state": "translated",
+            "value": "Open"
           }
         },
         "es": {
@@ -25001,8 +25001,8 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
-            "value": "Überfällig"
+            "state": "translated",
+            "value": "Overdue"
           }
         },
         "es": {
@@ -26439,7 +26439,7 @@
         }
       }
     },
-    "Jetzt": {
+    "Now": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -26624,7 +26624,7 @@
         }
       }
     },
-    "Kalender": {
+    "Calendar": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -26810,7 +26810,7 @@
         }
       }
     },
-    "kein Unterricht heute": {
+    "no classes today": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -27180,7 +27180,7 @@
         }
       }
     },
-    "Keine Likes.": {
+    "No likes.": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -27735,7 +27735,7 @@
         }
       }
     },
-    "Keine Noten.": {
+    "No grades.": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -28105,7 +28105,7 @@
         }
       }
     },
-    "Keine Schultermine oder Prüfungen in diesem Zeitraum.": {
+    "No school events or exams in this period.": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -28291,7 +28291,7 @@
         }
       }
     },
-    "Keine weiteren Sitzungen.": {
+    "No other sessions.": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -28476,7 +28476,7 @@
         }
       }
     },
-    "Laden": {
+    "Load": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -28662,7 +28662,7 @@
         }
       }
     },
-    "Lädt …": {
+    "Loading …": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -28848,7 +28848,7 @@
         }
       }
     },
-    "Lege fest, welche Bereiche zuerst erscheinen.": {
+    "Choose which sections appear first.": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -29033,7 +29033,7 @@
         }
       }
     },
-    "Lernzeit": {
+    "Study time": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -29219,7 +29219,7 @@
         }
       }
     },
-    "Lokales Werkzeug — Zugangsdaten bleiben auf diesem Mac.": {
+    "Local tool — credentials stay on this Mac.": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -29404,7 +29404,7 @@
         }
       }
     },
-    "Luftdruck": {
+    "Pressure": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -29590,7 +29590,7 @@
         }
       }
     },
-    "Luftfeuchte": {
+    "Humidity": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -29776,7 +29776,7 @@
         }
       }
     },
-    "Meldet dich ab und startet die Einführung erneut.": {
+    "Signs you out and restarts the introduction.": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -32048,8 +32048,8 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
-            "value": "Alle"
+            "state": "translated",
+            "value": "All"
           }
         },
         "es": {
@@ -32233,8 +32233,8 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
-            "value": "Umfrage"
+            "state": "translated",
+            "value": "Poll"
           }
         },
         "es": {
@@ -32603,8 +32603,8 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
-            "value": "Mitteilung"
+            "state": "translated",
+            "value": "Notification"
           }
         },
         "es": {
@@ -32788,8 +32788,8 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
-            "value": "Neuigkeit"
+            "state": "translated",
+            "value": "News"
           }
         },
         "es": {
@@ -33483,7 +33483,7 @@
         }
       }
     },
-    "Morgen": {
+    "Tomorrow": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -33669,7 +33669,7 @@
         }
       }
     },
-    "Nachrichten": {
+    "Messages": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -34041,7 +34041,7 @@
         }
       }
     },
-    "Nächste →": {
+    "Next →": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -34227,7 +34227,7 @@
         }
       }
     },
-    "Nächste 24 Stunden": {
+    "Next 24 hours": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -34598,7 +34598,7 @@
         }
       }
     },
-    "Neue Nachricht": {
+    "New message": {
       "comment": "Nachrichten: Verfassen-Titel",
       "localizations": {
         "af": {
@@ -34783,7 +34783,7 @@
         }
       }
     },
-    "Note": {
+    "Grade": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -34968,7 +34968,7 @@
         }
       }
     },
-    "Noten": {
+    "Grades": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -36083,7 +36083,7 @@
         }
       }
     },
-    "Offen": {
+    "Open": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -36131,8 +36131,8 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
-            "value": "Offen"
+            "state": "translated",
+            "value": "Open"
           }
         },
         "es": {
@@ -36269,7 +36269,7 @@
         }
       }
     },
-    "ohne Datum": {
+    "No date": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -36641,7 +36641,7 @@
         }
       }
     },
-    "Onboarding erneut durchlaufen": {
+    "Run onboarding again": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -39490,7 +39490,7 @@
         }
       }
     },
-    "Papierkorb": {
+    "Trash": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -40606,7 +40606,7 @@
         }
       }
     },
-    "Prüfen …": {
+    "Checking …": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -40792,7 +40792,7 @@
         }
       }
     },
-    "Prüft …": {
+    "Checking connection …": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -40841,7 +40841,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Checking …"
+            "value": "Checking connection …"
           }
         },
         "es": {
@@ -40978,7 +40978,7 @@
         }
       }
     },
-    "Schließen": {
+    "Close": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -41211,8 +41211,8 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
-            "value": "NEU"
+            "state": "translated",
+            "value": "NEW"
           }
         },
         "es": {
@@ -41396,8 +41396,8 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
-            "value": "GEÄNDERT"
+            "state": "translated",
+            "value": "CHANGED"
           }
         },
         "es": {
@@ -41581,8 +41581,8 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
-            "value": "ENTFÄLLT"
+            "state": "translated",
+            "value": "CANCELLED"
           }
         },
         "es": {
@@ -41951,8 +41951,8 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
-            "value": "ANWESENHEIT"
+            "state": "translated",
+            "value": "ATTENDANCE"
           }
         },
         "es": {
@@ -42136,8 +42136,8 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
-            "value": "SCHULTERMIN"
+            "state": "translated",
+            "value": "SCHOOL EVENT"
           }
         },
         "es": {
@@ -42321,8 +42321,8 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
-            "value": "TEST / PRÜFUNG"
+            "state": "translated",
+            "value": "TEST / EXAM"
           }
         },
         "es": {
@@ -43384,7 +43384,7 @@
         }
       }
     },
-    "Schulalltag": {
+    "School life": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -43569,7 +43569,7 @@
         }
       }
     },
-    "Schule": {
+    "School": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -43754,7 +43754,7 @@
         }
       }
     },
-    "Schulfrei": {
+    "No school": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -44124,7 +44124,7 @@
         }
       }
     },
-    "Senden": {
+    "Send": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -44310,7 +44310,7 @@
         }
       }
     },
-    "Sendet …": {
+    "Sending …": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -50996,7 +50996,7 @@
         }
       }
     },
-    "Sicht": {
+    "View": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -51182,7 +51182,7 @@
         }
       }
     },
-    "Sonnenaufgang": {
+    "Sunrise": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -51368,7 +51368,7 @@
         }
       }
     },
-    "Sonnenuntergang": {
+    "Sunset": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -51554,7 +51554,7 @@
         }
       }
     },
-    "Speichern": {
+    "Save": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -51740,7 +51740,7 @@
         }
       }
     },
-    "Speichern …": {
+    "Saving …": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -51926,7 +51926,7 @@
         }
       }
     },
-    "Speichert …": {
+    "Saving overview …": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -51975,7 +51975,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Saving …"
+            "value": "Saving overview …"
           }
         },
         "es": {
@@ -52112,7 +52112,7 @@
         }
       }
     },
-    "Sprache wählen": {
+    "Choose language": {
       "comment": "Onboarding: Sprachauswahl",
       "localizations": {
         "de": {
@@ -52129,7 +52129,7 @@
         }
       }
     },
-    "Standardfilter": {
+    "Default filter": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -52314,7 +52314,7 @@
         }
       }
     },
-    "Startseite nach Anmeldung": {
+    "Start page after sign-in": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -52684,7 +52684,7 @@
         }
       }
     },
-    "Stunden heute": {
+    "Classes today": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -52869,7 +52869,7 @@
         }
       }
     },
-    "Stundenplan": {
+    "Timetable": {
       "comment": "Einstellungen: Startseite Stundenplan\nStundenplan: Titel",
       "localizations": {
         "af": {
@@ -53054,7 +53054,7 @@
         }
       }
     },
-    "Suche": {
+    "Search": {
       "comment": "Nachrichten: Empfängersuche Platzhalter",
       "localizations": {
         "af": {
@@ -53443,7 +53443,7 @@
         }
       }
     },
-    "Tag": {
+    "Day": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -53629,7 +53629,7 @@
         }
       }
     },
-    "Termine": {
+    "Events": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -53815,7 +53815,7 @@
         }
       }
     },
-    "Termine und Planänderungen": {
+    "Events and schedule changes": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -54928,7 +54928,7 @@
         }
       }
     },
-    "Trage ein, wo EduFlow als Server läuft.": {
+    "Enter where EduFlow runs as server.": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -55484,7 +55484,7 @@
         }
       }
     },
-    "Überfällig": {
+    "Overdue": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -55532,8 +55532,8 @@
         },
         "en": {
           "stringUnit": {
-            "state": "new",
-            "value": "Überfällig"
+            "state": "translated",
+            "value": "Overdue"
           }
         },
         "es": {
@@ -55670,7 +55670,7 @@
         }
       }
     },
-    "Übermorgen": {
+    "Day after tomorrow": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -55856,7 +55856,7 @@
         }
       }
     },
-    "Übernehmen": {
+    "Apply": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -56060,7 +56060,7 @@
         }
       }
     },
-    "Übernehmen & weiter": {
+    "Apply & continue": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -56246,7 +56246,7 @@
         }
       }
     },
-    "Übersicht": {
+    "Overview": {
       "comment": "Einstellungen: Startseite Übersicht\nÜbersicht: Titel",
       "localizations": {
         "af": {
@@ -56431,7 +56431,7 @@
         }
       }
     },
-    "Übersicht anpassen": {
+    "Customize overview": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -56616,7 +56616,7 @@
         }
       }
     },
-    "Unbekanntes Gerät": {
+    "Unknown device": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -57358,7 +57358,7 @@
         }
       }
     },
-    "Verbunden": {
+    "Connected": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -57544,7 +57544,7 @@
         }
       }
     },
-    "Vertretungen": {
+    "Substitutions": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -57730,7 +57730,7 @@
         }
       }
     },
-    "Weiter": {
+    "Continue": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -57916,7 +57916,7 @@
         }
       }
     },
-    "Weiter ›": {
+    "Continue ›": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -58288,7 +58288,7 @@
         }
       }
     },
-    "Wetter": {
+    "Weather": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -59404,7 +59404,7 @@
         }
       }
     },
-    "Wo läuft dein Server?": {
+    "Where does your server run?": {
       "comment": "Anmeldung: Serverhinweis",
       "localizations": {
         "af": {
@@ -59589,7 +59589,7 @@
         }
       }
     },
-    "Woche": {
+    "Week": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -59775,7 +59775,7 @@
         }
       }
     },
-    "Wolken": {
+    "Clouds": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -60333,7 +60333,7 @@
         }
       }
     },
-    "Zurück": {
+    "Back": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -60519,7 +60519,7 @@
         }
       }
     },
-    "Zurück zur Anmeldung": {
+    "Back to sign-in": {
       "comment": "UI-Literal",
       "extractionState": "stale",
       "localizations": {
@@ -61262,7 +61262,7 @@
         }
       }
     },
-    "Zwischengespeichert": {
+    "Cached": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -71252,7 +71252,7 @@
         }
       }
     },
-    "Nach oben": {
+    "Move up": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -71437,7 +71437,7 @@
         }
       }
     },
-    "Nach unten": {
+    "Move down": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -71622,7 +71622,7 @@
         }
       }
     },
-    "Hinzufügen": {
+    "Add": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -71807,7 +71807,7 @@
         }
       }
     },
-    "Bereich nach oben verschieben": {
+    "Move section up": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -71992,7 +71992,7 @@
         }
       }
     },
-    "Bereich nach unten verschieben": {
+    "Move section down": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -72177,7 +72177,7 @@
         }
       }
     },
-    "Bereich aus der Leiste entfernen": {
+    "Remove section from the bar": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -72362,7 +72362,7 @@
         }
       }
     },
-    "Bereich zur Leiste hinzufügen": {
+    "Add section to the bar": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -72547,7 +72547,7 @@
         }
       }
     },
-    "Thema": {
+    "Topic": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -72732,7 +72732,7 @@
         }
       }
     },
-    "Gewichtung": {
+    "Weighting": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -72917,7 +72917,7 @@
         }
       }
     },
-    "Klasse Ø": {
+    "Class Ø": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -73102,7 +73102,7 @@
         }
       }
     },
-    "Veranstaltung": {
+    "Event": {
       "comment": "UI-Literal",
       "localizations": {
         "af": {
@@ -73283,6 +73283,23 @@
           "stringUnit": {
             "state": "new",
             "value": "Veranstaltung"
+          }
+        }
+      }
+    },
+    "auth_ready_detail": {
+      "comment": "Anmeldung: bereit-Detail",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server und Gerät sind eingetragen.\nJetzt nur noch anmelden."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Server and device are set.\nNow just sign in."
           }
         }
       }

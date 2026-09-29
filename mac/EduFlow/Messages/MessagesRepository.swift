@@ -88,7 +88,7 @@ public struct MessagesRepository: Sendable {
         guard !seen.isEmpty, !text.isEmpty else {
             throw APIError(
                 code: ErrorCodes.validation,
-                message: APIError.germanFallback(for: ErrorCodes.validation)
+                message: APIError.englishFallback(for: ErrorCodes.validation)
             )
         }
         let payload = try APIClient.jsonData([
@@ -106,7 +106,7 @@ public struct MessagesRepository: Sendable {
         guard !text.isEmpty else {
             throw APIError(
                 code: ErrorCodes.validation,
-                message: APIError.germanFallback(for: ErrorCodes.validation)
+                message: APIError.englishFallback(for: ErrorCodes.validation)
             )
         }
         let payload = try APIClient.jsonData(["body": text])

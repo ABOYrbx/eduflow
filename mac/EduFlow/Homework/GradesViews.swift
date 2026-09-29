@@ -16,7 +16,7 @@ public struct GradesView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
                 PageHead(
-                    "Noten",
+                    "Grades",
                     stats: summaryStats
                 )
                 toolsBar
@@ -30,7 +30,7 @@ public struct GradesView: View {
                         .frame(maxWidth: .infinity)
                         .padding(48)
                 } else if vm.visible.isEmpty {
-                    EmptyView("Keine Noten.")
+                    EmptyView("No grades.")
                         .padding(48)
                 } else {
                     ForEach(Array(vm.visible.enumerated()), id: \.offset) { index, group in
@@ -38,7 +38,7 @@ public struct GradesView: View {
                             .riseIn(delay: Double(min(index, 8)) * 0.06)
                     }
                     if vm.canLoadMore {
-                        Button(vm.isLoadingMore ? NSLocalizedString("Lädt …", value: "Lädt …", comment: "Noten: lädt") : String(format: NSLocalizedString("grades_load_more", value: "Mehr laden (%d/%d)", comment: "Noten: mehr laden"), vm.items.count, vm.total)) {
+                        Button(vm.isLoadingMore ? NSLocalizedString("Loading …", value: "Loading …", comment: "Noten: lädt") : String(format: NSLocalizedString("grades_load_more", value: "Load more (%d/%d)", comment: "Noten: mehr laden"), vm.items.count, vm.total)) {
                             Task { await vm.loadMore(onSessionExpired: onSessionExpired) }
                         }
                         .buttonStyle(UberButtonStyle(.smallLight))
@@ -60,7 +60,7 @@ public struct GradesView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle(NSLocalizedString("grades_nav", value: "Noten", comment: "Noten: Titel"))
+        .navigationTitle(NSLocalizedString("grades_nav", value: "Grades", comment: "Noten: Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
         .refreshable { await vm.load(refresh: true, onSessionExpired: onSessionExpired) }
     }
@@ -73,7 +73,7 @@ public struct GradesView: View {
         return String(
             format: NSLocalizedString(
                 "grades_summary_stats",
-                value: "%d Noten · %d Fächer · Schnitt: %@",
+                value: "%d grades · %d subjects · average: %@",
                 comment: "Noten: Zusammenfassung"
             ),
             gradeCount,
@@ -101,7 +101,7 @@ public struct GradesView: View {
     }
 
     private var halfYearPicker: some View {
-        Picker(NSLocalizedString("grades_picker_halfyear", value: "Halbjahr", comment: "Noten: Halbjahrfilter"), selection: $vm.tab) {
+        Picker(NSLocalizedString("grades_picker_halfyear", value: "Semester", comment: "Noten: Halbjahrfilter"), selection: $vm.tab) {
             ForEach(vm.tabs, id: \.self) { tab in
                 Text(tab.label).tag(tab)
             }
@@ -110,7 +110,7 @@ public struct GradesView: View {
     }
 
     private var searchField: some View {
-        TextField(NSLocalizedString("grades_search_placeholder", value: "Suchen", comment: "Noten: Suche Platzhalter"), text: $vm.search)
+        TextField(NSLocalizedString("grades_search_placeholder", value: "Search", comment: "Noten: Suche Platzhalter"), text: $vm.search)
             .uberInput()
             .autocorrectionDisabled()
     }
@@ -126,7 +126,7 @@ public struct GradesView: View {
                         Text(group.subject)
                             .font(UberFont.text(18, weight: .heavy))
                             .tracking(-0.3)
-                        Text(String(format: NSLocalizedString("grades_subject_count", value: "%d Noten", comment: "Noten: Fachanzahl"), group.grades.count))
+                        Text(String(format: NSLocalizedString("grades_subject_count", value: "%d grades", comment: "Noten: Fachanzahl"), group.grades.count))
                             .font(UberFont.text(13))
                             .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     }
@@ -137,7 +137,7 @@ public struct GradesView: View {
                             .tracking(-0.8)
                             .monospacedDigit()
                             .foregroundStyle(group.average == nil ? EduFlowPalette.inkDim(scheme) : EduFlowPalette.ink(scheme))
-                        Text(NSLocalizedString("grades_subject_average_caption", value: "Fachschn. gewichtet", comment: "Noten: Fachschnitt-Legende"))
+                        Text(NSLocalizedString("grades_subject_average_caption", value: "Subject avg. weighted", comment: "Noten: Fachschnitt-Legende"))
                             .font(UberFont.text(11, weight: .semibold))
                             .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     }
@@ -154,7 +154,7 @@ public struct GradesView: View {
                 DisclosureGroup("Details") {
                     VStack(alignment: .leading, spacing: 8) {
                         GradeTable(grades: group.grades)
-                        Text(NSLocalizedString("grades_average_hint", value: "Schnitt aus klassischen Noten, nach Gewichtung.", comment: "Noten: Schnitt-Hinweis"))
+                        Text(NSLocalizedString("grades_average_hint", value: "Average of classic grades, weighted.", comment: "Noten: Schnitt-Hinweis"))
                             .font(UberFont.text(11))
                             .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     }
@@ -201,9 +201,9 @@ private struct GradeChip: View {
         let topic = (grade.title ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         let date = (grade.dateDisplay ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         let weight = (grade.weightDisplay ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-        let fallbackTopic = NSLocalizedString("Note", value: "Note", comment: "UI-Literal")
-        let weightOnce = NSLocalizedString("grades_weight_once", value: "Gewichtung ×1", comment: "Noten: Gewichtung einfach")
-        let weightFormat = NSLocalizedString("grades_weight_format", value: "Gewichtung %@", comment: "Noten: Gewichtung mit Wert")
+        let fallbackTopic = NSLocalizedString("Grade", value: "Grade", comment: "UI-Literal")
+        let weightOnce = NSLocalizedString("grades_weight_once", value: "Weighting ×1", comment: "Noten: Gewichtung einfach")
+        let weightFormat = NSLocalizedString("grades_weight_format", value: "Weighting %@", comment: "Noten: Gewichtung mit Wert")
         let parts = [
             topic.isEmpty ? fallbackTopic : topic,
             date.isEmpty ? nil : date,
@@ -240,12 +240,12 @@ private struct GradeTable: View {
         ScrollView(.horizontal, showsIndicators: false) {
             VStack(spacing: 0) {
                 HStack(alignment: .firstTextBaseline) {
-                    Text("Thema")
+                    Text("Topic")
                         .frame(minWidth: 140, maxWidth: .infinity, alignment: .leading)
-                    Text("Note").frame(width: 76)
-                    Text("Datum").frame(width: 92)
-                    Text("Gewichtung").frame(width: 84)
-                    Text("Klasse Ø").frame(width: 72)
+                    Text("Grade").frame(width: 76)
+                    Text("Date").frame(width: 92)
+                    Text("Weighting").frame(width: 84)
+                    Text("Class Ø").frame(width: 72)
                 }
                 .font(UberFont.text(11, weight: .bold))
                 .tracking(0.6)
@@ -256,7 +256,7 @@ private struct GradeTable: View {
                 ForEach(grades, id: \.uid) { grade in
                     HStack(alignment: .top) {
                         VStack(alignment: .leading, spacing: 2) {
-                            (grade.title == nil ? Text("Note") : Text(verbatim: grade.title!))
+                            (grade.title == nil ? Text("Grade") : Text(verbatim: grade.title!))
                                 .font(UberFont.text(13, weight: .semibold))
                             if let teacher = grade.teacher, !teacher.isEmpty {
                                 Text(teacher)
@@ -279,7 +279,7 @@ private struct GradeTable: View {
                                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                                     .lineLimit(2)
                             } else if grade.isClassic == false {
-                                Text(NSLocalizedString("grades_not_classic", value: "o. Wertung", comment: "Noten: nicht klassisch"))
+                                Text(NSLocalizedString("grades_not_classic", value: "not graded", comment: "Noten: nicht klassisch"))
                                     .font(UberFont.text(11))
                                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                             }

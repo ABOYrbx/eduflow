@@ -95,11 +95,11 @@ public enum HomeworkStatusFilter {
 
     public static func displayName(_ status: String) -> String {
         switch status {
-        case alle: return NSLocalizedString("homework_filter_all", value: "Alle", comment: "Hausaufgaben: Filter alle")
-        case offen: return NSLocalizedString("homework_filter_open", value: "Offen", comment: "Hausaufgaben: Filter offene")
-        case ueberfaellig: return NSLocalizedString("homework_filter_overdue", value: "Überfällig", comment: "Hausaufgaben: Filter überfällige")
-        case erledigt: return NSLocalizedString("homework_filter_done", value: "Erledigt", comment: "Hausaufgaben: Filter erledigte")
-        case papierkorb: return NSLocalizedString("homework_filter_trash", value: "Papierkorb", comment: "Hausaufgaben: Filter Papierkorb")
+        case alle: return NSLocalizedString("homework_filter_all", value: "All", comment: "Hausaufgaben: Filter alle")
+        case offen: return NSLocalizedString("homework_filter_open", value: "Open", comment: "Hausaufgaben: Filter offene")
+        case ueberfaellig: return NSLocalizedString("homework_filter_overdue", value: "Overdue", comment: "Hausaufgaben: Filter überfällige")
+        case erledigt: return NSLocalizedString("homework_filter_done", value: "Completed", comment: "Hausaufgaben: Filter erledigte")
+        case papierkorb: return NSLocalizedString("homework_filter_trash", value: "Recycle bin", comment: "Hausaufgaben: Filter Papierkorb")
         default: return status.capitalized
         }
     }
@@ -111,5 +111,5 @@ public enum HomeworkItemStatus {
     public static let heute = "heute fällig"
     public static let offen = "offen"
     public static let erledigt = "erledigt"
-    public static let ohneDatum = "ohne Datum"
+    public static let ohneDatum = "No date"
 }

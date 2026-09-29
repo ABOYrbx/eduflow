@@ -16,8 +16,8 @@ public struct DevicesView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
                 PageHead(
-                    "Geräte",
-                    stats: vm.devices.isEmpty ? nil : String(format: NSLocalizedString("devices_count", value: "%d Sitzungen", comment: "Geräte: Sitzungszahl"), vm.devices.count)
+                    "Devices",
+                    stats: vm.devices.isEmpty ? nil : String(format: NSLocalizedString("devices_count", value: "%d sessions", comment: "Geräte: Sitzungszahl"), vm.devices.count)
                 )
                 if vm.isLoading && vm.devices.isEmpty {
                     ProgressView()
@@ -29,7 +29,7 @@ public struct DevicesView: View {
                         Task { await vm.load(onSessionExpired: onSessionExpired) }
                     }
                 } else if vm.devices.isEmpty {
-                    Text("Keine weiteren Sitzungen.")
+                    Text("No other sessions.")
                         .font(UberFont.text(15))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                         .frame(maxWidth: .infinity)
@@ -42,17 +42,17 @@ public struct DevicesView: View {
                         ForEach(Array(vm.devices.enumerated()), id: \.element.id) { index, device in
                             HStack(spacing: 10) {
                                 VStack(alignment: .leading, spacing: 2) {
-                                    (device.device.isEmpty ? Text("Unbekanntes Gerät") : Text(verbatim: device.device))
+                                    (device.device.isEmpty ? Text("Unknown device") : Text(verbatim: device.device))
                                         .font(UberFont.text(14, weight: .bold))
                                     Text(verbatim: "\(device.short) · \(device.created)")
                                         .font(UberFont.text(12))
                                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                                    Text(String(format: NSLocalizedString("devices_valid_until", value: "Gültig bis %@", comment: "Geräte: Gültigkeit"), device.expires))
+                                    Text(String(format: NSLocalizedString("devices_valid_until", value: "Valid until %@", comment: "Geräte: Gültigkeit"), device.expires))
                                         .font(UberFont.text(12))
                                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                                 }
                                 Spacer()
-                                Button("Entfernen") {
+                                Button(NSLocalizedString("Remove", value: "Remove", comment: "UI-Literal")) {
                                     Task { await vm.revoke(device, onSessionExpired: onSessionExpired) }
                                 }
                                 .buttonStyle(UberButtonStyle(.smallLight))
@@ -76,7 +76,7 @@ public struct DevicesView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle(NSLocalizedString("settings_devices_nav", value: "Geräte", comment: "Geräte: Titel"))
+        .navigationTitle(NSLocalizedString("settings_devices_nav", value: "Devices", comment: "Geräte: Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
     }
 }

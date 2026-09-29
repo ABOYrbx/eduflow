@@ -55,7 +55,7 @@ public final class HomeworkViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
     }
@@ -84,7 +84,7 @@ public final class HomeworkViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
     }
@@ -123,7 +123,7 @@ public final class HomeworkViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
     }
