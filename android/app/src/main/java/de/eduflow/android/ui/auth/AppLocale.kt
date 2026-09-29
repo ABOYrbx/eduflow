@@ -74,16 +74,50 @@ object AppLocale {
         }.getOrDefault(context.getString(R.string.onboarding_greeting))
     }
 
-    /** Übersetzungsstand (statisch, per Skript aus Crowdin-Splits berechnet). */
+    /**
+     * Übersetzungsstand je Sprache — wird per `tools/update_locale_coverage.py`
+     * aus den Sprachdateien unter `res` erzeugt. Nach jedem Crowdin-Sync laufen:
+     * `python3 tools/update_locale_coverage.py` (bzw. `--check` für CI).
+     */
     data class LocaleCoverage(val code: String, val translated: Int, val total: Int) {
         val percent: Int get() = if (total <= 0) 100 else (translated * 100 / total).coerceIn(0, 100)
     }
 
     private val coverage = mapOf(
-        "de" to LocaleCoverage("de", 300, 300),
-        "en" to LocaleCoverage("en", 300, 300),
+        "en" to LocaleCoverage("en", 316, 316),
+        "af" to LocaleCoverage("af", 278, 316),
+        "ar" to LocaleCoverage("ar", 125, 316),
+        "ca" to LocaleCoverage("ca", 278, 316),
+        "cs" to LocaleCoverage("cs", 288, 316),
+        "da" to LocaleCoverage("da", 279, 316),
+        "de" to LocaleCoverage("de", 289, 316),
+        "el" to LocaleCoverage("el", 284, 316),
+        "es" to LocaleCoverage("es", 291, 316),
+        "fi" to LocaleCoverage("fi", 291, 316),
+        "fr" to LocaleCoverage("fr", 280, 316),
+        "hu" to LocaleCoverage("hu", 278, 316),
+        "it" to LocaleCoverage("it", 275, 316),
+        "iw" to LocaleCoverage("iw", 278, 316),
+        "ja" to LocaleCoverage("ja", 283, 316),
+        "ko" to LocaleCoverage("ko", 278, 316),
+        "nl" to LocaleCoverage("nl", 277, 316),
+        "no" to LocaleCoverage("no", 290, 316),
+        "pl" to LocaleCoverage("pl", 287, 316),
+        "pt" to LocaleCoverage("pt", 294, 316),
+        "ro" to LocaleCoverage("ro", 287, 316),
+        "ru" to LocaleCoverage("ru", 295, 316),
+        "sr" to LocaleCoverage("sr", 278, 316),
+        "sv" to LocaleCoverage("sv", 284, 316),
+        "tr" to LocaleCoverage("tr", 278, 316),
+        "uk" to LocaleCoverage("uk", 283, 316),
+        "vi" to LocaleCoverage("vi", 278, 316),
+        "zh" to LocaleCoverage("zh", 300, 316),
     )
-    private const val fallbackTotal = 300
+    /** Nenner für Sprachen ohne Eintrag (entspricht dem Stand der Source). */
+    private const val fallbackTotal = 316
+
+    /** Sprachen mit gemessener Übersetzung (für Anzeige und Tests). */
+    fun knownLocaleCodes(): Set<String> = coverage.keys
 
     fun coverageFor(code: String): LocaleCoverage =
         coverage[code] ?: LocaleCoverage(code, 0, fallbackTotal)

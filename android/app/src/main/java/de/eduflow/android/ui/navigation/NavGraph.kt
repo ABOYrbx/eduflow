@@ -185,7 +185,10 @@ fun EduFlowNav(
             OnboardingFlow(
                 vm = authVm,
                 baseUrl = session?.baseUrl ?: TokenStore.DEFAULT_BASE_URL,
-                onBaseUrlChange = { url -> scope.launch { store.setBaseUrl(url) } },
+                // Suspendierend statt "fire and forget": sonst wechselte der
+                // Onboarding-Flow zum Login, bevor DataStore geschrieben war,
+                // und der erste Login lief noch gegen die Standard-Adresse.
+                onBaseUrlChange = { url -> store.setBaseUrl(url) },
                 onTwoFa = { pending -> nav.navigate(Routes.twoFa(pending)) },
             )
         }
@@ -193,7 +196,7 @@ fun EduFlowNav(
             LoginScreen(
                 vm = authVm,
                 baseUrl = session?.baseUrl ?: TokenStore.DEFAULT_BASE_URL,
-                onBaseUrlChange = { url -> scope.launch { store.setBaseUrl(url) } },
+                onBaseUrlChange = { url -> store.setBaseUrl(url) },
                 onTwoFa = { pending -> nav.navigate(Routes.twoFa(pending)) },
             )
         }
