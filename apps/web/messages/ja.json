@@ -33,7 +33,14 @@
     "noText": "(テキストなし)",
     "requestFailed": "リクエストに失敗しました。",
     "school": "学校",
-    "upstreamUnreachable": "サーバーに到達できません。"
+    "upstreamUnreachable": "サーバーに到達できません。",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "重み付け件名平均",

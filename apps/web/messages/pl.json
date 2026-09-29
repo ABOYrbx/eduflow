@@ -33,7 +33,14 @@
     "noText": "(brak tekstu)",
     "requestFailed": "Żądanie nie powiodło się.",
     "school": "Szkoła",
-    "upstreamUnreachable": "Serwer jest nieosiągalny."
+    "upstreamUnreachable": "Serwer jest nieosiągalny.",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "Średnia ważona tematu",

@@ -33,7 +33,14 @@
     "noText": "(aucun texte)",
     "requestFailed": "La demande a échoué.",
     "school": "École",
-    "upstreamUnreachable": "Le serveur est inaccessible."
+    "upstreamUnreachable": "Le serveur est inaccessible.",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "Moyenne du sujet pondéré",

@@ -33,7 +33,14 @@
     "noText": "(нет текста)",
     "requestFailed": "Запрос не удался.",
     "school": "Школа",
-    "upstreamUnreachable": "Сервер недоступен."
+    "upstreamUnreachable": "Сервер недоступен.",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "Средневзвешенная тема",

@@ -33,7 +33,14 @@
     "noText": "(لا يوجد نص)",
     "requestFailed": "فشل الطلب.",
     "school": "Schule",
-    "upstreamUnreachable": "لا يمكن الوصول إلى الخادم."
+    "upstreamUnreachable": "لا يمكن الوصول إلى الخادم.",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "متوسط الموضوع المرجح",

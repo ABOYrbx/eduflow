@@ -33,7 +33,14 @@
     "noText": "(sin texto)",
     "requestFailed": "La solicitud falló.",
     "school": "Escuela",
-    "upstreamUnreachable": "El servidor no está disponible."
+    "upstreamUnreachable": "El servidor no está disponible.",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "Promedio de sujeto ponderado",

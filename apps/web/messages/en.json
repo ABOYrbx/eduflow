@@ -33,7 +33,14 @@
     "noText": "(no text)",
     "requestFailed": "The request failed.",
     "school": "School",
-    "upstreamUnreachable": "The server is unreachable."
+    "upstreamUnreachable": "The server is unreachable.",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "Weighted subject average",

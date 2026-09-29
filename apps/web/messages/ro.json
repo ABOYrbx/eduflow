@@ -33,7 +33,14 @@
     "noText": "(fără text)",
     "requestFailed": "Solicitarea a eșuat.",
     "school": "Școală",
-    "upstreamUnreachable": "Serverul nu este accesibil."
+    "upstreamUnreachable": "Serverul nu este accesibil.",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "Media ponderată a subiectului",

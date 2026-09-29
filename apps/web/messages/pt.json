@@ -33,7 +33,14 @@
     "noText": "(sem texto)",
     "requestFailed": "A solicitação falhou.",
     "school": "Instituição",
-    "upstreamUnreachable": "O servidor está inacessível."
+    "upstreamUnreachable": "O servidor está inacessível.",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "Média do assunto ponderado",
