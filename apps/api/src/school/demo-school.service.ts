@@ -14,6 +14,7 @@ const settingsSchema: SettingSpec[] = [
   { key: "landing", kind: "select", label: t("settings.landingLabel"), options: [["uebersicht", t("settings.sectionUebersicht")], ["dashboard", t("settings.optDashboard")], ["hausaufgaben", t("settings.optHomework")], ["noten", t("settings.optGrades")], ["stundenplan", t("settings.optTimetable")]], default: "uebersicht" },
   { key: "hw_status", kind: "select", label: t("settings.hwStatusLabel"), options: [["alle", t("settings.optAll")], ["offen", t("settings.optOpen")], ["überfällig", t("settings.optOverdue")], ["erledigt", t("settings.optDone")], ["papierkorb", t("settings.optTrash")]], default: "alle" },
   { key: "hw_tests", kind: "bool", label: t("settings.hwTestsLabel"), default: false },
+  { key: "time_format", kind: "select", label: t("settings.timeFormatLabel"), options: [["24h", t("settings.opt24h")], ["12h", t("settings.opt12h")]], default: "24h" },
   { key: "ov_unread", kind: "int", label: t("settings.ovUnreadLabel"), min: 1, max: 50, default: 10 },
   { key: "ov_homework", kind: "int", label: t("settings.ovHomeworkLabel"), min: 1, max: 50, default: 10 },
   { key: "ov_order", kind: "order", section: t("settings.sectionUebersicht"), label: t("settings.ovOrderLabel"), default: "messages,homework,weather" },
