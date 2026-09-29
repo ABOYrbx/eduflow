@@ -94,7 +94,8 @@
     "trashBtn": "Корзина",
     "trashEmpty": "Корзина пуста.",
     "trashLabel": "Корзина",
-    "trashWithCount": "Корзина ({count})"
+    "trashWithCount": "Корзина ({count})",
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "Вернуться к входу",
