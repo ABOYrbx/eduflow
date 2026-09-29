@@ -52,15 +52,15 @@
     <string name="onboarding_greeting">Hello!</string>
     <string name="onboarding_language_title">Sprache wählen</string>
     <string name="onboarding_language_sub">EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen.</string>
-    <string name="onboarding_language_apply_restart">Übernehmen &amp; neu starten</string>
+    <string name="onboarding_language_apply_restart">تطبيق &amp; إعادة تشغيل</string>
     <string name="onboarding_language_system">النظام</string>
     <string name="onboarding_language_system_desc">Folgt der Systemsprache</string>
     <string name="onboarding_features_title">Everything in one place.</string>
-    <string name="onboarding_feat1_title">Messages &amp; Threads</string>
+    <string name="onboarding_feat1_title">الرسائل &amp; المواضيع</string>
     <string name="onboarding_feat1_desc">All EduPage messages in a mail layout — with likes, replies and files.</string>
-    <string name="onboarding_feat2_title">Homework &amp; Grades</string>
+    <string name="onboarding_feat2_title">الواجب البيتي &amp; درجات</string>
     <string name="onboarding_feat2_desc">Due dates with counters, semester tabs and average.</string>
-    <string name="onboarding_feat3_title">Timetable &amp; Weather</string>
+    <string name="onboarding_feat3_title">الجدول الزمني &amp; الطقس</string>
     <string name="onboarding_feat3_desc">Day and week plus weather on the overview.</string>
     <string name="onboarding_server_sub">Enter where EduFlow runs as server.</string>
     <string name="onboarding_connected">Connected</string>
@@ -74,7 +74,7 @@
     <string name="twofa_desc">Enter the two-factor code from your email or app.</string>
     <string name="twofa_label">Code from email or app</string>
     <string name="twofa_placeholder">الكود</string>
-    <string name="twofa_confirm_loading">Pru&lt;unk&gt; fen …</string>
+    <string name="twofa_confirm_loading">التحقق …</string>
     <string name="twofa_confirm">Confirm</string>
     <string name="twofa_back">Back to sign-in</string>
     <string name="twofa_validity">The code is valid for 10 minutes.</string>
@@ -83,10 +83,10 @@
     <string name="settings_subtitle">Your EduFlow account</string>
     <string name="settings_demo_text">Only synthetic sample data is loaded from the local demo server.</string>
     <string name="settings_server_section">خادم</string>
-    <string name="settings_server_placeholder">Server (…/api/v1/)</string>
+    <string name="settings_server_placeholder">الخادم (…/api/v1/)</string>
     <string name="settings_server_apply">Apply server</string>
     <string name="settings_school_fallback">School</string>
-    <string name="settings_connected_format">%1$s · connected</string>
+    <string name="settings_connected_format">%1$s · متصل</string>
     <string name="settings_appearance">Appearance</string>
     <string name="settings_theme_light">Light</string>
     <string name="settings_theme_light_sub">Always light design</string>
@@ -97,7 +97,7 @@
     <string name="settings_accent">Accent color</string>
     <string name="settings_notifications">Notifications</string>
     <string name="settings_notify_news">New messages</string>
-    <string name="settings_overview_tasks">Overview &amp; tasks</string>
+    <string name="settings_overview_tasks">نظرة عامة &amp; المهام</string>
     <string name="settings_landing_label">Start page after sign-in</string>
     <string name="settings_hwfilter_label">Tasks: default filter</string>
     <string name="settings_hwtests_label">Include tests and exams</string>
@@ -106,17 +106,17 @@
     <string name="settings_navbar_section">Navigationsleiste</string>
     <string name="settings_navbar_customize">Leiste anpassen</string>
     <string name="settings_navbar_desc">Wähle bis zu fünf Bereiche für die Leiste und sortiere sie mit den Pfeilen. „Mehr“ bleibt immer angepinnt.</string>
-    <string name="settings_navbar_shown">Angezeigt (%1$d/%2$d)</string>
+    <string name="settings_navbar_shown">عرض (%1$d/%2$d)</string>
     <string name="settings_navbar_add">Hinzufügen</string>
     <string name="settings_navbar_max">Maximal fünf Bereiche — erst einen abwählen.</string>
     <string name="settings_weather_show">Show weather map</string>
     <string name="settings_weather_sub">On the overview, on Android and the web</string>
     <string name="settings_weather_city_placeholder">City for weather map (e.g. Berlin)</string>
-    <string name="settings_weather_searching">Searching cities …</string>
+    <string name="settings_weather_searching">البحث عن المدن …</string>
     <string name="settings_weather_no_results">No matching places found.</string>
     <string name="settings_weather_usage">The place is used for the weather map on Android and the web.</string>
     <string name="settings_saved">Saved.</string>
-    <string name="settings_account">Account &amp; security</string>
+    <string name="settings_account">الحساب &amp; أمان</string>
     <string name="settings_devices">Connected devices</string>
     <string name="settings_privacy">Privacy</string>
     <string name="settings_privacy_text">Your credentials stay on this device. Only short-lived caches and revocable tokens reach the server — no tracking, no sharing with third parties.</string>
@@ -132,8 +132,8 @@
     <string name="devices_empty">No other devices signed in.</string>
     <string name="devices_unnamed">Unnamed device</string>
     <string name="devices_title_format">%1$s (%2$s)</string>
-    <string name="devices_created_format">Created: %1$s</string>
-    <string name="devices_expires_format">L&lt;unk&gt; uft من: %1$s</string>
+    <string name="devices_created_format">تم إنشاؤه: %1$s</string>
+    <string name="devices_expires_format">تنتهي الصلاحية: %1$s</string>
     <string name="devices_remove">Remove</string>
     <string name="device_default_name">Android emulator</string>
     <!-- Noten -->
@@ -148,10 +148,10 @@
     <string name="grades_avg_sub">Your grades at a glance</string>
     <string name="grades_no_grade">No grade yet</string>
     <string name="grades_grade_fallback">Grade</string>
-    <string name="grades_weight_format"> · Weight %1$s</string>
+    <string name="grades_weight_format"> · الوزن %1$s</string>
     <string name="grades_weight_default">×1</string>
-    <string name="grades_teacher_format">Teacher: %1$s</string>
-    <string name="grades_class_avg_format">Class avg. %1$s</string>
+    <string name="grades_teacher_format">المعلم: %1$s</string>
+    <string name="grades_class_avg_format">متوسط الصف الدراسي. %1$s</string>
     <string name="grades_term_all">All</string>
     <!-- Halbjahr-Name: %1$d = Halbjahr (1/2), %2$s/%3$s = Kurzjahre (25/26);
          Musterbuchstaben nicht übersetzen, nur Worte/Reihenfolge anpassen. -->
@@ -166,44 +166,44 @@
     <string name="homework_filter_overdue">Überfällig</string>
     <string name="homework_filter_done">Erledigt</string>
     <string name="homework_include_tests">Include tests/exams</string>
-    <string name="homework_section_trash_format">Trash · %1$d entries</string>
-    <string name="homework_section_open_format">%1$d offen · %2$d überfällig</string>
-    <string name="homework_trash_open_format">Trash (%1$d)</string>
+    <string name="homework_section_trash_format">· القمامة %1$d إدخالات</string>
+    <string name="homework_section_open_format">%1$d offen · %2$d überfällig</string>
+    <string name="homework_trash_open_format">سلة المهملات (%1$d)</string>
     <string name="homework_empty_trash">The trash is empty.</string>
     <string name="homework_empty">No homework found.</string>
     <string name="homework_swipe_trash">Trash</string>
     <string name="homework_swipe_restore">Restore</string>
     <string name="homework_reopen_desc">Reopen</string>
-    <string name="homework_title_format">Homework #%1$d</string>
+    <string name="homework_title_format">الواجب البيتي #%1$d</string>
     <!-- Nachrichten -->
-    <string name="messages_title">Messages</string>
+    <string name="messages_title">الرسائل</string>
     <string name="messages_subtitle">Messages from your school</string>
     <string name="messages_search_placeholder">Search messages</string>
     <string name="messages_filter_unread">إنجلوسن</string>
     <string name="messages_filter_files">With files</string>
-    <string name="messages_count_format">%1$d of %2$d messages</string>
+    <string name="messages_count_format">%1$d من رسائل %2$d</string>
     <string name="messages_mark_all">Mark all read</string>
-    <string name="messages_marked_format">%1$d marked as read.</string>
+    <string name="messages_marked_format">تم وضع علامة %1$d كمقروءة.</string>
     <string name="messages_empty_unread">All read. Well done.</string>
     <string name="messages_empty_files">No messages with files.</string>
     <string name="messages_empty_all">No messages found.</string>
     <string name="messages_new_desc">New message</string>
-    <string name="messages_file_format">File %1$d</string>
-    <string name="messages_like_format">♥ %1$d</string>
-    <string name="messages_like_detail_format">♥ %1$s · %2$s</string>
+    <string name="messages_file_format">ملف %1$d</string>
+    <string name="messages_like_format">♥️ %1$d</string>
+    <string name="messages_like_detail_format">♥️ %1$s · %2$s</string>
     <string name="messages_load">Load</string>
     <string name="messages_thread_title">موضوع</string>
     <string name="messages_cached">Loaded from cache.</string>
-    <string name="messages_files_format">Files (%1$d)</string>
-    <string name="messages_likes_format">Likes (%1$d)</string>
-    <string name="messages_replies_format">Replies (%1$d)</string>
+    <string name="messages_files_format">الملفات (%1$d)</string>
+    <string name="messages_likes_format">إعجاب (%1$d)</string>
+    <string name="messages_replies_format">الردود (%1$d)</string>
     <string name="messages_no_activity">No likes or replies yet.</string>
-    <string name="messages_reply_placeholder">Reply …</string>
-    <string name="messages_sending">Sending …</string>
+    <string name="messages_reply_placeholder">الرد …</string>
+    <string name="messages_sending">إرسال …</string>
     <string name="messages_reply_send">Reply</string>
     <string name="messages_compose_subtitle">Choose teachers and classmates</string>
     <string name="messages_recipient_search">Search recipients</string>
-    <string name="messages_recipients_format">%1$d recipients chosen</string>
+    <string name="messages_recipients_format">تم اختيار مستلمين %1$d</string>
     <string name="messages_body_placeholder">Message text</string>
     <string name="messages_compose_send">Send</string>
     <!-- Übersicht -->
@@ -211,7 +211,7 @@
     <string name="overview_customize_desc">Choose which sections appear first.</string>
     <string name="overview_move_up_desc">Move up</string>
     <string name="overview_move_down_desc">Move down</string>
-    <string name="overview_messages_count_format">Messages · %1$d</string>
+    <string name="overview_messages_count_format">الرسائل · %1$d</string>
     <string name="overview_action_all_tasks">All tasks</string>
     <string name="overview_clock_label">TIME</string>
     <!-- Datumszeile unter „Home" (EEEE = Wochentag, dd/MM/yyyy = Datum:
@@ -219,17 +219,17 @@
     <string name="home_date_format">EEEE, dd.MM.yyyy</string>
     <string name="overview_today_hours">CLASSES TODAY</string>
     <string name="overview_no_school">No school — no classes today.</string>
-    <string name="overview_now_format">Now: %1$s (%2$s. period · %3$s)</string>
-    <string name="overview_next_format">Next: %1$s (%2$s. period · %3$s)</string>
-    <string name="overview_next_room_format">Next: %1$s (%2$s. period · %3$s · Room %4$s)</string>
+    <string name="overview_now_format">الآن: %1$s ( فترة%2$s· %3$s)</string>
+    <string name="overview_next_format">التالي: %1$s ( فترة%2$s· %3$s)</string>
+    <string name="overview_next_room_format">التالي: %1$s ( فترة%2$s· %3$s · الغرفة %4$s)</string>
     <string name="overview_weather_title">WEATHER</string>
     <string name="overview_weather_default_city">Your location</string>
     <string name="overview_weather_default_title">Weather overview</string>
     <string name="overview_weather_refresh_desc">Refresh weather</string>
     <string name="overview_weather_set_location">Set your place in settings so the forecast appears here.</string>
     <string name="overview_weather_set_location_action">Set place in settings</string>
-    <string name="overview_weather_loading_format">Loading weather for %1$s.</string>
-    <string name="overview_weather_loading">Loading …</string>
+    <string name="overview_weather_loading_format">تحميل الطقس ل %1$s.</string>
+    <string name="overview_weather_loading">جاري التحميل …</string>
     <string name="overview_weather_retry">Reload</string>
     <string name="overview_weather_today_label">   TODAY</string>
     <string name="overview_weather_current_fallback">Current weather</string>
@@ -243,17 +243,17 @@
     <string name="overview_homework_empty">No open homework. Well done.</string>
     <string name="overview_order_weather">Weather</string>
     <string name="overview_drag_handle_desc">Ziehen zum Sortieren</string>
-    <string name="overview_due_suffix_format"> · fällig: %1$s</string>
+    <string name="overview_due_suffix_format"> · fällig: %1$s</string>
     <string name="overview_subject_suffix_format"> · %1$s</string>
-    <string name="overview_weather_high_low_format">H %1$s · L %2$s</string>
+    <string name="overview_weather_high_low_format">ش %1$s · L %2$s</string>
     <!-- Schulalltag -->
     <string name="school_title">School life</string>
     <string name="school_subtitle">Events and schedule changes</string>
-    <string name="school_tab_calendar_format">Calendar · %1$d</string>
-    <string name="school_tab_substitutions_format">Substitutions · %1$d</string>
+    <string name="school_tab_calendar_format">التقويم · %1$d</string>
+    <string name="school_tab_substitutions_format">البدائل · %1$d</string>
     <string name="school_prev_week_desc">Previous week</string>
     <string name="school_next_week_desc">Next week</string>
-    <string name="school_week_format">Week of %1$s</string>
+    <string name="school_week_format">أسبوع %1$s</string>
     <string name="school_empty_agenda">No school events or exams scheduled for this period.</string>
     <string name="school_empty_substitutions">No substitutions scheduled for this week.</string>
     <string name="school_kind_exam">TEST / PRU&lt;unk&gt; FUNG</string>
@@ -262,11 +262,11 @@
     <string name="school_change_add">NEU</string>
     <string name="school_change_remove">ENTFÄLLT</string>
     <string name="school_change_default">غريب</string>
-    <string name="school_class_format">Class %1$s</string>
+    <string name="school_class_format">الفئة %1$s</string>
     <!-- Stundenplan -->
     <string name="timetable_title">Timetable</string>
-    <string name="timetable_day_count_format">%1$d periods</string>
-    <string name="timetable_week_count_format">%1$d periods this week</string>
+    <string name="timetable_day_count_format">%1$d فترات</string>
+    <string name="timetable_week_count_format">%1$d فترات هذا الأسبوع</string>
     <string name="timetable_empty_day">No timetable loaded.</string>
     <string name="timetable_empty_week">No week data loaded.</string>
     <string name="timetable_no_lessons_weekend">No school — no classes on this day.</string>
@@ -276,18 +276,18 @@
     <string name="timetable_now">Now</string>
     <string name="timetable_day_tab">Day</string>
     <string name="timetable_week_tab">Week</string>
-    <string name="timetable_cancelled_with_time">%1$s · %2$s cancelled with time</string>
-    <string name="timetable_cancelled">%1$s cancelled</string>
+    <string name="timetable_cancelled_with_time">%1$s · %2$s ألغي مع الوقت</string>
+    <string name="timetable_cancelled">تم إلغاء %1$s</string>
     <string name="timetable_lesson_fallback">Lesson</string>
-    <string name="timetable_room_format">Room %1$s</string>
+    <string name="timetable_room_format">الغرفة %1$s</string>
     <string name="timetable_flag_online">متصل</string>
     <string name="timetable_flag_lernzeit">Study time</string>
-    <string name="timetable_flag_lernzeit_hours">Study time (%1$d hrs.)</string>
+    <string name="timetable_flag_lernzeit_hours">وقت الدراسة (%1$d ساعة)</string>
     <string name="timetable_flag_event">الحدث</string>
     <!-- Mehr -->
     <string name="more_title">More</string>
     <string name="more_subtitle">More sections</string>
-    <string name="more_school_title">Events &amp; substitutions</string>
+    <string name="more_school_title">الأحداث &amp; البدائل</string>
     <string name="more_school_sub">Exams, school events and changes</string>
     <string name="more_settings_sub">Appearance, account and server</string>
     <string name="more_demo_title">Demo mode</string>
@@ -296,7 +296,7 @@
     <string name="more_cache_title">Clear cache</string>
     <string name="more_cache_default">Delete cached data</string>
     <string name="more_logout_sub">Sign out from this device</string>
-    <string name="more_server_dialog_desc">Server for API requests (…/api/v1/).</string>
+    <string name="more_server_dialog_desc">خادم لطلبات API (…/api/v1/).</string>
     <!-- Validierung (clientseitig): Die ViewModels (ui/auth/AuthViewModel,
          ui/messages/MessagesViewModel, ui/overview/OverviewViewModel) liefern
          Code + deutschen Fallback-Text (kontextfrei für Unit-Tests) plus
@@ -333,20 +333,20 @@
     <string name="common_accent_pink">وردي</string>
     <!-- Plurale -->
     <plurals name="settings_devices_count">
-        <item quantity="zero">%1$d Geräte</item>
-        <item quantity="one">%1$d Gerät</item>
-        <item quantity="two">%1$d Geräte</item>
-        <item quantity="few">%1$d Geräte</item>
-        <item quantity="many">%1$d Geräte</item>
-        <item quantity="other">%1$d Geräte</item>
+        <item quantity="zero">%1$d جيرايت</item>
+        <item quantity="one">%1$d جيرايت</item>
+        <item quantity="two">%1$d جيرايت</item>
+        <item quantity="few">%1$d جيرايت</item>
+        <item quantity="many">%1$d جيرايت</item>
+        <item quantity="other">%1$d جيرايت</item>
     </plurals>
     <plurals name="more_cache_cleared">
-        <item quantity="zero">%1$d Dateien gelöscht</item>
-        <item quantity="one">%1$d Datei gelöscht</item>
-        <item quantity="two">%1$d Dateien gelöscht</item>
-        <item quantity="few">%1$d Dateien gelöscht</item>
-        <item quantity="many">%1$d Dateien gelöscht</item>
-        <item quantity="other">%1$d Dateien gelöscht</item>
+        <item quantity="zero">%1$d Dateien gelöscht</item>
+        <item quantity="one">%1$d Datei gelöscht</item>
+        <item quantity="two">%1$d Dateien gelöscht</item>
+        <item quantity="few">%1$d Dateien gelöscht</item>
+        <item quantity="many">%1$d Dateien gelöscht</item>
+        <item quantity="other">%1$d Dateien gelöscht</item>
     </plurals>
     <plurals name="grades_notes_count">
         <item quantity="zero">&lt;unk&gt; %1$s · %2$d Noten</item>
