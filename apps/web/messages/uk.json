@@ -95,7 +95,7 @@
     "trashEmpty": "Смітник пустий.",
     "trashLabel": "Кошик",
     "trashWithCount": "Кошик ({count})",
-    "dueToday": "due today"
+    "dueToday": "до сьогодні"
   },
   "login": {
     "backToLogin": "Повернутися до Входу",
