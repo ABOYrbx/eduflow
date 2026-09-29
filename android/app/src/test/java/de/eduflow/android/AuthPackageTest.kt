@@ -28,6 +28,7 @@ import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Test
@@ -100,6 +101,41 @@ class AuthPackageTest {
             "Captcha mit Browser-Hinweis",
             "Browser" in ErrorMapper.messageFor(ErrorCodes.CAPTCHA_REQUIRED),
         )
+    }
+
+    @Test
+    fun errorResMapping_coversAllCodes() {
+        // stringResFor: kontextfreie Code->error_*-Abbildung für Compose
+        // (R-IDs sind Compilezeit-Konstanten, daher offline testbar).
+        val expected = mapOf(
+            ErrorCodes.VALIDATION to R.string.error_validation,
+            ErrorCodes.TOKEN_INVALID to R.string.error_token_invalid,
+            ErrorCodes.TOKEN_EXPIRED to R.string.error_token_expired,
+            ErrorCodes.PENDING_INVALID to R.string.error_pending_invalid,
+            ErrorCodes.INVALID_CODE to R.string.error_invalid_code,
+            ErrorCodes.BAD_CREDENTIALS to R.string.error_bad_credentials,
+            ErrorCodes.EDUPAGE_2FA to R.string.error_edupage_2fa,
+            ErrorCodes.CAPTCHA_REQUIRED to R.string.error_captcha_required,
+            ErrorCodes.NOT_FOUND to R.string.error_not_found,
+            ErrorCodes.RATE_LIMITED to R.string.error_rate_limited,
+            ErrorCodes.CONFIG_MISSING to R.string.error_config_missing,
+            ErrorCodes.UPSTREAM to R.string.error_upstream,
+        )
+        expected.forEach { (code, res) ->
+            assertEquals(code, res, ErrorMapper.stringResFor(code))
+        }
+        // Unbekannte Codes fallen wie messageFor auf UPSTREAM.
+        assertEquals(R.string.error_upstream, ErrorMapper.stringResFor("E328"))
+        assertEquals(R.string.error_upstream, ErrorMapper.stringResFor(""))
+    }
+
+    @Test
+    fun apiException_messageResOptional() {
+        // Default null = Server-Fehler (Backend-Text hat Vorrang);
+        // gesetzt = clientseitige Validierung (Compose löst per stringResource).
+        assertNull(ApiException("UPSTREAM", "x").messageRes)
+        val e = ApiException("VALIDATION", "x", messageRes = R.string.auth_error_credentials)
+        assertEquals(R.string.auth_error_credentials, e.messageRes)
     }
 
     @Test

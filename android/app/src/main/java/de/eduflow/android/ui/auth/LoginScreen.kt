@@ -60,6 +60,7 @@ import de.eduflow.android.R
 import de.eduflow.android.data.defaultDeviceName
 import de.eduflow.android.data.TokenStore
 import de.eduflow.android.ui.common.PrimaryButton
+import de.eduflow.android.ui.timetable.localizedApiMessage
 import de.eduflow.android.ui.theme.LocalReducedMotion
 import kotlinx.coroutines.launch
 
@@ -74,7 +75,10 @@ fun LoginScreen(
 ) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var device by remember { mutableStateOf(defaultDeviceName()) }
+    // Vorbelegung lokalisiert (Gerätename landet in der Geräte-Liste);
+    // leeres Feld fällt beim Anmelden erneut auf diesen String zurück.
+    val emulatorLabel = stringResource(R.string.device_default_name)
+    var device by remember(emulatorLabel) { mutableStateOf(defaultDeviceName(emulatorLabel)) }
     var server by remember(baseUrl) { mutableStateOf(baseUrl) }
     var step by remember { mutableIntStateOf(0) }
     var showServerConfirm by remember { mutableStateOf(false) }
@@ -132,7 +136,12 @@ fun LoginScreen(
             }
             Text(stringResource(R.string.auth_step_format, step + 1, stepCount), fontSize = 12.sp, color = scheme.onSurfaceVariant, modifier = Modifier.padding(top = 6.dp, bottom = 16.dp))
             loginError?.let {
-                Text(it.message, color = scheme.error, textAlign = TextAlign.Center, modifier = Modifier.padding(bottom = 10.dp))
+                Text(
+                    localizedApiMessage(it.code, it.message, it.messageRes),
+                    color = scheme.error,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(bottom = 10.dp),
+                )
             }
 
             AnimatedContent(
@@ -220,7 +229,7 @@ fun LoginScreen(
                         if (showServerStep) {
                             onBaseUrlChange(server.trim().trimEnd('/').ifBlank { TokenStore.DEFAULT_BASE_URL.trimEnd('/') })
                         }
-                        vm.login(username, password, device)
+                        vm.login(username, password, device.ifBlank { emulatorLabel })
                     }
                 },
                 enabled = !loading,

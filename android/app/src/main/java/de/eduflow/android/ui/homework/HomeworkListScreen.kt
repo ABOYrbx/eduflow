@@ -61,6 +61,7 @@ import de.eduflow.android.ui.theme.RDotRed
 import de.eduflow.android.ui.theme.StatusGreen
 import de.eduflow.android.ui.theme.StatusRed
 import de.eduflow.android.ui.timetable.AuthAwareError
+import de.eduflow.android.ui.timetable.localizedApiMessage
 
 /** Chips aus dem PNG (Screen 01); Papierkorb läuft über den Button darunter. */
 @Composable
@@ -158,7 +159,7 @@ fun HomeworkListScreen(
 
         state.error?.let { err ->
             AuthAwareError(
-                message = "${err.message} (${err.code})",
+                message = "${localizedApiMessage(err.code, err.message, err.messageRes)} (${err.code})",
                 needsReLogin = err.code in
                     listOf(ErrorCodes.TOKEN_INVALID, ErrorCodes.TOKEN_EXPIRED, ErrorCodes.EDUPAGE_2FA),
                 onReLogin = onReLogin,

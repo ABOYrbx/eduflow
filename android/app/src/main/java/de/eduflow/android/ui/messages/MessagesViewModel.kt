@@ -2,6 +2,7 @@ package de.eduflow.android.ui.messages
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import de.eduflow.android.R
 import de.eduflow.android.data.ApiException
 import de.eduflow.android.data.ErrorMapper
 import de.eduflow.android.data.MessagesRepository
@@ -314,13 +315,23 @@ class ComposeViewModel(
         val body = s.body.trim()
         if (ids.isEmpty()) {
             _state.update {
-                it.copy(error = ApiException("VALIDATION", "Bitte mindestens einen gültigen Empfänger wählen."))
+                it.copy(
+                    error = ApiException(
+                        "VALIDATION", "Bitte mindestens einen gültigen Empfänger wählen.",
+                        messageRes = R.string.messages_compose_no_recipient,
+                    ),
+                )
             }
             return
         }
         if (body.isBlank()) {
             _state.update {
-                it.copy(error = ApiException("VALIDATION", "Bitte einen Nachrichtentext eingeben."))
+                it.copy(
+                    error = ApiException(
+                        "VALIDATION", "Bitte einen Nachrichtentext eingeben.",
+                        messageRes = R.string.messages_compose_no_body,
+                    ),
+                )
             }
             return
         }

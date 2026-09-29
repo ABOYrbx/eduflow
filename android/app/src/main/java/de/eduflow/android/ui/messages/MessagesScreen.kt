@@ -69,6 +69,7 @@ import de.eduflow.android.ui.common.PrimaryButton
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SearchPill
 import de.eduflow.android.ui.common.SectionLabel
+import de.eduflow.android.ui.timetable.localizedApiMessage
 
 private const val BODY_MAX = 5000
 
@@ -156,7 +157,7 @@ fun MessagesScreen(
 
             state.error?.let { err ->
                 MessageAuthError(
-                    message = "${err.message} (${err.code})",
+                    message = "${localizedApiMessage(err.code, err.message, err.messageRes)} (${err.code})",
                     code = err.code,
                     onReLogin = onReLogin,
                     onDismiss = viewModel::dismissError,
@@ -350,7 +351,7 @@ fun ThreadScreen(
 
         state.error?.let { err ->
             MessageAuthError(
-                message = "${err.message} (${err.code})",
+                message = "${localizedApiMessage(err.code, err.message, err.messageRes)} (${err.code})",
                 code = err.code,
                 onReLogin = onReLogin,
                 onDismiss = viewModel::dismissError,
@@ -544,7 +545,7 @@ fun ComposeScreen(
 
         state.error?.let { err ->
             MessageAuthError(
-                message = "${err.message} (${err.code})",
+                message = "${localizedApiMessage(err.code, err.message, err.messageRes)} (${err.code})",
                 code = err.code,
                 onReLogin = onReLogin,
                 onDismiss = viewModel::dismissError,
