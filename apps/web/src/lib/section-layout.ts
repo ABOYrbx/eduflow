@@ -68,13 +68,6 @@ export function moveItem<T>(list: readonly T[], from: number, to: number): T[] {
   return next;
 }
 
-/** Sichtbaren Schnittpunkt eines Zeigers bestimmen: Index der Zeile, in
- *  der der Zeiger steht, sonst der letzte bekannte Index. */
-export function hitIndex(rects: ReadonlyArray<{ top: number; bottom: number }>, y: number, fallback: number): number {
-  const found = rects.findIndex((rect) => y >= rect.top && y <= rect.bottom);
-  return found >= 0 ? found : fallback;
-}
-
 /** Schnittpunkt über die Mittellinie statt über die Kante: beim Ziehen über
  *  breite Karten soll die Karte erst wechseln, wenn der Zeiger wirklich
  *  auf der anderen Hälfte steht. */
