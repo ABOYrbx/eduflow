@@ -57,7 +57,7 @@ describe("meta (Port von app.py-Wetter, Paket N-G)", () => {
 
   it("meldet fehlenden Ort/Schlüssel/Upstream wie Python", async () => {
     await expect(getWetter(okFetch(CURRENT, FORECAST), "key", null, null, "")).resolves.toMatchObject({ status: 400 });
-    await expect(getWetter(okFetch(CURRENT, FORECAST), "", 52.5, 13.4, "")).resolves.toMatchObject({ payload: { error: "Kein API-Key (OPENWEATHER_KEY in .env eintragen)" }, status: 503 });
+    await expect(getWetter(okFetch(CURRENT, FORECAST), "", 52.5, 13.4, "")).resolves.toMatchObject({ payload: { error: "No API key (insert OPENWEATHER KEY in .env)" }, status: 503 });
     await expect(getWetter(okFetch({ cod: 404, message: "city not found" }, FORECAST), "key", 0, 0, "")).resolves.toMatchObject({ payload: { error: "city not found" }, status: 502 });
     const failing: FetchJson = async () => { throw new Error("netz weg"); };
     await expect(getWetter(failing, "key", 0, 0, "")).resolves.toMatchObject({ payload: { error: "netz weg" }, status: 502 });

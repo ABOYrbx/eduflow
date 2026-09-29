@@ -15,13 +15,16 @@
     "providerMissing": "The EduPage provider is not yet set up.",
     "rateLimited": "Too many attempts. Please try again later.",
     "serverKey": "Server keys are missing. Please try again later.",
+    "storedCredentials": "Stored credentials are invalid. Please sign in again.",
     "tokenExpired": "Token expired. Please sign in again.",
     "tokenExpiredShort": "Token expired. Please sign in again.",
     "tokenId": "Please provide token ID.",
     "tokenInvalid": "Invalid or missing token.",
     "tokenMissing": "Token is missing or invalid.",
     "tokenNotFound": "Token not found.",
-    "tokenRejected": "Token invalid."
+    "tokenRejected": "Token invalid.",
+    "twoFactorDemo": "Enter demo code 123456.",
+    "twoFactorMessage": "Enter the two-factor code from email or app and send it to /auth/2fa."
   },
   "common": {
     "badRequest": "Invalid request.",
@@ -35,6 +38,7 @@
     "clearCache": "Clear cache",
     "createDeviceToken": "Create device token",
     "doHomework": "Complete or open task",
+    "grades": "Grades",
     "homeworkList": "Homework list",
     "issueDownloadToken": "Issue short-term download token",
     "liveness": "Liveness probe",
@@ -59,6 +63,7 @@
     "timetableWeek": "Week timetable",
     "trashHomework": "Move homework to trash or restore",
     "validationDescription": "Validation error",
+    "weather": "Weather",
     "weatherSearch": "Weather location search"
   },
   "geo": {
@@ -66,7 +71,9 @@
     "citySearch": "Cities could not be searched right now.",
     "citySetup": "The city search is not set up.",
     "coords": "Please specify coordinates (?lat=..&lon=..) or city (?city=..).",
-    "noKey": "No API key (insert OPENWEATHER KEY in .env)"
+    "noKey": "No API key (insert OPENWEATHER KEY in .env)",
+    "searchUnavailable": "City search is unavailable.",
+    "unavailable": "Weather is currently unavailable."
   },
   "homework": {
     "notFound": "Homework not found."
@@ -83,7 +90,7 @@
     "recipientsBody": "Please specify valid recipients and a message body.",
     "sentNotFound": "Sent, but the new message was not found.",
     "unknownType": "Unknown message type.",
-    "unknownTypeValid": "Unknown message type. Valid: anketa, chat, genotif, news, sprava."
+    "unknownTypeValid": "Unknown message type. Valid: {types}."
   },
   "school": {
     "substitutions": "Substitution plan could not be loaded.",
@@ -114,17 +121,38 @@
     "sectionWetter": "Weather"
   },
   "upstream": {
+    "agendaFailed": "School events could not be loaded: {detail}",
+    "cacheFailed": "Cache could not be cleared: {detail}",
     "changeUnconfirmed": "EduPage has not confirmed the change.",
-    "replyUnconfirmed": "EduPage did not confirm the answer."
+    "downloadFailed": "Download failed: {detail}",
+    "edupageStatus": "EduPage reports error {status}.",
+    "gradesFailed": "Grades could not be loaded: {detail}",
+    "homeworkFailed": "Homework could not be loaded: {detail}",
+    "loginFailed": "Sign-in failed: {detail}",
+    "messagesFailed": "Messages could not be loaded: {detail}",
+    "readFailed": "Read status could not be saved: {detail}",
+    "recipientsFailed": "Recipients could not be loaded: {detail}",
+    "reopenFailed": "Task could not be marked as open: {detail}",
+    "replyFailed": "Reply failed: {detail}",
+    "replyThreadFailed": "Reply was sent, but the thread could not be loaded: {detail}",
+    "replyUnconfirmed": "EduPage did not confirm the answer.",
+    "sendFailed": "Send failed: {detail}",
+    "settingsFailed": "Settings could not be saved: {detail}",
+    "statusFailed": "Status could not be changed: {detail}",
+    "threadFailed": "Thread could not be loaded: {detail}",
+    "timetableFailed": "Timetable could not be loaded: {detail}",
+    "unexpectedResponse": "Unexpected response from EduPage."
   },
   "validation": {
     "bool": "Invalid boolean (expected true/false).",
+    "bool01": "Invalid boolean (expected 0 or 1).",
     "dateFormat": "The date must be given in the format YYYY-MM-DD.",
     "dateFormatShort": "Date must be in the format YYYY-MM-DD.",
     "invalidDate": "Invalid date (YYYY-MM-DD expected).",
     "json": "Invalid request (JSON expected).",
     "jsonObject": "Invalid request (JSON object expected).",
-    "limitRange": "Limit must be between 1 and 200.",
+    "limitRange": "Limit must be between 1 and {max}.",
+    "negativeOffset": "Offset must not be negative.",
     "pagination": "Limit and offset must be integers.",
     "status": "Invalid status.",
     "statusHomework": "Invalid status (expected: all, open, overdue, done or trash).",

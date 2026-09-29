@@ -130,9 +130,9 @@ describe("EdupageDataService (Paket N-C, Python-Parität)", () => {
     expect(overdue.items.map((item) => item.id)).toEqual([201]);
     const searched = await service.homeworkList(claims, { q: "vokabeln" }) as unknown as { items: { id: number }[] };
     expect(searched.items.map((item) => item.id)).toEqual([201]);
-    await expect(service.homeworkList(claims, { status: "falsch" })).rejects.toMatchObject({ response: { error: "Ungültiger Status (alle, offen, überfällig, erledigt oder papierkorb erwartet)." } });
-    await expect(service.homeworkList(claims, { since: "gestern" })).rejects.toMatchObject({ response: { error: "Ungültiges Datum (YYYY-MM-DD erwartet)." } });
-    await expect(service.homeworkList(claims, { include_tests: "vielleicht" })).rejects.toMatchObject({ response: { error: "Ungültiger Wahrheitswert (true/false erwartet)." } });
+    await expect(service.homeworkList(claims, { status: "falsch" })).rejects.toMatchObject({ response: { error: "Invalid status (expected: all, open, overdue, done or trash)." } });
+    await expect(service.homeworkList(claims, { since: "gestern" })).rejects.toMatchObject({ response: { error: "Invalid date (YYYY-MM-DD expected)." } });
+    await expect(service.homeworkList(claims, { include_tests: "vielleicht" })).rejects.toMatchObject({ response: { error: "Invalid boolean (expected true/false)." } });
   });
 
   it("markiert erledigt und legt in den Papierkorb", async () => {
@@ -146,20 +146,20 @@ describe("EdupageDataService (Paket N-C, Python-Parität)", () => {
     const back = await service.homeworkTrash(claims, "202", { hide: false }) as unknown as { is_hidden: boolean; is_done: boolean };
     expect(back).toMatchObject({ is_hidden: false, is_done: false });
     await expect(service.homeworkDone(claims, "999", { done: true })).rejects.toMatchObject({ response: { code: "NOT_FOUND" } });
-    await expect(service.homeworkDone(claims, "202", null)).rejects.toMatchObject({ response: { error: "Ungültige Anfrage (JSON erwartet)." } });
+    await expect(service.homeworkDone(claims, "202", null)).rejects.toMatchObject({ response: { error: "Invalid request (JSON expected)." } });
   });
 
   it("meldet Serverfehler beim Flaggen wie Python", async () => {
     seedTimeline([hwItem("201", "homework", isoDay(-1), "Vokabeln", "Deutsch")]);
     breakFlag();
-    await expect(service.homeworkDone(claims, "201", { done: true })).rejects.toMatchObject({ response: { error: expect.stringContaining("Status konnte nicht geändert werden:") } });
+    await expect(service.homeworkDone(claims, "201", { done: true })).rejects.toMatchObject({ response: { error: expect.stringContaining("Status could not be changed:") } });
   });
 
   it("parst Flags und Daten tolerant", () => {
     expect(parseBoolFlag("ja", false)).toBe(true);
     expect(parseBoolFlag(0, true)).toBe(false);
     expect(parseBoolFlag(undefined, true)).toBe(true);
-    expect(() => parseBoolFlag(2, false)).toThrow("Ungültiger Wahrheitswert (0 oder 1 erwartet).");
+    expect(() => parseBoolFlag(2, false)).toThrow("Invalid boolean (expected 0 or 1).");
     expect(homeworkRank({ is_hidden: true, status: "offen" })).toBe(3);
     expect(markHidden([{ id: 1 }, { id: 2 }], new Set(["2"]))).toEqual({ visible: [{ id: 1, is_hidden: false }], deleted: [{ id: 2, is_hidden: true }] });
     expect(parseDueDate("16.09.2026")).toEqual(new Date(2026, 8, 16));

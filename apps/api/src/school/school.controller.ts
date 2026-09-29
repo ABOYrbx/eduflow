@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, Query, Req, Res, UnauthorizedException, UseGuards } from "@nestjs/common";
 import type { Request, Response } from "express";
 import { AccessTokenGuard, AuthenticatedRequest } from "../auth/access-token.guard";
+import { t } from "../i18n";
 import { AuthClaims, AuthService } from "../auth/auth.service";
 import { DemoSchoolService } from "./demo-school.service";
 import { EdupageDataService } from "../edupage/data";
@@ -59,7 +60,7 @@ export class SchoolController {
       const file = dl
         ? await this.edupage.attachmentByDl(dl, eventId, index)
         : await this.edupage.attachmentByClaims(
-          req.authClaims ?? (bearer || queryToken ? await this.auth.authenticate((bearer ?? queryToken) as string) : (() => { throw new UnauthorizedException({ error: "Ungültiges oder fehlendes Token.", code: "TOKEN_INVALID" }); })()),
+          req.authClaims ?? (bearer || queryToken ? await this.auth.authenticate((bearer ?? queryToken) as string) : (() => { throw new UnauthorizedException({ error: t("auth.tokenInvalid"), code: "TOKEN_INVALID" }); })()),
           eventId, index);
       res.setHeader("Content-Type", file.contentType);
       res.setHeader("Content-Disposition", `attachment; filename="${file.filename.replace(/[\r\n"\\]/g, "_")}"`);

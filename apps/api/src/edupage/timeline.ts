@@ -1,4 +1,5 @@
 import { MissingDataError, RequestError } from "./errors";
+import { t } from "../i18n";
 import { parseServerDate } from "./serializers";
 import { EdupageSession } from "./session";
 
@@ -129,7 +130,7 @@ export async function fetchTimelineHistory(session: EdupageSession, subdomain: s
   try {
     data = JSON.parse(page.text) as Record<string, unknown>;
   } catch {
-    throw new RequestError("Unerwartete Antwort von EduPage.");
+    throw new RequestError(t("upstream.unexpectedResponse"));
   }
   if (!Array.isArray(data.timelineItems)) {
     throw new MissingDataError("Unexpected response from edupage! (no events in this time period?)");

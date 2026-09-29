@@ -108,7 +108,7 @@ describe("EdupageDataService (Paket N-D, Python-Parität)", () => {
     expect(day.cache_info).toBe("frisch geladen");
     const cached = await service.timetableDay(claims, { day: "2026-09-16" }) as unknown as { cache_info: string };
     expect(cached.cache_info).toBe("aus Cache");
-    await expect(service.timetableDay(claims, { day: "kein Datum" })).rejects.toMatchObject({ response: { error: "Das Datum muss im Format JJJJ-MM-TT angegeben werden." } });
+    await expect(service.timetableDay(claims, { day: "kein Datum" })).rejects.toMatchObject({ response: { error: "The date must be given in the format YYYY-MM-DD." } });
   });
 
   it("liefert die Woche mit Matrix und Cache-Zähler", async () => {

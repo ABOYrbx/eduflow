@@ -109,7 +109,7 @@ describe("AuthService (echter EduPage-Anbieter, Python-Parität)", () => {
   it("startet 2FA mit Python-Text und -Ablauf", async () => {
     service = new AuthService(prisma as never, null as never, factoryFor({ ...rpcLogin("/login/twofactor?sn=0"), ...twoFactorFinish }));
     const result = await service.login({ username: "demo", password: "geheim", subdomain: "demo" });
-    expect(result).toMatchObject({ status: "2fa_required", message: "Zwei-Faktor-Code aus E-Mail oder App eingeben und an /auth/2fa senden." });
+    expect(result).toMatchObject({ status: "2fa_required", message: "Enter the two-factor code from email or app and send it to /auth/2fa." });
     expect((result as { pending_token: string }).pending_token).toMatch(/^[0-9a-f]{32}$/);
   });
 
@@ -124,7 +124,7 @@ describe("AuthService (echter EduPage-Anbieter, Python-Parität)", () => {
 
   it("mappt EduPage-Fehler auf BAD_CREDENTIALS und CAPTCHA_REQUIRED", async () => {
     const bad = new AuthService(prisma as never, null as never, () => ({ login: async () => { throw new BadCredentialsError(); } }) as never);
-    await expect(bad.login({ username: "x", password: "y" })).rejects.toMatchObject({ response: { code: "BAD_CREDENTIALS", error: "Falscher Benutzername, Passwort oder Subdomain." } });
+    await expect(bad.login({ username: "x", password: "y" })).rejects.toMatchObject({ response: { code: "BAD_CREDENTIALS", error: "Wrong username, password or subdomain." } });
     const captcha = new AuthService(prisma as never, null as never, () => ({ login: async () => { throw new CaptchaError(); } }) as never);
     await expect(captcha.login({ username: "x", password: "y" })).rejects.toMatchObject({ response: { code: "CAPTCHA_REQUIRED" } });
   });
@@ -138,7 +138,7 @@ describe("AuthService (echter EduPage-Anbieter, Python-Parität)", () => {
     service = new AuthService(prisma as never, null as never, factoryFor(failing));
     const started = await service.login({ username: "demo", password: "geheim", subdomain: "demo" }) as { pending_token: string };
     await expect(service.finishTwoFactor({ pending_token: started.pending_token, code: "000000" }))
-      .rejects.toMatchObject({ response: { code: "INVALID_CODE", error: "Der Code wurde nicht akzeptiert. Bitte erneut versuchen." } });
+      .rejects.toMatchObject({ response: { code: "INVALID_CODE", error: "The code was not accepted. Please try again." } });
   });
 
   it("unterscheidet abgelaufene und unbekannte Tokens", async () => {
@@ -146,7 +146,7 @@ describe("AuthService (echter EduPage-Anbieter, Python-Parität)", () => {
     const first = tokens[0];
     if (!first) throw new Error("kein Token");
     first.accessExpiresAt = new Date(Date.now() - 1000);
-    await expect(service.authenticate(login.token)).rejects.toMatchObject({ response: { code: "TOKEN_EXPIRED", error: "Token ist abgelaufen. Bitte erneut anmelden." } });
+    await expect(service.authenticate(login.token)).rejects.toMatchObject({ response: { code: "TOKEN_EXPIRED", error: "Token expired. Please sign in again." } });
     await expect(service.authenticate("unbekannt")).rejects.toMatchObject({ response: { code: "TOKEN_INVALID" } });
   });
 

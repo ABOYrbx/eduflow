@@ -107,7 +107,7 @@ describe("EdupageDataService (Paket N-E, Python-Parität)", () => {
     expect(calls.filter((call) => call.includes("MainLogin"))).toHaveLength(loginCalls);
     const forced = await service.gradesList(claims, { refresh: "1" }) as unknown as { cache_info: string };
     expect(forced.cache_info).toBe("frisch geladen");
-    await expect(service.gradesList(claims, { limit: "x" })).rejects.toMatchObject({ response: { error: "Limit und Offset müssen ganze Zahlen sein." } });
+    await expect(service.gradesList(claims, { limit: "x" })).rejects.toMatchObject({ response: { error: "Limit and offset must be integers." } });
   });
 
   it("formatiert Alter wie cache.format_age", () => {
