@@ -94,7 +94,8 @@
     "trashBtn": "Trash",
     "trashEmpty": "The trash is empty.",
     "trashLabel": "Trash",
-    "trashWithCount": "Trash ({count})"
+    "trashWithCount": "Trash ({count})",
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "Back to Login",

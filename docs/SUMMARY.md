@@ -1,9 +1,10 @@
 # Summary
 
 * [Start](README.md)
-* [Architektur](ARCHITEKTUR.md)
-* [Funktionen](FUNKTIONEN.md)
-* [API v1](API.md)
-* [Plattformen](PLATTFORMEN.md)
-* [Entwicklung](ENTWICKLUNG.md)
-* [Migration](MIGRATION.md)
+* [Installation](INSTALLATION.md)
+* [Getting started](GETTING_STARTED.md)
+* [Features](FEATURES.md)
+* [Architecture](ARCHITECTURE.md)
+* [API reference](API.md)
+* [Platforms](PLATFORMS.md)
+* [Development](DEVELOPMENT.md)
