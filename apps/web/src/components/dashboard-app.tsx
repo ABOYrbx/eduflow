@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { FormEvent, Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { localeTag, t } from "../lib/i18n";
 import { useLocale } from "../lib/locale-context";
+import { normalizeHidden, normalizeOrder, SECTION_KEYS } from "../lib/section-layout";
 import { Icon } from "./icon";
 import { LanguagePicker } from "./language-picker";
 import { SectionEditor, type SectionLayout } from "./section-editor";
@@ -36,20 +37,6 @@ type Weather = { city: string; today: { temp: number; max: number; min: number; 
  *  und ein Sprachwechsel die Beschriftungen mitnimmt. */
 const nav = () => [{ href: "/", label: t("nav.overview") }, { href: "/messages", label: t("nav.messages") }, { href: "/homework", label: t("nav.homework") }, { href: "/grades", label: t("nav.grades") }, { href: "/timetable", label: t("nav.timetable") }, { href: "/agenda", label: t("nav.agenda") }];
 
-const SECTION_KEYS = ["messages", "homework", "weather"];
-
-/** Reihenfolge aus den Einstellungen lesen, fehlende/absurde Werte ergänzen. */
-function readSectionOrder(values: Record<string, unknown> | null | undefined): string[] {
-  const raw = String(values?.ov_order ?? "").split(",").map((part) => part.trim());
-  const order = [...new Set(raw.filter((key) => SECTION_KEYS.includes(key)))];
-  for (const key of SECTION_KEYS) if (!order.includes(key)) order.push(key);
-  return order;
-}
-
-/** Ausgeblendete Abschnitte aus den Einstellungen lesen. */
-function readHiddenSections(values: Record<string, unknown> | null | undefined): string[] {
-  return [...new Set(String(values?.ov_hidden ?? "").split(",").map((part) => part.trim()).filter((key) => SECTION_KEYS.includes(key)))];
-}
 
 async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const response = await fetch(`/api/v1${path}`, { ...init, cache: "no-store", headers: { ...(init?.body ? { "content-type": "application/json" } : {}), ...init?.headers } });
@@ -153,7 +140,7 @@ function OverviewView({ username }: { username: string }) {
   const [messages, setMessages] = useState<Message[]>([]); const [homework, setHomework] = useState<Homework[]>([]); const [counts, setCounts] = useState<Record<string, number>>({}); const [lessons, setLessons] = useState<Lesson[]>([]); const [weather, setWeather] = useState<Weather | null>(null); const [settings, setSettings] = useState<Settings | null>(null); const [error, setError] = useState(""); const [clock, setClock] = useState<Date | null>(null); const [lessonIndex, setLessonIndex] = useState(0); const [loaded, setLoaded] = useState(false);
   const [editing, setEditing] = useState(false); const [order, setOrder] = useState<string[]>(SECTION_KEYS.slice()); const [hidden, setHidden] = useState<string[]>([]); const [saving, setSaving] = useState(false); const [saved, setSaved] = useState(false);
   useEffect(() => { const tick = () => setClock(new Date()); tick(); const timer = window.setInterval(tick, 1000); return () => window.clearInterval(timer); }, []);
-  useEffect(() => { let live = true; Promise.all([api<Page<Message>>("/messages?limit=4"), api<Page<Homework>>("/homework?limit=5&status=offen"), api<{ lessons: Lesson[] }>("/timetable/day"), api<Weather>("/wetter?city=Berlin"), api<Settings>("/settings")]).then(([m, h, t, w, s]) => { if (!live) return; setMessages(m.items); setHomework(h.items); setCounts(h.counts ?? {}); const schoolDayLessons = t.lessons.filter((lesson) => !lesson.is_event); setLessons(schoolDayLessons); setLessonIndex(lessonStartIndex(schoolDayLessons, new Date())); setWeather(w); setSettings(s); setOrder(readSectionOrder(s.values)); setHidden(readHiddenSections(s.values)); }).catch((e: Error) => { if (live) setError(e.message); }).finally(() => { if (live) setLoaded(true); }); return () => { live = false; }; }, []);
+  useEffect(() => { let live = true; Promise.all([api<Page<Message>>("/messages?limit=4"), api<Page<Homework>>("/homework?limit=5&status=offen"), api<{ lessons: Lesson[] }>("/timetable/day"), api<Weather>("/wetter?city=Berlin"), api<Settings>("/settings")]).then(([m, h, t, w, s]) => { if (!live) return; setMessages(m.items); setHomework(h.items); setCounts(h.counts ?? {}); const schoolDayLessons = t.lessons.filter((lesson) => !lesson.is_event); setLessons(schoolDayLessons); setLessonIndex(lessonStartIndex(schoolDayLessons, new Date())); setWeather(w); setSettings(s); setOrder(normalizeOrder(s.values)); setHidden(normalizeHidden(s.values)); }).catch((e: Error) => { if (live) setError(e.message); }).finally(() => { if (live) setLoaded(true); }); return () => { live = false; }; }, []);
   const schoolLessons = lessons.filter((lesson) => !lesson.is_event); const selectedLesson = schoolLessons[Math.min(lessonIndex, Math.max(schoolLessons.length - 1, 0))]; const visibleOrder = order.filter((key) => !hidden.includes(key));
   const sectionLabels: Record<string, string> = { messages: t("nav.messages"), homework: t("nav.homework"), weather: t("overview.weather") };
   const sectionHints = { drag: t("overview.editorDrag"), up: t("settings.moveUp"), down: t("settings.moveDown"), hide: t("overview.editorHide"), show: t("overview.editorShow"), hidden: t("overview.editorHidden") };
@@ -294,7 +281,7 @@ function SettingsView() {
   const [themeChoice, setThemeChoice] = useState("system"); const [accent, setAccent] = useState("black");
   const [order, setOrder] = useState("messages,homework,weather");
   const [layout, setLayout] = useState<SectionLayout>({ order: SECTION_KEYS.slice(), hidden: [] });
-  const layoutOrder = readSectionOrder({ ov_order: layout.order.join(",") });
+  const layoutOrder = normalizeOrder({ ov_order: layout.order.join(",") });
   const layoutHidden = layout.hidden;
   const sectionHints = { drag: t("overview.editorDrag"), up: t("settings.moveUp"), down: t("settings.moveDown"), hide: t("overview.editorHide"), show: t("overview.editorShow"), hidden: t("overview.editorHidden") };
   const [cityValue, setCityValue] = useState(""); const [cityQuery, setCityQuery] = useState("");
@@ -304,7 +291,7 @@ function SettingsView() {
       const [nextSettings, nextDevices] = await Promise.all([api<Settings>("/settings"), api<{ items: typeof devices }>("/devices")]);
       setSettings(nextSettings); setDevices(nextDevices.items); setError("");
       setOrder(String(nextSettings.values.ov_order ?? "messages,homework,weather"));
-      setLayout({ order: readSectionOrder(nextSettings.values), hidden: readHiddenSections(nextSettings.values) });
+      setLayout({ order: normalizeOrder(nextSettings.values), hidden: normalizeHidden(nextSettings.values) });
       setCityValue(String(nextSettings.values.wetter_city ?? ""));
     } catch (e) { setError((e as Error).message); }
   }, []);
@@ -331,7 +318,7 @@ function SettingsView() {
     }
     try {
       const result = await api<{ values: Record<string, unknown> }>("/settings", { method: "PUT", body: JSON.stringify(payload) });
-      setSettings({ ...settings, values: result.values }); setOrder(String(result.values.ov_order ?? order)); setLayout({ order: readSectionOrder(result.values), hidden: readHiddenSections(result.values) }); setCityValue(String(result.values.wetter_city ?? "")); setFeedback(t("settings.saved")); setError("");
+      setSettings({ ...settings, values: result.values }); setOrder(String(result.values.ov_order ?? order)); setLayout({ order: normalizeOrder(result.values), hidden: normalizeHidden(result.values) }); setCityValue(String(result.values.wetter_city ?? "")); setFeedback(t("settings.saved")); setError("");
     } catch (e) { setError((e as Error).message); } finally { setBusy(false); }
   }
   async function revoke(id: string) { try { await api(`/devices/${id}`, { method: "DELETE" }); await load(); setFeedback(t("settings.revoked")); } catch (e) { setError((e as Error).message); } }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { hitIndex, moveItem } from "../lib/section-layout";
 import { Icon } from "./icon";
 
 export type SectionLayout = { order: string[]; hidden: string[] };
@@ -48,11 +49,8 @@ export function SectionEditor({
   }, []);
 
   function move(from: number, to: number) {
-    if (to < 0 || to >= order.length || from === to) return;
-    const next = [...order];
-    const [moved] = next.splice(from, 1);
-    next.splice(to, 0, moved);
-    onChange({ order: next, hidden });
+    if (from === to) return;
+    onChange({ order: moveItem(order, from, to), hidden });
   }
 
   function startDrag(event: React.PointerEvent<HTMLButtonElement>, index: number) {
@@ -65,12 +63,11 @@ export function SectionEditor({
     (event.target as HTMLElement).setPointerCapture?.(event.pointerId);
 
     function onMove(move2: PointerEvent) {
-      const hit = rows.current.findIndex((row) => {
-        if (!row) return false;
-        const rect = row.getBoundingClientRect();
-        return move2.clientY >= rect.top && move2.clientY <= rect.bottom;
+      const rects = rows.current.map((row) => {
+        const rect = row?.getBoundingClientRect();
+        return rect ? { top: rect.top, bottom: rect.bottom } : { top: 0, bottom: -1 };
       });
-      const next = hit >= 0 ? hit : (overIndex.current ?? index);
+      const next = hitIndex(rects, move2.clientY, overIndex.current ?? index);
       if (next !== overIndex.current) {
         overIndex.current = next;
         setTarget(next);
