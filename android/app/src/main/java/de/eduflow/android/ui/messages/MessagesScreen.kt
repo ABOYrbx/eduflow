@@ -66,6 +66,7 @@ import de.eduflow.android.ui.common.AvatarDot
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.FilterChips
 import de.eduflow.android.ui.common.PrimaryButton
+import de.eduflow.android.ui.common.PullRefreshBox
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SearchPill
 import de.eduflow.android.ui.common.SectionLabel
@@ -81,7 +82,8 @@ private fun initialsOf(name: String): String =
  *
  * Header, Titel + Untertitel, Suche, Chips Alle/Ungelesen/Mit Dateien,
  * Avatar-Karten (Name + Zeit, Betreff fett, Vorschau grau, Punkt bei
- * ungelesen), FAB zum Verfassen.
+ * ungelesen), FAB zum Verfassen. Aktualisieren per Pull-to-Refresh
+ * (von oben ziehen, lädt frisch via refresh=1) oder Kopf-Knopf.
  */
 @Composable
 fun MessagesScreen(
@@ -115,9 +117,9 @@ fun MessagesScreen(
                 placeholder = stringResource(R.string.messages_search_placeholder),
             )
             Spacer(Modifier.height(10.dp))
-            val filterAll = stringResource(R.string.homework_filter_all)
-            val filterUnread = stringResource(R.string.messages_filter_unread)
-            val filterFiles = stringResource(R.string.messages_filter_files)
+            val filterAll = stringResource(MsgFilter.ALLE.stringRes)
+            val filterUnread = stringResource(MsgFilter.UNGELESEN.stringRes)
+            val filterFiles = stringResource(MsgFilter.MIT_DATEIEN.stringRes)
             val filterOptions = listOf(filterAll, filterUnread, filterFiles)
             val filterSelected = when (state.filter) {
                 MsgFilter.UNGELESEN -> filterUnread
@@ -164,6 +166,11 @@ fun MessagesScreen(
                 )
             }
 
+            PullRefreshBox(
+                refreshing = state.isLoading,
+                onRefresh = viewModel::refresh,
+                modifier = Modifier.weight(1f).fillMaxWidth(),
+            ) {
             if (state.isLoading && state.items.isEmpty()) {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(32.dp),
@@ -189,7 +196,7 @@ fun MessagesScreen(
             } else {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.fillMaxSize(),
                 ) {
                     items(visible, key = { it.id }) { item ->
                         MessageCard(
@@ -221,6 +228,7 @@ fun MessagesScreen(
                     }
                     item { Spacer(Modifier.height(88.dp)) }
                 }
+            }
             }
         }
         // Über der Bottom-Bar (Pille + Systemleiste): 88dp frei, passend

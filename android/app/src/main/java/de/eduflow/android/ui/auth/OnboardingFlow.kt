@@ -72,6 +72,7 @@ import androidx.compose.ui.unit.sp
 import de.eduflow.android.R
 import de.eduflow.android.data.ApiClient
 import de.eduflow.android.data.TokenStore
+import de.eduflow.android.data.normalizeBaseUrl
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.PrimaryButton
 import de.eduflow.android.ui.theme.EduFlowRiseEasing
@@ -479,10 +480,7 @@ private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
     val connectedText = stringResource(R.string.onboarding_connected)
     val unreachableText = stringResource(R.string.onboarding_unreachable)
 
-    fun normalizedUrl(): String = draft.trim().let { raw ->
-        val withScheme = if (raw.isNotBlank() && "://" !in raw) "http://$raw" else raw
-        withScheme.trimEnd('/')
-    }.ifBlank { TokenStore.DEFAULT_BASE_URL.trimEnd('/') } + "/"
+    fun normalizedUrl(): String = normalizeBaseUrl(draft)
 
     suspend fun checkConnection() {
         checking = true

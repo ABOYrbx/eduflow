@@ -342,11 +342,12 @@ private fun NowCard(
     onTimetable: () -> Unit,
 ) {
     val scheme = MaterialTheme.colorScheme
-    // Dark: schwarze Karte statt weißer Primär-Fläche (Light bleibt
-    // PNG-schwarz) — weiße Schrift dazu statt onPrimary.
+    // Akzent-Karte: Standard-Dark bleibt schwarze Karte (primary wäre dort
+    // Weiß), jede echte Akzent-Wahl färbt die Karte in beiden Modi.
     val dark = LocalEduFlowDark.current
-    val cardColor = if (dark) Color.Black else scheme.primary
-    val contentColor = if (dark) Color.White else scheme.onPrimary
+    val isDefaultDark = dark && scheme.primary == Color.White
+    val cardColor = if (isDefaultDark) Color.Black else scheme.primary
+    val contentColor = if (isDefaultDark) Color.White else scheme.onPrimary
     Surface(
         shape = RoundedCornerShape(16.dp),
         color = cardColor,

@@ -14,6 +14,8 @@ import de.eduflow.android.data.dto.groupGradesBySubject
 import de.eduflow.android.data.dto.gradeTermKey
 import de.eduflow.android.data.repository.GradesRepository
 import java.time.LocalDate
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,16 +30,20 @@ data class GradesUiState(
     val terms: List<GradeTerm> = listOf(GradeTerm()),
     val term: String = "alle",
     val query: String = "",
+    /** Entprellte Suche (350 ms, wie Nachrichten/Aufgaben): erst dieser Wert
+     * filtert [shown], damit jeder Tastenschlag keine Listen-Neuaufbauten
+     * auslöst. */
+    val debouncedQuery: String = "",
     val isLoading: Boolean = false,
     val isLoadingMore: Boolean = false,
     val error: ApiException? = null,
     val canLoadMore: Boolean = false,
     val fallbackTerm: String = "alle",
 ) {
-    /** Geladene Einträge nach Halbjahr + Suche (Fach/Thema/Lehrer, wie Web). */
+    /** Geladene Einträge nach Halbjahr + entprellter Suche (Fach/Thema/Lehrer, wie Web). */
     val shown: List<de.eduflow.android.data.dto.GradeDto>
         get() {
-            val needle = query.trim().lowercase()
+            val needle = debouncedQuery.trim().lowercase()
             return allItems.filter { g ->
                 (term == "alle" || gradeTermKey(g.date_iso, fallbackTerm) == term) &&
                     (needle.isBlank() ||
@@ -72,13 +78,16 @@ private fun currentTerm(): String {
  * - Liste in Cache-Reihenfolge vom Server (keine eigenen Filter/Sortierung
  *   an die API — Gruppierung clientseitig wie Web-noten()).
  * - Paginierung: initial limit=50, Mehr laden via offset.
- * - Halbjahr-Tabs + Suche filtern die geladenen Einträge lokal.
+ * - Halbjahr-Tabs + Suche (350 ms entprellt) filtern die geladenen
+ *   Einträge lokal.
  */
 class GradesViewModel(
     private val repository: GradesRepository,
 ) : ViewModel() {
     private val _state = MutableStateFlow(GradesUiState(isLoading = true, fallbackTerm = currentTerm()))
     val state: StateFlow<GradesUiState> = _state.asStateFlow()
+
+    private var searchJob: Job? = null
 
     init {
         loadFromCache()
@@ -138,6 +147,11 @@ class GradesViewModel(
 
     fun onQuery(query: String) {
         _state.update { it.copy(query = query) }
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            delay(350)
+            _state.update { it.copy(debouncedQuery = it.query) }
+        }
     }
 
     fun dismissError() {

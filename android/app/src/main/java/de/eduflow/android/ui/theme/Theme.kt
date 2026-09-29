@@ -41,20 +41,28 @@ fun EduFlowTheme(
     content: @Composable () -> Unit,
 ) {
     val reduced = rememberReducedMotion()
-    // Primär wie im PNG: Light = Schwarz, Dark = Weiß (Buttons invertiert).
-    // Der Akzent-Parameter bleibt für die Farb-Dots (Paket F) erhalten.
+    // Akzent global: "black" (Standard) bleibt PNG-schwarz/weiß, jede andere
+    // Wahl färbt primary/secondary/tertiary + Container-Tönung. onPrimary etc.
+    // per WCAG-Kontrast (Weiß/Schwarz), Container-Texte bleiben Tinte.
+    val eff = effectiveAccent(accent, darkTheme)
+    val onEff = contentOnAccent(eff)
+    val surface = if (darkTheme) RCardDark else RCardLight
+    val ink = if (darkTheme) RInkDark else RInkLight
+    val tint = surface.mix(eff, 0.16f)
+    val isDefault = eff == (if (darkTheme) Color.White else Color.Black)
+    // Default exakt wie bisher (PNG), sonst Akzent-Variante.
     val light = lightColorScheme(
-        primary = Color.Black,
-        onPrimary = Color.White,
-        primaryContainer = RSecondaryLight,
+        primary = eff,
+        onPrimary = onEff,
+        primaryContainer = if (isDefault) RSecondaryLight else tint,
         onPrimaryContainer = RInkLight,
-        secondary = RMutedLight,
-        onSecondary = RCardLight,
-        secondaryContainer = RSecondaryLight,
+        secondary = if (isDefault) RMutedLight else eff,
+        onSecondary = if (isDefault) RCardLight else onEff,
+        secondaryContainer = if (isDefault) RSecondaryLight else tint,
         onSecondaryContainer = RInkLight,
-        tertiary = RMutedLight,
-        onTertiary = RCardLight,
-        tertiaryContainer = RSecondaryLight,
+        tertiary = if (isDefault) RMutedLight else eff,
+        onTertiary = if (isDefault) RCardLight else onEff,
+        tertiaryContainer = if (isDefault) RSecondaryLight else tint,
         onTertiaryContainer = RInkLight,
         background = RBgLight,
         onBackground = RInkLight,
@@ -74,17 +82,17 @@ fun EduFlowTheme(
         onError = Color.White,
     )
     val dark = darkColorScheme(
-        primary = Color.White,
-        onPrimary = Color.Black,
-        primaryContainer = RSecondaryDark,
+        primary = eff,
+        onPrimary = onEff,
+        primaryContainer = if (isDefault) RSecondaryDark else tint,
         onPrimaryContainer = RInkDark,
-        secondary = RMutedDark,
-        onSecondary = RBgDark,
-        secondaryContainer = RSecondaryDark,
+        secondary = if (isDefault) RMutedDark else eff,
+        onSecondary = if (isDefault) RBgDark else onEff,
+        secondaryContainer = if (isDefault) RSecondaryDark else tint,
         onSecondaryContainer = RInkDark,
-        tertiary = RMutedDark,
-        onTertiary = RBgDark,
-        tertiaryContainer = RSecondaryDark,
+        tertiary = if (isDefault) RMutedDark else eff,
+        onTertiary = if (isDefault) RBgDark else onEff,
+        tertiaryContainer = if (isDefault) RSecondaryDark else tint,
         onTertiaryContainer = RInkDark,
         background = RBgDark,
         onBackground = RInkDark,
@@ -119,6 +127,41 @@ fun EduFlowTheme(
             content = content,
         )
     }
+}
+
+/**
+ * Effektiver Akzent: "black" (Standard, [Color.Black]) bleibt PNG-treu
+ * (Light Schwarz, Dark Weiß), jede andere Wahl gilt in beiden Modi.
+ * MainActivity übergibt accentByKey(key).color, daher ist Black hier
+ * gleichbedeutend mit "kein Akzent gewählt".
+ */
+fun effectiveAccent(accent: Color, darkTheme: Boolean): Color =
+    if (accent == Color.Black && darkTheme) Color.White else accent
+
+/**
+ * Lesbare Schrift auf dem Akzent: Weiß oder Schwarz, je nachdem was nach
+ * WCAG (relative Luminanz) mehr Kontrast bietet.
+ */
+fun contentOnAccent(accent: Color): Color {
+    fun lin(c: Float): Double {
+        val v = c.toDouble()
+        return if (v <= 0.04045) v / 12.92 else Math.pow((v + 0.055) / 1.055, 2.4)
+    }
+    val lum = 0.2126 * lin(accent.red) + 0.7152 * lin(accent.green) + 0.0722 * lin(accent.blue)
+    val contrastWhite = 1.05 / (lum + 0.05)
+    val contrastBlack = (lum + 0.05) / 0.05
+    return if (contrastWhite >= contrastBlack) Color.White else Color.Black
+}
+
+/** Opaque Mischung zweier Farben (Anteil von [other], 0..1). */
+fun Color.mix(other: Color, fraction: Float): Color {
+    val f = fraction.coerceIn(0f, 1f)
+    return Color(
+        red = red * (1 - f) + other.red * f,
+        green = green * (1 - f) + other.green * f,
+        blue = blue * (1 - f) + other.blue * f,
+        alpha = 1f,
+    )
 }
 
 @Composable

@@ -25,7 +25,6 @@ venv/
 /packages/contracts/tsconfig.tsbuildinfo
 .DS_Store
 .idea/
-.freebuff/
 # Lokale Build-/IDE-Dateien (nie committen)
 android/local.properties
 xcuserdata/
@@ -54,3 +53,12 @@ GoogleService-Info.plist
 # Lokale Env-Varianten (Beispiele als *.example sind ok)
 .env.local
 .env.*.local
+
+# AI Agents
+.opencode
+.codex
+.claude
+.openchamber
+
+# anderes
+.cache

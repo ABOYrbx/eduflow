@@ -51,6 +51,7 @@ import de.eduflow.android.data.dto.HomeworkStatus
 import de.eduflow.android.ui.common.AppHeader
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.FilterChips
+import de.eduflow.android.ui.common.PullRefreshBox
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SearchPill
 import de.eduflow.android.ui.common.SectionLabel
@@ -168,6 +169,11 @@ fun HomeworkListScreen(
             )
         }
 
+        PullRefreshBox(
+            refreshing = state.isLoading,
+            onRefresh = viewModel::refresh,
+            modifier = Modifier.weight(1f).fillMaxWidth(),
+        ) {
         if (state.isLoading && state.items.isEmpty()) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(32.dp),
@@ -190,7 +196,7 @@ fun HomeworkListScreen(
         } else {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxSize(),
             ) {
                 items(state.items, key = { it.id }) { item ->
                     val pending = item.id in state.pendingIds
@@ -224,6 +230,7 @@ fun HomeworkListScreen(
                 }
                 item { Spacer(Modifier.height(88.dp)) }
             }
+        }
         }
     }
 }

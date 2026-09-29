@@ -33,6 +33,7 @@ import de.eduflow.android.R
 import de.eduflow.android.data.dto.ErrorCodes
 import de.eduflow.android.data.dto.TimetableView
 import de.eduflow.android.ui.common.AppHeader
+import de.eduflow.android.ui.common.PullRefreshBox
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.StatusPill
 import de.eduflow.android.ui.theme.RDotBlue
@@ -104,6 +105,11 @@ fun WeekScreen(
             )
         }
 
+        PullRefreshBox(
+            refreshing = state.isLoading,
+            onRefresh = viewModel::refresh,
+            modifier = Modifier.weight(1f).fillMaxWidth(),
+        ) {
         if (state.isLoading && week == null) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(32.dp),
@@ -125,7 +131,7 @@ fun WeekScreen(
         } else {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxSize(),
             ) {
                 items(week.days, key = { it.date }) { day ->
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -160,6 +166,7 @@ fun WeekScreen(
                 }
                 item { Spacer(Modifier.height(88.dp)) }
             }
+        }
         }
     }
 }
