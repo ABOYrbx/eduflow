@@ -23,6 +23,39 @@ export function getCatalog(locale: string): unknown {
   return locale !== FALLBACK_LOCALE && extraCatalogs[locale] ? extraCatalogs[locale] : en;
 }
 
+/** Übersetzungsstand je Sprache in Prozent (Nenner = Keys mit deutschem
+ *  Wert ungleich Englisch; die Quellsprache zählt als vollständig).
+ *  Auf dem Client sind keine Kataloge registriert → leere Liste,
+ *  daher nur serverseitig aufrufen und einbetten. */
+export interface LanguageCoverage {
+  code: string;
+  percent: number;
+}
+export function languageCoverage(): LanguageCoverage[] {
+  const flat = (node: unknown, out: Record<string, string> = {}, prefix = ""): Record<string, string> => {
+    if (typeof node === "object" && node !== null) {
+      for (const [key, value] of Object.entries(node)) flat(value, out, `${prefix}${key}.`);
+    } else if (typeof node === "string") {
+      out[prefix.slice(0, -1)] = node;
+    }
+    return out;
+  };
+  const source = flat(en);
+  const german = flat(extraCatalogs["de"] ?? {});
+  const denominator = Object.keys(source).filter(
+    (key) => german[key] !== undefined && german[key] !== source[key],
+  );
+  if (!denominator.length) return [];
+  return [FALLBACK_LOCALE, ...Object.keys(extraCatalogs)].map((code) => {
+    if (code === FALLBACK_LOCALE) return { code, percent: 100 };
+    const target = flat(extraCatalogs[code] ?? {});
+    const done = denominator.filter(
+      (key) => target[key] !== undefined && target[key] !== source[key],
+    ).length;
+    return { code, percent: Math.round((done / denominator.length) * 100) };
+  });
+}
+
 /** Eigennamen der Sprachen (Crowdin-Neuzugänge fallen auf den Code zurück). */
 export const NATIVE_NAMES: Record<string, string> = {
   af: "Afrikaans", ar: "العربية", ca: "Català", cs: "Čeština", da: "Dansk",
@@ -36,7 +69,7 @@ export const NATIVE_NAMES: Record<string, string> = {
 /** Eingespritzter Katalog (das Layout bettet ihn pro Request ein). */
 declare global {
   interface Window {
-    __EDUFLOW_MESSAGES__?: { locale: string; catalog: unknown; supported: string[] };
+    __EDUFLOW_MESSAGES__?: { locale: string; catalog: unknown; supported: string[]; coverage?: LanguageCoverage[] };
   }
 }
 function injected(): { locale: string; catalog: unknown } | null {

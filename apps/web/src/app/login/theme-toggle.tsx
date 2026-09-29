@@ -5,7 +5,7 @@ import { NATIVE_NAMES, localeCookie, normalizeLocaleTag, setActiveLocale, t } fr
 
 declare global {
   interface Window {
-    __EDUFLOW_MESSAGES__?: { locale: string; catalog: unknown; supported: string[] };
+    __EDUFLOW_MESSAGES__?: { locale: string; catalog: unknown; supported: string[]; coverage?: Array<{ code: string; percent: number }> };
   }
 }
 
@@ -13,6 +13,7 @@ export function ThemeToggle() {
   const [dark, setDark] = useState(false);
   const [locale, setLocale] = useState("en");
   const [supported, setSupported] = useState<string[]>(["en"]);
+  const [coverage, setCoverage] = useState<Record<string, number>>({});
   const [langOpen, setLangOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
 
@@ -21,6 +22,14 @@ export function ThemeToggle() {
     setLocale(document.documentElement.lang || "en");
     const list = window.__EDUFLOW_MESSAGES__?.supported;
     if (Array.isArray(list) && list.length) setSupported(list);
+    const rows = window.__EDUFLOW_MESSAGES__?.coverage;
+    if (Array.isArray(rows)) {
+      const map: Record<string, number> = {};
+      for (const row of rows) {
+        if (row && typeof row.code === "string" && typeof row.percent === "number") map[row.code] = row.percent;
+      }
+      setCoverage(map);
+    }
   }, []);
 
   useEffect(() => {
@@ -75,18 +84,29 @@ export function ThemeToggle() {
     </button>
     {langOpen && (
       <div className="profile-menu lang-menu" role="menu" aria-label={t("theme.language")}>
-        {supported.map((code) => (
-          <button
-            key={code}
-            type="button"
-            role="menuitemradio"
-            aria-checked={code === locale}
-            className="pm-link lang-option"
-            onClick={() => pickLanguage(code)}
-          >
-            <span aria-hidden="true">{code === locale ? "✓ " : ""}</span>{NATIVE_NAMES[code] ?? code}
-          </button>
-        ))}
+        {supported.map((code) => {
+          const percent = coverage[code];
+          return (
+            <button
+              key={code}
+              type="button"
+              role="menuitemradio"
+              aria-checked={code === locale}
+              className="pm-link lang-option"
+              onClick={() => pickLanguage(code)}
+            >
+              <span className="lang-row">
+                <span>{NATIVE_NAMES[code] ?? code}</span>
+                {percent !== undefined && <span className="lang-pct">{percent} %</span>}
+              </span>
+              {percent !== undefined && (
+                <span className="lang-bar" aria-hidden="true">
+                  <span style={{ width: `${percent}%` }} />
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
     )}
     </div>

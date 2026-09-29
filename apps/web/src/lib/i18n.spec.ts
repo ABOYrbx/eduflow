@@ -1,5 +1,6 @@
 import {
   getCatalog,
+  languageCoverage,
   localeCookie,
   localeTag,
   normalizeLocaleTag,
@@ -138,5 +139,18 @@ describe("resolveLocale", () => {
 describe("localeCookie", () => {
   it("baut einen jahresgültigen Cookie-String mit Pfad", () => {
     expect(localeCookie("de")).toBe("eduflow_locale=de; path=/; max-age=31536000; SameSite=Lax");
+  });
+});
+
+describe("languageCoverage", () => {
+  it("zählt übersetzte Keys gegen Englisch (Deutsch als Nenner-Referenz)", () => {
+    registerCatalogs({
+      de: { nav: { overview: "Übersicht", messages: "Nachrichten" } },
+      qq: { nav: { overview: "Aperçu" } },
+    });
+    const rows = languageCoverage();
+    expect(rows).toContainEqual({ code: "en", percent: 100 });
+    expect(rows).toContainEqual({ code: "de", percent: 100 });
+    expect(rows).toContainEqual({ code: "qq", percent: 50 });
   });
 });
