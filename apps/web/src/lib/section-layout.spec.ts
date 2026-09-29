@@ -1,5 +1,4 @@
 import {
-  hitIndex,
   hitIndexByMidline,
   moveItem,
   normalizeHidden,
@@ -61,25 +60,6 @@ describe("moveItem", () => {
 
   it("ungültige Quellposition ändert nichts", () => {
     expect(moveItem(list, 7, 0)).toEqual(["a", "b", "c"]);
-  });
-});
-
-describe("hitIndex", () => {
-  const rects = [
-    { top: 0, bottom: 50 },
-    { top: 50, bottom: 100 },
-    { top: 100, bottom: 150 },
-  ];
-
-  it("findet die Zeile am Zeiger", () => {
-    expect(hitIndex(rects, 10, 0)).toBe(0);
-    expect(hitIndex(rects, 75, 0)).toBe(1);
-    expect(hitIndex(rects, 149, 0)).toBe(2);
-  });
-
-  it("nutzt den letzten bekannten Index ausserhalb aller Zeilen", () => {
-    expect(hitIndex(rects, -20, 1)).toBe(1);
-    expect(hitIndex(rects, 400, 2)).toBe(2);
   });
 });
 

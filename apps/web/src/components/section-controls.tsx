@@ -1,7 +1,6 @@
 "use client";
 
 import { Icon } from "./icon";
-import { SPAN_FULL } from "../lib/section-layout";
 
 export type SectionHints = {
   drag: string;
@@ -99,5 +98,3 @@ export function SectionControls({
     </span>
   );
 }
-
-export { SPAN_FULL };
