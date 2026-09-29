@@ -37,6 +37,8 @@ android/.gradle/
 android/.kotlin/
 android/app/build/
 DerivedData/
+# Lokale Worktree-Ablage (verknüpfte Arbeitskopien, nie committen)
+.worktrees/
 # Generierte Docs-Website (mkdocs build)
 site/
 # Signing-/Schlüsseldateien (nie committen, auch später nicht)
