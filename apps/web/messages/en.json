@@ -103,7 +103,7 @@
     "codePlaceholder": "2FA code",
     "connectionFailed": "Connection to the server failed.",
     "passwordLabel": "Password",
-    "remember": "Stay signed in (30 days)",
+    
     "submit2fa": "Confirm",
     "submitLogin": "Sign in",
     "subdomainLabel": "School subdomain",
