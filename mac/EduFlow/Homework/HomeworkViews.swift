@@ -1,7 +1,73 @@
 import SwiftUI
 
+/// Hausaufgaben-Karte mit integriertem Statusstreifen (dateilokal, keine
+/// gemeinsame API): 6px-Kante links *innerhalb* des Kartenrechtecks —
+/// derselbe 14px-Radius, 1px-Rahmen und 20/22-Innenabstand wie `UberCard`,
+/// erledigt blass, Papierkorb gestrichelt mit durchgestrichenem Titel.
+/// (Abgleich mit Agent 1: wandert bei Gelegenheit in `HomeworkCard`.)
+fileprivate struct HomeworkStatusCard<Content: View>: View {
+    @Environment(\.colorScheme) private var scheme
+    let status: String
+    let isDone: Bool
+    let isHidden: Bool
+    @ViewBuilder let content: Content
+
+    var body: some View {
+        HStack(spacing: 0) {
+            EduFlowPalette.homeworkEdge(status, scheme: scheme)
+                .frame(width: 6)
+            content
+                .padding(.vertical, 20)
+                .padding(.horizontal, 22)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .background(EduFlowPalette.card(scheme))
+        .clipShape(.rect(cornerRadius: 14))
+        .overlay {
+            RoundedRectangle(cornerRadius: 14)
+                .strokeBorder(
+                    EduFlowPalette.border(scheme),
+                    style: StrokeStyle(lineWidth: 1, dash: isHidden ? [6, 4] : [])
+                )
+        }
+        .opacity(isDone ? 0.65 : (isHidden ? 0.55 : 1))
+    }
+}
+
+/// Schalter-Zeile im Uber-Stil (dateilokal, keine gemeinsame API):
+/// Akzent-Kreis mit Haken statt nativem macOS-Toggle.
+fileprivate struct CheckRow: View {
+    @Environment(\.colorScheme) private var scheme
+    @Environment(\.uberAccent) private var accent
+    @Binding var isOn: Bool
+    let titleKey: String
+
+    var body: some View {
+        Button {
+            isOn.toggle()
+        } label: {
+            HStack(spacing: 10) {
+                Image(systemName: isOn ? "checkmark.circle.fill" : "circle")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(isOn ? accent.resolved(scheme) : EduFlowPalette.inkMuted(scheme))
+                Text(LocalizedStringKey(titleKey))
+                    .font(UberFont.text(14, weight: .medium))
+                    .foregroundStyle(EduFlowPalette.ink(scheme))
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(.isToggle)
+        .accessibilityLabel(Text(LocalizedStringKey(titleKey)))
+        .accessibilityValue(Text(isOn
+            ? NSLocalizedString("common_toggle_on", value: "Ein", comment: "Schalter: ein")
+            : NSLocalizedString("common_toggle_off", value: "Aus", comment: "Schalter: aus")))
+    }
+}
+
 /// Hausaufgaben wie `/hausaufgaben`: Seitenkopf, Filter-Karte,
-/// Statistik-Karten und Karten mit 6px Status-Kante (`.hw.st-*`).
+/// Statistik-Karten und Karten mit integrierter Status-Kante (`.hw.st-*`).
 public struct HomeworkView: View {
     @Environment(\.colorScheme) private var scheme
     @State private var vm: HomeworkViewModel
@@ -31,14 +97,14 @@ public struct HomeworkView: View {
                         .frame(maxWidth: .infinity)
                         .padding(48)
                 } else if vm.items.isEmpty {
-                    Text("Keine Hausaufgaben.")
+                    Text(verbatim: emptyText)
                         .font(UberFont.text(15))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                         .frame(maxWidth: .infinity)
                         .padding(48)
                 } else {
                     ForEach(Array(vm.items.enumerated()), id: \.element.id) { index, item in
-                        HomeworkCard(status: item.status, isDone: item.isDone, isHidden: item.isHidden) {
+                        HomeworkStatusCard(status: item.status, isDone: item.isDone, isHidden: item.isHidden) {
                             VStack(alignment: .leading, spacing: 8) {
                                 Text(item.title)
                                     .font(UberFont.text(17, weight: .heavy))
@@ -47,9 +113,9 @@ public struct HomeworkView: View {
                                 HStack(spacing: 8) {
                                     Tag(item.status, style: statusTag(item.status))
                                     if item.isHidden {
-                                        Tag("Gelöscht", style: .muted)
+                                        Tag(NSLocalizedString("homework_deleted", value: "Gelöscht", comment: "Hausaufgaben: gelöscht-Tag"), style: .muted)
                                     }
-                                    (Text("fällig: ")
+                                    (Text(NSLocalizedString("homework_due_prefix", value: "fällig: ", comment: "Hausaufgaben: fällig-Präfix"))
                                         + Text(item.dueDisplay).bold())
                                         .font(UberFont.text(13))
                                     if !item.subject.isEmpty {
@@ -61,40 +127,34 @@ public struct HomeworkView: View {
                                         .font(UberFont.text(13))
                                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                                 }
-                                (item.description.isEmpty ? Text("(keine Beschreibung)") : Text(verbatim: item.description))
+                                (item.description.isEmpty ? Text(NSLocalizedString("homework_no_description", value: "(keine Beschreibung)", comment: "Hausaufgaben: keine Beschreibung")) : Text(verbatim: item.description))
                                     .font(UberFont.text(15))
                                     .lineSpacing(4)
                                 HStack(spacing: 8) {
-                                    Button(item.isDone ? "Wieder öffnen" : "Fertig") {
+                                    PillButton(item.isDone ? NSLocalizedString("homework_action_reopen", value: "Wieder öffnen", comment: "Hausaufgaben: wieder öffnen") : NSLocalizedString("homework_action_done", value: "Fertig", comment: "Hausaufgaben: fertig"), style: .smallPrimary) {
                                         Task { await vm.toggleDone(item, onSessionExpired: onSessionExpired) }
                                     }
-                                    .buttonStyle(UberButtonStyle(.smallPrimary))
-                                    .hoverLift()
-                                    Button(item.isHidden ? "Zurückholen" : "Papierkorb") {
+                                    PillButton(item.isHidden ? NSLocalizedString("homework_action_restore", value: "Zurückholen", comment: "Hausaufgaben: zurückholen") : NSLocalizedString("homework_action_trash", value: "Papierkorb", comment: "Hausaufgaben: Papierkorb"), style: .smallLight) {
                                         Task { await vm.toggleTrash(item, onSessionExpired: onSessionExpired) }
                                     }
-                                    .buttonStyle(UberButtonStyle(.smallLight))
-                                    .hoverLift()
                                 }
                                 .padding(.top, 4)
                             }
                         }
                         .contextMenu {
-                            Button(item.isDone ? "Wieder öffnen" : "Als erledigt markieren") {
+                            Button(item.isDone ? NSLocalizedString("homework_action_reopen", value: "Wieder öffnen", comment: "Hausaufgaben: wieder öffnen") : NSLocalizedString("homework_menu_done", value: "Als erledigt markieren", comment: "Hausaufgaben: als erledigt markieren")) {
                                 Task { await vm.toggleDone(item, onSessionExpired: onSessionExpired) }
                             }
-                            Button(item.isHidden ? "Zurückholen (als offen)" : "In den Papierkorb") {
+                            Button(item.isHidden ? NSLocalizedString("homework_menu_restore", value: "Zurückholen (als offen)", comment: "Hausaufgaben: zurückholen als offen") : NSLocalizedString("homework_menu_trash", value: "In den Papierkorb", comment: "Hausaufgaben: in den Papierkorb")) {
                                 Task { await vm.toggleTrash(item, onSessionExpired: onSessionExpired) }
                             }
                         }
                         .riseIn(delay: Double(min(index, 8)) * 0.06)
                     }
                     if vm.canLoadMore {
-                        Button(vm.isLoadingMore ? "Lädt …" : String(format: NSLocalizedString("grades_load_more", value: "Mehr laden (%d/%d)", comment: "Hausaufgaben: mehr laden"), vm.items.count, vm.total)) {
+                        PillButton(vm.isLoadingMore ? NSLocalizedString("common_loading", value: "Lädt …", comment: "Laden läuft") : String(format: NSLocalizedString("homework_load_more", value: "Mehr laden (%d/%d)", comment: "Hausaufgaben: mehr laden"), vm.items.count, vm.total), style: .smallLight) {
                             Task { await vm.loadMore(onSessionExpired: onSessionExpired) }
                         }
-                        .buttonStyle(UberButtonStyle(.smallLight))
-                        .hoverLift()
                         .disabled(vm.isLoadingMore)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 8)
@@ -147,8 +207,7 @@ public struct HomeworkView: View {
                             Task { await vm.load(onSessionExpired: onSessionExpired) }
                         }
                 }
-                Toggle(NSLocalizedString("homework_toggle_tests", value: "Tests einbeziehen", comment: "Hausaufgaben: Tests einbeziehen"), isOn: $vm.includeTests)
-                    .font(UberFont.text(14, weight: .medium))
+                CheckRow(isOn: $vm.includeTests, titleKey: "homework_toggle_tests")
                     .onChange(of: vm.includeTests) {
                         Task { await vm.load(onSessionExpired: onSessionExpired) }
                     }
@@ -163,6 +222,23 @@ public struct HomeworkView: View {
             StatCard("\(vm.counts.ueberfaellig)", label: "Überfällig", tone: .danger)
             StatCard("\(vm.counts.erledigt)", label: "Erledigt", tone: .ok)
             StatCard("\(vm.counts.papierkorb)", label: "Papierkorb")
+        }
+    }
+
+    /// Leertext je Filter: leerer, erledigter und gemischter Bestand sowie
+    /// Papierkorb bekommen je eine passende Aussage (Zähler stehen darüber).
+    private var emptyText: String {
+        switch vm.status {
+        case HomeworkStatusFilter.offen:
+            return NSLocalizedString("homework_empty_open", value: "Keine offenen Aufgaben.", comment: "Hausaufgaben: keine offenen")
+        case HomeworkStatusFilter.ueberfaellig:
+            return NSLocalizedString("homework_empty_overdue", value: "Nichts überfällig.", comment: "Hausaufgaben: nichts überfällig")
+        case HomeworkStatusFilter.erledigt:
+            return NSLocalizedString("homework_empty_done", value: "Noch nichts erledigt.", comment: "Hausaufgaben: nichts erledigt")
+        case HomeworkStatusFilter.papierkorb:
+            return NSLocalizedString("homework_empty_trash", value: "Der Papierkorb ist leer.", comment: "Hausaufgaben: Papierkorb leer")
+        default:
+            return NSLocalizedString("homework_empty_all", value: "Keine Hausaufgaben.", comment: "Hausaufgaben: leer")
         }
     }
 

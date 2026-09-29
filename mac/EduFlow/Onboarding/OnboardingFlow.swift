@@ -1,13 +1,19 @@
+import Combine
+import Foundation
 import SwiftUI
 
 /// Onboarding-Ablauf (nur erster Start): Willkommen → Sprache →
 /// Funktionen → Server (optional) → Anmelden. Die Anmeldung ist die
 /// bestehende Login-Ansicht inklusive Zwei-Faktor-Pfad; bei Erfolg wird das
 /// Flag gesetzt und zur Landing-Route navigiert.
+///
+/// Die Sprachwahl auf Seite 2 wirkt sofort (locale-Umgebung + erneutes
+/// Rendern, kein Neustart).
 public struct OnboardingFlow: View {
     @Environment(\.colorScheme) private var scheme
     @State private var page = 0
     @State private var pending2FA: String?
+    @State private var languageID = AppLanguage.current
     private let store: TokenStore
     private let onLoggedIn: (Route) -> Void
 
@@ -35,7 +41,7 @@ public struct OnboardingFlow: View {
                 } else {
                     VStack(spacing: 0) {
                         pageView(for: page)
-                            .id(page)
+                            .id("\(page)-\(languageID)")
                             .transition(
                                 .asymmetric(
                                     insertion: .move(edge: .trailing).combined(with: .opacity),
@@ -48,6 +54,10 @@ public struct OnboardingFlow: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(EduFlowPalette.canvas(scheme))
+        .environment(\.locale, Locale(identifier: languageID))
+        .onReceive(NotificationCenter.default.publisher(for: .appLanguageDidChange)) { _ in
+            languageID = AppLanguage.current
+        }
     }
 
     private func go(to index: Int) {

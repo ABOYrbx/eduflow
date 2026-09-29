@@ -238,6 +238,18 @@ public struct LoginView: View {
                 icon: "desktopcomputer",
                 autofocus: true
             ) { advance() }
+            AuthLabel(NSLocalizedString("auth_label_subdomain", value: "Schuldomain (optional)", comment: "Anmeldung: Schuldomain-Label"))
+            UberTextField(
+                text: $vm.subdomain,
+                placeholder: NSLocalizedString("auth_placeholder_subdomain", value: "z. B. meine-schule", comment: "Anmeldung: Schuldomain-Platzhalter"),
+                icon: "building.2",
+                autofocus: false
+            ) { advance() }
+            Text(NSLocalizedString("auth_hint_subdomain", value: "Leer lassen für automatische Erkennung.", comment: "Anmeldung: Schuldomain-Hinweis"))
+                .font(UberFont.text(12))
+                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                .multilineTextAlignment(.center)
+                .padding(.top, 6)
         default:
             if showsServerStep {
                 stepHint(NSLocalizedString("Wo läuft dein Server?", value: "Wo läuft dein Server?", comment: "Anmeldung: Serverhinweis"))

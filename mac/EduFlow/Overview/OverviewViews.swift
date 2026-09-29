@@ -1,8 +1,9 @@
 import SwiftUI
 
-/// Startseite 1:1 wie `/uebersicht`: Uhr + Wetter + schwarze Jetzt-Karte
-/// oben, darunter Nachrichten und Hausaufgaben mit
-/// Kennzahlen-Band und Karten.
+/// Startseite: Uhr + Jetzt-Karte oben (nebeneinander auf breiten
+/// Fenstern), Kennzahlen-Band zur sichtbaren Auswahl, darunter
+/// Nachrichten und Hausaufgaben als Spalten; Wetter läuft kompakt als
+/// Streifen und verdrängt keine Inhalte.
 public struct OverviewView: View {
     @Environment(\.colorScheme) private var scheme
     @Environment(\.uberAccent) private var accent
@@ -43,23 +44,22 @@ public struct OverviewView: View {
 
     public var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
+            VStack(alignment: .leading, spacing: 20) {
                 topRow
-                HStack {
-                    Spacer()
-                    Button("Übersicht anpassen") {
-                        layoutDraft = Self.normalizedOrder(vm.settings.ovOrder)
-                        showLayoutEditor = true
-                    }
-                    .buttonStyle(UberButtonStyle(.smallLight))
+                statsBand
+                    .riseIn(delay: 0.12)
+                layoutRow
+                // Wetter bleibt kompakt und verdrängt nichts: Steht es in
+                // der Reihenfolge zuerst, erscheint es als schmaler Streifen
+                // oben, sonst unten. Hausaufgaben und Nachrichten stehen
+                // immer als Spalten nebeneinander (bzw. untereinander auf
+                // schmalen Fenstern).
+                if orderedSections.first == "weather" {
+                    weatherStrip
                 }
-                ForEach(Self.normalizedOrder(vm.settings.ovOrder), id: \.self) { section in
-                    switch section {
-                    case "messages": messagesColumn
-                    case "homework": homeworkColumn
-                    case "weather": if vm.settings.ovWetter { weatherCard.frame(height: 150) }
-                    default: Color.clear.frame(height: 0)
-                    }
+                mainColumns(order: orderedSections)
+                if orderedSections.first != "weather" {
+                    weatherStrip
                 }
                 footer
             }
@@ -86,12 +86,84 @@ public struct OverviewView: View {
 
     // MARK: - Obere Reihe (`.ov-top`)
 
+    /// Uhr und Jetzt-Karte nebeneinander auf breiten Fenstern,
+    /// untereinander auf schmalen.
     private var topRow: some View {
-        VStack(spacing: 16) {
-            clockCard
-                .riseIn()
-            nowCard
-                .riseIn(delay: 0.08)
+        ViewThatFits(in: .horizontal) {
+            HStack(alignment: .top, spacing: 16) {
+                clockCard
+                    .frame(minWidth: 240, maxWidth: 340)
+                nowCard
+                    .frame(minWidth: 320, maxWidth: .infinity)
+            }
+            VStack(spacing: 16) {
+                clockCard
+                nowCard
+            }
+        }
+        .riseIn()
+    }
+
+    /// Kennzahlen-Band über die sichtbare Auswahl (konsistent mit den
+    /// Listen darunter, keine globalen Zähler).
+    private var statsBand: some View {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 170), spacing: 12)], spacing: 12) {
+            StatCard("\(vm.messagesTotal)", label: "Nachrichten")
+            StatCard("\(vm.homeworkOpen)", label: "Offen")
+            StatCard(
+                "\(vm.homeworkOverdue)",
+                label: "Überfällig",
+                tone: vm.homeworkOverdue > 0 ? .danger : .plain
+            )
+        }
+    }
+
+    private var layoutRow: some View {
+        HStack {
+            Spacer()
+            Button("Übersicht anpassen") {
+                layoutDraft = Self.normalizedOrder(vm.settings.ovOrder)
+                showLayoutEditor = true
+            }
+            .buttonStyle(UberButtonStyle(.smallLight))
+        }
+    }
+
+    /// Hausaufgaben und Nachrichten in der vom Nutzer gewählten
+    /// Reihenfolge (erste links/oben), Wetter läuft separat als Streifen.
+    private func mainColumns(order: [String]) -> some View {
+        let homeworkFirst = (order.firstIndex(of: "homework") ?? 1) < (order.firstIndex(of: "messages") ?? 0)
+        return ViewThatFits(in: .horizontal) {
+            HStack(alignment: .top, spacing: 16) {
+                if homeworkFirst {
+                    homeworkColumn.frame(minWidth: 320, maxWidth: .infinity, alignment: .top)
+                    messagesColumn.frame(minWidth: 320, maxWidth: .infinity, alignment: .top)
+                } else {
+                    messagesColumn.frame(minWidth: 320, maxWidth: .infinity, alignment: .top)
+                    homeworkColumn.frame(minWidth: 320, maxWidth: .infinity, alignment: .top)
+                }
+            }
+            VStack(spacing: 16) {
+                if homeworkFirst {
+                    homeworkColumn
+                    messagesColumn
+                } else {
+                    messagesColumn
+                    homeworkColumn
+                }
+            }
+        }
+    }
+
+    /// Kompakter Wetter-Streifen (verdrängt keine Inhalte, keine fixe Höhe).
+    @ViewBuilder
+    private var weatherStrip: some View {
+        if vm.settings.ovWetter {
+            if let error = vm.wetterError, vm.wetter.today == nil {
+                Notice(error.message)
+            } else if vm.wetter.today != nil {
+                weatherCard
+            }
         }
     }
 
@@ -302,8 +374,10 @@ public struct OverviewView: View {
                 Button("Alle Nachrichten") { onNavigate(.messages) }
                     .buttonStyle(UberButtonStyle(.smallLight))
             }
-            if vm.messages.isEmpty {
-                Text("Keine neuen Nachrichten.")
+            if let error = vm.messagesError {
+                Notice(error.message)
+            } else if vm.shownMessages.isEmpty {
+                Text(NSLocalizedString("overview_messages_empty", value: "Keine neuen Nachrichten.", comment: "Übersicht: keine Nachrichten"))
                     .font(UberFont.text(14))
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -311,7 +385,7 @@ public struct OverviewView: View {
                     .background(EduFlowPalette.card(scheme))
                     .clipShape(.rect(cornerRadius: 14))
             } else {
-                ForEach(Array(vm.messages.prefix(5)), id: \.id) { message in
+                ForEach(vm.shownMessages, id: \.id) { message in
                     VStack(alignment: .leading, spacing: 6) {
                         HStack {
                             (message.author.isEmpty ? Text("Schule") : Text(verbatim: message.author))
@@ -332,8 +406,19 @@ public struct OverviewView: View {
                     .clipShape(.rect(cornerRadius: 14))
                     .overlay { RoundedRectangle(cornerRadius: 14).stroke(EduFlowPalette.border(scheme), lineWidth: 1) }
                 }
+                if vm.messagesHasMore {
+                    Button(String(format: NSLocalizedString("overview_more_messages", value: "+ %d weitere", comment: "Übersicht: weitere Nachrichten"), vm.messagesMoreCount)) {
+                        onNavigate(.messages)
+                    }
+                    .buttonStyle(UberButtonStyle(.smallLight))
+                }
             }
         }
+        .frame(maxWidth: .infinity, alignment: .top)
+    }
+
+    private var orderedSections: [String] {
+        Self.normalizedOrder(vm.settings.ovOrder)
     }
 
     private static func normalizedOrder(_ raw: String) -> [String] {
@@ -347,67 +432,45 @@ public struct OverviewView: View {
 
     private var homeworkColumn: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("Hausaufgaben")
-                    .font(UberFont.text(20, weight: .heavy))
-                    .tracking(-0.5)
+            HStack(alignment: .firstTextBaseline) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Hausaufgaben")
+                        .font(UberFont.text(20, weight: .heavy))
+                        .tracking(-0.5)
+                    Text(String(format: NSLocalizedString("overview_homework_sub", value: "%d offen · %d überfällig", comment: "Übersicht: Hausaufgaben-Totale"), vm.homeworkTotalOpen, vm.homeworkTotalOverdue))
+                        .font(UberFont.text(13, weight: .medium))
+                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                }
                 Spacer()
                 Button("Alle Aufgaben") { onNavigate(.homework) }
                     .buttonStyle(UberButtonStyle(.smallPrimary))
                     .hoverLift()
             }
             .frame(minHeight: 36)
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
-                HStack(spacing: 6) {
-                    Text(verbatim: "\(vm.messagesTotal)")
-                        .font(UberFont.text(18, weight: .heavy))
-                        .tracking(-0.5)
-                    Text("ungelesen")
-                        .font(UberFont.text(14, weight: .semibold))
-                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                }
-                HStack(spacing: 6) {
-                    Text(verbatim: "\(vm.homeworkOpen)")
-                        .font(UberFont.text(18, weight: .heavy))
-                        .tracking(-0.5)
-                    Text("offen")
-                        .font(UberFont.text(14, weight: .semibold))
-                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                }
-                HStack(spacing: 6) {
-                    Text(verbatim: "\(vm.homeworkOverdue)")
-                        .font(UberFont.text(18, weight: .heavy))
-                        .foregroundStyle(EduFlowPalette.red)
-                    Text("überfällig")
-                        .font(UberFont.text(14, weight: .semibold))
-                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                }
-                HStack(spacing: 6) {
-                    Text(verbatim: "\(vm.homeworkDone)")
-                        .font(UberFont.text(18, weight: .heavy))
-                        .foregroundStyle(EduFlowPalette.green)
-                    Text("erledigt")
-                        .font(UberFont.text(14, weight: .semibold))
-                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                }
-            }
-            .padding(.vertical, 14)
-            .padding(.horizontal, 18)
-            .frame(maxWidth: .infinity)
-            .background(EduFlowPalette.card(scheme))
-            .clipShape(.rect(cornerRadius: 14))
-            .overlay {
-                RoundedRectangle(cornerRadius: 14)
-                    .stroke(EduFlowPalette.border(scheme), lineWidth: 1)
-            }
             if let error = vm.homeworkError {
                 Notice(error.message)
             } else if vm.homework.isEmpty {
-                Text("Keine offenen Hausaufgaben. Sehr gut.")
-                    .font(UberFont.text(15))
-                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                    .frame(maxWidth: .infinity)
-                    .padding(48)
+                // Leere Liste ehrlich erklären: Alle Zahlen stammen aus
+                // denselben Server-Totalen wie die Kopfzeile.
+                if vm.homeworkRelevantTotal > 0 {
+                    Text(NSLocalizedString("overview_homework_more_available", value: "Weitere Aufgaben vorhanden — alle ansehen.", comment: "Übersicht: weitere Aufgaben vorhanden"))
+                        .font(UberFont.text(15))
+                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                        .frame(maxWidth: .infinity)
+                        .padding(48)
+                } else if vm.homeworkDone > 0 {
+                    Text(NSLocalizedString("overview_homework_all_done", value: "Alle Hausaufgaben erledigt. Sehr gut.", comment: "Übersicht: alles erledigt"))
+                        .font(UberFont.text(15))
+                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                        .frame(maxWidth: .infinity)
+                        .padding(48)
+                } else {
+                    Text(NSLocalizedString("overview_homework_none", value: "Keine Hausaufgaben vorhanden.", comment: "Übersicht: keine Aufgaben"))
+                        .font(UberFont.text(15))
+                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                        .frame(maxWidth: .infinity)
+                        .padding(48)
+                }
             } else {
                 ForEach(Array(vm.homework.enumerated()), id: \.element.id) { index, item in
                     HomeworkCard(status: item.status, isDone: item.isDone, isHidden: false) {
@@ -436,9 +499,15 @@ public struct OverviewView: View {
                     }
                     .riseIn(delay: Double(min(index, 8)) * 0.06)
                 }
+                if vm.homeworkHasMore {
+                    Button(String(format: NSLocalizedString("overview_more_homework", value: "+ %d weitere", comment: "Übersicht: weitere Aufgaben"), vm.homeworkMoreCount)) {
+                        onNavigate(.homework)
+                    }
+                    .buttonStyle(UberButtonStyle(.smallLight))
+                }
             }
         }
-        .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity, alignment: .top)
     }
 
     private func statusTag(_ status: String) -> TagStyle {
@@ -451,12 +520,28 @@ public struct OverviewView: View {
         }
     }
 
+    /// Knöpfe zu allen Bereichen (Nachrichten, Hausaufgaben, Stundenplan,
+    /// Noten, Einstellungen) plus lokale Kennzeichnung.
     private var footer: some View {
-        Text("EduFlow Dashboard · lokal")
-            .font(UberFont.text(12))
-            .foregroundStyle(EduFlowPalette.inkDim(scheme))
-            .frame(maxWidth: .infinity)
-            .padding(.top, 16)
+        VStack(spacing: 12) {
+            HStack(spacing: 8) {
+                Button(NSLocalizedString("Nachrichten", value: "Nachrichten", comment: "Übersicht: Bereich Nachrichten")) { onNavigate(.messages) }
+                    .buttonStyle(UberButtonStyle(.smallLight))
+                Button(NSLocalizedString("Hausaufgaben", value: "Hausaufgaben", comment: "Übersicht: Bereich Hausaufgaben")) { onNavigate(.homework) }
+                    .buttonStyle(UberButtonStyle(.smallLight))
+                Button(NSLocalizedString("Stundenplan", value: "Stundenplan", comment: "Übersicht: Bereich Stundenplan")) { onNavigate(.timetable) }
+                    .buttonStyle(UberButtonStyle(.smallLight))
+                Button(NSLocalizedString("grades_nav", value: "Noten", comment: "Übersicht: Bereich Noten")) { onNavigate(.grades) }
+                    .buttonStyle(UberButtonStyle(.smallLight))
+                Button(NSLocalizedString("Einstellungen", value: "Einstellungen", comment: "Übersicht: Bereich Einstellungen")) { onNavigate(.settings) }
+                    .buttonStyle(UberButtonStyle(.smallLight))
+            }
+            Text("EduFlow Dashboard · lokal")
+                .font(UberFont.text(12))
+                .foregroundStyle(EduFlowPalette.inkDim(scheme))
+                .frame(maxWidth: .infinity)
+        }
+        .padding(.top, 16)
     }
 }
 

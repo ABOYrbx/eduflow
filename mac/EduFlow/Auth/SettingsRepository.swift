@@ -19,15 +19,22 @@ public struct SettingsRepository: Sendable {
     /// `api/settings.py`; Antwort ohne Schema wird toleriert).
     @discardableResult
     public func save(_ values: SettingsValues) async throws -> SettingsValues {
+        var outgoing = values
+        // Wie `coerceSetting` (text): Leerzeichen/Zeilenumbrüche fallen weg,
+        // der Server schneidet zusätzlich auf 100 Zeichen.
+        outgoing.wetterCity = values.wetterCity
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "\r", with: " ")
+            .replacingOccurrences(of: "\n", with: " ")
         let body = try APIClient.jsonData([
-            "landing": values.landing,
-            "hw_status": values.hwStatus,
-            "hw_tests": values.hwTests,
-            "ov_unread": values.ovUnread,
-            "ov_homework": values.ovHomework,
-            "ov_order": values.ovOrder,
-            "ov_wetter": values.ovWetter,
-            "wetter_city": values.wetterCity,
+            "landing": outgoing.landing,
+            "hw_status": outgoing.hwStatus,
+            "hw_tests": outgoing.hwTests,
+            "ov_unread": outgoing.ovUnread,
+            "ov_homework": outgoing.ovHomework,
+            "ov_order": outgoing.ovOrder,
+            "ov_wetter": outgoing.ovWetter,
+            "wetter_city": outgoing.wetterCity,
         ] as [String: Any])
         let data = try await client.put(APIClient.Paths.settings, body: body)
         let response = try APIClient.decode(SettingsResponse.self, from: data)

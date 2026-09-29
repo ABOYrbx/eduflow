@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 import SwiftUI
 
 /// Prüfergebnis des Server-Schritts (reine Werte, testbar vergleichbar).
@@ -197,9 +198,8 @@ struct OnboardingParticleBackground: View {
     }
 }
 
-/// Seite 2: Sprachauswahl mit Übersetzungsstand. Die Auswahl landet im
-/// System-Schlüssel `AppleLanguages` und wird nach einem Neustart aktiv —
-/// geändert Weiter startet die App dafür neu, unverändert geht es weiter.
+/// Seite 2: Sprachauswahl mit Übersetzungsstand. Antippen wendet die Sprache
+/// sofort an (laufender Prozess, kein Neustart); Weiter geht zur nächsten Seite.
 public struct OnboardingLanguagePage: View {
     @Environment(\.colorScheme) private var scheme
     @Environment(\.uberAccent) private var accent
@@ -211,8 +211,6 @@ public struct OnboardingLanguagePage: View {
         _selected = State(initialValue: AppLanguage.override)
         self.onNext = onNext
     }
-
-    private var changed: Bool { selected != AppLanguage.override }
 
     /// Zeilen-Codes, aktuelle Sprache zuerst, Rest nach Eigenname sortiert.
     private var orderedCodes: [String] {
@@ -235,7 +233,7 @@ public struct OnboardingLanguagePage: View {
                 .tracking(-1.2)
                 .padding(.top, 12)
                 .riseIn(delay: 0.08)
-            Text("EduFlow spricht deine Sprache. Die Auswahl wird nach einem Neustart aktiv.")
+            Text("EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen.")
                 .font(UberFont.text(14))
                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 .multilineTextAlignment(.center)
@@ -263,22 +261,20 @@ public struct OnboardingLanguagePage: View {
                     }
                 }
             }
+            .scrollIndicators(.never)
             .padding(.top, 20)
             .riseIn(delay: 0.2)
-            PillButton(changed ? "Übernehmen & neu starten" : "Weiter") {
-                if changed {
-                    AppLanguage.set(selected)
-                    NSApplication.shared.terminate(nil)
-                } else {
-                    onNext()
-                }
-            }
-            .riseIn(delay: 0.3)
+            PillButton("Weiter", action: onNext)
+                .riseIn(delay: 0.3)
         }
         .padding(.vertical, 24)
         .padding(.horizontal, 28)
         .frame(maxWidth: 560)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onReceive(NotificationCenter.default.publisher(for: .appLanguageDidChange)) { _ in
+            selected = AppLanguage.override
+            rows = AppLocalizations.coverage()
+        }
     }
 
     private func languageRow(
@@ -289,7 +285,11 @@ public struct OnboardingLanguagePage: View {
         selected: Bool
     ) -> some View {
         UberCard {
-            Button(action: { self.selected = code }) {
+            Button(action: {
+                // Sofort anwenden: persistieren + laufender Prozess (kein Neustart).
+                AppLanguage.set(code)
+                self.selected = code
+            }) {
                 HStack(spacing: 14) {
                     ZStack {
                         Circle()

@@ -159,6 +159,64 @@ struct CoreTests {
         #expect(TokenStore.defaultBaseURL == "http://127.0.0.1:3000/api/v1/")
     }
 
+    @Test("Topbar-Standard enthält alle Bereiche außer Termine")
+    func topBarDefaultExcludesSchool() {
+        #expect(TopBarConfig.defaultVisible == [.overview, .messages, .homework, .grades, .timetable])
+        #expect(!TopBarConfig.defaultVisible.contains(.school))
+        #expect(TopBarSection.allCases.contains(.school))
+        for section in TopBarSection.allCases {
+            #expect(!section.title.isEmpty)
+            #expect(section.route != .settings)
+            #expect(section.route != .devices)
+            #expect(section.route != .login)
+        }
+        #expect(TopBarSection.school.route == .school)
+    }
+
+    @Test("Topbar-Ablage wird bereinigt (unbekannt, Duplikate, leer)")
+    func topBarSanitize() {
+        #expect(TopBarConfig.sanitize(nil) == TopBarConfig.defaultVisible)
+        #expect(TopBarConfig.sanitize([]) == TopBarConfig.defaultVisible)
+        #expect(TopBarConfig.sanitize(["overview", "nope", "messages", "messages"]) == [.overview, .messages])
+        #expect(TopBarConfig.sanitize(["school"]) == [.school])
+    }
+
+    @Test("Topbar-Umsortieren bewegt Einträge, ungültig bleibt stabil")
+    func topBarMove() {
+        let order: [TopBarSection] = [.overview, .messages, .homework]
+        #expect(TopBarConfig.move(order, from: 2, by: -2) == [.homework, .overview, .messages])
+        #expect(TopBarConfig.move(order, from: 0, by: -1) == order)
+        #expect(TopBarConfig.move(order, from: 2, by: 5) == order)
+        #expect(TopBarConfig.move(order, from: 9, by: 1) == order)
+        #expect(TopBarConfig.move([], from: 0, by: 1) == [])
+    }
+
+    @Test("Topbar-Auswahl wird gespeichert und gelesen")
+    func topBarSaveRoundtrip() {
+        let key = TopBarConfig.storageKey
+        let saved = UserDefaults.standard.stringArray(forKey: key)
+        defer {
+            if let saved {
+                UserDefaults.standard.set(saved, forKey: key)
+            } else {
+                UserDefaults.standard.removeObject(forKey: key)
+            }
+            NotificationCenter.default.post(name: .topBarConfigDidChange, object: nil)
+        }
+        UserDefaults.standard.removeObject(forKey: key)
+        #expect(TopBarConfig.visible == TopBarConfig.defaultVisible)
+        TopBarConfig.save([.school, .overview])
+        #expect(TopBarConfig.visible == [.school, .overview])
+        TopBarConfig.save([])
+        #expect(TopBarConfig.visible == TopBarConfig.defaultVisible)
+    }
+
+    @Test("Paginierung entspricht Backend (Standard 50, max 200)")
+    func pageLimitsMatchBackend() {
+        #expect(PageLimits.defaultLimit == 50)
+        #expect(PageLimits.maxLimit == 200)
+    }
+
     @Test("Alle Routenpfade sind gesetzt")
     func allRoutePathsPresent() {
         let paths = [
@@ -174,10 +232,11 @@ struct CoreTests {
             APIClient.Paths.downloadToken, APIClient.Paths.homework, APIClient.Paths.homeworkDone(3),
             APIClient.Paths.homeworkTrash(3), APIClient.Paths.grades,
             APIClient.Paths.timetableDay, APIClient.Paths.timetableWeek,
-            APIClient.Paths.wetter,
+            APIClient.Paths.schoolAgenda, APIClient.Paths.substitutionsWeek,
+            APIClient.Paths.wetter, APIClient.Paths.wetterSuche,
         ]
-        #expect(paths.count == 26)
-        #expect(Set(paths).count == 26)
+        #expect(paths.count == 29)
+        #expect(Set(paths).count == 29)
         for path in paths {
             #expect(!path.isEmpty)
             #expect(!path.hasPrefix("/"))

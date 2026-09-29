@@ -1,15 +1,95 @@
 import Foundation
 import SwiftUI
 
-struct SchoolAgendaItem: Decodable, Identifiable, Sendable {
-    var id: Int = 0
-    var kind = "event"
-    var date = ""
-    var title = ""
-    var text = ""
-    var subject = ""
-    var typeLabel = ""
-    var author = ""
+/// Tageshelfer für den Schulalltag (UTC wie Backend und Web):
+/// Wochenstart ist Montag (`(Wochentag + 6) % 7` Tage zurück),
+/// das Agenda-Fenster sind −30/+60 Tage um den gewählten Tag.
+public enum SchoolDates: Sendable {
+    public static var utc: Calendar {
+        var calendar = Calendar(identifier: .gregorian)
+        if let gmt = TimeZone(secondsFromGMT: 0) {
+            calendar.timeZone = gmt
+        }
+        return calendar
+    }
+
+    public static func isoDay(_ date: Date) -> String {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withFullDate]
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        return formatter.string(from: date)
+    }
+
+    public static func monday(of date: Date) -> Date {
+        let weekday = utc.component(.weekday, from: date)
+        let offset = (weekday + 5) % 7
+        return utc.date(byAdding: .day, value: -offset, to: utc.startOfDay(for: date)) ?? date
+    }
+
+    public static func shifted(_ date: Date, days: Int) -> Date {
+        utc.date(byAdding: .day, value: days, to: date) ?? date
+    }
+}
+
+/// Fehlertolerantes Lesen einzelner Werte (unbekannte Felder ignoriert
+/// der Decoder ohnehin; falsche Typen fallen auf Defaults zurück).
+private func lenientString<K: CodingKey>(_ box: KeyedDecodingContainer<K>, _ key: K) -> String {
+    let text: String? = try? box.decodeIfPresent(String.self, forKey: key)
+    if let text {
+        return text
+    }
+    let number: Int? = try? box.decodeIfPresent(Int.self, forKey: key)
+    if let number {
+        return String(number)
+    }
+    let flag: Bool? = try? box.decodeIfPresent(Bool.self, forKey: key)
+    if let flag {
+        return flag ? "true" : "false"
+    }
+    return ""
+}
+
+private func lenientInt<K: CodingKey>(_ box: KeyedDecodingContainer<K>, _ key: K) -> Int {
+    let number: Int? = try? box.decodeIfPresent(Int.self, forKey: key)
+    if let number {
+        return number
+    }
+    let text: String? = try? box.decodeIfPresent(String.self, forKey: key)
+    if let text, let parsed = Int(text) {
+        return parsed
+    }
+    return 0
+}
+
+/// Agenda-Eintrag 1:1 zum Backend (`event_to_dict` bzw.
+/// `homework_to_dict` plus `kind`/`date`); der Titel fällt auf Text
+/// bzw. Typ-Label zurück wie in der Web-Agenda.
+public struct SchoolAgendaItem: Decodable, Identifiable, Sendable {
+    public var id = 0
+    public var kind = "event"
+    public var date = ""
+    public var title = ""
+    public var text = ""
+    public var subject = ""
+    public var typeLabel = ""
+    public var author = ""
+
+    public init() {}
+
+    public init(from decoder: Decoder) throws {
+        let box = try decoder.container(keyedBy: CodingKeys.self)
+        id = lenientInt(box, .id)
+        kind = lenientString(box, .kind)
+        if kind.isEmpty {
+            kind = "event"
+        }
+        date = lenientString(box, .date)
+        title = lenientString(box, .title)
+        text = lenientString(box, .text)
+        subject = lenientString(box, .subject)
+        typeLabel = lenientString(box, .typeLabel)
+        author = lenientString(box, .author)
+    }
 
     private enum CodingKeys: String, CodingKey {
         case id, kind, date, title, text, subject, typeLabel
@@ -17,18 +97,42 @@ struct SchoolAgendaItem: Decodable, Identifiable, Sendable {
     }
 }
 
-private struct SchoolAgendaResponse: Decodable, Sendable {
-    var items: [SchoolAgendaItem] = []
-    var total = 0
+public struct SchoolAgendaResponse: Decodable, Sendable {
+    public var items: [SchoolAgendaItem] = []
+    public var total = 0
+
+    public init() {}
+
+    public init(from decoder: Decoder) throws {
+        let box = try decoder.container(keyedBy: CodingKeys.self)
+        items = (try? box.decodeIfPresent([SchoolAgendaItem].self, forKey: .items)) ?? []
+        total = lenientInt(box, .total)
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case items, total
+    }
 }
 
-struct SchoolSubstitution: Decodable, Identifiable, Sendable {
-    var schoolClass = ""
-    var lesson = ""
-    var title = ""
-    var action = ""
+/// Vertretungszeile 1:1 zum Backend (`change_to_dict` mit `class`,
+/// `lesson`, `title`, `action`); Zahlen-Stunden werden als Text gelesen.
+public struct SchoolSubstitution: Decodable, Identifiable, Sendable {
+    public var schoolClass = ""
+    public var lesson = ""
+    public var title = ""
+    public var action = ""
 
-    var id: String { "\(schoolClass)-\(lesson)-\(title)-\(action)" }
+    public var id: String { "\(schoolClass)-\(lesson)-\(title)-\(action)" }
+
+    public init() {}
+
+    public init(from decoder: Decoder) throws {
+        let box = try decoder.container(keyedBy: CodingKeys.self)
+        schoolClass = lenientString(box, .schoolClass)
+        lesson = lenientString(box, .lesson)
+        title = lenientString(box, .title)
+        action = lenientString(box, .action)
+    }
 
     private enum CodingKeys: String, CodingKey {
         case schoolClass = "class"
@@ -36,38 +140,66 @@ struct SchoolSubstitution: Decodable, Identifiable, Sendable {
     }
 }
 
-struct SchoolSubstitutionDay: Decodable, Identifiable, Sendable {
-    var date = ""
-    var dayLabel = ""
-    var changes: [SchoolSubstitution] = []
-    var id: String { date }
+public struct SchoolSubstitutionDay: Decodable, Identifiable, Sendable {
+    public var date = ""
+    public var dayLabel = ""
+    public var changes: [SchoolSubstitution] = []
+    public var id: String { date }
+
+    public init() {}
+
+    public init(from decoder: Decoder) throws {
+        let box = try decoder.container(keyedBy: CodingKeys.self)
+        date = lenientString(box, .date)
+        dayLabel = lenientString(box, .dayLabel)
+        changes = (try? box.decodeIfPresent([SchoolSubstitution].self, forKey: .changes)) ?? []
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case date, dayLabel, changes
+    }
 }
 
-private struct SchoolSubstitutionResponse: Decodable, Sendable {
-    var days: [SchoolSubstitutionDay] = []
+public struct SchoolSubstitutionResponse: Decodable, Sendable {
+    public var days: [SchoolSubstitutionDay] = []
+
+    public init() {}
+
+    public init(from decoder: Decoder) throws {
+        let box = try decoder.container(keyedBy: CodingKeys.self)
+        days = (try? box.decodeIfPresent([SchoolSubstitutionDay].self, forKey: .days)) ?? []
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case days
+    }
 }
 
-private struct SchoolRepository: Sendable {
-    let client: APIClient
+/// Schulalltag-Repository (nur gegen Paket 0): Kalenderfenster und
+/// Vertretungswoche wie die Web-Agenda (`school/agenda`,
+/// `substitutions/week`).
+public struct SchoolRepository: Sendable {
+    public let client: APIClient
 
-    func agenda(day: Date, refresh: Bool) async throws -> [SchoolAgendaItem] {
-        let start = Calendar.current.date(byAdding: .day, value: -30, to: day) ?? day
-        let end = Calendar.current.date(byAdding: .day, value: 60, to: day) ?? day
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withFullDate]
-        let data = try await client.get(APIClient.Paths.schoolAgenda, query: [
-            URLQueryItem(name: "since", value: formatter.string(from: start)),
-            URLQueryItem(name: "until", value: formatter.string(from: end)),
-            URLQueryItem(name: "refresh", value: refresh ? "1" : "0"),
-        ])
+    public init(client: APIClient) {
+        self.client = client
+    }
+
+    public func agenda(day: Date, refresh: Bool = false) async throws -> [SchoolAgendaItem] {
+        var query = [
+            URLQueryItem(name: "since", value: SchoolDates.isoDay(SchoolDates.shifted(day, days: -30))),
+            URLQueryItem(name: "until", value: SchoolDates.isoDay(SchoolDates.shifted(day, days: 60))),
+        ]
+        if refresh {
+            query.append(URLQueryItem(name: "refresh", value: "1"))
+        }
+        let data = try await client.get(APIClient.Paths.schoolAgenda, query: query)
         return try APIClient.decode(SchoolAgendaResponse.self, from: data).items
     }
 
-    func substitutions(day: Date) async throws -> [SchoolSubstitutionDay] {
-        let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withFullDate]
+    public func substitutions(day: Date) async throws -> [SchoolSubstitutionDay] {
         let data = try await client.get(APIClient.Paths.substitutionsWeek, query: [
-            URLQueryItem(name: "day", value: formatter.string(from: day)),
+            URLQueryItem(name: "day", value: SchoolDates.isoDay(day)),
         ])
         return try APIClient.decode(SchoolSubstitutionResponse.self, from: data).days
     }
@@ -80,8 +212,7 @@ private final class SchoolViewModel {
     var substitutions: [SchoolSubstitutionDay] = []
     var error: APIError?
     var isLoading = false
-    var selectedDay = Calendar.current.dateInterval(of: .weekOfYear, for: Date())?.start
-        ?? Calendar.current.startOfDay(for: Date())
+    var selectedDay = SchoolDates.monday(of: Date())
     private let store: TokenStore
 
     init(store: TokenStore) { self.store = store }
@@ -110,7 +241,7 @@ private final class SchoolViewModel {
     }
 
     func moveWeek(_ offset: Int, onSessionExpired: () -> Void) async {
-        selectedDay = Calendar.current.date(byAdding: .weekOfYear, value: offset, to: selectedDay) ?? selectedDay
+        selectedDay = SchoolDates.shifted(selectedDay, days: offset * 7)
         await load(onSessionExpired: onSessionExpired)
     }
 
@@ -247,7 +378,9 @@ struct SchoolView: View {
                                 .frame(width: 54, alignment: .leading)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(change.title).font(UberFont.text(14, weight: .semibold))
-                                Text(String(format: NSLocalizedString("school_class_format", value: "Klasse %@", comment: "Schule: Klasse"), change.schoolClass)).font(UberFont.text(12))
+                                Text(change.schoolClass.isEmpty
+                                    ? NSLocalizedString("school_plan_change", value: "Stundenplanänderung", comment: "Schule: Änderung ohne Klasse")
+                                    : String(format: NSLocalizedString("school_class_format", value: "Klasse %@", comment: "Schule: Klasse"), change.schoolClass)).font(UberFont.text(12))
                                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                             }
                             Spacer()

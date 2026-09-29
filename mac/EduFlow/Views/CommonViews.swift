@@ -105,6 +105,74 @@ private struct LightBorderIfNeeded: ViewModifier {
     }
 }
 
+// MARK: - Gemeinsame Schaltflächen-Schnittstelle (Paket 0/F, für alle Pakete)
+//
+// Verbindlich für alle macOS-Ansichten, damit nirgends die native
+// Standardknopf-Optik (Bezel) erscheint:
+//
+// - Textknöpfe → `PillButton` oder `Button` + `.buttonStyle(UberButtonStyle(...))`.
+// - Icon-knöpfe (nur Symbol, kein Text) → `IconButton` (nie `Button` + `Image`
+//   mit Standard-Stil). Enthält Kreis-Hover, sichtbaren Fokus-Ring,
+//   VoiceOver-Namen (`label`) und Tooltip (`help`, fällt auf `label` zurück).
+// - Zeilen-/Karten-Taps → `Button` + `.buttonStyle(.plain)` (eigene Optik,
+//   Label immer mit `.accessibilityLabel`, Icon-only zusätzlich mit `.help`).
+//
+// Tastatur (Tab + Return/Leer), VoiceOver-Namen, Tooltips und Fokuszustände
+// bleiben dabei immer erhalten — die Stile ändern nur die Optik, nie das
+// darunterliegende `Button`-Verhalten.
+
+/// Einheitliche Icon-Schaltfläche (32pt, Kreis-Hover, Fokus-Ring in Akzent).
+public struct IconButton: View {
+    @Environment(\.colorScheme) private var scheme
+    @Environment(\.uberAccent) private var accent
+    @FocusState private var focused: Bool
+    @State private var hovering = false
+    public let icon: String
+    public let label: String
+    public let help: String?
+    public let disabled: Bool
+    public let action: () -> Void
+
+    public init(
+        icon: String,
+        label: String,
+        help: String? = nil,
+        disabled: Bool = false,
+        action: @escaping () -> Void
+    ) {
+        self.icon = icon
+        self.label = label
+        self.help = help
+        self.disabled = disabled
+        self.action = action
+    }
+
+    public var body: some View {
+        Button(action: action) {
+            Image(systemName: icon)
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(EduFlowPalette.ink(scheme))
+                .frame(width: 32, height: 32)
+                .background(hovering ? EduFlowPalette.surface2(scheme) : Color.clear)
+                .clipShape(.circle)
+                .overlay {
+                    Circle()
+                        .stroke(
+                            focused ? accent.resolved(scheme) : Color.clear,
+                            lineWidth: 2
+                        )
+                }
+        }
+        .buttonStyle(.plain)
+        .focused($focused)
+        .disabled(disabled)
+        .opacity(disabled ? 0.35 : 1)
+        .accessibilityLabel(LocalizedStringKey(label))
+        .help(help ?? label)
+        .onHover { hovering = $0 && !disabled }
+    }
+}
+
 // MARK: - Karten (`.card`, 14px, 1px Rahmen)
 
 ///
@@ -417,6 +485,8 @@ public struct UberTextField: View {
                         .foregroundStyle(EduFlowPalette.inkDim(scheme))
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(NSLocalizedString("common_clear_input", value: "Eingabe löschen", comment: "Eingabefeld: löschen"))
+                .help(NSLocalizedString("common_clear_input", value: "Eingabe löschen", comment: "Eingabefeld: löschen"))
             }
         }
         .padding(.horizontal, 18)
@@ -520,6 +590,7 @@ public struct UberSecureField: View {
                         .foregroundStyle(EduFlowPalette.inkDim(scheme))
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(revealed ? NSLocalizedString("common_password_hide", value: "Passwort verbergen", comment: "Passwort: verbergen") : NSLocalizedString("common_password_show", value: "Passwort anzeigen", comment: "Passwort: anzeigen"))
                 .help(revealed ? NSLocalizedString("common_password_hide", value: "Passwort verbergen", comment: "Passwort: verbergen") : NSLocalizedString("common_password_show", value: "Passwort anzeigen", comment: "Passwort: anzeigen"))
             } else if !text.isEmpty {
                 Button { text = "" } label: {
@@ -528,6 +599,8 @@ public struct UberSecureField: View {
                         .foregroundStyle(EduFlowPalette.inkDim(scheme))
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(NSLocalizedString("common_clear_input", value: "Eingabe löschen", comment: "Eingabefeld: löschen"))
+                .help(NSLocalizedString("common_clear_input", value: "Eingabe löschen", comment: "Eingabefeld: löschen"))
             }
         }
         .padding(.horizontal, 18)
