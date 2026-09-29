@@ -28,6 +28,8 @@ API_PORT=3001 WEB_PORT=8001 ./run.sh
 
 ![Login](images/login.jpg)
 
+![Two-factor code](images/2fa.jpg)
+
 ## Verify
 
 ```sh

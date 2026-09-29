@@ -1,6 +1,6 @@
 # Features
 
-All pages share the top pill nav (Overview, Messages, Homework, Grades, Timetable, Events) and a profile menu (Settings, Sign out). Screenshots below show the demo (`demo` / `demo`) with synthetic — partly German — sample data.
+All pages share the top pill nav (Overview, Messages, Homework, Grades, Timetable, Events) and a profile menu (Settings, Sign out). Screenshots below show the English demo (`demo` / `demo`) with synthetic sample data.
 
 ## Overview (`/`)
 

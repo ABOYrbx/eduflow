@@ -94,7 +94,8 @@
     "trashWithCount": "Trash ({count})",
     "deleted": "Deleted",
     "dueLabel": "due:",
-    "assignedLabel": "assigned:"
+    "assignedLabel": "assigned:",
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "Back to Login",
