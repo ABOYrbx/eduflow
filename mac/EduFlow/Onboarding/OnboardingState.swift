@@ -1,4 +1,82 @@
 import Foundation
+import ObjectiveC
+
+/// Meldung bei Sprachwechsel: Die Auswahl wird sofort im laufenden Prozess
+/// aktiv (kein Neustart). Ansichten hören darauf und rendern neu.
+public extension Notification.Name {
+    static let appLanguageDidChange = Notification.Name("de.eduflow.appLanguageDidChange")
+}
+
+/// Laufzeit-Überlagerung für die App-Sprache (ohne Neustart).
+///
+/// Die Persistenz im System-Schlüssel `AppleLanguages` wirkt erst beim
+/// nächsten Start; diese Überlagerung schließt die Lücke im laufenden
+/// Prozess, indem `NSLocalizedString` (via `Bundle.main`) sofort die
+/// gewählte Sprache liefert. SwiftUI-Texte (`LocalizedStringKey`) folgen
+/// zusätzlich der `locale`-Umgebung (siehe `OnboardingFlow`).
+/// Die Datei-Suche ist injizierbar (`bundle:`), damit Tests mit
+/// synthetischen Bundles offline laufen.
+public enum BundleLanguageOverride {
+    /// Liest `key` aus `<code>.lproj/Localizable.strings` in `bundle`.
+    /// Gibt nil zurück, wenn nichts gefunden ist (Aufrufer fällt auf Super zurück).
+    public static func lookup(key: String, table: String?, in bundle: Bundle, code: String) -> String? {
+        guard table == nil || table == "Localizable" else { return nil }
+        guard let dict = AppLocalizations.table(for: code, in: bundle) else { return nil }
+        return dict[key]
+    }
+
+    /// Überlagerung aktivieren (Default: `Bundle.main`). Harmlos, wenn `code`
+    /// nil ist oder kein `lproj` existiert (reiner Super-Fallback).
+    public static func activate(code: String?, in bundle: Bundle = .main) {
+        if !(bundle is AppLanguageBundle) {
+            object_setClass(bundle, AppLanguageBundle.self)
+        }
+        liveLanguageLock.lock()
+        liveLanguageCode = code
+        liveLanguageTables = [:]
+        liveLanguageLock.unlock()
+    }
+}
+
+/// Bundle-Unterklasse für die Live-Sprache (nur via `BundleLanguageOverride`
+/// auf `Bundle.main` gelegt).
+///
+/// Bewusst OHNE eigene Stored Properties (sonst wäre der Isa-Tausch auf der
+/// bestehenden `Bundle.main`-Instanz speicherunsicher): Der Zustand liegt in
+/// datei-privaten Statiken unten; die Klasse ändert nur die Methoden-Dispatch.
+final class AppLanguageBundle: Bundle {
+    override func localizedString(forKey key: String, value: String?, table tableName: String?) -> String {
+        let table = tableName ?? "Localizable"
+        liveLanguageLock.lock()
+        guard let code = liveLanguageCode, table == "Localizable" else {
+            liveLanguageLock.unlock()
+            return super.localizedString(forKey: key, value: value, table: tableName)
+        }
+        if let hit = liveLanguageTables[code]?[key] {
+            liveLanguageLock.unlock()
+            return hit
+        }
+        liveLanguageLock.unlock()
+        // Datei lesen AUSSERHALB der Sperre (IO + Super nie unter Lock).
+        let dict = AppLocalizations.table(for: code, in: Bundle.main) ?? [:]
+        liveLanguageLock.lock()
+        if liveLanguageCode == code {
+            liveLanguageTables[code] = dict
+        }
+        let hit = liveLanguageTables[code]?[key]
+        liveLanguageLock.unlock()
+        if let hit {
+            return hit
+        }
+        return super.localizedString(forKey: key, value: value, table: tableName)
+    }
+}
+
+/// Zustand der Live-Überlagerung (Datei-privat; nur via `BundleLanguageOverride`).
+private let liveLanguageLock = NSLock()
+private var liveLanguageCode: String?
+/// Gelesene Tabellen je Code (`[:]` = Datei fehlt, reiner Super-Fallback).
+private var liveLanguageTables: [String: [String: String]] = [:]
 
 /// Onboarding-Zustand (reine Logik, ohne UI und ohne Netz, testbar).
 ///
@@ -56,8 +134,9 @@ public let localeCoverage: [LocaleCoverage] = [
 
 /// App-Sprache als Override der Systemsprache (reine Logik, testbar).
 ///
-/// Die Auswahl landet im System-Schlüssel `AppleLanguages` und wird beim
-/// nächsten Start wirksam (Sandbox: kein Selbst-Neustart möglich).
+/// Die Auswahl landet im System-Schlüssel `AppleLanguages` (wirksam ab dem
+/// nächsten Start) und wird zusätzlich sofort im laufenden Prozess aktiv
+/// (Bundle-Überlagerung + `appLanguageDidChange`, kein Neustart nötig).
 /// `nil` heißt Systemsprache. Die Absicht steht zusätzlich unter eigenem
 /// Schlüssel, weil `AppleLanguages` lesend immer auf die Systemsprache
 /// zurückfällt und `nil` sonst nie unterscheidbar wäre.
@@ -96,6 +175,9 @@ public enum AppLanguage {
             UserDefaults.standard.removeObject(forKey: selectionKey)
             UserDefaults.standard.removeObject(forKey: systemKey)
         }
+        // Sofort anwenden (laufender Prozess) + Ansichten neu rendern.
+        BundleLanguageOverride.activate(code: code)
+        NotificationCenter.default.post(name: .appLanguageDidChange, object: nil)
     }
 }
 

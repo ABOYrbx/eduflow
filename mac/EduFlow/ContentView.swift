@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 import SwiftUI
 
 /// Eigene App-Hülle ohne System-Sidebar: schwebende Pillen-Navigation
@@ -153,21 +154,20 @@ struct ContentView: View {
 private struct TopPillNav: View {
     @Environment(\.colorScheme) var scheme
     @State private var profileMenuOpen = false
+    @State private var sections = TopBarConfig.visible
     let selection: Route?
     let store: TokenStore
     let onNavigate: (Route) -> Void
     let onLogout: () -> Void
 
-    /// Aktiver Abschnitt: Thread und Verfassen gehören zu Nachrichten,
-    /// der Rest mappt auf sich selbst (Einstellungen/Geräte/Login → nichts).
-    private var activeSection: Route? {
-        switch selection {
-        case .thread, .compose:
-            .messages
-        case .overview, .messages, .homework, .grades, .timetable, .school:
-            selection
+    /// Aktiver Reiter: Thread und Verfassen gehören zu Nachrichten.
+    private func isActive(_ section: TopBarSection) -> Bool {
+        guard let selection else { return false }
+        switch (section, selection) {
+        case (.messages, .thread), (.messages, .compose):
+            return true
         default:
-            nil
+            return selection == section.route
         }
     }
 
@@ -187,23 +187,10 @@ private struct TopPillNav: View {
                         .clipShape(.capsule)
                         .help(NSLocalizedString("content_demo_hint", value: "Nur synthetische Beispieldaten vom lokalen Fake-Server", comment: "Navigation: Demo-Hinweis"))
                 }
-                NavPill(title: "Übersicht", active: activeSection == .overview) {
-                    onNavigate(.overview)
-                }
-                NavPill(title: "Nachrichten", active: activeSection == .messages) {
-                    onNavigate(.messages)
-                }
-                NavPill(title: "Hausaufgaben", active: activeSection == .homework) {
-                    onNavigate(.homework)
-                }
-                NavPill(title: "Noten", active: activeSection == .grades) {
-                    onNavigate(.grades)
-                }
-                NavPill(title: "Stundenplan", active: activeSection == .timetable) {
-                    onNavigate(.timetable)
-                }
-                NavPill(title: "Termine", active: activeSection == .school) {
-                    onNavigate(.school)
+                ForEach(sections) { section in
+                    NavPill(title: section.title, active: isActive(section)) {
+                        onNavigate(section.route)
+                    }
                 }
                 avatarMenu
                     .padding(.trailing, 4)
@@ -221,20 +208,26 @@ private struct TopPillNav: View {
         }
         .padding(.top, 0)
         .padding(.horizontal, 16)
+        .onReceive(NotificationCenter.default.publisher(for: .topBarConfigDidChange)) { _ in
+            sections = TopBarConfig.visible
+        }
     }
 
-    /// Avatar mit Profilmenü wie `.profile-menu` (Einstellungen, Geräte, Abmelden).
+    /// Avatar mit Profilmenü wie `.profile-menu` (Einstellungen, Geräte,
+    /// Termine, Abmelden). Größere Darstellung mit erweiterter Klickfläche.
     private var avatarMenu: some View {
         Button { profileMenuOpen.toggle() } label: {
             Text(String(store.username.prefix(1).uppercased()))
-                .font(UberFont.text(15, weight: .heavy))
-                .frame(width: 38, height: 38)
+                .font(UberFont.text(17, weight: .heavy))
+                .frame(width: 44, height: 44)
                 .background(EduFlowPalette.surface2(scheme))
                 .foregroundStyle(EduFlowPalette.ink(scheme))
                 .clipShape(.circle)
                 .overlay(Circle().stroke(EduFlowPalette.border(scheme), lineWidth: 1))
         }
         .buttonStyle(.plain)
+        .padding(6)
+        .contentShape(.circle)
         .accessibilityLabel(NSLocalizedString("common_profile_menu_open", value: "Profilmenü öffnen", comment: "Navigation: Profilmenü"))
         .help("\(store.username) @ \(store.subdomain)")
         .popover(isPresented: $profileMenuOpen, arrowEdge: .top) {
@@ -261,6 +254,10 @@ private struct TopPillNav: View {
                 profileAction("Geräte", icon: "laptopcomputer.and.iphone") {
                     profileMenuOpen = false
                     onNavigate(.devices)
+                }
+                profileAction("Termine & Vertretungen", icon: "calendar") {
+                    profileMenuOpen = false
+                    onNavigate(.school)
                 }
                 Divider()
                 profileAction("Abmelden", icon: "rectangle.portrait.and.arrow.right", isDestructive: true) {

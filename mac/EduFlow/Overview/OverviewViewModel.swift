@@ -1,10 +1,16 @@
 import Foundation
 
-/// Übersichts-Logik (Paket D): Uhr, ungelesene Nachrichten, offene
-/// Hausaufgaben, aktuelle/nächste Stunde, Wetterkarte.
-/// Wiederverwendet die Listen aus den Paketen B und C (keine eigene
-/// Server-Logik); Teilergebnisse bleiben sichtbar, Fehler werden
-/// einzeln gemeldet.
+/// Übersichts-Logik: Uhr, Nachrichten, Hausaufgaben, aktuelle/nächste
+/// Stunde, Wetterkarte. Wiederverwendet die Listen aus den Paketen B
+/// und C (keine eigene Server-Logik); Teilergebnisse bleiben sichtbar,
+/// Fehler werden einzeln gemeldet.
+///
+/// Hausaufgaben-Regel: `homework` enthält nur die tatsächlich geladene,
+/// sichtbare Auswahl (ohne erledigte/versteckte Aufgaben); `homeworkOpen`
+/// und `homeworkOverdue` werden daraus abgeleitet, damit Liste und Zähler
+/// immer zusammenpassen. Die Server-Totale (`homeworkTotalOpen`,
+/// `homeworkTotalOverdue`, `homeworkDone`) dienen nur Links, Hinweisen
+/// und Leerzuständen.
 @MainActor
 @Observable
 public final class OverviewViewModel {
@@ -16,6 +22,9 @@ public final class OverviewViewModel {
     public var homeworkOpen: Int = 0
     public var homeworkOverdue: Int = 0
     public var homeworkDone: Int = 0
+    public var homeworkTotalOpen: Int = 0
+    public var homeworkTotalOverdue: Int = 0
+    public var homeworkHasMore = false
     public var homeworkError: APIError?
     public var lessons: [Lesson] = []
     public var lessonsError: APIError?
@@ -44,9 +53,13 @@ public final class OverviewViewModel {
             try await MessagesRepository(client: client)
                 .list(limit: max(settings.ovUnread, 1), refresh: refresh)
         }
+        // Status "alle": Der Server sortiert überfällig zuerst, erledigte
+        // zuletzt — so landen die relevanten Aufgaben auf Seite 1 und die
+        // sichtbare Auswahl wird lokal daraus abgeleitet (statt globaler
+        // Zähler neben einer gefilterten Teilliste).
         async let homeworkTask = Self.capture {
             try await HomeworkRepository(client: client)
-                .list(status: HomeworkStatusFilter.offen, limit: max(settings.ovHomework, 1), refresh: refresh)
+                .list(status: HomeworkStatusFilter.alle, limit: max(settings.ovHomework, 1), refresh: refresh)
         }
         async let dayTask = Self.capture {
             try await TimetableRepository(client: client).day(nil, refresh: refresh)
@@ -61,18 +74,41 @@ public final class OverviewViewModel {
             messagesError = nil
         case .failure(let error):
             messages = []
+            messagesTotal = 0
             messagesError = error
             expired = expired || SessionRecovery.forceLogout(error: error, isLoggedIn: store.isLoggedIn)
         }
         switch homeworkResult {
         case .success(let response):
-            homework = response.items
-            homeworkOpen = response.counts?.offen ?? response.total
-            homeworkOverdue = response.counts?.ueberfaellig ?? 0
-            homeworkDone = response.counts?.erledigt ?? 0
+            let counts = response.counts ?? HomeworkCounts()
+            homeworkTotalOpen = counts.offen
+            homeworkTotalOverdue = counts.ueberfaellig
+            homeworkDone = counts.erledigt
+            // Sichtbar: nur tatsächlich geladene Aufgaben ohne erledigte
+            // oder versteckte (Papierkorb) — in Server-Sortierung.
+            let visible = response.items.filter {
+                !$0.isHidden && !$0.isDone
+                    && $0.status != HomeworkItemStatus.erledigt
+                    && $0.status != HomeworkStatusFilter.papierkorb
+            }
+            homework = visible
+            let overdue = visible.filter { $0.status == HomeworkItemStatus.ueberfaellig }.count
+            homeworkOverdue = overdue
+            homeworkOpen = visible.count - overdue
+            // Relevante Totale (offen + überfällig); fällt auf die
+            // sichtbare Anzahl zurück, damit die Angabe nie der Liste
+            // widerspricht (z. B. bei fehlenden Zählern).
+            let relevant = max(counts.offen + counts.ueberfaellig, visible.count)
+            homeworkHasMore = relevant > visible.count
             homeworkError = nil
         case .failure(let error):
             homework = []
+            homeworkOpen = 0
+            homeworkOverdue = 0
+            homeworkDone = 0
+            homeworkTotalOpen = 0
+            homeworkTotalOverdue = 0
+            homeworkHasMore = false
             homeworkError = error
             expired = expired || SessionRecovery.forceLogout(error: error, isLoggedIn: store.isLoggedIn)
         }
@@ -148,6 +184,33 @@ public final class OverviewViewModel {
                 message: APIError.germanFallback(for: ErrorCodes.upstream)
             )
         }
+    }
+
+    /// Relevante Gesamtzahl (offen + überfällig, nie kleiner als die
+    /// sichtbare Auswahl) für Links und Leerzustände.
+    public var homeworkRelevantTotal: Int {
+        max(homeworkTotalOpen + homeworkTotalOverdue, homework.count)
+    }
+
+    /// In der Übersicht gezeigte Nachrichten (kompakt, max. 5).
+    public var shownMessages: [MessageDTO] {
+        Array(messages.prefix(5))
+    }
+
+    /// True, wenn mehr Nachrichten existieren als gezeigt werden
+    /// (Server-Totale oder geladene, aber abgeschnittene Liste).
+    public var messagesHasMore: Bool {
+        messagesTotal > shownMessages.count || messages.count > shownMessages.count
+    }
+
+    /// Anzahl weiterer Nachrichten jenseits der gezeigten Auswahl.
+    public var messagesMoreCount: Int {
+        max(messagesTotal - shownMessages.count, messages.count - shownMessages.count, 0)
+    }
+
+    /// Anzahl weiterer Hausaufgaben jenseits der sichtbaren Auswahl.
+    public var homeworkMoreCount: Int {
+        max(homeworkRelevantTotal - homework.count, 0)
     }
 
     /// Aktuelle und nächste Stunde aus den Tagesstunden (wie im Web).

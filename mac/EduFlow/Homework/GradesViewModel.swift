@@ -24,26 +24,33 @@ public final class GradesViewModel {
     public var canLoadMore: Bool { items.count < total }
 
     /// Noten im gewählten Tab plus Suche (Fächer alphabetisch, Noten
-    /// neueste zuerst wie im Web).
+    /// neueste zuerst wie im Web; Suche ohne Unterschied bei Umlauten
+    /// und Groß-/Kleinschreibung wie die Web-Ansicht).
     public var visible: [(subject: String, grades: [GradeDTO], average: Double?)] {
+        func fold(_ value: String) -> String {
+            value.folding(options: .diacriticInsensitive, locale: .current).lowercased()
+        }
         let inTab = items.filter { item in
             guard tab != .all else { return true }
             return HalfYear.key(for: item.dateIso) == tab
         }
-        let needle = search.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        let needle = fold(search.trimmingCharacters(in: .whitespacesAndNewlines))
         let matching = inTab.filter { item in
             guard !needle.isEmpty else { return true }
-            let hay = [
+            let hay = fold([
                 item.title, item.subject, item.teacher, item.comment,
-                item.gradeDisplay, item.gradeSub,
-            ].compactMap { $0 }.joined(separator: " ").lowercased()
+                item.gradeDisplay, item.gradeSub, item.dateDisplay,
+                item.weightDisplay,
+            ].compactMap { $0 }.joined(separator: " "))
             return hay.contains(needle)
         }
         var groups: [String: [GradeDTO]] = [:]
         for item in matching {
             groups[item.subject ?? NSLocalizedString("grades_subject_other", value: "Sonstiges", comment: "Noten: Fach-Fallback"), default: []].append(item)
         }
-        return groups.keys.sorted().map { subject in
+        return groups.keys.sorted {
+            $0.localizedCaseInsensitiveCompare($1) == .orderedAscending
+        }.map { subject in
             let grades = (groups[subject] ?? []).sorted {
                 ($0.sortKey ?? "") > ($1.sortKey ?? "")
             }

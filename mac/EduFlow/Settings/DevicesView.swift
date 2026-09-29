@@ -35,6 +35,9 @@ public struct DevicesView: View {
                         .frame(maxWidth: .infinity)
                         .padding(48)
                 } else {
+                    if let error = vm.error {
+                        Notice(error.message)
+                    }
                     VStack(spacing: 8) {
                         ForEach(Array(vm.devices.enumerated()), id: \.element.id) { index, device in
                             HStack(spacing: 10) {

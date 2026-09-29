@@ -63,14 +63,14 @@ public struct GradesListResponse: Decodable, Sendable {
 }
 
 /// Gewichteter Schnitt wie `grades_average` in `app.py`: klassische
-/// Noten im gültigen Bereich mit Gewichtung, auf zwei Stellen gerundet.
-/// Reine Logik (offline testbar).
+/// Noten im gültigen Bereich (1 bis 6) mit Gewichtung, auf zwei Stellen
+/// gerundet. Reine Logik (offline testbar).
 public enum GradesAverage {
     public static func of(_ items: [GradeDTO]) -> Double? {
         var total = 0.0
         var weights = 0.0
         for item in items {
-            guard let num = item.gradeNum, item.isClassic == true else { continue }
+            guard let num = item.gradeNum, item.isClassic == true, (1...6).contains(num) else { continue }
             let weight = ((item.weight ?? 0) > 0) ? (item.weight ?? 1) : 1
             total += num * weight
             weights += weight

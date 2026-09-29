@@ -126,12 +126,55 @@ public struct MessagesRepository: Sendable {
 
     /// Anhang laden (authentifizierter Proxy, nur EduPage-Adressen
     /// serverseitig; Dateiname aus den Nachrichtendaten).
-    public func downloadAttachment(eventId: Int, index: Int) async throws -> URL {
+    /// Der Client-Download landet zuerst unter einem Temp-Namen; mit
+    /// `filename` wird die Datei auf den bereinigten Originalnamen
+    /// umbenannt (Teilen zeigt den echten Namen).
+    public func downloadAttachment(eventId: Int, index: Int, filename: String? = nil) async throws -> URL {
         let token = try await downloadToken(eventId: eventId, index: index)
-        return try await client.download(
+        let file = try await client.download(
             APIClient.Paths.attachment(eventId, index),
             query: [URLQueryItem(name: "dl", value: token.downloadToken)],
             useTokenQuery: false
         )
+        let raw = (filename ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !raw.isEmpty else {
+            return file
+        }
+        let target = file.deletingLastPathComponent()
+            .appendingPathComponent(Self.safeFilename(raw, index: index), isDirectory: false)
+        guard target != file else {
+            return file
+        }
+        if FileManager.default.fileExists(atPath: target.path) {
+            try? FileManager.default.removeItem(at: target)
+        }
+        do {
+            try FileManager.default.moveItem(at: file, to: target)
+            return target
+        } catch {
+            return file
+        }
+    }
+
+    /// Dateiname bereinigen (keine Pfad-Trennzeichen, max. 120 Zeichen;
+    /// Fallback nummeriert wie in der Ansicht).
+    public static func safeFilename(_ name: String, index: Int) -> String {
+        var clean = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        for separator in ["/", "\\", ":"] {
+            clean = clean.replacingOccurrences(of: separator, with: "_")
+        }
+        clean = clean.filter { !$0.isNewline }
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+        if clean.isEmpty {
+            return "Datei \(index + 1)"
+        }
+        if clean.count > 120 {
+            let prefix = String(clean.prefix(120)).trimmingCharacters(in: .whitespacesAndNewlines)
+            clean = prefix.isEmpty ? "Datei \(index + 1)" : prefix
+        }
+        if clean == "." || clean == ".." {
+            return "Datei \(index + 1)"
+        }
+        return clean
     }
 }
