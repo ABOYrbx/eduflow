@@ -31,9 +31,9 @@ describe("DemoSchoolService", () => {
   beforeEach(() => { states.clear(); jest.clearAllMocks(); service = new DemoSchoolService(prisma as never); });
 
   it("keeps message search, type filters and pagination behavior", async () => {
-    const page = await service.messages({ sub: "acct", jti: "t", tokenUse: "access" }, { type: "sprava", q: "FRAU BERGER Elternabend", limit: "1" });
+    const page = await service.messages({ sub: "acct", jti: "t", tokenUse: "access" }, { type: "sprava", q: "MS BERGER parent-teacher", limit: "1" });
     expect(page.total).toBe(1);
-    expect(page.items[0]).toMatchObject({ id: 4101, type_label: "Nachricht" });
+    expect(page.items[0]).toMatchObject({ id: 4101, type_label: "Message" });
     await expect(service.messages({ sub: "acct", jti: "t", tokenUse: "access" }, { type: "bogus" })).rejects.toMatchObject({ response: { code: "VALIDATION" } });
   });
 
@@ -62,7 +62,7 @@ describe("DemoSchoolService", () => {
   it("returns five school days, agenda, grades and demo weather", () => {
     const week = service.timetableWeek({ day: "2026-09-24" });
     expect(week.days).toHaveLength(5);
-    expect(week.days[0]?.day_name).toBe("Montag");
+    expect(week.days[0]?.day_name).toBe("Monday");
     expect(service.timetableDay({ day: "2026-09-25" }).lessons).toHaveLength(4);
     expect(service.timetableDay({ day: "2026-09-26" }).lessons).toHaveLength(0);
     expect(service.agenda({}).items.map((item) => item.kind)).toEqual(expect.arrayContaining(["event", "exam", "attendance"]));
