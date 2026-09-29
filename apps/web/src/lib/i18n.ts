@@ -6,6 +6,11 @@ type Vars = Record<string, string | number>;
 export const FALLBACK_LOCALE = "en";
 export const LOCALE_COOKIE = "eduflow_locale";
 
+/** Cookie-String für die Sprachwahl (1 Jahr, eigener Pfad, Lax). */
+export function localeCookie(code: string): string {
+  return `${LOCALE_COOKIE}=${code}; path=/; max-age=31536000; SameSite=Lax`;
+}
+
 /** Zusätzliche Kataloge (der Server registriert alle via lib/locales). */
 const extraCatalogs: Record<string, unknown> = {};
 export function registerCatalogs(catalogs: Record<string, unknown>): void {

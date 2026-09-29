@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { LOCALE_COOKIE, NATIVE_NAMES, normalizeLocaleTag, t } from "../../lib/i18n";
+import { NATIVE_NAMES, localeCookie, normalizeLocaleTag, setActiveLocale, t } from "../../lib/i18n";
 
 declare global {
   interface Window {
@@ -35,12 +35,15 @@ export function ThemeToggle() {
   return (
     <>
     <select
-      className="auth-top-right auth-lang-select"
+      className="auth-top-left auth-lang-select"
       aria-label={t("theme.language")}
       value={locale}
       onChange={(event) => {
         const next = normalizeLocaleTag(event.target.value) ?? "en";
-        document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=31536000; samesite=lax`;
+        document.cookie = localeCookie(next);
+        setLocale(next);
+        setActiveLocale(next);
+        document.documentElement.lang = next;
         window.location.reload();
       }}
     >

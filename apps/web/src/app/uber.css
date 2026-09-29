@@ -380,6 +380,7 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 .theme-toggle.is-dark .theme-icon-moon{opacity:0;transform:rotate(80deg) scale(.55)}
 .theme-toggle.is-dark .theme-icon-sun{opacity:1;transform:rotate(0) scale(1)}
 .auth-top-right{position:fixed;top:18px;right:18px;z-index:99}
+.auth-top-left{position:fixed;top:18px;left:18px;z-index:99}
 
 /* ---------- Dark Mode ---------- */
 [data-theme="dark"]{

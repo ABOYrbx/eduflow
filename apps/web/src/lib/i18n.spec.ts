@@ -1,5 +1,6 @@
 import {
   getCatalog,
+  localeCookie,
   localeTag,
   normalizeLocaleTag,
   parseAcceptLanguage,
@@ -131,5 +132,11 @@ describe("resolveLocale", () => {
     expect(resolveLocale(["xx", "fr"], supported)).toBe("fr");
     expect(resolveLocale(["xx", null], supported)).toBe("en");
     expect(resolveLocale([], supported)).toBe("en");
+  });
+});
+
+describe("localeCookie", () => {
+  it("baut einen jahresgültigen Cookie-String mit Pfad", () => {
+    expect(localeCookie("de")).toBe("eduflow_locale=de; path=/; max-age=31536000; SameSite=Lax");
   });
 });
