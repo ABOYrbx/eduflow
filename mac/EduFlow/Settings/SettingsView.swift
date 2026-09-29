@@ -37,6 +37,7 @@ public struct SettingsView: View {
                         .padding(48)
                 } else {
                     startSection
+                    timeSection
                     navigationSection
                     homeworkSection
                     overviewSection
@@ -77,6 +78,20 @@ public struct SettingsView: View {
                     RadioCard(title: NSLocalizedString("Homework", value: "Homework", comment: "Einstellungen: Startseite Aufgaben"), desc: NSLocalizedString("settings_landing_homework_desc", value: "Go straight to homework", comment: "Einstellungen: Startseite Aufgaben Beschreibung"), value: "hausaufgaben", selection: $vm.values.landing)
                     RadioCard(title: NSLocalizedString("grades_nav", value: "Grades", comment: "Einstellungen: Startseite Noten"), desc: NSLocalizedString("settings_landing_grades_desc", value: "Go straight to grades", comment: "Einstellungen: Startseite Noten Beschreibung"), value: "noten", selection: $vm.values.landing)
                     RadioCard(title: NSLocalizedString("Timetable", value: "Timetable", comment: "Einstellungen: Startseite Stundenplan"), desc: NSLocalizedString("settings_landing_timetable_desc", value: "Go straight to timetable", comment: "Einstellungen: Startseite Stundenplan Beschreibung"), value: "stundenplan", selection: $vm.values.landing)
+                }
+            }
+        }
+    }
+
+    private var timeSection: some View {
+        UberCard {
+            VStack(alignment: .leading, spacing: 10) {
+                Text(NSLocalizedString("settings_time_title", value: "Clock format", comment: "Einstellungen: Uhrzeitformat Titel"))
+                    .font(UberFont.text(19, weight: .heavy))
+                    .tracking(-0.4)
+                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+                    RadioCard(title: NSLocalizedString("settings_time_24", value: "24-hour", comment: "Einstellungen: 24 Stunden"), desc: NSLocalizedString("settings_time_24_desc", value: "e.g. 14:05", comment: "Einstellungen: 24 Stunden Beispiel"), value: "24h", selection: $vm.values.timeFormat)
+                    RadioCard(title: NSLocalizedString("settings_time_12", value: "12-hour", comment: "Einstellungen: 12 Stunden"), desc: NSLocalizedString("settings_time_12_desc", value: "e.g. 2:05 PM", comment: "Einstellungen: 12 Stunden Beispiel"), value: "12h", selection: $vm.values.timeFormat)
                 }
             }
         }

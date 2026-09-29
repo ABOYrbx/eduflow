@@ -248,11 +248,13 @@ class AuthPackageTest {
             "hw_status" to "gibts-nicht",
             "ov_unread" to "999",
             "ov_homework" to "-5",
+            "time_format" to "13h",
         ).typedValues()
         assertEquals("uebersicht", values.landing)
         assertEquals("alle", values.hwStatus)
         assertEquals(50, values.ovUnread)
         assertEquals(1, values.ovHomework)
+        assertEquals("24h", values.timeFormat)
         assertTrue(values.ovWetter) // Default: Wetterkarte an
         assertEquals("", values.wetterCity)
     }

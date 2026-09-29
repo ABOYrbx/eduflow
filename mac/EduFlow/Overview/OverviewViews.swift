@@ -16,12 +16,23 @@ public struct OverviewView: View {
     private let onNavigate: (Route) -> Void
     private let onSessionExpired: () -> Void
 
-    private static let clock: DateFormatter = {
+    private static let clock24: DateFormatter = {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "de_DE")
         formatter.dateFormat = "HH:mm:ss"
         return formatter
     }()
+
+    private static let clock12: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "de_DE")
+        formatter.dateFormat = "h:mm:ss a"
+        return formatter
+    }()
+
+    private static func clockString(from date: Date, timeFormat: String) -> String {
+        (timeFormat == "12h" ? clock12 : clock24).string(from: date)
+    }
 
     private static let dateLine: DateFormatter = {
         let formatter = DateFormatter()
@@ -168,7 +179,7 @@ public struct OverviewView: View {
     private var clockCard: some View {
         VStack(alignment: .leading, spacing: 6) {
             Spacer()
-            Text(Self.clock.string(from: now))
+            Text(Self.clockString(from: now, timeFormat: vm.settings.timeFormat))
                 .font(UberFont.text(44, weight: .heavy))
                 .tracking(-1.5)
                 .monospacedDigit()

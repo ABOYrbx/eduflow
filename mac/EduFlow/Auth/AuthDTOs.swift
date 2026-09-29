@@ -244,6 +244,7 @@ public struct SettingsValues: Equatable, Sendable {
     public var ovOrder = "messages,homework,weather"
     public var ovWetter = true
     public var wetterCity = ""
+    public var timeFormat = "24h"
 
     public init() {}
 
@@ -276,6 +277,10 @@ public struct SettingsValues: Equatable, Sendable {
         }
         if let raw = values["wetter_city"]?.string {
             out.wetterCity = raw
+        }
+        let formats = ["24h", "12h"]
+        if let raw = values["time_format"]?.string, formats.contains(raw) {
+            out.timeFormat = raw
         }
         return out
     }

@@ -73303,6 +73303,931 @@
           }
         }
       }
+    },
+    "settings_time_title": {
+      "comment": "Einstellungen: Uhrzeitformat Titel",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clock format"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Uhrzeitformat"
+          }
+        }
+      }
+    },
+    "settings_time_24": {
+      "comment": "Einstellungen: 24 Stunden",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24 Stunden"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "24-hour"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "24 Stunden"
+          }
+        }
+      }
+    },
+    "settings_time_24_desc": {
+      "comment": "Einstellungen: 24 Stunden Beispiel",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "z. B. 14:05"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "e.g. 14:05"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 14:05"
+          }
+        }
+      }
+    },
+    "settings_time_12": {
+      "comment": "Einstellungen: 12 Stunden",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "12 Stunden"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "12-hour"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "12 Stunden"
+          }
+        }
+      }
+    },
+    "settings_time_12_desc": {
+      "comment": "Einstellungen: 12 Stunden Beispiel",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "e.g. 2:05 PM"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. 2:05 PM"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

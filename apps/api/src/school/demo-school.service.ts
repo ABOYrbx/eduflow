@@ -23,9 +23,9 @@ const settingsSchema: SettingSpec[] = [
 ];
 const defaults: Record<string, unknown> = Object.fromEntries(settingsSchema.map((item) => [item.key, item.default]));
 const hash = (text: string) => createHash("sha256").update(text).digest("hex");
-const norm = (text: unknown) => typeof text === "string" ? text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("de-DE") : "";
+const norm = (text: unknown) => typeof text === "string" ? text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("en") : "";
 const dateOnly = (value: string | Date) => new Date(value).toISOString().slice(0, 10);
-const germanDays = ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"];
+const englishDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const germanMonths = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 const parseDate = (input: unknown, fallback: Date): Date => {
   if (input === undefined || input === "") return fallback;
@@ -110,7 +110,7 @@ export class DemoSchoolService {
     const text = typeof input.body === "string" ? input.body.trim() : "";
     if (!recipients.length || !text || recipients.some((id) => !demoRecipients.some((recipient) => recipient.id === id))) throw new BadRequestException({ error: t("messages.recipientsBody"), code: "VALIDATION" });
     const now = new Date(); const stamp = now.toISOString().slice(0, 19).replace("T", " ");
-    const message = { id: 4999 + this.sentMessages.length, timestamp: stamp, timestamp_iso: now.toISOString(), sort_key: now.toISOString(), text, author: "Demo-Schüler", recipient: recipients.map((id) => demoRecipients.find((r) => r.id === id)?.name).join(", "), type: "sprava", type_label: "Nachricht", additional_data: {}, is_starred: false, is_done: false, done_at: "", reaction_count: 0, created_at: now.toISOString(), is_removed: false };
+    const message = { id: 4999 + this.sentMessages.length, timestamp: stamp, timestamp_iso: now.toISOString(), sort_key: now.toISOString(), text, author: "Demo student", recipient: recipients.map((id) => demoRecipients.find((r) => r.id === id)?.name).join(", "), type: "sprava", type_label: "Message", additional_data: {}, is_starred: false, is_done: false, done_at: "", reaction_count: 0, created_at: now.toISOString(), is_removed: false };
     this.sentMessages.unshift(message);
     return message;
   }
@@ -122,7 +122,7 @@ export class DemoSchoolService {
     const text = typeof body === "object" && body !== null && "body" in body && typeof (body as { body?: unknown }).body === "string" ? (body as { body: string }).body.trim() : "";
     if (!text) throw new BadRequestException({ error: t("messages.noReplyAlt"), code: "VALIDATION" });
     const now = new Date(); const stamp = now.toISOString().slice(0, 19).replace("T", " ");
-    const reply = { id: 4999 + this.sentMessages.length, timestamp: stamp, timestamp_iso: now.toISOString(), sort_key: now.toISOString(), text, author: "Demo-Schüler", recipient: root.author, type: root.type, type_label: root.type_label, additional_data: { textReply: String(id) }, is_starred: false, is_done: false, done_at: "", reaction_count: 0, created_at: now.toISOString(), is_removed: false };
+    const reply = { id: 4999 + this.sentMessages.length, timestamp: stamp, timestamp_iso: now.toISOString(), sort_key: now.toISOString(), text, author: "Demo student", recipient: root.author, type: root.type, type_label: root.type_label, additional_data: { textReply: String(id) }, is_starred: false, is_done: false, done_at: "", reaction_count: 0, created_at: now.toISOString(), is_removed: false };
     this.sentMessages.push(reply);
     // Wie der Echt-Provider (edupage/data.ts): Thread frisch zurückgeben,
     // nicht das Nachrichten-Objekt (Web ignoriert den Body, Mac/Android
@@ -150,7 +150,7 @@ export class DemoSchoolService {
     if (!claims) throw new NotFoundException({ error: t("messages.attachment"), code: "NOT_FOUND" });
     const item = this.sentMessages.find((message) => message.id === id);
     if (!item || idx !== 0 || typeof item.additional_data.filename !== "string") throw new NotFoundException({ error: t("messages.attachment"), code: "NOT_FOUND" });
-    return { filename: item.additional_data.filename, content: Buffer.from("EduFlow-Demo: Beispielanhang\n", "utf8") };
+    return { filename: item.additional_data.filename, content: Buffer.from("EduFlow demo: sample attachment\n", "utf8") };
   }
 
   async homework(claims: AuthClaims, query: Record<string, unknown>) {
@@ -180,7 +180,7 @@ export class DemoSchoolService {
     });
     const rank: Record<string, number> = { "überfällig": 0, "heute fällig": 1, offen: 2, erledigt: 3 };
     all.sort((a, b) => Number(a.is_hidden) - Number(b.is_hidden) || (rank[a.status] ?? 4) - (rank[b.status] ?? 4) || a.due.localeCompare(b.due));
-    return { ...this.page(all, query), counts, cache_info: "Beispieldaten" };
+    return { ...this.page(all, query), counts, cache_info: "Sample data" };
   }
 
   async homeworkChange(claims: AuthClaims, id: string, mode: "done" | "trash", body: unknown) {
@@ -203,38 +203,38 @@ export class DemoSchoolService {
   timetableDay(query: Record<string, unknown>) {
     this.assertEnabled(); const day = parseDate(query.day, new Date()); const iso = dateOnly(day);
     const isWeekend = day.getUTCDay() === 0 || day.getUTCDay() === 6;
-    return { day: iso, day_label: `${germanDays[day.getUTCDay()]} ${day.toLocaleDateString("de-DE", { timeZone: "UTC", day: "2-digit", month: "2-digit", year: "numeric" })}`, prev_day: dateOnly(new Date(day.getTime() - 86400000)), next_day: dateOnly(new Date(day.getTime() + 86400000)), today: dateOnly(new Date()), lessons: isWeekend ? [] : [...demoLessons], cache_info: "Beispieldaten" };
+    return { day: iso, day_label: `${englishDays[day.getUTCDay()]} ${day.toLocaleDateString("en-US", { timeZone: "UTC", day: "2-digit", month: "2-digit", year: "numeric" })}`, prev_day: dateOnly(new Date(day.getTime() - 86400000)), next_day: dateOnly(new Date(day.getTime() + 86400000)), today: dateOnly(new Date()), lessons: isWeekend ? [] : [...demoLessons], cache_info: "Sample data" };
   }
 
   timetableWeek(query: Record<string, unknown>) {
     this.assertEnabled(); const day = parseDate(query.day, new Date()); const monday = new Date(day); monday.setUTCDate(monday.getUTCDate() - (monday.getUTCDay() + 6) % 7);
-    const days = Array.from({ length: 5 }, (_, i) => { const current = new Date(monday); current.setUTCDate(monday.getUTCDate() + i); return { date: dateOnly(current), day_name: germanDays[current.getUTCDay()], day_date: current.toLocaleDateString("de-DE", { timeZone: "UTC", day: "2-digit", month: "2-digit" }), is_today: dateOnly(current) === dateOnly(new Date()), lessons: [...demoLessons] }; });
+    const days = Array.from({ length: 5 }, (_, i) => { const current = new Date(monday); current.setUTCDate(monday.getUTCDate() + i); return { date: dateOnly(current), day_name: englishDays[current.getUTCDay()], day_date: current.toLocaleDateString("en-US", { timeZone: "UTC", day: "2-digit", month: "2-digit" }), is_today: dateOnly(current) === dateOnly(new Date()), lessons: [...demoLessons] }; });
     const friday = new Date(monday); friday.setUTCDate(monday.getUTCDate() + 4);
-    return { day: dateOnly(day), monday: dateOnly(monday), week_label: `Woche ${monday.toLocaleDateString("de-DE", { timeZone: "UTC", day: "2-digit", month: "2-digit" })} – ${friday.toLocaleDateString("de-DE", { timeZone: "UTC", day: "2-digit", month: "2-digit", year: "numeric" })}`, days, cache_info: "Woche aus Beispieldaten" };
+    return { day: dateOnly(day), monday: dateOnly(monday), week_label: `Week ${monday.toLocaleDateString("en-US", { timeZone: "UTC", day: "2-digit", month: "2-digit" })} – ${friday.toLocaleDateString("en-US", { timeZone: "UTC", day: "2-digit", month: "2-digit", year: "numeric" })}`, days, cache_info: "Sample-data week" };
   }
 
   substitutions(query: Record<string, unknown>) {
     this.assertEnabled(); const day = parseDate(query.day, new Date()); const monday = new Date(day); monday.setUTCDate(monday.getUTCDate() - (monday.getUTCDay() + 6) % 7); const friday = new Date(monday); friday.setUTCDate(monday.getUTCDate() + 4);
-    const days = Array.from({ length: 5 }, (_, i) => { const current = new Date(monday); current.setUTCDate(monday.getUTCDate() + i); return { date: dateOnly(current), day_label: `${germanDays[current.getUTCDay()]} ${current.toLocaleDateString("de-DE", { timeZone: "UTC" })}`, changes: i === 1 ? [{ class: "8A", lesson: "4", title: "Raumänderung", action: "changeroom" }] : [] }; });
-    return { monday: dateOnly(monday), week_label: `Woche ${monday.toLocaleDateString("de-DE", { timeZone: "UTC", day: "2-digit", month: "2-digit" })} – ${friday.toLocaleDateString("de-DE", { timeZone: "UTC", day: "2-digit", month: "2-digit", year: "numeric" })}`, days };
+    const days = Array.from({ length: 5 }, (_, i) => { const current = new Date(monday); current.setUTCDate(monday.getUTCDate() + i); return { date: dateOnly(current), day_label: `${englishDays[current.getUTCDay()]} ${current.toLocaleDateString("en-US", { timeZone: "UTC" })}`, changes: i === 1 ? [{ class: "8A", lesson: "4", title: "Room change", action: "changeroom" }] : [] }; });
+    return { monday: dateOnly(monday), week_label: `Week ${monday.toLocaleDateString("en-US", { timeZone: "UTC", day: "2-digit", month: "2-digit" })} – ${friday.toLocaleDateString("en-US", { timeZone: "UTC", day: "2-digit", month: "2-digit", year: "numeric" })}`, days };
   }
 
   agenda(query: Record<string, unknown>) {
     this.assertEnabled(); const now = new Date(); const since = parseDate(query.since, new Date(now.getTime() - 30 * 86400000)); const until = parseDate(query.until, new Date(now.getTime() + 60 * 86400000));
     if (until < since || (until.getTime() - since.getTime()) / 86400000 > 366) throw new BadRequestException({ error: t("validation.yearRange"), code: "VALIDATION" });
     const items = [
-      { id: 7101, kind: "event", date: dateOnly(new Date(now.getTime() + 3 * 86400000)), text: "Elternabend", title: "Elternabend", author: "Schule", type: "parentsevening", timestamp_iso: now.toISOString() },
-      { id: 7102, kind: "exam", date: dateOnly(new Date(now.getTime() + 5 * 86400000)), text: "Lernzielkontrolle: Kräfte", title: "Lernzielkontrolle: Kräfte", subject: "Physik", type: "bexam", due: dateOnly(new Date(now.getTime() + 5 * 86400000)), assigned_iso: now.toISOString() },
-      { id: 7103, kind: "attendance", date: dateOnly(new Date(now.getTime() - 2 * 86400000)), text: "Anwesenheit bestätigt", title: "Anwesenheit bestätigt", type: "student_absent", timestamp_iso: now.toISOString() },
+      { id: 7101, kind: "event", date: dateOnly(new Date(now.getTime() + 3 * 86400000)), text: "Parent-teacher conferences", title: "Parent-teacher conferences", author: "School", type: "parentsevening", timestamp_iso: now.toISOString() },
+      { id: 7102, kind: "exam", date: dateOnly(new Date(now.getTime() + 5 * 86400000)), text: "Quiz: forces", title: "Quiz: forces", subject: "Physics", type: "bexam", due: dateOnly(new Date(now.getTime() + 5 * 86400000)), assigned_iso: now.toISOString() },
+      { id: 7103, kind: "attendance", date: dateOnly(new Date(now.getTime() - 2 * 86400000)), text: "Attendance confirmed", title: "Attendance confirmed", type: "student_absent", timestamp_iso: now.toISOString() },
     ].filter((item) => item.date >= dateOnly(since) && item.date <= dateOnly(until)).sort((a, b) => a.date.localeCompare(b.date));
-    return { items, total: items.length, since: dateOnly(since), until: dateOnly(until), cache_info: "Beispieldaten" };
+    return { items, total: items.length, since: dateOnly(since), until: dateOnly(until), cache_info: "Sample data" };
   }
 
-  grades(query: Record<string, unknown>) { this.assertEnabled(); return { ...this.page([...demoGrades], query), cache_info: "Beispieldaten" }; }
+  grades(query: Record<string, unknown>) { this.assertEnabled(); return { ...this.page([...demoGrades], query), cache_info: "Sample data" }; }
 
   weather(query: Record<string, unknown>) {
     this.assertEnabled(); const city = typeof query.city === "string" && query.city.trim() ? query.city.trim().slice(0, 100) : "Berlin";
-    return { city, today: { temp: 18, max: 20, min: 12, desc: "Leicht bewölkt", icon: "02d", pop: 10 }, tomorrow: { max: 19, min: 11, desc: "Sonnig", icon: "01d", pop: 0 }, day3: { label: germanDays[(new Date().getDay() + 2) % 7], max: 17, min: 10, desc: "Wolkig", icon: "03d", pop: 20 }, hourly: [], details: { feels_like: 17, humidity: 55, pressure: 1013, wind: 3.2, wind_kmh: 12, wind_dir: "W", visibility_km: 10, sunrise: "06:45", sunset: "19:20" } };
+    return { city, today: { temp: 18, max: 20, min: 12, desc: "Partly cloudy", icon: "02d", pop: 10 }, tomorrow: { max: 19, min: 11, desc: "Sunny", icon: "01d", pop: 0 }, day3: { label: englishDays[(new Date().getDay() + 2) % 7], max: 17, min: 10, desc: "Cloudy", icon: "03d", pop: 20 }, hourly: [], details: { feels_like: 17, humidity: 55, pressure: 1013, wind: 3.2, wind_kmh: 12, wind_dir: "W", visibility_km: 10, sunrise: "06:45", sunset: "19:20" } };
   }
 
   searchCities(query: unknown) {

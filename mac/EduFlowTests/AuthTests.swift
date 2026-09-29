@@ -207,7 +207,7 @@ struct AuthTests {
 
     @Test("Einstellungs-Defaults und Clamping wie im Web")
     func settingsDefaultsAndClamping() async throws {
-        stub(status: 200, body: #"{"schema":[],"values":{"landing":"falsch","hw_status":"offen","ov_unread":99,"ov_homework":0,"hw_tests":"1","ov_wetter":"0"}}"#)
+        stub(status: 200, body: #"{"schema":[],"values":{"landing":"falsch","hw_status":"offen","ov_unread":99,"ov_homework":0,"hw_tests":"1","ov_wetter":"0","time_format":"falsch"}}"#)
         let (_, values) = try await SettingsRepository(client: client()).load()
         #expect(values.landing == "uebersicht")
         #expect(values.hwStatus == "offen")
@@ -215,6 +215,7 @@ struct AuthTests {
         #expect(values.ovHomework == 1)
         #expect(values.hwTests == true)
         #expect(values.ovWetter == false)
+        #expect(values.timeFormat == "24h")
     }
 
     @Test("Speichern sendet echte JSON-Typen")
@@ -228,6 +229,7 @@ struct AuthTests {
             #expect((body["ov_unread"] as? Int) == 12)
             #expect((body["landing"] as? String) == "noten")
             #expect((body["wetter_city"] as? String) == "Berlin")
+            #expect((body["time_format"] as? String) == "24h")
             let data = #"{"status":"ok","values":{"landing":"noten","hw_tests":true,"ov_unread":12,"ov_wetter":false,"wetter_city":"Berlin"}}"#
                 .data(using: .utf8)!
             let response = HTTPURLResponse(
