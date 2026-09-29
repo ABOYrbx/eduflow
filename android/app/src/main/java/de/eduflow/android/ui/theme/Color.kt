@@ -40,13 +40,13 @@ data class AccentOption(
 )
 
 val Accents = listOf(
-    AccentOption("black", Color(0xFF000000), "Schwarz"),
-    AccentOption("blue", Color(0xFF2563EB), "Blau"),
-    AccentOption("violet", Color(0xFF7C3AED), "Lila"),
-    AccentOption("teal", Color(0xFF0E7490), "Petrol"),
-    AccentOption("green", Color(0xFF16A34A), "Grün"),
+    AccentOption("black", Color(0xFF000000), "Black"),
+    AccentOption("blue", Color(0xFF2563EB), "Blue"),
+    AccentOption("violet", Color(0xFF7C3AED), "Lilac"),
+    AccentOption("teal", Color(0xFF0E7490), "Teal"),
+    AccentOption("green", Color(0xFF16A34A), "Green"),
     AccentOption("orange", Color(0xFFEA580C), "Orange"),
-    AccentOption("red", Color(0xFFDC2626), "Rot"),
+    AccentOption("red", Color(0xFFDC2626), "Red"),
     AccentOption("pink", Color(0xFFDB2777), "Pink"),
 )
 

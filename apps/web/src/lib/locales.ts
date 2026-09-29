@@ -4,8 +4,8 @@ import ar from "../../messages/ar.json";
 import ca from "../../messages/ca.json";
 import cs from "../../messages/cs.json";
 import da from "../../messages/da.json";
+import de from "../../messages/de.json";
 import el from "../../messages/el.json";
-import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import fi from "../../messages/fi.json";
 import fr from "../../messages/fr.json";
@@ -29,8 +29,8 @@ import zh from "../../messages/zh.json";
 
 // Nur für Server-Code (Layout, Routen): registriert alle Kataloge einmalig.
 // WICHTIG: Neue Crowdin-Sprache = hier Import + Eintrag ergänzen, sonst
-// bleibt sie ungenutzt (t() fällt dann auf Deutsch zurück).
+// bleibt sie ungenutzt (t() fällt dann auf Englisch zurück).
 registerCatalogs({
-  af, ar, ca, cs, da, el, en, es, fi, fr, he, hu, it, ja, ko, nl, no,
+  af, ar, ca, cs, da, de, el, es, fi, fr, he, hu, it, ja, ko, nl, no,
   pl, pt, ro, ru, sr, sv, tr, uk, vi, zh,
 });

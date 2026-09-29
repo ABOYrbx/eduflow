@@ -729,7 +729,7 @@ private fun AccentDotsRow(
 private fun initialsOf(name: String): String =
     name.split(" ", " ").mapNotNull { it.firstOrNull()?.toString() }.take(2).joinToString("")
 
-/** Deutsche Labels für die Akzent-Keys (TalkBack) via Ressourcen. */
+/** Labels für die Akzent-Keys (TalkBack) via Ressourcen. */
 @Composable
 private fun accentLabel(key: String): String = when (key) {
     "black" -> stringResource(R.string.common_accent_black)

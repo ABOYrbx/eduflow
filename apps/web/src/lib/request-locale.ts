@@ -4,7 +4,7 @@ import { LOCALE_COOKIE, parseAcceptLanguage, resolveLocale } from "./i18n";
 
 /**
  * Sprache für den aktuellen Request (nur Server-Komponenten/Layout).
- * Reihenfolge: Cookie `eduflow_locale` → Accept-Language → Deutsch.
+ * Reihenfolge: Cookie `eduflow_locale` → Accept-Language → Englisch.
  */
 export async function requestLocale(): Promise<string> {
   const store = await cookies();
