@@ -61446,6 +61446,8331 @@
           }
         }
       }
+    },
+    "auth_hint_subdomain": {
+      "comment": "Anmeldung: Schuldomain-Hinweis",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leave empty for automatic detection."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Leer lassen für automatische Erkennung."
+          }
+        }
+      }
+    },
+    "auth_label_subdomain": {
+      "comment": "Anmeldung: Schuldomain-Label",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "School domain (optional)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schuldomain (optional)"
+          }
+        }
+      }
+    },
+    "auth_placeholder_subdomain": {
+      "comment": "Anmeldung: Schuldomain-Platzhalter",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "e.g. my-school"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "z. B. meine-schule"
+          }
+        }
+      }
+    },
+    "common_clear_input": {
+      "comment": "Eingabefeld: löschen",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Eingabe löschen"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear input"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Eingabe löschen"
+          }
+        }
+      }
+    },
+    "common_loading": {
+      "comment": "Laden läuft",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lädt …"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Loading …"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Lädt …"
+          }
+        }
+      }
+    },
+    "common_toggle_off": {
+      "comment": "Schalter: aus",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aus"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Off"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Aus"
+          }
+        }
+      }
+    },
+    "common_toggle_on": {
+      "comment": "Schalter: ein",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ein"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ein"
+          }
+        }
+      }
+    },
+    "common_unknown_author": {
+      "comment": "Nachrichten: unbekannter Absender",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(unbekannt)"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(unknown)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(unbekannt)"
+          }
+        }
+      }
+    },
+    "grades_average_hint": {
+      "comment": "Noten: Schnitt-Hinweis",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Average of classic grades, weighted."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Schnitt aus klassischen Noten, nach Gewichtung."
+          }
+        }
+      }
+    },
+    "grades_not_classic": {
+      "comment": "Noten: nicht klassisch",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "o. Wertung"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "not graded"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "o. Wertung"
+          }
+        }
+      }
+    },
+    "grades_subject_average_caption": {
+      "comment": "Noten: Fachschnitt-Legende",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subject avg. weighted"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fachschn. gewichtet"
+          }
+        }
+      }
+    },
+    "grades_summary_stats": {
+      "comment": "Noten: Zusammenfassung",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d grades · %d subjects · average: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d Noten · %d Fächer · Schnitt: %@"
+          }
+        }
+      }
+    },
+    "homework_action_done": {
+      "comment": "Hausaufgaben: fertig",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fertig"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Fertig"
+          }
+        }
+      }
+    },
+    "homework_action_reopen": {
+      "comment": "Hausaufgaben: wieder öffnen",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wieder öffnen"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reopen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Wieder öffnen"
+          }
+        }
+      }
+    },
+    "homework_action_restore": {
+      "comment": "Hausaufgaben: zurückholen",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zurückholen"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen"
+          }
+        }
+      }
+    },
+    "homework_action_trash": {
+      "comment": "Hausaufgaben: Papierkorb",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Papierkorb"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Trash"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Papierkorb"
+          }
+        }
+      }
+    },
+    "homework_deleted": {
+      "comment": "Hausaufgaben: gelöscht-Tag",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gelöscht"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deleted"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelöscht"
+          }
+        }
+      }
+    },
+    "homework_due_prefix": {
+      "comment": "Hausaufgaben: fällig-Präfix",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "fällig: "
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "due: "
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "fällig: "
+          }
+        }
+      }
+    },
+    "homework_empty_all": {
+      "comment": "Hausaufgaben: leer",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No homework."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben."
+          }
+        }
+      }
+    },
+    "homework_empty_done": {
+      "comment": "Hausaufgaben: nichts erledigt",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing completed yet."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Noch nichts erledigt."
+          }
+        }
+      }
+    },
+    "homework_empty_open": {
+      "comment": "Hausaufgaben: keine offenen",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No open tasks."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine offenen Aufgaben."
+          }
+        }
+      }
+    },
+    "homework_empty_overdue": {
+      "comment": "Hausaufgaben: nichts überfällig",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nichts überfällig."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nothing overdue."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Nichts überfällig."
+          }
+        }
+      }
+    },
+    "homework_empty_trash": {
+      "comment": "Hausaufgaben: Papierkorb leer",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The trash is empty."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Der Papierkorb ist leer."
+          }
+        }
+      }
+    },
+    "homework_menu_done": {
+      "comment": "Hausaufgaben: als erledigt markieren",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mark as done"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Als erledigt markieren"
+          }
+        }
+      }
+    },
+    "homework_menu_restore": {
+      "comment": "Hausaufgaben: zurückholen als offen",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restore (as open)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Zurückholen (als offen)"
+          }
+        }
+      }
+    },
+    "homework_menu_trash": {
+      "comment": "Hausaufgaben: in den Papierkorb",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In den Papierkorb"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Move to trash"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "In den Papierkorb"
+          }
+        }
+      }
+    },
+    "homework_no_description": {
+      "comment": "Hausaufgaben: keine Beschreibung",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(no description)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "(keine Beschreibung)"
+          }
+        }
+      }
+    },
+    "messages_action_mark_read": {
+      "comment": "Nachrichten: alle als gelesen",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle als gelesen"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mark all as read"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle als gelesen"
+          }
+        }
+      }
+    },
+    "messages_action_reload": {
+      "comment": "Nachrichten: neu laden",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neu laden"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reload"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu laden"
+          }
+        }
+      }
+    },
+    "messages_attachment_load": {
+      "comment": "Nachrichten: Anhang laden",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anhang laden"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Load attachment"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Anhang laden"
+          }
+        }
+      }
+    },
+    "messages_empty": {
+      "comment": "Nachrichten: leer",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No messages."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Nachrichten."
+          }
+        }
+      }
+    },
+    "messages_file_fallback": {
+      "comment": "Nachrichten: Dateiname-Fallback",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datei %d"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "File %d"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Datei %d"
+          }
+        }
+      }
+    },
+    "messages_state_read": {
+      "comment": "Nachrichten: Status gelesen",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gelesen"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Gelesen"
+          }
+        }
+      }
+    },
+    "messages_state_unread": {
+      "comment": "Nachrichten: Status ungelesen",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ungelesen"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unread"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Ungelesen"
+          }
+        }
+      }
+    },
+    "messages_unread": {
+      "comment": "Nachrichten: Ungelesen-Tag",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neu"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Neu"
+          }
+        }
+      }
+    },
+    "messages_unread_count": {
+      "comment": "Nachrichten: Anzahl ungelesen",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d ungelesen"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d unread"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d ungelesen"
+          }
+        }
+      }
+    },
+    "overview_homework_all_done": {
+      "comment": "Übersicht: alles erledigt",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All homework done. Well done."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Alle Hausaufgaben erledigt. Sehr gut."
+          }
+        }
+      }
+    },
+    "overview_homework_more_available": {
+      "comment": "Übersicht: weitere Aufgaben vorhanden",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More tasks available — view all."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Weitere Aufgaben vorhanden — alle ansehen."
+          }
+        }
+      }
+    },
+    "overview_homework_none": {
+      "comment": "Übersicht: keine Aufgaben",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No homework available."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine Hausaufgaben vorhanden."
+          }
+        }
+      }
+    },
+    "overview_homework_sub": {
+      "comment": "Übersicht: Hausaufgaben-Totale",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d open · %d overdue"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%d offen · %d überfällig"
+          }
+        }
+      }
+    },
+    "overview_messages_empty": {
+      "comment": "Übersicht: keine Nachrichten",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No new messages."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Keine neuen Nachrichten."
+          }
+        }
+      }
+    },
+    "overview_more_homework": {
+      "comment": "Übersicht: weitere Aufgaben",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ %d weitere"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ %d more"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        }
+      }
+    },
+    "overview_more_messages": {
+      "comment": "Übersicht: weitere Nachrichten",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ %d weitere"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ %d more"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "+ %d weitere"
+          }
+        }
+      }
+    },
+    "school_plan_change": {
+      "comment": "Schule: Änderung ohne Klasse",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Timetable change"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Stundenplanänderung"
+          }
+        }
+      }
+    },
+    "timetable_room": {
+      "comment": "Stundenplan: Raumzeile",
+      "localizations": {
+        "af": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "ca": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "cs": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "da": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Raum %@"
+          }
+        },
+        "el": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Room %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "fi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "he": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "hu": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "it": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "nb": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "nl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "pl": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "pt": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "pt-BR": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "ro": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "sr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "sv": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "uk": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Raum %@"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
