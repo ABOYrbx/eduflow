@@ -46,7 +46,7 @@ public final class ServerCheckModel {
         } catch let apiError as APIError {
             result = .failed(message: apiError.message)
         } catch {
-            result = .failed(message: APIError.germanFallback(for: ErrorCodes.upstream))
+            result = .failed(message: APIError.englishFallback(for: ErrorCodes.upstream))
         }
     }
 
@@ -228,12 +228,12 @@ public struct OnboardingLanguagePage: View {
 
     public var body: some View {
         VStack(spacing: 0) {
-            Text("Sprache wählen")
+            Text("Choose language")
                 .font(UberFont.text(30, weight: .heavy))
                 .tracking(-1.2)
                 .padding(.top, 12)
                 .riseIn(delay: 0.08)
-            Text(NSLocalizedString("onboarding_language_subtitle", value: "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen.", comment: "Onboarding: Sprachauswahl Untertitel"))
+            Text(NSLocalizedString("onboarding_language_subtitle", value: "EduFlow speaks your language. The choice applies immediately.", comment: "Onboarding: Sprachauswahl Untertitel"))
                 .font(UberFont.text(14))
                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 .multilineTextAlignment(.center)
@@ -246,7 +246,7 @@ public struct OnboardingLanguagePage: View {
                     languageRow(
                         code: nil,
                         name: "System",
-                        detail: "Folgt der Systemsprache",
+                        detail: "Follows the system language",
                         percent: nil,
                         selected: selected == nil
                     )
@@ -264,7 +264,7 @@ public struct OnboardingLanguagePage: View {
             .scrollIndicators(.never)
             .padding(.top, 20)
             .riseIn(delay: 0.2)
-            PillButton("Weiter", action: onNext)
+            PillButton("Continue", action: onNext)
                 .riseIn(delay: 0.3)
         }
         .padding(.vertical, 24)
@@ -370,7 +370,7 @@ public struct OnboardingWelcomePage: View {
             .padding(.top, 8)
             .riseIn(delay: 0.45)
             Spacer()
-            PillButton("Weiter", action: onNext)
+            PillButton("Continue", action: onNext)
                 .opacity(showButton ? 1 : 0)
                 .offset(y: showButton ? 0 : 22)
                 .scaleEffect(showButton ? 1 : 0.985)
@@ -408,19 +408,19 @@ public struct OnboardingFeaturesPage: View {
     public var body: some View {
         VStack(spacing: 0) {
             Spacer()
-            Text("Alles an einem Ort.")
+            Text("Everything in one place.")
                 .font(UberFont.text(30, weight: .heavy))
                 .tracking(-1.2)
                 .padding(.top, 12)
                 .riseIn(delay: 0.08)
             VStack(spacing: 10) {
-                featureRow(icon: "envelope", title: NSLocalizedString("onboarding_feature_messages_title", value: "Nachrichten & Threads", comment: "Onboarding: Nachrichten Titel"), text: NSLocalizedString("onboarding_feature_messages_text", value: "Alle EduPage-Nachrichten im Mail-Layout — mit Likes, Antworten und Dateien.", comment: "Onboarding: Nachrichten Beschreibung"), delay: 0.14)
-                featureRow(icon: "checklist", title: NSLocalizedString("onboarding_feature_homework_title", value: "Hausaufgaben & Noten", comment: "Onboarding: Aufgaben Titel"), text: NSLocalizedString("onboarding_feature_homework_text", value: "Fälligkeiten mit Zählern, Halbjahr-Tabs und Schnitt.", comment: "Onboarding: Aufgaben Beschreibung"), delay: 0.2)
-                featureRow(icon: "calendar", title: NSLocalizedString("onboarding_feature_timetable_title", value: "Stundenplan & Wetter", comment: "Onboarding: Stundenplan Titel"), text: NSLocalizedString("onboarding_feature_timetable_text", value: "Tag und Woche und Wetter auf der Übersicht.", comment: "Onboarding: Stundenplan Beschreibung"), delay: 0.26)
+                featureRow(icon: "envelope", title: NSLocalizedString("onboarding_feature_messages_title", value: "Messages & Threads", comment: "Onboarding: Nachrichten Titel"), text: NSLocalizedString("onboarding_feature_messages_text", value: "All EduPage messages in a mail layout — with likes, replies and files.", comment: "Onboarding: Nachrichten Beschreibung"), delay: 0.14)
+                featureRow(icon: "checklist", title: NSLocalizedString("onboarding_feature_homework_title", value: "Homework & Grades", comment: "Onboarding: Aufgaben Titel"), text: NSLocalizedString("onboarding_feature_homework_text", value: "Due dates with counters, semester tabs and average.", comment: "Onboarding: Aufgaben Beschreibung"), delay: 0.2)
+                featureRow(icon: "calendar", title: NSLocalizedString("onboarding_feature_timetable_title", value: "Timetable & Weather", comment: "Onboarding: Stundenplan Titel"), text: NSLocalizedString("onboarding_feature_timetable_text", value: "Day and week plus weather on the overview.", comment: "Onboarding: Stundenplan Beschreibung"), delay: 0.26)
             }
             .padding(.top, 22)
             Spacer()
-            PillButton("Weiter", action: onNext)
+            PillButton("Continue", action: onNext)
                 .riseIn(delay: 0.32)
         }
         .padding(.vertical, 24)
@@ -468,12 +468,12 @@ public struct OnboardingServerPage: View {
     public var body: some View {
         VStack(spacing: 0) {
             Spacer()
-            Text("Wo läuft dein Server?")
+            Text("Where does your server run?")
                 .font(UberFont.text(30, weight: .heavy))
                 .tracking(-1.2)
                 .padding(.top, 12)
                 .riseIn(delay: 0.08)
-            Text("Trage ein, wo EduFlow als Server läuft.")
+            Text("Enter where EduFlow runs as server.")
                 .font(UberFont.text(14))
                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 .multilineTextAlignment(.center)
@@ -519,7 +519,7 @@ public struct OnboardingServerPage: View {
             Spacer()
             // Ein Knopf in voller Breite wie auf Seite 1 — die Prüfung
             // läuft beim Übernehmen automatisch (Fehler bleiben stehen).
-            PillButton(model.checking ? "Prüft …" : model.showSuccess ? "Verbunden" : "Übernehmen & weiter") {
+            PillButton(model.checking ? "Checking connection …" : model.showSuccess ? "Connected" : "Apply & continue") {
                 Task { @MainActor in
                     if await model.proceed(reduceMotion: reduceMotion) {
                         onNext()

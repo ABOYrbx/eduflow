@@ -86,7 +86,7 @@ public final class LoginViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
             return nil
         }
@@ -140,7 +140,7 @@ public final class TwoFAViewModel {
             case .twoFaRequired:
                 self.error = APIError(
                     code: ErrorCodes.upstream,
-                    message: APIError.germanFallback(for: ErrorCodes.upstream)
+                    message: APIError.englishFallback(for: ErrorCodes.upstream)
                 )
                 return nil
             }
@@ -153,7 +153,7 @@ public final class TwoFAViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
             return nil
         }

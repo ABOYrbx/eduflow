@@ -485,8 +485,8 @@ public struct UberTextField: View {
                         .foregroundStyle(EduFlowPalette.inkDim(scheme))
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel(NSLocalizedString("common_clear_input", value: "Eingabe löschen", comment: "Eingabefeld: löschen"))
-                .help(NSLocalizedString("common_clear_input", value: "Eingabe löschen", comment: "Eingabefeld: löschen"))
+                .accessibilityLabel(NSLocalizedString("common_clear_input", value: "Clear input", comment: "Eingabefeld: löschen"))
+                .help(NSLocalizedString("common_clear_input", value: "Clear input", comment: "Eingabefeld: löschen"))
             }
         }
         .padding(.horizontal, 18)
@@ -590,8 +590,8 @@ public struct UberSecureField: View {
                         .foregroundStyle(EduFlowPalette.inkDim(scheme))
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel(revealed ? NSLocalizedString("common_password_hide", value: "Passwort verbergen", comment: "Passwort: verbergen") : NSLocalizedString("common_password_show", value: "Passwort anzeigen", comment: "Passwort: anzeigen"))
-                .help(revealed ? NSLocalizedString("common_password_hide", value: "Passwort verbergen", comment: "Passwort: verbergen") : NSLocalizedString("common_password_show", value: "Passwort anzeigen", comment: "Passwort: anzeigen"))
+                .accessibilityLabel(revealed ? NSLocalizedString("common_password_hide", value: "Hide password", comment: "Passwort: verbergen") : NSLocalizedString("common_password_show", value: "Show password", comment: "Passwort: anzeigen"))
+                .help(revealed ? NSLocalizedString("common_password_hide", value: "Hide password", comment: "Passwort: verbergen") : NSLocalizedString("common_password_show", value: "Show password", comment: "Passwort: anzeigen"))
             } else if !text.isEmpty {
                 Button { text = "" } label: {
                     Image(systemName: "xmark.circle.fill")
@@ -599,8 +599,8 @@ public struct UberSecureField: View {
                         .foregroundStyle(EduFlowPalette.inkDim(scheme))
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel(NSLocalizedString("common_clear_input", value: "Eingabe löschen", comment: "Eingabefeld: löschen"))
-                .help(NSLocalizedString("common_clear_input", value: "Eingabe löschen", comment: "Eingabefeld: löschen"))
+                .accessibilityLabel(NSLocalizedString("common_clear_input", value: "Clear input", comment: "Eingabefeld: löschen"))
+                .help(NSLocalizedString("common_clear_input", value: "Clear input", comment: "Eingabefeld: löschen"))
             }
         }
         .padding(.horizontal, 18)
@@ -728,7 +728,7 @@ public struct ErrorView: View {
                 .font(UberFont.text(15))
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 24)
-            PillButton(NSLocalizedString("Erneut versuchen", value: "Erneut versuchen", comment: "Fehler: erneut versuchen"), action: onRetry)
+            PillButton(NSLocalizedString("Try again", value: "Try again", comment: "Fehler: erneut versuchen"), action: onRetry)
                 .padding(.horizontal, 24)
             Spacer()
         }

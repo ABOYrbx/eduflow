@@ -29,7 +29,7 @@ public struct SettingsView: View {
     public var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
-                PageHead("Einstellungen")
+                PageHead("Settings")
                 if vm.isLoading && vm.error == nil {
                     ProgressView()
                         .controlSize(.large)
@@ -59,7 +59,7 @@ public struct SettingsView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle(NSLocalizedString("settings_nav", value: "Einstellungen", comment: "Einstellungen: Titel"))
+        .navigationTitle(NSLocalizedString("settings_nav", value: "Settings", comment: "Einstellungen: Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
     }
 
@@ -68,15 +68,15 @@ public struct SettingsView: View {
     private var startSection: some View {
         UberCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Startseite nach Anmeldung")
+                Text("Start page after sign-in")
                     .font(UberFont.text(19, weight: .heavy))
                     .tracking(-0.4)
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
-                    RadioCard(title: NSLocalizedString("Übersicht", value: "Übersicht", comment: "Einstellungen: Startseite Übersicht"), desc: NSLocalizedString("settings_landing_overview_desc", value: "Uhr, Nachrichten, Wetter", comment: "Einstellungen: Startseite Übersicht Beschreibung"), value: "uebersicht", selection: $vm.values.landing)
-                    RadioCard(title: NSLocalizedString("messages_nav_list", value: "Nachrichten", comment: "Einstellungen: Startseite Nachrichten"), desc: NSLocalizedString("settings_landing_messages_desc", value: "Direkt in die Nachrichten", comment: "Einstellungen: Startseite Nachrichten Beschreibung"), value: "dashboard", selection: $vm.values.landing)
-                    RadioCard(title: NSLocalizedString("Hausaufgaben", value: "Hausaufgaben", comment: "Einstellungen: Startseite Aufgaben"), desc: NSLocalizedString("settings_landing_homework_desc", value: "Direkt zu den Aufgaben", comment: "Einstellungen: Startseite Aufgaben Beschreibung"), value: "hausaufgaben", selection: $vm.values.landing)
-                    RadioCard(title: NSLocalizedString("grades_nav", value: "Noten", comment: "Einstellungen: Startseite Noten"), desc: NSLocalizedString("settings_landing_grades_desc", value: "Direkt zu den Noten", comment: "Einstellungen: Startseite Noten Beschreibung"), value: "noten", selection: $vm.values.landing)
-                    RadioCard(title: NSLocalizedString("Stundenplan", value: "Stundenplan", comment: "Einstellungen: Startseite Stundenplan"), desc: NSLocalizedString("settings_landing_timetable_desc", value: "Direkt zum Stundenplan", comment: "Einstellungen: Startseite Stundenplan Beschreibung"), value: "stundenplan", selection: $vm.values.landing)
+                    RadioCard(title: NSLocalizedString("Overview", value: "Overview", comment: "Einstellungen: Startseite Übersicht"), desc: NSLocalizedString("settings_landing_overview_desc", value: "Clock, messages, weather", comment: "Einstellungen: Startseite Übersicht Beschreibung"), value: "uebersicht", selection: $vm.values.landing)
+                    RadioCard(title: NSLocalizedString("messages_nav_list", value: "Messages", comment: "Einstellungen: Startseite Nachrichten"), desc: NSLocalizedString("settings_landing_messages_desc", value: "Go straight to messages", comment: "Einstellungen: Startseite Nachrichten Beschreibung"), value: "dashboard", selection: $vm.values.landing)
+                    RadioCard(title: NSLocalizedString("Homework", value: "Homework", comment: "Einstellungen: Startseite Aufgaben"), desc: NSLocalizedString("settings_landing_homework_desc", value: "Go straight to homework", comment: "Einstellungen: Startseite Aufgaben Beschreibung"), value: "hausaufgaben", selection: $vm.values.landing)
+                    RadioCard(title: NSLocalizedString("grades_nav", value: "Grades", comment: "Einstellungen: Startseite Noten"), desc: NSLocalizedString("settings_landing_grades_desc", value: "Go straight to grades", comment: "Einstellungen: Startseite Noten Beschreibung"), value: "noten", selection: $vm.values.landing)
+                    RadioCard(title: NSLocalizedString("Timetable", value: "Timetable", comment: "Einstellungen: Startseite Stundenplan"), desc: NSLocalizedString("settings_landing_timetable_desc", value: "Go straight to timetable", comment: "Einstellungen: Startseite Stundenplan Beschreibung"), value: "stundenplan", selection: $vm.values.landing)
                 }
             }
         }
@@ -85,10 +85,10 @@ public struct SettingsView: View {
     private var navigationSection: some View {
         UberCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text(NSLocalizedString("settings_navbar_title", value: "Navigationsleiste", comment: "Einstellungen: Navigationsleiste Titel"))
+                Text(NSLocalizedString("settings_navbar_title", value: "Navigation bar", comment: "Einstellungen: Navigationsleiste Titel"))
                     .font(UberFont.text(19, weight: .heavy))
                     .tracking(-0.4)
-                Text(NSLocalizedString("settings_navbar_desc", value: "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar.", comment: "Einstellungen: Navigationsleiste Beschreibung"))
+                Text(NSLocalizedString("settings_navbar_desc", value: "Choose which sections appear on top and in which order. Events stay reachable via the profile menu even without a tab.", comment: "Einstellungen: Navigationsleiste Beschreibung"))
                     .font(UberFont.text(13))
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 ForEach(Array(topBarOrder.enumerated()), id: \.element.id) { index, section in
@@ -96,15 +96,15 @@ public struct SettingsView: View {
                         Text(LocalizedStringKey(section.title))
                             .font(UberFont.text(14, weight: .semibold))
                         Spacer()
-                        IconButton(icon: "chevron.up", label: "Nach oben", help: "Bereich nach oben verschieben", disabled: index == 0) {
+                        IconButton(icon: "chevron.up", label: "Move up", help: "Move section up", disabled: index == 0) {
                             topBarOrder = TopBarConfig.move(topBarOrder, from: index, by: -1)
                             TopBarConfig.save(topBarOrder)
                         }
-                        IconButton(icon: "chevron.down", label: "Nach unten", help: "Bereich nach unten verschieben", disabled: index == topBarOrder.count - 1) {
+                        IconButton(icon: "chevron.down", label: "Move down", help: "Move section down", disabled: index == topBarOrder.count - 1) {
                             topBarOrder = TopBarConfig.move(topBarOrder, from: index, by: 1)
                             TopBarConfig.save(topBarOrder)
                         }
-                        IconButton(icon: "minus", label: "Entfernen", help: "Bereich aus der Leiste entfernen") {
+                        IconButton(icon: "minus", label: "Remove", help: "Remove section from the bar") {
                             topBarOrder = topBarOrder.filter { $0 != section }
                             TopBarConfig.save(topBarOrder)
                         }
@@ -113,7 +113,7 @@ public struct SettingsView: View {
                 }
                 let hidden = TopBarSection.allCases.filter { !topBarOrder.contains($0) }
                 if !hidden.isEmpty {
-                    Text(NSLocalizedString("settings_navbar_available", value: "Verfügbar", comment: "Einstellungen: verfügbare Bereiche"))
+                    Text(NSLocalizedString("settings_navbar_available", value: "Available", comment: "Einstellungen: verfügbare Bereiche"))
                         .font(UberFont.text(13, weight: .bold))
                         .tracking(0.8)
                         .textCase(.uppercase)
@@ -125,7 +125,7 @@ public struct SettingsView: View {
                                 .font(UberFont.text(14, weight: .semibold))
                                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                             Spacer()
-                            IconButton(icon: "plus", label: "Hinzufügen", help: "Bereich zur Leiste hinzufügen") {
+                            IconButton(icon: "plus", label: "Add", help: "Add section to the bar") {
                                 topBarOrder = topBarOrder + [section]
                                 TopBarConfig.save(topBarOrder)
                             }
@@ -140,22 +140,22 @@ public struct SettingsView: View {
     private var homeworkSection: some View {
         UberCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Hausaufgaben")
+                Text("Homework")
                     .font(UberFont.text(19, weight: .heavy))
                     .tracking(-0.4)
-                Text("Standardfilter")
+                Text("Default filter")
                     .font(UberFont.text(13, weight: .bold))
                     .tracking(0.8)
                     .textCase(.uppercase)
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
-                    RadioCard(title: NSLocalizedString("homework_filter_all", value: "Alle", comment: "Einstellungen: Filter alle"), desc: NSLocalizedString("settings_filter_all_desc", value: "Alles zeigen", comment: "Einstellungen: Filter alle Beschreibung"), value: "alle", selection: $vm.values.hwStatus)
-                    RadioCard(title: NSLocalizedString("settings_filter_open_title", value: "Nur offene", comment: "Einstellungen: Filter offene"), desc: NSLocalizedString("settings_filter_open_desc", value: "Ohne erledigte", comment: "Einstellungen: Filter offene Beschreibung"), value: "offen", selection: $vm.values.hwStatus)
-                    RadioCard(title: NSLocalizedString("settings_filter_overdue_title", value: "Nur überfällige", comment: "Einstellungen: Filter überfällige"), desc: NSLocalizedString("settings_filter_overdue_desc", value: "Frist vorbei", comment: "Einstellungen: Filter überfällige Beschreibung"), value: "überfällig", selection: $vm.values.hwStatus)
-                    RadioCard(title: NSLocalizedString("settings_filter_done_title", value: "Nur erledigte", comment: "Einstellungen: Filter erledigte"), desc: NSLocalizedString("settings_filter_done_desc", value: "Fertige Aufgaben", comment: "Einstellungen: Filter erledigte Beschreibung"), value: "erledigt", selection: $vm.values.hwStatus)
-                    RadioCard(title: NSLocalizedString("homework_filter_trash", value: "Papierkorb", comment: "Einstellungen: Filter Papierkorb"), desc: NSLocalizedString("settings_filter_trash_desc", value: "Ausgeblendete", comment: "Einstellungen: Filter Papierkorb Beschreibung"), value: "papierkorb", selection: $vm.values.hwStatus)
+                    RadioCard(title: NSLocalizedString("homework_filter_all", value: "All", comment: "Einstellungen: Filter alle"), desc: NSLocalizedString("settings_filter_all_desc", value: "Show everything", comment: "Einstellungen: Filter alle Beschreibung"), value: "alle", selection: $vm.values.hwStatus)
+                    RadioCard(title: NSLocalizedString("settings_filter_open_title", value: "Only open", comment: "Einstellungen: Filter offene"), desc: NSLocalizedString("settings_filter_open_desc", value: "Without done", comment: "Einstellungen: Filter offene Beschreibung"), value: "offen", selection: $vm.values.hwStatus)
+                    RadioCard(title: NSLocalizedString("settings_filter_overdue_title", value: "Only past due", comment: "Einstellungen: Filter überfällige"), desc: NSLocalizedString("settings_filter_overdue_desc", value: "Past due", comment: "Einstellungen: Filter überfällige Beschreibung"), value: "überfällig", selection: $vm.values.hwStatus)
+                    RadioCard(title: NSLocalizedString("settings_filter_done_title", value: "Only completed", comment: "Einstellungen: Filter erledigte"), desc: NSLocalizedString("settings_filter_done_desc", value: "Completed tasks", comment: "Einstellungen: Filter erledigte Beschreibung"), value: "erledigt", selection: $vm.values.hwStatus)
+                    RadioCard(title: NSLocalizedString("homework_filter_trash", value: "Recycle bin", comment: "Einstellungen: Filter Papierkorb"), desc: NSLocalizedString("settings_filter_trash_desc", value: "Hidden", comment: "Einstellungen: Filter Papierkorb Beschreibung"), value: "papierkorb", selection: $vm.values.hwStatus)
                 }
-                Toggle(NSLocalizedString("settings_toggle_hw_tests", value: "Tests und Prüfungen einbeziehen", comment: "Einstellungen: Tests einbeziehen"), isOn: $vm.values.hwTests)
+                Toggle(NSLocalizedString("settings_toggle_hw_tests", value: "Include tests and exams", comment: "Einstellungen: Tests einbeziehen"), isOn: $vm.values.hwTests)
                     .font(UberFont.text(14, weight: .medium))
                     .tint(accent.resolved(scheme))
             }
@@ -165,20 +165,20 @@ public struct SettingsView: View {
     private var overviewSection: some View {
         UberCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Übersicht")
+                Text("Overview")
                     .font(UberFont.text(19, weight: .heavy))
                     .tracking(-0.4)
-                Stepper(String(format: NSLocalizedString("settings_max_unread", value: "Max. ungelesene Nachrichten: %d", comment: "Einstellungen: ungelesene Nachrichten"), vm.values.ovUnread), value: $vm.values.ovUnread, in: 1...50)
+                Stepper(String(format: NSLocalizedString("settings_max_unread", value: "Max. unread messages: %d", comment: "Einstellungen: ungelesene Nachrichten"), vm.values.ovUnread), value: $vm.values.ovUnread, in: 1...50)
                     .font(UberFont.text(14, weight: .medium))
-                Stepper(String(format: NSLocalizedString("settings_max_homework", value: "Max. offene Hausaufgaben: %d", comment: "Einstellungen: offene Hausaufgaben"), vm.values.ovHomework), value: $vm.values.ovHomework, in: 1...50)
+                Stepper(String(format: NSLocalizedString("settings_max_homework", value: "Max. open homework: %d", comment: "Einstellungen: offene Hausaufgaben"), vm.values.ovHomework), value: $vm.values.ovHomework, in: 1...50)
                     .font(UberFont.text(14, weight: .medium))
-                Toggle(NSLocalizedString("settings_toggle_wetter_map", value: "Wetterkarte anzeigen", comment: "Einstellungen: Wetterkarte"), isOn: $vm.values.ovWetter)
+                Toggle(NSLocalizedString("settings_toggle_wetter_map", value: "Show weather map", comment: "Einstellungen: Wetterkarte"), isOn: $vm.values.ovWetter)
                     .font(UberFont.text(14, weight: .medium))
                     .tint(accent.resolved(scheme))
-                TextField(NSLocalizedString("settings_wetter_city_placeholder", value: "Wetter: Stadt (optional)", comment: "Einstellungen: Wetterstadt Platzhalter"), text: $vm.values.wetterCity)
+                TextField(NSLocalizedString("settings_wetter_city_placeholder", value: "Weather: city (optional)", comment: "Einstellungen: Wetterstadt Platzhalter"), text: $vm.values.wetterCity)
                     .uberInput()
                     .autocorrectionDisabled()
-                Text(NSLocalizedString("settings_ov_order_title", value: "Reihenfolge der Bereiche", comment: "Einstellungen: Reihenfolge Titel"))
+                Text(NSLocalizedString("settings_ov_order_title", value: "Section order", comment: "Einstellungen: Reihenfolge Titel"))
                     .font(UberFont.text(13, weight: .bold))
                     .tracking(0.8)
                     .textCase(.uppercase)
@@ -190,16 +190,16 @@ public struct SettingsView: View {
                         Text(LocalizedStringKey(Self.overviewOrderLabels[key] ?? key))
                             .font(UberFont.text(14, weight: .semibold))
                         Spacer()
-                        IconButton(icon: "chevron.up", label: "Nach oben", help: "Bereich nach oben verschieben", disabled: index == 0) {
+                        IconButton(icon: "chevron.up", label: "Move up", help: "Move section up", disabled: index == 0) {
                             moveOverviewOrder(from: index, by: -1)
                         }
-                        IconButton(icon: "chevron.down", label: "Nach unten", help: "Bereich nach unten verschieben", disabled: index == order.count - 1) {
+                        IconButton(icon: "chevron.down", label: "Move down", help: "Move section down", disabled: index == order.count - 1) {
                             moveOverviewOrder(from: index, by: 1)
                         }
                     }
                     .padding(.vertical, 4)
                 }
-                Text(NSLocalizedString("settings_ov_order_hint", value: "Wird mit „Speichern“ übernommen.", comment: "Einstellungen: Reihenfolge Hinweis"))
+                Text(NSLocalizedString("settings_ov_order_hint", value: "Applied when you save.", comment: "Einstellungen: Reihenfolge Hinweis"))
                     .font(UberFont.text(12))
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
             }
@@ -209,10 +209,10 @@ public struct SettingsView: View {
     private var appearanceSection: some View {
         UberCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Aussehen")
+                Text("Appearance")
                     .font(UberFont.text(19, weight: .heavy))
                     .tracking(-0.4)
-                Text("Hell und Dunkel folgt dem System. Akzentfarbe:")
+                Text("Light and dark follow the system. Accent color:")
                     .font(UberFont.text(13))
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 HStack(spacing: 12) {
@@ -252,14 +252,14 @@ public struct SettingsView: View {
                     .font(UberFont.text(19, weight: .heavy))
                     .tracking(-0.4)
                 if store.isDemo {
-                    Text("Es werden ausschließlich synthetische Beispieldaten vom lokalen Demo-Server geladen.")
+                    Text("Only synthetic sample data is loaded from the local demo server.")
                         .font(UberFont.text(13))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 } else {
-                    TextField(NSLocalizedString("settings_baseurl_placeholder", value: "Basis-URL", comment: "Einstellungen: Basis-URL Platzhalter"), text: $vm.baseURL)
+                    TextField(NSLocalizedString("settings_baseurl_placeholder", value: "Base URL", comment: "Einstellungen: Basis-URL Platzhalter"), text: $vm.baseURL)
                         .uberInput()
                         .autocorrectionDisabled()
-                    Button("Übernehmen") { vm.applyBaseURL() }
+                    Button(NSLocalizedString("Apply", value: "Apply", comment: "UI-Literal")) { vm.applyBaseURL() }
                         .buttonStyle(UberButtonStyle(.smallLight))
                         .hoverLift()
                 }
@@ -270,9 +270,9 @@ public struct SettingsView: View {
     /// Reihenfolge der Übersichts-Bereiche (gehört fachlich hierher, nicht in
     /// die Übersicht selbst; gespeichert wird per „Speichern" via `ov_order`).
     private static let overviewOrderLabels = [
-        "messages": "Nachrichten",
-        "homework": "Hausaufgaben",
-        "weather": "Wetter",
+        "messages": "Messages",
+        "homework": "Homework",
+        "weather": "Weather",
     ]
     private static let overviewOrderKeys = ["messages", "homework", "weather"]
 
@@ -298,18 +298,18 @@ public struct SettingsView: View {
     private var developerSection: some View {
         UberCard {
             VStack(alignment: .leading, spacing: 10) {
-                Text("Entwickleroptionen")
+                Text("Developer options")
                     .font(UberFont.text(19, weight: .heavy))
                     .tracking(-0.4)
-                Toggle(NSLocalizedString("settings_toggle_dev_options", value: "Entwickleroptionen aktivieren", comment: "Einstellungen: Entwickleroptionen"), isOn: $developerOptionsEnabled)
+                Toggle(NSLocalizedString("settings_toggle_dev_options", value: "Enable developer options", comment: "Einstellungen: Entwickleroptionen"), isOn: $developerOptionsEnabled)
                     .font(UberFont.text(14, weight: .medium))
                     .tint(accent.resolved(scheme))
 
                 if developerOptionsEnabled {
-                    Text("Meldet dich ab und startet die Einführung erneut.")
+                    Text("Signs you out and restarts the introduction.")
                         .font(UberFont.text(12))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                    Button(vm.isLoggingOut ? "Abmelden …" : "Onboarding erneut durchlaufen") {
+                    Button(vm.isLoggingOut ? NSLocalizedString("Signing out …", value: "Signing out …", comment: "UI-Literal") : NSLocalizedString("Run onboarding again", value: "Run onboarding again", comment: "UI-Literal")) {
                         guard !vm.isLoggingOut else { return }
                         OnboardingState.reset()
                         Task {
@@ -328,28 +328,28 @@ public struct SettingsView: View {
 
     private var actionsSection: some View {
         VStack(spacing: 10) {
-            PillButton(vm.isSaving ? NSLocalizedString("Speichern …", value: "Speichern …", comment: "Einstellungen: Speichern läuft") : NSLocalizedString("Speichern", value: "Speichern", comment: "Einstellungen: Speichern")) {
+            PillButton(vm.isSaving ? NSLocalizedString("Saving …", value: "Saving …", comment: "Einstellungen: Speichern läuft") : NSLocalizedString("Save", value: "Save", comment: "Einstellungen: Speichern")) {
                 Task { await vm.save(onSessionExpired: onSessionExpired) }
             }
             .disabled(vm.isSaving || vm.isLoading)
             HStack(spacing: 10) {
-                Button("Erneut laden") {
+                Button(NSLocalizedString("Reload", value: "Reload", comment: "UI-Literal")) {
                     Task { await vm.load(onSessionExpired: onSessionExpired) }
                 }
                 .buttonStyle(UberButtonStyle(.smallLight))
                 .hoverLift()
                 .disabled(vm.isLoading)
-                Button(vm.isClearing ? NSLocalizedString("settings_cache_clear_busy", value: "Cache leeren …", comment: "Einstellungen: Cache leeren läuft") : NSLocalizedString("settings_cache_clear", value: "Cache leeren", comment: "Einstellungen: Cache leeren")) {
+                Button(vm.isClearing ? NSLocalizedString("settings_cache_clear_busy", value: "Clearing cache …", comment: "Einstellungen: Cache leeren läuft") : NSLocalizedString("settings_cache_clear", value: "Clear cache", comment: "Einstellungen: Cache leeren")) {
                     Task { await vm.clearCache(onSessionExpired: onSessionExpired) }
                 }
                 .buttonStyle(UberButtonStyle(.smallLight))
                 .hoverLift()
                 .disabled(vm.isClearing)
-                Button("Geräte verwalten", action: onDevices)
+                Button(NSLocalizedString("Manage devices", value: "Manage devices", comment: "UI-Literal"), action: onDevices)
                     .buttonStyle(UberButtonStyle(.smallLight))
                     .hoverLift()
             }
-            Button(vm.isLoggingOut ? NSLocalizedString("Abmelden …", value: "Abmelden …", comment: "Einstellungen: Abmelden läuft") : NSLocalizedString("Abmelden", value: "Abmelden", comment: "Einstellungen: Abmelden")) {
+            Button(vm.isLoggingOut ? NSLocalizedString("Signing out …", value: "Signing out …", comment: "Einstellungen: Abmelden läuft") : NSLocalizedString("Sign out", value: "Sign out", comment: "Einstellungen: Abmelden")) {
                 Task {
                     await vm.logout()
                     onLogout()

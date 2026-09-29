@@ -251,18 +251,18 @@ private final class SchoolViewModel {
         do { return .success(try await work()) }
         catch let error as APIError { return .failure(error) }
         catch { return .failure(APIError(code: ErrorCodes.upstream,
-                                        message: APIError.germanFallback(for: ErrorCodes.upstream))) }
+                                        message: APIError.englishFallback(for: ErrorCodes.upstream))) }
     }
 }
 
 private enum SchoolTab: String, CaseIterable, Identifiable {
-    case agenda = "Kalender"
-    case substitutions = "Vertretungen"
+    case agenda = "Calendar"
+    case substitutions = "Substitutions"
     var id: String { rawValue }
     var displayName: String {
         switch self {
-        case .agenda: return NSLocalizedString("school_tab_agenda", value: "Kalender", comment: "Schule: Tab Kalender")
-        case .substitutions: return NSLocalizedString("school_tab_substitutions", value: "Vertretungen", comment: "Schule: Tab Vertretungen")
+        case .agenda: return NSLocalizedString("school_tab_agenda", value: "Calendar", comment: "Schule: Tab Kalender")
+        case .substitutions: return NSLocalizedString("school_tab_substitutions", value: "Substitutions", comment: "Schule: Tab Vertretungen")
         }
     }
 }
@@ -283,8 +283,8 @@ struct SchoolView: View {
             VStack(alignment: .leading, spacing: 18) {
                 HStack(alignment: .center) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Schulalltag").font(UberFont.text(26, weight: .heavy))
-                        Text("Termine und Planänderungen")
+                        Text("School life").font(UberFont.text(26, weight: .heavy))
+                        Text("Events and schedule changes")
                             .font(UberFont.text(14)).foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     }
                     Spacer()
@@ -294,7 +294,7 @@ struct SchoolView: View {
                     .buttonStyle(.bordered)
                     .disabled(vm.isLoading)
                 }
-                Picker(NSLocalizedString("school_picker_section", value: "Bereich", comment: "Schule: Bereichsfilter"), selection: $tab) {
+                Picker(NSLocalizedString("school_picker_section", value: "Section", comment: "Schule: Bereichsfilter"), selection: $tab) {
                     ForEach(SchoolTab.allCases) { Text($0.displayName).tag($0) }
                 }
                 .pickerStyle(.segmented)
@@ -309,11 +309,11 @@ struct SchoolView: View {
                 }
                 if tab == .substitutions {
                     HStack {
-                        Button("← Vorwoche") { Task { await vm.moveWeek(-1, onSessionExpired: onSessionExpired) } }
+                        Button(NSLocalizedString("← Previous week", value: "← Previous week", comment: "UI-Literal")) { Task { await vm.moveWeek(-1, onSessionExpired: onSessionExpired) } }
                         Spacer()
                         Text(weekLabel(vm.selectedDay)).font(UberFont.text(12, weight: .semibold))
                         Spacer()
-                        Button("Nächste →") { Task { await vm.moveWeek(1, onSessionExpired: onSessionExpired) } }
+                        Button(NSLocalizedString("Next →", value: "Next →", comment: "UI-Literal")) { Task { await vm.moveWeek(1, onSessionExpired: onSessionExpired) } }
                     }
                     .buttonStyle(.bordered)
                 }
@@ -330,14 +330,14 @@ struct SchoolView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle(NSLocalizedString("school_nav", value: "Termine & Vertretungen", comment: "Schule: Titel"))
+        .navigationTitle(NSLocalizedString("school_nav", value: "Events & substitutions", comment: "Schule: Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
         .refreshable { await vm.load(refresh: true, onSessionExpired: onSessionExpired) }
     }
 
     @ViewBuilder private var agendaContent: some View {
         if vm.agenda.isEmpty {
-            emptyCard(NSLocalizedString("Keine Schultermine oder Prüfungen in diesem Zeitraum.", value: "Keine Schultermine oder Prüfungen in diesem Zeitraum.", comment: "Schule: keine Termine"))
+            emptyCard(NSLocalizedString("No school events or exams in this period.", value: "No school events or exams in this period.", comment: "Schule: keine Termine"))
         } else {
             ForEach(vm.agenda) { item in
                 VStack(alignment: .leading, spacing: 6) {
@@ -367,7 +367,7 @@ struct SchoolView: View {
     @ViewBuilder private var substitutionsContent: some View {
         let daysWithChanges = vm.substitutions.filter { !$0.changes.isEmpty }
         if daysWithChanges.isEmpty {
-            emptyCard(NSLocalizedString("Für diese Woche sind keine Vertretungen eingetragen.", value: "Für diese Woche sind keine Vertretungen eingetragen.", comment: "Schule: keine Vertretungen"))
+            emptyCard(NSLocalizedString("No substitutions scheduled for this week.", value: "No substitutions scheduled for this week.", comment: "Schule: keine Vertretungen"))
         } else {
             ForEach(daysWithChanges) { day in
                 VStack(alignment: .leading, spacing: 8) {
@@ -379,8 +379,8 @@ struct SchoolView: View {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(change.title).font(UberFont.text(14, weight: .semibold))
                                 Text(change.schoolClass.isEmpty
-                                    ? NSLocalizedString("school_plan_change", value: "Stundenplanänderung", comment: "Schule: Änderung ohne Klasse")
-                                    : String(format: NSLocalizedString("school_class_format", value: "Klasse %@", comment: "Schule: Klasse"), change.schoolClass)).font(UberFont.text(12))
+                                    ? NSLocalizedString("school_plan_change", value: "Timetable change", comment: "Schule: Änderung ohne Klasse")
+                                    : String(format: NSLocalizedString("school_class_format", value: "Class %@", comment: "Schule: Klasse"), change.schoolClass)).font(UberFont.text(12))
                                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                             }
                             Spacer()
@@ -406,17 +406,17 @@ struct SchoolView: View {
 
     private func kindTitle(_ kind: String) -> String {
         switch kind {
-        case "exam": return NSLocalizedString("school_kind_exam", value: "TEST / PRÜFUNG", comment: "Schule: Prüfungsart")
-        case "attendance": return NSLocalizedString("school_kind_attendance", value: "ANWESENHEIT", comment: "Schule: Anwesenheit")
-        default: return NSLocalizedString("school_kind_event", value: "SCHULTERMIN", comment: "Schule: Schultermin")
+        case "exam": return NSLocalizedString("school_kind_exam", value: "TEST / EXAM", comment: "Schule: Prüfungsart")
+        case "attendance": return NSLocalizedString("school_kind_attendance", value: "ATTENDANCE", comment: "Schule: Anwesenheit")
+        default: return NSLocalizedString("school_kind_event", value: "SCHOOL EVENT", comment: "Schule: Schultermin")
         }
     }
 
     private func actionLabel(_ action: String) -> String {
         switch action {
-        case "add": return NSLocalizedString("school_action_add", value: "NEU", comment: "Schule: neu")
-        case "remove": return NSLocalizedString("school_action_remove", value: "ENTFÄLLT", comment: "Schule: entfällt")
-        default: return NSLocalizedString("school_action_changed", value: "GEÄNDERT", comment: "Schule: geändert")
+        case "add": return NSLocalizedString("school_action_add", value: "NEW", comment: "Schule: neu")
+        case "remove": return NSLocalizedString("school_action_remove", value: "CANCELLED", comment: "Schule: entfällt")
+        default: return NSLocalizedString("school_action_changed", value: "CHANGED", comment: "Schule: geändert")
         }
     }
 
@@ -424,6 +424,6 @@ struct SchoolView: View {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "de_DE")
         formatter.dateFormat = "dd.MM.yyyy"
-        return String(format: NSLocalizedString("school_week_from", value: "Woche ab %@", comment: "Schule: Wochenlabel"), formatter.string(from: day))
+        return String(format: NSLocalizedString("school_week_from", value: "Week of %@", comment: "Schule: Wochenlabel"), formatter.string(from: day))
     }
 }

@@ -47,7 +47,7 @@ public final class SettingsViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
     }
@@ -71,7 +71,7 @@ public final class SettingsViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
     }
@@ -85,7 +85,7 @@ public final class SettingsViewModel {
         let repo = SettingsRepository(client: store.makeClient())
         do {
             let count = try await repo.clearCache()
-            clearMessage = String(format: NSLocalizedString("settings_cache_cleared", value: "Cache geleert (%d Dateien).", comment: "Einstellungen: Cache geleert"), count)
+            clearMessage = String(format: NSLocalizedString("settings_cache_cleared", value: "Cache cleared (%d files).", comment: "Einstellungen: Cache geleert"), count)
         } catch let apiError as APIError {
             if SessionRecovery.forceLogout(error: apiError, isLoggedIn: store.isLoggedIn) {
                 store.clear()
@@ -96,7 +96,7 @@ public final class SettingsViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
     }
@@ -142,7 +142,7 @@ public final class DevicesViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
     }
@@ -163,7 +163,7 @@ public final class DevicesViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
     }

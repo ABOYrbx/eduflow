@@ -29,33 +29,33 @@ public struct APIError: LocalizedError, Sendable {
         isSessionExpired || code == ErrorCodes.edupage2FA
     }
 
-    /// Deutsche Rückfalltexte je Code (Backend-Texte haben Vorrang).
-    public static func germanFallback(for code: String) -> String {
+    /// Englische Rückfalltexte je Code (Backend-Texte haben Vorrang).
+    public static func englishFallback(for code: String) -> String {
         switch code {
         case ErrorCodes.validation:
-            return NSLocalizedString("common_error_validation", value: "Ungültige Eingabe. Bitte prüfen und erneut versuchen.", comment: "Fehler: ungültige Eingabe")
+            return NSLocalizedString("common_error_validation", value: "Invalid input. Please check and try again.", comment: "Fehler: ungültige Eingabe")
         case ErrorCodes.tokenInvalid:
-            return NSLocalizedString("common_error_token_invalid", value: "Sitzung ungültig. Bitte erneut anmelden.", comment: "Fehler: Sitzung ungültig")
+            return NSLocalizedString("common_error_token_invalid", value: "Session invalid. Please sign in again.", comment: "Fehler: Sitzung ungültig")
         case ErrorCodes.tokenExpired:
-            return NSLocalizedString("common_error_token_expired", value: "Sitzung abgelaufen. Bitte erneut anmelden.", comment: "Fehler: Sitzung abgelaufen")
+            return NSLocalizedString("common_error_token_expired", value: "Session expired. Please sign in again.", comment: "Fehler: Sitzung abgelaufen")
         case ErrorCodes.pendingInvalid:
-            return NSLocalizedString("common_error_pending_invalid", value: "Zwischenschritt abgelaufen. Bitte erneut anmelden.", comment: "Fehler: Zwischenschritt abgelaufen")
+            return NSLocalizedString("common_error_pending_invalid", value: "Intermediate step expired. Please sign in again.", comment: "Fehler: Zwischenschritt abgelaufen")
         case ErrorCodes.invalidCode:
-            return NSLocalizedString("common_error_invalid_code", value: "Der Code wurde nicht akzeptiert. Bitte erneut versuchen.", comment: "Fehler: Code nicht akzeptiert")
+            return NSLocalizedString("common_error_invalid_code", value: "The code was not accepted. Please try again.", comment: "Fehler: Code nicht akzeptiert")
         case ErrorCodes.badCredentials:
-            return NSLocalizedString("common_error_bad_credentials", value: "Falscher Benutzername oder Passwort.", comment: "Fehler: falsche Zugangsdaten")
+            return NSLocalizedString("common_error_bad_credentials", value: "Wrong username, password or subdomain.", comment: "Fehler: falsche Zugangsdaten")
         case ErrorCodes.edupage2FA:
-            return NSLocalizedString("common_error_edupage_2fa", value: "EduPage verlangt erneut einen Code. Bitte neu anmelden.", comment: "Fehler: EduPage verlangt Code")
+            return NSLocalizedString("common_error_edupage_2fa", value: "EduPage requires a code again. Please sign in again.", comment: "Fehler: EduPage verlangt Code")
         case ErrorCodes.captchaRequired:
-            return NSLocalizedString("common_error_captcha_required", value: "EduPage verlangt ein Captcha. Bitte einmal im Browser anmelden.", comment: "Fehler: Captcha erforderlich")
+            return NSLocalizedString("common_error_captcha_required", value: "EduPage requires a captcha. Please sign in via browser once.", comment: "Fehler: Captcha erforderlich")
         case ErrorCodes.notFound:
-            return NSLocalizedString("common_error_not_found", value: "Nicht gefunden.", comment: "Fehler: nicht gefunden")
+            return NSLocalizedString("common_error_not_found", value: "Not found.", comment: "Fehler: nicht gefunden")
         case ErrorCodes.rateLimited:
-            return NSLocalizedString("common_error_rate_limited", value: "Zu viele Versuche. Bitte später erneut versuchen.", comment: "Fehler: zu viele Versuche")
+            return NSLocalizedString("common_error_rate_limited", value: "Too many attempts. Please try again later.", comment: "Fehler: zu viele Versuche")
         case ErrorCodes.configMissing:
-            return NSLocalizedString("common_error_config_missing", value: "Server-Schlüssel fehlt. Bitte später erneut versuchen.", comment: "Fehler: Server-Schlüssel fehlt")
+            return NSLocalizedString("common_error_config_missing", value: "Server key missing. Please try again later.", comment: "Fehler: Server-Schlüssel fehlt")
         default:
-            return NSLocalizedString("common_error_upstream", value: "Anfrage fehlgeschlagen. Bitte später erneut versuchen.", comment: "Fehler: Anfrage fehlgeschlagen")
+            return NSLocalizedString("common_error_upstream", value: "Request failed. Please try again later.", comment: "Fehler: Anfrage fehlgeschlagen")
         }
     }
 }

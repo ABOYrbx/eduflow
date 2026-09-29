@@ -125,11 +125,11 @@ public struct LocaleCoverage: Equatable, Sendable {
 /// erzeugt; bei neuen Sprachen/Zahlen dort neu berechnen, siehe
 /// `plaene/LOKALISIERUNG.md`).
 public let localeCoverage: [LocaleCoverage] = [
-    LocaleCoverage(code: "de", translated: 263, total: 263, percent: 100),
-    LocaleCoverage(code: "en", translated: 263, total: 263, percent: 100),
-    LocaleCoverage(code: "fr", translated: 238, total: 263, percent: 90),
-    LocaleCoverage(code: "pl", translated: 238, total: 263, percent: 90),
-    LocaleCoverage(code: "tr", translated: 238, total: 263, percent: 90),
+    LocaleCoverage(code: "de", translated: 384, total: 384, percent: 100),
+    LocaleCoverage(code: "en", translated: 384, total: 384, percent: 100),
+    LocaleCoverage(code: "fr", translated: 378, total: 384, percent: 98),
+    LocaleCoverage(code: "pl", translated: 378, total: 384, percent: 98),
+    LocaleCoverage(code: "tr", translated: 378, total: 384, percent: 98),
 ]
 
 /// App-Sprache als Override der Systemsprache (reine Logik, testbar).
