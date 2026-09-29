@@ -192,7 +192,9 @@
     "profileAria": "Abrir menu de perfil",
     "profileTitle": "Seu perfil",
     "settings": "Confirgurações",
-    "timetable": "Prazo"
+    "timetable": "Prazo",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right"
   },
   "overview": {
     "allMessages": "Todas as mensagens",
@@ -223,7 +225,20 @@
     "tomorrow": "Amanhã",
     "weather": "Tempo",
     "weatherHint": "Definir localização nas configurações",
-    "weatherUnavailable": "Dados meteorológicos indisponíveis"
+    "weatherUnavailable": "Dados meteorológicos indisponíveis",
+    "editorToggle": "Arrange",
+    "editorHint": "Drag a section to move it, or use the arrows. Hide what you do not need.",
+    "editorDone": "Done",
+    "editorSaving": "Saving…",
+    "editorSaved": "Layout saved",
+    "editorHide": "Hide section",
+    "editorShow": "Show section",
+    "editorHidden": "Hidden",
+    "editorDrag": "Drag to move",
+    "editorReset": "Reset",
+    "editorEmpty": "All sections are hidden. Turn at least one back on.",
+    "editorWide": "Full width",
+    "editorNarrow": "Half width"
   },
   "settings": {
     "accentApplied": "Cor de realce aplicada.",
@@ -294,7 +309,9 @@
     "title": "Confirgurações",
     "tokenCreated": "Token criado. Copie o valor agora; ele é mostrado apenas uma vez.",
     "unnamedDevice": "Dispositivo sem nome",
-    "validUntil": "Válido até {date}"
+    "validUntil": "Válido até {date}",
+    "languageTitle": "Language",
+    "languageHint": "Applies right away. The choice is remembered on this device."
   },
   "theme": {
     "language": "IDIOMA",

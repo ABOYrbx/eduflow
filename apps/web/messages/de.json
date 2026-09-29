@@ -192,7 +192,9 @@
     "profileAria": "Profilmenü öffnen",
     "profileTitle": "Dein Profil",
     "settings": "Einstellungen",
-    "timetable": "Stundenplan"
+    "timetable": "Stundenplan",
+    "scrollBack": "Nach links scrollen",
+    "scrollForward": "Nach rechts scrollen"
   },
   "overview": {
     "allMessages": "Alle Nachrichten",
@@ -223,7 +225,20 @@
     "tomorrow": "Morgen",
     "weather": "Wetter",
     "weatherHint": "Standort in den Einstellungen festlegen",
-    "weatherUnavailable": "Wetterdaten nicht verfügbar"
+    "weatherUnavailable": "Wetterdaten nicht verfügbar",
+    "editorToggle": "Anordnen",
+    "editorHint": "Ziehe einen Abschnitt zum Verschieben oder nutze die Pfeile. Blende aus, was du nicht brauchst.",
+    "editorDone": "Fertig",
+    "editorSaving": "Wird gespeichert …",
+    "editorSaved": "Layout gespeichert",
+    "editorHide": "Abschnitt ausblenden",
+    "editorShow": "Abschnitt einblenden",
+    "editorHidden": "Ausgeblendet",
+    "editorDrag": "Zum Verschieben ziehen",
+    "editorReset": "Zurücksetzen",
+    "editorEmpty": "Alle Abschnitte sind ausgeblendet. Schalte mindestens einen wieder ein.",
+    "editorWide": "Volle Breite",
+    "editorNarrow": "Halbe Breite"
   },
   "settings": {
     "accentApplied": "Akzentfarbe angewendet.",
@@ -294,7 +309,9 @@
     "title": "Einstellungen",
     "tokenCreated": "Token erstellt. Kopieren Sie den Wert jetzt; er wird nur einmal angezeigt.",
     "unnamedDevice": "Unbenanntes Gerät",
-    "validUntil": "Gültig bis {date}"
+    "validUntil": "Gültig bis {date}",
+    "languageTitle": "Sprache",
+    "languageHint": "Gilt sofort. Die Auswahl bleibt auf diesem Gerät gespeichert."
   },
   "theme": {
     "language": "Sprache",
