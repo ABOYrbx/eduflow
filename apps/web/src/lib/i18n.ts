@@ -50,6 +50,16 @@ export function setActiveLocale(locale: string | null): void {
   activeLocale = locale;
 }
 
+/**
+ * BCP47-Tag für toLocale*-Aufrufe: aktive Sprache, sonst Englisch.
+ * Auf dem Server und beim ersten Client-Render (Hydration) ist das Englisch,
+ * damit der Client das Server-HTML übernimmt; der LocaleProvider aktiviert
+ * danach die injizierte Sprache und rendert neu.
+ */
+export function localeTag(): string {
+  return activeLocale ?? FALLBACK_LOCALE;
+}
+
 /** "en-US" → "en"; alles andere (leer, zu lang, keine Buchstaben) → null. */
 export function normalizeLocaleTag(tag: unknown): string | null {
   if (typeof tag !== "string") return null;

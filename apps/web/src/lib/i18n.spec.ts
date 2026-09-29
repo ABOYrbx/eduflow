@@ -1,5 +1,6 @@
 import {
   getCatalog,
+  localeTag,
   normalizeLocaleTag,
   parseAcceptLanguage,
   registerCatalogs,
@@ -43,6 +44,15 @@ describe("t", () => {
     expect(t("nav.overview", undefined, "xx")).toBe("Overview");
   });
 
+  it("fällt pro Key auf Englisch zurück (neue Keys ohne Crowdin-Übersetzung)", () => {
+    expect(t("overview.lessonsToday")).toBe("Lessons today");
+    expect(t("settings.tokenCreated")).toContain("Token created");
+    expect(t("homework.starred")).toBe("★ marked");
+    expect(t("homework.starred", undefined, "fr")).toBe("★ marked");
+    expect(t("overview.lessonsToday", undefined, "fr")).toBe("Lessons today");
+    expect(t("settings.tokenCreated", undefined, "fr")).toContain("Token created");
+  });
+
   it("nutzt den eingespritzten Katalog erst nach Aktivierung", () => {
     (globalThis as { window?: unknown }).window = {
       __EDUFLOW_MESSAGES__: { locale: "fr", catalog: { nav: { overview: "Aperçu" } }, supported: ["en", "fr"] },
@@ -63,6 +73,21 @@ describe("getCatalog/supportedLocales", () => {
     const locales = supportedLocales();
     expect(locales[0]).toBe("en");
     expect(locales).toContain("fr");
+  });
+});
+
+describe("localeTag", () => {
+  afterEach(() => {
+    setActiveLocale(null);
+  });
+
+  it("liefert Englisch ohne aktive Sprache (SSR/erster Render)", () => {
+    expect(localeTag()).toBe("en");
+  });
+
+  it("folgt der aktiven Sprache", () => {
+    setActiveLocale("de");
+    expect(localeTag()).toBe("de");
   });
 });
 
