@@ -106,3 +106,47 @@ export function weekStartIso(value: string, weekStart: number): string {
   const offset = (date.getDay() + 6 - weekStart) % 7;
   return stepIsoDate(value, -offset);
 }
+
+/* ---------- Beschriftungen im aktiven Katalog, nicht aus dem API-Text ----------
+ * Das Backend liefert Tagesnamen in seiner Sprache (im Demo-Dienst englisch).
+ * Für die Oberfläche werden sie hier aus dem Datum in der aktiven
+ * Sprache gebildet; `fallback` greift nur, wenn kein Datum vorhanden ist. */
+
+function format(value: string, locale: string, options: Intl.DateTimeFormatOptions, fallback: string): string {
+  const date = parseIsoDate(value);
+  if (!date) return fallback;
+  try {
+    return new Intl.DateTimeFormat(locale, options).format(date);
+  } catch {
+    return fallback;
+  }
+}
+
+/** "Dienstag" */
+export function weekdayLabel(value: string, locale: string, fallback = ""): string {
+  return format(value, locale, { weekday: "long" }, fallback);
+}
+
+/** "29.09." */
+export function shortDateLabel(value: string, locale: string, fallback = ""): string {
+  return format(value, locale, { day: "2-digit", month: "2-digit" }, fallback);
+}
+
+/** "Dienstag, 29. September 2026" */
+export function fullDateLabel(value: string, locale: string, fallback = ""): string {
+  return format(value, locale, { weekday: "long", day: "numeric", month: "long", year: "numeric" }, fallback);
+}
+
+/** "28.09. – 02.10.2026" — das Jahr nur am Ende, wie es üblich ist. */
+export function weekRangeLabel(fromIso: string, toIso: string, locale: string, fallback = ""): string {
+  const from = parseIsoDate(fromIso);
+  const to = parseIsoDate(toIso);
+  if (!from || !to) return fallback;
+  try {
+    const start = new Intl.DateTimeFormat(locale, { day: "2-digit", month: "2-digit" }).format(from);
+    const end = new Intl.DateTimeFormat(locale, { day: "2-digit", month: "2-digit", year: "numeric" }).format(to);
+    return `${start} – ${end}`;
+  } catch {
+    return fallback;
+  }
+}

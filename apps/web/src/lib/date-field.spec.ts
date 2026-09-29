@@ -1,6 +1,10 @@
 import {
   firstWeekday,
   formatIsoDate,
+  fullDateLabel,
+  shortDateLabel,
+  weekdayLabel,
+  weekRangeLabel,
   monthGrid,
   parseIsoDate,
   shiftMonth,
@@ -112,5 +116,36 @@ describe("firstWeekday", () => {
 
   it("fällt bei unbekannter Sprache auf Montag zurück", () => {
     expect(firstWeekday("")).toBe(0);
+  });
+});
+
+describe("Beschriftungen in der aktiven Sprache", () => {
+  // 29.09.2026 ist ein Dienstag.
+  it("bildet den Wochentag unabhängig vom API-Text", () => {
+    expect(weekdayLabel("2026-09-29", "de-DE", "Tuesday")).toBe("Dienstag");
+    expect(weekdayLabel("2026-09-29", "en-US", "Dienstag")).toBe("Tuesday");
+  });
+
+  it("nutzt den API-Text nur als Rückfall", () => {
+    expect(weekdayLabel("kein-datum", "de-DE", "Tuesday")).toBe("Tuesday");
+    expect(shortDateLabel("kein-datum", "de-DE", "09/29")).toBe("09/29");
+  });
+
+  it("bildet das kurze Datum", () => {
+    expect(shortDateLabel("2026-09-29", "de-DE")).toBe("29.09.");
+    expect(shortDateLabel("2026-09-29", "en-US")).toBe("09/29");
+  });
+
+  it("bildet das volle Datum", () => {
+    expect(fullDateLabel("2026-09-29", "de-DE")).toBe("Dienstag, 29. September 2026");
+  });
+
+  it("bildet den Wochenbereich mit Jahr nur am Ende", () => {
+    expect(weekRangeLabel("2026-09-28", "2026-10-02", "de-DE")).toBe("28.09. – 02.10.2026");
+    expect(weekRangeLabel("2026-09-28", "2026-10-02", "en-US")).toBe("09/28 – 10/02/2026");
+  });
+
+  it("fällt bei fehlendem Datum auf den API-Text zurück", () => {
+    expect(weekRangeLabel("", "2026-10-02", "de-DE", "KW 40")).toBe("KW 40");
   });
 });
