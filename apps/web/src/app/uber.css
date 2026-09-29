@@ -384,7 +384,8 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 /* Sprachwahl als Button-Pille mit Custom-Menü (Profilmenü-Stil) */
 .lang-wrap .lang-btn{position:relative;padding-right:36px;cursor:pointer;font-family:inherit}
 .lang-btn::after{content:"";position:absolute;right:15px;top:50%;width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-70%) rotate(45deg);pointer-events:none}
-.lang-wrap .profile-menu{display:block;left:0;right:auto;min-width:190px;max-height:min(60vh,380px);overflow:auto}
+.lang-wrap .profile-menu{display:block;left:0;right:auto;min-width:190px;max-height:min(60vh,380px);overflow:auto;scrollbar-width:none;-ms-overflow-style:none}
+.lang-wrap .profile-menu::-webkit-scrollbar{display:none}
 .lang-option{width:100%;background:none;border:0;text-align:left;font:inherit;color:inherit;cursor:pointer}
 .lang-option[aria-checked="true"]{font-weight:800}
 .lang-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
