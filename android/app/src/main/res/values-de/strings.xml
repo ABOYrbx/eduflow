@@ -247,7 +247,6 @@
     <string name="overview_messages_empty">Keine neuen Nachrichten.</string>
     <string name="overview_homework_empty">Keine offenen Hausaufgaben. Sehr gut.</string>
     <string name="overview_order_weather">Wetter</string>
-    <string name="overview_order_lunch">Mittagessen</string>
     <string name="overview_drag_handle_desc">Ziehen zum Sortieren</string>
     <string name="overview_due_suffix_format"> · fällig: %1$s</string>
     <string name="overview_subject_suffix_format"> · %1$s</string>
