@@ -28,7 +28,7 @@ button{font-family:inherit;cursor:pointer}
 /* ---------- Nav: kleine zentrierte Pille (nur so breit wie der Inhalt) ---------- */
 .nav-wrap{overflow:clip;position:sticky;top:12px;z-index:50;width:fit-content;max-width:calc(100vw - 24px);margin:12px auto 0;border:1px solid rgba(255,255,255,.65);border-radius:var(--r-full);background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.45));backdrop-filter:blur(24px) saturate(1.8);-webkit-backdrop-filter:blur(24px) saturate(1.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255,.15),0 12px 40px rgba(0,0,0,.14);transition:box-shadow .2s ease,background .2s ease,border-color .2s ease}
 .nav-wrap .nav{max-width:none;width:auto;margin:0;padding:5px 8px;justify-content:space-between}
-.nav{display:flex;align-items:center;justify-content:center;gap:6px;padding:14px 0;flex-wrap:nowrap;transition:padding .22s ease}
+.nav{display:flex;align-items:center;justify-content:center;gap:6px;padding:14px 0;flex-wrap:nowrap;min-width:0;transition:padding .22s ease}
 .nav-logo{width:32px;height:32px;flex:0 0 32px;border-radius:50%;overflow:hidden;display:block;transition:transform .12s ease}
 .nav-logo:hover{transform:translateY(-1px)}
 .nav-logo img{display:block;width:100%;height:100%;object-fit:cover}
@@ -56,6 +56,10 @@ button{font-family:inherit;cursor:pointer}
    klebte der Knopf am Profilbild (4px statt 12px). */
 .nav-scroll-end{margin-right:8px}
 [data-theme="dark"] .nav-scroll{background:rgba(255,255,255,.14);color:#fff}
+/* Weiche Kante zeigt an, dass links oder rechts noch etwas liegt. */
+.nav-wrap.has-start .nav-mid{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 30px);mask-image:linear-gradient(90deg,transparent 0,#000 30px)}
+.nav-wrap.has-end .nav-mid{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 30px),transparent 100%);mask-image:linear-gradient(90deg,#000 calc(100% - 30px),transparent 100%)}
+.nav-wrap.has-start.has-end .nav-mid{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 30px,#000 calc(100% - 30px),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 30px,#000 calc(100% - 30px),transparent 100%)}
 .nav-mid::-webkit-scrollbar{display:none}
 .nav-pill{padding:7px 12px;border-radius:var(--r-full);font-size:13px;font-weight:600;color:var(--ink-muted);transition:padding .22s ease,font-size .22s ease,background .15s,color .15s;white-space:nowrap}
 .nav-pill:hover{color:var(--ink);background:var(--surface-1)}
