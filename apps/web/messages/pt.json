@@ -95,7 +95,7 @@
     "trashEmpty": "O lixo está vazio.",
     "trashLabel": "Descartar",
     "trashWithCount": "Lixeira ({count})",
-    "dueToday": "due today"
+    "dueToday": "expira hoje"
   },
   "login": {
     "backToLogin": "Voltar ao Login",
@@ -202,7 +202,7 @@
     "loading": "Carregando …",
     "loadingTimetable": "Carregando calendário …",
     "messages": "mensagens",
-    "newMessages": "{count} neu",
+    "newMessages": "{count} new",
     "nextLesson": "Próxima lição",
     "noLessonsToday": "nenhuma lição hoje",
     "online": "Disponível",
