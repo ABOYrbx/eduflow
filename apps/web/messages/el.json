@@ -95,7 +95,7 @@
     "trashEmpty": "Ο κάδος απορριμμάτων είναι άδειος.",
     "trashLabel": "Απορρίμματα",
     "trashWithCount": "Papierkorb ({count})",
-    "dueToday": "due today"
+    "dueToday": "ημερομηνία λήξης"
   },
   "login": {
     "backToLogin": "Πίσω στην είσοδο",
