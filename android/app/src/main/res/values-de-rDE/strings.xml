@@ -32,7 +32,7 @@
     <string name="navbar_move_up">Nach oben</string>
     <string name="navbar_move_down">Nach unten</string>
     <!-- Auth / Login -->
-    <string name="auth_step_format">Step %1$d of %2$d</string>
+    <string name="auth_step_format">Schritt %1$d von %2$d</string>
     <string name="auth_hint_username">Wie lautet Ihr EduPage Benutzername?</string>
     <string name="auth_label_username">Benutzername</string>
     <string name="auth_placeholder_username">z.B. max.muster</string>
@@ -196,7 +196,7 @@
     <string name="messages_cached">Aus Cache geladen.</string>
     <string name="messages_files_format">Dateien (%1$d)</string>
     <string name="messages_likes_format">\"Gefällt mir\" (%1$d)</string>
-    <string name="messages_replies_format">Replies (%1$d)</string>
+    <string name="messages_replies_format">Antworten (%1$d)</string>
     <string name="messages_no_activity">Noch keine Likes oder Antworten.</string>
     <string name="messages_reply_placeholder">Antwort …</string>
     <string name="messages_sending">Senden …</string>
