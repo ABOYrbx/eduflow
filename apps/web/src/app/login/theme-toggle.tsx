@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NATIVE_NAMES, localeCookie, normalizeLocaleTag, setActiveLocale, t } from "../../lib/i18n";
 
 declare global {
@@ -13,6 +13,8 @@ export function ThemeToggle() {
   const [dark, setDark] = useState(false);
   const [locale, setLocale] = useState("en");
   const [supported, setSupported] = useState<string[]>(["en"]);
+  const [langOpen, setLangOpen] = useState(false);
+  const langRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setDark(document.documentElement.dataset.theme === "dark");
@@ -20,6 +22,32 @@ export function ThemeToggle() {
     const list = window.__EDUFLOW_MESSAGES__?.supported;
     if (Array.isArray(list) && list.length) setSupported(list);
   }, []);
+
+  useEffect(() => {
+    if (!langOpen) return;
+    function onDown(event: MouseEvent) {
+      if (langRef.current && !langRef.current.contains(event.target as Node)) setLangOpen(false);
+    }
+    function onKey(event: KeyboardEvent) {
+      if (event.key === "Escape") setLangOpen(false);
+    }
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [langOpen]);
+
+  function pickLanguage(code: string) {
+    const next = normalizeLocaleTag(code) ?? "en";
+    setLangOpen(false);
+    document.cookie = localeCookie(next);
+    setLocale(next);
+    setActiveLocale(next);
+    document.documentElement.lang = next;
+    window.location.reload();
+  }
 
   function toggleTheme() {
     const next = dark ? "light" : "dark";
@@ -34,23 +62,34 @@ export function ThemeToggle() {
 
   return (
     <>
-    <span className="auth-top-left select-wrap lang-wrap">
-    <select
-      className="btn btn-light btn-sm auth-lang-select"
+    <div className="auth-top-left lang-wrap" ref={langRef}>
+    <button
+      type="button"
+      className="btn btn-light btn-sm lang-btn"
+      aria-haspopup="menu"
+      aria-expanded={langOpen}
       aria-label={t("theme.language")}
-      value={locale}
-      onChange={(event) => {
-        const next = normalizeLocaleTag(event.target.value) ?? "en";
-        document.cookie = localeCookie(next);
-        setLocale(next);
-        setActiveLocale(next);
-        document.documentElement.lang = next;
-        window.location.reload();
-      }}
+      onClick={() => setLangOpen((open) => !open)}
     >
-      {supported.map((code) => <option key={code} value={code}>{NATIVE_NAMES[code] ?? code}</option>)}
-    </select>
-    </span>
+      {NATIVE_NAMES[locale] ?? locale}
+    </button>
+    {langOpen && (
+      <div className="profile-menu lang-menu" role="menu" aria-label={t("theme.language")}>
+        {supported.map((code) => (
+          <button
+            key={code}
+            type="button"
+            role="menuitemradio"
+            aria-checked={code === locale}
+            className="pm-link lang-option"
+            onClick={() => pickLanguage(code)}
+          >
+            <span aria-hidden="true">{code === locale ? "✓ " : ""}</span>{NATIVE_NAMES[code] ?? code}
+          </button>
+        ))}
+      </div>
+    )}
+    </div>
     <button
       className={`theme-toggle auth-top-right${dark ? " is-dark" : ""}`}
       type="button"
