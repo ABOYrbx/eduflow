@@ -230,14 +230,23 @@ struct MessageTests {
         #expect((try? Data(contentsOf: file)) == "datei".data(using: .utf8))
     }
 
+    /// Erwartungswert in der gerade aktiven App-Sprache (Katalog ist
+    /// mehrsprachig, `value` dient als Quelle).
+    private func localized(_ key: String, _ source: String) -> String {
+        NSLocalizedString(key, value: source, comment: "Test")
+    }
+
     @Test("Typ-Labels und Fehlercodes wie im Web")
     func labelsAndErrors() async throws {
-        #expect(MessageTypes.label("sprava") == "Nachricht")
-        #expect(MessageTypes.label("news") == "Neuigkeit")
-        #expect(MessageTypes.label("anketa") == "Umfrage")
-        #expect(MessageTypes.label("chat") == "Chat")
-        #expect(MessageTypes.label("genotif") == "Mitteilung")
-        #expect(MessageTypes.label("") == "Alle")
+        // Typwerte (`sprava` usw.) bleiben stabil; nur die Anzeige ist
+        // uebersetzt. Erwartung daher gegen die aktuelle App-Sprache, nicht
+        // gegen einen festen deutschen Text (Bundle ist mehrsprachig).
+        #expect(MessageTypes.label("sprava") == localized("messages_type_sprava", "Message"))
+        #expect(MessageTypes.label("news") == localized("messages_type_news", "News"))
+        #expect(MessageTypes.label("anketa") == localized("messages_type_anketa", "Poll"))
+        #expect(MessageTypes.label("chat") == localized("messages_type_chat", "Chat"))
+        #expect(MessageTypes.label("genotif") == localized("messages_type_genotif", "Notification"))
+        #expect(MessageTypes.label("") == localized("homework_filter_all", "All"))
         stub(status: 400, body: #"{"error":"Unbekannter Typ.","code":"VALIDATION"}"#)
         do {
             _ = try await MessagesRepository(client: client()).list(type: "falsch")

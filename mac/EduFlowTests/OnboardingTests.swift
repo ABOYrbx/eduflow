@@ -56,7 +56,9 @@ struct OnboardingTests {
                 }
             }
             // Live-Überlagerung auf den vorherigen Stand zurücksetzen.
-            BundleLanguageOverride.activate(code: UserDefaults.standard.string(forKey: "de.eduflow.appLanguage"))
+            // Wichtig: Suite-übergreifend — ohne Reset bleiben deutsche
+            // Labels in anderen Suites (Bundle-Override ist global).
+            BundleLanguageOverride.activate(code: nil)
         }
         for key in keys { UserDefaults.standard.removeObject(forKey: key) }
         #expect(AppLanguage.override == nil)
@@ -79,7 +81,7 @@ struct OnboardingTests {
                     UserDefaults.standard.removeObject(forKey: key)
                 }
             }
-            BundleLanguageOverride.activate(code: UserDefaults.standard.string(forKey: "de.eduflow.appLanguage"))
+            BundleLanguageOverride.activate(code: nil)
         }
         for key in keys { UserDefaults.standard.removeObject(forKey: key) }
         await confirmation("Wechsel gemeldet", expectedCount: 2) { confirm in

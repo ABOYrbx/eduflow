@@ -7,8 +7,9 @@ import SwiftUI
 /// bestehende Login-Ansicht inklusive Zwei-Faktor-Pfad; bei Erfolg wird das
 /// Flag gesetzt und zur Landing-Route navigiert.
 ///
-/// Die Sprachwahl auf Seite 2 wirkt sofort (locale-Umgebung + erneutes
-/// Rendern, kein Neustart).
+/// Die Sprachwahl auf Seite 2 wirkt sofort (locale-Umgebung, kein
+/// Neustart) — die Seite wird dabei NICHT neu aufgebaut, damit keine
+/// Einstiegs-Animationen erneut abspielen und die Liste nicht springt.
 public struct OnboardingFlow: View {
     @Environment(\.colorScheme) private var scheme
     @State private var page = 0
@@ -40,8 +41,12 @@ public struct OnboardingFlow: View {
                     .padding(20)
                 } else {
                     VStack(spacing: 0) {
+                        // Bewusst nur page als ID: Bei Sprachwechsel ändert
+                        // sich nur die locale-Umgebung (Texte rendern neu),
+                        // die Ansicht bleibt bestehen — sonst würde jeder
+                        // Tap die RiseIn-Animationen erneut abspielen.
                         pageView(for: page)
-                            .id("\(page)-\(languageID)")
+                            .id(page)
                             .transition(
                                 .asymmetric(
                                     insertion: .move(edge: .trailing).combined(with: .opacity),
