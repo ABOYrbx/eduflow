@@ -123,7 +123,9 @@
     "sectionWetter": "Wetter",
     "timeFormatLabel": "Uhr: Zeitformat",
     "ovHiddenLabel": "Ausgeblendete Abschnitte",
-    "ovHiddenHint": "Abschnitte, die du im Übersichts-Editor ausgeschaltet hast."
+    "ovHiddenHint": "Abschnitte, die du im Übersichts-Editor ausgeschaltet hast.",
+    "ovSpanLabel": "Abschnittsbreiten",
+    "ovSpanHint": "Abschnitte auf halbe Breite stehen nebeneinander."
   },
   "upstream": {
     "agendaFailed": "Schulereignisse konnten nicht geladen werden: {detail}",

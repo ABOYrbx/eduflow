@@ -123,7 +123,9 @@
     "sectionWetter": "Vreme",
     "timeFormatLabel": "Clock: Time format",
     "ovHiddenLabel": "Hidden sections",
-    "ovHiddenHint": "Sections you switched off in the overview editor."
+    "ovHiddenHint": "Sections you switched off in the overview editor.",
+    "ovSpanLabel": "Section widths",
+    "ovSpanHint": "Sections you set to half width sit next to each other."
   },
   "upstream": {
     "agendaFailed": "Evenimentele școlare nu au putut fi încărcate: {detail}",

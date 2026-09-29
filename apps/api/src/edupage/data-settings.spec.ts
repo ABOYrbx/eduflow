@@ -33,7 +33,7 @@ describe("settings (Port von app.py + api/settings.py, Paket N-F)", () => {
 
   it("liefert Schema und Defaults wie Python", async () => {
     const got = await service.settingsGet(claims);
-    expect(got.schema).toHaveLength(10);
+    expect(got.schema).toHaveLength(11);
     expect(got.values).toMatchObject({ landing: "uebersicht", hw_tests: false, ov_unread: 10, ov_order: "messages,homework,weather", time_format: "24h" });
     expect(SETTINGS_DEFAULTS.ov_wetter).toBe(true);
   });
@@ -46,6 +46,18 @@ describe("settings (Port von app.py + api/settings.py, Paket N-F)", () => {
     prefs.set("time_format", "13h");
     const got = await service.settingsGet(claims) as unknown as { values: Record<string, unknown> };
     expect(got.values).toMatchObject({ landing: "dashboard", ov_unread: 50, hw_tests: true, ov_order: "weather,messages,homework", time_format: "24h" });
+  });
+
+  it("filtert ausgeblendete Abschnitte und Spaltenbreiten", async () => {
+    prefs.set("ov_hidden", "weather,lunch,messages,weather");
+    prefs.set("ov_span", "weather:6,messages:9,homework:6,lunch:6");
+    const got = await service.settingsGet(claims) as unknown as { values: Record<string, unknown> };
+    expect(got.values.ov_hidden).toBe("weather,messages");
+    // messages:9 ist weder 6 noch 12 und fällt raus, lunch ist unbekannt.
+    expect(got.values.ov_span).toBe("homework:6,weather:6");
+    const saved = await service.settingsPut(claims, { ov_hidden: "homework", ov_span: "homework:6" }) as unknown as { values: Record<string, unknown> };
+    expect(saved.values.ov_hidden).toBe("homework");
+    expect(saved.values.ov_span).toBe("homework:6");
   });
 
   it("speichert gegen Schema validiert wie Python", async () => {
