@@ -29,6 +29,7 @@ class SettingsRepository(private val api: () -> ApiService) {
             put("ov_order", JsonPrimitive(values.ovOrder))
             put("ov_wetter", JsonPrimitive(values.ovWetter))
             put("wetter_city", JsonPrimitive(values.wetterCity))
+            put("time_format", JsonPrimitive(values.timeFormat))
         }
         val res = api().putSettings(body).unwrap()
         return res.typedValues()

@@ -62,7 +62,7 @@ describe("DemoSchoolService", () => {
   it("returns five school days, agenda, grades and demo weather", () => {
     const week = service.timetableWeek({ day: "2026-09-24" });
     expect(week.days).toHaveLength(5);
-    expect(week.days[0]?.day_name).toBe("Montag");
+    expect(week.days[0]?.day_name).toBe("Monday");
     expect(service.timetableDay({ day: "2026-09-25" }).lessons).toHaveLength(4);
     expect(service.timetableDay({ day: "2026-09-26" }).lessons).toHaveLength(0);
     expect(service.agenda({}).items.map((item) => item.kind)).toEqual(expect.arrayContaining(["event", "exam", "attendance"]));

@@ -107,6 +107,9 @@
     <string name="settings_landing_label">Start page after sign-in</string>
     <string name="settings_hwfilter_label">Tasks: default filter</string>
     <string name="settings_hwtests_label">Include tests and exams</string>
+    <string name="settings_time_format_label">Clock format</string>
+    <string name="settings_time_24h">24-hour</string>
+    <string name="settings_time_12h">12-hour</string>
     <string name="settings_unread_placeholder">Max. unread messages (1–50)</string>
     <string name="settings_homework_placeholder">Max. open homework (1–50)</string>
     <string name="settings_navbar_section">Navigation bar</string>

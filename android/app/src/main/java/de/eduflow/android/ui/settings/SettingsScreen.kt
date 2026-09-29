@@ -395,6 +395,18 @@ fun SettingsScreen(
                     onSelectKey = { key -> vm.update(v.copy(hwStatus = key)) },
                 )
                 Spacer(Modifier.height(12.dp))
+                Text(
+                    stringResource(R.string.settings_time_format_label),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                Spacer(Modifier.height(8.dp))
+                SettingsDropdown(
+                    options = SettingsDefaults.TIME_FORMAT_OPTIONS.map { key -> key to timeFormatLabel(key) },
+                    selectedKey = v.timeFormat,
+                    onSelectKey = { key -> vm.update(v.copy(timeFormat = key)) },
+                )
+                Spacer(Modifier.height(12.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
                         stringResource(R.string.settings_hwtests_label),
@@ -814,5 +826,12 @@ private fun hwStatusLabel(key: String): String = when (key) {
     "überfällig" -> stringResource(R.string.homework_filter_overdue)
     "erledigt" -> stringResource(R.string.homework_filter_done)
     "papierkorb" -> stringResource(R.string.homework_swipe_trash)
+    else -> key
+}
+
+@Composable
+private fun timeFormatLabel(key: String): String = when (key) {
+    "24h" -> stringResource(R.string.settings_time_24h)
+    "12h" -> stringResource(R.string.settings_time_12h)
     else -> key
 }

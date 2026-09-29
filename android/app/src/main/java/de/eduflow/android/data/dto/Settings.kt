@@ -47,9 +47,11 @@ object SettingsDefaults {
     const val OV_WETTER = true
     const val WETTER_CITY = ""
     const val WETTER_CITY_MAX = 100
+    const val TIME_FORMAT = "24h"
 
     val LANDING_OPTIONS = listOf("uebersicht", "dashboard", "hausaufgaben", "noten", "stundenplan")
     val HW_STATUS_OPTIONS = listOf("alle", "offen", "überfällig", "erledigt", "papierkorb")
+    val TIME_FORMAT_OPTIONS = listOf("24h", "12h")
 }
 
 /** Typisierte Sicht auf die rohen Server-Werte (mit Fallback auf Defaults). */
@@ -62,6 +64,7 @@ data class SettingsValues(
     val ovOrder: String = SettingsDefaults.OV_ORDER,
     val ovWetter: Boolean = SettingsDefaults.OV_WETTER,
     val wetterCity: String = SettingsDefaults.WETTER_CITY,
+    val timeFormat: String = SettingsDefaults.TIME_FORMAT,
 )
 
 fun SettingsResponse.typedValues(): SettingsValues {
@@ -96,5 +99,6 @@ fun SettingsResponse.typedValues(): SettingsValues {
         ovOrder = text("ov_order", SettingsDefaults.OV_ORDER, 100),
         ovWetter = bool("ov_wetter", SettingsDefaults.OV_WETTER),
         wetterCity = text("wetter_city", SettingsDefaults.WETTER_CITY, SettingsDefaults.WETTER_CITY_MAX),
+        timeFormat = str("time_format", SettingsDefaults.TIME_FORMAT, SettingsDefaults.TIME_FORMAT_OPTIONS),
     )
 }

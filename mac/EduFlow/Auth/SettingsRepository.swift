@@ -35,6 +35,7 @@ public struct SettingsRepository: Sendable {
             "ov_order": outgoing.ovOrder,
             "ov_wetter": outgoing.ovWetter,
             "wetter_city": outgoing.wetterCity,
+            "time_format": outgoing.timeFormat,
         ] as [String: Any])
         let data = try await client.put(APIClient.Paths.settings, body: body)
         let response = try APIClient.decode(SettingsResponse.self, from: data)
