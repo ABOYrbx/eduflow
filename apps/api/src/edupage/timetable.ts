@@ -1,4 +1,5 @@
 import { MissingDataError, RequestError } from "./errors";
+import { t } from "../i18n";
 import { EdupageSession } from "./session";
 import { encodeFormData } from "./protocol";
 
@@ -50,7 +51,7 @@ export async function fetchDayPlan(session: EdupageSession, subdomain: string, u
   try {
     data = JSON.parse(middle) as Record<string, unknown>;
   } catch {
-    throw new RequestError("Unerwartete Antwort von EduPage.");
+    throw new RequestError(t("upstream.unexpectedResponse"));
   }
   const dates = (data.dates ?? {}) as Record<string, { plan?: unknown[] }>;
   const plan = dates[date]?.plan;

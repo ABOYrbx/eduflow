@@ -2,6 +2,7 @@ package de.eduflow.android.ui.overview
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import de.eduflow.android.R
 import de.eduflow.android.data.ApiException
 import de.eduflow.android.data.ApiService
 import de.eduflow.android.data.EduFlowJson
@@ -169,7 +170,12 @@ class OverviewViewModel(
         val city = _state.value.wetterCity.trim()
         if (city.isEmpty()) {
             _state.update {
-                it.copy(wetterError = ApiException("VALIDATION", "Bitte eine Stadt eingeben."))
+                it.copy(
+                    wetterError = ApiException(
+                        "VALIDATION", "Bitte eine Stadt eingeben.",
+                        messageRes = R.string.overview_weather_no_city,
+                    ),
+                )
             }
             return
         }

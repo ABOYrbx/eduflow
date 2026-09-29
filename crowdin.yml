@@ -1,4 +1,4 @@
-# EduFlow – Crowdin-Quellen (Source-Sprache: Deutsch)
+# EduFlow – Crowdin-Quellen (Source-Sprache: Englisch)
 #
 # Die Crowdin-GitHub-App nutzt diese Datei. Secrets (CROWDIN_PROJECT_ID,
 # CROWDIN_TOKEN) liegen nur als GitHub-Secrets, niemals im Repo
@@ -8,25 +8,29 @@ api_token_env: CROWDIN_TOKEN
 preserve_hierarchy: true
 
 files:
-  # Web (Next.js, Quelle = deutsch, `t()` aus apps/web/src/lib/i18n.ts).
-  # Übersetzungen landen als weitere Kataloge neben de.json.
-  - source: /apps/web/messages/de.json
+  # Web (Next.js, Quelle = englisch, `t()` aus apps/web/src/lib/i18n.ts).
+  # Übersetzungen landen als weitere Kataloge neben en.json
+  # (de.json ist jetzt normale Zielsprache und wird von Crowdin verwaltet).
+  - source: /apps/web/messages/en.json
     translation: /apps/web/messages/%two_letters_code%.json
     update_option: update_as_unapproved
 
   # Backend (NestJS-Fehlermeldungen + Settings-Schema + API-Docs, `t()` aus
   # apps/api/src/i18n.ts). API-Fehler-`code`s werden nie übersetzt.
-  - source: /apps/api/src/messages/de.json
+  # Quelle = englisch; de.json wird von Crowdin als Übersetzung verwaltet.
+  - source: /apps/api/src/messages/en.json
     translation: /apps/api/src/messages/%two_letters_code%.json
     update_option: update_as_unapproved
 
-  # Android (Quelle = deutsch, Texte via stringResource aus values/strings.xml)
+  # Android (Quelle = englisch, values/strings.xml ist englisch,
+  # Texte via stringResource). values-de/ wird von Crowdin verwaltet.
   - source: /android/app/src/main/res/values/strings.xml
     translation: /android/app/src/main/res/values-%android_code%/strings.xml
     update_option: update_as_unapproved
 
   # macOS String Catalog (alle Sprachen leben in derselben Datei;
   # multilingual befreit vom Sprach-Platzhalter, siehe CLI-Doku).
+  # Katalog-Source ist en.
   - source: /mac/EduFlow/Resources/Localizable.xcstrings
     translation: /mac/EduFlow/Resources/Localizable.xcstrings
     multilingual: true

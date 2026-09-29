@@ -53,6 +53,7 @@
 		1F5F9039524F0CCD29C43E4E /* HomeworkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605AFB79FA16A8C75C3FBC58 /* HomeworkTests.swift */; };
 		3F89C71CDFD55196BF9CD840 /* TimetableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D2F36018D8E9F2A54BFC45 /* TimetableTests.swift */; };
 		18EE91D7FB77423845BAE685 /* OnboardingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55E951937A6C9F5066B4180 /* OnboardingTests.swift */; };
+		A1B2C3D4E5F60718293A4B5C /* SchoolTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F60718293A4B5C6D /* SchoolTests.swift */; };
 		701536B5DD228FE17DF76C52 /* Inter.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 040D6D124C9FEAB4666DF4A4 /* Inter.ttf */; };
 		A639164140892C8537395F63 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = E983B6428F4BB45B34030F6E /* icon.png */; };
 		9B354DB2FE2BD5EC9F1FFEB9 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AD6D4B96C5259ADFCDAF0545 /* Localizable.xcstrings */; };
@@ -113,6 +114,7 @@
 		605AFB79FA16A8C75C3FBC58 /* HomeworkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeworkTests.swift; sourceTree = "<group>"; };
 		C2D2F36018D8E9F2A54BFC45 /* TimetableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableTests.swift; sourceTree = "<group>"; };
 		C55E951937A6C9F5066B4180 /* OnboardingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingTests.swift; sourceTree = "<group>"; };
+		B2C3D4E5F60718293A4B5C6D /* SchoolTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolTests.swift; sourceTree = "<group>"; };
 		040D6D124C9FEAB4666DF4A4 /* Inter.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Inter.ttf; sourceTree = "<group>"; };
 		E983B6428F4BB45B34030F6E /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		AD6D4B96C5259ADFCDAF0545 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -231,6 +233,7 @@
 				605AFB79FA16A8C75C3FBC58,
 				C2D2F36018D8E9F2A54BFC45,
 				C55E951937A6C9F5066B4180,
+				B2C3D4E5F60718293A4B5C6D,
 			); path = EduFlowTests; sourceTree = "<group>"; };
 		63A4CF06DA8E5857AFE04139 /* Products */ = {isa = PBXGroup; children = (
 				559B66BA1F9851FDB1F5E311,
@@ -321,6 +324,7 @@
 				1F5F9039524F0CCD29C43E4E /* HomeworkTests.swift in Sources */,
 				3F89C71CDFD55196BF9CD840 /* TimetableTests.swift in Sources */,
 				18EE91D7FB77423845BAE685 /* OnboardingTests.swift in Sources */,
+				A1B2C3D4E5F60718293A4B5C /* SchoolTests.swift in Sources */,
 			); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
 

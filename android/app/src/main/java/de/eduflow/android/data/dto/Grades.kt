@@ -49,7 +49,7 @@ data class GradeDto(
     @Serializable(with = FlexibleStringSerializer::class)
     val id: String = "",
     val title: String = "",
-    val subject: String = "Sonstiges",
+    val subject: String = SUBJECT_OTHER_DE,
     val teacher: String = "",
     val date_display: String = "",
     val date_iso: String = "",
@@ -80,7 +80,7 @@ data class GradesListResponse(
 @Serializable
 data class GradeTerm(
     val key: String = "alle",
-    val label: String = "Gesamt",
+    val label: String = TERM_ALL_DE,
     val count: Int = 0,
 )
 
@@ -131,34 +131,65 @@ fun gradeTermKey(dateIso: String, fallback: String): String {
     return currentTermKey(y, m)
 }
 
-/** Halbjahr-Key -> deutsche Bezeichnung (app.py grade_term_label). */
-fun gradeTermLabel(key: String): String {
+/** Halbjahr-Key -> Bezeichnung (app.py grade_term_label).
+ *
+ * Dokumentierte Ausnahme: Die Defaults sind deutsch (Quelle der
+ * `grades_term_*`-Strings), damit diese Ebene kontextfrei bleibt und
+ * Unit-Tests offline laufen. Die UI übergibt die übersetzten Ressourcen
+ * ([format] aus `grades_term_label_format`, siehe GradesScreen).
+ */
+const val TERM_LABEL_FORMAT_DE = "%1\$d. Halbjahr %2\$s/%3\$s"
+const val TERM_ALL_DE = "Gesamt"
+const val SUBJECT_OTHER_DE = "Sonstiges"
+
+fun gradeTermLabel(key: String, format: String = TERM_LABEL_FORMAT_DE): String {
     val parts = key.split("-H")
     if (parts.size != 2) return key
     val sy = parts[0].toIntOrNull() ?: return key
     val half = parts[1].toIntOrNull() ?: return key
-    return "$half. Halbjahr ${sy.toString().takeLast(2)}/${(sy + 1).toString().takeLast(2)}"
+    val yy1 = sy.toString().takeLast(2)
+    val yy2 = (sy + 1).toString().takeLast(2)
+    return try {
+        format.format(half, yy1, yy2)
+    } catch (_: Exception) {
+        TERM_LABEL_FORMAT_DE.format(half, yy1, yy2)
+    }
 }
+
+/** Term-Key -> Anzeigelabel ("alle" -> Gesamt, sonst Halbjahr-Format). */
+fun displayGradeTermLabel(
+    key: String,
+    allLabel: String = TERM_ALL_DE,
+    format: String = TERM_LABEL_FORMAT_DE,
+): String = if (key == "alle") allLabel else gradeTermLabel(key, format)
 
 /**
  * Halbjahre aus den geladenen Noten ableiten (neuestes zuerst) + "alle"
  * (app.py noten(): term_keys + Gesamt-Anhang).
  */
-fun buildGradeTerms(items: List<GradeDto>, fallback: String): List<GradeTerm> {
+fun buildGradeTerms(
+    items: List<GradeDto>,
+    fallback: String,
+    allLabel: String = TERM_ALL_DE,
+    termFormat: String = TERM_LABEL_FORMAT_DE,
+): List<GradeTerm> {
     val counts = linkedMapOf<String, Int>()
     for (g in items) {
         val k = gradeTermKey(g.date_iso, fallback)
         counts[k] = (counts[k] ?: 0) + 1
     }
     val terms = counts.entries.sortedByDescending { it.key }.map { (k, c) ->
-        GradeTerm(k, gradeTermLabel(k), c)
-    } + GradeTerm("alle", "Gesamt", items.size)
+        GradeTerm(k, gradeTermLabel(k, termFormat), c)
+    } + GradeTerm("alle", allLabel, items.size)
     return terms
 }
 
 /** Nach Fach gruppieren wie im Web (alphabetisch, Noten neueste zuerst). */
-fun groupGradesBySubject(items: List<GradeDto>): List<GradeSubjectGroup> {
-    return items.groupBy { it.subject.ifBlank { "Sonstiges" } }
+fun groupGradesBySubject(
+    items: List<GradeDto>,
+    otherLabel: String = SUBJECT_OTHER_DE,
+): List<GradeSubjectGroup> {
+    return items.groupBy { it.subject.ifBlank { otherLabel } }
         .toSortedMap(String.CASE_INSENSITIVE_ORDER)
         .map { (subject, group) ->
             val sorted = group.sortedByDescending { it.sort_key }

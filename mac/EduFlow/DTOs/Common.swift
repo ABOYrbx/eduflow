@@ -23,6 +23,13 @@ public enum ErrorCodes {
     ]
 }
 
+/// Paginierung wie das Backend (`apps/api/src/common/pagination.ts`):
+/// Standard 50, Maximum 200, Offset ab 0.
+public enum PageLimits {
+    public static let defaultLimit = 50
+    public static let maxLimit = 200
+}
+
 /// Hüllobjekt aller Listen: `{items, total, limit, offset}` (`BACKEND.md` §1).
 public struct Page<T: Decodable & Sendable>: Decodable, Sendable {
     public let items: [T]

@@ -1,6 +1,7 @@
 import { decodeResponse, encodeRequestBody } from "./protocol";
 import { parseLikesResponse } from "./serializers";
 import { RequestError } from "./errors";
+import { t } from "../i18n";
 import { EdupageSession } from "./session";
 
 /** Nachrichten-Protokoll (Port von `edupage_api.messages` + `app.py`, N-B). */
@@ -15,7 +16,7 @@ export async function sendTimelineMessage(session: EdupageSession, subdomain: st
   try {
     data = JSON.parse(text) as Record<string, unknown>;
   } catch {
-    throw new RequestError("Unerwartete Antwort von EduPage.");
+    throw new RequestError(t("upstream.unexpectedResponse"));
   }
   const changes = data.changes;
   if (!Array.isArray(changes) || changes.length === 0) {
@@ -37,15 +38,15 @@ export async function replyToMessage(session: EdupageSession, subdomain: string,
     text,
     moredata: JSON.stringify({ attachements: {} }),
   }, XML_REQUESTED_WITH);
-  if (page.status !== 200) throw new RequestError(`EduPage meldet Fehler ${page.status}.`);
+  if (page.status !== 200) throw new RequestError(t("upstream.edupageStatus", { status: page.status }));
   let data: Record<string, unknown>;
   try {
     data = JSON.parse(page.text) as Record<string, unknown>;
   } catch {
-    throw new RequestError("Unerwartete Antwort von EduPage.");
+    throw new RequestError(t("upstream.unexpectedResponse"));
   }
   if (typeof data !== "object" || data === null || String(data.status ?? "").toLowerCase() !== "ok") {
-    throw new RequestError("EduPage hat die Antwort nicht bestätigt.");
+    throw new RequestError(t("upstream.replyUnconfirmed"));
   }
   return data;
 }
@@ -53,12 +54,12 @@ export async function replyToMessage(session: EdupageSession, subdomain: string,
 export async function fetchThread(session: EdupageSession, subdomain: string, eventId: number | string): Promise<ReturnType<typeof parseLikesResponse>> {
   const host = subdomain.includes(".") ? subdomain.toLowerCase() : `${subdomain.toLowerCase()}.edupage.org`;
   const page = await session.postEqap(`https://${host}/timeline/?akcia=getRepliesItem`, { groupid: String(eventId), lastsync: "" }, XML_REQUESTED_WITH);
-  if (page.status !== 200) throw new RequestError(`EduPage meldet Fehler ${page.status}.`);
+  if (page.status !== 200) throw new RequestError(t("upstream.edupageStatus", { status: page.status }));
   let data: unknown;
   try {
     data = JSON.parse(page.text) as unknown;
   } catch {
-    throw new RequestError("Unerwartete Antwort von EduPage.");
+    throw new RequestError(t("upstream.unexpectedResponse"));
   }
   return parseLikesResponse(data, eventId);
 }
@@ -68,7 +69,7 @@ export interface DownloadedFile { filename: string; contentType: string; bytes: 
 /** Anhang laden (Session-Proxy wie Python `message_attachment`). */
 export async function downloadViaSession(session: EdupageSession, url: string, fallbackName: string): Promise<DownloadedFile> {
   const fetched = await session.getBytes(url);
-  if (fetched.status !== 200) throw new RequestError(`EduPage meldet Fehler ${fetched.status}.`);
+  if (fetched.status !== 200) throw new RequestError(t("upstream.edupageStatus", { status: fetched.status }));
   const clean = fallbackName.replace(/["\r\n]/g, "").trim().slice(0, 120) || "datei";
   const contentType = fetched.contentType.split(";")[0]?.trim() || "application/octet-stream";
   return { filename: clean, contentType, bytes: fetched.bytes };

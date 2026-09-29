@@ -53,6 +53,7 @@ import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SectionLabel
 import de.eduflow.android.ui.navigation.Routes
 import de.eduflow.android.ui.timetable.AuthAwareError
+import de.eduflow.android.ui.timetable.localizedApiMessage
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -142,7 +143,7 @@ private fun SchoolScreen(
         Spacer(Modifier.height(10.dp))
         state.error?.let { error ->
             AuthAwareError(
-                message = error.message,
+                message = localizedApiMessage(error.code, error.message, error.messageRes),
                 needsReLogin = error.code in setOf(
                     ErrorCodes.TOKEN_INVALID, ErrorCodes.TOKEN_EXPIRED, ErrorCodes.EDUPAGE_2FA,
                 ),

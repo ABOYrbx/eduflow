@@ -60,6 +60,7 @@ public struct APIClient: Sendable {
         public static let schoolAgenda = "school/agenda"
         public static let substitutionsWeek = "substitutions/week"
         public static let wetter = "wetter"
+        public static let wetterSuche = "wetter/suche"
     }
 
     /// Pfade ohne Bearer-Token (System plus Login-Ablauf).

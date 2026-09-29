@@ -6,11 +6,18 @@ import de.eduflow.android.data.dto.LoginResponse
 import de.eduflow.android.data.dto.MeDto
 import de.eduflow.android.data.dto.TwoFaRequest
 
-/** Lesbarer Gerätebezeichner; Emulator-Builds liefern sonst interne SDK-Namen. */
-internal fun defaultDeviceName(): String {
+/**
+ * Lesbarer Gerätebezeichner; Emulator-Builds liefern sonst interne SDK-Namen.
+ *
+ * Dokumentierte Ausnahme: [emulatorLabel] defaultet deutsch
+ * ("Android-Emulator"), weil das Repository keinen Context hat. Die UI
+ * übergibt den übersetzten `device_default_name`-String (LoginScreen);
+ * der Name landet auf dem Server und in der Geräte-Liste.
+ */
+internal fun defaultDeviceName(emulatorLabel: String = "Android-Emulator"): String {
     val model = android.os.Build.MODEL.orEmpty().trim()
     return if (model.isBlank() || model.startsWith("sdk_gphone", ignoreCase = true)) {
-        "Android-Emulator"
+        emulatorLabel
     } else {
         model
     }

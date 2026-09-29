@@ -1,4 +1,5 @@
 import { BadRequestException } from "@nestjs/common";
+import { t } from "../i18n";
 
 /** Paginierungs-Parität zu Python (`api/core.py::get_pagination`, Paket N0).
  *
@@ -19,12 +20,12 @@ const asInteger = (raw: unknown): number | undefined => {
   if (raw === undefined) return undefined;
   const first = Array.isArray(raw) ? raw[0] : raw;
   if (typeof first === "number") {
-    if (!Number.isInteger(first)) throw invalid("Limit und Offset müssen ganze Zahlen sein.");
+    if (!Number.isInteger(first)) throw invalid(t("validation.pagination"));
     return first;
   }
-  if (typeof first !== "string") throw invalid("Limit und Offset müssen ganze Zahlen sein.");
+  if (typeof first !== "string") throw invalid(t("validation.pagination"));
   const text = first.trim();
-  if (!/^[+-]?\d+$/.test(text)) throw invalid("Limit und Offset müssen ganze Zahlen sein.");
+  if (!/^[+-]?\d+$/.test(text)) throw invalid(t("validation.pagination"));
   return Number.parseInt(text, 10);
 };
 
@@ -36,8 +37,8 @@ export function parsePage(
 ): PageQuery {
   const limit = asInteger(query.limit) ?? fallback;
   const offset = asInteger(query.offset) ?? 0;
-  if (limit < 1 || limit > maximum) throw invalid(`Limit muss zwischen 1 und ${maximum} liegen.`);
-  if (offset < 0) throw invalid("Offset darf nicht negativ sein.");
+  if (limit < 1 || limit > maximum) throw invalid(t("validation.limitRange", { max: maximum }));
+  if (offset < 0) throw invalid(t("validation.negativeOffset"));
   return { limit, offset };
 }
 

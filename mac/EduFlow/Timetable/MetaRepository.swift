@@ -1,6 +1,14 @@
 import Foundation
 
 /// Wetter-Repository (Paket D, nur gegen Paket 0).
+///
+/// Essensplan (Paket D): ENTFÄLLT im NestJS-Stand. Das Backend stellt keine
+/// Essens-Route bereit (kein `/essen` in `SchoolController`/`openapi.json`,
+/// keine Essens-UI im Web); daher gibt es bewusst kein Essens-Repository,
+/// keinen Wochenplan mit Preisen/Quelle/PDF-Link und keinen
+/// Essen-heute-Pager in der Übersicht. Sollte das Backend je eine
+/// Essens-Route liefern, hier ein Repository mit Upstream-Fehler plus
+/// Cache-Fallback ergänzen (kein erfundenes Format, kein Backend-Eingriff).
 public struct MetaRepository: Sendable {
     public let client: APIClient
 

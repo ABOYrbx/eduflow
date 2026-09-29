@@ -27,10 +27,13 @@ public struct AuthRepository: Sendable {
                 message: APIError.germanFallback(for: ErrorCodes.validation)
             )
         }
+        // Wie `auth.service.ts`: Subdomain trimmen + kleinschreiben,
+        // leer bedeutet automatisch (Server-Default).
+        let sub = subdomain.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         let body = try APIClient.jsonData([
             "username": name,
             "password": password,
-            "subdomain": subdomain,
+            "subdomain": sub,
             "device": device,
         ])
         let data = try await client.post(APIClient.Paths.login, body: body)

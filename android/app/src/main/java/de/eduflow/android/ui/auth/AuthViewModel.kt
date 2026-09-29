@@ -2,6 +2,7 @@ package de.eduflow.android.ui.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import de.eduflow.android.R
 import de.eduflow.android.data.ApiException
 import de.eduflow.android.data.AuthRepository
 import de.eduflow.android.data.ErrorMapper
@@ -14,13 +15,18 @@ sealed interface LoginUiState {
     data object Idle : LoginUiState
     data object Loading : LoginUiState
     data class TwoFa(val pendingToken: String, val message: String) : LoginUiState
-    data class Error(val message: String, val code: String) : LoginUiState
+    /**
+     * Clientseitige Validierung (leere Felder) setzt [messageRes] auf den
+     * übersetzten String; Compose löst per stringResource auf, sonst gilt
+     * [message] (deutscher Fallback für kontextfreie Unit-Tests).
+     */
+    data class Error(val message: String, val code: String, val messageRes: Int? = null) : LoginUiState
 }
 
 sealed interface TwoFaUiState {
     data object Idle : TwoFaUiState
     data object Loading : TwoFaUiState
-    data class Error(val message: String, val code: String) : TwoFaUiState
+    data class Error(val message: String, val code: String, val messageRes: Int? = null) : TwoFaUiState
 }
 
 class AuthViewModel(private val repo: AuthRepository) : ViewModel() {
@@ -38,6 +44,7 @@ class AuthViewModel(private val repo: AuthRepository) : ViewModel() {
         if (username.isBlank() || password.isBlank()) {
             _login.value = LoginUiState.Error(
                 "Bitte Benutzername und Passwort angeben.", ErrorCodes.VALIDATION,
+                R.string.auth_error_credentials,
             )
             return
         }
@@ -67,6 +74,7 @@ class AuthViewModel(private val repo: AuthRepository) : ViewModel() {
         if (code.isBlank()) {
             _twoFa.value = TwoFaUiState.Error(
                 "Bitte Code angeben.", ErrorCodes.VALIDATION,
+                R.string.twofa_error_empty,
             )
             return
         }

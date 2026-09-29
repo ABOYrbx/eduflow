@@ -95,6 +95,24 @@ struct AuthTests {
         #expect(result == .loggedIn(token: "t", expires: "e", subdomain: "s", username: "u"))
     }
 
+    @Test("Subdomain wird getrimmt und kleingeschrieben, leer bleibt automatisch")
+    func loginNormalizesSubdomain() async throws {
+        var seen: [String] = []
+        MockURLProtocol.handler = { request in
+            let body = try requestBody(request)
+            seen.append(body["subdomain"] as? String ?? "<fehlt>")
+            let data = #"{"status":"ok","token":"t","expires":"e","subdomain":"schule","username":"u"}"#
+                .data(using: .utf8)!
+            let response = HTTPURLResponse(
+                url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (data, response)
+        }
+        let repo = AuthRepository(client: client())
+        _ = try await repo.login(username: "n", password: "p", subdomain: " SCHULE ", device: "")
+        _ = try await repo.login(username: "n", password: "p", subdomain: "   ", device: "")
+        #expect(seen == ["schule", ""])
+    }
+
     @Test("Zwei-Faktor-Pflicht liefert Zwischen-Token")
     func loginTwoFaRequired() async throws {
         stub(status: 200, body: #"{"status":"2fa_required","pending_token":"p123","message":"Code eingeben."}"#)
@@ -246,6 +264,34 @@ struct AuthTests {
             return (data, response)
         }
         try await repo.revokeDevice(id: "h1")
+    }
+
+    @Test("Geräte ohne Secrets: Token-Felder werden ignoriert")
+    func devicesIgnoreSecrets() async throws {
+        stub(status: 200, body: #"{"items":[{"id":"h1","short":"…abcdef","device":"Mac","created":"c","expires":"e","token":"GEHEIM","accessTokenHash":"GEHEIM","refresh_token":"GEHEIM"}],"total":1}"#)
+        let devices = try await SettingsRepository(client: client()).devices()
+        #expect(devices.count == 1)
+        #expect(devices.first?.id == "h1")
+        #expect(devices.first?.short == "…abcdef")
+        // DeviceInfo besitzt kein Token-Feld — Secrets landen nirgends.
+        let mirror = Mirror(reflecting: devices.first as Any)
+        #expect(!mirror.children.contains { ($0.label ?? "").lowercased().contains("token") })
+    }
+
+    @Test("Speichern trimmt die Wetter-Stadt")
+    func saveTrimsWetterCity() async throws {
+        MockURLProtocol.handler = { request in
+            let body = try requestBody(request)
+            #expect(body["wetter_city"] as? String == "Berlin")
+            let data = #"{"status":"ok","values":{"wetter_city":"Berlin"}}"#.data(using: .utf8)!
+            let response = HTTPURLResponse(
+                url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (data, response)
+        }
+        var values = SettingsValues()
+        values.wetterCity = "  Berlin\n"
+        let saved = try await SettingsRepository(client: client()).save(values)
+        #expect(saved.wetterCity == "Berlin")
     }
 
     @Test("401-Verhalten mit und ohne Sitzung")

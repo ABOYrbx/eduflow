@@ -254,4 +254,113 @@ struct MessageTests {
             #expect(error.httpStatus == 404)
         }
     }
+
+    @Test("Abgelaufene Sitzung meldet 401 für Login")
+    func unauthorizedMapsToLogin() async throws {
+        stub(status: 401, body: #"{"error":"Ungültiges oder fehlendes Token.","code":"TOKEN_INVALID"}"#)
+        do {
+            _ = try await MessagesRepository(client: client()).list()
+            Issue.record("Fehler erwartet")
+        } catch let error as APIError {
+            #expect(error.code == "TOKEN_INVALID")
+            #expect(error.httpStatus == 401)
+            #expect(error.needsReLogin)
+            #expect(SessionRecovery.forceLogout(error: error, isLoggedIn: true))
+            #expect(!SessionRecovery.forceLogout(error: error, isLoggedIn: false))
+        }
+        stub(status: 401, body: #"{"error":"Erneute Zwei-Faktor-Pflicht.","code":"EDUPAGE_2FA"}"#)
+        do {
+            _ = try await MessagesRepository(client: client()).thread(id: 7)
+            Issue.record("Fehler erwartet")
+        } catch let error as APIError {
+            #expect(error.code == "EDUPAGE_2FA")
+            #expect(SessionRecovery.forceLogout(error: error, isLoggedIn: true))
+        }
+    }
+
+    @Test("Falsches Datumsformat meldet Validierung")
+    func badSinceMapsToValidation() async throws {
+        stub(status: 400, body: #"{"error":"Datum muss im Format JJJJ-MM-TT sein.","code":"VALIDATION"}"#)
+        do {
+            _ = try await MessagesRepository(client: client()).list(since: "gestern")
+            Issue.record("Fehler erwartet")
+        } catch let error as APIError {
+            #expect(error.code == "VALIDATION")
+        }
+    }
+
+    @Test("Paginierung sendet Limit und Offset")
+    func paginationSendsLimitAndOffset() async throws {
+        MockURLProtocol.handler = { request in
+            let query = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)?.queryItems ?? []
+            func value(_ name: String) -> String? {
+                query.first(where: { $0.name == name })?.value
+            }
+            if request.url?.path.hasSuffix("recipients") == true {
+                #expect(value("limit") == "200")
+                #expect(value("offset") == "200")
+                let data = #"{"items":[],"total":201,"limit":200,"offset":200}"#
+                    .data(using: .utf8)!
+                let response = HTTPURLResponse(
+                    url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
+                return (data, response)
+            }
+            #expect(request.url?.path.hasSuffix("messages") == true)
+            #expect(value("since") == "2000-01-01")
+            #expect(value("limit") == "10")
+            #expect(value("offset") == "20")
+            let data = #"{"items":[],"total":0,"limit":10,"offset":20}"#
+                .data(using: .utf8)!
+            let response = HTTPURLResponse(
+                url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (data, response)
+        }
+        let page = try await MessagesRepository(client: client())
+            .list(limit: 10, offset: 20)
+        #expect(page.total == 0)
+        #expect(page.limit == 10)
+        let recipients = try await MessagesRepository(client: client())
+            .recipients(limit: 200, offset: 200)
+        #expect(recipients.total == 201)
+    }
+
+    @Test("Thread-Aktualisierung sendet Refresh-Schalter")
+    func threadRefreshSendsFlag() async throws {
+        MockURLProtocol.handler = { request in
+            #expect(request.url?.path.hasSuffix("messages/7/thread") == true)
+            let query = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)?.queryItems ?? []
+            #expect(query.first(where: { $0.name == "refresh" })?.value == "1")
+            let data = #"{"likes":[],"replies":[],"reply_ids":[],"summary":{},"cached":false}"#
+                .data(using: .utf8)!
+            let response = HTTPURLResponse(
+                url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (data, response)
+        }
+        let thread = try await MessagesRepository(client: client()).thread(id: 7, refresh: true)
+        #expect(!thread.cached)
+    }
+
+    @Test("Download behält den Dateinamen aus den Nachrichtendaten")
+    func downloadKeepsFilename() async throws {
+        MockURLProtocol.handler = { request in
+            let path = request.url?.path ?? ""
+            if path.hasSuffix("messages/download-token") {
+                let data = #"{"download_token":"kurz","expires_in":300}"#.data(using: .utf8)!
+                let response = HTTPURLResponse(
+                    url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
+                return (data, response)
+            }
+            let data = "datei".data(using: .utf8)!
+            let response = HTTPURLResponse(
+                url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (data, response)
+        }
+        let file = try await MessagesRepository(client: client())
+            .downloadAttachment(eventId: 7, index: 0, filename: "Packliste.pdf")
+        #expect(file.lastPathComponent == "Packliste.pdf")
+        #expect((try? Data(contentsOf: file)) == "datei".data(using: .utf8))
+        #expect(MessagesRepository.safeFilename("../geheim.txt", index: 0) == ".._geheim.txt")
+        #expect(MessagesRepository.safeFilename("   ", index: 2) == "Datei 3")
+        #expect(MessagesRepository.safeFilename(".", index: 0) == "Datei 1")
+    }
 }

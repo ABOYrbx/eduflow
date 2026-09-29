@@ -1,4 +1,5 @@
 import { RequestError } from "./errors";
+import { t } from "../i18n";
 import { parseServerDate } from "./serializers";
 import { EdupageSession } from "./session";
 
@@ -24,11 +25,11 @@ export async function fetchGradeData(session: EdupageSession, subdomain: string)
   const host = subdomain.includes(".") ? subdomain.toLowerCase() : `${subdomain.toLowerCase()}.edupage.org`;
   const page = await session.get(`https://${host}/znamky/`);
   const middle = page.text.split(".znamkyStudentViewer(")[1]?.split(");\r\n\t\t});\r\n\t\t</script>")[0];
-  if (middle === undefined) throw new RequestError("Unerwartete Antwort von EduPage.");
+  if (middle === undefined) throw new RequestError(t("upstream.unexpectedResponse"));
   try {
     return JSON.parse(middle) as Record<string, unknown>;
   } catch {
-    throw new RequestError("Unerwartete Antwort von EduPage.");
+    throw new RequestError(t("upstream.unexpectedResponse"));
   }
 }
 

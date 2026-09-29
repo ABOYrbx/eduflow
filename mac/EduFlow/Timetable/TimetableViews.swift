@@ -70,7 +70,17 @@ public struct DayView: View {
                         .frame(maxWidth: .infinity)
                         .padding(48)
                 } else if vm.weekMode {
-                    weekMatrix
+                    if vm.weekResponse.days.isEmpty
+                        || vm.weekResponse.days.allSatisfy({ $0.lessons.isEmpty })
+                    {
+                        Text("Schulfrei.")
+                            .font(UberFont.text(15))
+                            .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                            .frame(maxWidth: .infinity)
+                            .padding(48)
+                    } else {
+                        weekMatrix
+                    }
                 } else if vm.dayResponse.lessons.isEmpty {
                     Text("Schulfrei.")
                         .font(UberFont.text(15))
@@ -101,9 +111,14 @@ public struct DayView: View {
 
     // MARK: - Tagesliste
 
+    /// Reguläre Stunden mit Perioden-Badge; mittägliche Lernzeit läuft
+    /// bewusst separat ohne Stunden-Badge, damit sie nicht wie Unterricht
+    /// wirkt.
     private func dayList(_ lessons: [Lesson]) -> some View {
-        VStack(spacing: 8) {
-            ForEach(Array(lessons.enumerated()), id: \.element.uid) { index, lesson in
+        let regular = lessons.filter { !$0.isLernzeit }
+        let lernzeit = lessons.filter { $0.isLernzeit }
+        return VStack(spacing: 8) {
+            ForEach(Array(regular.enumerated()), id: \.element.uid) { index, lesson in
                 HStack(spacing: 12) {
                     Text(lesson.period)
                         .font(UberFont.text(14, weight: .heavy))
@@ -118,6 +133,17 @@ public struct DayView: View {
                     LessonCell(lesson: lesson)
                 }
                 .riseIn(delay: Double(min(index, 8)) * 0.05)
+            }
+            if !lernzeit.isEmpty {
+                HStack(spacing: 8) {
+                    Tag("Lernzeit", style: .muted)
+                    Spacer(minLength: 0)
+                }
+                .padding(.top, regular.isEmpty ? 0 : 6)
+                ForEach(Array(lernzeit.enumerated()), id: \.element.uid) { index, lesson in
+                    LessonCell(lesson: lesson)
+                        .riseIn(delay: Double(min(regular.count + index, 8)) * 0.05)
+                }
             }
         }
     }
@@ -160,7 +186,8 @@ public struct DayView: View {
                                 .stroke(EduFlowPalette.border(scheme), lineWidth: 1)
                         }
                     ForEach(days, id: \.date) { day in
-                        if let lesson = day.lessons.first(where: { $0.period == period || $0.rowPeriod == period }) {
+                        let matches = day.lessons.filter { $0.period == period || $0.rowPeriod == period }
+                        if let lesson = matches.first(where: { $0.isEvent }) ?? matches.first {
                             LessonCell(lesson: lesson)
                         } else {
                             Text(verbatim: "–")
@@ -175,19 +202,30 @@ public struct DayView: View {
         }
     }
 
+    /// Zeilenraster wie im Web: nur aus regulären Stunden (ohne
+    /// Veranstaltungen). Veranstaltungen ersetzen dadurch die betroffene
+    /// Stunde in der bestehenden Zeile statt eigene Zeilen zu erzeugen.
+    /// Fällt das Raster ohne Events leer aus (reine Veranstaltungs­woche),
+    /// fallen wir auf alle Stunden zurück, damit nichts verloren geht.
     private func periodRows(days: [TimetableWeekDay]) -> [String] {
-        var seen: [String] = []
-        for day in days {
-            for lesson in day.lessons {
-                let key = lesson.rowPeriod.isEmpty ? lesson.period : lesson.rowPeriod
-                if !seen.contains(key) {
-                    seen.append(key)
+        func collect(skippingEvents: Bool) -> [String] {
+            var seen: [String] = []
+            for day in days {
+                for lesson in day.lessons {
+                    if skippingEvents, lesson.isEvent { continue }
+                    let key = lesson.rowPeriod.isEmpty ? lesson.period : lesson.rowPeriod
+                    if !key.isEmpty, !seen.contains(key) {
+                        seen.append(key)
+                    }
                 }
             }
+            return seen.sorted {
+                (Int($0.prefix(while: { $0.isNumber })) ?? 99) < (Int($1.prefix(while: { $0.isNumber })) ?? 99)
+            }
         }
-        return seen.sorted {
-            (Int($0.prefix(while: { $0.isNumber })) ?? 99) < (Int($1.prefix(while: { $0.isNumber })) ?? 99)
-        }
+        let regular = collect(skippingEvents: true)
+        if !regular.isEmpty { return regular }
+        return collect(skippingEvents: false)
     }
 }
 
@@ -208,7 +246,10 @@ private struct TogglePill: ButtonStyle {
     }
 }
 
-/// Stunden-Zelle (`.tt-cell`) mit Entfall- und Online-Stil.
+/// Stunden-Zelle (`.tt-cell`): Entfall (rot, durchgestrichen),
+/// Veranstaltung (bernstein, ersetzt die Stunde), Online (blau) und
+/// Lernzeit (gedeckt, kein Unterricht) sind über Tags unterscheidbar.
+/// Der Klassenraum steht unter dem Lehrernamen statt dahinter.
 public struct LessonCell: View {
     @Environment(\.colorScheme) var scheme
     public let lesson: Lesson
@@ -220,34 +261,71 @@ public struct LessonCell: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 3) {
             Text(lesson.title)
-                .font(UberFont.text(13, weight: .bold))
+                .font(UberFont.text(13, weight: lesson.isLernzeit ? .semibold : .bold))
                 .tracking(-0.2)
                 .lineLimit(2)
                 .strikethrough(lesson.isCancelled)
+                .foregroundStyle(lesson.isLernzeit ? EduFlowPalette.inkMuted(scheme) : EduFlowPalette.ink(scheme))
             Text(lesson.time)
                 .font(UberFont.text(11))
                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-            if !lesson.teachers.isEmpty || !lesson.rooms.isEmpty {
-                Text([lesson.teachers, lesson.rooms].filter { !$0.isEmpty }.joined(separator: " · "))
+            if !lesson.teachers.isEmpty {
+                Text(lesson.teachers)
                     .font(UberFont.text(11))
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     .lineLimit(1)
             }
-            if lesson.isOnline {
-                Text("Online")
-                    .font(UberFont.text(11, weight: .bold))
-                    .foregroundStyle(EduFlowPalette.blue)
+            if !lesson.rooms.isEmpty {
+                Text(roomLine)
+                    .font(UberFont.text(11))
+                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                    .lineLimit(1)
+            }
+            if hasStateTags {
+                HStack(spacing: 6) {
+                    if lesson.isCancelled {
+                        Tag("Entfall", style: .red)
+                    }
+                    if lesson.isEvent {
+                        Tag("Veranstaltung", style: .amber)
+                    }
+                    if lesson.isOnline {
+                        Tag("Online", style: .blue)
+                    }
+                    if lesson.isLernzeit {
+                        Tag("Lernzeit", style: .muted)
+                    }
+                }
             }
         }
         .frame(maxWidth: .infinity, minHeight: 66, alignment: .leading)
         .padding(8)
-        .background(lesson.isEvent ? Color(red: 1, green: 0.98, blue: 0.92) : EduFlowPalette.card(scheme))
+        .background(cellBackground)
         .clipShape(.rect(cornerRadius: 10))
         .overlay {
             RoundedRectangle(cornerRadius: 10)
-                .stroke(lesson.isEvent ? EduFlowPalette.amber : EduFlowPalette.border(scheme), lineWidth: 1)
+                .stroke(cellBorder, lineWidth: 1)
         }
         .opacity(lesson.isCancelled ? 0.6 : 1)
+    }
+
+    private var roomLine: String {
+        String(format: NSLocalizedString("timetable_room", value: "Raum %@", comment: "Stundenplan: Raumzeile"), lesson.rooms)
+    }
+
+    private var hasStateTags: Bool {
+        lesson.isCancelled || lesson.isEvent || lesson.isOnline || lesson.isLernzeit
+    }
+
+    private var cellBackground: Color {
+        if lesson.isLernzeit { return EduFlowPalette.surface1(scheme) }
+        if lesson.isEvent { return Color(red: 1, green: 0.98, blue: 0.92) }
+        return EduFlowPalette.card(scheme)
+    }
+
+    private var cellBorder: Color {
+        if lesson.isEvent { return EduFlowPalette.amber }
+        return EduFlowPalette.border(scheme)
     }
 }
 
@@ -269,23 +347,40 @@ public struct LessonRow: View {
                 Text(lesson.title)
                     .font(UberFont.text(14, weight: .bold))
                     .strikethrough(lesson.isCancelled)
-                Text(verbatim: "\(lesson.time) · \(lesson.teachers) · \(lesson.rooms)")
+                Text(verbatim: detailLine)
                     .font(UberFont.text(12))
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                HStack(spacing: 6) {
-                    if lesson.isCancelled {
-                        Tag(NSLocalizedString("Entfall", value: "Entfall", comment: "Stundenplan: Entfall"), style: .muted)
-                    }
-                    if lesson.isOnline {
-                        Tag("Online", style: .blue)
-                    }
-                    if lesson.isLernzeit {
-                        Tag(NSLocalizedString("Lernzeit", value: "Lernzeit", comment: "Stundenplan: Lernzeit"), style: .muted)
+                if hasStateTags {
+                    HStack(spacing: 6) {
+                        if lesson.isCancelled {
+                            Tag("Entfall", style: .red)
+                        }
+                        if lesson.isEvent {
+                            Tag("Veranstaltung", style: .amber)
+                        }
+                        if lesson.isOnline {
+                            Tag("Online", style: .blue)
+                        }
+                        if lesson.isLernzeit {
+                            Tag("Lernzeit", style: .muted)
+                        }
                     }
                 }
             }
             Spacer()
         }
         .padding(.vertical, 2)
+    }
+
+    /// Zeit · Lehrer · Raum, nur gesetzte Teile (keine leeren Trenner).
+    private var detailLine: String {
+        [lesson.time, lesson.teachers, lesson.rooms]
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+            .joined(separator: " · ")
+    }
+
+    private var hasStateTags: Bool {
+        lesson.isCancelled || lesson.isEvent || lesson.isOnline || lesson.isLernzeit
     }
 }

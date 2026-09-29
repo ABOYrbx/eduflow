@@ -14,7 +14,7 @@ class OnboardingLocaleTest {
     @Test
     fun availableFromAssets_filtersAndSorts() {
         assertEquals(
-            listOf("de", "en", "fr"),
+            listOf("en", "fr"),
             AppLocale.availableFromAssets(listOf("en-rUS", "fr", "Base", "zh-Hans", "", "pt-BR")),
         )
         assertEquals(emptyList<String>(), AppLocale.availableFromAssets(emptyList()))

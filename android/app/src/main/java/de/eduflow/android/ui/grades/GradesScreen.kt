@@ -43,6 +43,8 @@ import de.eduflow.android.R
 import de.eduflow.android.data.dto.ErrorCodes
 import de.eduflow.android.data.dto.GradeDto
 import de.eduflow.android.data.dto.GradeSubjectGroup
+import de.eduflow.android.data.dto.SUBJECT_OTHER_DE
+import de.eduflow.android.data.dto.displayGradeTermLabel
 import de.eduflow.android.ui.common.AppHeader
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.FilterChips
@@ -57,6 +59,7 @@ import de.eduflow.android.ui.theme.GradeGray
 import de.eduflow.android.ui.theme.GradeGreen
 import de.eduflow.android.ui.theme.GradeRed
 import de.eduflow.android.ui.timetable.AuthAwareError
+import de.eduflow.android.ui.timetable.localizedApiMessage
 
 /**
  * Noten-Screen (Paket E, Redesign-PNG Screen 04).
@@ -106,8 +109,14 @@ fun GradesScreen(
         if (state.terms.size > 1) {
             Spacer(Modifier.height(10.dp))
             // Anzeige lokalisiert, Abgleich über dieselben Ressourcen-Strings (sprachunabhängig).
+            val allLabel = stringResource(R.string.grades_term_all)
+            val termFormat = stringResource(R.string.grades_term_label_format)
             val labelByKeyLocalized = state.terms.associate { term ->
-                term.key to stringResource(R.string.grades_term_format, term.label, term.count)
+                term.key to stringResource(
+                    R.string.grades_term_format,
+                    displayGradeTermLabel(term.key, allLabel, termFormat),
+                    term.count,
+                )
             }
             val labels = state.terms.map { labelByKeyLocalized[it.key].orEmpty() }
             val selected = labelByKeyLocalized[state.term].orEmpty()
@@ -141,7 +150,7 @@ fun GradesScreen(
 
         state.error?.let { err ->
             AuthAwareError(
-                message = "${err.message} (${err.code})",
+                message = "${localizedApiMessage(err.code, err.message, err.messageRes)} (${err.code})",
                 needsReLogin = err.code in
                     listOf(ErrorCodes.TOKEN_INVALID, ErrorCodes.TOKEN_EXPIRED, ErrorCodes.EDUPAGE_2FA),
                 onReLogin = onReLogin,
@@ -256,6 +265,10 @@ private fun AverageCard(avgDisplay: String, compactFraction: Float = 0f) {
 private fun SubjectRow(group: GradeSubjectGroup) {
     var expanded by remember(group.subject) { mutableStateOf(false) }
     val scheme = MaterialTheme.colorScheme
+    // Gruppierungs-Fallback lokalisieren (Server/DTO liefern "Sonstiges").
+    val subjectLabel =
+        if (group.subject == SUBJECT_OTHER_DE) stringResource(R.string.grades_subject_other)
+        else group.subject
     val newest = group.items.firstOrNull()
     val newestLine = newestSub(newest)
     val countLine = pluralStringResource(
@@ -272,7 +285,7 @@ private fun SubjectRow(group: GradeSubjectGroup) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
                     Text(
-                        group.subject,
+                        subjectLabel,
                         fontSize = 15.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = scheme.onSurface,

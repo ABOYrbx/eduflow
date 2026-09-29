@@ -55,6 +55,8 @@ struct OnboardingTests {
                     UserDefaults.standard.removeObject(forKey: key)
                 }
             }
+            // Live-Überlagerung auf den vorherigen Stand zurücksetzen.
+            BundleLanguageOverride.activate(code: UserDefaults.standard.string(forKey: "de.eduflow.appLanguage"))
         }
         for key in keys { UserDefaults.standard.removeObject(forKey: key) }
         #expect(AppLanguage.override == nil)
@@ -63,6 +65,56 @@ struct OnboardingTests {
         #expect(AppLanguage.current == "fr")
         AppLanguage.set(nil)
         #expect(AppLanguage.override == nil)
+    }
+
+    @Test("Sprachwahl wird sofort aktiv und meldet den Wechsel")
+    func appLanguageAppliesLive() async {
+        let keys = ["de.eduflow.appLanguage", "AppleLanguages"]
+        let saved = keys.map { UserDefaults.standard.object(forKey: $0) }
+        defer {
+            for (key, value) in zip(keys, saved) {
+                if let value {
+                    UserDefaults.standard.set(value, forKey: key)
+                } else {
+                    UserDefaults.standard.removeObject(forKey: key)
+                }
+            }
+            BundleLanguageOverride.activate(code: UserDefaults.standard.string(forKey: "de.eduflow.appLanguage"))
+        }
+        for key in keys { UserDefaults.standard.removeObject(forKey: key) }
+        await confirmation("Wechsel gemeldet", expectedCount: 2) { confirm in
+            let observer = NotificationCenter.default.addObserver(
+                forName: .appLanguageDidChange,
+                object: nil,
+                queue: nil
+            ) { _ in confirm() }
+            defer { NotificationCenter.default.removeObserver(observer) }
+            AppLanguage.set("en")
+            #expect(AppLanguage.override == "en")
+            #expect(AppLanguage.current == "en")
+            AppLanguage.set(nil)
+            #expect(AppLanguage.override == nil)
+        }
+    }
+
+    @Test("Live-Lookup liest synthetisches Sprachbundle, sonst nil")
+    func liveLookupSyntheticBundle() throws {
+        let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        let lproj = root.appendingPathComponent("xx.lproj", isDirectory: true)
+        try FileManager.default.createDirectory(at: lproj, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: root) }
+        let strings: [String: String] = ["live_key": "Live-Wert", "other_key": "Anderer Wert"]
+        let data = try PropertyListSerialization.data(fromPropertyList: strings, format: .xml, options: 0)
+        try data.write(to: lproj.appendingPathComponent("Localizable.strings"))
+        guard let bundle = Bundle(path: root.path) else {
+            Issue.record("Synthetisches Bundle erwartet")
+            return
+        }
+        #expect(BundleLanguageOverride.lookup(key: "live_key", table: nil, in: bundle, code: "xx") == "Live-Wert")
+        #expect(BundleLanguageOverride.lookup(key: "live_key", table: "Localizable", in: bundle, code: "xx") == "Live-Wert")
+        #expect(BundleLanguageOverride.lookup(key: "missing_key", table: nil, in: bundle, code: "xx") == nil)
+        #expect(BundleLanguageOverride.lookup(key: "live_key", table: "Other", in: bundle, code: "xx") == nil)
+        #expect(BundleLanguageOverride.lookup(key: "live_key", table: nil, in: bundle, code: "yy") == nil)
     }
 
     @Test("Coverage-Daten sind konsistent (Prozente, Eigennamen)")

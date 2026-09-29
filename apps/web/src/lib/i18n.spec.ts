@@ -1,5 +1,6 @@
 import {
   getCatalog,
+  localeTag,
   normalizeLocaleTag,
   parseAcceptLanguage,
   registerCatalogs,
@@ -11,7 +12,6 @@ import {
 
 registerCatalogs({
   fr: { nav: { overview: "Aperçu" }, onlyFr: "Seulement FR" },
-  en: { nav: { overview: "Overview" } },
 });
 
 describe("t", () => {
@@ -20,12 +20,12 @@ describe("t", () => {
     delete (globalThis as { window?: unknown }).window;
   });
 
-  it("liefert Deutsch als Standard", () => {
-    expect(t("nav.overview")).toBe("Übersicht");
+  it("liefert Englisch als Standard", () => {
+    expect(t("nav.overview")).toBe("Overview");
   });
 
   it("ersetzt Variablen", () => {
-    expect(t("overview.newMessages", { count: 3 })).toBe("3 neu");
+    expect(t("overview.newMessages", { count: 3 })).toBe("3 new");
   });
 
   it("gibt unbekannte Keys unverändert zurück", () => {
@@ -36,34 +36,58 @@ describe("t", () => {
     expect(t("nav.overview", undefined, "fr")).toBe("Aperçu");
   });
 
-  it("fällt für fehlende Keys auf Deutsch zurück", () => {
-    expect(t("nav.messages", undefined, "fr")).toBe("Nachrichten");
+  it("fällt für fehlende Keys auf Englisch zurück", () => {
+    expect(t("nav.messages", undefined, "fr")).toBe("Messages");
   });
 
-  it("fällt für unbekannte Sprachen auf Deutsch zurück", () => {
-    expect(t("nav.overview", undefined, "xx")).toBe("Übersicht");
+  it("fällt für unbekannte Sprachen auf Englisch zurück", () => {
+    expect(t("nav.overview", undefined, "xx")).toBe("Overview");
+  });
+
+  it("fällt pro Key auf Englisch zurück (neue Keys ohne Crowdin-Übersetzung)", () => {
+    expect(t("overview.lessonsToday")).toBe("Lessons today");
+    expect(t("settings.tokenCreated")).toContain("Token created");
+    expect(t("homework.starred")).toBe("★ marked");
+    expect(t("homework.starred", undefined, "fr")).toBe("★ marked");
+    expect(t("overview.lessonsToday", undefined, "fr")).toBe("Lessons today");
+    expect(t("settings.tokenCreated", undefined, "fr")).toContain("Token created");
   });
 
   it("nutzt den eingespritzten Katalog erst nach Aktivierung", () => {
     (globalThis as { window?: unknown }).window = {
-      __EDUFLOW_MESSAGES__: { locale: "fr", catalog: { nav: { overview: "Aperçu" } }, supported: ["de", "fr"] },
+      __EDUFLOW_MESSAGES__: { locale: "fr", catalog: { nav: { overview: "Aperçu" } }, supported: ["en", "fr"] },
     };
-    expect(t("nav.overview")).toBe("Übersicht");
+    expect(t("nav.overview")).toBe("Overview");
     setActiveLocale("fr");
     expect(t("nav.overview")).toBe("Aperçu");
   });
 });
 
 describe("getCatalog/supportedLocales", () => {
-  it("liefert registrierte Kataloge und Deutsch als Fallback", () => {
+  it("liefert registrierte Kataloge und Englisch als Fallback", () => {
     expect(getCatalog("fr")).toEqual({ nav: { overview: "Aperçu" }, onlyFr: "Seulement FR" });
-    expect(getCatalog("xx")).toEqual(getCatalog("de"));
+    expect(getCatalog("xx")).toEqual(getCatalog("en"));
   });
 
-  it("listet Deutsch zuerst", () => {
+  it("listet Englisch zuerst", () => {
     const locales = supportedLocales();
-    expect(locales[0]).toBe("de");
+    expect(locales[0]).toBe("en");
     expect(locales).toContain("fr");
+  });
+});
+
+describe("localeTag", () => {
+  afterEach(() => {
+    setActiveLocale(null);
+  });
+
+  it("liefert Englisch ohne aktive Sprache (SSR/erster Render)", () => {
+    expect(localeTag()).toBe("en");
+  });
+
+  it("folgt der aktiven Sprache", () => {
+    setActiveLocale("de");
+    expect(localeTag()).toBe("de");
   });
 });
 
@@ -103,9 +127,9 @@ describe("resolveLocale", () => {
     expect(resolveLocale([null, "en"], supported)).toBe("en");
   });
 
-  it("überspringt Nicht-Unterstütztes und fällt auf Deutsch zurück", () => {
+  it("überspringt Nicht-Unterstütztes und fällt auf Englisch zurück", () => {
     expect(resolveLocale(["xx", "fr"], supported)).toBe("fr");
-    expect(resolveLocale(["xx", null], supported)).toBe("de");
-    expect(resolveLocale([], supported)).toBe("de");
+    expect(resolveLocale(["xx", null], supported)).toBe("en");
+    expect(resolveLocale([], supported)).toBe("en");
   });
 });

@@ -15,6 +15,7 @@ import { fetchGradeData, gradeToDict, parseGrades } from "./grades";
 import { setHomeworkDone } from "./homework";
 import { page, parsePage } from "../common/pagination";
 import { openPassword } from "./vault";
+import { t } from "../i18n";
 
 const TIMELINE_TTL_S = 900;
 const LIKES_TTL_S = 3600;
@@ -23,7 +24,7 @@ const DL_TTL_S = 300;
 const EARLIEST_DEFAULT = "2000-01-01";
 
 const bearerError = (): UnauthorizedException =>
-  new UnauthorizedException({ error: "Ungültiges oder fehlendes Token.", code: "TOKEN_INVALID" });
+  new UnauthorizedException({ error: t("auth.tokenInvalid"), code: "TOKEN_INVALID" });
 
 interface StoredEvent {
   eventId: number;
@@ -77,12 +78,12 @@ export function parseBoolFlag(value: unknown, fallback = false): boolean {
   if (typeof value === "boolean") return value;
   if (typeof value === "number" && Number.isInteger(value)) {
     if (value === 0 || value === 1) return value === 1;
-    throw new Error("Ungültiger Wahrheitswert (0 oder 1 erwartet).");
+    throw new Error(t("validation.bool01"));
   }
   const text = String(value).trim().toLowerCase();
   if (["1", "true", "on", "yes", "ja"].includes(text)) return true;
   if (["0", "false", "off", "no", "nein"].includes(text)) return false;
-  throw new Error("Ungültiger Wahrheitswert (true/false erwartet).");
+  throw new Error(t("validation.bool"));
 }
 
 /** Anmeldefehler für Ressourcen-Pakete (Port von `edupage_login_error`).
@@ -90,15 +91,15 @@ export function parseBoolFlag(value: unknown, fallback = false): boolean {
  * Standardtext wie `api/core.py`; nur `api/messages.py` nutzt die
  * N-B-Variante ("Benutzername, ... ist falsch.") per Parameter.
  */
-export function mapResourceLoginError(error: unknown, badCredentialsText = "Gespeicherte Zugangsdaten sind ungültig. Bitte erneut anmelden."): HttpException {
+export function mapResourceLoginError(error: unknown, badCredentialsText = t("auth.storedCredentials")): HttpException {
   if (error instanceof BadCredentialsError) {
     return new UnauthorizedException({ error: badCredentialsText, code: "BAD_CREDENTIALS" });
   }
   if (error instanceof CaptchaError) {
-    return new ForbiddenException({ error: "EduPage verlangt ein Captcha. Bitte einmal im Browser anmelden.", code: "CAPTCHA_REQUIRED" });
+    return new ForbiddenException({ error: t("auth.captcha"), code: "CAPTCHA_REQUIRED" });
   }
   const detail = error instanceof Error ? error.message : String(error);
-  return new HttpException({ error: `Anmeldung fehlgeschlagen: ${detail}`, code: "UPSTREAM" }, 502);
+  return new HttpException({ error: t("upstream.loginFailed", { detail }), code: "UPSTREAM" }, 502);
 }
 
 interface SessionContext {
@@ -146,7 +147,7 @@ export class EdupageDataService {
       throw mapResourceLoginError(error, badCredentialsText);
     }
     if (result.outcome === "twofactor") {
-      throw new UnauthorizedException({ error: "Sitzung erfordert erneut 2FA. Bitte erneut über /auth/login anmelden.", code: "EDUPAGE_2FA" });
+      throw new UnauthorizedException({ error: t("auth.edupage2fa"), code: "EDUPAGE_2FA" });
     }
     return { client, accountId: account.id, subdomain: result.subdomain, username: account.username, loginData: result.data, gsecHash: result.gsecHash };
   }
@@ -215,21 +216,21 @@ export class EdupageDataService {
     const { limit, offset } = parsePage(query);
     const sinceRaw = typeof query.since === "string" && query.since.trim() ? query.since.trim() : EARLIEST_DEFAULT;
     if (!/^\d{4}-\d{2}-\d{2}$/.test(sinceRaw) || Number.isNaN(Date.parse(`${sinceRaw}T00:00:00Z`))) {
-      throw new BadRequestException({ error: "Datum muss im Format JJJJ-MM-TT sein.", code: "VALIDATION" });
+      throw new BadRequestException({ error: t("validation.dateFormatShort"), code: "VALIDATION" });
     }
     const typeFilter = typeof query.type === "string" ? query.type.trim() : "";
     if (typeFilter && !MESSAGE_TYPES.includes(typeFilter)) {
-      throw new BadRequestException({ error: `Unbekannter Nachrichtentyp. Gültig: ${[...MESSAGE_TYPES].sort().join(", ")}.`, code: "VALIDATION" });
+      throw new BadRequestException({ error: t("messages.unknownTypeValid", { types: [...MESSAGE_TYPES].sort().join(", ") }), code: "VALIDATION" });
     }
     const words = norm(typeof query.q === "string" ? query.q.trim().slice(0, 200) : "").split(/\s+/).filter(Boolean);
     const force = query.refresh === "1";
-    const { client, subdomain } = await this.loginFor(claims.sub, "Benutzername, Passwort oder Subdomain ist falsch.");
+    const { client, subdomain } = await this.loginFor(claims.sub, t("auth.badCredentialsAlt"));
     let events: TimelineEvent[];
     try {
       ({ events } = await this.timelineEvents(client, subdomain, claims.sub, sinceRaw, force));
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
-      throw new HttpException({ error: `Nachrichten konnten nicht geladen werden: ${detail}`, code: "UPSTREAM" }, 502);
+      throw new HttpException({ error: t("upstream.messagesFailed", { detail }), code: "UPSTREAM" }, 502);
     }
     const items: Record<string, unknown>[] = [];
     for (const event of events) {
@@ -254,20 +255,20 @@ export class EdupageDataService {
   // ---------------------------------------------------------- Thread
 
   async thread(claims: AuthClaims, eventId: number, refresh: boolean) {
-    if (!Number.isInteger(eventId)) throw new NotFoundException({ error: "Nachricht nicht gefunden.", code: "NOT_FOUND" });
+    if (!Number.isInteger(eventId)) throw new NotFoundException({ error: t("messages.notFound"), code: "NOT_FOUND" });
     const key = `likes:${eventId}`;
     const cached = await this.readCache(claims.sub, key);
     if (cached && cached.fresh && !refresh) {
       const payload = cached.payload as { likes?: unknown; replies?: unknown; reply_ids?: unknown; summary?: unknown };
       return { likes: payload.likes ?? [], replies: payload.replies ?? [], reply_ids: payload.reply_ids ?? [], summary: payload.summary ?? {}, cached: true };
     }
-    const { client, subdomain } = await this.loginFor(claims.sub, "Benutzername, Passwort oder Subdomain ist falsch.");
+    const { client, subdomain } = await this.loginFor(claims.sub, t("auth.badCredentialsAlt"));
     let result;
     try {
       result = await fetchThread(client.session, subdomain, eventId);
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
-      throw new HttpException({ error: `Thread konnte nicht geladen werden: ${detail}`, code: "UPSTREAM" }, 502);
+      throw new HttpException({ error: t("upstream.threadFailed", { detail }), code: "UPSTREAM" }, 502);
     }
     await this.writeCache(claims.sub, key, { ...result }, LIKES_TTL_S);
     return { ...result, cached: false };
@@ -297,7 +298,7 @@ export class EdupageDataService {
       return { marked };
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
-      throw new HttpException({ error: `Gelesen-Status konnte nicht gespeichert werden: ${detail}`, code: "UPSTREAM" }, 502);
+      throw new HttpException({ error: t("upstream.readFailed", { detail }), code: "UPSTREAM" }, 502);
     }
   }
 
@@ -305,13 +306,13 @@ export class EdupageDataService {
 
   async recipients(claims: AuthClaims, query: Record<string, unknown>) {
     const { limit, offset } = parsePage(query);
-    const { loginData } = await this.loginFor(claims.sub, "Benutzername, Passwort oder Subdomain ist falsch.");
+    const { loginData } = await this.loginFor(claims.sub, t("auth.badCredentialsAlt"));
     let recs;
     try {
       recs = recipientsFromDbi((loginData as Record<string, unknown> | null)?.dbi ?? {});
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
-      throw new HttpException({ error: `Empfänger konnten nicht geladen werden: ${detail}`, code: "UPSTREAM" }, 502);
+      throw new HttpException({ error: t("upstream.recipientsFailed", { detail }), code: "UPSTREAM" }, 502);
     }
     return page(recs, { limit: String(limit), offset: String(offset) });
   }
@@ -337,20 +338,20 @@ export class EdupageDataService {
     const input = (typeof body === "object" && body !== null && !Array.isArray(body) ? body : {}) as Record<string, unknown>;
     const picked = this.normalizeRecipients(input.recipients);
     const text = typeof input.body === "string" ? input.body.trim().slice(0, 5000) : "";
-    if (!picked.length) throw new BadRequestException({ error: "Bitte mindestens einen gültigen Empfänger angeben.", code: "VALIDATION" });
-    if (!text) throw new BadRequestException({ error: "Bitte einen Nachrichtentext eingeben.", code: "VALIDATION" });
-    const { client, subdomain, loginData } = await this.loginFor(claims.sub, "Benutzername, Passwort oder Subdomain ist falsch.");
+    if (!picked.length) throw new BadRequestException({ error: t("messages.noRecipients"), code: "VALIDATION" });
+    if (!text) throw new BadRequestException({ error: t("messages.noBody"), code: "VALIDATION" });
+    const { client, subdomain, loginData } = await this.loginFor(claims.sub, t("auth.badCredentialsAlt"));
     // Nur IDs aus der eigenen Empfängerliste zulassen (Mitgliedschaft statt
     // Format-Raten: dbi-Schlüssel sind nicht überall rein numerisch).
     const known = new Set(recipientsFromDbi((loginData as Record<string, unknown> | null)?.dbi ?? {}).map((item) => item.id));
     const valid = picked.filter((id) => known.has(id));
-    if (!valid.length) throw new BadRequestException({ error: "Bitte mindestens einen gültigen Empfänger angeben.", code: "VALIDATION" });
+    if (!valid.length) throw new BadRequestException({ error: t("messages.noRecipients"), code: "VALIDATION" });
     let newId: number;
     try {
       newId = await sendTimelineMessage(client.session, subdomain, valid, text);
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
-      throw new HttpException({ error: `Senden fehlgeschlagen: ${detail}`, code: "UPSTREAM" }, 502);
+      throw new HttpException({ error: t("upstream.sendFailed", { detail }), code: "UPSTREAM" }, 502);
     }
     try {
       const { events } = await this.timelineEvents(client, subdomain, claims.sub, EARLIEST_DEFAULT, true);
@@ -359,7 +360,7 @@ export class EdupageDataService {
     } catch {
       /* unten: nicht gefunden */
     }
-    throw new HttpException({ error: "Gesendet, aber die neue Nachricht wurde nicht gefunden.", code: "UPSTREAM" }, 502);
+    throw new HttpException({ error: t("messages.sentNotFound"), code: "UPSTREAM" }, 502);
   }
 
   // ---------------------------------------------------------- Antworten
@@ -367,13 +368,13 @@ export class EdupageDataService {
   async reply(claims: AuthClaims, eventId: number, body: unknown) {
     const input = (typeof body === "object" && body !== null && !Array.isArray(body) ? body : {}) as Record<string, unknown>;
     const text = typeof input.body === "string" ? input.body.trim().slice(0, 5000) : "";
-    if (!text) throw new BadRequestException({ error: "Bitte einen Antworttext eingeben.", code: "VALIDATION" });
-    const { client, subdomain } = await this.loginFor(claims.sub, "Benutzername, Passwort oder Subdomain ist falsch.");
+    if (!text) throw new BadRequestException({ error: t("messages.noReply"), code: "VALIDATION" });
+    const { client, subdomain } = await this.loginFor(claims.sub, t("auth.badCredentialsAlt"));
     try {
       await replyToMessage(client.session, subdomain, eventId, text);
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
-      throw new HttpException({ error: `Antwort fehlgeschlagen: ${detail}`, code: "UPSTREAM" }, 502);
+      throw new HttpException({ error: t("upstream.replyFailed", { detail }), code: "UPSTREAM" }, 502);
     }
     try {
       const result = await fetchThread(client.session, subdomain, eventId);
@@ -381,7 +382,7 @@ export class EdupageDataService {
       return { ...result, cached: false };
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
-      throw new HttpException({ error: `Antwort wurde gesendet, der Thread konnte aber nicht geladen werden: ${detail}`, code: "UPSTREAM" }, 502);
+      throw new HttpException({ error: t("upstream.replyThreadFailed", { detail }), code: "UPSTREAM" }, 502);
     }
   }
 
@@ -392,11 +393,11 @@ export class EdupageDataService {
     const eventId = typeof input.event_id === "number" ? input.event_id : Number.NaN;
     const idx = typeof input.idx === "number" ? input.idx : Number.NaN;
     if (!Number.isInteger(eventId) || !Number.isInteger(idx) || (idx as number) < 0) {
-      throw new BadRequestException({ error: "Bitte event_id und idx als Zahl angeben.", code: "VALIDATION" });
+      throw new BadRequestException({ error: t("messages.eventIdx"), code: "VALIDATION" });
     }
-    const { client, subdomain } = await this.loginFor(claims.sub, "Benutzername, Passwort oder Subdomain ist falsch.");
+    const { client, subdomain } = await this.loginFor(claims.sub, t("auth.badCredentialsAlt"));
     const event = await this.resolveEvent(client, claims.sub, subdomain, eventId as number);
-    if (!event) throw new NotFoundException({ error: "Nachricht nicht gefunden.", code: "NOT_FOUND" });
+    if (!event) throw new NotFoundException({ error: t("messages.notFound"), code: "NOT_FOUND" });
     this.attachmentUrl(event, subdomain, idx as number);
     const token = randomBytes(18).toString("base64url");
     await this.writeCache(claims.sub, `dl:${token}`, { accountId: claims.sub, eventId: String(eventId), idx: String(idx) }, DL_TTL_S);
@@ -405,16 +406,16 @@ export class EdupageDataService {
 
   private attachmentUrl(event: TimelineEvent, subdomain: string, idx: number): string {
     const atts = extractAttachments(event.additionalData);
-    if (idx < 0 || idx >= atts.length) throw new NotFoundException({ error: "Datei nicht gefunden.", code: "NOT_FOUND" });
+    if (idx < 0 || idx >= atts.length) throw new NotFoundException({ error: t("messages.attachment"), code: "NOT_FOUND" });
     const raw = atts[idx]?.url ?? "";
     const url = raw.startsWith("/") ? `https://${subdomain}.edupage.org${raw}` : raw;
     const host = (() => { try { return new URL(url).hostname; } catch { return ""; } })();
-    if (!host.endsWith(".edupage.org")) throw new BadRequestException({ error: "Ungültiger Download-Link.", code: "VALIDATION" });
+    if (!host.endsWith(".edupage.org")) throw new BadRequestException({ error: t("messages.badLink"), code: "VALIDATION" });
     return url;
   }
 
   async attachmentByClaims(claims: AuthClaims, eventId: number, idx: number) {
-    const { client, subdomain } = await this.loginFor(claims.sub, "Benutzername, Passwort oder Subdomain ist falsch.");
+    const { client, subdomain } = await this.loginFor(claims.sub, t("auth.badCredentialsAlt"));
     return this.downloadResolved(client, claims.sub, subdomain, eventId, idx);
   }
 
@@ -429,7 +430,7 @@ export class EdupageDataService {
     const payload = ((row?.payload ?? {}) as { accountId?: string; eventId?: string; idx?: string });
     if (!row || row.expiresAt.getTime() <= Date.now() || !payload.accountId
       || payload.eventId !== String(eventId) || payload.idx !== String(idx)) {
-      throw new UnauthorizedException({ error: "Ungültiges oder fehlendes Token.", code: "TOKEN_INVALID" });
+      throw new UnauthorizedException({ error: t("auth.tokenInvalid"), code: "TOKEN_INVALID" });
     }
     const { client, subdomain } = await this.loginFor(payload.accountId, "Benutzername, Passwort oder Subdomain ist falsch.");
     return this.downloadResolved(client, payload.accountId, subdomain, eventId, idx);
@@ -437,21 +438,21 @@ export class EdupageDataService {
 
   private async downloadResolved(client: EdupageClient, accountId: string, subdomain: string, eventId: number, idx: number) {
     const event = await this.resolveEvent(client, accountId, subdomain, eventId);
-    if (!event) throw new NotFoundException({ error: "Nachricht nicht gefunden.", code: "NOT_FOUND" });
+    if (!event) throw new NotFoundException({ error: t("messages.notFound"), code: "NOT_FOUND" });
     let url: string;
     try {
       url = this.attachmentUrl(event, subdomain, idx);
     } catch (error) {
       if (error instanceof HttpException) throw error;
-      throw new NotFoundException({ error: "Datei nicht gefunden.", code: "NOT_FOUND" });
+      throw new NotFoundException({ error: t("messages.attachment"), code: "NOT_FOUND" });
     }
     try {
       const file = await downloadViaSession(client.session, url, eventIdName(event, idx));
       return file;
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
-      if (detail.startsWith("EduPage meldet Fehler")) throw new HttpException({ error: detail, code: "UPSTREAM" }, 502);
-      throw new HttpException({ error: `Download fehlgeschlagen: ${detail}`, code: "UPSTREAM" }, 502);
+      if (detail.startsWith("EduPage reports error")) throw new HttpException({ error: detail, code: "UPSTREAM" }, 502);
+      throw new HttpException({ error: t("upstream.downloadFailed", { detail }), code: "UPSTREAM" }, 502);
     }
   }
 
@@ -562,11 +563,11 @@ export class EdupageDataService {
     const sinceRaw = query.since === undefined || query.since === null || String(query.since).trim() === ""
       ? EARLIEST_DEFAULT : String(query.since).trim();
     if (!/^\d{4}-\d{2}-\d{2}$/.test(sinceRaw) || Number.isNaN(Date.parse(`${sinceRaw}T00:00:00Z`))) {
-      throw new BadRequestException({ error: "Ungültiges Datum (YYYY-MM-DD erwartet).", code: "VALIDATION" });
+      throw new BadRequestException({ error: t("validation.invalidDate"), code: "VALIDATION" });
     }
     const status = (typeof query.status === "string" && query.status ? query.status : "alle").trim() || "alle";
     if (!["alle", "offen", "überfällig", "erledigt", "papierkorb"].includes(status)) {
-      throw new BadRequestException({ error: "Ungültiger Status (alle, offen, überfällig, erledigt oder papierkorb erwartet).", code: "VALIDATION" });
+      throw new BadRequestException({ error: t("validation.statusHomework"), code: "VALIDATION" });
     }
     let includeTests = false;
     let force = false;
@@ -584,14 +585,14 @@ export class EdupageDataService {
       view = await this.buildHomeworkView(client, subdomain, claims.sub, username, sinceRaw, status, includeTests, q, force);
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
-      throw new HttpException({ error: `Hausaufgaben konnten nicht geladen werden: ${detail}`, code: "UPSTREAM" }, 502);
+      throw new HttpException({ error: t("upstream.homeworkFailed", { detail }), code: "UPSTREAM" }, 502);
     }
     return { ...page(view.items, { limit: String(limit), offset: String(offset) }), counts: view.counts, cache_info: view.cacheInfo };
   }
 
   async homeworkDone(claims: AuthClaims, eventId: string, body: unknown, today = new Date()) {
     if (typeof body !== "object" || body === null || Array.isArray(body)) {
-      throw new BadRequestException({ error: "Ungültige Anfrage (JSON erwartet).", code: "VALIDATION" });
+      throw new BadRequestException({ error: t("validation.json"), code: "VALIDATION" });
     }
     const input = body as Record<string, unknown>;
     let done: boolean;
@@ -607,26 +608,26 @@ export class EdupageDataService {
       view = await this.buildHomeworkView(client, subdomain, claims.sub, username, EARLIEST_DEFAULT, "alle", true, "", false, today);
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
-      throw new HttpException({ error: `Hausaufgaben konnten nicht geladen werden: ${detail}`, code: "UPSTREAM" }, 502);
+      throw new HttpException({ error: t("upstream.homeworkFailed", { detail }), code: "UPSTREAM" }, 502);
     }
     if (!view.items.some((item) => String(item.id) === String(eventId))) {
-      throw new NotFoundException({ error: "Hausaufgabe nicht gefunden.", code: "NOT_FOUND" });
+      throw new NotFoundException({ error: t("homework.notFound"), code: "NOT_FOUND" });
     }
     try {
       await setHomeworkDone(client.session, subdomain, eventId, done);
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
-      throw new HttpException({ error: `Status konnte nicht geändert werden: ${detail}`, code: "UPSTREAM" }, 502);
+      throw new HttpException({ error: t("upstream.statusFailed", { detail }), code: "UPSTREAM" }, 502);
     }
     await this.writeHwState(claims.sub, eventId, "done", done);
     const updated = await this.homeworkDictById(claims.sub, eventId, today);
-    if (!updated) throw new NotFoundException({ error: "Hausaufgabe nicht gefunden.", code: "NOT_FOUND" });
+    if (!updated) throw new NotFoundException({ error: t("homework.notFound"), code: "NOT_FOUND" });
     return updated;
   }
 
   async homeworkTrash(claims: AuthClaims, eventId: string, body: unknown, today = new Date()) {
     if (typeof body !== "object" || body === null || Array.isArray(body)) {
-      throw new BadRequestException({ error: "Ungültige Anfrage (JSON erwartet).", code: "VALIDATION" });
+      throw new BadRequestException({ error: t("validation.json"), code: "VALIDATION" });
     }
     const input = body as Record<string, unknown>;
     const raw = input.hide ?? input.trash ?? true;
@@ -643,10 +644,10 @@ export class EdupageDataService {
       view = await this.buildHomeworkView(client, subdomain, claims.sub, username, EARLIEST_DEFAULT, "alle", true, "", false, today);
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
-      throw new HttpException({ error: `Hausaufgaben konnten nicht geladen werden: ${detail}`, code: "UPSTREAM" }, 502);
+      throw new HttpException({ error: t("upstream.homeworkFailed", { detail }), code: "UPSTREAM" }, 502);
     }
     const current = view.items.find((item) => String(item.id) === String(eventId));
-    if (!current) throw new NotFoundException({ error: "Hausaufgabe nicht gefunden.", code: "NOT_FOUND" });
+    if (!current) throw new NotFoundException({ error: t("homework.notFound"), code: "NOT_FOUND" });
     if (hide) {
       await this.writeHwState(claims.sub, eventId, "trash", true);
     } else {
@@ -655,14 +656,14 @@ export class EdupageDataService {
           await setHomeworkDone(client.session, subdomain, eventId, false);
         } catch (error) {
           const detail = error instanceof Error ? error.message : String(error);
-          throw new HttpException({ error: `Aufgabe konnte nicht als offen markiert werden: ${detail}`, code: "UPSTREAM" }, 502);
+          throw new HttpException({ error: t("upstream.reopenFailed", { detail }), code: "UPSTREAM" }, 502);
         }
         await this.writeHwState(claims.sub, eventId, "done", false);
       }
       await this.removeHwState(claims.sub, eventId, "trash");
     }
     const updated = await this.homeworkDictById(claims.sub, eventId, today);
-    if (!updated) throw new NotFoundException({ error: "Hausaufgabe nicht gefunden.", code: "NOT_FOUND" });
+    if (!updated) throw new NotFoundException({ error: t("homework.notFound"), code: "NOT_FOUND" });
     return updated;
   }
 
@@ -692,7 +693,7 @@ export class EdupageDataService {
       plan = await fetchDayPlan(client.session, subdomain, userId, dayIso);
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
-      throw new HttpException({ error: `Stundenplan konnte nicht geladen werden: ${detail}`, code: "UPSTREAM" }, 502);
+      throw new HttpException({ error: t("upstream.timetableFailed", { detail }), code: "UPSTREAM" }, 502);
     }
     const groups = (typeof dbi === "object" && dbi !== null ? dbi : {}) as Record<string, Record<string, { short?: string; firstname?: string; lastname?: string }>>;
     const lessons = parseDayPlan(plan, { subjects: groups.subjects ?? {}, teachers: groups.teachers ?? {}, classrooms: groups.classrooms ?? {} }).map(lessonToDict);
@@ -704,12 +705,12 @@ export class EdupageDataService {
     const raw = typeof query.day === "string" ? query.day.trim() : "";
     const dayIso = raw || today.toISOString().slice(0, 10);
     if (!/^\d{4}-\d{2}-\d{2}$/.test(dayIso) || Number.isNaN(Date.parse(`${dayIso}T00:00:00Z`))) {
-      throw new BadRequestException({ error: "Das Datum muss im Format JJJJ-MM-TT angegeben werden.", code: "VALIDATION" });
+      throw new BadRequestException({ error: t("validation.dateFormat"), code: "VALIDATION" });
     }
     const force = query.refresh === "1";
     const { client, subdomain, loginData } = await this.loginFor(claims.sub);
     const userId = String((loginData as Record<string, unknown> | null)?.userid ?? "");
-    if (!userId) throw new HttpException({ error: "Stundenplan konnte nicht geladen werden: fehlende Benutzerkennung.", code: "UPSTREAM" }, 502);
+    if (!userId) throw new HttpException({ error: t("school.timetable"), code: "UPSTREAM" }, 502);
     const dbi = (loginData as Record<string, unknown> | null)?.dbi ?? {};
     const loaded = await this.loadTimetableDay(client, claims.sub, subdomain, userId, dbi, dayIso, force);
     const lessons = mergeLernzeit(loaded.lessons);
@@ -733,12 +734,12 @@ export class EdupageDataService {
     const raw = typeof query.day === "string" ? query.day.trim() : "";
     const dayIso = raw || today.toISOString().slice(0, 10);
     if (!/^\d{4}-\d{2}-\d{2}$/.test(dayIso) || Number.isNaN(Date.parse(`${dayIso}T00:00:00Z`))) {
-      throw new BadRequestException({ error: "Das Datum muss im Format JJJJ-MM-TT angegeben werden.", code: "VALIDATION" });
+      throw new BadRequestException({ error: t("validation.dateFormat"), code: "VALIDATION" });
     }
     const force = query.refresh === "1";
     const { client, subdomain, loginData } = await this.loginFor(claims.sub);
     const userId = String((loginData as Record<string, unknown> | null)?.userid ?? "");
-    if (!userId) throw new HttpException({ error: "Stundenplan konnte nicht geladen werden: fehlende Benutzerkennung.", code: "UPSTREAM" }, 502);
+    if (!userId) throw new HttpException({ error: t("school.timetable"), code: "UPSTREAM" }, 502);
     const dbi = (loginData as Record<string, unknown> | null)?.dbi ?? {};
     const base = new Date(`${dayIso}T00:00:00Z`);
     const monday = new Date(base.getTime() - (((base.getUTCDay() + 6) % 7) * 86400000));
@@ -795,7 +796,7 @@ export class EdupageDataService {
       dicts = parseGrades(data, dbi).map(gradeToDict);
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
-      throw new HttpException({ error: `Noten konnten nicht geladen werden: ${detail}`, code: "UPSTREAM" }, 502);
+      throw new HttpException({ error: t("upstream.gradesFailed", { detail }), code: "UPSTREAM" }, 502);
     }
     await this.writeCache(claims.sub, "grades", { grades: dicts, savedAt: new Date().toISOString() }, GRADES_TTL_S);
     return { ...page(dicts, { limit: String(limit), offset: String(offset) }), cache_info: "frisch geladen" };
@@ -814,12 +815,12 @@ export class EdupageDataService {
     const lon = coord(query.lon);
     const city = (typeof query.city === "string" ? query.city : "").trim().slice(0, 100);
     if ((lat === null || lon === null) && !city) {
-      throw new BadRequestException({ error: "Bitte Koordinaten (?lat=..&lon=..) oder Stadt (?city=..) angeben.", code: "VALIDATION" });
+      throw new BadRequestException({ error: t("geo.coords"), code: "VALIDATION" });
     }
     const key = process.env.OPENWEATHER_KEY ?? "";
     const { payload, status } = await getWetter(this.fetchJson, key, lat, lon, city);
     if (status === 200) return payload;
-    const message = typeof payload.error === "string" ? payload.error : "Wetter derzeit nicht verfügbar.";
+    const message = typeof payload.error === "string" ? payload.error : t("geo.unavailable");
     if (status === 400) throw new BadRequestException({ error: message, code: "VALIDATION" });
     if (status === 503) throw new HttpException({ error: message, code: "CONFIG_MISSING" }, 503);
     throw new HttpException({ error: message, code: "UPSTREAM" }, 502);
@@ -831,7 +832,7 @@ export class EdupageDataService {
     const key = process.env.OPENWEATHER_KEY ?? "";
     const { payload, status } = await searchWetterCities(this.fetchJson, key, text);
     if (status === 200) return payload;
-    const message = typeof payload.error === "string" ? payload.error : "Stadtsuche nicht verfügbar.";
+    const message = typeof payload.error === "string" ? payload.error : t("geo.searchUnavailable");
     if (status === 503) throw new HttpException({ error: message, code: "CONFIG_MISSING" }, 503);
     throw new HttpException({ error: message, code: "UPSTREAM" }, 502);
   }
@@ -842,7 +843,7 @@ export class EdupageDataService {
     const raw = typeof query.day === "string" ? query.day.trim() : "";
     const selected = raw || today.toISOString().slice(0, 10);
     if (!/^\d{4}-\d{2}-\d{2}$/.test(selected) || Number.isNaN(Date.parse(`${selected}T00:00:00Z`))) {
-      throw new BadRequestException({ error: "Das Datum muss im Format JJJJ-MM-TT angegeben werden.", code: "VALIDATION" });
+      throw new BadRequestException({ error: t("validation.dateFormat"), code: "VALIDATION" });
     }
     const { client, subdomain, loginData, gsecHash } = await this.loginFor(claims.sub);
     const base = new Date(`${selected}T00:00:00Z`);
@@ -866,7 +867,7 @@ export class EdupageDataService {
         });
       }
     } catch {
-      throw new HttpException({ error: "Vertretungsplan konnte nicht geladen werden.", code: "UPSTREAM" }, 502);
+      throw new HttpException({ error: t("school.substitutions"), code: "UPSTREAM" }, 502);
     }
     const friday = new Date(monday.getTime() + 4 * 86400000);
     return {
@@ -880,7 +881,7 @@ export class EdupageDataService {
     const parseRangeDate = (value: unknown, fallback: string): string => {
       const text = typeof value === "string" && value.trim() ? value.trim() : fallback;
       if (!/^\d{4}-\d{2}-\d{2}$/.test(text) || Number.isNaN(Date.parse(`${text}T00:00:00Z`))) {
-        throw new BadRequestException({ error: "Das Datum muss im Format JJJJ-MM-TT angegeben werden.", code: "VALIDATION" });
+        throw new BadRequestException({ error: t("validation.dateFormat"), code: "VALIDATION" });
       }
       return text;
     };
@@ -889,7 +890,7 @@ export class EdupageDataService {
     const until = parseRangeDate(query.until, shiftIso(60));
     const spanDays = Math.round((Date.parse(`${until}T00:00:00Z`) - Date.parse(`${since}T00:00:00Z`)) / 86400000);
     if (until < since || spanDays > 366) {
-      throw new BadRequestException({ error: "Der Zeitraum darf höchstens ein Jahr umfassen.", code: "VALIDATION" });
+      throw new BadRequestException({ error: t("validation.yearRange"), code: "VALIDATION" });
     }
     const force = query.refresh === "1";
     const { client, subdomain } = await this.loginFor(claims.sub);
@@ -899,14 +900,14 @@ export class EdupageDataService {
       ({ events, info } = await this.timelineEvents(client, subdomain, claims.sub, since, force));
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
-      throw new HttpException({ error: `Schultermine konnten nicht geladen werden: ${detail}`, code: "UPSTREAM" }, 502);
+      throw new HttpException({ error: t("upstream.agendaFailed", { detail }), code: "UPSTREAM" }, 502);
     }
     let items: Record<string, unknown>[];
     try {
       items = this.buildAgendaItems(events, since, until, today);
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
-      throw new HttpException({ error: `Schultermine konnten nicht geladen werden: ${detail}`, code: "UPSTREAM" }, 502);
+      throw new HttpException({ error: t("upstream.agendaFailed", { detail }), code: "UPSTREAM" }, 502);
     }
     return { items, total: items.length, since, until, cache_info: info };
   }
@@ -964,7 +965,7 @@ export class EdupageDataService {
 
   async settingsPut(claims: AuthClaims, body: unknown) {
     if (typeof body !== "object" || body === null || Array.isArray(body)) {
-      throw new BadRequestException({ error: "Ungültige Anfrage (JSON-Objekt erwartet).", code: "VALIDATION" });
+      throw new BadRequestException({ error: t("validation.jsonObject"), code: "VALIDATION" });
     }
     const current = await this.settingsGet(claims);
     const input = { ...(current.values as Record<string, unknown>), ...(body as Record<string, unknown>) };
@@ -979,7 +980,7 @@ export class EdupageDataService {
       values = settingsFromForm(normalized);
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
-      throw new BadRequestException({ error: `Einstellungen konnten nicht gespeichert werden: ${detail}`, code: "VALIDATION" });
+      throw new BadRequestException({ error: t("upstream.settingsFailed", { detail }), code: "VALIDATION" });
     }
     try {
       for (const spec of SETTINGS_SCHEMA) {
@@ -991,7 +992,7 @@ export class EdupageDataService {
       }
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
-      throw new HttpException({ error: `Einstellungen konnten nicht gespeichert werden: ${detail}`, code: "UPSTREAM" }, 502);
+      throw new HttpException({ error: t("upstream.settingsFailed", { detail }), code: "UPSTREAM" }, 502);
     }
     return { status: "ok", values: (await this.settingsGet(claims)).values };
   }
@@ -1002,7 +1003,7 @@ export class EdupageDataService {
       return { status: "ok", cleared: result.count };
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
-      throw new HttpException({ error: `Cache konnte nicht gelöscht werden: ${detail}`, code: "UPSTREAM" }, 502);
+      throw new HttpException({ error: t("upstream.cacheFailed", { detail }), code: "UPSTREAM" }, 502);
     }
   }
 }

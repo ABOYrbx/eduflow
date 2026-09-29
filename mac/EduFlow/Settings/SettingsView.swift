@@ -8,6 +8,7 @@ public struct SettingsView: View {
     @Environment(TokenStore.self) private var store
     @State private var vm: SettingsViewModel
     @State private var accent = Accent.stored
+    @State private var topBarOrder: [TopBarSection] = TopBarConfig.visible
     @AppStorage("de.eduflow.developerOptionsEnabledV1") private var developerOptionsEnabled = false
     private let onSessionExpired: () -> Void
     private let onDevices: () -> Void
@@ -36,6 +37,7 @@ public struct SettingsView: View {
                         .padding(48)
                 } else {
                     startSection
+                    navigationSection
                     homeworkSection
                     overviewSection
                     appearanceSection
@@ -75,6 +77,61 @@ public struct SettingsView: View {
                     RadioCard(title: NSLocalizedString("Hausaufgaben", value: "Hausaufgaben", comment: "Einstellungen: Startseite Aufgaben"), desc: NSLocalizedString("settings_landing_homework_desc", value: "Direkt zu den Aufgaben", comment: "Einstellungen: Startseite Aufgaben Beschreibung"), value: "hausaufgaben", selection: $vm.values.landing)
                     RadioCard(title: NSLocalizedString("grades_nav", value: "Noten", comment: "Einstellungen: Startseite Noten"), desc: NSLocalizedString("settings_landing_grades_desc", value: "Direkt zu den Noten", comment: "Einstellungen: Startseite Noten Beschreibung"), value: "noten", selection: $vm.values.landing)
                     RadioCard(title: NSLocalizedString("Stundenplan", value: "Stundenplan", comment: "Einstellungen: Startseite Stundenplan"), desc: NSLocalizedString("settings_landing_timetable_desc", value: "Direkt zum Stundenplan", comment: "Einstellungen: Startseite Stundenplan Beschreibung"), value: "stundenplan", selection: $vm.values.landing)
+                }
+            }
+        }
+    }
+
+    private var navigationSection: some View {
+        UberCard {
+            VStack(alignment: .leading, spacing: 10) {
+                Text(NSLocalizedString("settings_navbar_title", value: "Navigationsleiste", comment: "Einstellungen: Navigationsleiste Titel"))
+                    .font(UberFont.text(19, weight: .heavy))
+                    .tracking(-0.4)
+                Text(NSLocalizedString("settings_navbar_desc", value: "Lege fest, welche Bereiche oben erscheinen und in welcher Reihenfolge. Termine bleiben auch ohne Reiter über das Profilmenü erreichbar.", comment: "Einstellungen: Navigationsleiste Beschreibung"))
+                    .font(UberFont.text(13))
+                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                ForEach(Array(topBarOrder.enumerated()), id: \.element.id) { index, section in
+                    HStack(spacing: 4) {
+                        Text(LocalizedStringKey(section.title))
+                            .font(UberFont.text(14, weight: .semibold))
+                        Spacer()
+                        IconButton(icon: "chevron.up", label: "Nach oben", help: "Bereich nach oben verschieben", disabled: index == 0) {
+                            topBarOrder = TopBarConfig.move(topBarOrder, from: index, by: -1)
+                            TopBarConfig.save(topBarOrder)
+                        }
+                        IconButton(icon: "chevron.down", label: "Nach unten", help: "Bereich nach unten verschieben", disabled: index == topBarOrder.count - 1) {
+                            topBarOrder = TopBarConfig.move(topBarOrder, from: index, by: 1)
+                            TopBarConfig.save(topBarOrder)
+                        }
+                        IconButton(icon: "minus", label: "Entfernen", help: "Bereich aus der Leiste entfernen") {
+                            topBarOrder = topBarOrder.filter { $0 != section }
+                            TopBarConfig.save(topBarOrder)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                }
+                let hidden = TopBarSection.allCases.filter { !topBarOrder.contains($0) }
+                if !hidden.isEmpty {
+                    Text(NSLocalizedString("settings_navbar_available", value: "Verfügbar", comment: "Einstellungen: verfügbare Bereiche"))
+                        .font(UberFont.text(13, weight: .bold))
+                        .tracking(0.8)
+                        .textCase(.uppercase)
+                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                        .padding(.top, 4)
+                    ForEach(hidden) { section in
+                        HStack(spacing: 4) {
+                            Text(LocalizedStringKey(section.title))
+                                .font(UberFont.text(14, weight: .semibold))
+                                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                            Spacer()
+                            IconButton(icon: "plus", label: "Hinzufügen", help: "Bereich zur Leiste hinzufügen") {
+                                topBarOrder = topBarOrder + [section]
+                                TopBarConfig.save(topBarOrder)
+                            }
+                        }
+                        .padding(.vertical, 4)
+                    }
                 }
             }
         }
@@ -121,6 +178,30 @@ public struct SettingsView: View {
                 TextField(NSLocalizedString("settings_wetter_city_placeholder", value: "Wetter: Stadt (optional)", comment: "Einstellungen: Wetterstadt Platzhalter"), text: $vm.values.wetterCity)
                     .uberInput()
                     .autocorrectionDisabled()
+                Text(NSLocalizedString("settings_ov_order_title", value: "Reihenfolge der Bereiche", comment: "Einstellungen: Reihenfolge Titel"))
+                    .font(UberFont.text(13, weight: .bold))
+                    .tracking(0.8)
+                    .textCase(.uppercase)
+                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                    .padding(.top, 4)
+                let order = parsedOverviewOrder()
+                ForEach(Array(order.enumerated()), id: \.offset) { index, key in
+                    HStack(spacing: 4) {
+                        Text(LocalizedStringKey(Self.overviewOrderLabels[key] ?? key))
+                            .font(UberFont.text(14, weight: .semibold))
+                        Spacer()
+                        IconButton(icon: "chevron.up", label: "Nach oben", help: "Bereich nach oben verschieben", disabled: index == 0) {
+                            moveOverviewOrder(from: index, by: -1)
+                        }
+                        IconButton(icon: "chevron.down", label: "Nach unten", help: "Bereich nach unten verschieben", disabled: index == order.count - 1) {
+                            moveOverviewOrder(from: index, by: 1)
+                        }
+                    }
+                    .padding(.vertical, 4)
+                }
+                Text(NSLocalizedString("settings_ov_order_hint", value: "Wird mit „Speichern“ übernommen.", comment: "Einstellungen: Reihenfolge Hinweis"))
+                    .font(UberFont.text(12))
+                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
             }
         }
     }
@@ -186,6 +267,34 @@ public struct SettingsView: View {
         }
     }
 
+    /// Reihenfolge der Übersichts-Bereiche (gehört fachlich hierher, nicht in
+    /// die Übersicht selbst; gespeichert wird per „Speichern" via `ov_order`).
+    private static let overviewOrderLabels = [
+        "messages": "Nachrichten",
+        "homework": "Hausaufgaben",
+        "weather": "Wetter",
+    ]
+    private static let overviewOrderKeys = ["messages", "homework", "weather"]
+
+    private func parsedOverviewOrder() -> [String] {
+        let parsed = vm.values.ovOrder
+            .split(separator: ",")
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+            .filter { Self.overviewOrderKeys.contains($0) }
+        return parsed + Self.overviewOrderKeys.filter { !parsed.contains($0) }
+    }
+
+    private func moveOverviewOrder(from: Int, by offset: Int) {
+        let order = parsedOverviewOrder()
+        guard order.indices.contains(from) else { return }
+        let target = min(max(from + offset, 0), order.count - 1)
+        guard target != from else { return }
+        var result = order
+        let item = result.remove(at: from)
+        result.insert(item, at: target)
+        vm.values.ovOrder = result.joined(separator: ",")
+    }
+
     private var developerSection: some View {
         UberCard {
             VStack(alignment: .leading, spacing: 10) {
@@ -197,31 +306,24 @@ public struct SettingsView: View {
                     .tint(accent.resolved(scheme))
 
                 if developerOptionsEnabled {
-                    Toggle(NSLocalizedString("settings_toggle_onboarding_restart", value: "Onboarding erneut durchlaufen", comment: "Einstellungen: Onboarding erneut"), isOn: onboardingRestartBinding)
-                        .font(UberFont.text(14, weight: .medium))
-                        .tint(accent.resolved(scheme))
-                        .disabled(vm.isLoggingOut)
                     Text("Meldet dich ab und startet die Einführung erneut.")
                         .font(UberFont.text(12))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                    Button(vm.isLoggingOut ? "Abmelden …" : "Onboarding erneut durchlaufen") {
+                        guard !vm.isLoggingOut else { return }
+                        OnboardingState.reset()
+                        Task {
+                            await vm.logout()
+                            onLogout()
+                        }
+                    }
+                    .buttonStyle(UberButtonStyle(.smallLight))
+                    .hoverLift()
+                    .disabled(vm.isLoggingOut)
+                    .foregroundStyle(EduFlowPalette.red)
                 }
             }
         }
-    }
-
-    /// Der zweite Schalter ist eine Aktion und springt danach zurück auf Aus.
-    private var onboardingRestartBinding: Binding<Bool> {
-        Binding(
-            get: { false },
-            set: { shouldRestart in
-                guard shouldRestart, !vm.isLoggingOut else { return }
-                OnboardingState.reset()
-                Task {
-                    await vm.logout()
-                    onLogout()
-                }
-            }
-        )
     }
 
     private var actionsSection: some View {

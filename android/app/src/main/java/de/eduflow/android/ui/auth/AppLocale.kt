@@ -41,7 +41,7 @@ object AppLocale {
         activity.recreate()
     }
 
-    /** Installierte Sprachen (Deutsch immer dabei, System-Default inklusive). */
+    /** Installierte Sprachen (Englisch immer dabei, System-Default inklusive). */
     fun availableLocales(context: Context): List<String> =
         availableFromAssets(context.assets.locales.toList())
 
@@ -51,10 +51,10 @@ object AppLocale {
             .filter { it.matches(Regex("^[a-z]{2}$")) }
             .distinct()
             .sorted()
-        // Deutsch ist immer wählbar (Fallback-Katalog) — aber nur, wenn
+        // Englisch ist immer wählbar (Fallback-Katalog) — aber nur, wenn
         // überhaupt Splits installiert sind.
         return if (normalized.isEmpty()) emptyList()
-        else (normalized + "de").distinct().sorted()
+        else (normalized + "en").distinct().sorted()
     }
 
     /** Eigenname der Sprache (`fr` → „français", Fallback: Code). */
@@ -63,7 +63,7 @@ object AppLocale {
 
     /** Begrüßung in der Sprache (Fallback: aktuelle Ressourcen). */
     fun greetingFor(code: String, context: Context): String {
-        if (code == "de") {
+        if (code == "en") {
             return context.getString(R.string.onboarding_greeting)
         }
         return runCatching {
@@ -80,10 +80,10 @@ object AppLocale {
     }
 
     private val coverage = mapOf(
-        "de" to LocaleCoverage("de", 250, 250),
-        "en" to LocaleCoverage("en", 250, 250),
+        "de" to LocaleCoverage("de", 300, 300),
+        "en" to LocaleCoverage("en", 300, 300),
     )
-    private const val fallbackTotal = 250
+    private const val fallbackTotal = 300
 
     fun coverageFor(code: String): LocaleCoverage =
         coverage[code] ?: LocaleCoverage(code, 0, fallbackTotal)

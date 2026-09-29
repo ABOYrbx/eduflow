@@ -26,9 +26,12 @@ public struct MessagesView: View {
         VStack(alignment: .leading, spacing: 12) {
             PageHead(
                 "Nachrichten",
-                stats: vm.total == 0 ? nil : String(format: NSLocalizedString("messages_count", value: "%d Nachrichten", comment: "Nachrichten: Anzahl"), vm.total)
+                stats: vm.total == 0 ? nil : messageStats
             )
             searchbar
+            if let marked = vm.markedMessage {
+                Notice(marked)
+            }
             if let error = vm.error, vm.items.isEmpty {
                 ErrorView(message: error.message) {
                     Task { await vm.load(onSessionExpired: onSessionExpired) }
@@ -43,6 +46,15 @@ public struct MessagesView: View {
         .task { await vm.load(onSessionExpired: onSessionExpired) }
     }
 
+    /// Kopf-Statistik: Gesamtzahl plus Ungelesene (lokal getrackt).
+    private var messageStats: String {
+        let total = String(format: NSLocalizedString("messages_count", value: "%d Nachrichten", comment: "Nachrichten: Anzahl"), vm.total)
+        guard vm.unreadCount > 0 else {
+            return total
+        }
+        return total + " · " + String(format: NSLocalizedString("messages_unread_count", value: "%d ungelesen", comment: "Nachrichten: Anzahl ungelesen"), vm.unreadCount)
+    }
+
     // MARK: - Suchleiste (`.searchbar`, zwei Reihen)
 
     private var searchbar: some View {
@@ -54,17 +66,12 @@ public struct MessagesView: View {
                     .onSubmit {
                         Task { await vm.load(onSessionExpired: onSessionExpired) }
                     }
-                Button {
+                IconButton(
+                    icon: "magnifyingglass",
+                    label: NSLocalizedString("messages_search_placeholder", value: "Suchen", comment: "Nachrichten: Suche Platzhalter")
+                ) {
                     Task { await vm.load(onSessionExpired: onSessionExpired) }
-                } label: {
-                    Image(systemName: "magnifyingglass")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundStyle(EduFlowPalette.ink(scheme))
-                        .frame(width: 38, height: 38)
-                        .background(EduFlowPalette.surface1(scheme))
-                        .clipShape(.circle)
                 }
-                .buttonStyle(.plain)
                 Picker(NSLocalizedString("messages_picker_type", value: "Typ", comment: "Nachrichten: Typfilter"), selection: $vm.type) {
                     ForEach(MessageTypes.all, id: \.self) { type in
                         Text(MessageTypes.label(type)).tag(type)
@@ -85,20 +92,24 @@ public struct MessagesView: View {
                 Capsule().stroke(EduFlowPalette.borderStrong(scheme), lineWidth: 1)
             }
             HStack(spacing: 8) {
-                Button("Neu laden") {
+                IconButton(
+                    icon: "arrow.clockwise",
+                    label: NSLocalizedString("messages_action_reload", value: "Neu laden", comment: "Nachrichten: neu laden")
+                ) {
                     Task { await vm.load(refresh: true, onSessionExpired: onSessionExpired) }
                 }
-                .buttonStyle(UberButtonStyle(.smallLight))
-                .hoverLift()
-                Button("Alle als gelesen") {
+                IconButton(
+                    icon: "envelope.open",
+                    label: NSLocalizedString("messages_action_mark_read", value: "Alle als gelesen", comment: "Nachrichten: alle als gelesen")
+                ) {
                     Task { await vm.markAllRead(onSessionExpired: onSessionExpired) }
                 }
-                .buttonStyle(UberButtonStyle(.smallLight))
-                .hoverLift()
                 Spacer()
-                Button("Neue Nachricht", action: onCompose)
-                    .buttonStyle(UberButtonStyle(.smallPrimary))
-                    .hoverLift()
+                IconButton(
+                    icon: "plus",
+                    label: NSLocalizedString("messages_nav_compose", value: "Neue Nachricht", comment: "Nachrichten: Verfassen-Titel"),
+                    action: onCompose
+                )
             }
         }
     }
@@ -114,7 +125,7 @@ public struct MessagesView: View {
                         .frame(maxWidth: .infinity)
                         .padding(48)
                 } else if vm.items.isEmpty {
-                    Text("Keine Nachrichten.")
+                    Text(NSLocalizedString("messages_empty", value: "Keine Nachrichten.", comment: "Nachrichten: leer"))
                         .font(UberFont.text(15))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                         .frame(maxWidth: .infinity)
@@ -123,18 +134,18 @@ public struct MessagesView: View {
                     ForEach(Array(vm.items.enumerated()), id: \.element.id) { index, message in
                         MessageRow(
                             message: message,
+                            unread: vm.isUnread(message),
                             selected: false
                         ) {
+                            vm.markSeen(message.id)
                             onThread(message.header)
                         }
                         .riseIn(delay: Double(min(index, 8)) * 0.06)
                     }
                     if vm.canLoadMore {
-                        Button(vm.isLoadingMore ? NSLocalizedString("Lädt …", value: "Lädt …", comment: "Nachrichten: lädt") : String(format: NSLocalizedString("grades_load_more", value: "Mehr laden (%d/%d)", comment: "Nachrichten: mehr laden"), vm.items.count, vm.total)) {
+                        PillButton(vm.isLoadingMore ? NSLocalizedString("common_loading", value: "Lädt …", comment: "Laden läuft") : String(format: NSLocalizedString("messages_load_more", value: "Mehr laden (%d/%d)", comment: "Nachrichten: mehr laden"), vm.items.count, vm.total), style: .smallLight) {
                             Task { await vm.loadMore(onSessionExpired: onSessionExpired) }
                         }
-                        .buttonStyle(UberButtonStyle(.smallLight))
-                        .hoverLift()
                         .disabled(vm.isLoadingMore)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 8)
@@ -143,52 +154,125 @@ public struct MessagesView: View {
             }
             .padding(2)
         }
+        .refreshable {
+            await vm.load(refresh: true, onSessionExpired: onSessionExpired)
+        }
     }
 }
 
-/// Nachrichten-Zeile (`.msg-row`): Autor plus Zeit, Snippet, Tags.
+/// Icon-Aktionen nutzen die gemeinsame Schnittstelle aus Paket 1
+/// (`IconButton` in `Views/CommonViews.swift`: Kreis-Hover, Fokus-Ring,
+/// VoiceOver-Name, Tooltip) — keine eigene Button-API.
+
+/// Nachrichten-Zeile (`.msg-row`): Absender plus Datum, Betreff (fett,
+/// einzeilig), Vorschau (grau, zweizeilig, nur bei Resttext), Tags und
+/// Gelesen-Status (Punkt plus „Neu“-Tag bei ungelesen).
 /// Ausgewählt mit Tinten-Rahmen auf Fläche 1.
 private struct MessageRow: View {
     @Environment(\.colorScheme) var scheme
     @State private var hovering = false
     let message: MessageDTO
+    let unread: Bool
     let selected: Bool
     let action: () -> Void
 
+    private var author: String {
+        let name = message.author.trimmingCharacters(in: .whitespacesAndNewlines)
+        if name.isEmpty {
+            return NSLocalizedString("common_unknown_author", value: "(unbekannt)", comment: "Nachrichten: unbekannter Absender")
+        }
+        return message.author
+    }
+
+    private var timestamp: String {
+        if !message.timestamp.isEmpty {
+            return message.timestamp
+        }
+        return message.timestampIso
+    }
+
+    private var subject: String {
+        MessagePreview.subject(for: message)
+    }
+
+    private var preview: String {
+        MessagePreview.preview(for: message)
+    }
+
+    /// Typ-Tag unterdrücken, wenn er den Betreff nur wiederholt.
+    private var showsTypeTag: Bool {
+        let label = message.typeLabel.trimmingCharacters(in: .whitespacesAndNewlines)
+        if label.isEmpty {
+            return false
+        }
+        return label.caseInsensitiveCompare(subject.trimmingCharacters(in: .whitespacesAndNewlines)) != .orderedSame
+    }
+
+    private var accessibilityText: String {
+        var parts = [subject, author]
+        if !timestamp.isEmpty {
+            parts.append(timestamp)
+        }
+        if !preview.isEmpty {
+            parts.append(preview)
+        }
+        parts.append(unread
+            ? NSLocalizedString("messages_state_unread", value: "Ungelesen", comment: "Nachrichten: Status ungelesen")
+            : NSLocalizedString("messages_state_read", value: "Gelesen", comment: "Nachrichten: Status gelesen"))
+        return parts.joined(separator: ", ")
+    }
+
     var body: some View {
         Button(action: action) {
-            VStack(alignment: .leading, spacing: 4) {
-                HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    (message.author.isEmpty ? Text("(unbekannt)") : Text(verbatim: message.author))
-                        .font(UberFont.text(14, weight: .heavy))
-                        .tracking(-0.2)
-                        .lineLimit(1)
-                    Spacer()
-                    Text(message.timestamp)
-                        .font(UberFont.text(12))
-                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                }
-                Text(message.text)
-                    .font(UberFont.text(13))
-                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                    .lineLimit(2)
-                if !message.typeLabel.isEmpty || message.reactionCount > 0 || !message.attachments.isEmpty {
-                    HStack(spacing: 6) {
-                        if !message.typeLabel.isEmpty {
-                            Tag(message.typeLabel, style: .muted)
-                        }
-                        if message.reactionCount > 0 {
-                            Text(verbatim: "♥ \(message.reactionCount)")
-                                .font(UberFont.text(12, weight: .semibold))
-                                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                        }
-                        if !message.attachments.isEmpty {
-                            Text(verbatim: "📎 \(message.attachments.count)")
-                                .font(UberFont.text(12, weight: .semibold))
+            HStack(alignment: .top, spacing: 10) {
+                Circle()
+                    .fill(unread ? EduFlowPalette.blue : Color.clear)
+                    .frame(width: 8, height: 8)
+                    .padding(.top, 6)
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack(alignment: .firstTextBaseline, spacing: 8) {
+                        Text(verbatim: author)
+                            .font(UberFont.text(14, weight: .heavy))
+                            .tracking(-0.2)
+                            .lineLimit(1)
+                        Spacer()
+                        if !timestamp.isEmpty {
+                            Text(verbatim: timestamp)
+                                .font(UberFont.text(12))
                                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                         }
                     }
-                    .padding(.top, 4)
+                    Text(verbatim: subject)
+                        .font(UberFont.text(14, weight: .semibold))
+                        .lineLimit(1)
+                    if !preview.isEmpty {
+                        Text(verbatim: preview)
+                            .font(UberFont.text(13))
+                            .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                            .lineLimit(2)
+                    }
+                    if unread || showsTypeTag || message.reactionCount > 0 || !message.attachments.isEmpty {
+                        HStack(spacing: 6) {
+                            if unread {
+                                Tag(NSLocalizedString("messages_unread", value: "Neu", comment: "Nachrichten: Ungelesen-Tag"), style: .solid)
+                            }
+                            if showsTypeTag {
+                                Tag(message.typeLabel, style: .muted)
+                            }
+                            if message.reactionCount > 0 {
+                                Text(verbatim: "♥ \(message.reactionCount)")
+                                    .font(UberFont.text(12, weight: .semibold))
+                                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                            }
+                            if !message.attachments.isEmpty {
+                                Text(verbatim: "📎 \(message.attachments.count)")
+                                    .font(UberFont.text(12, weight: .semibold))
+                                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                            }
+                        }
+                        .padding(.top, 4)
+                    }
                 }
             }
             .padding(.vertical, 12)
@@ -208,6 +292,7 @@ private struct MessageRow: View {
             }
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(Text(verbatim: accessibilityText))
         .onHover { hovering = $0 }
         .animation(.easeOut(duration: 0.15), value: hovering)
     }
@@ -227,6 +312,22 @@ public struct ThreadDetail: View {
         self.message = message
         self.vm = vm
         self.onSessionExpired = onSessionExpired
+    }
+
+    /// Leerer Autor → lokalisiert „(unbekannt)“, nie hartcodiert.
+    static func authorName(_ author: String) -> String {
+        if author.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            return NSLocalizedString("common_unknown_author", value: "(unbekannt)", comment: "Nachrichten: unbekannter Absender")
+        }
+        return author
+    }
+
+    /// Leerer Dateiname → nummerierter Fallback, nie leer anzeigen.
+    static func attachmentName(_ name: String, index: Int) -> String {
+        if name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            return String(format: NSLocalizedString("messages_file_fallback", value: "Datei %d", comment: "Nachrichten: Dateiname-Fallback"), index + 1)
+        }
+        return name
     }
 
     public var body: some View {
@@ -259,7 +360,7 @@ public struct ThreadDetail: View {
             } else {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack(spacing: 8) {
-                        (message.author.isEmpty ? Text("(unbekannt)") : Text(verbatim: message.author))
+                        Text(verbatim: ThreadDetail.authorName(message.author))
                             .font(UberFont.text(15, weight: .bold))
                         Spacer()
                         Text(message.timestamp)
@@ -278,7 +379,7 @@ public struct ThreadDetail: View {
                 VStack(spacing: 8) {
                     ForEach(message.attachmentNames.indices, id: \.self) { index in
                         HStack(spacing: 10) {
-                            Text(message.attachmentNames[index])
+                            Text(verbatim: ThreadDetail.attachmentName(message.attachmentNames[index], index: index))
                                 .font(UberFont.text(14, weight: .semibold))
                             Spacer()
                             if vm.downloadingIndex == index {
@@ -290,12 +391,14 @@ public struct ThreadDetail: View {
                                         await vm.download(
                                             eventId: message.id,
                                             index: index,
+                                            filename: ThreadDetail.attachmentName(message.attachmentNames[index], index: index),
                                             onSessionExpired: onSessionExpired
                                         )
                                     }
                                 }
                                 .buttonStyle(UberButtonStyle(.smallLight))
                                 .hoverLift()
+                                .accessibilityLabel(Text(NSLocalizedString("messages_attachment_load", value: "Anhang laden", comment: "Nachrichten: Anhang laden") + ": " + ThreadDetail.attachmentName(message.attachmentNames[index], index: index)))
                             }
                         }
                         .padding(.vertical, 10)
@@ -309,7 +412,7 @@ public struct ThreadDetail: View {
                     }
                 }
                 if let file = vm.downloadedFile {
-                    ShareLink(NSLocalizedString("Geladene Datei teilen", value: "Geladene Datei teilen", comment: "Nachrichten: Datei teilen"), item: file)
+                    ShareLink("Geladene Datei teilen", item: file)
                         .font(UberFont.text(14, weight: .semibold))
                 }
             }
@@ -355,7 +458,7 @@ public struct ThreadDetail: View {
                     RoundedRectangle(cornerRadius: 12)
                         .stroke(EduFlowPalette.borderStrong(scheme), lineWidth: 1)
                 }
-            PillButton(vm.isReplying ? NSLocalizedString("Sendet …", value: "Sendet …", comment: "Nachrichten: sendet") : NSLocalizedString("Antworten", value: "Antworten", comment: "Nachrichten: antworten")) {
+            PillButton(vm.isReplying ? "Sendet …" : "Antworten") {
                 Task { await vm.sendReply(id: message.id, onSessionExpired: onSessionExpired) }
             }
             .disabled(vm.isReplying || vm.replyText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
@@ -484,6 +587,14 @@ public struct ComposeView: View {
                                     }
                                 }
                             }
+                            if vm.canLoadMoreRecipients {
+                                PillButton(vm.isLoadingMoreRecipients ? NSLocalizedString("common_loading", value: "Lädt …", comment: "Laden läuft") : String(format: NSLocalizedString("messages_load_more", value: "Mehr laden (%d/%d)", comment: "Nachrichten: mehr laden"), vm.recipients.count, vm.recipientTotal), style: .smallLight) {
+                                    Task { await vm.loadMoreRecipients(onSessionExpired: onSessionExpired) }
+                                }
+                                .disabled(vm.isLoadingMoreRecipients)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 8)
+                            }
                         }
                     }
                 }
@@ -500,7 +611,7 @@ public struct ComposeView: View {
                 if let error = vm.error {
                     Notice(error.message)
                 }
-                PillButton(vm.isSending ? NSLocalizedString("Sendet …", value: "Sendet …", comment: "Nachrichten: sendet") : NSLocalizedString("Senden", value: "Senden", comment: "Nachrichten: senden")) {
+                PillButton(vm.isSending ? "Sendet …" : "Senden") {
                     Task {
                         if await vm.send(onSessionExpired: onSessionExpired) {
                             onSent()

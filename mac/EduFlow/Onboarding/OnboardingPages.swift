@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 import SwiftUI
 
 /// Prüfergebnis des Server-Schritts (reine Werte, testbar vergleichbar).
@@ -197,9 +198,8 @@ struct OnboardingParticleBackground: View {
     }
 }
 
-/// Seite 2: Sprachauswahl mit Übersetzungsstand. Die Auswahl landet im
-/// System-Schlüssel `AppleLanguages` und wird nach einem Neustart aktiv —
-/// geändert Weiter startet die App dafür neu, unverändert geht es weiter.
+/// Seite 2: Sprachauswahl mit Übersetzungsstand. Antippen wendet die Sprache
+/// sofort an (laufender Prozess, kein Neustart); Weiter geht zur nächsten Seite.
 public struct OnboardingLanguagePage: View {
     @Environment(\.colorScheme) private var scheme
     @Environment(\.uberAccent) private var accent
@@ -211,8 +211,6 @@ public struct OnboardingLanguagePage: View {
         _selected = State(initialValue: AppLanguage.override)
         self.onNext = onNext
     }
-
-    private var changed: Bool { selected != AppLanguage.override }
 
     /// Zeilen-Codes, aktuelle Sprache zuerst, Rest nach Eigenname sortiert.
     private var orderedCodes: [String] {
@@ -235,7 +233,7 @@ public struct OnboardingLanguagePage: View {
                 .tracking(-1.2)
                 .padding(.top, 12)
                 .riseIn(delay: 0.08)
-            Text("EduFlow spricht deine Sprache. Die Auswahl wird nach einem Neustart aktiv.")
+            Text(NSLocalizedString("onboarding_language_subtitle", value: "EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen.", comment: "Onboarding: Sprachauswahl Untertitel"))
                 .font(UberFont.text(14))
                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 .multilineTextAlignment(.center)
@@ -247,8 +245,8 @@ public struct OnboardingLanguagePage: View {
                 VStack(spacing: 10) {
                     languageRow(
                         code: nil,
-                        name: NSLocalizedString("System", value: "System", comment: "Onboarding: Systemsprache"),
-                        detail: NSLocalizedString("Folgt der Systemsprache", value: "Folgt der Systemsprache", comment: "Onboarding: folgt Systemsprache"),
+                        name: "System",
+                        detail: "Folgt der Systemsprache",
                         percent: nil,
                         selected: selected == nil
                     )
@@ -263,22 +261,20 @@ public struct OnboardingLanguagePage: View {
                     }
                 }
             }
+            .scrollIndicators(.never)
             .padding(.top, 20)
             .riseIn(delay: 0.2)
-            PillButton(changed ? NSLocalizedString("Übernehmen & neu starten", value: "Übernehmen & neu starten", comment: "Onboarding: übernehmen und neu starten") : NSLocalizedString("Weiter", value: "Weiter", comment: "Onboarding: weiter")) {
-                if changed {
-                    AppLanguage.set(selected)
-                    NSApplication.shared.terminate(nil)
-                } else {
-                    onNext()
-                }
-            }
-            .riseIn(delay: 0.3)
+            PillButton("Weiter", action: onNext)
+                .riseIn(delay: 0.3)
         }
         .padding(.vertical, 24)
         .padding(.horizontal, 28)
         .frame(maxWidth: 560)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onReceive(NotificationCenter.default.publisher(for: .appLanguageDidChange)) { _ in
+            selected = AppLanguage.override
+            rows = AppLocalizations.coverage()
+        }
     }
 
     private func languageRow(
@@ -289,7 +285,11 @@ public struct OnboardingLanguagePage: View {
         selected: Bool
     ) -> some View {
         UberCard {
-            Button(action: { self.selected = code }) {
+            Button(action: {
+                // Sofort anwenden: persistieren + laufender Prozess (kein Neustart).
+                AppLanguage.set(code)
+                self.selected = code
+            }) {
                 HStack(spacing: 14) {
                     ZStack {
                         Circle()
@@ -370,7 +370,7 @@ public struct OnboardingWelcomePage: View {
             .padding(.top, 8)
             .riseIn(delay: 0.45)
             Spacer()
-            PillButton(NSLocalizedString("Weiter", value: "Weiter", comment: "Onboarding: weiter"), action: onNext)
+            PillButton("Weiter", action: onNext)
                 .opacity(showButton ? 1 : 0)
                 .offset(y: showButton ? 0 : 22)
                 .scaleEffect(showButton ? 1 : 0.985)
@@ -420,7 +420,7 @@ public struct OnboardingFeaturesPage: View {
             }
             .padding(.top, 22)
             Spacer()
-            PillButton(NSLocalizedString("Weiter", value: "Weiter", comment: "Onboarding: weiter"), action: onNext)
+            PillButton("Weiter", action: onNext)
                 .riseIn(delay: 0.32)
         }
         .padding(.vertical, 24)
@@ -519,7 +519,7 @@ public struct OnboardingServerPage: View {
             Spacer()
             // Ein Knopf in voller Breite wie auf Seite 1 — die Prüfung
             // läuft beim Übernehmen automatisch (Fehler bleiben stehen).
-            PillButton(model.checking ? NSLocalizedString("Prüft …", value: "Prüft …", comment: "Onboarding: prüft") : model.showSuccess ? NSLocalizedString("Verbunden", value: "Verbunden", comment: "Onboarding: verbunden") : NSLocalizedString("Übernehmen & weiter", value: "Übernehmen & weiter", comment: "Onboarding: übernehmen und weiter")) {
+            PillButton(model.checking ? "Prüft …" : model.showSuccess ? "Verbunden" : "Übernehmen & weiter") {
                 Task { @MainActor in
                     if await model.proceed(reduceMotion: reduceMotion) {
                         onNext()

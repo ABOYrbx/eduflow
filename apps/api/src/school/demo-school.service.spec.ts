@@ -54,7 +54,7 @@ describe("DemoSchoolService", () => {
     const claims = { sub: "acct", jti: "t", tokenUse: "access" as const };
     const current = await service.settings(claims);
     expect(current.values.landing).toBe("uebersicht");
-    expect(current.schema[0]?.options).toEqual([["uebersicht", "Übersicht"], ["dashboard", "Nachrichten"], ["hausaufgaben", "Hausaufgaben"], ["noten", "Noten"], ["stundenplan", "Stundenplan"]]);
+    expect(current.schema[0]?.options).toEqual([["uebersicht", "Overview"], ["dashboard", "Messages"], ["hausaufgaben", "Homework"], ["noten", "Grades"], ["stundenplan", "Timetable"]]);
     const saved = await service.saveSettings(claims, { landing: "invalid", ov_unread: 999, hw_tests: true, wetter_city: "  Wien  " });
     expect(saved.values).toMatchObject({ landing: "uebersicht", ov_unread: 50, hw_tests: true, wetter_city: "Wien" });
   });
