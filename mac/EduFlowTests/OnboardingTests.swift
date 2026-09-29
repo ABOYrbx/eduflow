@@ -25,8 +25,8 @@ struct OnboardingTests {
     }
 
     @Test("Onboarding nur beim ersten Start ohne Sitzung")
-    func showsOnlyOnFirstLaunch() throws {
-        try withCleanFlag {
+    func showsOnlyOnFirstLaunch() {
+        withCleanFlag {
             #expect(OnboardingState.shouldShow(isLoggedIn: false))
             #expect(!OnboardingState.shouldShow(isLoggedIn: true))
             OnboardingState.complete()

@@ -130,7 +130,7 @@ public struct MessagesView: View {
                         .riseIn(delay: Double(min(index, 8)) * 0.06)
                     }
                     if vm.canLoadMore {
-                        Button(vm.isLoadingMore ? "Lädt …" : String(format: NSLocalizedString("grades_load_more", value: "Mehr laden (%d/%d)", comment: "Nachrichten: mehr laden"), vm.items.count, vm.total)) {
+                        Button(vm.isLoadingMore ? NSLocalizedString("Lädt …", value: "Lädt …", comment: "Nachrichten: lädt") : String(format: NSLocalizedString("grades_load_more", value: "Mehr laden (%d/%d)", comment: "Nachrichten: mehr laden"), vm.items.count, vm.total)) {
                             Task { await vm.loadMore(onSessionExpired: onSessionExpired) }
                         }
                         .buttonStyle(UberButtonStyle(.smallLight))
@@ -309,7 +309,7 @@ public struct ThreadDetail: View {
                     }
                 }
                 if let file = vm.downloadedFile {
-                    ShareLink("Geladene Datei teilen", item: file)
+                    ShareLink(NSLocalizedString("Geladene Datei teilen", value: "Geladene Datei teilen", comment: "Nachrichten: Datei teilen"), item: file)
                         .font(UberFont.text(14, weight: .semibold))
                 }
             }
@@ -355,7 +355,7 @@ public struct ThreadDetail: View {
                     RoundedRectangle(cornerRadius: 12)
                         .stroke(EduFlowPalette.borderStrong(scheme), lineWidth: 1)
                 }
-            PillButton(vm.isReplying ? "Sendet …" : "Antworten") {
+            PillButton(vm.isReplying ? NSLocalizedString("Sendet …", value: "Sendet …", comment: "Nachrichten: sendet") : NSLocalizedString("Antworten", value: "Antworten", comment: "Nachrichten: antworten")) {
                 Task { await vm.sendReply(id: message.id, onSessionExpired: onSessionExpired) }
             }
             .disabled(vm.isReplying || vm.replyText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
@@ -500,7 +500,7 @@ public struct ComposeView: View {
                 if let error = vm.error {
                     Notice(error.message)
                 }
-                PillButton(vm.isSending ? "Sendet …" : "Senden") {
+                PillButton(vm.isSending ? NSLocalizedString("Sendet …", value: "Sendet …", comment: "Nachrichten: sendet") : NSLocalizedString("Senden", value: "Senden", comment: "Nachrichten: senden")) {
                     Task {
                         if await vm.send(onSessionExpired: onSessionExpired) {
                             onSent()

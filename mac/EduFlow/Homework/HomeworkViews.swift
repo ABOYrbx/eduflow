@@ -47,7 +47,7 @@ public struct HomeworkView: View {
                                 HStack(spacing: 8) {
                                     Tag(item.status, style: statusTag(item.status))
                                     if item.isHidden {
-                                        Tag("Gelöscht", style: .muted)
+                                        Tag(NSLocalizedString("Gelöscht", value: "Gelöscht", comment: "Hausaufgaben: gelöscht"), style: .muted)
                                     }
                                     (Text("fällig: ")
                                         + Text(item.dueDisplay).bold())
@@ -65,12 +65,12 @@ public struct HomeworkView: View {
                                     .font(UberFont.text(15))
                                     .lineSpacing(4)
                                 HStack(spacing: 8) {
-                                    Button(item.isDone ? "Wieder öffnen" : "Fertig") {
+                                    Button(item.isDone ? NSLocalizedString("Wieder öffnen", value: "Wieder öffnen", comment: "Hausaufgaben: wieder öffnen") : NSLocalizedString("Fertig", value: "Fertig", comment: "Hausaufgaben: fertig")) {
                                         Task { await vm.toggleDone(item, onSessionExpired: onSessionExpired) }
                                     }
                                     .buttonStyle(UberButtonStyle(.smallPrimary))
                                     .hoverLift()
-                                    Button(item.isHidden ? "Zurückholen" : "Papierkorb") {
+                                    Button(item.isHidden ? NSLocalizedString("Zurückholen", value: "Zurückholen", comment: "Hausaufgaben: zurückholen") : NSLocalizedString("Papierkorb", value: "Papierkorb", comment: "Hausaufgaben: Papierkorb")) {
                                         Task { await vm.toggleTrash(item, onSessionExpired: onSessionExpired) }
                                     }
                                     .buttonStyle(UberButtonStyle(.smallLight))
@@ -80,17 +80,17 @@ public struct HomeworkView: View {
                             }
                         }
                         .contextMenu {
-                            Button(item.isDone ? "Wieder öffnen" : "Als erledigt markieren") {
+                            Button(item.isDone ? NSLocalizedString("Wieder öffnen", value: "Wieder öffnen", comment: "Hausaufgaben: wieder öffnen") : NSLocalizedString("Als erledigt markieren", value: "Als erledigt markieren", comment: "Hausaufgaben: als erledigt markieren")) {
                                 Task { await vm.toggleDone(item, onSessionExpired: onSessionExpired) }
                             }
-                            Button(item.isHidden ? "Zurückholen (als offen)" : "In den Papierkorb") {
+                            Button(item.isHidden ? NSLocalizedString("Zurückholen (als offen)", value: "Zurückholen (als offen)", comment: "Hausaufgaben: zurückholen") : NSLocalizedString("In den Papierkorb", value: "In den Papierkorb", comment: "Hausaufgaben: in den Papierkorb")) {
                                 Task { await vm.toggleTrash(item, onSessionExpired: onSessionExpired) }
                             }
                         }
                         .riseIn(delay: Double(min(index, 8)) * 0.06)
                     }
                     if vm.canLoadMore {
-                        Button(vm.isLoadingMore ? "Lädt …" : String(format: NSLocalizedString("grades_load_more", value: "Mehr laden (%d/%d)", comment: "Hausaufgaben: mehr laden"), vm.items.count, vm.total)) {
+                        Button(vm.isLoadingMore ? NSLocalizedString("Lädt …", value: "Lädt …", comment: "Hausaufgaben: lädt") : String(format: NSLocalizedString("grades_load_more", value: "Mehr laden (%d/%d)", comment: "Hausaufgaben: mehr laden"), vm.items.count, vm.total)) {
                             Task { await vm.loadMore(onSessionExpired: onSessionExpired) }
                         }
                         .buttonStyle(UberButtonStyle(.smallLight))

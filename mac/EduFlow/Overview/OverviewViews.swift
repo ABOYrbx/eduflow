@@ -29,8 +29,6 @@ public struct OverviewView: View {
         return formatter
     }()
 
-    private let clockTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-
     public init(
         store: TokenStore,
         onNavigate: @escaping (Route) -> Void,
@@ -69,7 +67,7 @@ public struct OverviewView: View {
         }
         .background(EduFlowPalette.canvas(scheme))
         .navigationTitle(NSLocalizedString("Übersicht", value: "Übersicht", comment: "Übersicht: Titel"))
-        .onReceive(clockTimer) { now = $0 }
+        .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { now = $0 }
         .task { await vm.load(onSessionExpired: onSessionExpired) }
         .refreshable { await vm.load(refresh: true, onSessionExpired: onSessionExpired) }
         .sheet(isPresented: $showWetter) {
@@ -138,7 +136,7 @@ public struct OverviewView: View {
                 )
                 Divider()
                 WetterDayCard(
-                    label: vm.wetter.day3?.label ?? "Übermorgen",
+                    label: vm.wetter.day3?.label ?? NSLocalizedString("Übermorgen", value: "Übermorgen", comment: "Übersicht: Übermorgen"),
                     big: vm.wetter.day3.map { "\($0.max ?? 0)°" } ?? "–",
                     cond: [vm.wetter.day3?.desc, vm.wetter.day3.map { "· \($0.max ?? 0)°/\($0.min ?? 0)°" }].compactMap { $0 }.joined(separator: " "),
                     icon: vm.wetter.day3?.icon,
@@ -217,7 +215,7 @@ public struct OverviewView: View {
                             .clipShape(.capsule)
                         }
                         if lesson.isCancelled {
-                            Tag("Entfällt", style: .muted)
+                            Tag(NSLocalizedString("Entfällt", value: "Entfällt", comment: "Übersicht: entfällt"), style: .muted)
                         }
                     }
                     .padding(.top, 8)
@@ -471,9 +469,9 @@ private struct OverviewOrderEditor: View {
     let onSave: () async -> Bool
 
     private let labels = [
-        "messages": "Nachrichten",
-        "homework": "Hausaufgaben",
-        "weather": "Wetter",
+        "messages": NSLocalizedString("Nachrichten", value: "Nachrichten", comment: "Übersicht: Bereich Nachrichten"),
+        "homework": NSLocalizedString("Hausaufgaben", value: "Hausaufgaben", comment: "Übersicht: Bereich Aufgaben"),
+        "weather": NSLocalizedString("Wetter", value: "Wetter", comment: "Übersicht: Bereich Wetter"),
     ]
 
     var body: some View {
@@ -506,7 +504,7 @@ private struct OverviewOrderEditor: View {
                 Button("Abbrechen") { dismiss() }
                     .buttonStyle(UberButtonStyle(.smallLight))
                 Spacer()
-                Button(saving ? "Speichert …" : "Speichern") {
+                Button(saving ? NSLocalizedString("Speichert …", value: "Speichert …", comment: "Übersicht: speichert") : NSLocalizedString("Speichern", value: "Speichern", comment: "Übersicht: speichern")) {
                     Task { _ = await onSave() }
                 }
                     .buttonStyle(UberButtonStyle(.smallPrimary))
