@@ -118,7 +118,14 @@
     "ovWetterHint": "Se aplică interfeței web și aplicației Android.",
     "ovWetterLabel": "Arată harta meteo în prezentarea generală",
     "sectionUebersicht": "Prezentare generală",
-    "sectionWetter": "Vreme"
+    "sectionWetter": "Vreme",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor.",
+    "ovSpanLabel": "Section widths",
+    "ovSpanHint": "Sections you set to half width sit next to each other."
   },
   "upstream": {
     "agendaFailed": "Evenimentele școlare nu au putut fi încărcate: {detail}",

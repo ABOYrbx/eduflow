@@ -7,7 +7,7 @@
 import { t } from "../i18n";
 export interface SettingSpec {
   key: string;
-  kind: "select" | "bool" | "int" | "order" | "text" | "hidden";
+  kind: "select" | "bool" | "int" | "order" | "text" | "hidden" | "span";
   label: string;
   options?: Array<[string, string]>;
   default: unknown;
@@ -36,6 +36,8 @@ export const SETTINGS_SCHEMA: SettingSpec[] = [
   { key: "ov_order", kind: "order", section: t("settings.sectionUebersicht"), label: t("settings.ovOrderLabel"), default: "messages,homework,weather" },
   { key: "ov_hidden", kind: "hidden", section: t("settings.sectionUebersicht"), label: t("settings.ovHiddenLabel"),
     hint: t("settings.ovHiddenHint"), default: "" },
+  { key: "ov_span", kind: "span", section: t("settings.sectionUebersicht"), label: t("settings.ovSpanLabel"),
+    hint: t("settings.ovSpanHint"), default: "" },
   { key: "ov_wetter", kind: "bool", section: t("settings.sectionWetter"), label: t("settings.ovWetterLabel"),
     hint: t("settings.ovWetterHint"), default: true },
   { key: "wetter_city", kind: "text", section: t("settings.sectionWetter"), label: t("settings.cityLabel"),
@@ -75,6 +77,15 @@ export function coerceSetting(spec: SettingSpec, value: unknown): unknown {
         if (!ordered.includes(key)) ordered.push(key);
       }
       return ordered.join(",");
+    }
+    if (spec.kind === "span") {
+      const spans: Record<string, number> = {};
+      for (const part of Array.isArray(value) ? value : String(value ?? "").split(",")) {
+        const [rawKey = "", rawSpan = ""] = String(part).split(":").map((piece) => piece.trim());
+        const span = Number(rawSpan);
+        if (OVERVIEW_SECTION_KEYS.includes(rawKey) && (span === 6 || span === 12)) spans[rawKey] = span;
+      }
+      return OVERVIEW_SECTION_KEYS.filter((key) => key in spans).map((key) => `${key}:${spans[key]}`).join(",");
     }
     if (spec.kind === "hidden") {
       const raw = Array.isArray(value) ? value : String(value ?? "").split(",");

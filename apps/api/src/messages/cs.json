@@ -118,7 +118,14 @@
     "ovWetterHint": "Platí pro webové rozhraní a aplikaci pro Android.",
     "ovWetterLabel": "Zobrazit mapu počasí v přehledu",
     "sectionUebersicht": "Přehled",
-    "sectionWetter": "Počasí"
+    "sectionWetter": "Počasí",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor.",
+    "ovSpanLabel": "Section widths",
+    "ovSpanHint": "Sections you set to half width sit next to each other."
   },
   "upstream": {
     "agendaFailed": "Události ve škole nelze načíst. {detail}",
