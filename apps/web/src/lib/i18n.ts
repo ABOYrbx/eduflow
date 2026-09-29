@@ -5,6 +5,8 @@ type Vars = Record<string, string | number>;
 /** Englisch ist Quellsprache und Fallback (Crowdin liefert weitere Kataloge). */
 export const FALLBACK_LOCALE = "en";
 export const LOCALE_COOKIE = "eduflow_locale";
+/** Event nach Sprachwechsel (LocaleProvider rendert den Baum neu). */
+export const LOCALE_EVENT = "eduflow-locale-change";
 
 /** Cookie-String für die Sprachwahl (1 Jahr, eigener Pfad, Lax). */
 export function localeCookie(code: string): string {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useReducer } from "react";
-import { setActiveLocale } from "../lib/i18n";
+import { LOCALE_EVENT, setActiveLocale } from "../lib/i18n";
 
 /**
  * Schaltet Client-Komponenten nach der Hydration auf die vom Server
@@ -16,6 +16,11 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
       setActiveLocale(locale);
       force();
     }
+    function onLocaleChange() {
+      force();
+    }
+    window.addEventListener(LOCALE_EVENT, onLocaleChange);
+    return () => window.removeEventListener(LOCALE_EVENT, onLocaleChange);
   }, []);
   return <>{children}</>;
 }

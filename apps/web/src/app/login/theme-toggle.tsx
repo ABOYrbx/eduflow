@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { NATIVE_NAMES, localeCookie, normalizeLocaleTag, setActiveLocale, t } from "../../lib/i18n";
+import { LOCALE_EVENT, NATIVE_NAMES, localeCookie, normalizeLocaleTag, setActiveLocale, t } from "../../lib/i18n";
 
 declare global {
   interface Window {
@@ -48,14 +48,29 @@ export function ThemeToggle() {
     };
   }, [langOpen]);
 
-  function pickLanguage(code: string) {
-    const next = normalizeLocaleTag(code) ?? "en";
+  async function pickLanguage(code: string) {
+    const wanted = normalizeLocaleTag(code) ?? "en";
     setLangOpen(false);
-    document.cookie = localeCookie(next);
-    setLocale(next);
-    setActiveLocale(next);
-    document.documentElement.lang = next;
-    window.location.reload();
+    try {
+      const response = await fetch(`/api/locale?lang=${encodeURIComponent(wanted)}`, { cache: "no-store" });
+      const data = (await response.json()) as { locale?: string; catalog?: unknown };
+      const next = typeof data.locale === "string" ? data.locale : wanted;
+      const prev = window.__EDUFLOW_MESSAGES__;
+      window.__EDUFLOW_MESSAGES__ = {
+        locale: next,
+        catalog: data.catalog ?? prev?.catalog,
+        supported: prev?.supported ?? [],
+        coverage: prev?.coverage,
+      };
+      document.cookie = localeCookie(next);
+      setLocale(next);
+      setActiveLocale(next);
+      document.documentElement.lang = next;
+      window.dispatchEvent(new Event(LOCALE_EVENT));
+    } catch {
+      document.cookie = localeCookie(wanted);
+      window.location.reload();
+    }
   }
 
   function toggleTheme() {
