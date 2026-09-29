@@ -94,7 +94,8 @@
     "trashBtn": "بابييركورب",
     "trashEmpty": "Der Papierkorb ist leer.",
     "trashLabel": "بابييركورب",
-    "trashWithCount": "سلة المهملات ({count})"
+    "trashWithCount": "سلة المهملات ({count})",
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "العودة إلى تسجيل الدخول",

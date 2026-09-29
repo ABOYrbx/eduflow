@@ -94,7 +94,8 @@
     "trashBtn": "Koš",
     "trashEmpty": "Koš je prázdný.",
     "trashLabel": "Koš",
-    "trashWithCount": "Koš ({count})"
+    "trashWithCount": "Koš ({count})",
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "Zpět na přihlášení",

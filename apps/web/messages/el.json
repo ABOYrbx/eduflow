@@ -94,7 +94,8 @@
     "trashBtn": "Απορρίμματα",
     "trashEmpty": "Ο κάδος απορριμμάτων είναι άδειος.",
     "trashLabel": "Απορρίμματα",
-    "trashWithCount": "Papierkorb ({count})"
+    "trashWithCount": "Papierkorb ({count})",
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "Πίσω στην είσοδο",

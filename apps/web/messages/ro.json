@@ -94,7 +94,8 @@
     "trashBtn": "Gunoi",
     "trashEmpty": "Gunoiul este gol.",
     "trashLabel": "Gunoi",
-    "trashWithCount": "Gunoi ({count})"
+    "trashWithCount": "Gunoi ({count})",
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "Înapoi la Autentificare",

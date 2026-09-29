@@ -94,7 +94,8 @@
     "trashBtn": "Papierkorb",
     "trashEmpty": "Der Papierkorb ist leer.",
     "trashLabel": "Papierkorb",
-    "trashWithCount": "Papierkorb ({count})"
+    "trashWithCount": "Papierkorb ({count})",
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "Zurück zur Anmeldung",
