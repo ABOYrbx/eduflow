@@ -39330,19 +39330,19 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bonjour!"
+            "value": "Bonjour !"
           }
         },
         "pl": {
           "stringUnit": {
             "state": "translated",
-            "value": "Witaj!"
+            "value": "Cześć!"
           }
         },
         "tr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hallo!"
+            "value": "Merhaba!"
           }
         },
         "af": {
