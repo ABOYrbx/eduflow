@@ -94,7 +94,8 @@
     "trashBtn": "回收站",
     "trashEmpty": "回收站为空。",
     "trashLabel": "回收站",
-    "trashWithCount": "Trash ({count})"
+    "trashWithCount": "Trash ({count})",
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "返回登录",
