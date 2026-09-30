@@ -103,8 +103,6 @@
     "hwStatusLabel": "Domácí úkol: Standardní filtr",
     "hwTestsLabel": "Domácí práce: Včetně testů a zkoušek ve výchozím nastavení",
     "landingLabel": "Začít stránku po přihlášení",
-    "opt12h": "12-hour",
-    "opt24h": "24-hour",
     "optAll": "Vše",
     "optDashboard": "Zprávy",
     "optDone": "Pouze hotovo",
@@ -120,10 +118,7 @@
     "ovWetterHint": "Platí pro webové rozhraní a aplikaci pro Android.",
     "ovWetterLabel": "Zobrazit mapu počasí v přehledu",
     "sectionUebersicht": "Přehled",
-    "sectionWetter": "Počasí",
-    "timeFormatLabel": "Clock: Time format",
-    "ovHiddenLabel": "Hidden sections",
-    "ovHiddenHint": "Sections you switched off in the overview editor."
+    "sectionWetter": "Počasí"
   },
   "upstream": {
     "agendaFailed": "Události ve škole nelze načíst. {detail}",

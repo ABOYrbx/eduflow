@@ -1,67 +1,44 @@
-# EduFlow – Projektdokumentation
+# EduFlow
 
-# Dokumentation momentan wegen großer Änderung nicht aktuell und zu nutzen.
+EduFlow is a **local school dashboard**: a web app plus native clients (Android, macOS) backed by a local JSON API. It connects to [EduPage](https://www.edupage.org/) in real mode, or runs fully offline with synthetic demo data.
 
-Diese Dokumentation beschreibt den im Repository sichtbaren Aufbau und Funktionsumfang von EduFlow. Sie ergänzt die Arbeitsregeln und Detailpläne; sie ersetzt keine davon. Aktualisierungsstand ist der Node-Paritätsstand N0–NI (Cutover N-J offen).
+- **Web UI** (Next.js) + **API** (NestJS) on `/api/v1`
+- **Native clients**: Android (Kotlin/Compose) and macOS (SwiftUI)
+- **Two modes**: real (EduPage login) and demo (`demo` / `demo`, offline-safe)
+- **Local-first**: the server is a tool on your own machine, not a hosted service. No push, no multi-user, no file uploads from apps.
 
-## Schnellnavigation
+![Login](images/login.jpg)
 
-| Dokument | Inhalt |
-| --- | --- |
-| [Architektur](ARCHITEKTUR.md) | Systemübersicht, Datenfluss, Sitzungen und Cache |
-| [Funktionen](FUNKTIONEN.md) | Fachliche Abläufe und sichtbarer Funktionsumfang |
-| [API v1](API.md) | Routen, Authentifizierung, Parameter und Fehlercodes |
-| [Plattformen](PLATTFORMEN.md) | Web, Android, macOS und zurückgestelltes iOS |
-| [Entwicklung und Tests](ENTWICKLUNG.md) | Lokaler Start, Konfiguration, Build und Testbefehle |
-| [TypeScript-Migration](MIGRATION.md) | NestJS-/Prisma-/Next.js-Prototyp und bekannte Lücken |
+## Where to go next
 
-## Was EduFlow ist
+- [Installation](INSTALLATION.md) — prerequisites, `./install.sh`, ports
+- [Getting started](GETTING_STARTED.md) — `./run.sh`, demo mode, first login, verification
+- [Features](FEATURES.md) — what each page does, with screenshots
+- [Architecture](ARCHITECTURE.md) — how API, web UI and clients fit together
+- [API reference](API.md) — every `/api/v1` route, auth, errors
+- [Platforms](PLATFORMS.md) — Android and macOS apps: build, run, test
+- [Development](DEVELOPMENT.md) — checks, tests, conventions
 
-EduFlow ist ein **lokales Schul-Dashboard für eine einzelne Schüler-/Eltern-Sitzung**. Es liest Schulalltagsdaten über EduPage, bereitet sie für die Weboberfläche und Apps auf und speichert ausgewählte Einstellungen sowie abgeleitete Zustände lokal. Die fachliche Datenquelle bleibt EduPage.
+## Modes at a glance
 
-Der Funktionsumfang umfasst Nachrichten und Threads, Hausaufgaben, Stunden- und Vertretungspläne, Schultermine und Prüfungen, Noten, Essensplan, Wetter, Einstellungen und Geräteverwaltung. Die Weboberfläche und nativen Clients verwenden denselben versionierten API-Vertrag `/api/v1`.
+|  | Real | Demo |
+|---|---|---|
+| Start | `./run.sh` | `./run.sh --demo` |
+| API | `http://127.0.0.1:3000/api/v1` | `http://127.0.0.1:3100/api/v1` |
+| Web | `http://localhost:8000/` | `http://localhost:8101/` |
+| Login | EduPage subdomain + username + password | `demo` / `demo` (2FA: `demo-2fa` / `demo`, code `123456`) |
+| Data | Live EduPage session + Postgres cache | Synthetic fixtures, offline-safe |
 
-## Wichtig: zwei Backend-Stände
+Both modes can run side by side. On any `401` (`TOKEN_INVALID`, `TOKEN_EXPIRED`, `EDUPAGE_2FA`) clients return to login.
 
-Das Repository enthält derzeit zwei nebeneinander bestehende Implementierungen:
+## Repository map
 
-1. **Python-Referenzanwendung:** Flask in `app.py`, gemeinsame JSON-API in `api/`, Web-Templates unter `templates/`. Sie ist die aktuelle Referenz für EduPage-Integration und den stabilen `/api/v1`-Vertrag.
-2. **TypeScript-Migration:** NestJS unter `apps/api/`, Next.js unter `apps/web/` und gemeinsame Verträge unter `packages/contracts/`. Neben dem Fake-Schulprovider für lokale Demo (`EDUFLOW_PROVIDER=fake`) ist ein echter EduPage-Anbieter implementiert (Paritätspakete N0–NI: Auth, Nachrichten, Aufgaben, Stundenplan, Noten, Einstellungen, Essen/Wetter, Schulalltag, provider-neutrales Web) — drahtkompatibel zu `/api/v1`. Der Cutover (N-J: Live-Abgleich mit echten Zugangsdaten, App-Umschaltung, Python-Archivierung) ist noch **offen**; bis zur Abnahme bleibt die Python-Anwendung das Live-Backend.
-
-`./run.sh --demo` startet ausdrücklich die TypeScript-Demo mit Fake-Provider auf Port 3100 und die Next.js-Weboberfläche auf Port 8101. Die Python-Anwendung startet getrennt mit `python3 app.py` auf Port 8000. Die beiden Modi nicht verwechseln; Details: [Entwicklung](ENTWICKLUNG.md) und [Migration](MIGRATION.md).
-
-## Arbeitsregeln und Quellenhierarchie
-
-Vor Codeänderungen immer die Projektregeln in `AGENTS.md` (repo-intern, nicht Teil dieser Website) beachten. Besonders wichtig: Secrets, Cache-Dateien und Zugangsdaten niemals lesen, protokollieren oder committen; sichtbare Strings sind kurz und deutsch; API-Antworten und Helper-Signaturen kompatibel halten; Tests ohne echte Zugangsdaten ausführen. Android und macOS sowie Web haben Vorrang. iOS ist zurückgestellt.
-
-Wenn Angaben voneinander abweichen, gilt diese Reihenfolge:
-
-1. `AGENTS.md` und die dort genannten verbindlichen Bereichspläne
-2. Implementierung und Tests des betroffenen Bereichs
-3. Weitere Dateien unter `plaene/` (repo-intern, nicht Teil dieser Website)
-4. Diese Überblicksdokumentation
-5. Das ältere `README.md` im Repository-Stamm, das noch historische Projektbeschreibungen enthält
-
-Verbindlich sind der Node-Paritätsplan (`plaene/NODE_PARITAET.md`, Pakete N0–NI umgesetzt, Cutover N-J offen) sowie die fertig gebauten, eingefrorenen Bereichspläne unter `plaene/archiv/` (`BACKEND.md`, `ANDROID.md`, `MACOS.md`, `IOS.md`); dazu `IOS_APP_PLAN.md`, `EDUPAGE_LUECKENPLAN.md`, `DEMO.md` und `LOKALISIERUNG.md` direkt in `plaene/`. Alle repo-intern, nicht Teil dieser Website.
-
-## Repository-Karte
-
-```text
-app.py, cache.py, essen.py   Python-Flask-App, Cache, Mensa-PDF-Parser
-api/                         Python-API v1: Auth, Nachrichten, Schule, usw.
-templates/, static/          Python-Weboberfläche, CSS/JavaScript/Logo
-android/                     Android-Client (Kotlin, Jetpack Compose)
-mac/                         macOS-Client (Swift, SwiftUI)
-ios/                         iOS-Client (derzeit zurückgestellt)
-apps/api/                    TypeScript-API (NestJS, Prisma, Fake-Provider)
-apps/web/                    TypeScript-Webclient (Next.js, React)
-packages/contracts/          TypeScript-API-Vertrag und Fehlercodes
-migration/                   Installations- und Migrationsskripte
-plaene/                      Bereichspläne, Demo- und Ausbauplanung
-tests/                       Python-Offline- und Web-Sicherheitstests
-docs/                        Diese zusammenhängende Projektdokumentation
 ```
-
-## Dokumentation aktuell halten
-
-Bei Änderungen an Routen, DTOs, Cacheverhalten, Authentifizierung, Plattformumfang oder Migrationsstatus die betroffenen Seiten hier und den zuständigen Plan unter `plaene/` gemeinsam aktualisieren. Alle Aussagen müssen durch Quellcode oder Tests im aktuellen Checkout gedeckt sein; geplante, nur teilweise vorhandene oder Demo-Funktionen entsprechend kennzeichnen.
+apps/api/     NestJS backend (TypeScript): /api/v1, edupage + fake providers
+apps/web/     Next.js web UI (all pages, session proxy to the API)
+packages/     Shared TypeScript contracts (@eduflow/contracts)
+android/      Kotlin + Compose app
+mac/          SwiftUI app (macOS 14+)
+migration/    Installer helpers + notes
+docs/         This documentation (GitBook)
+```

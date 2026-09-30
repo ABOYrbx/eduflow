@@ -95,7 +95,7 @@
     "trashEmpty": "La papelera está vacía.",
     "trashLabel": "Basura",
     "trashWithCount": "Basura ({count})",
-    "dueToday": "due today"
+    "dueToday": "vence hoy"
   },
   "login": {
     "backToLogin": "Volver a Login",
@@ -185,9 +185,7 @@
     "profileAria": "Abrir menú de perfil",
     "profileTitle": "Tu perfil",
     "settings": "Ajustes",
-    "timetable": "Horarios",
-    "scrollBack": "Scroll left",
-    "scrollForward": "Scroll right"
+    "timetable": "Horarios"
   },
   "overview": {
     "allMessages": "Todos los mensajes",
@@ -218,18 +216,7 @@
     "tomorrow": "Mañana",
     "weather": "Clima",
     "weatherHint": "Establecer ubicación en ajustes",
-    "weatherUnavailable": "Datos meteorológicos no disponibles",
-    "editorToggle": "Arrange",
-    "editorHint": "Drag a section to move it, or use the arrows. Hide what you do not need.",
-    "editorDone": "Done",
-    "editorSaving": "Saving…",
-    "editorSaved": "Layout saved",
-    "editorHide": "Hide section",
-    "editorShow": "Show section",
-    "editorHidden": "Hidden",
-    "editorDrag": "Drag to move",
-    "editorReset": "Reset",
-    "editorEmpty": "All sections are hidden. Turn at least one back on."
+    "weatherUnavailable": "Datos meteorológicos no disponibles"
   },
   "settings": {
     "accentApplied": "Color de acento aplicado.",
@@ -300,9 +287,7 @@
     "title": "Ajustes",
     "tokenCreated": "Token creado. Copie el valor ahora; se muestra sólo una vez.",
     "unnamedDevice": "Dispositivo sin nombre",
-    "validUntil": "Válido hasta {date}",
-    "languageTitle": "Language",
-    "languageHint": "Applies right away. The choice is remembered on this device."
+    "validUntil": "Válido hasta {date}"
   },
   "theme": {
     "language": "Idioma",

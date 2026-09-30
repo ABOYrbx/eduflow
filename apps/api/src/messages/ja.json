@@ -103,8 +103,6 @@
     "hwStatusLabel": "宿題: 標準フィルタ",
     "hwTestsLabel": "宿題：テストとテストをデフォルトで含める",
     "landingLabel": "サインイン後に開始ページ",
-    "opt12h": "12-hour",
-    "opt24h": "24-hour",
     "optAll": "すべて",
     "optDashboard": "メッセージ",
     "optDone": "完了のみ",
@@ -120,10 +118,7 @@
     "ovWetterHint": "Web インターフェイスと Android アプリに適用されます。",
     "ovWetterLabel": "概要に天気図を表示する",
     "sectionUebersicht": "概要",
-    "sectionWetter": "天気",
-    "timeFormatLabel": "Clock: Time format",
-    "ovHiddenLabel": "Hidden sections",
-    "ovHiddenHint": "Sections you switched off in the overview editor."
+    "sectionWetter": "天気"
   },
   "upstream": {
     "agendaFailed": "スクールイベントをロードできませんでした: {detail}",

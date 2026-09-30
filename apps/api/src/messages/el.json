@@ -103,8 +103,6 @@
     "hwStatusLabel": "Αρχική σελίδα: Τυποποιημένο φίλτρο",
     "hwTestsLabel": "Εργασία: Συμπερίληψη εξετάσεων και εξετάσεων από προεπιλογή",
     "landingLabel": "Έναρξη σελίδας μετά την είσοδο",
-    "opt12h": "12-hour",
-    "opt24h": "24-hour",
     "optAll": "Όλα",
     "optDashboard": "Μηνύματα",
     "optDone": "Ολοκληρώθηκε μόνο",
@@ -120,10 +118,7 @@
     "ovWetterHint": "Ισχύει για το περιβάλλον εργασίας ιστού και την εφαρμογή Android.",
     "ovWetterLabel": "Εμφάνιση χάρτη καιρού στην επισκόπηση",
     "sectionUebersicht": "Επισκόπηση",
-    "sectionWetter": "Καιρός",
-    "timeFormatLabel": "Clock: Time format",
-    "ovHiddenLabel": "Hidden sections",
-    "ovHiddenHint": "Sections you switched off in the overview editor."
+    "sectionWetter": "Καιρός"
   },
   "upstream": {
     "agendaFailed": "School events could not be loaded: {detail}",

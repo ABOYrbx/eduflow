@@ -103,8 +103,6 @@
     "hwStatusLabel": "Hjemmeside: Standard filter",
     "hwTestsLabel": "Hjemmeside: Inkluder test og eksamener som standard",
     "landingLabel": "Startside efter log ind",
-    "opt12h": "12-hour",
-    "opt24h": "24-hour",
     "optAll": "Alle",
     "optDashboard": "Beskeder",
     "optDone": "Kun udført",
@@ -120,10 +118,7 @@
     "ovWetterHint": "Gælder for web-interface og Android-appen.",
     "ovWetterLabel": "Vis vejrkort på oversigten",
     "sectionUebersicht": "Oversigt",
-    "sectionWetter": "Vejr",
-    "timeFormatLabel": "Clock: Time format",
-    "ovHiddenLabel": "Hidden sections",
-    "ovHiddenHint": "Sections you switched off in the overview editor."
+    "sectionWetter": "Vejr"
   },
   "upstream": {
     "agendaFailed": "Skolebegivenheder kunne ikke indlæses: {detail}",

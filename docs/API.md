@@ -1,100 +1,90 @@
-# JSON-API `/api/v1`
+# API reference (`/api/v1`)
 
-Diese Seite beschreibt den **Python-Referenzvertrag** aus `api/`. Er ist die bestehende Schnittstelle für Android und macOS. Die TypeScript-Migration hat noch Abweichungen; sie wird in [MIGRATION.md](MIGRATION.md) beschrieben.
+Base URL (real): `http://127.0.0.1:3000/api/v1` — demo: `http://127.0.0.1:3100/api/v1`. Normative route list: `GET /api/v1/openapi.json`.
 
-## Allgemeine Regeln
+## Conventions
 
-- Präfix: `/api/v1`; JSON über Flask-Blueprint `api_v1`, zentral einmal in `app.py` registriert.
-- Für alle geschützten Ressourcen ist ein Bearer-Token erforderlich: `Authorization: Bearer <token>`. Keine Web-Cookie-Authentifizierung in der API.
-- Kein Token ist erforderlich für `GET /health`, `GET /openapi.json`, `POST /auth/login` und `POST /auth/2fa`.
-- Erfolgreiche Listen verwenden `{items, total, limit, offset}`; Standardlimit 50, Maximum 200, Offset ab 0. Hausaufgaben/Noten ergänzen Cache-/Zählerfelder; die Agenda hat ihre eigene Bereichshülle.
-- Fehler haben immer `{error, code}`. Das kanonische Fehler-Vokabular ist in `api/core.py` definiert.
-- Datumsparameter sind `YYYY-MM-DD`; erfolgreiche Ressourcendaten folgen den vorhandenen Web-Dicts.
-- Der vollständige, aber bewusst knappe Vertrag ist unter `GET /api/v1/openapi.json` abrufbar. Die Implementierung und die API-Tests bleiben für Detailfelder maßgeblich.
+- **Auth**: `Authorization: Bearer <token>` on everything except `health`, `openapi.json`, `auth/login`, `auth/2fa`. Any `401` → back to login.
+- **Lists**: `{items, total, limit, offset}` (`limit` default 50, max 200).
+- **Errors**: `{error, code}`. Canonical codes: `VALIDATION` (400), `TOKEN_INVALID` / `TOKEN_EXPIRED` / `PENDING_INVALID` / `INVALID_CODE` / `BAD_CREDENTIALS` (401), `EDUPAGE_2FA` (401, re-login), `CAPTCHA_REQUIRED` (403), `NOT_FOUND` (404), `RATE_LIMITED` (429, >20 hits/10 min/IP on login+2FA), `CONFIG_MISSING` (503, e.g. no weather key), `UPSTREAM` (502).
+- All `POST`/`PUT` return `200`.
 
-## Routen
+## System (no auth)
 
-### System und Anmeldung
+| Method | Path | Returns |
+|---|---|---|
+| `GET` | `/health` | `{status:"ok",version:"v1"}` |
+| `GET` | `/openapi.json` | Static OpenAPI 3.0 stub |
 
-| Methode und Pfad | Auth | Zweck / Eingaben |
-| --- | --- | --- |
-| `GET /health` | Nein | Liveness: `{status: "ok", version: "v1"}`. |
-| `GET /openapi.json` | Nein | Minimale OpenAPI-3.0-Spezifikation. |
-| `POST /auth/login` | Nein | JSON `{username, password, subdomain?, device?}`. Antwort entweder `status: "ok"` mit Token und Kontodaten oder `status: "2fa_required"` mit `pending_token`. |
-| `POST /auth/2fa` | Nein | JSON `{pending_token, code}`; tauscht eine gültige Zwischenanmeldung gegen normales Token. |
-| `POST /auth/logout` | Bearer | Widerruft genau das verwendete Token. |
-| `POST /auth/refresh` | Bearer | Prüft die gespeicherten EduPage-Zugangsdaten erneut, gibt ein rotiertes Token zurück und widerruft das alte. |
-| `GET /me` | Bearer | Subdomain und Benutzername des Token-Inhabers. |
-| `GET /devices` | Bearer | Eigene Tokens/Geräte ohne Passwort oder Token-Klartext. |
-| `DELETE /devices/{token_hash}` | Bearer | Widerruft ein eigenes Gerät anhand des Datensatz-Hashes; fremde Hashes werden nicht gelöscht. |
+## Auth & account
 
-### Nachrichten und Anhänge
+| Method | Path | Body / params | Returns |
+|---|---|---|---|
+| `POST` | `/auth/login` | `{username, password, subdomain?, device?}` (`subdomain` defaults `login1`, demo `demo`) | `ok` → token set, or `2fa_required` + `pending_token` (TTL 10 min) |
+| `POST` | `/auth/2fa` | `{pending_token, code}` (demo code `123456`) | Full token set, pending is single-use |
+| `POST` | `/auth/logout` | — (Bearer) | `{status:"ok"}`, revokes current token |
+| `POST` | `/auth/refresh` | `{refresh_token?}` or Bearer | Rotates the token, revokes the old one |
+| `GET` | `/me` | — (Bearer) | `{subdomain, username}` |
+| `GET` | `/devices` | — (Bearer) | `{items, total}` |
+| `POST` | `/devices` | `{device?}` (Bearer) | Extra token for a named device |
+| `DELETE` | `/devices/:id` | — (Bearer) | `{status:"ok"}` or `404 NOT_FOUND` |
 
-| Methode und Pfad | Auth | Zweck / Eingaben |
-| --- | --- | --- |
-| `GET /messages` | Bearer | Nachrichtenliste. `since` (Standard `2000-01-01`), `type`, `q` (alle Suchwörter), `limit`, `offset`, `refresh=1`; zeigt Top-Level-Einträge. |
-| `GET /messages/{event_id}/thread` | Bearer | Likes, Antworten, Antwort-IDs, Zusammenfassung; optional `refresh=1`. |
-| `POST /messages/read` | Bearer | Markiert aktuelle Nachrichtentypen im lokalen Gelesen-Status; Antwort `{marked}`. |
-| `GET /recipients` | Bearer | Lehrer und Mitschüler, sortiert nach Namen; `limit`, `offset`. |
-| `POST /messages/send` | Bearer | JSON `{recipients: [id, ...], body}`; Empfänger und Text werden geprüft, Text wird auf 5000 Zeichen begrenzt. |
-| `POST /messages/{event_id}/reply` | Bearer | JSON `{body}`; antwortet an den Thread. |
-| `POST /messages/download-token` | Bearer | JSON `{event_id, idx}`; erstellt kurzlebiges, dateigebundenes Token. |
-| `GET /messages/{event_id}/attachments/{idx}` | Bearer oder Download-Token | Lädt einen erlaubten EduPage-Anhang als Proxy. `?dl=` ist für Apps bevorzugt; `?token=` bleibt als Kompatibilität verfügbar. |
+Demo logins (fake provider only): `demo`/`demo` for instant access, `demo-2fa`/`demo` + code `123456` for the 2FA path.
 
-### Hausaufgaben
+## Messages
 
-| Methode und Pfad | Auth | Zweck / Eingaben |
-| --- | --- | --- |
-| `GET /homework` | Bearer | `since` (Standard `2000-01-01`), `status`, `include_tests`, `q`, `limit`, `offset`, `refresh=1`; liefert zusätzlich Zähler und `cache_info`. |
-| `POST /homework/{event_id}/done` | Bearer | JSON `{done: true/false}`; setzt das EduPage-Done-Flag und aktualisiert den Cache. |
-| `POST /homework/{event_id}/trash` | Bearer | JSON `{hide: true/false}`; `trash` ist Alias. Nur lokaler Papierkorb; Wiederherstellen einer Hausaufgabe markiert sie als offen. |
+| Method | Path | Query / body | Notes |
+|---|---|---|---|
+| `GET` | `/messages` | `?since=YYYY-MM-DD`, `?type=sprava\|news\|anketa\|chat\|genotif`, `?q=`, `?refresh=1`, `limit/offset` | List envelope |
+| `GET` | `/messages/:id/thread` | `?refresh=1` | `{likes, replies, reply_ids, summary, cached}` |
+| `POST` | `/messages/read` | — | `{marked: n}` |
+| `GET` | `/recipients` | `limit/offset` | List envelope |
+| `POST` | `/messages/send` | `{recipients: string[]\|"a,b", body}` (`body` ≤ 5000) | New message |
+| `POST` | `/messages/:id/reply` | `{body}` (≤ 5000) | Fresh thread |
+| `POST` | `/messages/download-token` | `{event_id, idx}` | `{download_token, expires_in: 300}` |
+| `GET` | `/messages/:id/attachments/:idx` | Bearer **or** `?dl=<token>` (recommended, 5 min) / `?token=` | Binary download |
 
-Erlaubte `status`-Werte: `alle`, `offen`, `überfällig`, `erledigt`, `papierkorb`. Zähler heißen `offen`, `ueberfaellig`, `erledigt`, `papierkorb`.
+## Homework, timetable, school day
 
-### Stundenplan und Schulalltag
+| Method | Path | Query / body | Notes |
+|---|---|---|---|
+| `GET` | `/homework` | `?since=`, `?status=alle\|offen\|überfällig\|erledigt\|papierkorb` (default `alle`), `?include_tests=0/1`, `?q=`, `?refresh=`, `limit/offset` | `{items,total,limit,offset,counts,cache_info}` |
+| `POST` | `/homework/:id/done` | `{done?: bool}` (tolerant `1/true/on/yes/ja`) | Updated task |
+| `POST` | `/homework/:id/trash` | `{hide\|trash?: bool}` | Updated task |
+| `GET` | `/timetable/day` | `?day=YYYY-MM-DD` (default today), `?refresh=1` | `{day, day_label, prev_day, next_day, today, lessons, cache_info}` |
+| `GET` | `/timetable/week` | `?day=` (any date in the week, Mon–Fri derived) | `{day, monday, week_label, days[5], cache_info}` |
+| `GET` | `/substitutions/week` | `?day=` | `{monday, week_label, days[{date, day_label, changes}]}` |
+| `GET` | `/school/agenda` | `?since=` (default −30 d), `?until=` (default +60 d, max span 366 d), `?refresh=1` | `{items, total, since, until, cache_info}`; `kind = event\|exam\|attendance` |
+| `GET` | `/grades` | `?refresh=1`, `limit/offset` | List envelope + `cache_info` |
 
-| Methode und Pfad | Auth | Zweck / Eingaben |
-| --- | --- | --- |
-| `GET /timetable/day` | Bearer | Tagesplan mit `day` (Standard heute), `refresh=1`, Stunden und Navigationstagen. |
-| `GET /timetable/week` | Bearer | Montag-bis-Freitag-Woche für `day`; liefert je Tag denselben Stundenobjekttyp. |
-| `GET /substitutions/week` | Bearer | Vertretungsänderungen Montag bis Freitag für die Woche von `day` (Standard heute). |
-| `GET /school/agenda` | Bearer | Schulereignisse, Prüfungen und Anwesenheitsereignisse; `since`, `until`, `refresh=1`. Standard: 30 Tage zurück bis 60 Tage voraus; Zeitraum höchstens 366 Tage. Antwort `{items, total, since, until, cache_info}`. |
+## Weather, settings, cache
 
-### Noten, Essen, Wetter und Einstellungen
+| Method | Path | Query / body | Notes |
+|---|---|---|---|
+| `GET` | `/wetter` | `?lat=&lon=` or `?city=` (≤ 100 chars) | `400` if neither; `503 CONFIG_MISSING` without key |
+| `GET` | `/wetter/suche` | `?q=` (≥ 2 chars) | `{items: [{name, country, lat, lon}]}` |
+| `GET` | `/settings` | — | `{schema: [...], values: {...}}` (`landing`, `hw_status`, `hw_tests`, `ov_unread`, `ov_homework`, `ov_order`, `ov_wetter`, `wetter_city`) |
+| `PUT` | `/settings` | JSON object, merged over current values | `{status:"ok", values}` |
+| `POST` | `/cache-clear` | — | `{status:"ok", cleared: n}` (keeps settings) |
 
-| Methode und Pfad | Auth | Zweck / Eingaben |
-| --- | --- | --- |
-| `GET /grades` | Bearer | Notenliste mit `limit`, `offset`, `refresh=1`, `cache_info`. |
-| `GET /essen` | Bearer | Aktueller Mensa-Wochenplan; `refresh=1` umgeht den Cache. |
-| `GET /wetter` | Bearer | Wetter per `city` oder per Paar `lat` + `lon`; ohne Ort `VALIDATION`. |
-| `GET /wetter/suche` | Bearer | Ortssuche mit `q`; unter zwei Zeichen leere Ergebnisliste. |
-| `GET /settings` | Bearer | Gemeinsames Schema und gespeicherte Werte. |
-| `PUT /settings` | Bearer | Account-Einstellungen validiert gegen dasselbe Schema wie das Web; JSON-Booleans verwenden. |
-| `POST /cache-clear` | Bearer | Löscht Cache-Dateien des Accounts und Mensa-Wochen-Caches; Einstellungen bleiben erhalten. |
+## Examples
 
-## Standardantworten und Fehler
+```sh
+BASE=http://127.0.0.1:3100/api/v1   # demo
 
-| Code | HTTP | Bedeutung |
-| --- | ---: | --- |
-| `VALIDATION` | 400 | Fehlendes JSON, ungültiger Parameter, Datum oder Listenlimit. |
-| `TOKEN_INVALID` | 401 | Fehlendes, unbekanntes oder widerrufenes Token. |
-| `TOKEN_EXPIRED` | 401 | Bekanntes, abgelaufenes Token. |
-| `PENDING_INVALID` | 401 | Unbekannte oder abgelaufene 2FA-Zwischenanmeldung. |
-| `INVALID_CODE` | 401 | 2FA-Code wurde abgelehnt. |
-| `BAD_CREDENTIALS` | 401 | EduPage-Zugangsdaten sind falsch oder nicht mehr gültig. |
-| `EDUPAGE_2FA` | 401 | EduPage verlangt beim Re-Login erneut 2FA; frisch anmelden. |
-| `CAPTCHA_REQUIRED` | 403 | EduPage verlangt ein Captcha; Anmeldung einmal im Browser lösen. |
-| `NOT_FOUND` | 404 | Nachricht, Aufgabe, Gerät oder Datei nicht gefunden. |
-| `RATE_LIMITED` | 429 | Zu viele Authentifizierungsversuche. |
-| `CONFIG_MISSING` | 503 | Erforderliche Serverkonfiguration fehlt, beispielsweise Wetter-Key. |
-| `UPSTREAM` | 502 | EduPage-, Datei-, Wetter- oder Netzwerkfehler. |
+curl -s $BASE/health
 
-## Download-Sicherheit
+TOKEN=$(curl -s -X POST $BASE/auth/login \
+  -H 'Content-Type: application/json' \
+  -d '{"username":"demo","password":"demo"}' | python3 -c 'import json,sys; print(json.load(sys.stdin)["token"])')
 
-Native Downloader unterstützen nicht immer einen Authorization-Header. Daher kann der Client zuerst `POST /messages/download-token` aufrufen und anschließend die Download-Route mit `?dl=<kurzlebiger-wert>` verwenden. Dieser Wert ist an ein Konto und genau eine Event-/Datei-Kombination gebunden und standardmäßig fünf Minuten gültig. Der langlebige `?token=`-Mechanismus ist nur für Kompatibilität; Token in URLs können in Logs oder Browserhistorien geraten.
+curl -s "$BASE/homework?status=offen&limit=5" -H "Authorization: Bearer $TOKEN"
 
-Downloads sind auf Hosts unter `*.edupage.org` beschränkt und laufen über die eingeloggte EduPage-Sitzung. Datei-Uploads sind nicht vorgesehen.
-
-## Paritätsstand TypeScript
-
-Die Python-API ist Referenz und Live-Backend. Der TypeScript-Echtpfad (Paritätspakete N0–NI) ist drahtkompatibel: gleiche Routen, DTOs, Fehlercodes und Auth-Abläufe (opake Bearer-Token, `pending_token`, `?dl=`-Kurz-Tokens, Rate-Limit). Ein Routenmatrix-Test prüft alle 30 Python-Pfade. Bekannte Restunterschiede: `POST /devices` existiert nur in TypeScript; der Fake-Modus nutzt JWT-Zugangs- und Refresh-Token. Der Cutover (Live-Abgleich, Client-Umschaltung) steht aus — siehe [Migration](MIGRATION.md).
+# 2FA variant
+PENDING=$(curl -s -X POST $BASE/auth/login \
+  -H 'Content-Type: application/json' \
+  -d '{"username":"demo-2fa","password":"demo"}' | python3 -c 'import json,sys; print(json.load(sys.stdin)["pending_token"])')
+curl -s -X POST $BASE/auth/2fa \
+  -H 'Content-Type: application/json' \
+  -d "{\"pending_token\":\"$PENDING\",\"code\":\"123456\"}"
+```

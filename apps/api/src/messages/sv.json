@@ -103,8 +103,6 @@
     "hwStatusLabel": "Hemsida: Standardfilter",
     "hwTestsLabel": "Hemsida: Inkludera tester och prov som standard",
     "landingLabel": "Startsidan efter inloggning",
-    "opt12h": "12-hour",
-    "opt24h": "24-hour",
     "optAll": "Alla",
     "optDashboard": "Meddelanden",
     "optDone": "Endast klart",
@@ -120,10 +118,7 @@
     "ovWetterHint": "Gäller för webbgränssnittet och Android-appen.",
     "ovWetterLabel": "Visa väderkarta på översikten",
     "sectionUebersicht": "Översikt",
-    "sectionWetter": "Väder",
-    "timeFormatLabel": "Clock: Time format",
-    "ovHiddenLabel": "Hidden sections",
-    "ovHiddenHint": "Sections you switched off in the overview editor."
+    "sectionWetter": "Väder"
   },
   "upstream": {
     "agendaFailed": "Skolevenemang kunde inte laddas: {detail}",

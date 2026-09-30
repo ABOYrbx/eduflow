@@ -103,8 +103,6 @@
     "hwStatusLabel": "Kotisivu: vakio suodatin",
     "hwTestsLabel": "Kotityö: Sisällytä testit ja tentit oletuksena",
     "landingLabel": "Aloitussivu sisäänkirjautumisen jälkeen",
-    "opt12h": "12-hour",
-    "opt24h": "24-hour",
     "optAll": "Kaikki",
     "optDashboard": "Viestit",
     "optDone": "Vain valmis",
@@ -120,10 +118,7 @@
     "ovWetterHint": "Sovelletaan web-käyttöliittymään ja Android-sovellukseen.",
     "ovWetterLabel": "Näytä sääkartta yleiskatsauksessa",
     "sectionUebersicht": "Yleiskatsaus",
-    "sectionWetter": "Sää",
-    "timeFormatLabel": "Clock: Time format",
-    "ovHiddenLabel": "Hidden sections",
-    "ovHiddenHint": "Sections you switched off in the overview editor."
+    "sectionWetter": "Sää"
   },
   "upstream": {
     "agendaFailed": "Koulutapahtumia ei voitu ladata: {detail}",

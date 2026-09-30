@@ -103,8 +103,6 @@
     "hwStatusLabel": "Homework: Standard filter",
     "hwTestsLabel": "Homework: Include tests and exams by default",
     "landingLabel": "Start page after sign-in",
-    "opt12h": "12-hour",
-    "opt24h": "24-hour",
     "optAll": "All",
     "optDashboard": "Messages",
     "optDone": "Only done",
@@ -120,10 +118,7 @@
     "ovWetterHint": "Applies to the web interface and the Android app.",
     "ovWetterLabel": "Show weather map on the overview",
     "sectionUebersicht": "Overview",
-    "sectionWetter": "Weather",
-    "timeFormatLabel": "Clock: Time format",
-    "ovHiddenLabel": "Hidden sections",
-    "ovHiddenHint": "Sections you switched off in the overview editor."
+    "sectionWetter": "Weather"
   },
   "upstream": {
     "agendaFailed": "School events could not be loaded: {detail}",

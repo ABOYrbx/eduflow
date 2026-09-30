@@ -103,8 +103,6 @@
     "hwStatusLabel": "Huiswerk: Standaard filter",
     "hwTestsLabel": "Huiswerk: standaard tests en examens opnemen",
     "landingLabel": "Pagina starten na het aanmelden",
-    "opt12h": "12-hour",
-    "opt24h": "24-hour",
     "optAll": "Allemaal",
     "optDashboard": "berichten",
     "optDone": "Alleen klaar",
@@ -120,10 +118,7 @@
     "ovWetterHint": "Van toepassing op de webinterface en de Android-app.",
     "ovWetterLabel": "Laat de weerkaart zien op het overzicht",
     "sectionUebersicht": "Overzicht.",
-    "sectionWetter": "Weer",
-    "timeFormatLabel": "Clock: Time format",
-    "ovHiddenLabel": "Hidden sections",
-    "ovHiddenHint": "Sections you switched off in the overview editor."
+    "sectionWetter": "Weer"
   },
   "upstream": {
     "agendaFailed": "School events konden niet worden geladen: {detail}",

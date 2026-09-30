@@ -103,8 +103,6 @@
     "hwStatusLabel": "Acasă: Filtru standard",
     "hwTestsLabel": "Acasă: Include teste și examene în mod implicit",
     "landingLabel": "Pagina de start după autentificare",
-    "opt12h": "12-hour",
-    "opt24h": "24-hour",
     "optAll": "Toate",
     "optDashboard": "Mesaje",
     "optDone": "Doar terminată",
@@ -120,10 +118,7 @@
     "ovWetterHint": "Se aplică interfeței web și aplicației Android.",
     "ovWetterLabel": "Arată harta meteo în prezentarea generală",
     "sectionUebersicht": "Prezentare generală",
-    "sectionWetter": "Vreme",
-    "timeFormatLabel": "Clock: Time format",
-    "ovHiddenLabel": "Hidden sections",
-    "ovHiddenHint": "Sections you switched off in the overview editor."
+    "sectionWetter": "Vreme"
   },
   "upstream": {
     "agendaFailed": "Evenimentele școlare nu au putut fi încărcate: {detail}",

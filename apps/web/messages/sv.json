@@ -95,7 +95,7 @@
     "trashEmpty": "Papperskorgen är tom.",
     "trashLabel": "Papperskorg",
     "trashWithCount": "Papperskorg ({count})",
-    "dueToday": "due today"
+    "dueToday": "förfaller idag"
   },
   "login": {
     "backToLogin": "Tillbaka till inloggning",
@@ -185,9 +185,7 @@
     "profileAria": "Öppna profilmenyn",
     "profileTitle": "Din profil",
     "settings": "Inställningar",
-    "timetable": "Tidtabell",
-    "scrollBack": "Scroll left",
-    "scrollForward": "Scroll right"
+    "timetable": "Tidtabell"
   },
   "overview": {
     "allMessages": "Alla meddelanden",
@@ -218,18 +216,7 @@
     "tomorrow": "Imorgon",
     "weather": "Väder",
     "weatherHint": "Ange plats i inställningar",
-    "weatherUnavailable": "Väderdata är inte tillgänglig",
-    "editorToggle": "Arrange",
-    "editorHint": "Drag a section to move it, or use the arrows. Hide what you do not need.",
-    "editorDone": "Done",
-    "editorSaving": "Saving…",
-    "editorSaved": "Layout saved",
-    "editorHide": "Hide section",
-    "editorShow": "Show section",
-    "editorHidden": "Hidden",
-    "editorDrag": "Drag to move",
-    "editorReset": "Reset",
-    "editorEmpty": "All sections are hidden. Turn at least one back on."
+    "weatherUnavailable": "Väderdata är inte tillgänglig"
   },
   "settings": {
     "accentApplied": "Accent färg tillämpas.",
@@ -300,9 +287,7 @@
     "title": "Inställningar",
     "tokenCreated": "Token skapad. Kopiera värdet nu; det visas bara en gång.",
     "unnamedDevice": "Namnlös enhet",
-    "validUntil": "Giltig till {date}",
-    "languageTitle": "Language",
-    "languageHint": "Applies right away. The choice is remembered on this device."
+    "validUntil": "Giltig till {date}"
   },
   "theme": {
     "language": "Språk",

@@ -95,7 +95,7 @@
     "trashEmpty": "ごみ箱は空です。",
     "trashLabel": "ごみ箱に入れる",
     "trashWithCount": "ごみ箱（{count}）",
-    "dueToday": "due today"
+    "dueToday": "今日までに"
   },
   "login": {
     "backToLogin": "ログインに戻る",
@@ -185,9 +185,7 @@
     "profileAria": "プロファイルメニューを開く",
     "profileTitle": "あなたのプロフィール",
     "settings": "設定",
-    "timetable": "タイムテーブル",
-    "scrollBack": "Scroll left",
-    "scrollForward": "Scroll right"
+    "timetable": "タイムテーブル"
   },
   "overview": {
     "allMessages": "すべてのメッセージ",
@@ -218,18 +216,7 @@
     "tomorrow": "明日",
     "weather": "天気",
     "weatherHint": "設定で場所を設定",
-    "weatherUnavailable": "天気データは利用できません",
-    "editorToggle": "Arrange",
-    "editorHint": "Drag a section to move it, or use the arrows. Hide what you do not need.",
-    "editorDone": "Done",
-    "editorSaving": "Saving…",
-    "editorSaved": "Layout saved",
-    "editorHide": "Hide section",
-    "editorShow": "Show section",
-    "editorHidden": "Hidden",
-    "editorDrag": "Drag to move",
-    "editorReset": "Reset",
-    "editorEmpty": "All sections are hidden. Turn at least one back on."
+    "weatherUnavailable": "天気データは利用できません"
   },
   "settings": {
     "accentApplied": "アクセントカラーを適用しました。",
@@ -300,9 +287,7 @@
     "title": "設定",
     "tokenCreated": "トークンが作成されました。値をコピーしてください。一度だけ表示されます。",
     "unnamedDevice": "名前のないデバイス",
-    "validUntil": "有効期限： {date}",
-    "languageTitle": "Language",
-    "languageHint": "Applies right away. The choice is remembered on this device."
+    "validUntil": "有効期限： {date}"
   },
   "theme": {
     "language": "言語",
