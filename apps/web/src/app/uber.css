@@ -38,10 +38,11 @@ button{font-family:inherit;cursor:pointer}
 .nav-mid::-webkit-scrollbar{display:none}
 .nav-scroll{flex:0 0 auto;width:26px;height:26px;display:grid;place-items:center;border:0;border-radius:50%;background:rgba(255,255,255,.7);color:var(--ink);cursor:pointer;opacity:.8;transition:opacity .15s,transform .15s}
 .nav-scroll:hover{opacity:1;transform:scale(1.08)}
-/* Am Anfang bzw. Ende bleibt der Knopf an seiner Stelle und wird nur
-   abgeblendet, damit die Leiste nicht springt. */
-.nav-scroll:disabled{opacity:.22;cursor:default}
-.nav-scroll:disabled:hover{opacity:.22;transform:none}
+/* Am Anfang bzw. Ende verschwindet der Knopf, bleibt aber an Ort und Stelle.
+   visibility:hidden statt display:none, weil sonst die Leiste springt:
+   ohne Knopf bekaeme .nav-mid mehr Platz, der Inhalt ueberlief nicht mehr,
+   und der Knopf waere sofort wieder da. */
+.nav-scroll.is-idle{visibility:hidden}
 .nav-scroll:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 /* Gleicher Abstand auf beiden Seiten: .nav-mid hat 8px Rand, der auch zwischen
    der Leiste und dem Chevron liegt. Rechts fehlte dieser Abstand, dadurch
@@ -596,10 +597,6 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 .picker-option .ico{opacity:.9}
 
 /* ---------- Editor für die Übersichts-Abschnitte ---------- */
-.ov-toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:4px 0 14px}
-.ov-toolbar .btn-sm{padding:9px 16px}
-.ov-toolbar-status{font-size:13px;color:var(--ink-muted);line-height:1.5;min-width:0}
-.sec-panel{margin:0 0 14px;padding:14px 16px}
 .sec-editor{display:flex;flex-direction:column;gap:8px;transition:opacity .15s}
 .sec-editor.is-busy{opacity:.6;pointer-events:none}
 .sec-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:12px;background:var(--surface-1);transition:transform .14s ease,border-color .14s,box-shadow .14s,opacity .14s}
@@ -616,8 +613,6 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 .sec-btn:hover:not(:disabled){background:var(--surface-2);color:var(--ink);border-color:var(--border)}
 .sec-btn:disabled{opacity:.28;cursor:not-allowed}
 .sec-btn[aria-pressed="true"]{background:var(--surface-2);color:var(--ink);border-color:var(--border-strong)}
-.sec-warn{margin:10px 0 0;font-size:13px;color:var(--ink-muted)}
-.ov-grid.is-editing .ov-col{transition:opacity .2s}
 
 /* Einmal angezeigter API-Token: monospace, umbrechbar, mit Kopieren-Button. */
 .token-box{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border:1px dashed var(--border-strong);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:var(--surface-1)}
