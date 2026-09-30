@@ -51,10 +51,10 @@
     <!-- Onboarding -->
     <string name="onboarding_greeting">Hallo!</string>
     <string name="onboarding_language_title">Sprache wählen</string>
-    <string name="onboarding_language_search">Search language</string>
-    <string name="onboarding_language_no_results">No language found</string>
-    <string name="onboarding_language_system_short">SYSTEM</string>
-    <string name="onboarding_language_system_format">System language: %1$s</string>
+    <string name="onboarding_language_search">Pretraži jezike</string>
+    <string name="onboarding_language_no_results">Jezik nije pronađen</string>
+    <string name="onboarding_language_system_short">SISTEM</string>
+    <string name="onboarding_language_system_format">Jezik sistema: %1$s</string>
     <string name="onboarding_language_sub">EduFlow spricht deine Sprache. Die Auswahl wird sofort übernommen.</string>
     <string name="onboarding_language_apply_restart">Übernehmen &amp; neu starten</string>
     <string name="onboarding_language_system">System</string>
@@ -67,6 +67,7 @@
     <string name="onboarding_feat3_title">Stundenplan &amp; Wetter</string>
     <string name="onboarding_feat3_desc">Tag und Woche und Wetter auf der Übersicht.</string>
     <string name="onboarding_server_sub">Trage ein, wo EduFlow als Server läuft.</string>
+    <string name="onboarding_server_hint">Samo IP adresa — port i putanja dodaju se automatski.</string>
     <string name="onboarding_connected">Verbunden</string>
     <string name="onboarding_unreachable">Server nicht erreichbar. Prüfe die Adresse und versuche es erneut.</string>
     <string name="onboarding_test_connected">✓  Verbunden</string>
@@ -99,17 +100,17 @@
     <string name="settings_theme_system">System</string>
     <string name="settings_theme_system_sub">Folgt Hell/Dunkel des Geräts</string>
     <string name="settings_accent">Akzentfarbe</string>
-    <string name="settings_language">Language</string>
-    <string name="settings_language_system">System language</string>
+    <string name="settings_language">Jezik</string>
+    <string name="settings_language_system">Jezik sistema</string>
     <string name="settings_notifications">Benachrichtigungen</string>
     <string name="settings_notify_news">Neue Nachrichten</string>
     <string name="settings_overview_tasks">Übersicht &amp; Aufgaben</string>
     <string name="settings_landing_label">Startseite nach Anmeldung</string>
     <string name="settings_hwfilter_label">Aufgaben: Standardfilter</string>
     <string name="settings_hwtests_label">Tests und Prüfungen einbeziehen</string>
-    <string name="settings_time_format_label">Clock format</string>
-    <string name="settings_time_24h">24-hour</string>
-    <string name="settings_time_12h">12-hour</string>
+    <string name="settings_time_format_label">Format sata</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
     <string name="settings_unread_placeholder">Max. ungelesene Nachrichten (1–50)</string>
     <string name="settings_homework_placeholder">Max. offene Hausaufgaben (1–50)</string>
     <string name="settings_navbar_section">Navigationsleiste</string>
@@ -217,12 +218,12 @@
     <string name="messages_compose_send">Senden</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
          label() stays the German context-free fallback for tests. -->
-    <string name="message_type_all">All</string>
-    <string name="message_type_sprava">Message</string>
-    <string name="message_type_news">News</string>
-    <string name="message_type_anketa">Poll</string>
-    <string name="message_type_chat">Chat</string>
-    <string name="message_type_genotif">Notice</string>
+    <string name="message_type_all">Sve</string>
+    <string name="message_type_sprava">Poruka</string>
+    <string name="message_type_news">Vesti</string>
+    <string name="message_type_anketa">Anketa</string>
+    <string name="message_type_chat">Ćaskanje</string>
+    <string name="message_type_genotif">Obaveštenje</string>
     <!-- Overview -->
     <string name="overview_customize">Übersicht anpassen</string>
     <string name="overview_customize_desc">Lege fest, welche Bereiche zuerst erscheinen.</string>
