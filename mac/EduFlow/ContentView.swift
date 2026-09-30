@@ -247,6 +247,10 @@ private struct TopPillNav: View {
                     }
                 }
                 Divider()
+                // Sprache direkt im Profilmenü: Auswahl wirkt sofort, zeigt
+                // Suchleiste und den Übersetzungsstand je Sprache.
+                LanguageSwitcher()
+                Divider()
                 profileAction(NSLocalizedString("Settings", value: "Settings", comment: "Navigation: Einstellungen"), icon: "gearshape") {
                     profileMenuOpen = false
                     onNavigate(.settings)

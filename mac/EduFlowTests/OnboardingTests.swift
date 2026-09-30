@@ -169,6 +169,23 @@ struct OnboardingTests {
         }
     }
 
+    @Test("Sprachliste trägt Namen, Prozent und Fortschritt")
+    func languageEntries() {
+        let entries = LanguageEntry.fromBundle()
+        #expect(!entries.isEmpty)
+        for entry in entries {
+            #expect(!entry.code.isEmpty)
+            #expect(!entry.name.isEmpty)
+            #expect(entry.total > 0)
+            #expect(entry.translated <= entry.total)
+            #expect(entry.percent >= 0 && entry.percent <= 100)
+        }
+        // Nach Eigenname sortiert, keine Dubletten.
+        let names = entries.map(\.name)
+        #expect(names == names.sorted { $0.localizedCaseInsensitiveCompare($1) == .orderedAscending })
+        #expect(Set(entries.map(\.code)).count == entries.count)
+    }
+
     @Test("Health-Abfrage liefert Version gegen Stub")
     func healthCheckOk() async throws {
         MockURLProtocol.handler = { request in

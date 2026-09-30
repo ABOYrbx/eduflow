@@ -75611,8 +75611,8 @@
         }
       }
     },
-    "settings_language_title": {
-      "comment": "Einstellungen: Sprache Titel",
+    "language_title": {
+      "comment": "Sprachwahl: Titel",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -75628,25 +75628,42 @@
         }
       }
     },
-    "settings_language_desc": {
-      "comment": "Einstellungen: Sprache Beschreibung",
+    "language_hint": {
+      "comment": "Sprachwahl: Hinweis",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Applies immediately. The percentage shows how much of the app is already translated in that language."
+            "value": "Takes effect right away. The percentage shows how much is translated."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wirkt sofort. Die Prozentzahl zeigt, wie viel der App in dieser Sprache schon übersetzt ist."
+            "value": "Wirkt sofort. Die Prozentzahl zeigt, wie viel übersetzt ist."
           }
         }
       }
     },
-    "settings_language_system": {
-      "comment": "Einstellungen: Systemsprache",
+    "language_search_placeholder": {
+      "comment": "Sprachwahl: Platzhalter",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search language"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sprache suchen"
+          }
+        }
+      }
+    },
+    "language_system": {
+      "comment": "Sprachwahl: Systemsprache",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -75662,36 +75679,53 @@
         }
       }
     },
-    "settings_language_active": {
-      "comment": "Einstellungen: Sprache aktiv",
+    "language_system_detail": {
+      "comment": "Sprachwahl: Systemsprache Detail",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Active"
+            "value": "Follows macOS"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aktiv"
+            "value": "Folgt macOS"
           }
         }
       }
     },
-    "settings_language_progress": {
-      "comment": "Einstellungen: Sprache Fortschritt",
+    "language_progress": {
+      "comment": "Sprachwahl: Fortschritt",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%d of %d texts translated"
+            "value": "%d of %d texts"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%d von %d Texten übersetzt"
+            "value": "%d von %d Texten"
+          }
+        }
+      }
+    },
+    "language_no_match": {
+      "comment": "Sprachwahl: kein Treffer",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No language matches that."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Sprache passt dazu."
           }
         }
       }
