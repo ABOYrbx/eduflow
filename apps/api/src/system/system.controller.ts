@@ -16,7 +16,7 @@ export class SystemController {
       "/api/v1/health": { get: get(t("docs.liveness"), false) }, "/api/v1/openapi.json": { get: get(t("docs.apiContract"), false) },
       "/api/v1/auth/login": { post: post(t("docs.login"), false) }, "/api/v1/auth/2fa": { post: post(t("docs.quit2fa"), false) },
       "/api/v1/auth/logout": { post: post(t("docs.logout")) }, "/api/v1/auth/refresh": { post: post(t("docs.rotateToken"), false) },
-      "/api/v1/me": { get: get(t("docs.myAccount")) }, "/api/v1/devices": { get: get(t("docs.myDevices")), post: post(t("docs.createDeviceToken")) }, "/api/v1/devices/{id}": { delete: get(t("docs.revokeDevice")) },
+      "/api/v1/me": { get: get(t("docs.myAccount")) }, "/api/v1/devices": { get: get(t("docs.myDevices")), post: post(t("docs.createDeviceToken")) }, "/api/v1/devices/{id}": { delete: get(t("docs.revokeDevice")) }, "/api/v1/devices/revoke-others": { post: post(t("docs.revokeOtherDevices")) },
       "/api/v1/messages": { get: get(t("docs.messages")) }, "/api/v1/messages/{id}/thread": { get: get(t("docs.thread")) },
       "/api/v1/messages/read": { post: post(t("docs.markRead")) }, "/api/v1/recipients": { get: get(t("docs.recipients")) },
       "/api/v1/messages/send": { post: post(t("docs.sendMessage")) }, "/api/v1/messages/{id}/reply": { post: post(t("docs.replyMessage")) },

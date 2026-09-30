@@ -38,4 +38,7 @@ export class AuthController {
   @Post("devices") createDevice(@Req() request: AuthenticatedRequest, @Body() body: unknown) { return this.auth.createDevice(request.authClaims, body); }
   @UseGuards(AccessTokenGuard)
   @Delete("devices/:id") revoke(@Req() request: AuthenticatedRequest, @Param("id") id: string) { return this.auth.revokeDevice(request.authClaims, id); }
+  @UseGuards(AccessTokenGuard)
+  @HttpCode(HttpStatus.OK)
+  @Post("devices/revoke-others") revokeOthers(@Req() request: AuthenticatedRequest) { return this.auth.revokeOtherDevices(request.authClaims); }
 }

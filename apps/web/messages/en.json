@@ -33,7 +33,14 @@
     "noText": "(no text)",
     "requestFailed": "The request failed.",
     "school": "School",
-    "upstreamUnreachable": "The server is unreachable."
+    "upstreamUnreachable": "The server is unreachable.",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "Weighted subject average",
@@ -185,7 +192,10 @@
     "profileAria": "Open profile menu",
     "profileTitle": "Your profile",
     "settings": "Settings",
-    "timetable": "Timetable"
+    "timetable": "Timetable",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right",
+    "sessions": "Sessions"
   },
   "overview": {
     "allMessages": "All messages",
@@ -216,7 +226,20 @@
     "tomorrow": "Tomorrow",
     "weather": "Weather",
     "weatherHint": "Set location in settings",
-    "weatherUnavailable": "Weather data not available"
+    "weatherUnavailable": "Weather data not available",
+    "editorToggle": "Arrange",
+    "editorHint": "Drag a section to move it, or use the arrows. Hide what you do not need.",
+    "editorDone": "Done",
+    "editorSaving": "Saving…",
+    "editorSaved": "Layout saved",
+    "editorHide": "Hide section",
+    "editorShow": "Show section",
+    "editorHidden": "Hidden",
+    "editorDrag": "Drag to move",
+    "editorReset": "Reset",
+    "editorEmpty": "All sections are hidden. Turn at least one back on.",
+    "editorWide": "Full width",
+    "editorNarrow": "Half width"
   },
   "settings": {
     "accentApplied": "Accent color applied.",
@@ -287,7 +310,10 @@
     "title": "Settings",
     "tokenCreated": "Token created. Copy the value now; it is shown only once.",
     "unnamedDevice": "Unnamed device",
-    "validUntil": "Valid until {date}"
+    "validUntil": "Valid until {date}",
+    "languageTitle": "Language",
+    "languageHint": "Applies right away. The choice is remembered on this device.",
+    "sessionsPanelNote": "Devices signed in on this account."
   },
   "theme": {
     "language": "Language",
@@ -324,5 +350,27 @@
     "viewAria": "View",
     "weekDetail": "{count} lessons this week.",
     "weekTab": "Week"
+  },
+  "sessions": {
+    "eyebrow": "Sessions",
+    "title": "Signed-in devices",
+    "detail": "Every device with a session on your account. You can sign out individually or all at once.",
+    "searchPlaceholder": "Search device or ID",
+    "searchAria": "Search sessions",
+    "active": "Signed in",
+    "signedOut": "Signed out",
+    "currentBadge": "This device",
+    "revokeAllOthers": "Sign out all other devices",
+    "revokeAllOthersHint": "This device stays signed in.",
+    "noneActive": "No other device is signed in.",
+    "noMatch": "No session matches your search.",
+    "noSessions": "No sessions yet.",
+    "lastSeen": "Signed in {created}",
+    "expires": "Valid until {expires}",
+    "id": "ID",
+    "openSettings": "Manage sessions",
+    "settingsHint": "{count} signed in · this device is {current}",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOthers": "No other sessions"
   }
 }

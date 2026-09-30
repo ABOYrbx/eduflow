@@ -4,7 +4,7 @@
     "actionChange": "Endret",
     "actionRemove": "Avbrutt",
     "calTitle": "Kalender og eksamen",
-    "classLabel": "Klasse {cls}",
+    "classLabel": "Class {cls}",
     "detailFallback": "Skolearrangementer, eksamener og kommentarer.",
     "emptyCal": "Ingen hendelser planlagt for denne uken.",
     "emptySubs": "Ingen erstatninger planlagt i denne uken.",
@@ -33,12 +33,19 @@
     "noText": "(ingen tekst)",
     "requestFailed": "Forespørselen mislyktes.",
     "school": "Skole",
-    "upstreamUnreachable": "Serveren er ikke tilgjengelig."
+    "upstreamUnreachable": "Serveren er ikke tilgjengelig.",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "Vektet pasientgjennomsnitt",
-    "colClassAvg": "Klasse Ø",
-    "colComment": "Kommentar",
+    "colClassAvg": "Class Ø",
+    "colComment": "Comment",
     "colDate": "Dato",
     "colGrade": "Karakter",
     "colTeacher": "Lærer",
@@ -79,7 +86,7 @@
     "reopen": "Åpne på nytt",
     "restore": "Gjenopprett",
     "searchLabel": "Søk",
-    "searchPlaceholder": "Titel / Fach / Lehrer…",
+    "searchPlaceholder": "Title / Subject / Teacher…",
     "shownCount": "{count} {label} vises.",
     "sinceLabel": "Historie siden",
     "starred": "★ merket",
@@ -95,7 +102,7 @@
     "trashEmpty": "Papirkurven er tom.",
     "trashLabel": "Papirkurv",
     "trashWithCount": "Papirkurv ({count})",
-    "dueToday": "forfaller i dag"
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "Tilbake til innlogging",
@@ -185,7 +192,10 @@
     "profileAria": "Åpne profilmeny",
     "profileTitle": "Din profil",
     "settings": "Innstillinger",
-    "timetable": "Tidsforløp"
+    "timetable": "Tidsforløp",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right",
+    "sessions": "Sessions"
   },
   "overview": {
     "allMessages": "Alle meldinger",
@@ -199,10 +209,10 @@
     "free": "Ingen skole",
     "homework": "Lekser",
     "lessonsToday": "Leksjoner i dag",
-    "loading": "Wird geladen",
+    "loading": "Loading …",
     "loadingTimetable": "Laster inn rutetabell …",
     "messages": "Meldinger",
-    "newMessages": "{count} neu",
+    "newMessages": "{count} new",
     "nextLesson": "Neste leksjon",
     "noLessonsToday": "ingen leksjoner i dag",
     "online": "Pålogget",
@@ -216,7 +226,20 @@
     "tomorrow": "I morgen",
     "weather": "Vær",
     "weatherHint": "Angi plassering i innstillinger",
-    "weatherUnavailable": "Værdata er ikke tilgjengelig"
+    "weatherUnavailable": "Værdata er ikke tilgjengelig",
+    "editorToggle": "Arrange",
+    "editorHint": "Drag a section to move it, or use the arrows. Hide what you do not need.",
+    "editorDone": "Done",
+    "editorSaving": "Saving…",
+    "editorSaved": "Layout saved",
+    "editorHide": "Hide section",
+    "editorShow": "Show section",
+    "editorHidden": "Hidden",
+    "editorDrag": "Drag to move",
+    "editorReset": "Reset",
+    "editorEmpty": "All sections are hidden. Turn at least one back on.",
+    "editorWide": "Full width",
+    "editorNarrow": "Half width"
   },
   "settings": {
     "accentApplied": "Nøyaktig farge påført.",
@@ -224,7 +247,7 @@
     "accentBlue": "Blå",
     "accentGreen": "Grønn",
     "accentOrange": "Oransje",
-    "accentPink": "Rosa",
+    "accentPink": "Pink",
     "accentRed": "Rød",
     "accentTeal": "Blågrønn",
     "accentTitle": "Uthevet farge",
@@ -249,7 +272,7 @@
     "deviceNameLabel": "Enhetens navn (valgfritt)",
     "deviceNamePlaceholder": "e.g. Pixel 8",
     "devicesTitle": "Enheter",
-    "eyebrow": "KONTO",
+    "eyebrow": "ACCOUNT",
     "generalNote": "Gjelder kontoen din på alle enheter.",
     "generalTitle": "Generelt",
     "loggedInAt": "Logget i {created} · utløper {expires}",
@@ -287,7 +310,10 @@
     "title": "Innstillinger",
     "tokenCreated": "Token opprettet. Kopier verdien nå; den vises kun én gang.",
     "unnamedDevice": "Navnløs enhet",
-    "validUntil": "Gyldig til {date}"
+    "validUntil": "Gyldig til {date}",
+    "languageTitle": "Language",
+    "languageHint": "Applies right away. The choice is remembered on this device.",
+    "sessionsPanelNote": "Devices signed in on this account."
   },
   "theme": {
     "language": "Språk",
@@ -301,7 +327,7 @@
     "backDay": "blodplate tilbake",
     "cancelledSmall": "avbrutt",
     "cancelledTag": "Avbrutt",
-    "classLabel": "Klasse {cls}",
+    "classLabel": "Class {cls}",
     "dayDetail": "{count} leksjoner.",
     "dayLabel": "Dag",
     "dayTab": "Dag",
@@ -324,5 +350,27 @@
     "viewAria": "Vis",
     "weekDetail": "{count} leksjoner denne uken.",
     "weekTab": "Uke"
+  },
+  "sessions": {
+    "eyebrow": "Sessions",
+    "title": "Signed-in devices",
+    "detail": "Every device with a session on your account. You can sign out individually or all at once.",
+    "searchPlaceholder": "Search device or ID",
+    "searchAria": "Search sessions",
+    "active": "Signed in",
+    "signedOut": "Signed out",
+    "currentBadge": "This device",
+    "revokeAllOthers": "Sign out all other devices",
+    "revokeAllOthersHint": "This device stays signed in.",
+    "noneActive": "No other device is signed in.",
+    "noMatch": "No session matches your search.",
+    "noSessions": "No sessions yet.",
+    "lastSeen": "Signed in {created}",
+    "expires": "Valid until {expires}",
+    "id": "ID",
+    "openSettings": "Manage sessions",
+    "settingsHint": "{count} signed in · this device is {current}",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOthers": "No other sessions"
   }
 }

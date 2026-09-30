@@ -13,7 +13,7 @@
     "kindEvent": "Tapahtuma",
     "kindExam": "Tentti",
     "lessonHour": "{lesson}. Jakso.",
-    "loadingCal": "Kalender wird geladen …",
+    "loadingCal": "Loading calendar …",
     "nextWeek": "Seuraava →",
     "planChange": "Ajoita muutos",
     "prevWeek": "← Edellinen viikko",
@@ -33,7 +33,14 @@
     "noText": "(ei tekstiä)",
     "requestFailed": "Pyyntö epäonnistui.",
     "school": "Koulu",
-    "upstreamUnreachable": "Palvelin ei ole tavoitettavissa."
+    "upstreamUnreachable": "Palvelin ei ole tavoitettavissa.",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "Painotettu aiheen keskiarvo",
@@ -44,12 +51,12 @@
     "colTeacher": "Opettaja",
     "colTopic": "Aihe",
     "colWeight": "Painotus",
-    "detailCount": "{count} Noten · Schnitt Ø {avg}",
+    "detailCount": "{count} grades · average Ø {avg}",
     "details": "Yksityiskohdat",
     "empty": "Ei arvosanoja tänä aikana.",
     "emptyFiltered": "Ei arvosanoja tälle valinnalle.",
     "eyebrow": "GRADIT",
-    "halfYear": "{half}. Halbjahr {a}/{b}",
+    "halfYear": "{half}. half-year {a}/{b}",
     "halfYearAria": "Puolivuosi",
     "noteMany": "Palkkaluokat",
     "noteOne": "Aste",
@@ -80,7 +87,7 @@
     "restore": "Palauta",
     "searchLabel": "Etsi",
     "searchPlaceholder": "Otsikko / Aihe / Opettaja…",
-    "shownCount": "{count} {label} angezeigt.",
+    "shownCount": "{count} {label} shown.",
     "sinceLabel": "Historia alkaen",
     "starred": "★ merkitty",
     "statusAll": "Kaikki kotitehtävät",
@@ -95,7 +102,7 @@
     "trashEmpty": "Roskakori on tyhjä.",
     "trashLabel": "Roskaa",
     "trashWithCount": "Roskakori ({count})",
-    "dueToday": "erääntyy tänään"
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "Takaisin kirjautumiseen",
@@ -185,7 +192,10 @@
     "profileAria": "Avaa profiilivalikko",
     "profileTitle": "Profiilisi",
     "settings": "Asetukset",
-    "timetable": "Aikataulu"
+    "timetable": "Aikataulu",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right",
+    "sessions": "Sessions"
   },
   "overview": {
     "allMessages": "Kaikki viestit",
@@ -200,7 +210,7 @@
     "homework": "Kotisivu",
     "lessonsToday": "Oppitunnit tänään",
     "loading": "Ladataan …",
-    "loadingTimetable": "Stundenplan wird geladen.",
+    "loadingTimetable": "Loading timetable …",
     "messages": "Viestit",
     "newMessages": "{count} uutta",
     "nextLesson": "Seuraava oppitunti",
@@ -216,7 +226,20 @@
     "tomorrow": "Huomenna",
     "weather": "Sää",
     "weatherHint": "Aseta sijainti asetuksissa",
-    "weatherUnavailable": "Säätietoja ei ole saatavilla"
+    "weatherUnavailable": "Säätietoja ei ole saatavilla",
+    "editorToggle": "Arrange",
+    "editorHint": "Drag a section to move it, or use the arrows. Hide what you do not need.",
+    "editorDone": "Done",
+    "editorSaving": "Saving…",
+    "editorSaved": "Layout saved",
+    "editorHide": "Hide section",
+    "editorShow": "Show section",
+    "editorHidden": "Hidden",
+    "editorDrag": "Drag to move",
+    "editorReset": "Reset",
+    "editorEmpty": "All sections are hidden. Turn at least one back on.",
+    "editorWide": "Full width",
+    "editorNarrow": "Half width"
   },
   "settings": {
     "accentApplied": "Akselin väri asetettu.",
@@ -252,11 +275,11 @@
     "eyebrow": "TILI",
     "generalNote": "Koskee tiliäsi kaikilla laitteilla.",
     "generalTitle": "Yleiset",
-    "loggedInAt": "Angemeldet {created} · läuft ab {expires}",
+    "loggedInAt": "Signed in {created} · expires {expires}",
     "lookNote": "Sovelletaan välittömästi tällä laitteella.",
     "lookTitle": "Ulkoasu",
     "moveDown": "Siirrä {name} alas",
-    "moveUp": "{name} nach oben",
+    "moveUp": "Move {name} up",
     "newTokenFor": "Uusi tunnus {device} – kopioi nyt:",
     "noCities": "Vastaavia paikkoja ei löytynyt.",
     "noDevices": "Ei rekisteröityjä laitteita.",
@@ -287,7 +310,10 @@
     "title": "Asetukset",
     "tokenCreated": "Token luotu. Kopioi arvo nyt; se näytetään vain kerran.",
     "unnamedDevice": "Nimetön laite",
-    "validUntil": "Gültig bis {date}."
+    "validUntil": "Valid until {date}",
+    "languageTitle": "Language",
+    "languageHint": "Applies right away. The choice is remembered on this device.",
+    "sessionsPanelNote": "Devices signed in on this account."
   },
   "theme": {
     "language": "Kieli",
@@ -324,5 +350,27 @@
     "viewAria": "Näytä",
     "weekDetail": "{count} tuntia tällä viikolla.",
     "weekTab": "Viikko"
+  },
+  "sessions": {
+    "eyebrow": "Sessions",
+    "title": "Signed-in devices",
+    "detail": "Every device with a session on your account. You can sign out individually or all at once.",
+    "searchPlaceholder": "Search device or ID",
+    "searchAria": "Search sessions",
+    "active": "Signed in",
+    "signedOut": "Signed out",
+    "currentBadge": "This device",
+    "revokeAllOthers": "Sign out all other devices",
+    "revokeAllOthersHint": "This device stays signed in.",
+    "noneActive": "No other device is signed in.",
+    "noMatch": "No session matches your search.",
+    "noSessions": "No sessions yet.",
+    "lastSeen": "Signed in {created}",
+    "expires": "Valid until {expires}",
+    "id": "ID",
+    "openSettings": "Manage sessions",
+    "settingsHint": "{count} signed in · this device is {current}",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOthers": "No other sessions"
   }
 }

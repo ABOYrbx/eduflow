@@ -24,7 +24,9 @@
     "tokenNotFound": "Токен не знайдено.",
     "tokenRejected": "Неприпустимий маркер.",
     "twoFactorDemo": "Введіть демо-код 123456.",
-    "twoFactorMessage": "Введіть двофакторний код з електронної пошти або програми та надішліть його на /auth/2fa."
+    "twoFactorMessage": "Введіть двофакторний код з електронної пошти або програми та надішліть його на /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Недійсний запит.",
@@ -64,7 +66,8 @@
     "trashHomework": "Перемістити домашню роботу в смітник або відновити",
     "validationDescription": "Помилка перевірки",
     "weather": "Погода",
-    "weatherSearch": "Пошук погоди"
+    "weatherSearch": "Пошук погоди",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Помилкові координати",
@@ -103,6 +106,8 @@
     "hwStatusLabel": "Домашня робота: Стандартний фільтр",
     "hwTestsLabel": "Homework: Включити тести та екзамени за замовчуванням",
     "landingLabel": "Стартова сторінка після входу",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "Всі",
     "optDashboard": "Повідомлення",
     "optDone": "Тільки зроблено",
@@ -118,7 +123,12 @@
     "ovWetterHint": "Застосовується до веб-інтерфейсу та додатка Android.",
     "ovWetterLabel": "Відображення карти погоди на огляді",
     "sectionUebersicht": "Перегляд попереднього контакту",
-    "sectionWetter": "Погода"
+    "sectionWetter": "Погода",
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor.",
+    "ovSpanLabel": "Section widths",
+    "ovSpanHint": "Sections you set to half width sit next to each other."
   },
   "upstream": {
     "agendaFailed": "School events could not be loaded: {detail}",
