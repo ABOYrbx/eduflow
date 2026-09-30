@@ -33,7 +33,14 @@
     "noText": "(brak tekstu)",
     "requestFailed": "Żądanie nie powiodło się.",
     "school": "Szkoła",
-    "upstreamUnreachable": "Serwer jest nieosiągalny."
+    "upstreamUnreachable": "Serwer jest nieosiągalny.",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "Średnia ważona tematu",
@@ -185,7 +192,10 @@
     "profileAria": "Otwórz menu profilu",
     "profileTitle": "Twój profil",
     "settings": "Ustawienia",
-    "timetable": "Harmonogram"
+    "timetable": "Harmonogram",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right",
+    "sessions": "Sessions"
   },
   "overview": {
     "allMessages": "Wszystkie wiadomości",
@@ -216,7 +226,20 @@
     "tomorrow": "Jutro",
     "weather": "Pogoda",
     "weatherHint": "Ustaw lokalizację w ustawieniach",
-    "weatherUnavailable": "Dane pogodowe niedostępne"
+    "weatherUnavailable": "Dane pogodowe niedostępne",
+    "editorToggle": "Arrange",
+    "editorHint": "Drag a section to move it, or use the arrows. Hide what you do not need.",
+    "editorDone": "Done",
+    "editorSaving": "Saving…",
+    "editorSaved": "Layout saved",
+    "editorHide": "Hide section",
+    "editorShow": "Show section",
+    "editorHidden": "Hidden",
+    "editorDrag": "Drag to move",
+    "editorReset": "Reset",
+    "editorEmpty": "All sections are hidden. Turn at least one back on.",
+    "editorWide": "Full width",
+    "editorNarrow": "Half width"
   },
   "settings": {
     "accentApplied": "Zastosowany kolor akcentu.",
@@ -287,7 +310,10 @@
     "title": "Ustawienia",
     "tokenCreated": "Token utworzony. Skopiuj wartość teraz; jest wyświetlany tylko raz.",
     "unnamedDevice": "Urządzenie bez nazwy",
-    "validUntil": "Ważne do {date}"
+    "validUntil": "Ważne do {date}",
+    "languageTitle": "Language",
+    "languageHint": "Applies right away. The choice is remembered on this device.",
+    "sessionsPanelNote": "Devices signed in on this account."
   },
   "theme": {
     "language": "Język",
@@ -324,5 +350,27 @@
     "viewAria": "Widok",
     "weekDetail": "{count} lekcje w tym tygodniu.",
     "weekTab": "Tydzień"
+  },
+  "sessions": {
+    "eyebrow": "Sessions",
+    "title": "Signed-in devices",
+    "detail": "Every device with a session on your account. You can sign out individually or all at once.",
+    "searchPlaceholder": "Search device or ID",
+    "searchAria": "Search sessions",
+    "active": "Signed in",
+    "signedOut": "Signed out",
+    "currentBadge": "This device",
+    "revokeAllOthers": "Sign out all other devices",
+    "revokeAllOthersHint": "This device stays signed in.",
+    "noneActive": "No other device is signed in.",
+    "noMatch": "No session matches your search.",
+    "noSessions": "No sessions yet.",
+    "lastSeen": "Signed in {created}",
+    "expires": "Valid until {expires}",
+    "id": "ID",
+    "openSettings": "Manage sessions",
+    "settingsHint": "{count} signed in · this device is {current}",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOthers": "No other sessions"
   }
 }
