@@ -338,36 +338,37 @@ private struct MessageRow: View {
         return parts.joined(separator: ", ")
     }
 
+    /// Vollständiger Text als Fließtext (mehrere Zeilen zu einer Zeile
+    /// zusammengezogen) — das ist der Text, der links groß steht.
+    private var messageText: String {
+        let flat = message.text
+            .components(separatedBy: .newlines)
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+            .joined(separator: " ")
+        if flat.isEmpty {
+            return subject
+        }
+        return flat
+    }
+
     var body: some View {
         Button(action: action) {
-            HStack(alignment: .top, spacing: 10) {
+            HStack(alignment: .top, spacing: 12) {
                 Circle()
                     .fill(unread ? EduFlowPalette.blue : Color.clear)
                     .frame(width: 8, height: 8)
-                    .padding(.top, 6)
+                    .padding(.top, 7)
                     .accessibilityHidden(true)
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack(alignment: .firstTextBaseline, spacing: 8) {
-                        Text(verbatim: author)
-                            .font(UberFont.text(14, weight: .heavy))
-                            .tracking(-0.2)
-                            .lineLimit(1)
-                        Spacer()
-                        if !timestamp.isEmpty {
-                            Text(verbatim: timestamp)
-                                .font(UberFont.text(12))
-                                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                        }
-                    }
-                    Text(verbatim: subject)
-                        .font(UberFont.text(14, weight: .semibold))
-                        .lineLimit(1)
-                    if !preview.isEmpty {
-                        Text(verbatim: preview)
-                            .font(UberFont.text(13))
-                            .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                            .lineLimit(2)
-                    }
+                // Links: die eigentliche Nachricht, groß und gut lesbar.
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(verbatim: messageText)
+                        .font(UberFont.text(15, weight: .medium))
+                        .lineSpacing(3)
+                        .foregroundStyle(EduFlowPalette.ink(scheme))
+                        .lineLimit(3)
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     if unread || showsTypeTag || message.reactionCount > 0 || !message.attachments.isEmpty {
                         HStack(spacing: 6) {
                             if unread {
@@ -387,9 +388,27 @@ private struct MessageRow: View {
                                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                             }
                         }
-                        .padding(.top, 4)
                     }
                 }
+                // Rechts: Titel, Absender und Datum, alles rechtsbündig.
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text(verbatim: subject)
+                        .font(UberFont.text(14, weight: .heavy))
+                        .tracking(-0.2)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.trailing)
+                    Text(verbatim: author)
+                        .font(UberFont.text(13, weight: .semibold))
+                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                        .lineLimit(1)
+                    if !timestamp.isEmpty {
+                        Text(verbatim: timestamp)
+                            .font(UberFont.text(12))
+                            .foregroundStyle(EduFlowPalette.inkDim(scheme))
+                            .lineLimit(1)
+                    }
+                }
+                .frame(minWidth: 150, idealWidth: 210, maxWidth: 260, alignment: .trailing)
             }
             .padding(.vertical, 12)
             .padding(.horizontal, 14)
