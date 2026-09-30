@@ -9,6 +9,8 @@ public struct SettingsView: View {
     @State private var vm: SettingsViewModel
     @State private var accent = Accent.stored
     @State private var topBarOrder: [TopBarSection] = TopBarConfig.visible
+    @State private var languageSelection: String? = AppLanguage.override
+    @State private var languageRows = SettingsView.languageRows()
     @AppStorage("de.eduflow.developerOptionsEnabledV1") private var developerOptionsEnabled = false
     private let onSessionExpired: () -> Void
     private let onDevices: () -> Void
@@ -42,6 +44,7 @@ public struct SettingsView: View {
                     homeworkSection
                     overviewSection
                     appearanceSection
+                    languageSection
                     serverSection
                     developerSection
                     if let error = vm.error {
@@ -61,6 +64,7 @@ public struct SettingsView: View {
         }
         .background(EduFlowPalette.canvas(scheme))
         .navigationTitle(NSLocalizedString("settings_nav", value: "Settings", comment: "Einstellungen: Titel"))
+        .environment(\.locale, Locale(identifier: languageSelection ?? AppLanguage.current))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
     }
 
@@ -258,6 +262,104 @@ public struct SettingsView: View {
                 .padding(.vertical, 4)
             }
         }
+    }
+
+    /// Sprache wählen. Zeile mit Auswahlmenü (System + alle Katalog-
+    /// Sprachen); darunter je Sprache der live aus dem Bundle gelesene
+    /// Übersetzungsstand als Prozentzahl plus Balken.
+    private var languageSection: some View {
+        UberCard {
+            VStack(alignment: .leading, spacing: 10) {
+                Text(NSLocalizedString("settings_language_title", value: "Language", comment: "Einstellungen: Sprache Titel"))
+                    .font(UberFont.text(19, weight: .heavy))
+                    .tracking(-0.4)
+                Text(NSLocalizedString("settings_language_desc", value: "Applies immediately. The percentage shows how much of the app is already translated in that language.", comment: "Einstellungen: Sprache Beschreibung"))
+                    .font(UberFont.text(13))
+                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                    .lineSpacing(2)
+                Picker("", selection: Binding(get: { languageSelection }, set: { languageSelection = $0 })) {
+                    Text(NSLocalizedString("settings_language_system", value: "System language", comment: "Einstellungen: Systemsprache"))
+                        .tag(String?.none)
+                    ForEach(languageRows, id: \.code) { row in
+                        Text("\(row.name) — \(row.percent) %")
+                            .tag(String?.some(row.code))
+                    }
+                }
+                .labelsHidden()
+                .pickerStyle(.menu)
+                .font(UberFont.text(14, weight: .semibold))
+                .tint(accent.resolved(scheme))
+                .onChange(of: languageSelection) { _, newValue in
+                    // Sofort anwenden (Bundle-Überlagerung + Notification,
+                    // kein Neustart nötig).
+                    AppLanguage.set(newValue)
+                }
+                // Übersetzungsstand aus dem Bundle lesen: neue Crowdin-
+                // Sprachen erscheinen damit automatisch.
+                ForEach(languageRows, id: \.code) { row in
+                    coverageRow(row)
+                }
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .appLanguageDidChange)) { _ in
+            languageRows = Self.languageRows()
+        }
+    }
+
+    private struct LanguageRow: Identifiable {
+        let code: String
+        let name: String
+        let percent: Int
+        let translated: Int
+        let total: Int
+        var id: String { code }
+    }
+
+    /// Katalog-Sprachen mit Eigenname und Übersetzungsstand, nach Eigenname
+    /// sortiert (Sprache + System stehen im Menü darüber).
+    private static func languageRows() -> [LanguageRow] {
+        AppLocalizations.coverage()
+            .map {
+                LanguageRow(
+                    code: $0.code,
+                    name: AppLanguage.nativeName($0.code),
+                    percent: $0.percent,
+                    translated: $0.translated,
+                    total: $0.total
+                )
+            }
+            .sorted {
+                $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
+            }
+    }
+
+    private func coverageRow(_ row: LanguageRow) -> some View {
+        let isActive = languageSelection == row.code
+        return HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 3) {
+                HStack(spacing: 6) {
+                    Text(row.name)
+                        .font(UberFont.text(14, weight: .semibold))
+                    if isActive {
+                        Tag(NSLocalizedString("settings_language_active", value: "Active", comment: "Einstellungen: Sprache aktiv"), style: .solid)
+                    }
+                }
+                Text(String(
+                    format: NSLocalizedString("settings_language_progress", value: "%d of %d texts translated", comment: "Einstellungen: Sprache Fortschritt"),
+                    row.translated,
+                    row.total
+                ))
+                .font(UberFont.text(12))
+                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+            }
+            Spacer()
+            Text("\(row.percent) %")
+                .font(UberFont.text(14, weight: .heavy))
+                .foregroundStyle(row.percent >= 90 ? EduFlowPalette.green : EduFlowPalette.ink(scheme))
+        }
+        .padding(.vertical, 2)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(row.name)
     }
 
     private var serverSection: some View {

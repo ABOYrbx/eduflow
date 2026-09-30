@@ -147,6 +147,28 @@ struct OnboardingTests {
         }
     }
 
+    @Test("Coverage liest echte Bundle-Sprachen mit Prozentzahl")
+    func coverageFromBundle() {
+        let rows = AppLocalizations.coverage()
+        #expect(!rows.isEmpty)
+        for row in rows {
+            #expect(row.percent >= 0 && row.percent <= 100)
+            #expect(row.total > 0)
+            #expect(row.translated <= row.total)
+            // Prozent = gerundeter Anteil der übersetzten Texte.
+            #expect(row.percent == Int((Double(row.translated) / Double(row.total) * 100).rounded()))
+        }
+        // Quelle (Englisch) ist immer vollständig.
+        if let english = rows.first(where: { $0.code == "en" }) {
+            #expect(english.percent == 100)
+        }
+        // Katalog-Sprachen haben lesbare Tabellen und einen Eigennamen.
+        #expect(!AppLocalizations.availableCodes().isEmpty)
+        for code in AppLocalizations.availableCodes() {
+            #expect(!AppLanguage.nativeName(code).isEmpty)
+        }
+    }
+
     @Test("Health-Abfrage liefert Version gegen Stub")
     func healthCheckOk() async throws {
         MockURLProtocol.handler = { request in
