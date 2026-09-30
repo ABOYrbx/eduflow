@@ -51,10 +51,10 @@
     <!-- Onboarding -->
     <string name="onboarding_greeting">¡Hola!</string>
     <string name="onboarding_language_title">Elegir idioma</string>
-    <string name="onboarding_language_search">Search language</string>
-    <string name="onboarding_language_no_results">No language found</string>
-    <string name="onboarding_language_system_short">SYSTEM</string>
-    <string name="onboarding_language_system_format">System language: %1$s</string>
+    <string name="onboarding_language_search">Buscar idioma</string>
+    <string name="onboarding_language_no_results">No se encontró ningún idioma</string>
+    <string name="onboarding_language_system_short">SISTEMA</string>
+    <string name="onboarding_language_system_format">Idioma del sistema: %1$s</string>
     <string name="onboarding_language_sub">EduFlow habla su idioma. La selección se aplica inmediatamente.</string>
     <string name="onboarding_language_apply_restart">Aplicar &amp; reiniciar</string>
     <string name="onboarding_language_system">Sistema</string>
@@ -67,6 +67,7 @@
     <string name="onboarding_feat3_title">Tiempo &amp; Tiempo</string>
     <string name="onboarding_feat3_desc">Día y semana más clima en la vista general.</string>
     <string name="onboarding_server_sub">Introduzca donde EduFlow se ejecuta como servidor.</string>
+    <string name="onboarding_server_hint">Solo la dirección IP — el puerto y la ruta se añaden automáticamente.</string>
     <string name="onboarding_connected">Conectado</string>
     <string name="onboarding_unreachable">Servidor inaccesible. Comprueba la dirección e inténtalo de nuevo.</string>
     <string name="onboarding_test_connected">✓ Conectado</string>
@@ -99,17 +100,17 @@
     <string name="settings_theme_system">Sistema</string>
     <string name="settings_theme_system_sub">Sigue la luz/oscura del dispositivo</string>
     <string name="settings_accent">Color de acento</string>
-    <string name="settings_language">Language</string>
-    <string name="settings_language_system">System language</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_language_system">Idioma del sistema</string>
     <string name="settings_notifications">Notificaciones</string>
     <string name="settings_notify_news">Nuevos mensajes</string>
     <string name="settings_overview_tasks">Resumen &amp; tareas</string>
     <string name="settings_landing_label">Página de inicio después de iniciar sesión</string>
     <string name="settings_hwfilter_label">Tareas: filtro por defecto</string>
     <string name="settings_hwtests_label">Incluye exámenes y exámenes</string>
-    <string name="settings_time_format_label">Clock format</string>
-    <string name="settings_time_24h">24-hour</string>
-    <string name="settings_time_12h">12-hour</string>
+    <string name="settings_time_format_label">Formato de hora</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
     <string name="settings_unread_placeholder">Max. mensajes no leídos (1–50)</string>
     <string name="settings_homework_placeholder">Trabajo máximo abierto (1–50)</string>
     <string name="settings_navbar_section">Barra de navegación</string>
@@ -217,12 +218,12 @@
     <string name="messages_compose_send">Enviar</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
          label() stays the German context-free fallback for tests. -->
-    <string name="message_type_all">All</string>
-    <string name="message_type_sprava">Message</string>
-    <string name="message_type_news">News</string>
-    <string name="message_type_anketa">Poll</string>
+    <string name="message_type_all">Todos</string>
+    <string name="message_type_sprava">Mensaje</string>
+    <string name="message_type_news">Noticias</string>
+    <string name="message_type_anketa">Encuesta</string>
     <string name="message_type_chat">Chat</string>
-    <string name="message_type_genotif">Notice</string>
+    <string name="message_type_genotif">Aviso</string>
     <!-- Overview -->
     <string name="overview_customize">Personalizar resumen</string>
     <string name="overview_customize_desc">Elija qué secciones aparecen primero.</string>
