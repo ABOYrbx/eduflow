@@ -75610,6 +75610,91 @@
           }
         }
       }
+    },
+    "settings_language_title": {
+      "comment": "Einstellungen: Sprache Titel",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Language"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sprache"
+          }
+        }
+      }
+    },
+    "settings_language_desc": {
+      "comment": "Einstellungen: Sprache Beschreibung",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Applies immediately. The percentage shows how much of the app is already translated in that language."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wirkt sofort. Die Prozentzahl zeigt, wie viel der App in dieser Sprache schon übersetzt ist."
+          }
+        }
+      }
+    },
+    "settings_language_system": {
+      "comment": "Einstellungen: Systemsprache",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System language"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Systemsprache"
+          }
+        }
+      }
+    },
+    "settings_language_active": {
+      "comment": "Einstellungen: Sprache aktiv",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Active"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aktiv"
+          }
+        }
+      }
+    },
+    "settings_language_progress": {
+      "comment": "Einstellungen: Sprache Fortschritt",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d of %d texts translated"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d von %d Texten übersetzt"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
