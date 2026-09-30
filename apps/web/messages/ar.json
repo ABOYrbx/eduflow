@@ -102,7 +102,7 @@
     "trashEmpty": "The trash is empty.",
     "trashLabel": "بابييركورب",
     "trashWithCount": "سلة المهملات ({count})",
-    "dueToday": "الواجب اليوم"
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "العودة إلى تسجيل الدخول",

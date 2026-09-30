@@ -102,7 +102,7 @@
     "trashEmpty": "Papirkurven er tom.",
     "trashLabel": "Papirkurv",
     "trashWithCount": "Papirkurv ({count})",
-    "dueToday": "forfaller i dag"
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "Tilbake til innlogging",

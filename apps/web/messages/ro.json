@@ -102,7 +102,7 @@
     "trashEmpty": "Gunoiul este gol.",
     "trashLabel": "Gunoi",
     "trashWithCount": "Gunoi ({count})",
-    "dueToday": "scadent astăzi"
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "Înapoi la Autentificare",

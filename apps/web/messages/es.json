@@ -102,7 +102,7 @@
     "trashEmpty": "La papelera está vacía.",
     "trashLabel": "Basura",
     "trashWithCount": "Basura ({count})",
-    "dueToday": "vence hoy"
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "Volver a Login",

@@ -102,7 +102,7 @@
     "trashEmpty": "ごみ箱は空です。",
     "trashLabel": "ごみ箱に入れる",
     "trashWithCount": "ごみ箱（{count}）",
-    "dueToday": "今日までに"
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "ログインに戻る",

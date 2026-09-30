@@ -102,7 +102,7 @@
     "trashEmpty": "Корзина пуста.",
     "trashLabel": "Корзина",
     "trashWithCount": "Корзина ({count})",
-    "dueToday": "срок до сегодняшнего дня"
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "Вернуться к входу",

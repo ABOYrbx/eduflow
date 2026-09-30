@@ -102,7 +102,7 @@
     "trashEmpty": "Koš je prázdný.",
     "trashLabel": "Koš",
     "trashWithCount": "Koš ({count})",
-    "dueToday": "termín dnes"
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "Zpět na přihlášení",

@@ -102,7 +102,7 @@
     "trashEmpty": "Kosz jest pusty.",
     "trashLabel": "Kosz",
     "trashWithCount": "Kosz ({count})",
-    "dueToday": "zaplanowane dzisiaj"
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "Powrót do logowania",

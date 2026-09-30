@@ -102,7 +102,7 @@
     "trashEmpty": "Papperskorgen är tom.",
     "trashLabel": "Papperskorg",
     "trashWithCount": "Papperskorg ({count})",
-    "dueToday": "förfaller idag"
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "Tillbaka till inloggning",

@@ -102,7 +102,7 @@
     "trashEmpty": "O lixo está vazio.",
     "trashLabel": "Descartar",
     "trashWithCount": "Lixeira ({count})",
-    "dueToday": "expira hoje"
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "Voltar ao Login",
