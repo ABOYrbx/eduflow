@@ -9,6 +9,8 @@ public struct MessagesView: View {
     @State private var vm: MessagesViewModel
     /// Nur die Eingabe; das Suchfeld selbst ist ein `NSSearchField`.
     @State private var searchText = ""
+    /// Absender-Auswahl aufgeklappt.
+    @State private var senderMenuOpen = false
     private let onThread: (MessageHeader) -> Void
     private let onCompose: () -> Void
     private let onSessionExpired: () -> Void
@@ -113,69 +115,117 @@ public struct MessagesView: View {
         }
     }
 
-    /// Absender einschränken: eigene Pille, die den Absender der aktuell
-    /// geladenen Nachrichten als Auswahl anbietet.
+    /// Absender einschränken. Eigene Pille mit eigenem Popover — bewusst
+    /// kein `Menu`: dessen Label setzt die Schrift selbst und wird im Dark
+    /// Mode schwarz. Die Auswahl hier nutzt dieselben Farben wie die Seite.
     private var senderFilter: some View {
-        Menu {
-            Button(NSLocalizedString("messages_sender_all", value: "All senders", comment: "Nachrichten: alle Absender")) {
-                vm.sender = ""
-                Task { await vm.load(onSessionExpired: onSessionExpired) }
-            }
-            ForEach(vm.senders, id: \.self) { sender in
-                Button(sender) {
-                    vm.sender = sender
-                    Task { await vm.load(onSessionExpired: onSessionExpired) }
-                }
-            }
-        } label: {
+        Button { senderMenuOpen = true } label: {
             HStack(spacing: 6) {
                 Image(systemName: "person")
                     .font(.system(size: 12, weight: .semibold))
-                Text(vm.sender.isEmpty
-                    ? NSLocalizedString("messages_sender_all", value: "All senders", comment: "Nachrichten: alle Absender")
-                    : vm.sender)
+                Text(senderLabel)
                     .lineLimit(1)
                 Image(systemName: "chevron.down")
                     .font(.system(size: 9, weight: .bold))
             }
             .font(UberFont.text(13, weight: .semibold))
-            .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+            .foregroundStyle(vm.sender.isEmpty ? EduFlowPalette.inkMuted(scheme) : accent.resolvedInk(scheme))
             .padding(.vertical, 7)
             .padding(.horizontal, 12)
-            .background(EduFlowPalette.surface2(scheme))
+            .background(vm.sender.isEmpty ? EduFlowPalette.surface2(scheme) : accent.resolved(scheme))
             .clipShape(.capsule)
             .overlay {
-                Capsule().stroke(EduFlowPalette.border(scheme), lineWidth: 1)
+                Capsule().stroke(vm.sender.isEmpty ? EduFlowPalette.border(scheme) : .clear, lineWidth: 1)
             }
         }
-        .menuStyle(.borderlessButton)
-        .menuIndicator(.hidden)
+        .buttonStyle(.plain)
         .fixedSize()
         .help(NSLocalizedString("messages_sender_filter", value: "Filter by sender", comment: "Nachrichten: Absenderfilter"))
+        .popover(isPresented: $senderMenuOpen, arrowEdge: .bottom) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(NSLocalizedString("messages_sender_filter", value: "Filter by sender", comment: "Nachrichten: Absenderfilter"))
+                    .font(UberFont.text(12, weight: .bold))
+                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                    .padding(.bottom, 2)
+                senderOption("", NSLocalizedString("messages_sender_all", value: "All senders", comment: "Nachrichten: alle Absender"))
+                ForEach(vm.senders, id: \.self) { sender in
+                    senderOption(sender, sender)
+                }
+                if vm.senders.isEmpty {
+                    Text(NSLocalizedString("messages_sender_none", value: "No sender loaded yet.", comment: "Nachrichten: keine Absender"))
+                        .font(UberFont.text(12))
+                        .foregroundStyle(EduFlowPalette.inkDim(scheme))
+                }
+            }
+            .padding(12)
+            .frame(width: 220, alignment: .leading)
+            .background(EduFlowPalette.card(scheme))
+        }
+    }
+
+    private var senderLabel: String {
+        vm.sender.isEmpty
+            ? NSLocalizedString("messages_sender_all", value: "All senders", comment: "Nachrichten: alle Absender")
+            : vm.sender
+    }
+
+    private func senderOption(_ value: String, _ title: String) -> some View {
+        let selected = vm.sender == value
+        return Button {
+            vm.sender = value
+            senderMenuOpen = false
+            Task { await vm.load(onSessionExpired: onSessionExpired) }
+        } label: {
+            HStack(spacing: 8) {
+                Image(systemName: selected ? "checkmark" : "person")
+                    .font(.system(size: 11, weight: .bold))
+                    .frame(width: 14)
+                Text(title)
+                    .font(UberFont.text(13, weight: .semibold))
+                    .lineLimit(1)
+                Spacer(minLength: 0)
+            }
+            .foregroundStyle(selected ? accent.resolvedInk(scheme) : EduFlowPalette.ink(scheme))
+            .padding(.vertical, 6)
+            .padding(.horizontal, 9)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(selected ? accent.resolved(scheme) : Color.clear)
+            .clipShape(.capsule)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(title)
     }
 
     private var typePills: some View {
         HStack(spacing: 4) {
             ForEach(MessageTypes.all, id: \.self) { type in
+                let selected = vm.type == type
                 Button {
                     vm.type = type
                     Task { await vm.load(onSessionExpired: onSessionExpired) }
                 } label: {
                     Text(MessageTypes.label(type))
                         .font(UberFont.text(12, weight: .semibold))
-                        .foregroundStyle(vm.type == type ? Color.white : EduFlowPalette.inkMuted(scheme))
+                        // Auf der ausgewählten Pille die zur Akzentfarbe
+                        // passende Schrift (bei schwarzem Akzent im Dark Mode
+                        // dunkel auf hellem Grund), sonst die gedämpfte Tinte.
+                        .foregroundStyle(selected ? accent.resolvedInk(scheme) : EduFlowPalette.inkMuted(scheme))
                         .padding(.vertical, 5)
                         .padding(.horizontal, 10)
-                        .background(vm.type == type ? accent.resolved(scheme) : Color.clear)
+                        .background(selected ? accent.resolved(scheme) : Color.clear)
                         .clipShape(.capsule)
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(MessageTypes.label(type))
+                .accessibilityAddTraits(selected ? [.isSelected] : [])
             }
         }
         .padding(.vertical, 2)
         .padding(.horizontal, 4)
         .background(EduFlowPalette.surface2(scheme))
+        .overlay {
+            Capsule().stroke(EduFlowPalette.border(scheme), lineWidth: 1)
+        }
         .clipShape(.capsule)
     }
 
