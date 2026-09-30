@@ -41,9 +41,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Dns
+import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Checklist
+import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -65,6 +69,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -539,9 +544,10 @@ private fun FeaturesPage(onNext: () -> Unit) {
                 modifier = Modifier.padding(top = 12.dp).riseIn(index = 2),
             )
             Column(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 22.dp)) {
-                FeatureRow(stringResource(R.string.onboarding_feat1_title), stringResource(R.string.onboarding_feat1_desc), 3)
-                FeatureRow(stringResource(R.string.onboarding_feat2_title), stringResource(R.string.onboarding_feat2_desc), 4)
-                FeatureRow(stringResource(R.string.onboarding_feat3_title), stringResource(R.string.onboarding_feat3_desc), 6)
+                // Icons wie in der Navigation zum jeweiligen Bereich.
+                FeatureRow(Icons.Filled.MailOutline, stringResource(R.string.onboarding_feat1_title), stringResource(R.string.onboarding_feat1_desc), 3)
+                FeatureRow(Icons.Filled.Checklist, stringResource(R.string.onboarding_feat2_title), stringResource(R.string.onboarding_feat2_desc), 4)
+                FeatureRow(Icons.Filled.CalendarMonth, stringResource(R.string.onboarding_feat3_title), stringResource(R.string.onboarding_feat3_desc), 6)
             }
             Spacer(Modifier.weight(1f))
             PrimaryButton(text = stringResource(R.string.common_next), onClick = onNext, modifier = Modifier.riseIn(index = 7))
@@ -550,17 +556,32 @@ private fun FeaturesPage(onNext: () -> Unit) {
 }
 
 /**
- * Karte einer Faehigkeit. Ohne Icon: die schwarzen Kreise mit
- * hartcodierten Unicode-Glyphen ("✉", "☷", "▦") passten nicht zum
- * Rest der Oberflaeche und waren zudem Hartcodings im Code.
+ * Karte einer Faehigkeit mit Icon-Kreis. Das Icon kommt aus
+ * material-icons-extended und ist dasselbe wie in der Navigation zum
+ * passenden Bereich — vorher standen hier hartcodierte Unicode-Glyphen
+ * ("✉", "☷", "▦"), die wie fremde Textzeichen aussahen statt wie Icons.
  */
 @Composable
-private fun FeatureRow(title: String, description: String, delayIndex: Int) {
+private fun FeatureRow(icon: ImageVector, title: String, description: String, delayIndex: Int) {
     val scheme = MaterialTheme.colorScheme
     EduCard(modifier = Modifier.fillMaxWidth().riseIn(index = delayIndex)) {
-        Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-            Text(title, fontSize = 15.sp, fontWeight = FontWeight.Black, letterSpacing = (-0.2).sp, color = scheme.onSurface)
-            Text(description, fontSize = 13.sp, lineHeight = 18.sp, color = scheme.onSurfaceVariant)
+        Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+            Surface(shape = CircleShape, color = scheme.primary, modifier = Modifier.size(40.dp)) {
+                Box(contentAlignment = Alignment.Center) {
+                    // Dekorativ: der Titel steht direkt daneben, eine
+                    // contentDescription wuerde nur doppelt vorlesen.
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = scheme.onPrimary,
+                        modifier = Modifier.size(20.dp),
+                    )
+                }
+            }
+            Column(Modifier.padding(start = 14.dp).weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                Text(title, fontSize = 15.sp, fontWeight = FontWeight.Black, letterSpacing = (-0.2).sp, color = scheme.onSurface)
+                Text(description, fontSize = 13.sp, lineHeight = 18.sp, color = scheme.onSurfaceVariant)
+            }
         }
     }
 }
