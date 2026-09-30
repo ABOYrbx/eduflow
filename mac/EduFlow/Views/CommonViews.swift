@@ -77,7 +77,8 @@ public struct LanguageSwitcher: View {
         .onChange(of: refreshToken) { _, _ in reload() }
     }
 
-    /// Kompakter Kopf: Titel, aktive Sprache und erklärender Text.
+    /// Kompakter Kopf: Titel und erklärender Text. Die aktive Sprache steht
+    /// nicht extra daneben — sie ist unten in ihrer eigenen Zeile markiert.
     private var header: some View {
         VStack(alignment: .leading, spacing: 3) {
             HStack(spacing: 8) {
@@ -87,23 +88,12 @@ public struct LanguageSwitcher: View {
                 Text(NSLocalizedString("language_title", value: "Language", comment: "Sprachwahl: Titel"))
                     .font(UberFont.text(15, weight: .heavy))
                     .tracking(-0.2)
-                Spacer()
-                Text(verbatim: currentLabel)
-                    .font(UberFont.text(12, weight: .bold))
-                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
             }
             Text(NSLocalizedString("language_hint", value: "Takes effect right away. The percentage shows how much is translated.", comment: "Sprachwahl: Hinweis"))
                 .font(UberFont.text(12))
                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 .lineSpacing(2)
         }
-    }
-
-    private var currentLabel: String {
-        if let selection {
-            return AppLanguage.nativeName(selection)
-        }
-        return NSLocalizedString("language_system", value: "System language", comment: "Sprachwahl: Systemsprache")
     }
 
     /// Systemsprache plus gefilterte Sprachen, jede Zeile eine Pille.
