@@ -59,6 +59,24 @@ class OnboardingLocaleTest {
     }
 
     @Test
+    fun greetingEntries_keepsCodeAndDropsDuplicateTexts() {
+        // Zwei Sprachen mit identischer Begrüßung fallen zusammen (erster
+        // Code gewinnt), sonst erschiene derselbe Text mehrfach im Zyklus.
+        val greetings = mapOf("de" to "Hallo!", "en" to "Hello!", "nl" to "Hallo!", "fr" to "")
+        val entries = AppLocale.greetingEntries(listOf("de", "en", "nl", "fr")) { greetings.getValue(it) }
+        assertEquals(listOf("de" to "Hallo!", "en" to "Hello!"), entries)
+        assertEquals(emptyList<Pair<String, String>>(), AppLocale.greetingEntries(emptyList()) { "" })
+    }
+
+    @Test
+    fun greeting_entries_coverEveryLanguageWithText() {
+        // Jede Sprache mit nicht leerem Text kommt genau einmal vor.
+        val codes = listOf("de", "en", "fr")
+        val entries = AppLocale.greetingEntries(codes) { "Hi $it" }
+        assertEquals(codes, entries.map { it.first })
+    }
+
+    @Test
     fun coverage_defaultsUnknownToZero() {
         val unknown = AppLocale.coverageFor("xx")
         assertEquals(0, unknown.percent)

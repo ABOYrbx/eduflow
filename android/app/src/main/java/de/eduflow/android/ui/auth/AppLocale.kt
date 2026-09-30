@@ -3,6 +3,7 @@ package de.eduflow.android.ui.auth
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
+import androidx.annotation.StringRes
 import de.eduflow.android.R
 import java.util.Locale
 
@@ -61,17 +62,40 @@ object AppLocale {
     fun nativeName(code: String): String =
         Locale(code).getDisplayLanguage(Locale(code)).replaceFirstChar { it.uppercase() }
 
-    /** Begrüßung in der Sprache (Fallback: aktuelle Ressourcen). */
-    fun greetingFor(code: String, context: Context): String {
-        if (code == "en") {
-            return context.getString(R.string.onboarding_greeting)
+    /**
+     * Text einer Ressource in einer anderen Sprache (Fallback: aktuelle
+     * Ressourcen, also die App-Sprache). Wird für die Begrüßung und den
+     * Weiter-Knopf im Onboarding benutzt, damit beides dieselbe Sprache zeigt.
+     */
+    fun stringFor(code: String, @StringRes res: Int, context: Context): String {
+        if (code.isBlank() || code == "en") {
+            return context.getString(res)
         }
         return runCatching {
             val conf = Configuration(context.resources.configuration)
             conf.setLocale(Locale(code))
-            context.createConfigurationContext(conf)
-                .getString(R.string.onboarding_greeting)
-        }.getOrDefault(context.getString(R.string.onboarding_greeting))
+            context.createConfigurationContext(conf).getString(res)
+        }.getOrDefault(context.getString(res))
+    }
+
+    /** Begrüßung in der Sprache (Fallback: aktuelle Ressourcen). */
+    fun greetingFor(code: String, context: Context): String =
+        stringFor(code, R.string.onboarding_greeting, context)
+
+    /**
+     * Sprachcode + Begrüßung als Paare. Sprachen mit identischem Text fallen
+     * zusammen (der erste Code gewinnt) — sonst würde dieselbe Begrüßung
+     * mehrfach im Zyklus erscheinen. Reine Logik, damit testbar.
+     */
+    fun greetingEntries(
+        codes: List<String>,
+        greetingOf: (String) -> String,
+    ): List<Pair<String, String>> {
+        val seen = mutableSetOf<String>()
+        return codes.mapNotNull { code ->
+            val text = greetingOf(code)
+            if (text.isBlank() || !seen.add(text)) null else code to text
+        }
     }
 
     /**

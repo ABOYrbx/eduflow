@@ -135,8 +135,12 @@ private fun WelcomePage(onNext: () -> Unit) {
     val density = LocalDensity.current
     val context = androidx.compose.ui.platform.LocalContext.current
     val greetings = remember {
-        AppLocale.availableLocales(context).map { AppLocale.greetingFor(it, context) }.distinct()
+        AppLocale.greetingEntries(AppLocale.availableLocales(context)) {
+            AppLocale.greetingFor(it, context)
+        }
     }
+    // Sprache der aktuell gezeigten Begrüßung — der Weiter-Knopf spricht sie.
+    var buttonLocale by remember { mutableStateOf("") }
     var showButton by remember { mutableStateOf(reducedMotion) }
     LaunchedEffect(reducedMotion) {
         if (reducedMotion) showButton = true else {
@@ -149,7 +153,7 @@ private fun WelcomePage(onNext: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(Modifier.weight(1f))
-        HelloGreeting(greetings)
+        HelloGreeting(greetings) { buttonLocale = it }
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier.fillMaxWidth().height(280.dp).padding(top = 8.dp).riseIn(index = 10),
@@ -172,7 +176,10 @@ private fun WelcomePage(onNext: () -> Unit) {
                     androidx.compose.animation.scaleIn(spring(dampingRatio = 0.55f, stiffness = 260f), initialScale = 0.985f),
             modifier = Modifier.fillMaxWidth(),
         ) {
-            PrimaryButton(text = stringResource(R.string.common_next), onClick = onNext)
+            PrimaryButton(
+                text = AppLocale.stringFor(buttonLocale, R.string.common_next, context),
+                onClick = onNext,
+            )
         }
     }
 }
@@ -284,16 +291,24 @@ private fun LanguagePage(onNext: () -> Unit) {
 }
 
 @Composable
-private fun HelloGreeting(greetings: List<String> = emptyList()) {
+private fun HelloGreeting(
+    entries: List<Pair<String, String>> = emptyList(),
+    onLanguage: (String) -> Unit = {},
+) {
     val reduced = LocalReducedMotion.current
-    val scheme = MaterialTheme.colorScheme
     val fallback = stringResource(R.string.onboarding_greeting)
-    val list = remember(greetings) { greetings.ifEmpty { listOf(fallback) }.distinct() }
+    val list = remember(entries) {
+        if (entries.isEmpty()) listOf("" to fallback) else entries
+    }
     var order by remember(list) { mutableStateOf(AppLocale.shuffledCycle(list.size, null)) }
     var position by remember(list) { mutableIntStateOf(0) }
     val scope = rememberCoroutineScope()
+    val shown = list[order[position % order.size]]
+    // Sprache der gerade gezeigten Begrüßung melden, damit der Weiter-Knopf
+    // auf derselben Seite mitwechselt. Leer = App-Sprache (Fallback).
+    LaunchedEffect(shown.first) { onLanguage(shown.first) }
     key(order, position) {
-        GreetingText(text = list[order[position % order.size]]) {
+        GreetingText(text = shown.second) {
             scope.launch {
                 delay(2_000)
                 val next = position + 1
