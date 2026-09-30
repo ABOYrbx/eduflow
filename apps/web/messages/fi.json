@@ -95,7 +95,7 @@
     "trashEmpty": "Roskakori on tyhjä.",
     "trashLabel": "Roskaa",
     "trashWithCount": "Roskakori ({count})",
-    "dueToday": "due today"
+    "dueToday": "erääntyy tänään"
   },
   "login": {
     "backToLogin": "Takaisin kirjautumiseen",

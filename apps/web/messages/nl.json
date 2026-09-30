@@ -95,7 +95,7 @@
     "trashEmpty": "De prullenbak is leeg.",
     "trashLabel": "Prullenbak",
     "trashWithCount": "Prullenbak ({count})",
-    "dueToday": "due today"
+    "dueToday": "verschuldigd vandaag"
   },
   "login": {
     "backToLogin": "Terug naar inloggen",

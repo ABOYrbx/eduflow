@@ -95,7 +95,7 @@
     "trashEmpty": "Il cestino è vuoto.",
     "trashLabel": "Cestino",
     "trashWithCount": "Cestino ({count})",
-    "dueToday": "due today"
+    "dueToday": "scaduto oggi"
   },
   "login": {
     "backToLogin": "Torna al login",

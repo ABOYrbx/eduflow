@@ -95,7 +95,7 @@
     "trashEmpty": "Der Papierkorb ist leer.",
     "trashLabel": "Papierkorb",
     "trashWithCount": "Papierkorb ({count})",
-    "dueToday": "due today"
+    "dueToday": "heute fällig"
   },
   "login": {
     "backToLogin": "Zurück zur Anmeldung",
