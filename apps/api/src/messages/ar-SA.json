@@ -24,7 +24,9 @@
     "tokenNotFound": "الرمز المميز غير موجود.",
     "tokenRejected": "رمز غير صالح.",
     "twoFactorDemo": "أدخل الرمز التجريبي 123456.",
-    "twoFactorMessage": "أدخل رمز عاملين من البريد الإلكتروني أو التطبيق وأرسله إلى /auth/2f."
+    "twoFactorMessage": "أدخل رمز عاملين من البريد الإلكتروني أو التطبيق وأرسله إلى /auth/2f.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "طلب غير صالح.",
@@ -64,7 +66,8 @@
     "trashHomework": "نقل الواجبات المنزلية إلى سلة المهملات أو الاستعادة",
     "validationDescription": "خطأ في التحقق",
     "weather": "Weather",
-    "weatherSearch": "البحث عن موقع الطقس"
+    "weatherSearch": "البحث عن موقع الطقس",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "إحداثيات سيئة",
@@ -103,6 +106,8 @@
     "hwStatusLabel": "الواجبات المنزلية: الفلتر القياسي",
     "hwTestsLabel": "الواجبات المنزلية: تشمل الاختبارات والامتحانات بشكل افتراضي",
     "landingLabel": "Startseite nach Anmeldung",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "كل",
     "optDashboard": "الرسائل",
     "optDone": "تم فقط",
@@ -118,7 +123,12 @@
     "ovWetterHint": "ينطبق على واجهة الويب وتطبيق الأندرويد.",
     "ovWetterLabel": "إظهار خريطة الطقس على النظرة العامة",
     "sectionUebersicht": "Übersicht",
-    "sectionWetter": "Wetter"
+    "sectionWetter": "Wetter",
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor.",
+    "ovSpanLabel": "Section widths",
+    "ovSpanHint": "Sections you set to half width sit next to each other."
   },
   "upstream": {
     "agendaFailed": "لا يمكن تحميل الأحداث المدرسية: {detail}",
