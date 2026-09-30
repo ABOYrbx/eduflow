@@ -67,6 +67,7 @@
     <string name="onboarding_feat3_title">Stundenplan &amp; Wetter</string>
     <string name="onboarding_feat3_desc">Tag und Woche plus Wetter auf der Übersicht.</string>
     <string name="onboarding_server_sub">Geben Sie ein, wo EduFlow als Server läuft.</string>
+    <string name="onboarding_server_hint">IP alone uses port %1$d. Add :port for another one — the demo server is %2$d.</string>
     <string name="onboarding_connected">Verbunden</string>
     <string name="onboarding_unreachable">Server nicht erreichbar. Prüfen Sie die Adresse und versuchen Sie es erneut.</string>
     <string name="onboarding_test_connected">✓ Verbunden</string>
