@@ -158,7 +158,7 @@
     "invalidDate": "Data non valida (AAAA-MM-GG prevista).",
     "json": "Richiesta non valida (JSON previsto).",
     "jsonObject": "Richiesta non valida (attesa oggetto JSON).",
-    "limitRange": "Limit muss zwischen 1 und 200 liegen.",
+    "limitRange": "Limit must be between 1 and {max}.",
     "negativeOffset": "Lo spostamento non deve essere negativo.",
     "pagination": "Limite e offset devono essere interi.",
     "status": "Stato non valido.",
