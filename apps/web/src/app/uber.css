@@ -807,7 +807,15 @@ body.wx-open{overflow:hidden}
   .ov-top > *{flex:1 1 100%;min-width:0}
   .now-card.now-right{margin-left:0}
   .weather-card{min-height:136px;padding:12px}
-  .wx-summary{flex-basis:62px;padding-right:8px}
+  /* Schmale Karte: der Titelbereich (61px) und sein senkrechter Strich
+     nahmen so viel Platz, dass fuer die drei Tage nur 56px blieben, also
+     16px je Tag - der Text wurde weggeklippt und der Strich lief durch
+     die ganze Hoehe. Darum unter 720px uebereinander: Titel und Stadt in
+     einer Zeile, der Strich wird zu einer Unterkante, die Tage bekommen
+     den vollen Breitenrest. */
+  .weather-card{flex-direction:column;gap:8px}
+  .wx-summary{flex:0 0 auto;flex-direction:row;align-items:baseline;gap:8px;border-right:0;border-bottom:1px solid var(--border);padding-right:0;padding-bottom:6px}
+  .wx-forecast{flex:0 0 auto}
   .wx-img{width:34px;height:34px}
   .wx-temp{font-size:19px}
   .wx-cond{font-size:10px}
