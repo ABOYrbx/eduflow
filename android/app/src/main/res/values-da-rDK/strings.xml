@@ -51,10 +51,10 @@
     <!-- Onboarding -->
     <string name="onboarding_greeting">Hej!</string>
     <string name="onboarding_language_title">Vælg sprog</string>
-    <string name="onboarding_language_search">Search language</string>
-    <string name="onboarding_language_no_results">No language found</string>
+    <string name="onboarding_language_search">Søg efter sprog</string>
+    <string name="onboarding_language_no_results">Intet sprog fundet</string>
     <string name="onboarding_language_system_short">SYSTEM</string>
-    <string name="onboarding_language_system_format">System language: %1$s</string>
+    <string name="onboarding_language_system_format">Systemsprog: %1$s</string>
     <string name="onboarding_language_sub">EduFlow taler dit sprog. Valget gælder med det samme.</string>
     <string name="onboarding_language_apply_restart">Anvend &amp; genstart</string>
     <string name="onboarding_language_system">System</string>
@@ -67,6 +67,7 @@
     <string name="onboarding_feat3_title">Tidsplan &amp; Vejr</string>
     <string name="onboarding_feat3_desc">Dag og uge plus vejr på oversigten.</string>
     <string name="onboarding_server_sub">Angiv hvor EduFlow kører som server.</string>
+    <string name="onboarding_server_hint">Kun IP-adressen — port og sti tilføjes automatisk.</string>
     <string name="onboarding_connected">Forbundet</string>
     <string name="onboarding_unreachable">Server ikke tilgængelig. Tjek adressen og prøv igen.</string>
     <string name="onboarding_test_connected">✓ Forbundet</string>
@@ -99,17 +100,17 @@
     <string name="settings_theme_system">System</string>
     <string name="settings_theme_system_sub">Følger enhed lys/mørk</string>
     <string name="settings_accent">Accent farve</string>
-    <string name="settings_language">Language</string>
-    <string name="settings_language_system">System language</string>
+    <string name="settings_language">Sprog</string>
+    <string name="settings_language_system">Systemsprog</string>
     <string name="settings_notifications">Notifikationer</string>
     <string name="settings_notify_news">Nye beskeder</string>
     <string name="settings_overview_tasks">Oversigt &amp; opgaver</string>
     <string name="settings_landing_label">Startside efter log ind</string>
     <string name="settings_hwfilter_label">Opgaver: standardfilter</string>
     <string name="settings_hwtests_label">Inkluder tests og eksamener</string>
-    <string name="settings_time_format_label">Clock format</string>
-    <string name="settings_time_24h">24-hour</string>
-    <string name="settings_time_12h">12-hour</string>
+    <string name="settings_time_format_label">Tidsformat</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
     <string name="settings_unread_placeholder">Maks. ulæste beskeder (1–50)</string>
     <string name="settings_homework_placeholder">Maks. åbne lektier (1–50)</string>
     <string name="settings_navbar_section">Navigation bar</string>
@@ -217,12 +218,12 @@
     <string name="messages_compose_send">Send</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
          label() stays the German context-free fallback for tests. -->
-    <string name="message_type_all">All</string>
-    <string name="message_type_sprava">Message</string>
-    <string name="message_type_news">News</string>
-    <string name="message_type_anketa">Poll</string>
+    <string name="message_type_all">Alle</string>
+    <string name="message_type_sprava">Besked</string>
+    <string name="message_type_news">Nyheder</string>
+    <string name="message_type_anketa">Afstemning</string>
     <string name="message_type_chat">Chat</string>
-    <string name="message_type_genotif">Notice</string>
+    <string name="message_type_genotif">Meddelelse</string>
     <!-- Overview -->
     <string name="overview_customize">Tilpas oversigt</string>
     <string name="overview_customize_desc">Vælg hvilke afsnit der skal vises først.</string>
