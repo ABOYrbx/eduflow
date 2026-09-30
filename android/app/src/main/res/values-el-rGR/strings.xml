@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">EduFlow</string>
-    <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
+    <!-- Common (package 0, RedesignUi / CommonUi / BottomBar / errors) -->
     <string name="common_logo_desc">Λογότυπο του EduFlow</string>
     <string name="common_demo_badge">DEMO</string>
     <string name="common_profile_title">Το προφίλ σας</string>
@@ -51,6 +51,10 @@
     <!-- Onboarding -->
     <string name="onboarding_greeting">Γεια Σας!</string>
     <string name="onboarding_language_title">Επιλέξτε γλώσσα</string>
+    <string name="onboarding_language_search">Search language</string>
+    <string name="onboarding_language_no_results">No language found</string>
+    <string name="onboarding_language_system_short">SYSTEM</string>
+    <string name="onboarding_language_system_format">System language: %1$s</string>
     <string name="onboarding_language_sub">Το EduFlow μιλάει τη γλώσσα σας. Η επιλογή ισχύει αμέσως.</string>
     <string name="onboarding_language_apply_restart">Εφαρμογή &amp; επανεκκίνηση</string>
     <string name="onboarding_language_system">Σύστημα</string>
@@ -78,7 +82,7 @@
     <string name="twofa_confirm">Επιβεβαίωση</string>
     <string name="twofa_back">Επιστροφή στην είσοδο</string>
     <string name="twofa_validity">Ο κωδικός ισχύει για 10 λεπτά.</string>
-    <!-- Einstellungen -->
+    <!-- Settings -->
     <string name="settings_title">Ρυθμίσεις</string>
     <string name="settings_subtitle">Ο λογαριασμός σας στο EduFlow</string>
     <string name="settings_demo_text">Μόνο συνθετικά δείγματα δεδομένων φορτώνονται από τον τοπικό διακομιστή επίδειξης.</string>
@@ -95,12 +99,17 @@
     <string name="settings_theme_system">Σύστημα</string>
     <string name="settings_theme_system_sub">Ακολουθεί φως/σκοτεινή συσκευή</string>
     <string name="settings_accent">Χρώμα έμφασης</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_language_system">System language</string>
     <string name="settings_notifications">Ειδοποιήσεις</string>
     <string name="settings_notify_news">Νέα μηνύματα</string>
     <string name="settings_overview_tasks">Επισκόπηση καθηκόντων &amp;</string>
     <string name="settings_landing_label">Έναρξη σελίδας μετά την είσοδο</string>
     <string name="settings_hwfilter_label">Εργασίες: προεπιλεγμένο φίλτρο</string>
     <string name="settings_hwtests_label">Συμπεριλάβετε δοκιμές και εξετάσεις</string>
+    <string name="settings_time_format_label">Clock format</string>
+    <string name="settings_time_24h">24-hour</string>
+    <string name="settings_time_12h">12-hour</string>
     <string name="settings_unread_placeholder">Μέγιστος αριθμός μη αναγνωσμένων μηνυμάτων (1–50)</string>
     <string name="settings_homework_placeholder">Μέγιστο ανοιχτό σπίτι (1–50)</string>
     <string name="settings_navbar_section">Γραμμή πλοήγησης</string>
@@ -126,7 +135,7 @@
     <string name="settings_dev_onboarding">Εκτελέστε ξανά την επιβίβαση</string>
     <string name="settings_dev_onboarding_sub">Σας υπογράφει και επανεκκινεί την εισαγωγή.</string>
     <string name="settings_landing_overview">Επισκόπηση</string>
-    <!-- Geräte -->
+    <!-- Devices -->
     <string name="devices_title">Συσκευές</string>
     <string name="devices_subtitle">Διαχείριση συσκευών εισόδου</string>
     <string name="devices_empty">Δεν έχουν συνδεθεί άλλες συσκευές.</string>
@@ -136,7 +145,7 @@
     <string name="devices_expires_format">Λήγει: %1$s</string>
     <string name="devices_remove">Αφαίρεση</string>
     <string name="device_default_name">εξομοιωτής Android</string>
-    <!-- Noten -->
+    <!-- Grades -->
     <string name="grades_title">Βαθμοί</string>
     <string name="grades_subtitle">Η απόδοσή σας ανά θέμα</string>
     <string name="grades_search_placeholder">Θέμα, τίτλος ή δάσκαλος</string>
@@ -153,11 +162,11 @@
     <string name="grades_teacher_format">Δάσκαλος: %1$s</string>
     <string name="grades_class_avg_format">Κλάση avg. %1$s</string>
     <string name="grades_term_all">Όλα</string>
-    <!-- Halbjahr-Name: %1$d = Halbjahr (1/2), %2$s/%3$s = Kurzjahre (25/26);
-         Musterbuchstaben nicht übersetzen, nur Worte/Reihenfolge anpassen. -->
+    <!-- Semester name: %1$d = semester (1/2), %2$s/%3$s = short years (25/26);
+         pattern letters must not be translated, only words/order. -->
     <string name="grades_term_label_format">Semester %1$d %2$s/%3$s</string>
     <string name="grades_subject_other">Άλλο</string>
-    <!-- Hausaufgaben -->
+    <!-- Homework -->
     <string name="homework_title">Αρχική</string>
     <string name="homework_subtitle">Οι εργασίες σας με μια ματιά</string>
     <string name="homework_search_placeholder">Τίτλος, μάθημα ή δάσκαλος</string>
@@ -175,7 +184,7 @@
     <string name="homework_swipe_restore">Επαναφορά</string>
     <string name="homework_reopen_desc">Ξαναανοίξτε</string>
     <string name="homework_title_format">Αρχική Εργασία #%1$d</string>
-    <!-- Nachrichten -->
+    <!-- Messages -->
     <string name="messages_title">Μηνύματα</string>
     <string name="messages_subtitle">Μηνύματα από το σχολείο σας</string>
     <string name="messages_search_placeholder">Αναζήτηση μηνυμάτων</string>
@@ -206,7 +215,15 @@
     <string name="messages_recipients_format">Επιλέχθηκε %1$d παραλήπτες</string>
     <string name="messages_body_placeholder">Κείμενο μηνύματος</string>
     <string name="messages_compose_send">Αποστολή</string>
-    <!-- Übersicht -->
+    <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
+         label() stays the German context-free fallback for tests. -->
+    <string name="message_type_all">All</string>
+    <string name="message_type_sprava">Message</string>
+    <string name="message_type_news">News</string>
+    <string name="message_type_anketa">Poll</string>
+    <string name="message_type_chat">Chat</string>
+    <string name="message_type_genotif">Notice</string>
+    <!-- Overview -->
     <string name="overview_customize">Προσαρμογή επισκόπησης</string>
     <string name="overview_customize_desc">Επιλέξτε ποιες ενότητες εμφανίζονται πρώτα.</string>
     <string name="overview_move_up_desc">Μετακίνηση πάνω</string>
@@ -214,8 +231,8 @@
     <string name="overview_messages_count_format">Μηνύματα · %1$d</string>
     <string name="overview_action_all_tasks">Όλες οι εργασίες</string>
     <string name="overview_clock_label">ΧΡΟΝΟΣ</string>
-    <!-- Datumszeile unter „Home" (EEEE = Wochentag, dd/MM/yyyy = Datum:
-         Musterbuchstaben nicht übersetzen, nur Reihenfolge anpassen). -->
+    <!-- Date line below "Home" (EEEE = weekday, MM/dd/yyyy = date:
+         pattern letters must not be translated, only order). -->
     <string name="home_date_format">EEEE, ηη.μμ.εεεε</string>
     <string name="overview_today_hours">ΚΑΤΗΓΟΡΙΑ ΣΗΜΕΡΑ</string>
     <string name="overview_no_school">Κανένα σχολείο — καμία τάξη σήμερα.</string>
@@ -246,7 +263,7 @@
     <string name="overview_due_suffix_format"> · fällig: %1$s</string>
     <string name="overview_subject_suffix_format"> · %1$s</string>
     <string name="overview_weather_high_low_format">H %1$s · L %2$s</string>
-    <!-- Schulalltag -->
+    <!-- School life -->
     <string name="school_title">Σχολική ζωή</string>
     <string name="school_subtitle">Εκδηλώσεις και αλλαγές χρονοδιαγράμματος</string>
     <string name="school_tab_calendar_format">Ημερολόγιο · %1$d</string>
@@ -263,7 +280,7 @@
     <string name="school_change_remove">ENTFÄLLT</string>
     <string name="school_change_default">GEAèNDERT</string>
     <string name="school_class_format">Κλάση %1$s</string>
-    <!-- Stundenplan -->
+    <!-- Timetable -->
     <string name="timetable_title">Χρονοδιάγραμμα</string>
     <string name="timetable_day_count_format">%1$d periods</string>
     <string name="timetable_week_count_format">%1$d περίοδοι αυτή την εβδομάδα</string>
@@ -284,7 +301,7 @@
     <string name="timetable_flag_lernzeit">Χρόνος μελέτης</string>
     <string name="timetable_flag_lernzeit_hours">Χρόνος μελέτης (%1$d hrs.)</string>
     <string name="timetable_flag_event">Γεγονός</string>
-    <!-- Mehr -->
+    <!-- More -->
     <string name="more_title">Περισσότερα</string>
     <string name="more_subtitle">Περισσότερες ενότητες</string>
     <string name="more_school_title">Εκδηλώσεις &amp; υποκαταστάσεις</string>
@@ -297,19 +314,19 @@
     <string name="more_cache_default">Διαγραφή δεδομένων προσωρινής μνήμης</string>
     <string name="more_logout_sub">Αποσυνδεθείτε από αυτήν τη συσκευή</string>
     <string name="more_server_dialog_desc">Διακομιστής αιτημάτων API (…/api/v1/).</string>
-    <!-- Validierung (clientseitig): Die ViewModels (ui/auth/AuthViewModel,
-         ui/messages/MessagesViewModel, ui/overview/OverviewViewModel) liefern
-         Code + deutschen Fallback-Text (kontextfrei für Unit-Tests) plus
-         messageRes — Compose löst per stringResource an den Call-Sites auf. -->
+    <!-- Client-side validation: the ViewModels (ui/auth/AuthViewModel,
+         ui/messages/MessagesViewModel, ui/overview/OverviewViewModel) supply
+         code + German fallback text (context-free for unit tests) plus
+         messageRes — Compose resolves via stringResource at the call sites. -->
     <string name="auth_error_credentials">Παρακαλώ εισάγετε όνομα χρήστη και κωδικό πρόσβασης.</string>
     <string name="twofa_error_empty">Παρακαλώ εισάγετε τον κωδικό.</string>
     <string name="messages_compose_no_recipient">Παρακαλώ επιλέξτε τουλάχιστον έναν έγκυρο παραλήπτη.</string>
     <string name="messages_compose_no_body">Παρακαλώ εισάγετε ένα κείμενο μηνύματος.</string>
     <string name="overview_weather_no_city">Παρακαλώ εισάγετε μια πόλη.</string>
-    <!-- Fehler-Fallbacks: data/ErrorMapper.messageFor liefert den deutschen
-         Fallback (Backend-Texte haben Vorrang, kontextfrei für Unit-Tests);
-         data/ErrorMapper.stringResFor mappt Codes auf diese Keys, Compose
-         löst per localizedApiMessage (ui/timetable/DayScreen.kt) auf. -->
+    <!-- Error fallbacks: data/ErrorMapper.messageFor supplies the German
+         fallback (backend texts take precedence, context-free for unit tests);
+         data/ErrorMapper.stringResFor maps codes onto these keys, Compose
+         resolves via localizedApiMessage (ui/timetable/DayScreen.kt). -->
     <string name="error_validation">Μη έγκυρη είσοδος. Παρακαλώ ελέγξτε και προσπαθήστε ξανά.</string>
     <string name="error_token_invalid">Η συνεδρία δεν είναι έγκυρη. Παρακαλώ συνδεθείτε ξανά.</string>
     <string name="error_token_expired">Η συνεδρία έληξε. Παρακαλώ συνδεθείτε ξανά.</string>
@@ -322,7 +339,7 @@
     <string name="error_rate_limited">Πάρα πολλές προσπάθειες. Παρακαλώ δοκιμάστε ξανά αργότερα.</string>
     <string name="error_config_missing">Λείπει το κλειδί διακομιστή. Παρακαλώ δοκιμάστε ξανά αργότερα.</string>
     <string name="error_upstream">Η σύνδεση απέτυχε. Παρακαλώ προσπαθήστε ξανά αργότερα.</string>
-    <!-- Akzentfarben -->
+    <!-- Accent colors -->
     <string name="common_accent_black">Μαύρο</string>
     <string name="common_accent_blue">Μπλε</string>
     <string name="common_accent_violet">Λιλά</string>
@@ -331,7 +348,7 @@
     <string name="common_accent_orange">Πορτοκαλί</string>
     <string name="common_accent_red">Κόκκινο</string>
     <string name="common_accent_pink">Ροζ</string>
-    <!-- Plurale -->
+    <!-- Plurals -->
     <plurals name="settings_devices_count">
         <item quantity="one">%1$d Geraèt</item>
         <item quantity="other">%1$d Geraète</item>
