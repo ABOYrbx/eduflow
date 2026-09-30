@@ -24,7 +24,9 @@
     "tokenNotFound": "找不到令牌。",
     "tokenRejected": "令牌无效。",
     "twoFactorDemo": "输入演示代码 123456。",
-    "twoFactorMessage": "输入来自电子邮件或应用程序的两步代码并将其发送至 /auth/2fa。"
+    "twoFactorMessage": "输入来自电子邮件或应用程序的两步代码并将其发送至 /auth/2fa。",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "无效请求。",
@@ -64,7 +66,8 @@
     "trashHomework": "移动家庭作业到回收站或恢复",
     "validationDescription": "验证错误",
     "weather": "天气情况",
-    "weatherSearch": "天气位置搜索"
+    "weatherSearch": "天气位置搜索",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "错误的坐标",
@@ -103,6 +106,8 @@
     "hwStatusLabel": "主页工作: 标准过滤器",
     "hwTestsLabel": "主页工作: 默认包括测试和测试",
     "landingLabel": "登录后开始页面",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "所有的",
     "optDashboard": "留言",
     "optDone": "仅完成",
@@ -118,7 +123,12 @@
     "ovWetterHint": "应用于网页界面和 Android 应用程序。",
     "ovWetterLabel": "在概览中显示天气地图",
     "sectionUebersicht": "概览",
-    "sectionWetter": "天气情况"
+    "sectionWetter": "天气情况",
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor.",
+    "ovSpanLabel": "Section widths",
+    "ovSpanHint": "Sections you set to half width sit next to each other."
   },
   "upstream": {
     "agendaFailed": "School events could not be loaded: {detail}",
