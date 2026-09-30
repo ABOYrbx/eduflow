@@ -41,9 +41,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Dns
+import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Checklist
+import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -65,6 +69,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -539,9 +544,10 @@ private fun FeaturesPage(onNext: () -> Unit) {
                 modifier = Modifier.padding(top = 12.dp).riseIn(index = 2),
             )
             Column(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 22.dp)) {
-                FeatureRow("✉", stringResource(R.string.onboarding_feat1_title), stringResource(R.string.onboarding_feat1_desc), 3)
-                FeatureRow("☷", stringResource(R.string.onboarding_feat2_title), stringResource(R.string.onboarding_feat2_desc), 4)
-                FeatureRow("▦", stringResource(R.string.onboarding_feat3_title), stringResource(R.string.onboarding_feat3_desc), 6)
+                // Icons wie in der Navigation zum jeweiligen Bereich.
+                FeatureRow(Icons.Filled.MailOutline, stringResource(R.string.onboarding_feat1_title), stringResource(R.string.onboarding_feat1_desc), 3)
+                FeatureRow(Icons.Filled.Checklist, stringResource(R.string.onboarding_feat2_title), stringResource(R.string.onboarding_feat2_desc), 4)
+                FeatureRow(Icons.Filled.CalendarMonth, stringResource(R.string.onboarding_feat3_title), stringResource(R.string.onboarding_feat3_desc), 6)
             }
             Spacer(Modifier.weight(1f))
             PrimaryButton(text = stringResource(R.string.common_next), onClick = onNext, modifier = Modifier.riseIn(index = 7))
@@ -549,17 +555,30 @@ private fun FeaturesPage(onNext: () -> Unit) {
     }
 }
 
+/**
+ * Karte einer Faehigkeit mit Icon-Kreis. Das Icon kommt aus
+ * material-icons-extended und ist dasselbe wie in der Navigation zum
+ * passenden Bereich — vorher standen hier hartcodierte Unicode-Glyphen
+ * ("✉", "☷", "▦"), die wie fremde Textzeichen aussahen statt wie Icons.
+ */
 @Composable
-private fun FeatureRow(icon: String, title: String, description: String, delayIndex: Int) {
+private fun FeatureRow(icon: ImageVector, title: String, description: String, delayIndex: Int) {
     val scheme = MaterialTheme.colorScheme
     EduCard(modifier = Modifier.fillMaxWidth().riseIn(index = delayIndex)) {
         Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Surface(shape = CircleShape, color = scheme.primary, modifier = Modifier.size(40.dp)) {
                 Box(contentAlignment = Alignment.Center) {
-                    Text(icon, fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = scheme.onPrimary)
+                    // Dekorativ: der Titel steht direkt daneben, eine
+                    // contentDescription wuerde nur doppelt vorlesen.
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = scheme.onPrimary,
+                        modifier = Modifier.size(20.dp),
+                    )
                 }
             }
-            Column(Modifier.padding(start = 14.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+            Column(Modifier.padding(start = 14.dp).weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(title, fontSize = 15.sp, fontWeight = FontWeight.Black, letterSpacing = (-0.2).sp, color = scheme.onSurface)
                 Text(description, fontSize = 13.sp, lineHeight = 18.sp, color = scheme.onSurfaceVariant)
             }
@@ -572,7 +591,11 @@ private fun FeatureRow(icon: String, title: String, description: String, delayIn
 private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
     val scheme = MaterialTheme.colorScheme
     val reducedMotion = LocalReducedMotion.current
-    var draft by remember(baseUrl) { mutableStateOf(baseUrl) }
+    // baseUrl ist der interne Notfallwert, wenn nichts gespeichert ist —
+// dann soll das Feld trotzdem leer sein (keine Voreinstellung). Nur eine
+// wirklich gespeicherte Adresse wird vorbelegt.
+    val storedBaseUrl = baseUrl.takeIf { it.isNotBlank() && it != TokenStore.DEFAULT_BASE_URL }
+    var draft by remember(storedBaseUrl) { mutableStateOf(storedBaseUrl.orEmpty()) }
     var checking by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf<String?>(null) }
     var connected by remember { mutableStateOf(false) }
@@ -580,9 +603,13 @@ private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
     val connectedText = stringResource(R.string.onboarding_connected)
     val unreachableText = stringResource(R.string.onboarding_unreachable)
 
+    // Ohne Eingabe gibt es nichts zu testen: leer heisst "kein Server
+    // eingetragen", nicht "nimm den Emulator-Host".
+    val canTest = draft.isNotBlank()
     fun normalizedUrl(): String = normalizeBaseUrl(draft)
 
     suspend fun checkConnection() {
+        if (!canTest) return
         checking = true
         message = null
         connected = false
@@ -627,8 +654,23 @@ private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
         OutlinedTextField(
             value = draft,
             onValueChange = { draft = it; message = null; connected = false },
-            placeholder = { Text(TokenStore.DEFAULT_BASE_URL) },
-            leadingIcon = { androidx.compose.material3.Icon(Icons.Filled.Dns, contentDescription = null) },
+            // Nur IP genügt, Port ist optional — der Hinweis sagt beides.
+            placeholder = { Text(TokenStore.SERVER_PLACEHOLDER) },
+            supportingText = if (draft.isBlank()) {
+                {
+                    Text(
+                        stringResource(
+                            R.string.onboarding_server_hint,
+                            TokenStore.DEFAULT_PORT,
+                            TokenStore.DEMO_PORT,
+                        ),
+                        fontSize = 12.sp,
+                    )
+                }
+            } else {
+                null
+            },
+            leadingIcon = { Icon(Icons.Filled.Dns, contentDescription = null) },
             singleLine = true,
             shape = CircleShape,
             modifier = Modifier.fillMaxWidth().padding(top = 20.dp).riseIn(index = 4),
@@ -639,7 +681,7 @@ private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
       Spacer(Modifier.height(12.dp))
       Button(
           onClick = { scope.launch { checkConnection() } },
-          enabled = !checking,
+          enabled = !checking && canTest,
           shape = CircleShape,
           colors = ButtonDefaults.buttonColors(
               containerColor = when {

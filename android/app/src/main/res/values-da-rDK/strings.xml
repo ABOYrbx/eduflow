@@ -344,4 +344,20 @@
         <item quantity="one">Ø %1$s · %2$d Note</item>
         <item quantity="other">Ø %1$s · %2$d Noten</item>
     </plurals>
+    <string name="onboarding_language_search">Søg efter sprog</string>
+    <string name="onboarding_language_no_results">Intet sprog fundet</string>
+    <string name="onboarding_language_system_short">SYSTEM</string>
+    <string name="onboarding_language_system_format">Systemsprog: %1$s</string>
+    <string name="onboarding_server_hint">Kun IP-adressen — port og sti tilføjes automatisk.</string>
+    <string name="settings_language">Sprog</string>
+    <string name="settings_language_system">Systemsprog</string>
+    <string name="settings_time_format_label">Tidsformat</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
+    <string name="message_type_all">Alle</string>
+    <string name="message_type_sprava">Besked</string>
+    <string name="message_type_news">Nyheder</string>
+    <string name="message_type_anketa">Afstemning</string>
+    <string name="message_type_chat">Chat</string>
+    <string name="message_type_genotif">Meddelelse</string>
 </resources>

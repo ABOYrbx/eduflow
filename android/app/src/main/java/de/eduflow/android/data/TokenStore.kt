@@ -26,18 +26,73 @@ private val Context.tokenDataStore: DataStore<Preferences> by preferencesDataSto
     ),
 )
 
+/** Pfad, den die App anhaengt — die Routen liegen unter `/api/v1`. */
+private const val API_PATH = "/api/v1"
+
+/** Authority als `host` oder `host:port`; Host darf IPv6 in Klammern sein. */
+private val AUTHORITY = Regex("""^(\[[^\]]+\]|[^:/?#]+)(:\d+)?$""")
+
 /**
- * Basis-URL normalisieren (Paket 0): Scheme ergänzen, wenn es fehlt
- * (sonst stürzt Retrofit mit IllegalArgumentException ab), Blank → Default.
- * `localhost` bleibt bewusst wörtlich erhalten — im Emulator gilt
- * `10.0.2.2` für den Host (siehe Hinweis im Login-Screen).
+ * Basis-URL normalisieren (Paket 0). Eingabe ist bewusst kurz: die
+ * Nutzerin tippt nur die IP des Servers, optional mit Port
+ * (`192.168.1.5` oder `192.168.1.5:3100`). Scheme, Port und Pfad
+ * ergaenzt die App:
+ *
+ *     192.168.1.5        -> http://192.168.1.5:3000/api/v1/
+ *     192.168.1.5:3100   -> http://192.168.1.5:3100/api/v1/
+ *     mein-mac.local     -> http://mein-mac.local:3000/api/v1/
+ *
+ * Vollstaendige URLs bleiben gueltig (Alteingaben aus aelteren
+ * App-Versionen und Werte aus dem Chatverlauf): ein bereits
+ * gesetzter Scheme bleibt, ein gesetzter Port bleibt, und ein
+ * vorhandenes `/api/v1` wird abgeschnitten, bevor der Pfad erneut
+ * angehaengt wird — sonst entstuende `/api/v1/api/v1`.
+ *
+ * Leer -> interner Notfallwert. Er wird nirgends angezeigt oder
+ * vorbelegt, existiert nur, damit Retrofit nie eine leere URL
+ * bekommt (das waere ein IllegalArgumentException beim Start).
  */
 internal fun normalizeBaseUrl(raw: String): String {
-    var base = raw.trim().trimEnd('/')
-    if (base.isBlank()) return TokenStore.DEFAULT_BASE_URL
-    if ("://" !in base) base = "http://$base"
-    return if (base.endsWith("/")) base else "$base/"
+    val input = raw.trim().trimEnd('/')
+    if (input.isBlank()) return TokenStore.DEFAULT_BASE_URL
+
+    // Scheme ergaenzen, falls keins da ist.
+    val withScheme = if ("://" in input) input else "http://$input"
+
+    val scheme = withScheme.substringBefore("://")
+    val rest = withScheme.substringAfter("://")
+    // Pfad abtrennen, damit die Authority unten isoliert ist.
+    val authority = rest.substringBefore('/')
+    val path = rest.substringAfter('/', "")
+
+    // Authority muss host oder host:port sein, sonst nichts aendern:
+    // eine kaputte Eingabe soll als Fehler auffallen, nicht still
+    // zu einem falschen Server fuehren.
+    val match = AUTHORITY.matchEntire(authority) ?: return withScheme
+    val host = match.groupValues[1]
+    val port = match.groupValues[2].ifEmpty { ":${TokenStore.DEFAULT_PORT}" }
+
+    // Doppelten API-Pfad vermeiden. removeSuffix trifft nur das letzte
+    // Vorkommen, darum in einer Schleife — sonst bliebe bei
+    // ".../api/v1/api/v1" ein "api/v1" uebrig.
+    var cleanPath = path.trim('/')
+    // Auch der reine Pfad ohne fuehrenden Slash ("api/v1") muss weg,
+    // sonst haette die letzte Runde nichts mehr zu entfernen.
+    val bareApiPath = API_PATH.trimStart('/')
+    while (cleanPath.endsWith(API_PATH) || cleanPath == bareApiPath) {
+        cleanPath = cleanPath.removeSuffix(API_PATH).removeSuffix(bareApiPath).trim('/')
+    }
+
+    return buildString {
+        append(scheme).append("://").append(host).append(port).append(API_PATH).append('/')
+        if (cleanPath.isNotEmpty()) append(cleanPath).append('/')
+    }
 }
+
+/** Port aus einer beliebigen Server-Eingabe, oder null wenn keiner erkennbar ist. */
+private fun portOf(normalized: String): String? =
+    normalized.substringAfter("://").substringBefore('/').substringAfterLast(':', "")
+        .takeIf { it.isNotEmpty() && it.all { ch -> ch.isDigit() } }
 
 /** Auf dem Gerät gespeicherte Sitzung (Token nie loggen, nie in UI zeigen). */
 data class Session(
@@ -168,7 +223,13 @@ class TokenStore(private val context: Context) {
         }
     }
 
+    /**
+     * Server-Adresse speichern. Leere Eingabe ignoriert die App bewusst:
+     * ein leeres Feld darf die bestehende Konfiguration nicht ueberschreiben
+     * (sonst loescht schon ein Tippen im Feld den Server).
+     */
     suspend fun setBaseUrl(baseUrl: String) {
+        if (baseUrl.isBlank()) return
         context.tokenDataStore.edit { prefs ->
             if (prefs[Keys.DEMO_MODE] == true) {
                 prefs[Keys.BASE_URL] = DEMO_BASE_URL.trimEnd('/')
@@ -219,16 +280,42 @@ class TokenStore(private val context: Context) {
     suspend fun currentSession(): Session = sessionFlow.first()
 
     companion object {
-        /** Default aus android/gradle.properties (eduflow.defaultBaseUrl). */
+        /**
+         * Reiner Notfallwert: greift nur, wenn ohne gespeicherten Server
+         * und ohne Eingabe ein Client gebaut wird. In der Oberflaeche wird
+         * nichts vorbelegt und nichts angezeigt — die Eingabe ist leer,
+         * die Nutzerin tippt die IP selbst.
+         */
         const val DEFAULT_BASE_URL = "http://10.0.2.2:3000/api/v1/"
+
+        /** Demo-Server des Fake-Providers (`./run.sh --demo`). */
         const val DEMO_BASE_URL = "http://10.0.2.2:3100/api/v1/"
 
+        /** Port, an dem der Demo-Server laeuft. */
+        const val DEMO_PORT = 3100
+
         /**
-         * Demo-Server erkannt? Der Demo-Modus gilt automatisch bei
-         * Verbindung zu dieser Adresse (kein separater Schalter in der UI).
+         * Beispiel fuer das Server-Feld. Ist ein *Hinweis* im Placeholder,
+         * kein Wert — das Feld startet leer.
+         */
+        const val SERVER_PLACEHOLDER = "192.168.1.5"
+
+        /**
+         * Port, den die App annimmt, wenn die Eingabe nur eine IP ist. Die
+         * Eingabe darf trotzdem einen eigenen Port mitbringen (`IP:Port`) —
+         * etwa [DEMO_PORT] fuer den Demo-Server.
+         */
+        const val DEFAULT_PORT = 3000
+
+        /**
+         * Demo-Server erkannt? Der Demo-Modus gilt automatisch, sobald die
+         * Adresse auf dem Demo-Port [DEMO_PORT] liegt — bewusst nur nach dem
+         * Port und nicht nach der vollen URL: sonst waere ein Demo-Server
+         * unter `192.168.1.5:3100` (Handy im WLAN) kein Demo mehr, weil die
+         * Host-IP von [DEMO_BASE_URL] abweicht.
          */
         fun isDemoServerUrl(raw: String): Boolean =
-            normalizeBaseUrl(raw).trimEnd('/') == DEMO_BASE_URL.trimEnd('/')
+            portOf(normalizeBaseUrl(raw)) == DEMO_PORT.toString()
 
         /** Aussehen-Werte wie im Web (static/theme.js: system/light/dark). */
         const val THEME_SYSTEM = "system"

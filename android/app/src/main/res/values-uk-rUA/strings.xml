@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Едуфов</string>
     <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
-    <string name="common_logo_desc">Логотип EduFlow</string>
+    <string name="common_logo_desc">EduFlow logo</string>
     <string name="common_demo_badge">Демо-версія</string>
     <string name="common_profile_title">Ваш профіль</string>
     <string name="common_profile_default_account">Обліковий запис</string>
@@ -350,4 +350,20 @@
         <item quantity="many">Ø %1$s · %2$d Noten</item>
         <item quantity="other">Ø %1$s · %2$d Noten</item>
     </plurals>
+    <string name="onboarding_language_search">Пошук мови</string>
+    <string name="onboarding_language_no_results">Мову не знайдено</string>
+    <string name="onboarding_language_system_short">СИСТЕМА</string>
+    <string name="onboarding_language_system_format">Мова системи: %1$s</string>
+    <string name="onboarding_server_hint">Лише IP-адреса — порт і шлях буде додано автоматично.</string>
+    <string name="settings_language">Мова</string>
+    <string name="settings_language_system">Мова системи</string>
+    <string name="settings_time_format_label">Формат часу</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
+    <string name="message_type_all">Усі</string>
+    <string name="message_type_sprava">Повідомлення</string>
+    <string name="message_type_news">Новини</string>
+    <string name="message_type_anketa">Опитування</string>
+    <string name="message_type_chat">Чат</string>
+    <string name="message_type_genotif">Сповіщення</string>
 </resources>

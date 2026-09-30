@@ -46,7 +46,7 @@
     <string name="auth_label_device">Device name</string>
     <string name="auth_placeholder_device">e.g. Pixel 9 Pro</string>
     <string name="auth_hint_server">Where does your server run?</string>
-    <string name="auth_label_server">Server URL</string>
+    <string name="auth_label_server">Server IP</string>
     <string name="auth_server_current_format">Server: %1$s</string>
     <string name="auth_privacy_note">Local tool — credentials stay on this device.</string>
     <string name="auth_login_loading">Signing in …</string>
@@ -70,7 +70,8 @@
     <string name="onboarding_feat2_desc">Due dates with counters, semester tabs and average.</string>
     <string name="onboarding_feat3_title">Timetable &amp; Weather</string>
     <string name="onboarding_feat3_desc">Day and week plus weather on the overview.</string>
-    <string name="onboarding_server_sub">Enter where EduFlow runs as server.</string>
+    <string name="onboarding_server_sub">Enter the IP address of your EduFlow server.</string>
+    <string name="onboarding_server_hint">IP alone uses port %1$d. Add :port for another one — the demo server is %2$d.</string>
     <string name="onboarding_connected">Connected</string>
     <string name="onboarding_unreachable">Server unreachable. Check the address and try again.</string>
     <string name="onboarding_test_connected">✓ Connected</string>
@@ -93,7 +94,7 @@
     <string name="settings_subtitle">Your EduFlow account</string>
     <string name="settings_demo_text">Only synthetic sample data is loaded from the local demo server.</string>
     <string name="settings_server_section">Server</string>
-    <string name="settings_server_placeholder">Server (…/api/v1/)</string>
+    <string name="settings_server_placeholder">192.168.1.5</string>
     <string name="settings_server_apply">Apply server</string>
     <string name="settings_school_fallback">School</string>
     <string name="settings_connected_format">%1$s · connected</string>
@@ -324,11 +325,11 @@
     <string name="more_settings_sub">Appearance, account and server</string>
     <string name="more_demo_title">Demo mode</string>
     <string name="more_demo_sub">Sample data only · no real school connections</string>
-    <string name="more_server_fallback">Server for API requests</string>
+    <string name="more_server_fallback">No server set</string>
     <string name="more_cache_title">Clear cache</string>
     <string name="more_cache_default">Delete cached data</string>
     <string name="more_logout_sub">Sign out from this device</string>
-    <string name="more_server_dialog_desc">Server for API requests (…/api/v1/).</string>
+    <string name="more_server_dialog_desc">Enter only the IP of your server. Port and path are added automatically.</string>
 
     <!-- Client-side validation: the ViewModels (ui/auth/AuthViewModel,
          ui/messages/MessagesViewModel, ui/overview/OverviewViewModel) supply

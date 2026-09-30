@@ -301,11 +301,16 @@ class SettingsViewModel(
         }
     }
 
+    /**
+     * Server-Adresse uebernehmen. Leere Eingabe wird ignoriert — sonst
+     * wuerde schon das Leeren des Feldes die gespeicherte Adresse
+     * ueberschreiben. Die fertige URL normalisiert [TokenStore.setBaseUrl],
+     * sobald etwas drinsteht.
+     */
     fun setBaseUrl(url: String) {
+        if (url.isBlank()) return
         viewModelScope.launch {
-            val normalized = url.trim().trimEnd('/')
-                .ifBlank { TokenStore.DEFAULT_BASE_URL.trimEnd('/') }
-            store.setBaseUrl(normalized)
+            store.setBaseUrl(url.trim())
         }
     }
 

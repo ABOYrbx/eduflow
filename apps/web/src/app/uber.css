@@ -26,19 +26,35 @@ button{font-family:inherit;cursor:pointer}
 .container{max-width:1000px;margin:0 auto;padding:0 24px}
 
 /* ---------- Nav: kleine zentrierte Pille (nur so breit wie der Inhalt) ---------- */
-.nav-wrap{position:sticky;top:12px;z-index:50;width:fit-content;max-width:calc(100vw - 24px);margin:12px auto 0;border:1px solid rgba(255,255,255,.65);border-radius:var(--r-full);background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.45));backdrop-filter:blur(24px) saturate(1.8);-webkit-backdrop-filter:blur(24px) saturate(1.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255,.15),0 12px 40px rgba(0,0,0,.14);transition:box-shadow .2s ease,background .2s ease,border-color .2s ease}
+.nav-wrap{overflow:clip;position:sticky;top:12px;z-index:50;width:fit-content;max-width:calc(100vw - 24px);margin:12px auto 0;border:1px solid rgba(255,255,255,.65);border-radius:var(--r-full);background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.45));backdrop-filter:blur(24px) saturate(1.8);-webkit-backdrop-filter:blur(24px) saturate(1.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255,.15),0 12px 40px rgba(0,0,0,.14);transition:box-shadow .2s ease,background .2s ease,border-color .2s ease}
 .nav-wrap .nav{max-width:none;width:auto;margin:0;padding:5px 8px;justify-content:space-between}
 .nav{display:flex;align-items:center;justify-content:center;gap:6px;padding:14px 0;flex-wrap:nowrap;transition:padding .22s ease}
 .nav-logo{width:32px;height:32px;flex:0 0 32px;border-radius:50%;overflow:hidden;display:block;transition:transform .12s ease}
 .nav-logo:hover{transform:translateY(-1px)}
 .nav-logo img{display:block;width:100%;height:100%;object-fit:cover}
+/* Das Logo ist ein blaues '#1163F9' auf Durchsicht. Auf der schwarzen
+   Leiste ist dieses Blau zu dunkel und geht unter - im hellen Modus
+   dagegen ist es klar erkennbar, deshalb nur fuer dark.
+   (filter:invert() faellt aus: der CSS-Prozessor normalisiert invert(1) zu
+   invert(), und das ist zur Rechenzeit ungueltig - die Deklaration
+   verschwindet dann. Ueber eine Variable kommt die 1 zwar an, der Browser
+   wertet invert(var(...)) aber trotzdem nicht aus.) */
+[data-theme="dark"] .nav-logo img{filter:brightness(1.7) saturate(1.05)}
 .brand{display:flex;align-items:center;gap:0;font-weight:800;font-size:0;letter-spacing:-.8px;transition:font-size .22s ease}
 .brand-mark{width:26px;height:26px;border-radius:8px;background:var(--accent);display:grid;place-items:center;color:var(--accent-ink);font-weight:900;font-size:15px;transition:width .22s ease,height .22s ease,font-size .22s ease,background .15s;flex-shrink:0}
-.nav-mid{display:flex;gap:2px;background:rgba(255,255,255,.35);border-radius:var(--r-full);padding:3px;box-shadow:inset 0 1px 2px rgba(0,0,0,.05);flex:1;justify-content:flex-start;margin:0 8px;flex-wrap:nowrap;max-width:100%;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scroll-behavior:smooth}
+.nav-mid{display:flex;gap:2px;background:rgba(255,255,255,.35);border-radius:var(--r-full);padding:3px;box-shadow:inset 0 1px 2px rgba(0,0,0,.05);flex:1 1 auto;min-width:0;justify-content:flex-start;margin:0 8px;flex-wrap:nowrap;max-width:100%;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scroll-behavior:smooth}
 .nav-mid::-webkit-scrollbar{display:none}
 .nav-scroll{flex:0 0 auto;width:26px;height:26px;display:grid;place-items:center;border:0;border-radius:50%;background:rgba(255,255,255,.7);color:var(--ink);cursor:pointer;opacity:.8;transition:opacity .15s,transform .15s}
 .nav-scroll:hover{opacity:1;transform:scale(1.08)}
+/* Am Anfang bzw. Ende verschwindet der Knopf und gibt seinen Platz an die
+   Bar zurueck, statt als Luecke stehen zu bleiben. width:0 statt
+   visibility:hidden allein - nur so waechst .nav-mid bis an die Seite. */
+.nav-scroll.is-idle{width:0;margin:0;overflow:hidden;visibility:hidden}
 .nav-scroll:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+/* Gleicher Abstand auf beiden Seiten: .nav-mid hat 8px Rand, der auch zwischen
+   der Leiste und dem Chevron liegt. Rechts fehlte dieser Abstand, dadurch
+   klebte der Knopf am Profilbild (4px statt 12px). */
+.nav-scroll-end{margin-right:8px}
 [data-theme="dark"] .nav-scroll{background:rgba(255,255,255,.14);color:#fff}
 .nav-mid::-webkit-scrollbar{display:none}
 .nav-pill{padding:7px 12px;border-radius:var(--r-full);font-size:13px;font-weight:600;color:var(--ink-muted);transition:padding .22s ease,font-size .22s ease,background .15s,color .15s;white-space:nowrap}
@@ -113,6 +129,12 @@ select.input-pill{appearance:none;-webkit-appearance:none;padding-right:38px;cur
 .meta strong{color:var(--ink)}
 .tag{display:inline-block;font-size:11px;font-weight:700;padding:5px 12px;border-radius:var(--r-full);letter-spacing:.2px}
 .tag-solid{background:var(--accent);color:var(--accent-ink)}
+/* Die Heute-Markierung im Stundenplan ist ueber tag-solid schwarz im hellen
+   und weiss im dunklen Modus. Sie soll genau umgekehrt sein: weiss auf
+   hellem, schwarz auf dunklem Grund. Ohne Rand verschmilzt die Pille sonst
+   mit dem Kopf der Spalte, deshalb bekommt sie einen. */
+.tt-day .tag-solid{background:#ffffff;color:#000000;border:1px solid var(--border-strong)}
+[data-theme="dark"] .tt-day .tag-solid{background:#000000;color:#ffffff;border-color:rgba(255,255,255,.45)}
 .tag-soft{background:var(--surface-2);color:var(--ink)}
 .tag-outline{background:#fff;color:#000;border:1px solid var(--ink)}
 .tag-muted{background:var(--surface-1);color:var(--ink-muted);border:1px solid var(--border)}
@@ -435,6 +457,20 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 [data-accent="orange"]{--accent:#EA580C;--accent-hover:#C2410C;--accent-ink:#ffffff}
 [data-accent="red"]{--accent:#DC2626;--accent-hover:#B91C1C;--accent-ink:#ffffff}
 [data-accent="pink"]{--accent:#DB2777;--accent-hover:#BE185C;--accent-ink:#ffffff}
+/* Die schwarze Akzentfarbe waere auf dunklem Grund unsichtbar - und nicht
+   nur als Punkt in der Auswahl: Knöpfe, Eyebrows, Tags und aktive Pillen
+   holen ihre Farbe aus --accent. Beide Attribute stehen am <html>.
+   theme.js schreibt 'black' heute gar nicht erst als data-accent (Schwarz
+   ist der Standard und laeuft ueber 'kein Attribut', was der Dunkel-Block
+   bereits auf weiss stellt). Diese Regel greift fuer Geraete, in deren
+   localStorage noch ein 'black' aus einer aelteren Fassung liegt - dann
+   wuerde [data-accent="black"] das --accent sonst auf Schwarz setzen und
+   die Oberflaeche im dunklen Modus schwarz auf schwarz zeichnen. */
+[data-theme="dark"][data-accent="black"]{--accent:#ffffff;--accent-hover:#D4D4D4;--accent-ink:#000000}
+/* Der Punkt in der Auswahl bekommt seine Farbe inline gesetzt, deshalb
+   laeuft die Anpassung im dunklen Modus ueber --swatch statt ueber ein
+   !important auf der Hintergrundfarbe. */
+[data-theme="dark"] .accent-dot[data-set-accent="black"]{--swatch:#ffffff}
 [data-theme="dark"] .nav-wrap{background:linear-gradient(180deg,rgba(42,42,44,.7),rgba(42,42,44,.45));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 12px 40px rgba(0,0,0,.6)}
 [data-theme="dark"] .btn-light{background:transparent;color:#fff}
 [data-theme="dark"] .btn-light:hover{background:var(--surface-1)}
@@ -451,7 +487,7 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 
 /* ---------- Akzent-Auswahl (Dots in der Navi) ---------- */
 .accent-dots{display:flex;gap:7px;align-items:center}
-.accent-dot{width:18px;height:18px;border-radius:50%;background:var(--c);border:1px solid var(--border-strong);padding:0;flex-shrink:0}
+.accent-dot{width:18px;height:18px;border-radius:50%;background:var(--swatch, var(--c));border:1px solid var(--border-strong);padding:0;flex-shrink:0}
 .accent-dot:hover{transform:scale(1.15)}
 .accent-dot.active{outline:2px solid var(--ink);outline-offset:2px}
 @media(max-width:720px){
@@ -574,10 +610,6 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 .picker-option .ico{opacity:.9}
 
 /* ---------- Editor für die Übersichts-Abschnitte ---------- */
-.ov-toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:4px 0 14px}
-.ov-toolbar .btn-sm{padding:9px 16px}
-.ov-toolbar-status{font-size:13px;color:var(--ink-muted);line-height:1.5;min-width:0}
-.sec-panel{margin:0 0 14px;padding:14px 16px}
 .sec-editor{display:flex;flex-direction:column;gap:8px;transition:opacity .15s}
 .sec-editor.is-busy{opacity:.6;pointer-events:none}
 .sec-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:12px;background:var(--surface-1);transition:transform .14s ease,border-color .14s,box-shadow .14s,opacity .14s}
@@ -594,8 +626,6 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 .sec-btn:hover:not(:disabled){background:var(--surface-2);color:var(--ink);border-color:var(--border)}
 .sec-btn:disabled{opacity:.28;cursor:not-allowed}
 .sec-btn[aria-pressed="true"]{background:var(--surface-2);color:var(--ink);border-color:var(--border-strong)}
-.sec-warn{margin:10px 0 0;font-size:13px;color:var(--ink-muted)}
-.ov-grid.is-editing .ov-col{transition:opacity .2s}
 
 /* Einmal angezeigter API-Token: monospace, umbrechbar, mit Kopieren-Button. */
 .token-box{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border:1px dashed var(--border-strong);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:var(--surface-1)}

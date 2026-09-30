@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">EduFlow</string>
     <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
-    <string name="common_logo_desc">Λογότυπο του EduFlow</string>
+    <string name="common_logo_desc">EduFlow logo</string>
     <string name="common_demo_badge">DEMO</string>
     <string name="common_profile_title">Το προφίλ σας</string>
     <string name="common_profile_default_account">Λογαριασμός</string>
@@ -344,4 +344,20 @@
         <item quantity="one">Ø %1$s · %2$d Note</item>
         <item quantity="other">Ø %1$s · %2$d Σημείωση</item>
     </plurals>
+    <string name="onboarding_language_search">Αναζήτηση γλώσσας</string>
+    <string name="onboarding_language_no_results">Δεν βρέθηκε γλώσσα</string>
+    <string name="onboarding_language_system_short">ΣΥΣΤΗΜΑ</string>
+    <string name="onboarding_language_system_format">Γλώσσα συστήματος: %1$s</string>
+    <string name="onboarding_server_hint">Μόνο η διεύθυνση IP — η θύρα και η διαδρομή προστίθενται αυτόματα.</string>
+    <string name="settings_language">Γλώσσα</string>
+    <string name="settings_language_system">Γλώσσα συστήματος</string>
+    <string name="settings_time_format_label">Μορφή ώρας</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
+    <string name="message_type_all">Όλα</string>
+    <string name="message_type_sprava">Μήνυμα</string>
+    <string name="message_type_news">Νέα</string>
+    <string name="message_type_anketa">Δημοσκόπηση</string>
+    <string name="message_type_chat">Συνομιλία</string>
+    <string name="message_type_genotif">Ειδοποίηση</string>
 </resources>

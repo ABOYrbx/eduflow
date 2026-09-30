@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">EduFlow</string>
     <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
-    <string name="common_logo_desc">EduFlow-Logo</string>
+    <string name="common_logo_desc">EduFlow logo</string>
     <string name="common_demo_badge">DEMO</string>
     <string name="common_profile_title">Your profile</string>
     <string name="common_profile_default_account">Account</string>
@@ -338,4 +338,23 @@
         <item quantity="one">Avg. %1$s · %2$d grade</item>
         <item quantity="other">Avg. %1$s · %2$d grades</item>
     </plurals>
+    <string name="onboarding_language_search">Search language</string>
+    <string name="onboarding_language_no_results">No language found</string>
+    <string name="onboarding_language_system_short">SYSTEM</string>
+    <string name="onboarding_language_system_format">System language: %1$s</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_language_system">System language</string>
+    <string name="settings_time_format_label">Clock format</string>
+    <string name="message_type_all">All</string>
+    <string name="message_type_sprava">Message</string>
+    <string name="message_type_news">News</string>
+    <string name="message_type_anketa">Poll</string>
+    <string name="message_type_chat">Chat</string>
+    <string name="message_type_genotif">Notice</string>
+    <string name="device_default_name">Android emulator</string>
+    <string name="grades_subject_other">Other</string>
+    <string name="grades_term_all">All</string>
+    <string name="grades_term_label_format">Semester %1$d %2$s/%3$s</string>
+    <string name="settings_time_12h">12 h</string>
+    <string name="settings_time_24h">24 h</string>
 </resources>

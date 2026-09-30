@@ -167,8 +167,11 @@ fun SettingsScreen(
                     placeholder = stringResource(R.string.settings_server_placeholder),
                 )
                 PrimaryButton(
+                    // Leeres Feld: den gespeicherten Server stehen lassen,
+                    // statt ihn mit dem Notfallwert zu ueberschreiben.
+                    enabled = baseDraft.isNotBlank(),
                     text = stringResource(R.string.settings_server_apply),
-                    onClick = { onBaseUrlChange(baseDraft.trim().trimEnd('/')); vm.reload() },
+                    onClick = { onBaseUrlChange(baseDraft.trim()); vm.reload() },
                 )
             }
             TextButton(onClick = { vm.logout(onLogout) }) {

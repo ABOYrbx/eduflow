@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">EduFlow</string>
     <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
-    <string name="common_logo_desc">EduFlow-Logo</string>
+    <string name="common_logo_desc">EduFlow logo</string>
     <string name="common_demo_badge">DEMO</string>
     <string name="common_profile_title">Dein Profil</string>
     <string name="common_profile_default_account">Konto</string>
@@ -347,4 +347,20 @@
         <item quantity="two">Ø %1$s · %2$d Noten</item>
         <item quantity="other">Ø %1$s · %2$d Noten</item>
     </plurals>
+    <string name="onboarding_language_search">חיפוש שפה</string>
+    <string name="onboarding_language_no_results">לא נמצאה שפה</string>
+    <string name="onboarding_language_system_short">מערכת</string>
+    <string name="onboarding_language_system_format">שפת המערכת: %1$s</string>
+    <string name="onboarding_server_hint">כתובת IP בלבד — היציאה והנתיב יתווספו אוטומטית.</string>
+    <string name="settings_language">שפה</string>
+    <string name="settings_language_system">שפת המערכת</string>
+    <string name="settings_time_format_label">תבנית השעון</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
+    <string name="message_type_all">הכול</string>
+    <string name="message_type_sprava">הודעה</string>
+    <string name="message_type_news">חדשות</string>
+    <string name="message_type_anketa">סקר</string>
+    <string name="message_type_chat">צ׳אט</string>
+    <string name="message_type_genotif">הודעה</string>
 </resources>

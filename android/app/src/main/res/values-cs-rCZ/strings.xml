@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">EduFlow</string>
     <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
-    <string name="common_logo_desc">Logo EduFlow</string>
+    <string name="common_logo_desc">EduFlow logo</string>
     <string name="common_demo_badge">DEMO</string>
     <string name="common_profile_title">Váš profil</string>
     <string name="common_profile_default_account">Účet</string>
@@ -350,4 +350,20 @@
         <item quantity="many">&lt;unk&gt; %1$s · %2$d Poznámka</item>
         <item quantity="other">&lt;unk&gt; %1$s · %2$d Poznámka</item>
     </plurals>
+    <string name="onboarding_language_search">Hledat jazyk</string>
+    <string name="onboarding_language_no_results">Žádný jazyk nenalezen</string>
+    <string name="onboarding_language_system_short">SYSTÉM</string>
+    <string name="onboarding_language_system_format">Jazyk systému: %1$s</string>
+    <string name="onboarding_server_hint">Stačí IP adresa — port a cesta se doplní automaticky.</string>
+    <string name="settings_language">Jazyk</string>
+    <string name="settings_language_system">Jazyk systému</string>
+    <string name="settings_time_format_label">Formát času</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
+    <string name="message_type_all">Vše</string>
+    <string name="message_type_sprava">Zpráva</string>
+    <string name="message_type_news">Novinky</string>
+    <string name="message_type_anketa">Anketa</string>
+    <string name="message_type_chat">Chat</string>
+    <string name="message_type_genotif">Oznámení</string>
 </resources>
