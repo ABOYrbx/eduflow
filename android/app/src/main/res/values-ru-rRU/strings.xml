@@ -51,10 +51,10 @@
     <!-- Onboarding -->
     <string name="onboarding_greeting">Привет!</string>
     <string name="onboarding_language_title">Выберите язык</string>
-    <string name="onboarding_language_search">Search language</string>
-    <string name="onboarding_language_no_results">No language found</string>
-    <string name="onboarding_language_system_short">SYSTEM</string>
-    <string name="onboarding_language_system_format">System language: %1$s</string>
+    <string name="onboarding_language_search">Поиск языка</string>
+    <string name="onboarding_language_no_results">Язык не найден</string>
+    <string name="onboarding_language_system_short">СИСТЕМА</string>
+    <string name="onboarding_language_system_format">Язык системы: %1$s</string>
     <string name="onboarding_language_sub">EduFlow говорит на вашем языке. Выбор применим немедленно.</string>
     <string name="onboarding_language_apply_restart">Применить &amp; перезапустить</string>
     <string name="onboarding_language_system">Система</string>
@@ -67,6 +67,7 @@
     <string name="onboarding_feat3_title">Расписание &amp; Погода</string>
     <string name="onboarding_feat3_desc">День и неделю, а также погода на обзоре.</string>
     <string name="onboarding_server_sub">Введите где EduFlow работает как сервер.</string>
+    <string name="onboarding_server_hint">IP alone uses port %1$d. Add :port for another one — the demo server is %2$d.</string>
     <string name="onboarding_connected">Подключено</string>
     <string name="onboarding_unreachable">Сервер недоступен. Проверьте адрес и повторите попытку.</string>
     <string name="onboarding_test_connected">✓ Подключено</string>
@@ -99,17 +100,17 @@
     <string name="settings_theme_system">Система</string>
     <string name="settings_theme_system_sub">Отслеживает светлое/темное устройство</string>
     <string name="settings_accent">Цвет акцента</string>
-    <string name="settings_language">Language</string>
-    <string name="settings_language_system">System language</string>
+    <string name="settings_language">Язык</string>
+    <string name="settings_language_system">Язык системы</string>
     <string name="settings_notifications">Уведомления</string>
     <string name="settings_notify_news">Новые сообщения</string>
     <string name="settings_overview_tasks">Обзор &amp; задач</string>
     <string name="settings_landing_label">Начальная страница после входа в систему</string>
     <string name="settings_hwfilter_label">Задачи: фильтр по умолчанию</string>
     <string name="settings_hwtests_label">Включить тесты и экзамены</string>
-    <string name="settings_time_format_label">Clock format</string>
-    <string name="settings_time_24h">24-hour</string>
-    <string name="settings_time_12h">12-hour</string>
+    <string name="settings_time_format_label">Формат времени</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
     <string name="settings_unread_placeholder">Макс. непрочитанных сообщений (1–50)</string>
     <string name="settings_homework_placeholder">Макс. количество открытых домашних заданий (1–50)</string>
     <string name="settings_navbar_section">Панель навигации</string>
@@ -217,12 +218,12 @@
     <string name="messages_compose_send">Отправить</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
          label() stays the German context-free fallback for tests. -->
-    <string name="message_type_all">All</string>
-    <string name="message_type_sprava">Message</string>
-    <string name="message_type_news">News</string>
-    <string name="message_type_anketa">Poll</string>
-    <string name="message_type_chat">Chat</string>
-    <string name="message_type_genotif">Notice</string>
+    <string name="message_type_all">Все</string>
+    <string name="message_type_sprava">Сообщение</string>
+    <string name="message_type_news">Новости</string>
+    <string name="message_type_anketa">Опрос</string>
+    <string name="message_type_chat">Чат</string>
+    <string name="message_type_genotif">Уведомление</string>
     <!-- Overview -->
     <string name="overview_customize">Настроить обзор</string>
     <string name="overview_customize_desc">Сначала выберите, какие разделы появляются.</string>
