@@ -650,6 +650,36 @@ input[type="search"]::-webkit-search-decoration{-webkit-appearance:none;appearan
 .lang-block .lang-btn::after{right:18px}
 .lang-block .lang-menu{position:absolute;left:0;right:0;min-width:0;top:calc(100% + 6px)}
 
+/* ---------- Sitzungen (eigene Seite) ---------- */
+.crumb{margin:0 0 14px}
+.crumb .pm-link{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--border);border-radius:999px;text-decoration:none;color:var(--ink)}
+.crumb .pm-link:hover{background:var(--surface-1)}
+.sessions-toolbar{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.sessions-search{flex:1 1 260px;min-width:200px}
+.sessions-search input[type="search"]{width:100%}
+.sessions-bulk{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.sessions-bulk-hint{font-size:12px;color:var(--ink-muted);max-width:22ch}
+.session-list{display:flex;flex-direction:column;gap:8px}
+.session-row{display:flex;align-items:center;gap:14px;padding:12px 14px;border:1px solid var(--border);border-radius:14px;background:var(--surface-1);transition:opacity .15s,border-color .15s}
+.session-row.is-off{opacity:.55}
+.session-row .secondary{flex:0 0 auto}
+.session-state{flex:0 0 auto;width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:var(--accent);color:var(--accent-ink)}
+.session-state.is-off{background:var(--surface-2);color:var(--ink-muted)}
+.session-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.session-body strong{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:750;flex-wrap:wrap}
+.session-meta{font-size:12px;color:var(--ink-muted)}
+.session-id{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;color:var(--ink-dim)}
+.session-row .tag{flex:0 0 auto}
+@media(max-width:720px){
+  /* Umbruch: Zustand oben, Name darunter, danach Status und Knopf. Ohne
+     die Reihenfolge fuer alle Kinder rueckte der Text hinter die Knoepfe. */
+  .session-row{flex-wrap:wrap}
+  .session-state{order:0}
+  .session-body{flex:1 1 100%;order:1}
+  .session-row .tag{order:2}
+  .session-row .secondary{order:3;width:100%;justify-content:center}
+}
+
 /* ---------- Icons ---------- */
 .ico{flex:0 0 auto;display:block;opacity:.85}
 .btn .ico,.secondary .ico,.primary .ico{opacity:.95}

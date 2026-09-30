@@ -24,7 +24,9 @@
     "tokenNotFound": "Token blev ikke fundet.",
     "tokenRejected": "Token ugyldig.",
     "twoFactorDemo": "Indtast demokode 123456.",
-    "twoFactorMessage": "Indtast to-faktor koden fra e-mail eller app og send den til /auth/2fa."
+    "twoFactorMessage": "Indtast to-faktor koden fra e-mail eller app og send den til /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Ugyldig anmodning.",
@@ -64,7 +66,8 @@
     "trashHomework": "Flyt lektier til papirkurven eller gendan",
     "validationDescription": "Valideringsfejl",
     "weather": "Vejr",
-    "weatherSearch": "Vejr lokation søgning"
+    "weatherSearch": "Vejr lokation søgning",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Dårlige koordinater",

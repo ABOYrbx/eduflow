@@ -24,7 +24,9 @@
     "tokenNotFound": "Token-ul nu a fost găsit.",
     "tokenRejected": "Token invalid.",
     "twoFactorDemo": "Introduceți codul demo 123456.",
-    "twoFactorMessage": "Introduceți codul cu doi factori din e-mail sau aplicație și trimiteți-l la /auth/2fa."
+    "twoFactorMessage": "Introduceți codul cu doi factori din e-mail sau aplicație și trimiteți-l la /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Cerere invalidă.",
@@ -64,7 +66,8 @@
     "trashHomework": "Mută temele la gunoi sau restaurare",
     "validationDescription": "Eroare de validare",
     "weather": "Vreme",
-    "weatherSearch": "Căutare locație meteo"
+    "weatherSearch": "Căutare locație meteo",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Coordonate greșite",

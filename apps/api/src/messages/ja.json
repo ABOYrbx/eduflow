@@ -24,7 +24,9 @@
     "tokenNotFound": "トークンが見つかりません。",
     "tokenRejected": "トークンが無効です。",
     "twoFactorDemo": "デモコード123456を入力してください。",
-    "twoFactorMessage": "メールまたはアプリから2要素コードを入力し、/auth/2faに送信します。"
+    "twoFactorMessage": "メールまたはアプリから2要素コードを入力し、/auth/2faに送信します。",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "無効なリクエストです。",
@@ -64,7 +66,8 @@
     "trashHomework": "宿題をゴミ箱に移動または復元する",
     "validationDescription": "検証エラー",
     "weather": "天気",
-    "weatherSearch": "天気の場所を検索"
+    "weatherSearch": "天気の場所を検索",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "不正な座標",

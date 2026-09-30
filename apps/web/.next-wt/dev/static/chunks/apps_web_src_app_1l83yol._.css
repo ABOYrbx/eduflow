@@ -3020,6 +3020,152 @@ input[type="search"]::-webkit-search-decoration {
   right: 0;
 }
 
+.crumb {
+  margin: 0 0 14px;
+}
+
+.crumb .pm-link {
+  border: 1px solid var(--border);
+  color: var(--ink);
+  border-radius: 999px;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  text-decoration: none;
+  display: inline-flex;
+}
+
+.crumb .pm-link:hover {
+  background: var(--surface-1);
+}
+
+.sessions-toolbar {
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  display: flex;
+}
+
+.sessions-search {
+  flex: 260px;
+  min-width: 200px;
+}
+
+.sessions-search input[type="search"] {
+  width: 100%;
+}
+
+.sessions-bulk {
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  display: flex;
+}
+
+.sessions-bulk-hint {
+  color: var(--ink-muted);
+  max-width: 22ch;
+  font-size: 12px;
+}
+
+.session-list {
+  flex-direction: column;
+  gap: 8px;
+  display: flex;
+}
+
+.session-row {
+  border: 1px solid var(--border);
+  background: var(--surface-1);
+  border-radius: 14px;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  transition: opacity .15s, border-color .15s;
+  display: flex;
+}
+
+.session-row.is-off {
+  opacity: .55;
+}
+
+.session-row .secondary {
+  flex: none;
+}
+
+.session-state {
+  background: var(--accent);
+  width: 24px;
+  height: 24px;
+  color: var(--accent-ink);
+  border-radius: 50%;
+  flex: none;
+  place-items: center;
+  display: grid;
+}
+
+.session-state.is-off {
+  background: var(--surface-2);
+  color: var(--ink-muted);
+}
+
+.session-body {
+  flex-direction: column;
+  flex: 1;
+  gap: 3px;
+  min-width: 0;
+  display: flex;
+}
+
+.session-body strong {
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 750;
+  display: flex;
+}
+
+.session-meta {
+  color: var(--ink-muted);
+  font-size: 12px;
+}
+
+.session-id {
+  color: var(--ink-dim);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11px;
+}
+
+.session-row .tag {
+  flex: none;
+}
+
+@media (max-width: 720px) {
+  .session-row {
+    flex-wrap: wrap;
+  }
+
+  .session-state {
+    order: 0;
+  }
+
+  .session-body {
+    flex: 100%;
+    order: 1;
+  }
+
+  .session-row .tag {
+    order: 2;
+  }
+
+  .session-row .secondary {
+    order: 3;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
 .ico {
   opacity: .85;
   flex: none;

@@ -24,7 +24,9 @@
     "tokenNotFound": "Tunnistetta ei löytynyt.",
     "tokenRejected": "Tunnus ei kelpaa.",
     "twoFactorDemo": "Syötä esittelykoodi 123456.",
-    "twoFactorMessage": "Syötä kaksivaiheinen koodi sähköpostista tai sovelluksesta ja lähetä se osoitteeseen /auth/2fa."
+    "twoFactorMessage": "Syötä kaksivaiheinen koodi sähköpostista tai sovelluksesta ja lähetä se osoitteeseen /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Virheellinen pyyntö.",
@@ -64,7 +66,8 @@
     "trashHomework": "Siirrä läksyt roskakoriin tai palautukseen",
     "validationDescription": "Vahvistusvirhe",
     "weather": "Sää",
-    "weatherSearch": "Säätietojen haku"
+    "weatherSearch": "Säätietojen haku",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Huonot koordinaatit",

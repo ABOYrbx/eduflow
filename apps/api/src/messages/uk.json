@@ -24,7 +24,9 @@
     "tokenNotFound": "Токен не знайдено.",
     "tokenRejected": "Неприпустимий маркер.",
     "twoFactorDemo": "Введіть демо-код 123456.",
-    "twoFactorMessage": "Введіть двофакторний код з електронної пошти або програми та надішліть його на /auth/2fa."
+    "twoFactorMessage": "Введіть двофакторний код з електронної пошти або програми та надішліть його на /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Недійсний запит.",
@@ -64,7 +66,8 @@
     "trashHomework": "Перемістити домашню роботу в смітник або відновити",
     "validationDescription": "Помилка перевірки",
     "weather": "Погода",
-    "weatherSearch": "Пошук погоди"
+    "weatherSearch": "Пошук погоди",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Помилкові координати",

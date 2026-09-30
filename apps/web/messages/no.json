@@ -194,7 +194,8 @@
     "settings": "Innstillinger",
     "timetable": "Tidsforløp",
     "scrollBack": "Scroll left",
-    "scrollForward": "Scroll right"
+    "scrollForward": "Scroll right",
+    "sessions": "Sessions"
   },
   "overview": {
     "allMessages": "Alle meldinger",
@@ -311,7 +312,8 @@
     "unnamedDevice": "Navnløs enhet",
     "validUntil": "Gyldig til {date}",
     "languageTitle": "Language",
-    "languageHint": "Applies right away. The choice is remembered on this device."
+    "languageHint": "Applies right away. The choice is remembered on this device.",
+    "sessionsPanelNote": "Devices signed in on this account."
   },
   "theme": {
     "language": "Språk",
@@ -348,5 +350,27 @@
     "viewAria": "Vis",
     "weekDetail": "{count} leksjoner denne uken.",
     "weekTab": "Uke"
+  },
+  "sessions": {
+    "eyebrow": "Sessions",
+    "title": "Signed-in devices",
+    "detail": "Every device with a session on your account. You can sign out individually or all at once.",
+    "searchPlaceholder": "Search device or ID",
+    "searchAria": "Search sessions",
+    "active": "Signed in",
+    "signedOut": "Signed out",
+    "currentBadge": "This device",
+    "revokeAllOthers": "Sign out all other devices",
+    "revokeAllOthersHint": "This device stays signed in.",
+    "noneActive": "No other device is signed in.",
+    "noMatch": "No session matches your search.",
+    "noSessions": "No sessions yet.",
+    "lastSeen": "Signed in {created}",
+    "expires": "Valid until {expires}",
+    "id": "ID",
+    "openSettings": "Manage sessions",
+    "settingsHint": "{count} signed in · this device is {current}",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOthers": "No other sessions"
   }
 }

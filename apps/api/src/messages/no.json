@@ -24,7 +24,9 @@
     "tokenNotFound": "Sjetong ikke funnet.",
     "tokenRejected": "Koden er ugyldig.",
     "twoFactorDemo": "Angi demokode 123456.",
-    "twoFactorMessage": "Skriv inn to-faktor-koden fra e-post eller app og send den til /auth/2fa."
+    "twoFactorMessage": "Skriv inn to-faktor-koden fra e-post eller app og send den til /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Ugyldig forespørsel.",
@@ -64,7 +66,8 @@
     "trashHomework": "Flytt lekser til papirkurv eller gjenoppretting",
     "validationDescription": "Feil under validering",
     "weather": "Vær",
-    "weatherSearch": "Søk etter værplassering"
+    "weatherSearch": "Søk etter værplassering",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Dårlig koordinater",

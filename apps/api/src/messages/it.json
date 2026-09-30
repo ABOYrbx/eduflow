@@ -24,7 +24,9 @@
     "tokenNotFound": "Token non trovato.",
     "tokenRejected": "Token non valido.",
     "twoFactorDemo": "Inserisci il codice demo 123456.",
-    "twoFactorMessage": "Inserisci il codice a due fattori dall'email o dall'app e invialo a /auth/2fa."
+    "twoFactorMessage": "Inserisci il codice a due fattori dall'email o dall'app e invialo a /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Richiesta non valida.",
@@ -64,7 +66,8 @@
     "trashHomework": "Sposta i compiti nel cestino o ripristina",
     "validationDescription": "Errore di convalida",
     "weather": "Meteo",
-    "weatherSearch": "Ricerca posizione meteo"
+    "weatherSearch": "Ricerca posizione meteo",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Coordinate errate",
