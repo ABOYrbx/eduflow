@@ -264,6 +264,133 @@ public struct LanguageSwitcher: View {
     }
 }
 
+// MARK: - Suchfeld (`.searchbar`)
+
+/// Echtes macOS-Suchfeld (`NSSearchField`) in der Optik der App.
+///
+/// Bewusst `NSSearchField` und nicht ein selbst gezeichnetes Textfeld: das
+/// System liefert Fokus-Ring, Lupe, Kreuz-Knopf, Platzhalter-Ausblendung und
+/// die Tastatur-Shortcuts (Esc leert) — das Verhalten ist also das des
+/// Systems, nur die Fläche ist unsere Pille. Kein `TextField`-Optik,
+/// entsprechend keine System-Steuerelement-Kante.
+public struct UberSearchField: View {
+    @Environment(\.colorScheme) private var scheme
+    @Binding var text: String
+    let prompt: String
+    var onSubmit: () -> Void = {}
+    /// Fokus sofort setzen (wichtig, wenn die Ansicht frisch eingeblendet wird).
+    var autofocus: Bool = false
+
+    public init(
+        text: Binding<String>,
+        prompt: String = "",
+        onSubmit: @escaping () -> Void = {},
+        autofocus: Bool = false
+    ) {
+        _text = text
+        self.prompt = prompt
+        self.onSubmit = onSubmit
+        self.autofocus = autofocus
+    }
+
+    public var body: some View {
+        NativeSearchField(text: $text, prompt: prompt, onSubmit: onSubmit, autofocus: autofocus)
+            .frame(height: 26)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(EduFlowPalette.surface2(scheme))
+            .clipShape(.capsule)
+            .overlay {
+                Capsule().stroke(EduFlowPalette.border(scheme), lineWidth: 1)
+            }
+    }
+}
+
+/// Brücke zu `NSSearchField`. Nutzt den Haupt-Thread-Actorrun, weil
+/// AppKit-Steuerelemente dort angelegt werden müssen.
+private struct NativeSearchField: NSViewRepresentable {
+    @Binding var text: String
+    let prompt: String
+    let onSubmit: () -> Void
+    let autofocus: Bool
+
+    @MainActor
+    func makeNSView(context: Context) -> NSSearchField {
+        let field = NSSearchField()
+        field.isBezeled = false
+        field.drawsBackground = false
+        field.focusRingType = .none
+        field.sendsWholeSearchString = false
+        field.sendsSearchStringImmediately = false
+        field.placeholderString = prompt
+        field.controlSize = .small
+        field.font = NSFont.systemFont(ofSize: 13, weight: .medium)
+        field.stringValue = text
+        field.delegate = context.coordinator
+        if autofocus {
+            DispatchQueue.main.async { field.window?.makeFirstResponder(field) }
+        }
+        return field
+    }
+
+    @MainActor
+    func updateNSView(_ field: NSSearchField, context: Context) {
+        // Nur von außen übernehmen, wenn sich der Wert wirklich unterscheidet:
+        // sonst springt der Cursor beim Tippen ans Ende.
+        if field.stringValue != text {
+            field.stringValue = text
+        }
+        if field.placeholderString != prompt {
+            field.placeholderString = prompt
+        }
+        if autofocus, let window = field.window, window.firstResponder !== field {
+            window.makeFirstResponder(field)
+        }
+    }
+
+    @MainActor
+    func makeCoordinator() -> Coordinator {
+        Coordinator(text: $text, onSubmit: onSubmit)
+    }
+
+    @MainActor
+    final class Coordinator: NSObject, NSSearchFieldDelegate {
+        private var text: Binding<String>
+        private let onSubmit: () -> Void
+
+        init(text: Binding<String>, onSubmit: @escaping () -> Void) {
+            self.text = text
+            self.onSubmit = onSubmit
+        }
+
+        func controlTextDidChange(_ obj: Notification) {
+            guard let field = obj.object as? NSSearchField else { return }
+            let value = field.stringValue
+            // Vermeidet Rückkopplung: nur schreiben, wenn sich etwas ändert.
+            if text.wrappedValue != value {
+                text.wrappedValue = value
+            }
+        }
+
+        func control(_ control: NSControl, textView: NSTextView, doCommandBy selector: Selector) -> Bool {
+            if selector == #selector(NSResponder.cancelOperation(_:)) {
+                // Esc leert das Feld (Systemverhalten der Suchleiste).
+                text.wrappedValue = ""
+                return true
+            }
+            return false
+        }
+
+        func controlTextDidEndEditing(_ obj: Notification) {
+            guard let field = obj.object as? NSSearchField, field.stringValue != text.wrappedValue else {
+                return
+            }
+            text.wrappedValue = field.stringValue
+            onSubmit()
+        }
+    }
+}
+
 // MARK: - Knöpfe (`.btn`, volle Pillen-Geometrie)
 
 ///
