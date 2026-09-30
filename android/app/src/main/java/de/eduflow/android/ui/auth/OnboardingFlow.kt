@@ -51,6 +51,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableDoubleStateOf
@@ -231,14 +232,14 @@ private fun AnimatedNextButton(text: String, onClick: () -> Unit) {
     }
 }
 
-/** Sprachauswahl als zweite Onboarding-Seite: Liste mit Stand, Auswahl + Weiter übernimmt sofort (Activity-Neustart). */
+/** Sprachauswahl als zweite Onboarding-Seite: Liste mit Stand; Auswahl wirkt sofort, ohne Neustart. */
 @Composable
 private fun LanguagePage(onNext: () -> Unit) {
     val scheme = MaterialTheme.colorScheme
     val context = LocalContext.current
-    val activity = context as? Activity
-    var selected by remember { mutableStateOf(AppLocale.current(context)) }
-    val current = AppLocale.current(context)
+    // Auswahl live beobachten, damit der Stand nach dem Setzen stimmt.
+    val current by AppLocale.selectionFlow(context).collectAsState(initial = null)
+    var selected by remember(current) { mutableStateOf(current) }
     val changed = selected != current
     val codes = remember(selected) {
         buildList {
@@ -325,12 +326,12 @@ private fun LanguagePage(onNext: () -> Unit) {
             }
         }
         PrimaryButton(
-            text = stringResource(
-                if (changed) R.string.onboarding_language_apply_restart else R.string.common_next,
-            ),
+            // common_apply statt "Übernehmen & neu starten": es gibt keinen
+            // Neustart mehr, der Knopf geht direkt zur nächsten Seite.
+            text = stringResource(if (changed) R.string.common_apply else R.string.common_next),
             onClick = {
-                if (changed) activity?.let { AppLocale.set(it, selected) } ?: onNext()
-                else onNext()
+                if (changed) AppLocale.set(context, selected)
+                onNext()
             },
             modifier = Modifier.riseIn(index = 7),
         )

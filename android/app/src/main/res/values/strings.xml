@@ -101,6 +101,8 @@
     <string name="settings_theme_system">System</string>
     <string name="settings_theme_system_sub">Follows device light/dark</string>
     <string name="settings_accent">Accent color</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_language_system">System language</string>
     <string name="settings_notifications">Notifications</string>
     <string name="settings_notify_news">New messages</string>
     <string name="settings_overview_tasks">Overview &amp; tasks</string>
