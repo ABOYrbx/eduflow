@@ -58,6 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.eduflow.android.R
 import de.eduflow.android.data.defaultDeviceName
+import de.eduflow.android.data.normalizeBaseUrl
 import de.eduflow.android.data.TokenStore
 import de.eduflow.android.ui.common.PrimaryButton
 import de.eduflow.android.ui.timetable.localizedApiMessage
@@ -171,16 +172,30 @@ fun LoginScreen(
                         }
                         else -> {
                             StepHint(stringResource(R.string.auth_hint_server))
-                            LoginField(stringResource(R.string.auth_label_server), server, { server = it; showServerConfirm = false }, TokenStore.DEFAULT_BASE_URL, KeyboardType.Uri)
-                            TextButton(onClick = {
-                                scope.launch {
-                                    onBaseUrlChange(server.trim().trimEnd('/'))
-                                    showServerConfirm = true
-                                }
-                            }) {
+                            // Leer starten, kein Vorschlag: der Hinweis ist nur
+                            // der Placeholder, die Eingabe ist die IP des Servers.
+                            LoginField(stringResource(R.string.auth_label_server), server, { server = it; showServerConfirm = false }, TokenStore.SERVER_PLACEHOLDER, KeyboardType.Uri)
+                            TextButton(
+                                enabled = server.isNotBlank(),
+                                onClick = {
+                                    scope.launch {
+                                        onBaseUrlChange(server.trim().trimEnd('/'))
+                                        showServerConfirm = true
+                                    }
+                                },
+                            ) {
                                 Text(if (showServerConfirm) stringResource(R.string.common_applied) else stringResource(R.string.common_apply))
                             }
-                            Text(stringResource(R.string.auth_server_current_format, server.ifBlank { TokenStore.DEFAULT_BASE_URL }), fontSize = 12.sp, color = scheme.onSurfaceVariant, textAlign = TextAlign.Center)
+                            // Nur den tatsaechlichen Stand zeigen, nicht die
+                            // fertige URL erfinden, wenn nichts eingetragen ist.
+                            if (server.isNotBlank()) {
+                                Text(
+                                    stringResource(R.string.auth_server_current_format, normalizeBaseUrl(server)),
+                                    fontSize = 12.sp,
+                                    color = scheme.onSurfaceVariant,
+                                    textAlign = TextAlign.Center,
+                                )
+                            }
                         }
                     }
                 }
@@ -226,8 +241,11 @@ fun LoginScreen(
                 text = if (loading) stringResource(R.string.auth_login_loading) else stringResource(R.string.auth_login),
                 onClick = {
                     scope.launch {
-                        if (showServerStep) {
-                            onBaseUrlChange(server.trim().trimEnd('/').ifBlank { TokenStore.DEFAULT_BASE_URL.trimEnd('/') })
+                        // Nur uebernehmen wenn etwas drinsteht; sonst bleibt
+                        // der gespeicherte Server unangetastet (der Schritt
+                        // laesst sich auch ohne Eingabe bestaetigen).
+                        if (showServerStep && server.isNotBlank()) {
+                            onBaseUrlChange(server.trim())
                         }
                         vm.login(username, password, device.ifBlank { emulatorLabel })
                     }

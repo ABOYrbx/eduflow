@@ -48,6 +48,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.eduflow.android.R
+import de.eduflow.android.data.TokenStore
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.settings.SettingsViewModel
@@ -200,6 +201,7 @@ fun MoreScreen(
                     OutlinedTextField(
                         value = serverDraft,
                         onValueChange = { serverDraft = it },
+                        placeholder = { Text(TokenStore.SERVER_PLACEHOLDER) },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
                         shape = RoundedCornerShape(16.dp),
@@ -215,8 +217,9 @@ fun MoreScreen(
                 }
             },
             confirmButton = {
+                // Leer lassen ist erlaubt: dann bleibt der alte Server stehen.
                 TextButton(onClick = {
-                    onBaseUrlChange(serverDraft.trim().trimEnd('/'))
+                    if (serverDraft.isNotBlank()) onBaseUrlChange(serverDraft.trim())
                     showServer = false
                 }) { Text(stringResource(R.string.common_apply)) }
             },

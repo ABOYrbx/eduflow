@@ -251,4 +251,19 @@ class LogicPackageTest {
         assertFalse(TokenStore.isDemoServerUrl("http://10.0.2.2:3000/api/v1/"))
         assertFalse(TokenStore.isDemoServerUrl(""))
     }
+
+    @Test
+    fun demoServerUrlDetectionFollowsPortNotHost() {
+        // Ohne Port-Eingabe erkannt, weil :3100 der Demo-Port ist.
+        assertTrue(TokenStore.isDemoServerUrl("10.0.2.2:3100"))
+        // Entscheidend: ein Demo-Server im WLAN (Handy gegen den Mac) ist
+        // auch ein Demo — die Host-IP weicht von DEMO_BASE_URL ab, der
+        // Vergleich lief vorher ueber die volle URL und wuerde scheitern.
+        assertTrue(TokenStore.isDemoServerUrl("192.168.1.5:3100"))
+        // Gleicher Host, anderer Port -> kein Demo.
+        assertFalse(TokenStore.isDemoServerUrl("192.168.1.5:3000"))
+        assertFalse(TokenStore.isDemoServerUrl("192.168.1.5"))
+        // Hostname statt IP zaehlt genauso.
+        assertTrue(TokenStore.isDemoServerUrl("mein-mac.local:3100"))
+    }
 }
