@@ -249,10 +249,9 @@ private fun LanguagePage(onNext: () -> Unit) {
     val codes = remember(query, available, system) {
         AppLocale.filterLanguages(AppLocale.orderedLanguages(available, system), query)
     }
-    // Die vorausgewählte Systemsprache gilt ohnehin schon — sie ist kein Wechsel
-    // und darf die App-Sprache nicht festnageln, wenn das Gerät später die
-    // Systemsprache ändert.
-    val changed = selected != current && !(current == null && selected == system)
+    // Die vorausgewählte Systemsprache wird nicht festgenagelt: erst wenn die
+    // Nutzerin tatsächlich eine Sprache antippt, wird sie gespeichert.
+
     Column(
         modifier = Modifier.fillMaxSize().padding(horizontal = 28.dp, vertical = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -310,7 +309,13 @@ private fun LanguagePage(onNext: () -> Unit) {
                 EduCard(modifier = Modifier.fillMaxWidth()) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth().padding(16.dp).clickable { selected = code },
+                        // Wirkt sofort: die Umschaltung ist live, ein
+                        // separater "Übernehmen"-Schritt wäre überflüssig —
+                        // der Knopf bleibt daher immer "Weiter".
+                        modifier = Modifier.fillMaxWidth().padding(16.dp).clickable {
+                            selected = code
+                            AppLocale.set(context, code)
+                        },
                     ) {
                         Box(
                             contentAlignment = Alignment.Center,
@@ -360,15 +365,11 @@ private fun LanguagePage(onNext: () -> Unit) {
             }
         }
         PrimaryButton(
-            // common_apply statt "Übernehmen & neu starten": es gibt keinen
-            // Neustart mehr, der Knopf geht direkt zur nächsten Seite. Bleibt
-            // die (vorausgewählte) Systemsprache, ist nichts zu übernehmen.
-            text = stringResource(if (changed) R.string.common_apply else R.string.common_next),
+            // Die Sprache ist beim Tippen bereits gesetzt — der Knopf ist nur
+            // noch "Weiter" zur naechsten Onboarding-Seite.
+            text = stringResource(R.string.common_next),
             enabled = selected != null,
-            onClick = {
-                if (changed) selected?.let { AppLocale.set(context, it) }
-                onNext()
-            },
+            onClick = onNext,
             modifier = Modifier.riseIn(index = 7),
         )
     }
