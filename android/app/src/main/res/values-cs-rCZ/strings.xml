@@ -51,10 +51,10 @@
     <!-- Onboarding -->
     <string name="onboarding_greeting">Ahoj!</string>
     <string name="onboarding_language_title">Vyberte jazyk</string>
-    <string name="onboarding_language_search">Search language</string>
-    <string name="onboarding_language_no_results">No language found</string>
-    <string name="onboarding_language_system_short">SYSTEM</string>
-    <string name="onboarding_language_system_format">System language: %1$s</string>
+    <string name="onboarding_language_search">Hledat jazyk</string>
+    <string name="onboarding_language_no_results">Žádný jazyk nenalezen</string>
+    <string name="onboarding_language_system_short">SYSTÉM</string>
+    <string name="onboarding_language_system_format">Jazyk systému: %1$s</string>
     <string name="onboarding_language_sub">EduFlow mluví vaším jazykem. Výběr se provádí okamžitě.</string>
     <string name="onboarding_language_apply_restart">Použít &amp; restartovat</string>
     <string name="onboarding_language_system">Systém</string>
@@ -67,6 +67,7 @@
     <string name="onboarding_feat3_title">Časový rozvrh &amp; Počasí</string>
     <string name="onboarding_feat3_desc">Den a týden plus počasí v přehledu.</string>
     <string name="onboarding_server_sub">Zadejte místo, kde EduFlow běží jako server.</string>
+    <string name="onboarding_server_hint">Stačí IP adresa — port a cesta se doplní automaticky.</string>
     <string name="onboarding_connected">Připojeno</string>
     <string name="onboarding_unreachable">Server je nedostupný. Zkontrolujte adresu a zkuste to znovu.</string>
     <string name="onboarding_test_connected">✓ Připojeno</string>
@@ -99,17 +100,17 @@
     <string name="settings_theme_system">Systém</string>
     <string name="settings_theme_system_sub">Sleduje zařízení světlo/tmavý</string>
     <string name="settings_accent">Barva zvýraznění</string>
-    <string name="settings_language">Language</string>
-    <string name="settings_language_system">System language</string>
+    <string name="settings_language">Jazyk</string>
+    <string name="settings_language_system">Jazyk systému</string>
     <string name="settings_notifications">Oznámení</string>
     <string name="settings_notify_news">Nové zprávy</string>
     <string name="settings_overview_tasks">Přehled &amp; úkolů</string>
     <string name="settings_landing_label">Začít stránku po přihlášení</string>
     <string name="settings_hwfilter_label">Úkoly: výchozí filtr</string>
     <string name="settings_hwtests_label">Zahrnout testy a zkoušky</string>
-    <string name="settings_time_format_label">Clock format</string>
-    <string name="settings_time_24h">24-hour</string>
-    <string name="settings_time_12h">12-hour</string>
+    <string name="settings_time_format_label">Formát času</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
     <string name="settings_unread_placeholder">Max. nepřečtené zprávy (1–50)</string>
     <string name="settings_homework_placeholder">Max. otevřené domácí úkoly (1–50)</string>
     <string name="settings_navbar_section">Navigační panel</string>
@@ -217,12 +218,12 @@
     <string name="messages_compose_send">Poslat</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
          label() stays the German context-free fallback for tests. -->
-    <string name="message_type_all">All</string>
-    <string name="message_type_sprava">Message</string>
-    <string name="message_type_news">News</string>
-    <string name="message_type_anketa">Poll</string>
+    <string name="message_type_all">Vše</string>
+    <string name="message_type_sprava">Zpráva</string>
+    <string name="message_type_news">Novinky</string>
+    <string name="message_type_anketa">Anketa</string>
     <string name="message_type_chat">Chat</string>
-    <string name="message_type_genotif">Notice</string>
+    <string name="message_type_genotif">Oznámení</string>
     <!-- Overview -->
     <string name="overview_customize">Přizpůsobit přehled</string>
     <string name="overview_customize_desc">Vyberte, které sekce se objeví jako první.</string>
