@@ -55,6 +55,10 @@
     <!-- Onboarding -->
     <string name="onboarding_greeting">Hello!</string>
     <string name="onboarding_language_title">Choose language</string>
+    <string name="onboarding_language_search">Search language</string>
+    <string name="onboarding_language_no_results">No language found</string>
+    <string name="onboarding_language_system_short">SYSTEM</string>
+    <string name="onboarding_language_system_format">System language: %1$s</string>
     <string name="onboarding_language_sub">EduFlow speaks your language. The selection applies immediately.</string>
     <string name="onboarding_language_apply_restart">Apply &amp; restart</string>
     <string name="onboarding_language_system">System</string>

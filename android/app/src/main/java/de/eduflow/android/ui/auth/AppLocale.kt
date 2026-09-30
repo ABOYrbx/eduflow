@@ -86,6 +86,47 @@ object AppLocale {
         Locale(code).getDisplayLanguage(Locale(code)).replaceFirstChar { it.uppercase() }
 
     /**
+     * Systemsprache als 2-Buchstaben-Code, aber nur wenn wir sie auch
+     * ausliefern. Sonst würde die Sprachauswahl einen Eintrag markieren, den
+     * es gar nicht gibt.
+     */
+    fun systemCode(available: List<String>): String? =
+        Locale.getDefault().language.takeIf { it in available }
+
+    /**
+     * Vorauswahl der Sprachliste: eine gespeicherte Wahl gewinnt, sonst die
+     * erkannte Systemsprache. Damit entfällt der separate „System"-Eintrag —
+     * der Systemsprache-Eintrag ist einfach schon markiert.
+     */
+    fun initialSelection(current: String?, system: String?): String? =
+        current ?: system
+
+    /**
+     * Sprachliste für die Auswahl: Systemsprache zuerst, danach alphabetisch
+     * nach Eigenname. Reine Logik, damit testbar.
+     */
+    fun orderedLanguages(available: List<String>, system: String?): List<String> =
+        available.sortedWith(
+            compareBy({ it != system }, { nativeName(it).lowercase() }),
+        )
+
+    /**
+     * Filtert [candidates] nach Suchbegriff: der Eigenname zählt mit Präfix
+     * („deut" findet Deutsch, „fran" findet Français), der Sprachcode bei
+     * exakter Übereinstimmung. Kein reines Teilstring — sonst fände „de" auch
+     * „Nederlands" und „Slovenščina"; Präfix ist für ein Suchfeld das
+     * erwartete Verhalten. Reine Logik.
+     */
+    fun filterLanguages(candidates: List<String>, query: String): List<String> {
+        val needle = query.trim().lowercase()
+        if (needle.isEmpty()) return candidates
+        return candidates.filter { code ->
+            nativeName(code).lowercase().startsWith(needle) ||
+                code.equals(needle, ignoreCase = true)
+        }
+    }
+
+    /**
      * Text einer Ressource in einer anderen Sprache (Fallback: aktuelle
      * Ressourcen, also die App-Sprache). Wird für die Begrüßung und den
      * Weiter-Knopf im Onboarding benutzt, damit beides dieselbe Sprache zeigt.
@@ -131,34 +172,34 @@ object AppLocale {
     }
 
     private val coverage = mapOf(
-        "en" to LocaleCoverage("en", 318, 318),
-        "af" to LocaleCoverage("af", 278, 318),
-        "ar" to LocaleCoverage("ar", 125, 318),
-        "ca" to LocaleCoverage("ca", 278, 318),
-        "cs" to LocaleCoverage("cs", 288, 318),
-        "da" to LocaleCoverage("da", 279, 318),
-        "de" to LocaleCoverage("de", 291, 318),
-        "el" to LocaleCoverage("el", 284, 318),
-        "es" to LocaleCoverage("es", 291, 318),
-        "fi" to LocaleCoverage("fi", 291, 318),
-        "fr" to LocaleCoverage("fr", 280, 318),
-        "hu" to LocaleCoverage("hu", 278, 318),
-        "it" to LocaleCoverage("it", 275, 318),
-        "iw" to LocaleCoverage("iw", 278, 318),
-        "ja" to LocaleCoverage("ja", 283, 318),
-        "ko" to LocaleCoverage("ko", 278, 318),
-        "nl" to LocaleCoverage("nl", 277, 318),
-        "no" to LocaleCoverage("no", 290, 318),
-        "pl" to LocaleCoverage("pl", 287, 318),
-        "pt" to LocaleCoverage("pt", 294, 318),
-        "ro" to LocaleCoverage("ro", 287, 318),
-        "ru" to LocaleCoverage("ru", 295, 318),
-        "sr" to LocaleCoverage("sr", 278, 318),
-        "sv" to LocaleCoverage("sv", 284, 318),
-        "tr" to LocaleCoverage("tr", 278, 318),
-        "uk" to LocaleCoverage("uk", 283, 318),
-        "vi" to LocaleCoverage("vi", 278, 318),
-        "zh" to LocaleCoverage("zh", 300, 318),
+        "en" to LocaleCoverage("en", 322, 322),
+        "af" to LocaleCoverage("af", 278, 322),
+        "ar" to LocaleCoverage("ar", 125, 322),
+        "ca" to LocaleCoverage("ca", 278, 322),
+        "cs" to LocaleCoverage("cs", 288, 322),
+        "da" to LocaleCoverage("da", 279, 322),
+        "de" to LocaleCoverage("de", 294, 322),
+        "el" to LocaleCoverage("el", 284, 322),
+        "es" to LocaleCoverage("es", 291, 322),
+        "fi" to LocaleCoverage("fi", 291, 322),
+        "fr" to LocaleCoverage("fr", 280, 322),
+        "hu" to LocaleCoverage("hu", 278, 322),
+        "it" to LocaleCoverage("it", 275, 322),
+        "iw" to LocaleCoverage("iw", 278, 322),
+        "ja" to LocaleCoverage("ja", 283, 322),
+        "ko" to LocaleCoverage("ko", 278, 322),
+        "nl" to LocaleCoverage("nl", 277, 322),
+        "no" to LocaleCoverage("no", 290, 322),
+        "pl" to LocaleCoverage("pl", 287, 322),
+        "pt" to LocaleCoverage("pt", 294, 322),
+        "ro" to LocaleCoverage("ro", 287, 322),
+        "ru" to LocaleCoverage("ru", 295, 322),
+        "sr" to LocaleCoverage("sr", 278, 322),
+        "sv" to LocaleCoverage("sv", 284, 322),
+        "tr" to LocaleCoverage("tr", 278, 322),
+        "uk" to LocaleCoverage("uk", 283, 322),
+        "vi" to LocaleCoverage("vi", 278, 322),
+        "zh" to LocaleCoverage("zh", 300, 322),
     )
     /** Nenner für Sprachen ohne Eintrag (entspricht dem Stand der Source). */
     private const val fallbackTotal = 316

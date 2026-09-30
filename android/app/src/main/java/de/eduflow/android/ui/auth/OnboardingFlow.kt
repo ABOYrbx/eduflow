@@ -80,6 +80,7 @@ import de.eduflow.android.data.TokenStore
 import de.eduflow.android.data.normalizeBaseUrl
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.PrimaryButton
+import de.eduflow.android.ui.common.SearchPill
 import de.eduflow.android.ui.theme.EduFlowRiseEasing
 import de.eduflow.android.ui.theme.LocalReducedMotion
 import de.eduflow.android.ui.theme.riseIn
@@ -232,23 +233,26 @@ private fun AnimatedNextButton(text: String, onClick: () -> Unit) {
     }
 }
 
-/** Sprachauswahl als zweite Onboarding-Seite: Liste mit Stand; Auswahl wirkt sofort, ohne Neustart. */
+/** Sprachauswahl als zweite Onboarding-Seite: Suchfeld + Liste mit Stand; Auswahl wirkt sofort. */
 @Composable
 private fun LanguagePage(onNext: () -> Unit) {
     val scheme = MaterialTheme.colorScheme
     val context = LocalContext.current
     // Auswahl live beobachten, damit der Stand nach dem Setzen stimmt.
     val current by AppLocale.selectionFlow(context).collectAsState(initial = null)
-    var selected by remember(current) { mutableStateOf(current) }
-    val changed = selected != current
-    val codes = remember(selected) {
-        buildList {
-            add(null)
-            addAll(AppLocale.availableLocales(context).sortedWith(
-                compareBy({ it != current }, { AppLocale.nativeName(it).lowercase() }),
-            ))
-        }
+    val available = remember { AppLocale.availableLocales(context) }
+    val system = remember(available) { AppLocale.systemCode(available) }
+    // Ohne eigene Wahl gilt die Systemsprache — sie ist einfach markiert,
+    // ein eigener „System"-Eintrag wäre doppelt.
+    var selected by remember(current, system) { mutableStateOf(AppLocale.initialSelection(current, system)) }
+    var query by remember { mutableStateOf("") }
+    val codes = remember(query, available, system) {
+        AppLocale.filterLanguages(AppLocale.orderedLanguages(available, system), query)
     }
+    // Die vorausgewählte Systemsprache gilt ohnehin schon — sie ist kein Wechsel
+    // und darf die App-Sprache nicht festnageln, wenn das Gerät später die
+    // Systemsprache ändert.
+    val changed = selected != current && !(current == null && selected == system)
     Column(
         modifier = Modifier.fillMaxSize().padding(horizontal = 28.dp, vertical = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -270,10 +274,37 @@ private fun LanguagePage(onNext: () -> Unit) {
             color = scheme.onSurfaceVariant,
             modifier = Modifier.padding(top = 10.dp, start = 24.dp, end = 24.dp).riseIn(index = 3),
         )
+        if (system != null) {
+            Text(
+                stringResource(R.string.onboarding_language_system_format, AppLocale.nativeName(system)),
+                fontSize = 13.sp,
+                color = scheme.onSurfaceVariant,
+                modifier = Modifier.padding(top = 8.dp).riseIn(index = 5),
+            )
+        }
+        SearchPill(
+            value = query,
+            onValueChange = { query = it },
+            placeholder = stringResource(R.string.onboarding_language_search),
+            modifier = Modifier.padding(top = 16.dp).riseIn(index = 4),
+        )
+        // Listenhöhe über weight begrenzt, damit der Weiter-Knopf nie
+        // überlagert wird; zusätzlich Luft nach unten, damit die letzte
+        // Zeile beim Scrollen nicht unter dem Knopf verschwindet.
         Column(
-            modifier = Modifier.fillMaxWidth().weight(1f).verticalScroll(rememberScrollState()).padding(top = 20.dp),
+            modifier = Modifier.fillMaxWidth().weight(1f).verticalScroll(rememberScrollState())
+                .padding(top = 12.dp, bottom = 8.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
+            if (codes.isEmpty()) {
+                Text(
+                    stringResource(R.string.onboarding_language_no_results),
+                    fontSize = 14.sp,
+                    color = scheme.onSurfaceVariant,
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp),
+                    textAlign = TextAlign.Center,
+                )
+            }
             codes.forEach { code ->
                 val isSelected = selected == code
                 EduCard(modifier = Modifier.fillMaxWidth()) {
@@ -292,34 +323,37 @@ private fun LanguagePage(onNext: () -> Unit) {
                         Column(Modifier.padding(start = 14.dp).weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(
-                                    if (code == null) stringResource(R.string.onboarding_language_system)
-                                    else AppLocale.nativeName(code),
+                                    AppLocale.nativeName(code),
                                     fontSize = 15.sp,
                                     fontWeight = FontWeight.Black,
                                     letterSpacing = (-0.2).sp,
                                     color = scheme.onSurface,
                                     modifier = Modifier.weight(1f),
                                 )
-                                if (code != null) {
+                                if (code == system && current == null) {
+                                    // Kennzeichnet, was ohne eigene Wahl gilt.
                                     Text(
-                                        "${AppLocale.coverageFor(code).percent} %",
-                                        fontSize = 13.sp,
+                                        stringResource(R.string.onboarding_language_system_short),
+                                        fontSize = 11.sp,
+                                        fontWeight = FontWeight.Bold,
                                         color = scheme.onSurfaceVariant,
+                                        modifier = Modifier
+                                            .padding(end = 8.dp)
+                                            .clip(CircleShape)
+                                            .background(scheme.surfaceVariant)
+                                            .padding(horizontal = 8.dp, vertical = 2.dp),
                                     )
                                 }
-                            }
-                            if (code != null) {
-                                LinearProgressIndicator(
-                                    progress = { AppLocale.coverageFor(code).percent / 100f },
-                                    modifier = Modifier.fillMaxWidth().height(4.dp).clip(CircleShape),
-                                )
-                            } else {
                                 Text(
-                                    stringResource(R.string.onboarding_language_system_desc),
+                                    "${AppLocale.coverageFor(code).percent} %",
                                     fontSize = 13.sp,
                                     color = scheme.onSurfaceVariant,
                                 )
                             }
+                            LinearProgressIndicator(
+                                progress = { AppLocale.coverageFor(code).percent / 100f },
+                                modifier = Modifier.fillMaxWidth().height(4.dp).clip(CircleShape),
+                            )
                         }
                     }
                 }
@@ -327,10 +361,12 @@ private fun LanguagePage(onNext: () -> Unit) {
         }
         PrimaryButton(
             // common_apply statt "Übernehmen & neu starten": es gibt keinen
-            // Neustart mehr, der Knopf geht direkt zur nächsten Seite.
+            // Neustart mehr, der Knopf geht direkt zur nächsten Seite. Bleibt
+            // die (vorausgewählte) Systemsprache, ist nichts zu übernehmen.
             text = stringResource(if (changed) R.string.common_apply else R.string.common_next),
+            enabled = selected != null,
             onClick = {
-                if (changed) AppLocale.set(context, selected)
+                if (changed) selected?.let { AppLocale.set(context, it) }
                 onNext()
             },
             modifier = Modifier.riseIn(index = 7),

@@ -77,6 +77,41 @@ class OnboardingLocaleTest {
     }
 
     @Test
+    fun filterLanguages_matchesNameAndCodeIgnoringCase() {
+        val all = listOf("de", "fr", "nl", "pt")
+        assertEquals(all, AppLocale.filterLanguages(all, ""))
+        assertEquals(all, AppLocale.filterLanguages(all, "   "))
+        assertEquals(listOf("de"), AppLocale.filterLanguages(all, "Deutsch"))
+        assertEquals(listOf("de"), AppLocale.filterLanguages(all, "deut"))
+        // Praefix statt Teilstring: "de" darf nicht auch "Nederlands" (nl)
+        // treffen, obwohl "de" darin als Teilstring steckt.
+        assertEquals(listOf("de"), AppLocale.filterLanguages(all, "DE"))
+        assertEquals(listOf("nl"), AppLocale.filterLanguages(all, "n"))
+        assertEquals(listOf("pt"), AppLocale.filterLanguages(all, "port"))
+        assertEquals(emptyList<String>(), AppLocale.filterLanguages(all, "zzzz"))
+    }
+
+    @Test
+    fun orderedLanguages_putsSystemFirstThenAlphabetical() {
+        val all = listOf("de", "fr", "nl", "pt")
+        assertEquals(listOf("de", "fr", "nl", "pt"), AppLocale.orderedLanguages(all, "de"))
+        // Ohne erkannte Systemsprache rein alphabetisch.
+        assertEquals(listOf("de", "fr", "nl", "pt"), AppLocale.orderedLanguages(all, null))
+        assertEquals(listOf("fr", "de", "nl", "pt"), AppLocale.orderedLanguages(all, "fr"))
+    }
+
+    @Test
+    fun initialSelection_prefersStoredChoiceOverSystem() {
+        // Eigene Wahl gewinnt.
+        assertEquals("fr", AppLocale.initialSelection("fr", "de"))
+        // Ohne eigene Wahl gilt die Systemsprache — sie ist einfach markiert,
+        // ein eigener System-Eintrag entfällt.
+        assertEquals("de", AppLocale.initialSelection(null, "de"))
+        // Systemsprache, die wir nicht ausliefern, wird nicht erfunden.
+        assertEquals(null, AppLocale.initialSelection(null, null))
+    }
+
+    @Test
     fun coverage_defaultsUnknownToZero() {
         val unknown = AppLocale.coverageFor("xx")
         assertEquals(0, unknown.percent)
