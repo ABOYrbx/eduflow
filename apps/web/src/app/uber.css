@@ -129,6 +129,12 @@ select.input-pill{appearance:none;-webkit-appearance:none;padding-right:38px;cur
 .meta strong{color:var(--ink)}
 .tag{display:inline-block;font-size:11px;font-weight:700;padding:5px 12px;border-radius:var(--r-full);letter-spacing:.2px}
 .tag-solid{background:var(--accent);color:var(--accent-ink)}
+/* Die Heute-Markierung im Stundenplan ist ueber tag-solid schwarz im hellen
+   und weiss im dunklen Modus. Sie soll genau umgekehrt sein: weiss auf
+   hellem, schwarz auf dunklem Grund. Ohne Rand verschmilzt die Pille sonst
+   mit dem Kopf der Spalte, deshalb bekommt sie einen. */
+.tt-day .tag-solid{background:#ffffff;color:#000000;border:1px solid var(--border-strong)}
+[data-theme="dark"] .tt-day .tag-solid{background:#000000;color:#ffffff;border-color:rgba(255,255,255,.45)}
 .tag-soft{background:var(--surface-2);color:var(--ink)}
 .tag-outline{background:#fff;color:#000;border:1px solid var(--ink)}
 .tag-muted{background:var(--surface-1);color:var(--ink-muted);border:1px solid var(--border)}
