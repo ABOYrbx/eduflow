@@ -24,7 +24,9 @@
     "tokenNotFound": "Token blev ikke fundet.",
     "tokenRejected": "Token ugyldig.",
     "twoFactorDemo": "Indtast demokode 123456.",
-    "twoFactorMessage": "Indtast to-faktor koden fra e-mail eller app og send den til /auth/2fa."
+    "twoFactorMessage": "Indtast to-faktor koden fra e-mail eller app og send den til /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Ugyldig anmodning.",
@@ -64,7 +66,8 @@
     "trashHomework": "Flyt lektier til papirkurven eller gendan",
     "validationDescription": "Valideringsfejl",
     "weather": "Vejr",
-    "weatherSearch": "Vejr lokation søgning"
+    "weatherSearch": "Vejr lokation søgning",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Dårlige koordinater",
@@ -103,6 +106,8 @@
     "hwStatusLabel": "Hjemmeside: Standard filter",
     "hwTestsLabel": "Hjemmeside: Inkluder test og eksamener som standard",
     "landingLabel": "Startside efter log ind",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "Alle",
     "optDashboard": "Beskeder",
     "optDone": "Kun udført",
@@ -118,7 +123,12 @@
     "ovWetterHint": "Gælder for web-interface og Android-appen.",
     "ovWetterLabel": "Vis vejrkort på oversigten",
     "sectionUebersicht": "Oversigt",
-    "sectionWetter": "Vejr"
+    "sectionWetter": "Vejr",
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor.",
+    "ovSpanLabel": "Section widths",
+    "ovSpanHint": "Sections you set to half width sit next to each other."
   },
   "upstream": {
     "agendaFailed": "Skolebegivenheder kunne ikke indlæses: {detail}",
