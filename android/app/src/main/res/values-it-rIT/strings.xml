@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">EduFlow</string>
     <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
-    <string name="common_logo_desc">Logo di EduFlow</string>
+    <string name="common_logo_desc">EduFlow logo</string>
     <string name="common_demo_badge">DEMO</string>
     <string name="common_profile_title">Il tuo profilo</string>
     <string name="common_profile_default_account">Account</string>
@@ -344,4 +344,19 @@
         <item quantity="one">Ø %1$s · Nota %2$d</item>
         <item quantity="other">Ø %1$s · %2$d Noten</item>
     </plurals>
+    <string name="onboarding_language_search">Cerca lingua</string>
+    <string name="onboarding_language_no_results">Nessuna lingua trovata</string>
+    <string name="onboarding_language_system_short">SISTEMA</string>
+    <string name="onboarding_language_system_format">Lingua di sistema: %1$s</string>
+    <string name="settings_language">Lingua</string>
+    <string name="settings_language_system">Lingua di sistema</string>
+    <string name="settings_time_format_label">Formato dell’ora</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
+    <string name="message_type_all">Tutti</string>
+    <string name="message_type_sprava">Messaggio</string>
+    <string name="message_type_news">Notizie</string>
+    <string name="message_type_anketa">Sondaggio</string>
+    <string name="message_type_chat">Chat</string>
+    <string name="message_type_genotif">Avviso</string>
 </resources>

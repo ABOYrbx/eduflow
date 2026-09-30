@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">EduFlow</string>
     <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
-    <string name="common_logo_desc">Eduardo Logo</string>
+    <string name="common_logo_desc">EduFlow logo</string>
     <string name="common_demo_badge">二极管</string>
     <string name="common_profile_title">您的个人资料</string>
     <string name="common_profile_default_account">账户</string>
@@ -341,4 +341,19 @@
     <plurals name="grades_notes_count">
         <item quantity="other">预设 %1$s · %2$d</item>
     </plurals>
+    <string name="onboarding_language_search">搜索语言</string>
+    <string name="onboarding_language_no_results">未找到语言</string>
+    <string name="onboarding_language_system_short">系统</string>
+    <string name="onboarding_language_system_format">系统语言：%1$s</string>
+    <string name="settings_language">语言</string>
+    <string name="settings_language_system">系统语言</string>
+    <string name="settings_time_format_label">时钟格式</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
+    <string name="message_type_all">全部</string>
+    <string name="message_type_sprava">消息</string>
+    <string name="message_type_news">新闻</string>
+    <string name="message_type_anketa">投票</string>
+    <string name="message_type_chat">聊天</string>
+    <string name="message_type_genotif">通知</string>
 </resources>

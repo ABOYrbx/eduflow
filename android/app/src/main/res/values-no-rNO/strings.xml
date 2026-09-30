@@ -344,4 +344,20 @@
         <item quantity="one">Ø %1$s · %2$d notat</item>
         <item quantity="other">Ø %1$s · %2$d Noten</item>
     </plurals>
+    <string name="onboarding_language_search">Søk etter språk</string>
+    <string name="onboarding_language_no_results">Fant ingen språk</string>
+    <string name="onboarding_language_system_short">SYSTEM</string>
+    <string name="onboarding_language_system_format">Systemspråk: %1$s</string>
+    <string name="onboarding_server_hint">Bare IP-adressen — port og bane legges til automatisk.</string>
+    <string name="settings_language">Språk</string>
+    <string name="settings_language_system">Systemspråk</string>
+    <string name="settings_time_format_label">Klokkeformat</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
+    <string name="message_type_all">Alle</string>
+    <string name="message_type_sprava">Melding</string>
+    <string name="message_type_news">Nyheter</string>
+    <string name="message_type_anketa">Avstemning</string>
+    <string name="message_type_chat">Chat</string>
+    <string name="message_type_genotif">Varsel</string>
 </resources>

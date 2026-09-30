@@ -654,10 +654,19 @@ private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
         OutlinedTextField(
             value = draft,
             onValueChange = { draft = it; message = null; connected = false },
-            // Nur IP eingeben. Hint, kein Wert — das Feld startet leer.
+            // Nur IP genügt, Port ist optional — der Hinweis sagt beides.
             placeholder = { Text(TokenStore.SERVER_PLACEHOLDER) },
             supportingText = if (draft.isBlank()) {
-                { Text(stringResource(R.string.onboarding_server_hint), fontSize = 12.sp) }
+                {
+                    Text(
+                        stringResource(
+                            R.string.onboarding_server_hint,
+                            TokenStore.DEFAULT_PORT,
+                            TokenStore.DEMO_PORT,
+                        ),
+                        fontSize = 12.sp,
+                    )
+                }
             } else {
                 null
             },

@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">EduFlow</string>
     <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
-    <string name="common_logo_desc">Logo de EduFlow</string>
+    <string name="common_logo_desc">EduFlow logo</string>
     <string name="common_demo_badge">DEMO</string>
     <string name="common_profile_title">Tu perfil</string>
     <string name="common_profile_default_account">Cuenta</string>
@@ -344,4 +344,20 @@
         <item quantity="one">Ø %1$s · %2$d Nota</item>
         <item quantity="other">Ø %1$s · %2$d Nota</item>
     </plurals>
+    <string name="onboarding_language_search">Buscar idioma</string>
+    <string name="onboarding_language_no_results">No se encontró ningún idioma</string>
+    <string name="onboarding_language_system_short">SISTEMA</string>
+    <string name="onboarding_language_system_format">Idioma del sistema: %1$s</string>
+    <string name="onboarding_server_hint">Solo la dirección IP — el puerto y la ruta se añaden automáticamente.</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_language_system">Idioma del sistema</string>
+    <string name="settings_time_format_label">Formato de hora</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
+    <string name="message_type_all">Todos</string>
+    <string name="message_type_sprava">Mensaje</string>
+    <string name="message_type_news">Noticias</string>
+    <string name="message_type_anketa">Encuesta</string>
+    <string name="message_type_chat">Chat</string>
+    <string name="message_type_genotif">Aviso</string>
 </resources>

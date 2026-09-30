@@ -344,4 +344,19 @@
         <item quantity="one">Ø %1$s · %2$d Notitie</item>
         <item quantity="other">Ø %1$s · %2$d Noten</item>
     </plurals>
+    <string name="onboarding_language_search">Taal zoeken</string>
+    <string name="onboarding_language_no_results">Geen taal gevonden</string>
+    <string name="onboarding_language_system_short">SYSTEEM</string>
+    <string name="onboarding_language_system_format">Systeemtaal: %1$s</string>
+    <string name="settings_language">Taal</string>
+    <string name="settings_language_system">Systeemtaal</string>
+    <string name="settings_time_format_label">Tijdnotatie</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
+    <string name="message_type_all">Alles</string>
+    <string name="message_type_sprava">Bericht</string>
+    <string name="message_type_news">Nieuws</string>
+    <string name="message_type_anketa">Enquête</string>
+    <string name="message_type_chat">Chat</string>
+    <string name="message_type_genotif">Melding</string>
 </resources>

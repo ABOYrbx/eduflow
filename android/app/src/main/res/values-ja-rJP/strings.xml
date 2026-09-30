@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">EduFlow</string>
     <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
-    <string name="common_logo_desc">EduFlow ロゴ</string>
+    <string name="common_logo_desc">EduFlow logo</string>
     <string name="common_demo_badge">デモ版</string>
     <string name="common_profile_title">あなたのプロフィール</string>
     <string name="common_profile_default_account">アカウント</string>
@@ -341,4 +341,19 @@
     <plurals name="grades_notes_count">
         <item quantity="other">Ø %1$s · %2$d Noten</item>
     </plurals>
+    <string name="onboarding_language_search">言語を検索</string>
+    <string name="onboarding_language_no_results">言語が見つかりません</string>
+    <string name="onboarding_language_system_short">システム</string>
+    <string name="onboarding_language_system_format">システムの言語: %1$s</string>
+    <string name="settings_language">言語</string>
+    <string name="settings_language_system">システムの言語</string>
+    <string name="settings_time_format_label">時刻の形式</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
+    <string name="message_type_all">すべて</string>
+    <string name="message_type_sprava">メッセージ</string>
+    <string name="message_type_news">ニュース</string>
+    <string name="message_type_anketa">アンケート</string>
+    <string name="message_type_chat">チャット</string>
+    <string name="message_type_genotif">お知らせ</string>
 </resources>

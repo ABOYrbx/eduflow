@@ -71,7 +71,7 @@
     <string name="onboarding_feat3_title">Timetable &amp; Weather</string>
     <string name="onboarding_feat3_desc">Day and week plus weather on the overview.</string>
     <string name="onboarding_server_sub">Enter the IP address of your EduFlow server.</string>
-    <string name="onboarding_server_hint">Just the IP — port and path are added automatically.</string>
+    <string name="onboarding_server_hint">IP alone uses port %1$d. Add :port for another one — the demo server is %2$d.</string>
     <string name="onboarding_connected">Connected</string>
     <string name="onboarding_unreachable">Server unreachable. Check the address and try again.</string>
     <string name="onboarding_test_connected">✓ Connected</string>
