@@ -33,7 +33,14 @@
     "noText": "(немає тексту)",
     "requestFailed": "Не вдалося виконати запит.",
     "school": "Школа",
-    "upstreamUnreachable": "Сервер недоступний."
+    "upstreamUnreachable": "Сервер недоступний.",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "Середня за вагою",
@@ -185,7 +192,10 @@
     "profileAria": "Відкрити меню профілю",
     "profileTitle": "Ваш профіль",
     "settings": "Налаштування",
-    "timetable": "Розклад"
+    "timetable": "Розклад",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right",
+    "sessions": "Sessions"
   },
   "overview": {
     "allMessages": "Усі повідомлення",
@@ -216,7 +226,20 @@
     "tomorrow": "Завтра",
     "weather": "Погода",
     "weatherHint": "Встановити місце в налаштуваннях",
-    "weatherUnavailable": "Дані погоди не доступні"
+    "weatherUnavailable": "Дані погоди не доступні",
+    "editorToggle": "Arrange",
+    "editorHint": "Drag a section to move it, or use the arrows. Hide what you do not need.",
+    "editorDone": "Done",
+    "editorSaving": "Saving…",
+    "editorSaved": "Layout saved",
+    "editorHide": "Hide section",
+    "editorShow": "Show section",
+    "editorHidden": "Hidden",
+    "editorDrag": "Drag to move",
+    "editorReset": "Reset",
+    "editorEmpty": "All sections are hidden. Turn at least one back on.",
+    "editorWide": "Full width",
+    "editorNarrow": "Half width"
   },
   "settings": {
     "accentApplied": "Колір акценту застосовано.",
@@ -287,7 +310,10 @@
     "title": "Налаштування",
     "tokenCreated": "Токен створено. Скопіюйте значення зараз; він відображається лише один раз.",
     "unnamedDevice": "Неназваний пристрій",
-    "validUntil": "Gültig bis {date}."
+    "validUntil": "Gültig bis {date}.",
+    "languageTitle": "Language",
+    "languageHint": "Applies right away. The choice is remembered on this device.",
+    "sessionsPanelNote": "Devices signed in on this account."
   },
   "theme": {
     "language": "Мова:",
@@ -324,5 +350,27 @@
     "viewAria": "Дивитись",
     "weekDetail": "Уроки {count} цього тижня.",
     "weekTab": "Тижні"
+  },
+  "sessions": {
+    "eyebrow": "Sessions",
+    "title": "Signed-in devices",
+    "detail": "Every device with a session on your account. You can sign out individually or all at once.",
+    "searchPlaceholder": "Search device or ID",
+    "searchAria": "Search sessions",
+    "active": "Signed in",
+    "signedOut": "Signed out",
+    "currentBadge": "This device",
+    "revokeAllOthers": "Sign out all other devices",
+    "revokeAllOthersHint": "This device stays signed in.",
+    "noneActive": "No other device is signed in.",
+    "noMatch": "No session matches your search.",
+    "noSessions": "No sessions yet.",
+    "lastSeen": "Signed in {created}",
+    "expires": "Valid until {expires}",
+    "id": "ID",
+    "openSettings": "Manage sessions",
+    "settingsHint": "{count} signed in · this device is {current}",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOthers": "No other sessions"
   }
 }
