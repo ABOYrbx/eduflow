@@ -61,6 +61,18 @@ Gegenmittel im Repo:
   Wert (nur bei Sprachen mit geringer Abdeckung) und mindestens 60 %
   deutsche Wörter im Wert. Kognite wie `Token`, `Datum:` (nl) oder
   `lektion` (da/sv) bleiben bewusst stehen.
+- `python3 migration/check-macos-catalog.py` prüft zusätzlich
+  `mac/EduFlow/Resources/Localizable.xcstrings`. Dort sind die Klartext-
+  Schlüssel deutsch, wodurch 9 Sprachen in 187 Texten und `ar` in 51
+  deutsch zeigten. Das Skript repariert zuerst die englische Lokalisierung
+  (an acht Stellen stand noch deutscher Quelltext, den alle Sprachen
+  übernommen hatten) und ersetzt dann deutsche Werte durch Englisch.
+  Kognite wie `Kalender` (nl/sv/no/da), `Datum` (sv), `Titel` (da),
+  `Typ` (cs/pl), `Note` (fr) und `Alle` (da/no) bleiben stehen.
+  `npm run check:catalogs` ruft beide Skripte.
+- **Unicode:** Katalogwerte werden vor dem Vergleich NFC-normalisiert. Ohne
+  das gelten zerlegte Umlaute (`A` + U+0308) und zusammengesetzte
+  (`A-diaeresis`) als verschieden, und deutsche Reste bleiben unentdeckt.
 - `apps/web/src/lib/catalogs.spec.ts` und
   `apps/api/src/messages/catalogs.spec.ts` prüfen dieselben Regeln, damit
   `npm test` einen Sync rot meldet. Alles, was beide Regeln nicht fassen,

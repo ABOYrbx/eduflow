@@ -274,7 +274,7 @@
     "eyebrow": "帐户",
     "generalNote": "在所有设备上应用于您的帐户。",
     "generalTitle": "A. 概况",
-    "loggedInAt": "Angemeldet {created} · läuft ab {expires}",
+    "loggedInAt": "Signed in {created} · expires {expires}",
     "lookNote": "在此设备上立即应用。",
     "lookTitle": "外观",
     "moveDown": "Move {name} down",

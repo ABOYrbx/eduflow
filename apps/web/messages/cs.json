@@ -309,7 +309,7 @@
     "title": "Nastavení",
     "tokenCreated": "Token vytvořen. Zkopírujte hodnotu nyní; je zobrazena pouze jednou.",
     "unnamedDevice": "Nepojmenované zařízení",
-    "validUntil": "Gültig bis {date}.",
+    "validUntil": "Valid until {date}",
     "languageTitle": "Language",
     "languageHint": "Applies right away. The choice is remembered on this device."
   },

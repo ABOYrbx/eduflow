@@ -309,7 +309,7 @@
     "title": "Impostazioni",
     "tokenCreated": "Token creato. Copia il valore adesso; viene mostrato una sola volta.",
     "unnamedDevice": "Dispositivo senza nome",
-    "validUntil": "Gültig bis {date}.",
+    "validUntil": "Valid until {date}",
     "languageTitle": "Language",
     "languageHint": "Applies right away. The choice is remembered on this device."
   },

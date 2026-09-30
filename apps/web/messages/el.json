@@ -309,7 +309,7 @@
     "title": "Ρυθμίσεις",
     "tokenCreated": "Το διακριτικό δημιουργήθηκε. Αντιγράψτε την τιμή τώρα· εμφανίζεται μόνο μία φορά.",
     "unnamedDevice": "Ανώνυμη συσκευή",
-    "validUntil": "Gültig bis {date}.",
+    "validUntil": "Valid until {date}",
     "languageTitle": "Language",
     "languageHint": "Applies right away. The choice is remembered on this device."
   },

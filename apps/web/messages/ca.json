@@ -274,7 +274,7 @@
     "eyebrow": "ACCOUNT",
     "generalNote": "Applies to your account on all devices.",
     "generalTitle": "General",
-    "loggedInAt": "Angemeldet {created} · läuft ab {expires}",
+    "loggedInAt": "Signed in {created} · expires {expires}",
     "lookNote": "Applies immediately on this device.",
     "lookTitle": "Appearance",
     "moveDown": "Move {name} down",

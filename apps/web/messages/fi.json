@@ -309,7 +309,7 @@
     "title": "Asetukset",
     "tokenCreated": "Token luotu. Kopioi arvo nyt; se näytetään vain kerran.",
     "unnamedDevice": "Nimetön laite",
-    "validUntil": "Gültig bis {date}.",
+    "validUntil": "Valid until {date}",
     "languageTitle": "Language",
     "languageHint": "Applies right away. The choice is remembered on this device."
   },

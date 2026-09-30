@@ -1,5 +1,10 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
+/** Unicode-Normalisierung, damit zerlegte und zusammengesetzte Umlaute
+ *  (A + U+0308 gegen A-diaeresis) als dasselbe gelten. */
+function nfc(text: string | undefined): string {
+  return (text ?? "").normalize("NFC");
+}
 
 /**
  * Wächter über die Kataloge: eine Sprache, die noch nicht übersetzt ist,
@@ -21,6 +26,16 @@ const KOGNITE = new Set([
   "konto", "licht",
 ]);
 const ABDECKUNG_GUT = 200;
+// Ganze Werte, die in der jeweiligen Sprache richtig sind und dem Deutschen
+// nur gleichen: 'Datum:' ist im Tschechischen und Niederlaendischen richtig,
+// 'Alle typen' im Niederlaendischen, '{lesson}. lektion' in Daenisch und
+// Schwedisch.
+const KEEP_WERTE: Record<string, Set<string>> = {
+  cs: new Set(["Datum:"]),
+  da: new Set(["{lesson}. lektion"]),
+  nl: new Set(["Datum:", "Alle typen"]),
+  sv: new Set(["{lesson}. lektion"]),
+};
 
 function flat(node: unknown, prefix = "", out: Record<string, string> = {}): Record<string, string> {
   if (typeof node === "object" && node !== null) {
@@ -36,7 +51,7 @@ function words(value: string): string[] {
 }
 
 function normalisiert(value: string | undefined): string {
-  return (value ?? "").toLowerCase().replace(NORMAL, "");
+  return nfc(value).toLowerCase().replace(NORMAL, "");
 }
 
 function lade(verzeichnis: string): Map<string, Record<string, string>> {
@@ -51,6 +66,7 @@ export function meldeDeutscheReste(
   en: Record<string, string>,
   de: Record<string, string>,
   catalog: Record<string, string>,
+  sprache: string,
 ): string[] {
   const deutschWoerter = new Set<string>();
   for (const [key, wert] of Object.entries(de)) {
@@ -63,7 +79,7 @@ export function meldeDeutscheReste(
   const treffer: string[] = [];
   for (const [key, wert] of Object.entries(catalog)) {
     if (!(key in en) || wert === en[key]) continue;
-    if (gering && key in de && normalisiert(de[key]) !== normalisiert(en[key]) && normalisiert(wert) === normalisiert(de[key])) {
+    if (key in de && normalisiert(de[key]) !== normalisiert(en[key]) && normalisiert(wert) === normalisiert(de[key]) && !KEEP_WERTE[sprache]?.has(wert)) {
       treffer.push(`${key} = ${wert}`);
       continue;
     }
@@ -92,7 +108,7 @@ describe("Web-Kataloge", () => {
     if (sprache === "en" || sprache === "de") continue;
 
     it(`${sprache} zeigt keine deutschen Texte`, () => {
-      expect(meldeDeutscheReste(en, de, catalog)).toEqual([]);
+      expect(meldeDeutscheReste(en, de, catalog, sprache)).toEqual([]);
     });
 
     it(`${sprache} kennt jeden Quell-Key`, () => {
