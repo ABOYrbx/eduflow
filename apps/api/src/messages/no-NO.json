@@ -24,7 +24,9 @@
     "tokenNotFound": "Sjetong ikke funnet.",
     "tokenRejected": "Koden er ugyldig.",
     "twoFactorDemo": "Angi demokode 123456.",
-    "twoFactorMessage": "Skriv inn to-faktor-koden fra e-post eller app og send den til /auth/2fa."
+    "twoFactorMessage": "Skriv inn to-faktor-koden fra e-post eller app og send den til /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Ugyldig forespørsel.",
@@ -64,7 +66,8 @@
     "trashHomework": "Flytt lekser til papirkurv eller gjenoppretting",
     "validationDescription": "Feil under validering",
     "weather": "Vær",
-    "weatherSearch": "Søk etter værplassering"
+    "weatherSearch": "Søk etter værplassering",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Dårlig koordinater",
@@ -103,6 +106,8 @@
     "hwStatusLabel": "Hjemme: Standardfilter",
     "hwTestsLabel": "Hjemme: Inkluder tester og eksamener som standard",
     "landingLabel": "Start side etter pålogging",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "Alle",
     "optDashboard": "Meldinger",
     "optDone": "Bare ferdig",
@@ -118,7 +123,12 @@
     "ovWetterHint": "Gjelder webgrensesnittet og Android-appen.",
     "ovWetterLabel": "Vis værkart på oversikten",
     "sectionUebersicht": "Oversikt",
-    "sectionWetter": "Vær"
+    "sectionWetter": "Vær",
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor.",
+    "ovSpanLabel": "Section widths",
+    "ovSpanHint": "Sections you set to half width sit next to each other."
   },
   "upstream": {
     "agendaFailed": "Skolearrangementer kunne ikke lastes: {detail}",
