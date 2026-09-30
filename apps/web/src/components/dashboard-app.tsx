@@ -110,9 +110,13 @@ export function DashboardApp({ username }: { username: string }) {
   return <>
     <div className="nav-wrap"><div className="container nav">
       <Link className="nav-logo" href="/" aria-label={t("nav.logoAria")}><img src="/icons/icon.png" alt="" /></Link>
-      {navEdges.start && <button className="nav-scroll nav-scroll-start" type="button" tabIndex={-1} aria-label={t("nav.scrollBack")} onClick={() => scrollNav(-1)}><Icon name="left" /></button>}
+      {/* Beide Knoepfe bleiben immer an Ort und Stelle und werden am Ende nur
+          abgeblendet. Vorher wurden sie bei navEdges.end weggeschluckt - dadurch
+          bekam die Leiste mehr Platz, der Inhalt ueberlief nicht mehr, und der
+          Knopf kam sofort wieder zurueck: die Leiste sprang hin und her. */}
+      <button className="nav-scroll nav-scroll-start" type="button" tabIndex={-1} aria-label={t("nav.scrollBack")} disabled={!navEdges.start} onClick={() => scrollNav(-1)}><Icon name="left" /></button>
       <nav className="nav-mid" aria-label={t("nav.mainAria")} ref={navRef}>{items.map((item) => <Link className={`nav-pill ${active === item.label ? "active" : ""}`} key={item.href} href={item.href}>{item.label}</Link>)}</nav>
-      {navEdges.end && <button className="nav-scroll nav-scroll-end" type="button" tabIndex={-1} aria-label={t("nav.scrollForward")} onClick={() => scrollNav(1)}><Icon name="right" /></button>}
+      <button className="nav-scroll nav-scroll-end" type="button" tabIndex={-1} aria-label={t("nav.scrollForward")} disabled={!navEdges.end} onClick={() => scrollNav(1)}><Icon name="right" /></button>
       <div className="nav-cta"><div className="profile-wrap">
         <button className="avatar-btn" type="button" aria-haspopup="true" aria-expanded="false" aria-label={t("nav.profileAria")} title={username}>{username.slice(0, 1).toLocaleUpperCase(localeTag())}</button>
         <div className="profile-menu" role="menu"><div className="pm-head"><div className="t">{t("nav.profileTitle")}</div><div className="u">{username}</div></div><div className="pm-div" />
