@@ -1,6 +1,7 @@
 {
   "/[...slug]/page": "app/[...slug]/page.js",
   "/api/auth/login/route": "app/api/auth/login/route.js",
+  "/api/locale/route": "app/api/locale/route.js",
   "/api/v1/[...path]/route": "app/api/v1/[...path]/route.js",
   "/login/page": "app/login/page.js",
   "/page": "app/page.js"
