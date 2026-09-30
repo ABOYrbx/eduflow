@@ -51,10 +51,10 @@
     <!-- Onboarding -->
     <string name="onboarding_greeting">Salut!</string>
     <string name="onboarding_language_title">Alege limba</string>
-    <string name="onboarding_language_search">Search language</string>
-    <string name="onboarding_language_no_results">No language found</string>
-    <string name="onboarding_language_system_short">SYSTEM</string>
-    <string name="onboarding_language_system_format">System language: %1$s</string>
+    <string name="onboarding_language_search">Caută o limbă</string>
+    <string name="onboarding_language_no_results">Nu a fost găsită nicio limbă</string>
+    <string name="onboarding_language_system_short">SISTEM</string>
+    <string name="onboarding_language_system_format">Limba sistemului: %1$s</string>
     <string name="onboarding_language_sub">EduFlow vă vorbește limba. Selecția se aplică imediat.</string>
     <string name="onboarding_language_apply_restart">Aplică &amp; repornire</string>
     <string name="onboarding_language_system">Sistem</string>
@@ -67,6 +67,7 @@
     <string name="onboarding_feat3_title">Calendar &amp; Vreme</string>
     <string name="onboarding_feat3_desc">Zi și săptămână plus vremea în prezentarea generală.</string>
     <string name="onboarding_server_sub">Introduceți unde EduFlow rulează ca server.</string>
+    <string name="onboarding_server_hint">Doar adresa IP — portul și calea se adaugă automat.</string>
     <string name="onboarding_connected">Conectat</string>
     <string name="onboarding_unreachable">Server inaccesibil. Verificaţi adresa şi încercaţi din nou.</string>
     <string name="onboarding_test_connected">✓ Conectat</string>
@@ -99,17 +100,17 @@
     <string name="settings_theme_system">Sistem</string>
     <string name="settings_theme_system_sub">Urmărește lumina/întuneric dispozitivul</string>
     <string name="settings_accent">Culoare accent</string>
-    <string name="settings_language">Language</string>
-    <string name="settings_language_system">System language</string>
+    <string name="settings_language">Limbă</string>
+    <string name="settings_language_system">Limba sistemului</string>
     <string name="settings_notifications">Notificări</string>
     <string name="settings_notify_news">Mesaje noi</string>
     <string name="settings_overview_tasks">Prezentare generală sarcini &amp;</string>
     <string name="settings_landing_label">Pagina de start după autentificare</string>
     <string name="settings_hwfilter_label">Sarcini: filtru implicit</string>
     <string name="settings_hwtests_label">Include teste și examene</string>
-    <string name="settings_time_format_label">Clock format</string>
-    <string name="settings_time_24h">24-hour</string>
-    <string name="settings_time_12h">12-hour</string>
+    <string name="settings_time_format_label">Formatul ceasului</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
     <string name="settings_unread_placeholder">Max. mesaje necitite (1-50)</string>
     <string name="settings_homework_placeholder">Temă deschisă maximă (1-50)</string>
     <string name="settings_navbar_section">Bara de navigare</string>
@@ -217,12 +218,12 @@
     <string name="messages_compose_send">Trimite</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
          label() stays the German context-free fallback for tests. -->
-    <string name="message_type_all">All</string>
-    <string name="message_type_sprava">Message</string>
-    <string name="message_type_news">News</string>
-    <string name="message_type_anketa">Poll</string>
-    <string name="message_type_chat">Chat</string>
-    <string name="message_type_genotif">Notice</string>
+    <string name="message_type_all">Toate</string>
+    <string name="message_type_sprava">Mesaj</string>
+    <string name="message_type_news">Noutăți</string>
+    <string name="message_type_anketa">Sondaj</string>
+    <string name="message_type_chat">Conversație</string>
+    <string name="message_type_genotif">Notificare</string>
     <!-- Overview -->
     <string name="overview_customize">Personalizare prezentare generală</string>
     <string name="overview_customize_desc">Alegeţi secţiunile care apar mai întâi.</string>
