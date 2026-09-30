@@ -385,10 +385,10 @@ private struct NativeSearchField: NSViewRepresentable {
 
 /// Zustand der oberen Leiste beim Scrollen (reine Logik, testbar).
 ///
-/// Die Leiste wird kleiner, wenn nach oben gescrollt wird, und wächst
-/// wieder, wenn man nach unten scrollt oder ganz oben ist. Am Anfang
-/// (Offset 0) ist sie immer groß, sonst wäre sie beim Seitenwechsel
-/// verschwunden.
+/// Beim Scrollen **nach unten** wird die Leiste kleiner (der Inhalt rückt
+/// nach oben, die Leiste soll aus dem Weg); beim Scrollen **nach oben** und
+/// ganz oben am Seitenanfang wächst sie wieder. Am Offset 0 ist sie immer
+/// groß, sonst wäre sie beim Seitenwechsel verschwunden.
 @MainActor
 @Observable
 public final class TopBarCollapseState {
@@ -411,22 +411,120 @@ public final class TopBarCollapseState {
         if clamped <= Self.topThreshold {
             isCompact = false
         } else if abs(delta) >= Self.minimumDelta {
-            // Nach unten scrollen (Offset wächst) → groß; nach oben → klein.
-            isCompact = delta < 0
+            // Nach unten scrollen (Offset wächst) → klein; nach oben → groß.
+            isCompact = delta > 0
         }
         lastOffset = clamped
         return isCompact
     }
+
+    /// Zustand vergessen (Seitenwechsel): die neue Seite beginnt oben, also
+    /// muss die Leiste wieder groß sein und der Vergleich neu ansetzen.
+    public func reset() {
+        lastOffset = 0
+        isCompact = false
+    }
 }
 
-/// Meldet die Scrollposition der umgebenden Scrollansicht.
+/// Meldet das Scrollen einer Seite an die obere Leiste.
 ///
-/// `onScrollGeometryChange` gibt es erst ab macOS 15, das Projekt läuft aber
-/// auf macOS 14. Deshalb hängt sich der Beobachter an die vorhandene
-/// `NSScrollView` und liest deren `contentOffset` — dieselbe Größe, die
-/// SwiftUI intern auch auswertet.
+/// Zwei Wege, weil das Projekt macOS 14 als Ziel hat:
+/// - ab macOS 15 `onScrollGeometryChange` (die SwiftUI-eigene Größe),
+/// - darunter die Fenster-Suche in `TopBarScrollObserver`.
+///
+/// Als **erstes Kind** in die `ScrollView` gelegt; unsichtbar.
+public struct ScrollOffsetSentinel: View {
+    @Environment(\.topBarCollapse) private var collapse
+
+    public init() {}
+
+    public var body: some View {
+        Group {
+            if #available(macOS 15.0, *) {
+                Color.clear
+                    .onScrollGeometryChange(for: CGFloat.self) { geometry in
+                        // Nach oben gescrollt ist der Versatz negativ.
+                        geometry.contentOffset.y + geometry.contentInsets.top
+                    } action: { _, offset in
+                        collapse.update(offset: offset)
+                    }
+            } else {
+                // Ältere Systeme übernimmt der fensterweite Beobachter.
+                Color.clear
+            }
+        }
+        .frame(width: 0, height: 0)
+        .opacity(0)
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+}
+
+/// Zustand in der Umgebung — bewusst als eigener Schlüssel und **nicht** als
+/// `@Environment(TopBarCollapseState.self)`: fehlte er, würde SwiftUI beim
+/// Rendern abstürzen. Mit Vorgabe bleibt die Seite beim Vorentwurf oder in
+/// einer Testansicht schlicht ohne Reaktion.
+private struct TopBarCollapseKey: EnvironmentKey {
+    /// Gemeinsame Vorgabe: wird nur benutzt, wenn niemand einen Zustand
+    /// gesetzt hat (Vorschau, isolierte Testansicht).
+    @MainActor static let defaultValue = TopBarCollapseState()
+}
+
+extension EnvironmentValues {
+    /// Zustand der oberen Leiste (siehe `TopBarCollapseState`).
+    public var topBarCollapse: TopBarCollapseState {
+        get { self[TopBarCollapseKey.self] }
+        set { self[TopBarCollapseKey.self] = newValue }
+    }
+}
+
+/// Rückfallebene für macOS 14 (dort gibt es `onScrollGeometryChange` noch
+/// nicht): sucht die scrollbare Ansicht der geöffneten Seite im Fenster und
+/// beobachtet deren Clip-View. Ab macOS 15 macht `ScrollOffsetSentinel` das
+/// schon selbst, deshalb läuft dieser Weg nur auf älteren Systemen.
+public struct TopBarScrollObserver: View {
+    let state: TopBarCollapseState
+    /// Zähler für „Seite gewechselt" — treibt die Suche neu.
+    let token: Int
+
+    public init(state: TopBarCollapseState, token: Int) {
+        self.state = state
+        self.token = token
+    }
+
+    public var body: some View {
+        Group {
+            if #available(macOS 15.0, *) {
+                Color.clear
+            } else {
+                ScrollOffsetReporter(state: state, token: token)
+            }
+        }
+        .frame(width: 0, height: 0)
+        .opacity(0)
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+}
+
+/// Trägeransicht: sobald sie im Fenster hängt, wird der passende
+/// Scrollbereich gesucht und beobachtet.
+private final class ScrollObserverView: NSView {
+    var onWindowChange: (() -> Void)?
+
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        guard window != nil else { return }
+        // Eine Runde warten: erst dann ist der Seiteninhalt im Baum.
+        DispatchQueue.main.async { [weak self] in
+            self?.onWindowChange?()
+        }
+    }
+}
+
 private struct ScrollOffsetReporter: NSViewRepresentable {
     let state: TopBarCollapseState
+    let token: Int
 
     @MainActor
     func makeCoordinator() -> Coordinator {
@@ -434,74 +532,105 @@ private struct ScrollOffsetReporter: NSViewRepresentable {
     }
 
     @MainActor
-    func makeNSView(context: Context) -> NSView {
-        let view = NSView(frame: .zero)
-        // Die Scrollansicht steht erst nach dem Einbau im Fenster fest.
-        DispatchQueue.main.async { context.coordinator.attach(to: view) }
+    func makeNSView(context: Context) -> ScrollObserverView {
+        let view = ScrollObserverView(frame: .zero)
+        view.onWindowChange = { context.coordinator.scan(from: view) }
+        context.coordinator.scan(from: view)
         return view
     }
 
     @MainActor
-    func updateNSView(_ nsView: NSView, context: Context) {
+    func updateNSView(_ nsView: ScrollObserverView, context: Context) {
         context.coordinator.state = state
+        // Jede Aktualisierung prüft neu: beim Seitenwechsel entsteht eine
+        // andere Scrollansicht, die alte Beobachtung muss weg.
+        context.coordinator.scan(from: nsView, force: context.coordinator.token != token)
+        context.coordinator.token = token
     }
 
     @MainActor
     final class Coordinator: NSObject {
         var state: TopBarCollapseState
-        private weak var scrollView: NSScrollView?
+        var token: Int = 0
+        private weak var watched: NSScrollView?
         private var observation: NSKeyValueObservation?
+        private var attempts = 0
 
         init(state: TopBarCollapseState) {
             self.state = state
         }
 
-        /// Nächste umgebende Scrollansicht suchen und beobachten.
-        func attach(to view: NSView) {
-            guard observation == nil else { return }
-            guard let scroll = view.enclosingScrollView else {
-                // Noch nicht im Baum: später noch einmal versuchen.
-                DispatchQueue.main.async { [weak self, weak view] in
-                    guard let self, let view else { return }
-                    self.attach(to: view)
-                }
+        deinit {
+            observation?.invalidate()
+        }
+
+        /// Die scrollbare Ansicht der geöffneten Seite suchen und beobachten.
+        func scan(from view: NSView, force: Bool = false) {
+            guard let window = view.window else {
+                retry(from: view)
                 return
             }
-            scrollView = scroll
+            if force {
+                observation?.invalidate()
+                observation = nil
+                watched = nil
+                attempts = 0
+            }
+            guard observation == nil else { return }
+
+            guard let scroll = Self.scrollableScrollView(in: window) else {
+                // Inhalt ist noch nicht da: ein paarmal nachfassen.
+                retry(from: view)
+                return
+            }
             let clip = scroll.contentView
+            watched = scroll
+            attempts = 0
+            state.reset()
             observation = clip.observe(\.bounds, options: [.new]) { [weak self] _, change in
                 guard let self, let bounds = change.newValue else { return }
-                // Nach oben scrollen heißt: das Clip-View wandert nach unten,
-                // sein Ursprung bekommt also einen negativen Y-Wert.
-                let visible = clip.bounds.height
-                let scrollable = scroll.contentSize.height - visible
+                // Nach unten scrollen bewegt das Clip-View nach oben, sein
+                // Ursprung bekommt also einen negativen Y-Wert.
+                let scrollable = scroll.contentSize.height - clip.bounds.height
                 let offset = scrollable > 0 ? -bounds.origin.y : 0
                 Task { @MainActor in
                     self.state.update(offset: offset)
                 }
             }
         }
-    }
-}
 
-/// Unsichtbarer Beobachter, der als **erstes Kind** in eine `ScrollView`
-/// gelegt wird. Nur so liegt er im Dokument der `NSScrollView` und findet
-/// sie über `enclosingScrollView`; außen an der Scrollansicht klebend gäbe es
-/// keinen umgebenden Scrollbereich.
-///
-/// Liest den Zustand aus der Umgebung, damit die Seiten nichts um die
-/// Leiste wissen müssen — die setzt ihn in `ContentView`.
-public struct ScrollOffsetSentinel: View {
-    @Environment(TopBarCollapseState.self) private var collapse
+        /// Kurzzeitig weiter versuchen (Inhalt baut sich asynchron auf).
+        private func retry(from view: NSView) {
+            guard attempts < 12 else { return }
+            attempts += 1
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) { [weak self, weak view] in
+                guard let self, let view else { return }
+                self.scan(from: view)
+            }
+        }
 
-    public init() {}
-
-    public var body: some View {
-        ScrollOffsetReporter(state: collapse)
-            .frame(width: 0, height: 0)
-            .opacity(0)
-            .allowsHitTesting(false)
-            .accessibilityHidden(true)
+        /// Erste waagerecht unscrollbare, aber senkrecht scrollbare Ansicht
+        /// im Fenster — das ist die Liste der geöffneten Seite.
+        private static func scrollableScrollView(in window: NSWindow) -> NSScrollView? {
+            guard let content = window.contentView else { return nil }
+            var found: NSScrollView?
+            func walk(_ view: NSView) {
+                if found != nil { return }
+                if let scroll = view as? NSScrollView {
+                    let vertical = scroll.hasVerticalScroller
+                        && scroll.contentSize.height > scroll.contentView.bounds.height + 1
+                    let horizontal = scroll.hasHorizontalScroller
+                        && scroll.contentSize.width > scroll.contentView.bounds.width + 1
+                    if vertical && !horizontal {
+                        found = scroll
+                        return
+                    }
+                }
+                for sub in view.subviews { walk(sub) }
+            }
+            walk(content)
+            return found
+        }
     }
 }
 
