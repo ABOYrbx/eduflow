@@ -28,7 +28,6 @@ const hash = (text: string) => createHash("sha256").update(text).digest("hex");
 const norm = (text: unknown) => typeof text === "string" ? text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("en") : "";
 const dateOnly = (value: string | Date) => new Date(value).toISOString().slice(0, 10);
 const englishDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-const germanMonths = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
 const parseDate = (input: unknown, fallback: Date): Date => {
   if (input === undefined || input === "") return fallback;
   if (typeof input !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(input) || Number.isNaN(Date.parse(`${input}T00:00:00Z`))) throw new BadRequestException({ error: t("validation.dateFormatShort"), code: "VALIDATION" });
