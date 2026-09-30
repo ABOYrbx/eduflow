@@ -51,10 +51,10 @@
     <!-- Onboarding -->
     <string name="onboarding_greeting">Hei!</string>
     <string name="onboarding_language_title">Valitse kieli</string>
-    <string name="onboarding_language_search">Search language</string>
-    <string name="onboarding_language_no_results">No language found</string>
-    <string name="onboarding_language_system_short">SYSTEM</string>
-    <string name="onboarding_language_system_format">System language: %1$s</string>
+    <string name="onboarding_language_search">Hae kieltä</string>
+    <string name="onboarding_language_no_results">Kieltä ei löytynyt</string>
+    <string name="onboarding_language_system_short">JÄRJESTELMÄ</string>
+    <string name="onboarding_language_system_format">Järjestelmän kieli: %1$s</string>
     <string name="onboarding_language_sub">EduFlow puhuu kieltäsi. Valinta koskee heti.</string>
     <string name="onboarding_language_apply_restart">Käytä &amp; uudelleenkäynnistystä</string>
     <string name="onboarding_language_system">Järjestelmä</string>
@@ -67,6 +67,7 @@
     <string name="onboarding_feat3_title">Aikataulu &amp; Sää</string>
     <string name="onboarding_feat3_desc">Päivä ja viikko sekä sää yleiskatsauksessa.</string>
     <string name="onboarding_server_sub">Syötä missä EduFlow toimii palvelimena.</string>
+    <string name="onboarding_server_hint">Vain IP-osoite — portti ja polku lisätään automaattisesti.</string>
     <string name="onboarding_connected">Yhdistetty</string>
     <string name="onboarding_unreachable">Palvelimeen ei saada yhteyttä. Tarkista osoite ja yritä uudelleen.</string>
     <string name="onboarding_test_connected">✓ Yhdistetty</string>
@@ -99,17 +100,17 @@
     <string name="settings_theme_system">Järjestelmä</string>
     <string name="settings_theme_system_sub">Seuraa laitteen vaalea/tumma</string>
     <string name="settings_accent">Korostuksen väri</string>
-    <string name="settings_language">Language</string>
-    <string name="settings_language_system">System language</string>
+    <string name="settings_language">Kieli</string>
+    <string name="settings_language_system">Järjestelmän kieli</string>
     <string name="settings_notifications">Ilmoitukset</string>
     <string name="settings_notify_news">Uudet viestit</string>
     <string name="settings_overview_tasks">Overview &amp; tasks</string>
     <string name="settings_landing_label">Aloitussivu sisäänkirjautumisen jälkeen</string>
     <string name="settings_hwfilter_label">Tehtävät: oletussuodatin</string>
     <string name="settings_hwtests_label">Sisällytä testit ja tentit</string>
-    <string name="settings_time_format_label">Clock format</string>
-    <string name="settings_time_24h">24-hour</string>
-    <string name="settings_time_12h">12-hour</string>
+    <string name="settings_time_format_label">Kellonajan muoto</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
     <string name="settings_unread_placeholder">Lukemattomien viestien enimmäismäärät (1–50)</string>
     <string name="settings_homework_placeholder">Max. avoimet läksyt (1–50)</string>
     <string name="settings_navbar_section">Navigointipalkki</string>
@@ -217,12 +218,12 @@
     <string name="messages_compose_send">Lähetä</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
          label() stays the German context-free fallback for tests. -->
-    <string name="message_type_all">All</string>
-    <string name="message_type_sprava">Message</string>
-    <string name="message_type_news">News</string>
-    <string name="message_type_anketa">Poll</string>
-    <string name="message_type_chat">Chat</string>
-    <string name="message_type_genotif">Notice</string>
+    <string name="message_type_all">Kaikki</string>
+    <string name="message_type_sprava">Viesti</string>
+    <string name="message_type_news">Uutiset</string>
+    <string name="message_type_anketa">Kysely</string>
+    <string name="message_type_chat">Keskustelu</string>
+    <string name="message_type_genotif">Ilmoitus</string>
     <!-- Overview -->
     <string name="overview_customize">Muokkaa yleiskatsausta</string>
     <string name="overview_customize_desc">Valitse mitkä kohdat näkyvät ensin.</string>
