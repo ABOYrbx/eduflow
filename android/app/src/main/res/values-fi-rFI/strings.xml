@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">EduFlow</string>
     <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
-    <string name="common_logo_desc">EduVirtauksen logo</string>
+    <string name="common_logo_desc">EduFlow logo</string>
     <string name="common_demo_badge">DEMO</string>
     <string name="common_profile_title">Profiilisi</string>
     <string name="common_profile_default_account">Tili</string>
@@ -344,4 +344,20 @@
         <item quantity="one">Ø %1$s · %2$d Huomautus</item>
         <item quantity="other">Ø %1$s · %2$d Noten</item>
     </plurals>
+    <string name="onboarding_language_search">Hae kieltä</string>
+    <string name="onboarding_language_no_results">Kieltä ei löytynyt</string>
+    <string name="onboarding_language_system_short">JÄRJESTELMÄ</string>
+    <string name="onboarding_language_system_format">Järjestelmän kieli: %1$s</string>
+    <string name="onboarding_server_hint">Vain IP-osoite — portti ja polku lisätään automaattisesti.</string>
+    <string name="settings_language">Kieli</string>
+    <string name="settings_language_system">Järjestelmän kieli</string>
+    <string name="settings_time_format_label">Kellonajan muoto</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
+    <string name="message_type_all">Kaikki</string>
+    <string name="message_type_sprava">Viesti</string>
+    <string name="message_type_news">Uutiset</string>
+    <string name="message_type_anketa">Kysely</string>
+    <string name="message_type_chat">Keskustelu</string>
+    <string name="message_type_genotif">Ilmoitus</string>
 </resources>

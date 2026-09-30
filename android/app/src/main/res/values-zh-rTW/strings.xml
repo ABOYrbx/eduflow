@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">EduFlow</string>
     <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
-    <string name="common_logo_desc">EduFlow-Logo</string>
+    <string name="common_logo_desc">EduFlow logo</string>
     <string name="common_demo_badge">DEMO</string>
     <string name="common_profile_title">Dein Profil</string>
     <string name="common_profile_default_account">Konto</string>
@@ -341,4 +341,19 @@
     <plurals name="grades_notes_count">
         <item quantity="other">Ø %1$s · %2$d Noten</item>
     </plurals>
+    <string name="onboarding_language_search">搜尋語言</string>
+    <string name="onboarding_language_no_results">找不到語言</string>
+    <string name="onboarding_language_system_short">系統</string>
+    <string name="onboarding_language_system_format">系統語言：%1$s</string>
+    <string name="settings_language">語言</string>
+    <string name="settings_language_system">系統語言</string>
+    <string name="settings_time_format_label">時間格式</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
+    <string name="message_type_all">全部</string>
+    <string name="message_type_sprava">訊息</string>
+    <string name="message_type_news">新聞</string>
+    <string name="message_type_anketa">投票</string>
+    <string name="message_type_chat">聊天</string>
+    <string name="message_type_genotif">通知</string>
 </resources>

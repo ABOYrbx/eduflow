@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">EduFlow</string>
     <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
-    <string name="common_logo_desc">EduFlow-Logo</string>
+    <string name="common_logo_desc">EduFlow logo</string>
     <string name="common_demo_badge">DEMO</string>
     <string name="common_profile_title">Dein Profil</string>
     <string name="common_profile_default_account">Konto</string>
@@ -347,4 +347,20 @@
         <item quantity="few">Ø %1$s · %2$d Noten</item>
         <item quantity="other">Ø %1$s · %2$d Noten</item>
     </plurals>
+    <string name="onboarding_language_search">Pretraži jezike</string>
+    <string name="onboarding_language_no_results">Jezik nije pronađen</string>
+    <string name="onboarding_language_system_short">SISTEM</string>
+    <string name="onboarding_language_system_format">Jezik sistema: %1$s</string>
+    <string name="onboarding_server_hint">Samo IP adresa — port i putanja dodaju se automatski.</string>
+    <string name="settings_language">Jezik</string>
+    <string name="settings_language_system">Jezik sistema</string>
+    <string name="settings_time_format_label">Format sata</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
+    <string name="message_type_all">Sve</string>
+    <string name="message_type_sprava">Poruka</string>
+    <string name="message_type_news">Vesti</string>
+    <string name="message_type_anketa">Anketa</string>
+    <string name="message_type_chat">Ćaskanje</string>
+    <string name="message_type_genotif">Obaveštenje</string>
 </resources>

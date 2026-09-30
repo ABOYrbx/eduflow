@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">EduFlow</string>
     <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
-    <string name="common_logo_desc">شعار EduFlow</string>
+    <string name="common_logo_desc">EduFlow logo</string>
     <string name="common_demo_badge">ديمو</string>
     <string name="common_profile_title">ملفك الشخصي</string>
     <string name="common_profile_default_account">حساب</string>
@@ -356,4 +356,20 @@
         <item quantity="many">&lt;unk&gt; %1$s · %2$d Noten</item>
         <item quantity="other">&lt;unk&gt; %1$s · %2$d Noten</item>
     </plurals>
+    <string name="onboarding_language_search">ابحث عن لغة</string>
+    <string name="onboarding_language_no_results">لم يتم العثور على لغة</string>
+    <string name="onboarding_language_system_short">النظام</string>
+    <string name="onboarding_language_system_format">لغة النظام: %1$s</string>
+    <string name="onboarding_server_hint">عنوان IP فقط — سيُضاف المنفذ والمسار تلقائيًا.</string>
+    <string name="settings_language">اللغة</string>
+    <string name="settings_language_system">لغة النظام</string>
+    <string name="settings_time_format_label">تنسيق الساعة</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
+    <string name="message_type_all">الكل</string>
+    <string name="message_type_sprava">رسالة</string>
+    <string name="message_type_news">أخبار</string>
+    <string name="message_type_anketa">استطلاع</string>
+    <string name="message_type_chat">دردشة</string>
+    <string name="message_type_genotif">إشعار</string>
 </resources>

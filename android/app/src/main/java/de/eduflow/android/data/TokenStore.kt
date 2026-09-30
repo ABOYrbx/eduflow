@@ -26,9 +26,6 @@ private val Context.tokenDataStore: DataStore<Preferences> by preferencesDataSto
     ),
 )
 
-/** Port, den die App annimmt, wenn die Eingabe keinen nennt. */
-private const val DEFAULT_PORT = 3000
-
 /** Pfad, den die App anhaengt — die Routen liegen unter `/api/v1`. */
 private const val API_PATH = "/api/v1"
 
@@ -73,7 +70,7 @@ internal fun normalizeBaseUrl(raw: String): String {
     // zu einem falschen Server fuehren.
     val match = AUTHORITY.matchEntire(authority) ?: return withScheme
     val host = match.groupValues[1]
-    val port = match.groupValues[2].ifEmpty { ":$DEFAULT_PORT" }
+    val port = match.groupValues[2].ifEmpty { ":${TokenStore.DEFAULT_PORT}" }
 
     // Doppelten API-Pfad vermeiden. removeSuffix trifft nur das letzte
     // Vorkommen, darum in einer Schleife — sonst bliebe bei
@@ -302,6 +299,13 @@ class TokenStore(private val context: Context) {
          * kein Wert — das Feld startet leer.
          */
         const val SERVER_PLACEHOLDER = "192.168.1.5"
+
+        /**
+         * Port, den die App annimmt, wenn die Eingabe nur eine IP ist. Die
+         * Eingabe darf trotzdem einen eigenen Port mitbringen (`IP:Port`) —
+         * etwa [DEMO_PORT] fuer den Demo-Server.
+         */
+        const val DEFAULT_PORT = 3000
 
         /**
          * Demo-Server erkannt? Der Demo-Modus gilt automatisch, sobald die

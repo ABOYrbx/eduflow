@@ -350,4 +350,19 @@
         <item quantity="many">Ø %1$s · %2$d Нотен</item>
         <item quantity="other">Ø %1$s · %2$d Нотен</item>
     </plurals>
+    <string name="onboarding_language_search">Поиск языка</string>
+    <string name="onboarding_language_no_results">Язык не найден</string>
+    <string name="onboarding_language_system_short">СИСТЕМА</string>
+    <string name="onboarding_language_system_format">Язык системы: %1$s</string>
+    <string name="settings_language">Язык</string>
+    <string name="settings_language_system">Язык системы</string>
+    <string name="settings_time_format_label">Формат времени</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
+    <string name="message_type_all">Все</string>
+    <string name="message_type_sprava">Сообщение</string>
+    <string name="message_type_news">Новости</string>
+    <string name="message_type_anketa">Опрос</string>
+    <string name="message_type_chat">Чат</string>
+    <string name="message_type_genotif">Уведомление</string>
 </resources>
