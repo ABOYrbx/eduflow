@@ -51,7 +51,7 @@
     "colTeacher": "Opettaja",
     "colTopic": "Aihe",
     "colWeight": "Painotus",
-    "detailCount": "{count} Noten · Schnitt Ø {avg}",
+    "detailCount": "{count} grades · average Ø {avg}",
     "details": "Yksityiskohdat",
     "empty": "Ei arvosanoja tänä aikana.",
     "emptyFiltered": "Ei arvosanoja tälle valinnalle.",

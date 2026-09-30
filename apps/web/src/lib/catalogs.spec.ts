@@ -20,10 +20,15 @@ function nfc(text: string | undefined): string {
 
 const WORT = /[A-Za-zÄÖÜäöüß]{4,}/g;
 const NORMAL = /[^a-zäöüß]/g;
+/** Platzhalter wie {count} sind Namen aus dem englischen Quelltext, keine
+ *  Wörter. Mitgezählt machen sie jeden Wert zum Treffer. */
+const PLATZHALTER = /\{[^{}]*\}/g;
 const KOGNITE = new Set([
   "token", "kalender", "titel", "datum", "profil", "alle", "morgen",
   "lektion", "note", "liste", "faktor", "ller", "modus", "lokale",
-  "konto", "licht",
+  "konto", "licht", "typ", "typen", "termin", "test", "cache", "kopier",
+  "geload", "violet", "speicher", "standort", "chat", "nachricht",
+  "laden", "kopiert", "desc", "standardfilter",
 ]);
 const ABDECKUNG_GUT = 200;
 // Ganze Werte, die in der jeweiligen Sprache richtig sind und dem Deutschen
@@ -67,15 +72,8 @@ export function meldeDeutscheReste(
   de: Record<string, string>,
   catalog: Record<string, string>,
   sprache: string,
+  deutschWoerter: Set<string>,
 ): string[] {
-  const deutschWoerter = new Set<string>();
-  for (const [key, wert] of Object.entries(de)) {
-    const quelle = en[key] ?? "";
-    for (const wort of words(wert)) if (!words(quelle).includes(wort)) deutschWoerter.add(wort);
-  }
-  const echt = Object.keys(catalog).filter((key) => key in en && catalog[key] !== en[key] && catalog[key] !== de[key]).length;
-  const gering = echt < ABDECKUNG_GUT;
-
   const treffer: string[] = [];
   for (const [key, wert] of Object.entries(catalog)) {
     if (!(key in en) || wert === en[key]) continue;
@@ -83,12 +81,15 @@ export function meldeDeutscheReste(
       treffer.push(`${key} = ${wert}`);
       continue;
     }
-    const woerter = words(wert);
+    // Nur Wörter, die nicht auch im englischen Quelltext stehen: 'EduFlow'
+    // oder 'Cache' sind in jeder Sprache gleich und kein deutsches Indiz.
+    const gemeinsam = new Set(words((en[key] ?? "").replace(PLATZHALTER, " ")));
+    const woerter = words(wert.replace(PLATZHALTER, " ")).filter((wort) => !gemeinsam.has(wort));
     if (woerter.length === 0) continue;
     const trefferWoerter = woerter.filter((wort) => deutschWoerter.has(wort) && !KOGNITE.has(wort));
     const istDeutsch = woerter.length === 1
       ? trefferWoerter.length === 1
-      : trefferWoerter.length / woerter.length >= 0.6;
+      : trefferWoerter.length / woerter.length >= 0.5;
     if (istDeutsch) treffer.push(`${key} = ${wert}`);
   }
   return treffer;
@@ -98,17 +99,30 @@ describe("Web-Kataloge", () => {
   const catalogs = lade("messages");
   const en = catalogs.get("en") as Record<string, string>;
   const de = catalogs.get("de") as Record<string, string>;
+  const deutschWoerter = new Set<string>(
+    JSON.parse(readFileSync(join(__dirname, "..", "..", "..", "..", "migration", "de-vokabular.json"), "utf8")) as string[],
+  );
 
   it("unterscheiden sich auf Deutsch wirklich von der Quelle", () => {
     // Ohne diesen Test wäre die Prüfung unten bedeutungslos.
     expect(Object.keys(en).filter((key) => de[key] !== en[key]).length).toBeGreaterThan(100);
   });
 
+  it("kennt auch deutsche Wörter, die nicht mehr in de.json stehen", () => {
+    // Genau hier ist die Prüfung im September 2026 gescheitert: die Reste
+    // stammen aus einer älteren deutschen Fassung ('Vertretungsplan',
+    // waehrend de.json heute 'Ersetzungsplan' sagt). Ein Wortschatz aus
+    // de.json allein sieht davon nichts.
+    for (const wort of ["vertretungsplan", "aufgaben", "darstellung", "pfeilen"]) {
+      expect(deutschWoerter.has(wort)).toBe(true);
+    }
+  });
+
   for (const [sprache, catalog] of catalogs) {
     if (sprache === "en" || sprache === "de") continue;
 
     it(`${sprache} zeigt keine deutschen Texte`, () => {
-      expect(meldeDeutscheReste(en, de, catalog, sprache)).toEqual([]);
+      expect(meldeDeutscheReste(en, de, catalog, sprache, deutschWoerter)).toEqual([]);
     });
 
     it(`${sprache} kennt jeden Quell-Key`, () => {
