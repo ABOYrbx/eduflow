@@ -5,8 +5,12 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
@@ -176,10 +180,53 @@ private fun WelcomePage(onNext: () -> Unit) {
                     androidx.compose.animation.scaleIn(spring(dampingRatio = 0.55f, stiffness = 260f), initialScale = 0.985f),
             modifier = Modifier.fillMaxWidth(),
         ) {
-            PrimaryButton(
+            AnimatedNextButton(
                 text = AppLocale.stringFor(buttonLocale, R.string.common_next, context),
                 onClick = onNext,
             )
+        }
+    }
+}
+
+/**
+ * Weiter-Knopf der Startseite, dessen Text beim Sprachwechsel mitläuft.
+ *
+ * Optisch identisch zu [PrimaryButton] (Paket 0 bleibt unberührt), aber der
+ * Text rollt von unten nach oben, genau wie die Buchstaben der Begrüßung:
+ * der neue Satz steigt ein, während der alte nach oben austritt. Bei
+ * "Bewegung reduzieren" wird ohne Animation getauscht.
+ */
+@Composable
+private fun AnimatedNextButton(text: String, onClick: () -> Unit) {
+    val scheme = MaterialTheme.colorScheme
+    val reduced = LocalReducedMotion.current
+    Button(
+        onClick = onClick,
+        shape = CircleShape,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = scheme.primary,
+            contentColor = scheme.onPrimary,
+        ),
+        modifier = Modifier.fillMaxWidth().height(52.dp),
+    ) {
+        AnimatedContent(
+            targetState = text,
+            transitionSpec = {
+                if (reduced) EnterTransition.None togetherWith ExitTransition.None
+                else (
+                    slideInVertically(tween(380, easing = EduFlowRiseEasing)) { it / 2 } +
+                        fadeIn(tween(380, easing = EduFlowRiseEasing)) +
+                        scaleIn(tween(380, easing = EduFlowRiseEasing), initialScale = 0.92f)
+                    ) togetherWith (
+                    slideOutVertically(tween(240, easing = FastOutSlowInEasing)) { -it / 2 } +
+                        fadeOut(tween(240, easing = FastOutSlowInEasing)) +
+                        scaleOut(tween(240, easing = FastOutSlowInEasing), targetScale = 0.92f)
+                    )
+            },
+            contentAlignment = Alignment.Center,
+            label = "next-label",
+        ) { value ->
+            Text(value, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
         }
     }
 }
