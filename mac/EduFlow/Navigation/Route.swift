@@ -68,6 +68,18 @@ public enum TopBarSection: String, CaseIterable, Identifiable, Sendable {
         case .school: return "Events"
         }
     }
+
+    /// SF-Symbol des Reiters (nur Gestaltung, nicht übersetzt).
+    public var icon: String {
+        switch self {
+        case .overview: return "square.grid.2x2"
+        case .messages: return "envelope"
+        case .homework: return "checklist"
+        case .grades: return "chart.bar"
+        case .timetable: return "calendar"
+        case .school: return "sparkles"
+        }
+    }
 }
 
 /// Auswahl und Reihenfolge der Topbar (UserDefaults, testbar).

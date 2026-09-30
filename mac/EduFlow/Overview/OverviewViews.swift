@@ -53,6 +53,7 @@ public struct OverviewView: View {
 
     public var body: some View {
         ScrollView {
+            ScrollOffsetSentinel()
             VStack(alignment: .leading, spacing: 20) {
                 topRow
                 statsBand
