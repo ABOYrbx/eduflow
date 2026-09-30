@@ -24,7 +24,9 @@
     "tokenNotFound": "Jeton introuvable.",
     "tokenRejected": "Jeton non valide.",
     "twoFactorDemo": "Entrez le code de démonstration 123456.",
-    "twoFactorMessage": "Entrez le code à deux facteurs de l'e-mail ou de l'application et envoyez-le à /auth/2fa."
+    "twoFactorMessage": "Entrez le code à deux facteurs de l'e-mail ou de l'application et envoyez-le à /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Requête invalide.",
@@ -64,7 +66,8 @@
     "trashHomework": "Déplacer les devoirs vers la corbeille ou la restauration",
     "validationDescription": "Erreur de validation",
     "weather": "Météo",
-    "weatherSearch": "Recherche de localisation météo"
+    "weatherSearch": "Recherche de localisation météo",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Mauvaises coordonnées",

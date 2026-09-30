@@ -23,6 +23,7 @@ describe("SystemController", () => {
       "/api/v1/cache-clear",
       "/api/v1/devices",
       "/api/v1/devices/{id}",
+      "/api/v1/devices/revoke-others",
       "/api/v1/grades",
       "/api/v1/health",
       "/api/v1/homework",

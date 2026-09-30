@@ -24,7 +24,9 @@
     "tokenNotFound": "Token not found.",
     "tokenRejected": "Token invalid.",
     "twoFactorDemo": "Enter demo code 123456.",
-    "twoFactorMessage": "Enter the two-factor code from email or app and send it to /auth/2fa."
+    "twoFactorMessage": "Enter the two-factor code from email or app and send it to /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Invalid request.",
@@ -64,7 +66,8 @@
     "trashHomework": "Move homework to trash or restore",
     "validationDescription": "Validation error",
     "weather": "Weather",
-    "weatherSearch": "Weather location search"
+    "weatherSearch": "Weather location search",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Bad coordinates",

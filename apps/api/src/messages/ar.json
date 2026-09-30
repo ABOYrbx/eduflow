@@ -24,7 +24,9 @@
     "tokenNotFound": "الرمز المميز غير موجود.",
     "tokenRejected": "رمز غير صالح.",
     "twoFactorDemo": "أدخل الرمز التجريبي 123456.",
-    "twoFactorMessage": "أدخل رمز عاملين من البريد الإلكتروني أو التطبيق وأرسله إلى /auth/2f."
+    "twoFactorMessage": "أدخل رمز عاملين من البريد الإلكتروني أو التطبيق وأرسله إلى /auth/2f.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "طلب غير صالح.",
@@ -64,7 +66,8 @@
     "trashHomework": "نقل الواجبات المنزلية إلى سلة المهملات أو الاستعادة",
     "validationDescription": "خطأ في التحقق",
     "weather": "Weather",
-    "weatherSearch": "البحث عن موقع الطقس"
+    "weatherSearch": "البحث عن موقع الطقس",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "إحداثيات سيئة",

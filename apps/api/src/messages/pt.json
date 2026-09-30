@@ -24,7 +24,9 @@
     "tokenNotFound": "Token não encontrado.",
     "tokenRejected": "Token inválido.",
     "twoFactorDemo": "Digite o código de demonstração 123456.",
-    "twoFactorMessage": "Digite o código de duas etapas do e-mail ou aplicativo e envie-o para /auth/2fa."
+    "twoFactorMessage": "Digite o código de duas etapas do e-mail ou aplicativo e envie-o para /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Solicitação inválida.",
@@ -64,7 +66,8 @@
     "trashHomework": "Mover tarefa de casa para lixeira ou restauração",
     "validationDescription": "Erro de validação",
     "weather": "Tempo",
-    "weatherSearch": "Clima de pesquisa de localização"
+    "weatherSearch": "Clima de pesquisa de localização",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Coordenadas inválidas",

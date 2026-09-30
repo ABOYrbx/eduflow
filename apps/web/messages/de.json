@@ -194,7 +194,8 @@
     "settings": "Einstellungen",
     "timetable": "Stundenplan",
     "scrollBack": "Nach links scrollen",
-    "scrollForward": "Nach rechts scrollen"
+    "scrollForward": "Nach rechts scrollen",
+    "sessions": "Sitzungen"
   },
   "overview": {
     "allMessages": "Alle Nachrichten",
@@ -311,7 +312,8 @@
     "unnamedDevice": "Unbenanntes Gerät",
     "validUntil": "Gültig bis {date}",
     "languageTitle": "Sprache",
-    "languageHint": "Gilt sofort. Die Auswahl bleibt auf diesem Gerät gespeichert."
+    "languageHint": "Gilt sofort. Die Auswahl bleibt auf diesem Gerät gespeichert.",
+    "sessionsPanelNote": "Geräte, die auf diesem Konto angemeldet sind."
   },
   "theme": {
     "language": "Sprache",
@@ -348,5 +350,27 @@
     "viewAria": "Ansicht",
     "weekDetail": "{count} Lektionen diese Woche.",
     "weekTab": "Woche"
+  },
+  "sessions": {
+    "eyebrow": "Sitzungen",
+    "title": "Angemeldete Geräte",
+    "detail": "Alle Geräte mit einer Sitzung auf deinem Konto. Du kannst einzeln oder alle auf einmal abmelden.",
+    "searchPlaceholder": "Gerät oder Kennung suchen",
+    "searchAria": "Sitzungen durchsuchen",
+    "active": "Angemeldet",
+    "signedOut": "Abgemeldet",
+    "currentBadge": "Dieses Gerät",
+    "revokeAllOthers": "Alle anderen Geräte abmelden",
+    "revokeAllOthersHint": "Dieses Gerät bleibt angemeldet.",
+    "noneActive": "Kein anderes Gerät ist angemeldet.",
+    "noMatch": "Keine Sitzung passt zur Suche.",
+    "noSessions": "Noch keine Sitzungen.",
+    "lastSeen": "Angemeldet am {created}",
+    "expires": "Gültig bis {expires}",
+    "id": "Kennung",
+    "openSettings": "Sitzungen verwalten",
+    "settingsHint": "{count} angemeldet · dieses Gerät ist {current}",
+    "revokedOthers": "{count} andere Sitzungen abgemeldet.",
+    "noOthers": "Keine anderen Sitzungen"
   }
 }

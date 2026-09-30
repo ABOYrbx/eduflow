@@ -24,7 +24,9 @@
     "tokenNotFound": "Token niet gevonden.",
     "tokenRejected": "Token ongeldig.",
     "twoFactorDemo": "Voer democode 123456 in.",
-    "twoFactorMessage": "Voer de tweestapscode van e-mail of app in en stuur deze naar /auth/2fa."
+    "twoFactorMessage": "Voer de tweestapscode van e-mail of app in en stuur deze naar /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Ongeldig verzoek.",
@@ -64,7 +66,8 @@
     "trashHomework": "Verplaats huiswerk naar prullenbak of herstel",
     "validationDescription": "Validatie fout",
     "weather": "Weer",
-    "weatherSearch": "Weer locatie zoeken"
+    "weatherSearch": "Weer locatie zoeken",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Slechte coördinaten",

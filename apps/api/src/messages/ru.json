@@ -24,7 +24,9 @@
     "tokenNotFound": "Токен не найден.",
     "tokenRejected": "Неверный токен.",
     "twoFactorDemo": "Введите демо код 123456.",
-    "twoFactorMessage": "Введите код двухфактора из электронной почты или приложения и отправьте его в /auth/2fa."
+    "twoFactorMessage": "Введите код двухфактора из электронной почты или приложения и отправьте его в /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Неверный запрос.",
@@ -64,7 +66,8 @@
     "trashHomework": "Переместить домашнюю работу в корзину или восстановить",
     "validationDescription": "Ошибка проверки",
     "weather": "Погода",
-    "weatherSearch": "Поиск местоположения"
+    "weatherSearch": "Поиск местоположения",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Некорректные координаты",

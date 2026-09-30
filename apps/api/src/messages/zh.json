@@ -24,7 +24,9 @@
     "tokenNotFound": "找不到令牌。",
     "tokenRejected": "令牌无效。",
     "twoFactorDemo": "输入演示代码 123456。",
-    "twoFactorMessage": "输入来自电子邮件或应用程序的两步代码并将其发送至 /auth/2fa。"
+    "twoFactorMessage": "输入来自电子邮件或应用程序的两步代码并将其发送至 /auth/2fa。",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "无效请求。",
@@ -64,7 +66,8 @@
     "trashHomework": "移动家庭作业到回收站或恢复",
     "validationDescription": "验证错误",
     "weather": "天气情况",
-    "weatherSearch": "天气位置搜索"
+    "weatherSearch": "天气位置搜索",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "错误的坐标",

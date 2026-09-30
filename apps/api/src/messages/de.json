@@ -24,7 +24,9 @@
     "tokenNotFound": "Token nicht gefunden.",
     "tokenRejected": "Token ungültig.",
     "twoFactorDemo": "Demo-Code 123456 eingeben.",
-    "twoFactorMessage": "Geben Sie den Zwei-Faktor-Code aus E-Mail oder App ein und senden Sie ihn an /auth/2fa."
+    "twoFactorMessage": "Geben Sie den Zwei-Faktor-Code aus E-Mail oder App ein und senden Sie ihn an /auth/2fa.",
+    "revokedOthers": "{count} andere Sitzungen abgemeldet.",
+    "noOtherSessions": "Keine anderen Sitzungen"
   },
   "common": {
     "badRequest": "Ungültige Anfrage.",
@@ -64,7 +66,8 @@
     "trashHomework": "Hausaufgaben in den Papierkorb verschieben",
     "validationDescription": "Validierungsfehler",
     "weather": "Wetter",
-    "weatherSearch": "Wetter-Standort-Suche"
+    "weatherSearch": "Wetter-Standort-Suche",
+    "revokeOtherDevices": "Andere Sitzungen abmelden"
   },
   "geo": {
     "badCoords": "Falsche Koordinaten",

@@ -346,8 +346,16 @@ export class AuthService {
       current: row.id === claims.jti, revoked: row.revokedAt !== null })), total: rows.length };
   }
 
-  async revokeDevice(claims: AuthClaims, id: string) {
-    if (!this.isFake()) {
+  /** Alle anderen Sitzungen des Kontos abmelden, die eigene bleibt aktiv. */
+  async revokeOtherDevices(claims: AuthClaims) {
+    const revoked = await this.prisma.apiToken.updateMany({
+      where: { accountId: claims.sub, id: { not: claims.jti }, revokedAt: null },
+      data: { revokedAt: new Date(), refreshTokenHash: null },
+    });
+    return { status: "ok", revoked: revoked.count };
+  }
+
+  async revokeDevice(claims: AuthClaims, id: string) {    if (!this.isFake()) {
       const clean = (id ?? "").trim();
       if (!clean) throw new BadRequestException({ error: t("auth.tokenId"), code: "VALIDATION" });
       const result = await this.prisma.apiToken.updateMany({ where: { accountId: claims.sub, accessTokenHash: clean, revokedAt: null }, data: { revokedAt: new Date(), refreshTokenHash: null } });

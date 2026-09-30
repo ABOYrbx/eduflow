@@ -24,7 +24,9 @@
     "tokenNotFound": "Το διακριτικό δεν βρέθηκε.",
     "tokenRejected": "Μη έγκυρο διακριτικό.",
     "twoFactorDemo": "Εισάγετε τον κωδικό επίδειξης 123456.",
-    "twoFactorMessage": "Εισάγετε τον κωδικό δύο παραγόντων από το email ή την εφαρμογή και στείλτε τον στο /auth/2fa."
+    "twoFactorMessage": "Εισάγετε τον κωδικό δύο παραγόντων από το email ή την εφαρμογή και στείλτε τον στο /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Μη έγκυρη αίτηση.",
@@ -64,7 +66,8 @@
     "trashHomework": "Μετακινήστε την εργασία στο κάδο απορριμμάτων ή επαναφορά",
     "validationDescription": "Σφάλμα επικύρωσης",
     "weather": "Καιρός",
-    "weatherSearch": "Αναζήτηση τοποθεσίας καιρού"
+    "weatherSearch": "Αναζήτηση τοποθεσίας καιρού",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Εσφαλμένες συντεταγμένες",
