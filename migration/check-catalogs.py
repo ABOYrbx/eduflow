@@ -15,8 +15,20 @@ Zwei Regeln, bewusst konservativ:
    Ablehnungen wie 'Schul-Subdomain' zu 'Schulsubdomain'. Nur für Sprachen
    mit geringer Abdeckung — bei guten Übersetzungen kann ein Wert zufällig
    dem deutschen gleichen ('Datum:' ist im Niederländischen richtig).
-2. Mindestens 60 % der Wörter (ab 4 Zeichen) kommen nur im Deutschen vor.
-   Bei Einwort-Werten genügt ein eindeutig deutsches Wort.
+2. Mindestens 50 % der eigenen Wörter (ab 4 Zeichen) stehen im deutschen
+   Wortschatz des Projekts. Bei Einwort-Werten genügt ein eindeutig
+   deutsches Wort.
+
+Der Wortschatz kommt aus migration/de-vokabular.py — nicht aus `de.json`.
+Die deutschen Reste in den Katalogen stammen aus einer älteren deutschen
+Fassung: 'Vertretungsplan', während `de.json` heute 'Ersetzungsplan' sagt.
+Gegen den aktuellen Katalog gemessen findet die Prüfung davon nichts, und
+genau daran ist sie im September 2026 gescheitert — sie meldete 0, während
+das Interface deutlich Deutsch zeigte.
+
+Platzhalter ({count}) zählen nicht als Wörter, und Wörter, die auch im
+englischen Quelltext stehen (EduFlow, Cache, Token), gelten in keiner
+Sprache als deutsches Indiz.
 
 Was beide Regeln nicht fassen, ist eine kurze Entscheidung von Hand wert —
 im September 2026 war das ein einzelnes 'Gültig bis {date}.' im Chinesischen.
@@ -35,11 +47,25 @@ BASIS = ["apps/web/messages", "apps/api/src/messages"]
 KOGNITE = {
     "token", "kalender", "titel", "datum", "profil", "alle", "morgen",
     "lektion", "note", "liste", "faktor", "ller", "modus", "lokale",
-    "konto", "licht",
+    "konto", "licht", "typ", "typen", "termin", "test", "cache", "kopier",
+    "geload", "violet", "speicher", "standort", "chat", "nachricht",
+    # aus der Sichtung gefunden: 'Bestand laden' ist echtes Niederlaendisch,
+    # 'kopiert' steht so in Daenisch und Norwegisch, 'descarcare' in
+    # Rumaenisch. Ein Wortfragment wie 'desc' zaehlt nie als Indiz.
+    "laden", "kopiert", "desc",
+    # 'Standardfilter' ist ein ge-legtes Kompositum in Norwegisch und
+    # Schwedisch. Aus der Sichtung im September 2026.
+    "standardfilter",
 }
 
 WORT = re.compile(r"[A-Za-zÄÖÜäöüß]{4,}")
 NORMAL = re.compile(r"[^a-zäöüß]")
+# Platzhalter wie {count} oder {lesson}. sind keine Woerter, sondern Namen aus
+# dem englischen Quelltext. Mitgezaehlt machen sie jeden Wert zum Treffer, weil
+# '{count} Noten' und '{count} Grades' gleich viele Woerter haben.
+PLATZHALTER = re.compile(r"\{[^{}]*\}")
+# Wortschatz der deutschen Sprache im Projekt, siehe build-de-vocab.py.
+VOKABULAR = "migration/de-vokabular.json"
 
 # Ab dieser Zahl echter Übersetzungen gilt eine Sprache als gut übersetzt.
 ABDECKUNG_GUT = 200
@@ -90,6 +116,17 @@ def stil_von(quelle, daten):
     raise ValueError("Dateistil unbekannt")
 
 
+def eigene_woerter(wert, englisch):
+    """Woerter des Wertes, die nicht aus dem englischen Quelltext stammen.
+
+    Ein Wort, das auch im englischen Text steht, kann kein deutscher Rest
+    sein: 'EduFlow', 'API', 'Token' oder 'Cache' stehen in jeder Sprache so.
+    """
+    gemeinsam = {w.lower() for w in WORT.findall(PLATZHALTER.sub(" ", englisch or ""))}
+    return [w.lower() for w in WORT.findall(PLATZHALTER.sub(" ", wert))
+            if w.lower() not in gemeinsam]
+
+
 def ist_deutsch(wert, deutsch, englisch, deutsch_woerter, sprache):
     if not isinstance(wert, str) or wert == englisch:
         return False
@@ -98,13 +135,13 @@ def ist_deutsch(wert, deutsch, englisch, deutsch_woerter, sprache):
             and normalisiert(wert) == normalisiert(deutsch)
             and wert not in KEEP_WERTE.get(sprache, set())):
         return True
-    woerter = [w.lower() for w in WORT.findall(wert)]
+    woerter = eigene_woerter(wert, englisch)
     if not woerter:
         return False
     treffer = [w for w in woerter if w in deutsch_woerter and w not in KOGNITE]
     if len(woerter) == 1:
         return len(treffer) == 1
-    return len(treffer) / len(woerter) >= 0.6
+    return len(treffer) / len(woerter) >= 0.5
 
 
 def main():
@@ -115,12 +152,7 @@ def main():
             continue
         en = flatten(json.load(open(f"{wurzel}/en.json", encoding="utf-8")))
         de = flatten(json.load(open(f"{wurzel}/de.json", encoding="utf-8")))
-        deutsch_woerter = set()
-        for key, wert in de.items():
-            quelle = en.get(key, "")
-            if isinstance(wert, str) and isinstance(quelle, str):
-                deutsch_woerter |= set(w.lower() for w in WORT.findall(wert))
-                deutsch_woerter -= set(w.lower() for w in WORT.findall(quelle))
+        deutsch_woerter = set(json.load(open(VOKABULAR, encoding="utf-8")))
         for pfad in sorted(glob.glob(f"{wurzel}/*.json")):
             sprache = os.path.basename(pfad)[:-5]
             if sprache in ("en", "de"):

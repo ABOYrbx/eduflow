@@ -17,10 +17,15 @@ function nfc(text: string | undefined): string {
 
 const WORT = /[A-Za-zÄÖÜäöüß]{4,}/g;
 const NORMAL = /[^a-zäöüß]/g;
+/** Platzhalter wie {count} sind Namen aus dem englischen Quelltext, keine
+ *  Wörter. Mitgezählt machen sie jeden Wert zum Treffer. */
+const PLATZHALTER = /\{[^{}]*\}/g;
 const KOGNITE = new Set([
   "token", "kalender", "titel", "datum", "profil", "alle", "morgen",
   "lektion", "note", "liste", "faktor", "ller", "modus", "lokale",
-  "konto", "licht",
+  "konto", "licht", "typ", "typen", "termin", "test", "cache", "kopier",
+  "geload", "violet", "speicher", "standort", "chat", "nachricht",
+  "laden", "kopiert", "desc", "standardfilter",
 ]);
 const ABDECKUNG_GUT = 200;
 // Ganze Werte, die in der jeweiligen Sprache richtig sind und dem Deutschen
@@ -54,15 +59,14 @@ const catalogs = new Map(readdirSync(__dirname)
 const en = catalogs.get("en") as Record<string, string>;
 const de = catalogs.get("de") as Record<string, string>;
 
-const deutschWoerter = new Set<string>();
-for (const [key, wert] of Object.entries(de)) {
-  const quelle = en[key] ?? "";
-  for (const wort of words(wert)) if (!words(quelle).includes(wort)) deutschWoerter.add(wort);
-}
+// Wortschatz aus migration/de-vokabular.json, nicht aus de.json: die
+// deutschen Reste stammen aus einer aelteren Fassung und stehen in keiner
+// aktuellen Datei mehr. Siehe build-de-vocab.py.
+const deutschWoerter = new Set<string>(
+  JSON.parse(readFileSync(join(__dirname, "..", "..", "..", "..", "migration", "de-vokabular.json"), "utf8")) as string[],
+);
 
 function melde(catalog: Record<string, string>, sprache: string): string[] {
-  const echt = Object.keys(catalog).filter((key) => key in en && catalog[key] !== en[key] && catalog[key] !== de[key]).length;
-  const gering = echt < ABDECKUNG_GUT;
   const treffer: string[] = [];
   for (const [key, wert] of Object.entries(catalog)) {
     if (!(key in en) || wert === en[key]) continue;
@@ -70,12 +74,15 @@ function melde(catalog: Record<string, string>, sprache: string): string[] {
       treffer.push(`${key} = ${wert}`);
       continue;
     }
-    const woerter = words(wert);
+    // Nur Wörter, die nicht auch im englischen Quelltext stehen: 'EduFlow'
+    // oder 'Cache' sind in jeder Sprache gleich und kein deutsches Indiz.
+    const gemeinsam = new Set(words((en[key] ?? "").replace(PLATZHALTER, " ")));
+    const woerter = words(wert.replace(PLATZHALTER, " ")).filter((wort) => !gemeinsam.has(wort));
     if (woerter.length === 0) continue;
     const trefferWoerter = woerter.filter((wort) => deutschWoerter.has(wort) && !KOGNITE.has(wort));
     const istDeutsch = woerter.length === 1
       ? trefferWoerter.length === 1
-      : trefferWoerter.length / woerter.length >= 0.6;
+      : trefferWoerter.length / woerter.length >= 0.5;
     if (istDeutsch) treffer.push(`${key} = ${wert}`);
   }
   return treffer;
@@ -84,6 +91,12 @@ function melde(catalog: Record<string, string>, sprache: string): string[] {
 describe("Backend-Kataloge", () => {
   it("unterscheiden sich auf Deutsch wirklich von der Quelle", () => {
     expect(Object.keys(en).filter((key) => de[key] !== en[key]).length).toBeGreaterThan(50);
+  });
+
+  it("kennt auch deutsche Wörter, die nicht mehr in de.json stehen", () => {
+    // Genau hier ist die Prüfung im September 2026 gescheitert.
+    expect(deutschWoerter.has("vertretungsplan")).toBe(true);
+    expect(deutschWoerter.has("anwesenheitsmeldungen")).toBe(true);
   });
 
   for (const [sprache, catalog] of catalogs) {

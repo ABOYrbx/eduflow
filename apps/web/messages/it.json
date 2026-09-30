@@ -328,7 +328,7 @@
     "cancelledSmall": "annullato",
     "cancelledTag": "Annullato",
     "classLabel": "Classe {cls}",
-    "dayDetail": "{count} Stunden.",
+    "dayDetail": "{count} lessons.",
     "dayLabel": "Giorno",
     "dayTab": "Giorno",
     "emptyDay": "Nessun orario per questo giorno (fine settimana/vacanze / nessuna lezione?).",
