@@ -32,17 +32,24 @@ button{font-family:inherit;cursor:pointer}
 .nav-logo{width:32px;height:32px;flex:0 0 32px;border-radius:50%;overflow:hidden;display:block;transition:transform .12s ease}
 .nav-logo:hover{transform:translateY(-1px)}
 .nav-logo img{display:block;width:100%;height:100%;object-fit:cover}
+/* Das Logo ist ein blaues '#1163F9' auf Durchsicht. Auf der schwarzen
+   Leiste ist dieses Blau zu dunkel und geht unter - im hellen Modus
+   dagegen ist es klar erkennbar, deshalb nur fuer dark.
+   (filter:invert() faellt aus: der CSS-Prozessor normalisiert invert(1) zu
+   invert(), und das ist zur Rechenzeit ungueltig - die Deklaration
+   verschwindet dann. Ueber eine Variable kommt die 1 zwar an, der Browser
+   wertet invert(var(...)) aber trotzdem nicht aus.) */
+[data-theme="dark"] .nav-logo img{filter:brightness(1.7) saturate(1.05)}
 .brand{display:flex;align-items:center;gap:0;font-weight:800;font-size:0;letter-spacing:-.8px;transition:font-size .22s ease}
 .brand-mark{width:26px;height:26px;border-radius:8px;background:var(--accent);display:grid;place-items:center;color:var(--accent-ink);font-weight:900;font-size:15px;transition:width .22s ease,height .22s ease,font-size .22s ease,background .15s;flex-shrink:0}
 .nav-mid{display:flex;gap:2px;background:rgba(255,255,255,.35);border-radius:var(--r-full);padding:3px;box-shadow:inset 0 1px 2px rgba(0,0,0,.05);flex:1 1 auto;min-width:0;justify-content:flex-start;margin:0 8px;flex-wrap:nowrap;max-width:100%;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scroll-behavior:smooth}
 .nav-mid::-webkit-scrollbar{display:none}
 .nav-scroll{flex:0 0 auto;width:26px;height:26px;display:grid;place-items:center;border:0;border-radius:50%;background:rgba(255,255,255,.7);color:var(--ink);cursor:pointer;opacity:.8;transition:opacity .15s,transform .15s}
 .nav-scroll:hover{opacity:1;transform:scale(1.08)}
-/* Am Anfang bzw. Ende verschwindet der Knopf, bleibt aber an Ort und Stelle.
-   visibility:hidden statt display:none, weil sonst die Leiste springt:
-   ohne Knopf bekaeme .nav-mid mehr Platz, der Inhalt ueberlief nicht mehr,
-   und der Knopf waere sofort wieder da. */
-.nav-scroll.is-idle{visibility:hidden}
+/* Am Anfang bzw. Ende verschwindet der Knopf und gibt seinen Platz an die
+   Bar zurueck, statt als Luecke stehen zu bleiben. width:0 statt
+   visibility:hidden allein - nur so waechst .nav-mid bis an die Seite. */
+.nav-scroll.is-idle{width:0;margin:0;overflow:hidden;visibility:hidden}
 .nav-scroll:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 /* Gleicher Abstand auf beiden Seiten: .nav-mid hat 8px Rand, der auch zwischen
    der Leiste und dem Chevron liegt. Rechts fehlte dieser Abstand, dadurch
