@@ -51,10 +51,10 @@
     <!-- Onboarding -->
     <string name="onboarding_greeting">Olá!</string>
     <string name="onboarding_language_title">Escolha o idioma</string>
-    <string name="onboarding_language_search">Search language</string>
-    <string name="onboarding_language_no_results">No language found</string>
-    <string name="onboarding_language_system_short">SYSTEM</string>
-    <string name="onboarding_language_system_format">System language: %1$s</string>
+    <string name="onboarding_language_search">Buscar idioma</string>
+    <string name="onboarding_language_no_results">Nenhum idioma encontrado</string>
+    <string name="onboarding_language_system_short">SISTEMA</string>
+    <string name="onboarding_language_system_format">Idioma do sistema: %1$s</string>
     <string name="onboarding_language_sub">O EduFlow fala sua língua. A seleção se aplica imediatamente.</string>
     <string name="onboarding_language_apply_restart">Aplicar &amp; reiniciar</string>
     <string name="onboarding_language_system">SISTEMA</string>
@@ -67,6 +67,7 @@
     <string name="onboarding_feat3_title">Calendário &amp; Clima</string>
     <string name="onboarding_feat3_desc">Dia e semana e mais tempo na visão geral.</string>
     <string name="onboarding_server_sub">Insira onde o EduFlow é executado como servidor.</string>
+    <string name="onboarding_server_hint">Somente o endereço IP — a porta e o caminho serão adicionados automaticamente.</string>
     <string name="onboarding_connected">Conectado</string>
     <string name="onboarding_unreachable">Servidor inacessível. Verifique o endereço e tente novamente.</string>
     <string name="onboarding_test_connected">✓ Conectado</string>
@@ -99,17 +100,17 @@
     <string name="settings_theme_system">SISTEMA</string>
     <string name="settings_theme_system_sub">Seguir dispositivo claro/escuro</string>
     <string name="settings_accent">Cor de realce</string>
-    <string name="settings_language">Language</string>
-    <string name="settings_language_system">System language</string>
+    <string name="settings_language">Idioma</string>
+    <string name="settings_language_system">Idioma do sistema</string>
     <string name="settings_notifications">notificações</string>
     <string name="settings_notify_news">Novas mensagens</string>
     <string name="settings_overview_tasks">Visão geral &amp; tarefas</string>
     <string name="settings_landing_label">Página inicial após o login</string>
     <string name="settings_hwfilter_label">Tarefas: filtro padrão</string>
     <string name="settings_hwtests_label">Incluir testes e exames</string>
-    <string name="settings_time_format_label">Clock format</string>
-    <string name="settings_time_24h">24-hour</string>
-    <string name="settings_time_12h">12-hour</string>
+    <string name="settings_time_format_label">Formato do relógio</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
     <string name="settings_unread_placeholder">Máximo de mensagens não lidas (1–50)</string>
     <string name="settings_homework_placeholder">Máx. tarefa aberta (1–50)</string>
     <string name="settings_navbar_section">Barra de navegação</string>
@@ -217,12 +218,12 @@
     <string name="messages_compose_send">Mandar</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
          label() stays the German context-free fallback for tests. -->
-    <string name="message_type_all">All</string>
-    <string name="message_type_sprava">Message</string>
-    <string name="message_type_news">News</string>
-    <string name="message_type_anketa">Poll</string>
-    <string name="message_type_chat">Chat</string>
-    <string name="message_type_genotif">Notice</string>
+    <string name="message_type_all">Todas</string>
+    <string name="message_type_sprava">Mensagem</string>
+    <string name="message_type_news">Notícias</string>
+    <string name="message_type_anketa">Enquete</string>
+    <string name="message_type_chat">Conversa</string>
+    <string name="message_type_genotif">Aviso</string>
     <!-- Overview -->
     <string name="overview_customize">Personalizar visão geral</string>
     <string name="overview_customize_desc">Escolha quais seções aparecem primeiro.</string>
