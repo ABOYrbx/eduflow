@@ -28,6 +28,8 @@ struct ContentView: View {
     @State private var selection: Route?
     /// Obere Leiste reagiert auf das Scrollen der jeweils offenen Seite.
     @State private var topBarCollapse = TopBarCollapseState()
+    /// Zähler für „Seite gewechselt" — treibt die Suche nach der Scrollansicht.
+    @State private var topBarScrollToken = 0
 
     private var isOnboarding: Bool {
         OnboardingState.shouldShow(isLoggedIn: store.isLoggedIn)
@@ -49,9 +51,17 @@ struct ContentView: View {
                     )
                     detailView(for: selection ?? .overview)
                 }
-                // Die Seiten melden ihr Scrollen hierher; die Leiste liest
-                // denselben Zustand (muss über beiden stehen).
-                .environment(topBarCollapse)
+                // Der Beobachter sucht die Scrollansicht der geöffneten Seite
+                // selbst; `topBarScrollToken` zwingt ihn beim Seitenwechsel
+                // zum Neusuchen.
+                .overlay(alignment: .topLeading) {
+                    TopBarScrollObserver(state: topBarCollapse, token: topBarScrollToken)
+                }
+                .onChange(of: selection) { _, _ in
+                    // Neue Seite beginnt oben → Leiste wieder groß.
+                    topBarCollapse.reset()
+                    topBarScrollToken += 1
+                }
             } else {
                 detailView(for: selection ?? .login)
             }
