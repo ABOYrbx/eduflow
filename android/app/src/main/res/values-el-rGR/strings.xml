@@ -51,10 +51,10 @@
     <!-- Onboarding -->
     <string name="onboarding_greeting">Γεια Σας!</string>
     <string name="onboarding_language_title">Επιλέξτε γλώσσα</string>
-    <string name="onboarding_language_search">Search language</string>
-    <string name="onboarding_language_no_results">No language found</string>
-    <string name="onboarding_language_system_short">SYSTEM</string>
-    <string name="onboarding_language_system_format">System language: %1$s</string>
+    <string name="onboarding_language_search">Αναζήτηση γλώσσας</string>
+    <string name="onboarding_language_no_results">Δεν βρέθηκε γλώσσα</string>
+    <string name="onboarding_language_system_short">ΣΥΣΤΗΜΑ</string>
+    <string name="onboarding_language_system_format">Γλώσσα συστήματος: %1$s</string>
     <string name="onboarding_language_sub">Το EduFlow μιλάει τη γλώσσα σας. Η επιλογή ισχύει αμέσως.</string>
     <string name="onboarding_language_apply_restart">Εφαρμογή &amp; επανεκκίνηση</string>
     <string name="onboarding_language_system">Σύστημα</string>
@@ -67,6 +67,7 @@
     <string name="onboarding_feat3_title">Χρονοδιάγραμμα &amp; Καιρός</string>
     <string name="onboarding_feat3_desc">Μέρα και εβδομάδα συν τον καιρό στην γενική εικόνα.</string>
     <string name="onboarding_server_sub">Εισάγετε πού τρέχει το EduFlow ως διακομιστή.</string>
+    <string name="onboarding_server_hint">Μόνο η διεύθυνση IP — η θύρα και η διαδρομή προστίθενται αυτόματα.</string>
     <string name="onboarding_connected">Συνδεδεμένο</string>
     <string name="onboarding_unreachable">Μη προσπελάσιμος διακομιστής. Ελέγξτε τη διεύθυνση και προσπαθήστε ξανά.</string>
     <string name="onboarding_test_connected">✓ Συνδεδεμένο</string>
@@ -99,17 +100,17 @@
     <string name="settings_theme_system">Σύστημα</string>
     <string name="settings_theme_system_sub">Ακολουθεί φως/σκοτεινή συσκευή</string>
     <string name="settings_accent">Χρώμα έμφασης</string>
-    <string name="settings_language">Language</string>
-    <string name="settings_language_system">System language</string>
+    <string name="settings_language">Γλώσσα</string>
+    <string name="settings_language_system">Γλώσσα συστήματος</string>
     <string name="settings_notifications">Ειδοποιήσεις</string>
     <string name="settings_notify_news">Νέα μηνύματα</string>
     <string name="settings_overview_tasks">Επισκόπηση καθηκόντων &amp;</string>
     <string name="settings_landing_label">Έναρξη σελίδας μετά την είσοδο</string>
     <string name="settings_hwfilter_label">Εργασίες: προεπιλεγμένο φίλτρο</string>
     <string name="settings_hwtests_label">Συμπεριλάβετε δοκιμές και εξετάσεις</string>
-    <string name="settings_time_format_label">Clock format</string>
-    <string name="settings_time_24h">24-hour</string>
-    <string name="settings_time_12h">12-hour</string>
+    <string name="settings_time_format_label">Μορφή ώρας</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
     <string name="settings_unread_placeholder">Μέγιστος αριθμός μη αναγνωσμένων μηνυμάτων (1–50)</string>
     <string name="settings_homework_placeholder">Μέγιστο ανοιχτό σπίτι (1–50)</string>
     <string name="settings_navbar_section">Γραμμή πλοήγησης</string>
@@ -217,12 +218,12 @@
     <string name="messages_compose_send">Αποστολή</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
          label() stays the German context-free fallback for tests. -->
-    <string name="message_type_all">All</string>
-    <string name="message_type_sprava">Message</string>
-    <string name="message_type_news">News</string>
-    <string name="message_type_anketa">Poll</string>
-    <string name="message_type_chat">Chat</string>
-    <string name="message_type_genotif">Notice</string>
+    <string name="message_type_all">Όλα</string>
+    <string name="message_type_sprava">Μήνυμα</string>
+    <string name="message_type_news">Νέα</string>
+    <string name="message_type_anketa">Δημοσκόπηση</string>
+    <string name="message_type_chat">Συνομιλία</string>
+    <string name="message_type_genotif">Ειδοποίηση</string>
     <!-- Overview -->
     <string name="overview_customize">Προσαρμογή επισκόπησης</string>
     <string name="overview_customize_desc">Επιλέξτε ποιες ενότητες εμφανίζονται πρώτα.</string>
