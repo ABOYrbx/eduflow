@@ -82,6 +82,72 @@ struct MessageTests {
         #expect(page.items.first?.typeLabel == "Nachricht")
     }
 
+    @Test("Live-Suche ab drei Zeichen, kürzer zeigt alles wieder")
+    @MainActor
+    func liveSearchNeedsThreeLetters() async throws {
+        let key = "de.eduflow.baseURL"
+        let saved = UserDefaults.standard.string(forKey: key)
+        defer {
+            if let saved {
+                UserDefaults.standard.set(saved, forKey: key)
+            } else {
+                UserDefaults.standard.removeObject(forKey: key)
+            }
+        }
+        #expect(MessagesViewModel.liveSearchMinLength == 3)
+
+        var requested: [String] = []
+        MockURLProtocol.handler = { request in
+            let query = URLComponents(url: request.url!, resolvingAgainstBaseURL: false)?.queryItems ?? []
+            let q = query.first(where: { $0.name == "q" })?.value ?? ""
+            requested.append(q)
+            let data = #"{"items":[{"id":1,"author":"Ms. Berger","text":"Elternabend am Donnerstag","type":"sprava","type_label":"Nachricht"}],"total":1,"limit":50,"offset":0}"#
+                .data(using: .utf8)!
+            let response = HTTPURLResponse(
+                url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)!
+            return (data, response)
+        }
+        let vm = MessagesViewModel(store: TokenStore(), client: client())
+        await vm.searchLive("Be", onSessionExpired: {})
+        #expect(requested.isEmpty, "Zwei Buchstaben lösen keinen Request aus")
+        await vm.searchLive("Ber", onSessionExpired: {})
+        try? await Task.sleep(for: .milliseconds(400))
+        #expect(requested.contains("Ber"))
+    }
+
+    @Test("Suche findet auch nach dem Absender")
+    @MainActor
+    func searchMatchesSender() async throws {
+        let store = TokenStore()
+        let vm = MessagesViewModel(store: store)
+        var message = MessageDTO()
+        message.id = 1
+        message.author = "Ms. Berger"
+        message.recipient = "Klasse"
+        message.type = "sprava"
+        message.typeLabel = "Nachricht"
+        message.text = "Bitte Elternabend beachten"
+        #expect(vm.matchesLocal(message, needle: "berger"))
+        #expect(vm.matchesLocal(message, needle: "elternabend"))
+        #expect(vm.matchesLocal(message, needle: "BEACHTEN"))
+        #expect(!vm.matchesLocal(message, needle: "zzz"))
+
+        // Absenderliste aus den geladenen Nachrichten, ohne Leere/Dubletten.
+        var withoutAuthor = MessageDTO()
+        withoutAuthor.id = 2
+        withoutAuthor.type = "news"
+        withoutAuthor.text = "x"
+        vm.items = [message, message, withoutAuthor]
+        #expect(vm.senders == ["Ms. Berger"])
+        // Absenderfilter greift lokal (Server kennt keinen Parameter).
+        vm.sender = "Ms. Berger"
+        #expect(vm.visibleItems.count == 2)
+        vm.sender = "Herr Özdemir"
+        #expect(vm.visibleItems.isEmpty)
+        vm.sender = ""
+        #expect(vm.visibleItems.count == 3)
+    }
+
     @Test("Thread mit Likes, Antworten und Cache-Hinweis")
     func threadDecodes() async throws {
         MockURLProtocol.handler = { request in

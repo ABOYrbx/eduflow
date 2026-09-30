@@ -33069,7 +33069,7 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Suchen"
+            "value": "Nachrichten und Absender suchen"
           }
         },
         "el": {
@@ -33081,7 +33081,7 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Search"
+            "value": "Search messages and senders"
           }
         },
         "es": {
@@ -77194,6 +77194,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "Keine Sprache passt dazu."
+          }
+        }
+      }
+    },
+    "messages_sender_all": {
+      "comment": "Nachrichten: alle Absender",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All senders"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alle Absender"
+          }
+        }
+      }
+    },
+    "messages_sender_filter": {
+      "comment": "Nachrichten: Absenderfilter",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filter by sender"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nach Absender filtern"
           }
         }
       }
