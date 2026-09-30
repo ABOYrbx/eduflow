@@ -51,10 +51,10 @@
     <!-- Onboarding -->
     <string name="onboarding_greeting">こんにちは！</string>
     <string name="onboarding_language_title">言語を選択</string>
-    <string name="onboarding_language_search">Search language</string>
-    <string name="onboarding_language_no_results">No language found</string>
-    <string name="onboarding_language_system_short">SYSTEM</string>
-    <string name="onboarding_language_system_format">System language: %1$s</string>
+    <string name="onboarding_language_search">言語を検索</string>
+    <string name="onboarding_language_no_results">言語が見つかりません</string>
+    <string name="onboarding_language_system_short">システム</string>
+    <string name="onboarding_language_system_format">システムの言語: %1$s</string>
     <string name="onboarding_language_sub">EduFlow はあなたの言語を話します。選択はすぐに適用されます。</string>
     <string name="onboarding_language_apply_restart">Übernehmen &amp; neu starten</string>
     <string name="onboarding_language_system">システム</string>
@@ -67,6 +67,7 @@
     <string name="onboarding_feat3_title">タイムテーブル &amp; 天気</string>
     <string name="onboarding_feat3_desc">日と週プラス天気の概要。</string>
     <string name="onboarding_server_sub">EduFlow がサーバーとして実行される場所を入力します。</string>
+    <string name="onboarding_server_hint">IP alone uses port %1$d. Add :port for another one — the demo server is %2$d.</string>
     <string name="onboarding_connected">接続しました</string>
     <string name="onboarding_unreachable">サーバーに接続できません。アドレスを確認して再度お試し下さい。</string>
     <string name="onboarding_test_connected">✓ 接続</string>
@@ -99,17 +100,17 @@
     <string name="settings_theme_system">システム</string>
     <string name="settings_theme_system_sub">デバイスのライト/ダークをフォロー</string>
     <string name="settings_accent">アクセントカラー</string>
-    <string name="settings_language">Language</string>
-    <string name="settings_language_system">System language</string>
+    <string name="settings_language">言語</string>
+    <string name="settings_language_system">システムの言語</string>
     <string name="settings_notifications">通知</string>
     <string name="settings_notify_news">新しいメッセージ</string>
     <string name="settings_overview_tasks">概要 &amp; タスク</string>
     <string name="settings_landing_label">サインイン後に開始ページ</string>
     <string name="settings_hwfilter_label">タスク: 既定のフィルター</string>
     <string name="settings_hwtests_label">テストとテストを含める</string>
-    <string name="settings_time_format_label">Clock format</string>
-    <string name="settings_time_24h">24-hour</string>
-    <string name="settings_time_12h">12-hour</string>
+    <string name="settings_time_format_label">時刻の形式</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
     <string name="settings_unread_placeholder">最大未読メッセージ (1–50)</string>
     <string name="settings_homework_placeholder">最大で宿題を開きます（1～50）</string>
     <string name="settings_navbar_section">ナビゲーションバー</string>
@@ -217,12 +218,12 @@
     <string name="messages_compose_send">送信</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
          label() stays the German context-free fallback for tests. -->
-    <string name="message_type_all">All</string>
-    <string name="message_type_sprava">Message</string>
-    <string name="message_type_news">News</string>
-    <string name="message_type_anketa">Poll</string>
-    <string name="message_type_chat">Chat</string>
-    <string name="message_type_genotif">Notice</string>
+    <string name="message_type_all">すべて</string>
+    <string name="message_type_sprava">メッセージ</string>
+    <string name="message_type_news">ニュース</string>
+    <string name="message_type_anketa">アンケート</string>
+    <string name="message_type_chat">チャット</string>
+    <string name="message_type_genotif">お知らせ</string>
     <!-- Overview -->
     <string name="overview_customize">概要をカスタマイズ</string>
     <string name="overview_customize_desc">最初に表示するセクションを選択します。</string>
