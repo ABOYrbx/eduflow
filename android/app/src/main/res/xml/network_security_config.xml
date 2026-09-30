@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Paket 0: Klartext nur für Dev-Loopback (10.0.2.2), sonst https. -->
+<!--
+  Der Server wird in der App als IP eingetragen (Onboarding, Login,
+  Einstellungen) und ergaenzt selbst http://, Port und /api/v1. Damit der
+  Release-Build eine solche Adresse im WLAN ueber Klartext erreicht, muss
+  cleartext erlaubt sein.
+
+  Warum nicht nur fuer 10.0.2.2 wie frueher: network-security-config kennt
+  keine CIDR-Notation, <domain> matcht exakte Hosts. Eine frei getippte
+  LAN-IP wie 192.168.1.5 laesst sich also nicht ueber eine Bereichsliste
+  freischalten — entweder global oder gar nicht.
+
+  Konsequenz: im Release ist HTTP zulaessig. Das ist fuer dieses Projekt
+  vertretbar (lokales Schul-Werkzeug, eigener Server, keine oeffentlichen
+  Ziele), hebt die Schutzregel aber auf: ein Angreifer im selben Netz
+  koennte den Klartext mitlesen. Bewuessliche Entscheidung, siehe Plan.
+-->
 <network-security-config>
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">10.0.2.2</domain>
-    </domain-config>
-    <base-config cleartextTrafficPermitted="false" />
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
 </network-security-config>

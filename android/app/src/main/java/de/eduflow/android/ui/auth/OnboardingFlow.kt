@@ -591,7 +591,11 @@ private fun FeatureRow(icon: ImageVector, title: String, description: String, de
 private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
     val scheme = MaterialTheme.colorScheme
     val reducedMotion = LocalReducedMotion.current
-    var draft by remember(baseUrl) { mutableStateOf(baseUrl) }
+    // baseUrl ist der interne Notfallwert, wenn nichts gespeichert ist —
+// dann soll das Feld trotzdem leer sein (keine Voreinstellung). Nur eine
+// wirklich gespeicherte Adresse wird vorbelegt.
+    val storedBaseUrl = baseUrl.takeIf { it.isNotBlank() && it != TokenStore.DEFAULT_BASE_URL }
+    var draft by remember(storedBaseUrl) { mutableStateOf(storedBaseUrl.orEmpty()) }
     var checking by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf<String?>(null) }
     var connected by remember { mutableStateOf(false) }
@@ -599,9 +603,13 @@ private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
     val connectedText = stringResource(R.string.onboarding_connected)
     val unreachableText = stringResource(R.string.onboarding_unreachable)
 
+    // Ohne Eingabe gibt es nichts zu testen: leer heisst "kein Server
+    // eingetragen", nicht "nimm den Emulator-Host".
+    val canTest = draft.isNotBlank()
     fun normalizedUrl(): String = normalizeBaseUrl(draft)
 
     suspend fun checkConnection() {
+        if (!canTest) return
         checking = true
         message = null
         connected = false
@@ -646,8 +654,14 @@ private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
         OutlinedTextField(
             value = draft,
             onValueChange = { draft = it; message = null; connected = false },
-            placeholder = { Text(TokenStore.DEFAULT_BASE_URL) },
-            leadingIcon = { androidx.compose.material3.Icon(Icons.Filled.Dns, contentDescription = null) },
+            // Nur IP eingeben. Hint, kein Wert — das Feld startet leer.
+            placeholder = { Text(TokenStore.SERVER_PLACEHOLDER) },
+            supportingText = if (draft.isBlank()) {
+                { Text(stringResource(R.string.onboarding_server_hint), fontSize = 12.sp) }
+            } else {
+                null
+            },
+            leadingIcon = { Icon(Icons.Filled.Dns, contentDescription = null) },
             singleLine = true,
             shape = CircleShape,
             modifier = Modifier.fillMaxWidth().padding(top = 20.dp).riseIn(index = 4),
@@ -658,7 +672,7 @@ private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
       Spacer(Modifier.height(12.dp))
       Button(
           onClick = { scope.launch { checkConnection() } },
-          enabled = !checking,
+          enabled = !checking && canTest,
           shape = CircleShape,
           colors = ButtonDefaults.buttonColors(
               containerColor = when {
