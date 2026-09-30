@@ -309,7 +309,7 @@
     "title": "Налаштування",
     "tokenCreated": "Токен створено. Скопіюйте значення зараз; він відображається лише один раз.",
     "unnamedDevice": "Неназваний пристрій",
-    "validUntil": "Gültig bis {date}.",
+    "validUntil": "Valid until {date}",
     "languageTitle": "Language",
     "languageHint": "Applies right away. The choice is remembered on this device."
   },

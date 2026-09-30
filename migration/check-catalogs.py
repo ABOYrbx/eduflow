@@ -26,6 +26,7 @@ import json
 import os
 import re
 import sys
+import unicodedata
 
 BASIS = ["apps/web/messages", "apps/api/src/messages"]
 
@@ -54,8 +55,23 @@ def flatten(node, prefix="", out=None):
     return out
 
 
+# Ganze Werte, die in der jeweiligen Sprache richtig sind und dem Deutschen
+# nur gleichen. Alles andere gilt als deutscher Rest: 'Datum:' ist im
+# Tschechischen und Niederlaendischen richtig, 'Alle typen' im
+# Niederlaendischen, '{lesson}. lektion' in Daenisch und Schwedisch.
+KEEP_WERTE = {
+    "cs": {"Datum:"},
+    "da": {"{lesson}. lektion"},
+    "nl": {"Datum:", "Alle typen"},
+    "sv": {"{lesson}. lektion"},
+}
+
+
 def normalisiert(text):
-    return NORMAL.sub("", text.lower())
+    # NFC zuerst: manche Kataloge mischen zerlegte Umlaute (A + U+0308) und
+    # zusammengesetzte (A-diaeresis). Ohne das gilt dasselbe Wort als
+    # verschieden und der deutsche Rest bleibt unentdeckt.
+    return NORMAL.sub("", unicodedata.normalize("NFC", text or "").lower())
 
 
 def stil_von(quelle, daten):
@@ -74,12 +90,13 @@ def stil_von(quelle, daten):
     raise ValueError("Dateistil unbekannt")
 
 
-def ist_deutsch(wert, deutsch, englisch, deutsch_woerter, auch_gleich):
+def ist_deutsch(wert, deutsch, englisch, deutsch_woerter, sprache):
     if not isinstance(wert, str) or wert == englisch:
         return False
-    if (auch_gleich and isinstance(deutsch, str) and isinstance(englisch, str)
+    if (isinstance(deutsch, str) and isinstance(englisch, str)
             and normalisiert(deutsch) != normalisiert(englisch)
-            and normalisiert(wert) == normalisiert(deutsch)):
+            and normalisiert(wert) == normalisiert(deutsch)
+            and wert not in KEEP_WERTE.get(sprache, set())):
         return True
     woerter = [w.lower() for w in WORT.findall(wert)]
     if not woerter:
@@ -116,7 +133,7 @@ def main():
             gering = echt < ABDECKUNG_GUT
             treffer = {
                 k: v for k, v in flach.items()
-                if ist_deutsch(v, de.get(k), en.get(k), deutsch_woerter, gering)
+                if ist_deutsch(v, de.get(k), en.get(k), deutsch_woerter, sprache)
             }
             if not treffer:
                 continue

@@ -1,5 +1,10 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
+/** Unicode-Normalisierung, damit zerlegte und zusammengesetzte Umlaute
+ *  (A + U+0308 gegen A-diaeresis) als dasselbe gelten. */
+function nfc(text: string | undefined): string {
+  return (text ?? "").normalize("NFC");
+}
 
 /**
  * Wächter über die Backend-Kataloge: nicht übersetzte Sprachen dürfen keinen
@@ -18,6 +23,16 @@ const KOGNITE = new Set([
   "konto", "licht",
 ]);
 const ABDECKUNG_GUT = 200;
+// Ganze Werte, die in der jeweiligen Sprache richtig sind und dem Deutschen
+// nur gleichen: 'Datum:' ist im Tschechischen und Niederlaendischen richtig,
+// 'Alle typen' im Niederlaendischen, '{lesson}. lektion' in Daenisch und
+// Schwedisch.
+const KEEP_WERTE: Record<string, Set<string>> = {
+  cs: new Set(["Datum:"]),
+  da: new Set(["{lesson}. lektion"]),
+  nl: new Set(["Datum:", "Alle typen"]),
+  sv: new Set(["{lesson}. lektion"]),
+};
 
 function flat(node: unknown, prefix = "", out: Record<string, string> = {}): Record<string, string> {
   if (typeof node === "object" && node !== null) {
@@ -29,7 +44,7 @@ function flat(node: unknown, prefix = "", out: Record<string, string> = {}): Rec
 }
 
 const words = (value: string): string[] => value.toLowerCase().match(WORT) ?? [];
-const normalisiert = (value: string | undefined): string => (value ?? "").toLowerCase().replace(NORMAL, "");
+const normalisiert = (value: string | undefined): string => nfc(value).toLowerCase().replace(NORMAL, "");
 
 // Die Spec liegt in src/messages, die Kataloge also direkt daneben.
 const catalogs = new Map(readdirSync(__dirname)
@@ -45,13 +60,13 @@ for (const [key, wert] of Object.entries(de)) {
   for (const wort of words(wert)) if (!words(quelle).includes(wort)) deutschWoerter.add(wort);
 }
 
-function melde(catalog: Record<string, string>): string[] {
+function melde(catalog: Record<string, string>, sprache: string): string[] {
   const echt = Object.keys(catalog).filter((key) => key in en && catalog[key] !== en[key] && catalog[key] !== de[key]).length;
   const gering = echt < ABDECKUNG_GUT;
   const treffer: string[] = [];
   for (const [key, wert] of Object.entries(catalog)) {
     if (!(key in en) || wert === en[key]) continue;
-    if (gering && key in de && normalisiert(de[key]) !== normalisiert(en[key]) && normalisiert(wert) === normalisiert(de[key])) {
+    if (key in de && normalisiert(de[key]) !== normalisiert(en[key]) && normalisiert(wert) === normalisiert(de[key]) && !KEEP_WERTE[sprache]?.has(wert)) {
       treffer.push(`${key} = ${wert}`);
       continue;
     }
@@ -74,7 +89,7 @@ describe("Backend-Kataloge", () => {
   for (const [sprache, catalog] of catalogs) {
     if (sprache === "en" || sprache === "de") continue;
     it(`${sprache} zeigt keine deutschen Texte`, () => {
-      expect(melde(catalog)).toEqual([]);
+      expect(melde(catalog, sprache)).toEqual([]);
     });
   }
 });
