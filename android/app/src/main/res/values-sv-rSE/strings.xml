@@ -51,10 +51,10 @@
     <!-- Onboarding -->
     <string name="onboarding_greeting">Hej!</string>
     <string name="onboarding_language_title">Välj språk</string>
-    <string name="onboarding_language_search">Search language</string>
-    <string name="onboarding_language_no_results">No language found</string>
+    <string name="onboarding_language_search">Sök språk</string>
+    <string name="onboarding_language_no_results">Inget språk hittades</string>
     <string name="onboarding_language_system_short">SYSTEM</string>
-    <string name="onboarding_language_system_format">System language: %1$s</string>
+    <string name="onboarding_language_system_format">Systemspråk: %1$s</string>
     <string name="onboarding_language_sub">EduFlow talar ditt språk. Urvalet gäller omedelbart.</string>
     <string name="onboarding_language_apply_restart">Tillämpa &amp; omstart</string>
     <string name="onboarding_language_system">System</string>
@@ -67,6 +67,7 @@
     <string name="onboarding_feat3_title">Tidtabell &amp; Väder</string>
     <string name="onboarding_feat3_desc">Dag och vecka plus väder på översikten.</string>
     <string name="onboarding_server_sub">Ange där EduFlow körs som server.</string>
+    <string name="onboarding_server_hint">Endast IP-adressen — port och sökväg läggs till automatiskt.</string>
     <string name="onboarding_connected">Ansluten</string>
     <string name="onboarding_unreachable">Servern är onåbar. Kontrollera adressen och försök igen.</string>
     <string name="onboarding_test_connected">✓ Ansluten</string>
@@ -99,17 +100,17 @@
     <string name="settings_theme_system">System</string>
     <string name="settings_theme_system_sub">Följer enhet ljus/mörk</string>
     <string name="settings_accent">Accent färg</string>
-    <string name="settings_language">Language</string>
-    <string name="settings_language_system">System language</string>
+    <string name="settings_language">Språk</string>
+    <string name="settings_language_system">Systemspråk</string>
     <string name="settings_notifications">Aviseringar</string>
     <string name="settings_notify_news">Nya meddelanden</string>
     <string name="settings_overview_tasks">Översikt &amp; uppgifter</string>
     <string name="settings_landing_label">Startsidan efter inloggning</string>
     <string name="settings_hwfilter_label">Uppgifter: standardfilter</string>
     <string name="settings_hwtests_label">Inkludera tester och prov</string>
-    <string name="settings_time_format_label">Clock format</string>
-    <string name="settings_time_24h">24-hour</string>
-    <string name="settings_time_12h">12-hour</string>
+    <string name="settings_time_format_label">Tidsformat</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
     <string name="settings_unread_placeholder">Max. olästa meddelanden (1–50)</string>
     <string name="settings_homework_placeholder">Max. öppna läxor (1–50)</string>
     <string name="settings_navbar_section">Navigeringsfält</string>
@@ -217,12 +218,12 @@
     <string name="messages_compose_send">Skicka</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
          label() stays the German context-free fallback for tests. -->
-    <string name="message_type_all">All</string>
-    <string name="message_type_sprava">Message</string>
-    <string name="message_type_news">News</string>
-    <string name="message_type_anketa">Poll</string>
-    <string name="message_type_chat">Chat</string>
-    <string name="message_type_genotif">Notice</string>
+    <string name="message_type_all">Alla</string>
+    <string name="message_type_sprava">Meddelande</string>
+    <string name="message_type_news">Nyheter</string>
+    <string name="message_type_anketa">Omröstning</string>
+    <string name="message_type_chat">Chatt</string>
+    <string name="message_type_genotif">Avisering</string>
     <!-- Overview -->
     <string name="overview_customize">Anpassa översikt</string>
     <string name="overview_customize_desc">Välj vilka sektioner som visas först.</string>
