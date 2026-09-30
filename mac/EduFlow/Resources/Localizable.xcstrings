@@ -53761,6 +53761,125 @@
         }
       }
     },
+    "language_hint" : {
+      "comment" : "Sprachwahl: Hinweis",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Takes effect right away. The percentage shows how much is translated."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wirkt sofort. Die Prozentzahl zeigt, wie viel übersetzt ist."
+          }
+        }
+      }
+    },
+    "language_no_match" : {
+      "comment" : "Sprachwahl: kein Treffer",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No language matches that."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Sprache passt dazu."
+          }
+        }
+      }
+    },
+    "language_progress" : {
+      "comment" : "Sprachwahl: Fortschritt",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d of %d texts"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%d von %d Texten"
+          }
+        }
+      }
+    },
+    "language_search_placeholder" : {
+      "comment" : "Sprachwahl: Platzhalter",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search language"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprache suchen"
+          }
+        }
+      }
+    },
+    "language_system" : {
+      "comment" : "Sprachwahl: Systemsprache",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System language"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Systemsprache"
+          }
+        }
+      }
+    },
+    "language_system_detail" : {
+      "comment" : "Sprachwahl: Systemsprache Detail",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Follows macOS"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Folgt macOS"
+          }
+        }
+      }
+    },
+    "language_title" : {
+      "comment" : "Sprachwahl: Titel",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprache"
+          }
+        }
+      }
+    },
     "messages_action_mark_read" : {
       "comment" : "Nachrichten: alle als gelesen",
       "localizations" : {
@@ -75607,6 +75726,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "← Vorwoche"
+          }
+        }
+      }
+    },
+    "content_demo_badge": {
+      "comment": "Navigation: Demo-Pille",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo"
           }
         }
       }

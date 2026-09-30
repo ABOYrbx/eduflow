@@ -14,6 +14,7 @@ public struct GradesView: View {
 
     public var body: some View {
         ScrollView {
+            ScrollOffsetSentinel()
             VStack(alignment: .leading, spacing: 14) {
                 PageHead(
                     "Grades",

@@ -5,7 +5,12 @@ import SwiftUI
 /// als eigene Ansicht mit Zurück-Button.
 public struct MessagesView: View {
     @Environment(\.colorScheme) private var scheme
+    @Environment(\.uberAccent) private var accent
     @State private var vm: MessagesViewModel
+    /// Nur die Eingabe; das Suchfeld selbst ist ein `NSSearchField`.
+    @State private var searchText = ""
+    /// Absender-Auswahl aufgeklappt.
+    @State private var senderMenuOpen = false
     private let onThread: (MessageHeader) -> Void
     private let onCompose: () -> Void
     private let onSessionExpired: () -> Void
@@ -26,13 +31,13 @@ public struct MessagesView: View {
         VStack(alignment: .leading, spacing: 12) {
             PageHead(
                 "Messages",
-                stats: vm.total == 0 ? nil : messageStats
+                stats: vm.visibleItems.isEmpty ? nil : messageStats
             )
             searchbar
             if let marked = vm.markedMessage {
                 Notice(marked)
             }
-            if let error = vm.error, vm.items.isEmpty {
+            if let error = vm.error, vm.visibleItems.isEmpty {
                 ErrorView(message: error.message) {
                     Task { await vm.load(onSessionExpired: onSessionExpired) }
                 }
@@ -44,48 +49,40 @@ public struct MessagesView: View {
         .background(EduFlowPalette.canvas(scheme))
         .navigationTitle(NSLocalizedString("messages_nav_list", value: "Messages", comment: "Nachrichten: Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
+        // Live-Suche: erst ab drei Buchstaben, dann entprellt nach 300 ms
+        // nachladen (Tippen soll nicht bei jedem Zeichen einen Request auslösen).
+        .onChange(of: searchText) { _, newValue in
+            Task { await vm.searchLive(newValue, onSessionExpired: onSessionExpired) }
+        }
     }
 
     /// Kopf-Statistik: Gesamtzahl plus Ungelesene (lokal getrackt).
     private var messageStats: String {
-        let total = String(format: NSLocalizedString("messages_count", value: "%d messages", comment: "Nachrichten: Anzahl"), vm.total)
+        let total = String(format: NSLocalizedString("messages_count", value: "%d messages", comment: "Nachrichten: Anzahl"), vm.visibleItems.count)
         guard vm.unreadCount > 0 else {
             return total
         }
         return total + " · " + String(format: NSLocalizedString("messages_unread_count", value: "%d unread", comment: "Nachrichten: Anzahl ungelesen"), vm.unreadCount)
     }
 
-    // MARK: - Suchleiste (`.searchbar`, zwei Reihen)
+    // MARK: - Suchleiste (`.searchbar`, macOS-Suchfeld + eigene Knöpfe)
 
     private var searchbar: some View {
         VStack(spacing: 8) {
-            HStack {
-                TextField(NSLocalizedString("grades_search_placeholder", value: "Search", comment: "Nachrichten: Suche Platzhalter"), text: $vm.query)
-                    .font(UberFont.text(15, weight: .medium))
-                    .autocorrectionDisabled()
-                    .onSubmit {
-                        Task { await vm.load(onSessionExpired: onSessionExpired) }
-                    }
-                IconButton(
-                    icon: "magnifyingglass",
-                    label: NSLocalizedString("messages_search_placeholder", value: "Search", comment: "Nachrichten: Suche Platzhalter")
-                ) {
-                    Task { await vm.load(onSessionExpired: onSessionExpired) }
-                }
-                Picker(NSLocalizedString("messages_picker_type", value: "Type", comment: "Nachrichten: Typfilter"), selection: $vm.type) {
-                    ForEach(MessageTypes.all, id: \.self) { type in
-                        Text(MessageTypes.label(type)).tag(type)
-                    }
-                }
-                .pickerStyle(.menu)
-                .frame(maxWidth: 110)
-                .onChange(of: vm.type) {
-                    Task { await vm.load(onSessionExpired: onSessionExpired) }
-                }
+            HStack(spacing: 8) {
+                // Echtes macOS-Suchfeld (NSSearchField) in der App-Pille:
+                // Lupe und Kreuz kommen vom System, Schrift und Rahmen von
+                // uns — die Geometrie bleibt die der Web-Suchleiste.
+                UberSearchField(
+                    text: $searchText,
+                    prompt: NSLocalizedString("messages_search_placeholder", value: "Search messages and senders", comment: "Nachrichten: Suche Platzhalter")
+                )
+                .frame(maxWidth: 320)
+                // Absender-Filter als eigene Pille, kein System-Menü.
+                senderFilter
             }
             .padding(.vertical, 6)
-            .padding(.leading, 22)
-            .padding(.trailing, 8)
+            .padding(.horizontal, 8)
             .background(EduFlowPalette.card(scheme))
             .clipShape(.capsule)
             .overlay {
@@ -105,6 +102,10 @@ public struct MessagesView: View {
                     Task { await vm.markAllRead(onSessionExpired: onSessionExpired) }
                 }
                 Spacer()
+                // Typfilter als eigene Pillenleiste (wie Android), damit
+                // keine native Menü-Optik durchschimmert.
+                typePills
+                Spacer()
                 IconButton(
                     icon: "plus",
                     label: NSLocalizedString("messages_nav_compose", value: "New message", comment: "Nachrichten: Verfassen-Titel"),
@@ -114,24 +115,139 @@ public struct MessagesView: View {
         }
     }
 
+    /// Absender einschränken. Eigene Pille mit eigenem Popover — bewusst
+    /// kein `Menu`: dessen Label setzt die Schrift selbst und wird im Dark
+    /// Mode schwarz. Die Auswahl hier nutzt dieselben Farben wie die Seite.
+    private var senderFilter: some View {
+        Button { senderMenuOpen = true } label: {
+            HStack(spacing: 6) {
+                Image(systemName: "person")
+                    .font(.system(size: 12, weight: .semibold))
+                Text(senderLabel)
+                    .lineLimit(1)
+                Image(systemName: "chevron.down")
+                    .font(.system(size: 9, weight: .bold))
+            }
+            .font(UberFont.text(13, weight: .semibold))
+            .foregroundStyle(vm.sender.isEmpty ? EduFlowPalette.inkMuted(scheme) : accent.resolvedInk(scheme))
+            .padding(.vertical, 7)
+            .padding(.horizontal, 12)
+            .background(vm.sender.isEmpty ? EduFlowPalette.surface2(scheme) : accent.resolved(scheme))
+            .clipShape(.capsule)
+            .overlay {
+                Capsule().stroke(vm.sender.isEmpty ? EduFlowPalette.border(scheme) : .clear, lineWidth: 1)
+            }
+        }
+        .buttonStyle(.plain)
+        .fixedSize()
+        .help(NSLocalizedString("messages_sender_filter", value: "Filter by sender", comment: "Nachrichten: Absenderfilter"))
+        .popover(isPresented: $senderMenuOpen, arrowEdge: .bottom) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(NSLocalizedString("messages_sender_filter", value: "Filter by sender", comment: "Nachrichten: Absenderfilter"))
+                    .font(UberFont.text(12, weight: .bold))
+                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                    .padding(.bottom, 2)
+                senderOption("", NSLocalizedString("messages_sender_all", value: "All senders", comment: "Nachrichten: alle Absender"))
+                ForEach(vm.senders, id: \.self) { sender in
+                    senderOption(sender, sender)
+                }
+                if vm.senders.isEmpty {
+                    Text(NSLocalizedString("messages_sender_none", value: "No sender loaded yet.", comment: "Nachrichten: keine Absender"))
+                        .font(UberFont.text(12))
+                        .foregroundStyle(EduFlowPalette.inkDim(scheme))
+                }
+            }
+            .padding(12)
+            .frame(width: 220, alignment: .leading)
+            .background(EduFlowPalette.card(scheme))
+        }
+    }
+
+    private var senderLabel: String {
+        vm.sender.isEmpty
+            ? NSLocalizedString("messages_sender_all", value: "All senders", comment: "Nachrichten: alle Absender")
+            : vm.sender
+    }
+
+    private func senderOption(_ value: String, _ title: String) -> some View {
+        let selected = vm.sender == value
+        return Button {
+            vm.sender = value
+            senderMenuOpen = false
+            Task { await vm.load(onSessionExpired: onSessionExpired) }
+        } label: {
+            HStack(spacing: 8) {
+                Image(systemName: selected ? "checkmark" : "person")
+                    .font(.system(size: 11, weight: .bold))
+                    .frame(width: 14)
+                Text(title)
+                    .font(UberFont.text(13, weight: .semibold))
+                    .lineLimit(1)
+                Spacer(minLength: 0)
+            }
+            .foregroundStyle(selected ? accent.resolvedInk(scheme) : EduFlowPalette.ink(scheme))
+            .padding(.vertical, 6)
+            .padding(.horizontal, 9)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(selected ? accent.resolved(scheme) : Color.clear)
+            .clipShape(.capsule)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(title)
+    }
+
+    private var typePills: some View {
+        HStack(spacing: 4) {
+            ForEach(MessageTypes.all, id: \.self) { type in
+                let selected = vm.type == type
+                Button {
+                    vm.type = type
+                    Task { await vm.load(onSessionExpired: onSessionExpired) }
+                } label: {
+                    Text(MessageTypes.label(type))
+                        .font(UberFont.text(12, weight: .semibold))
+                        // Auf der ausgewählten Pille die zur Akzentfarbe
+                        // passende Schrift (bei schwarzem Akzent im Dark Mode
+                        // dunkel auf hellem Grund), sonst die gedämpfte Tinte.
+                        .foregroundStyle(selected ? accent.resolvedInk(scheme) : EduFlowPalette.inkMuted(scheme))
+                        .padding(.vertical, 5)
+                        .padding(.horizontal, 10)
+                        .background(selected ? accent.resolved(scheme) : Color.clear)
+                        .clipShape(.capsule)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(MessageTypes.label(type))
+                .accessibilityAddTraits(selected ? [.isSelected] : [])
+            }
+        }
+        .padding(.vertical, 2)
+        .padding(.horizontal, 4)
+        .background(EduFlowPalette.surface2(scheme))
+        .overlay {
+            Capsule().stroke(EduFlowPalette.border(scheme), lineWidth: 1)
+        }
+        .clipShape(.capsule)
+    }
+
     // MARK: - Liste (`.mail-list-pane`)
 
     private var listPane: some View {
         ScrollView {
+            ScrollOffsetSentinel()
             LazyVStack(spacing: 8) {
-                if vm.isLoading && vm.items.isEmpty {
+                if vm.isLoading && vm.visibleItems.isEmpty {
                     ProgressView()
                         .controlSize(.large)
                         .frame(maxWidth: .infinity)
                         .padding(48)
-                } else if vm.items.isEmpty {
+                } else if vm.visibleItems.isEmpty {
                     Text(NSLocalizedString("messages_empty", value: "No messages.", comment: "Nachrichten: leer"))
                         .font(UberFont.text(15))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                         .frame(maxWidth: .infinity)
                         .padding(48)
                 } else {
-                    ForEach(Array(vm.items.enumerated()), id: \.element.id) { index, message in
+                    ForEach(Array(vm.visibleItems.enumerated()), id: \.element.id) { index, message in
                         MessageRow(
                             message: message,
                             unread: vm.isUnread(message),
@@ -143,7 +259,7 @@ public struct MessagesView: View {
                         .riseIn(delay: Double(min(index, 8)) * 0.06)
                     }
                     if vm.canLoadMore {
-                        PillButton(vm.isLoadingMore ? NSLocalizedString("common_loading", value: "Loading …", comment: "Laden läuft") : String(format: NSLocalizedString("messages_load_more", value: "Load more (%d/%d)", comment: "Nachrichten: mehr laden"), vm.items.count, vm.total), style: .smallLight) {
+                        PillButton(vm.isLoadingMore ? NSLocalizedString("common_loading", value: "Loading …", comment: "Laden läuft") : String(format: NSLocalizedString("messages_load_more", value: "Load more (%d/%d)", comment: "Nachrichten: mehr laden"), vm.visibleItems.count, vm.total), style: .smallLight) {
                             Task { await vm.loadMore(onSessionExpired: onSessionExpired) }
                         }
                         .disabled(vm.isLoadingMore)
@@ -222,36 +338,37 @@ private struct MessageRow: View {
         return parts.joined(separator: ", ")
     }
 
+    /// Vollständiger Text als Fließtext (mehrere Zeilen zu einer Zeile
+    /// zusammengezogen) — das ist der Text, der links groß steht.
+    private var messageText: String {
+        let flat = message.text
+            .components(separatedBy: .newlines)
+            .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty }
+            .joined(separator: " ")
+        if flat.isEmpty {
+            return subject
+        }
+        return flat
+    }
+
     var body: some View {
         Button(action: action) {
-            HStack(alignment: .top, spacing: 10) {
+            HStack(alignment: .top, spacing: 12) {
                 Circle()
                     .fill(unread ? EduFlowPalette.blue : Color.clear)
                     .frame(width: 8, height: 8)
-                    .padding(.top, 6)
+                    .padding(.top, 7)
                     .accessibilityHidden(true)
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack(alignment: .firstTextBaseline, spacing: 8) {
-                        Text(verbatim: author)
-                            .font(UberFont.text(14, weight: .heavy))
-                            .tracking(-0.2)
-                            .lineLimit(1)
-                        Spacer()
-                        if !timestamp.isEmpty {
-                            Text(verbatim: timestamp)
-                                .font(UberFont.text(12))
-                                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                        }
-                    }
-                    Text(verbatim: subject)
-                        .font(UberFont.text(14, weight: .semibold))
-                        .lineLimit(1)
-                    if !preview.isEmpty {
-                        Text(verbatim: preview)
-                            .font(UberFont.text(13))
-                            .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                            .lineLimit(2)
-                    }
+                // Links: die eigentliche Nachricht, groß und gut lesbar.
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(verbatim: messageText)
+                        .font(UberFont.text(15, weight: .medium))
+                        .lineSpacing(3)
+                        .foregroundStyle(EduFlowPalette.ink(scheme))
+                        .lineLimit(3)
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     if unread || showsTypeTag || message.reactionCount > 0 || !message.attachments.isEmpty {
                         HStack(spacing: 6) {
                             if unread {
@@ -271,9 +388,27 @@ private struct MessageRow: View {
                                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                             }
                         }
-                        .padding(.top, 4)
                     }
                 }
+                // Rechts: Titel, Absender und Datum, alles rechtsbündig.
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text(verbatim: subject)
+                        .font(UberFont.text(14, weight: .heavy))
+                        .tracking(-0.2)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.trailing)
+                    Text(verbatim: author)
+                        .font(UberFont.text(13, weight: .semibold))
+                        .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                        .lineLimit(1)
+                    if !timestamp.isEmpty {
+                        Text(verbatim: timestamp)
+                            .font(UberFont.text(12))
+                            .foregroundStyle(EduFlowPalette.inkDim(scheme))
+                            .lineLimit(1)
+                    }
+                }
+                .frame(minWidth: 150, idealWidth: 210, maxWidth: 260, alignment: .trailing)
             }
             .padding(.vertical, 12)
             .padding(.horizontal, 14)

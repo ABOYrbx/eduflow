@@ -147,6 +147,81 @@ struct OnboardingTests {
         }
     }
 
+    @Test("Coverage liest echte Bundle-Sprachen mit Prozentzahl")
+    func coverageFromBundle() {
+        let rows = AppLocalizations.coverage()
+        #expect(!rows.isEmpty)
+        for row in rows {
+            #expect(row.percent >= 0 && row.percent <= 100)
+            #expect(row.total > 0)
+            #expect(row.translated <= row.total)
+            // Prozent = gerundeter Anteil der übersetzten Texte.
+            #expect(row.percent == Int((Double(row.translated) / Double(row.total) * 100).rounded()))
+        }
+        // Quelle (Englisch) ist immer vollständig.
+        if let english = rows.first(where: { $0.code == "en" }) {
+            #expect(english.percent == 100)
+        }
+        // Katalog-Sprachen haben lesbare Tabellen und einen Eigennamen.
+        #expect(!AppLocalizations.availableCodes().isEmpty)
+        for code in AppLocalizations.availableCodes() {
+            #expect(!AppLanguage.nativeName(code).isEmpty)
+        }
+    }
+
+    @Test("Sprachliste trägt Namen, Prozent und Fortschritt")
+    func languageEntries() {
+        let entries = LanguageEntry.fromBundle()
+        #expect(!entries.isEmpty)
+        for entry in entries {
+            #expect(!entry.code.isEmpty)
+            #expect(!entry.name.isEmpty)
+            #expect(entry.total > 0)
+            #expect(entry.translated <= entry.total)
+            #expect(entry.percent >= 0 && entry.percent <= 100)
+        }
+        // Nach Eigenname sortiert, keine Dubletten.
+        let names = entries.map(\.name)
+        #expect(names == names.sorted { $0.localizedCaseInsensitiveCompare($1) == .orderedAscending })
+        #expect(Set(entries.map(\.code)).count == entries.count)
+    }
+
+    @Test("Topbar wird beim Scrollen nach unten klein, oben immer groß")
+    @MainActor
+    func topBarCollapsesOnScrollDown() {
+        let state = TopBarCollapseState()
+        #expect(!state.isCompact)
+        // Scrollen nach unten: Leiste wird klein.
+        state.update(offset: 200)
+        #expect(state.isCompact)
+        // Scrollen nach oben: wieder groß.
+        state.update(offset: 120)
+        #expect(!state.isCompact)
+        state.update(offset: 260)
+        #expect(state.isCompact)
+        // Ganz oben ist sie immer groß, auch nach kleinem Zappeln.
+        state.update(offset: 0)
+        #expect(!state.isCompact)
+        state.update(offset: -30)
+        #expect(!state.isCompact)
+        // Winzige Bewegungen (< Mindestbewegung) ändern nichts.
+        state.update(offset: 400)
+        state.update(offset: 401)
+        #expect(state.isCompact)
+        // Seitenwechsel setzt zurück: neue Seite beginnt oben.
+        state.reset()
+        #expect(!state.isCompact)
+    }
+
+    @Test("Jeder Topbar-Reiter hat ein Symbol und einen Titel")
+    func topBarSectionsHaveIcons() {
+        for section in TopBarSection.allCases {
+            #expect(!section.icon.isEmpty)
+            #expect(!section.title.isEmpty)
+        }
+        #expect(Set(TopBarSection.allCases.map(\.icon)).count == TopBarSection.allCases.count)
+    }
+
     @Test("Health-Abfrage liefert Version gegen Stub")
     func healthCheckOk() async throws {
         MockURLProtocol.handler = { request in

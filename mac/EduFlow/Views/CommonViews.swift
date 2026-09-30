@@ -1,6 +1,639 @@
 import AppKit
 import SwiftUI
 
+// MARK: - Sprachwahl (Profilmenü, eigene Pillen — keine System-Schalter)
+
+/// Eine Sprache mit ihrem Übersetzungsstand, aus dem Bundle gelesen
+/// (`AppLocalizations.coverage()`). Neue Crowdin-Sprachen erscheinen damit
+/// automatisch, ohne dass hier Code nachgezogen werden muss.
+public struct LanguageEntry: Identifiable, Equatable, Sendable {
+    public let code: String
+    public let name: String
+    public let percent: Int
+    public let translated: Int
+    public let total: Int
+
+    public var id: String { code }
+
+    /// Katalog-Sprachen mit Eigenname und Stand, nach Eigenname sortiert.
+    /// Die System-Sprache steht nicht in der Liste (sie hat keinen Code in
+    /// der Auswahl) und wird separat angeboten.
+    public static func fromBundle(in bundle: Bundle = .main) -> [LanguageEntry] {
+        AppLocalizations.coverage(in: bundle)
+            .map {
+                LanguageEntry(
+                    code: $0.code,
+                    name: AppLanguage.nativeName($0.code),
+                    percent: $0.percent,
+                    translated: $0.translated,
+                    total: $0.total
+                )
+            }
+            .sorted {
+                $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
+            }
+    }
+}
+
+/// Sprachauswahl als eigene Oberfläche: Suchleiste, Pillen-Liste mit
+/// Prozentzahl und Fortschrittsbalken. Bewusst ohne `Picker`, `Menu` oder
+/// `Toggle` — die Gestaltung folgt den App-Pillen (`.btn`), damit nichts
+/// als System-Steuerelement durchschimmert.
+///
+/// Wirkt sofort (Bundle-Überlagerung, kein Neustart) und informiert über
+/// `.appLanguageDidChange`, damit alle Ansichten neu rendern.
+public struct LanguageSwitcher: View {
+    @Environment(\.colorScheme) private var scheme
+    @Environment(\.uberAccent) private var accent
+    @State private var entries = LanguageEntry.fromBundle()
+    @State private var query = ""
+    /// `nil` = Systemsprache. Startwert aus dem Store, nicht aus der
+    /// Umgebung (damit der Ausgangszustand auch stimmt, wenn die App
+    /// gerade neu gestartet wurde).
+    @State private var selection: String?
+    /// Beim Öffnen einer neuen Liste neu aus dem Bundle lesen.
+    @State private var refreshToken = 0
+
+    public init() {
+        _selection = State(initialValue: AppLanguage.override)
+    }
+
+    public var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            header
+            UberTextField(
+                text: $query,
+                placeholder: NSLocalizedString("language_search_placeholder", value: "Search language", comment: "Sprachwahl: Platzhalter"),
+                icon: "magnifyingglass"
+            )
+            list
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .appLanguageDidChange)) { _ in
+            // Auswahl und Stand frisch halten, wenn die Sprache von woanders
+            // (Onboarding) gewechselt wurde.
+            selection = AppLanguage.override
+            reload()
+        }
+        .onChange(of: refreshToken) { _, _ in reload() }
+    }
+
+    /// Kompakter Kopf: Titel und erklärender Text. Die aktive Sprache steht
+    /// nicht extra daneben — sie ist unten in ihrer eigenen Zeile markiert.
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            HStack(spacing: 8) {
+                Image(systemName: "globe")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(accent.resolvedInk(scheme))
+                Text(NSLocalizedString("language_title", value: "Language", comment: "Sprachwahl: Titel"))
+                    .font(UberFont.text(15, weight: .heavy))
+                    .tracking(-0.2)
+            }
+            Text(NSLocalizedString("language_hint", value: "Takes effect right away. The percentage shows how much is translated.", comment: "Sprachwahl: Hinweis"))
+                .font(UberFont.text(12))
+                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                .lineSpacing(2)
+        }
+    }
+
+    /// Systemsprache plus gefilterte Sprachen, jede Zeile eine Pille.
+    private var list: some View {
+        ScrollView {
+            VStack(spacing: 6) {
+                systemRow
+                ForEach(filtered) { entry in
+                    languageRow(entry)
+                }
+                if !filtered.isEmpty {
+                    emptyHint
+                }
+            }
+        }
+        .scrollIndicators(.never)
+        .frame(maxHeight: 260)
+    }
+
+    private var filtered: [LanguageEntry] {
+        let needle = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard !needle.isEmpty else { return entries }
+        return entries.filter { entry in
+            entry.name.lowercased().contains(needle) || entry.code.lowercased().hasPrefix(needle)
+        }
+    }
+
+    private var emptyHint: some View {
+        Text(NSLocalizedString("language_no_match", value: "No language matches that.", comment: "Sprachwahl: kein Treffer"))
+            .font(UberFont.text(12))
+            .foregroundStyle(EduFlowPalette.inkDim(scheme))
+            .frame(maxWidth: .infinity, alignment: .center)
+            .padding(.vertical, 10)
+    }
+
+    /// Systemsprache ohne Prozent: sie folgt dem System, ihre Texte sind
+    /// automatisch da.
+    private var systemRow: some View {
+        Button {
+            choose(nil)
+        } label: {
+            rowLabel(
+                name: NSLocalizedString("language_system", value: "System language", comment: "Sprachwahl: Systemsprache"),
+                detail: NSLocalizedString("language_system_detail", value: "Follows macOS", comment: "Sprachwahl: Systemsprache Detail"),
+                percent: nil,
+                selected: selection == nil,
+                query: nil
+            )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(NSLocalizedString("language_system", value: "System language", comment: "Sprachwahl: Systemsprache"))
+    }
+
+    private func languageRow(_ entry: LanguageEntry) -> some View {
+        Button {
+            choose(entry.code)
+        } label: {
+            rowLabel(
+                name: entry.name,
+                detail: String(
+                    format: NSLocalizedString("language_progress", value: "%d of %d texts", comment: "Sprachwahl: Fortschritt"),
+                    entry.translated,
+                    entry.total
+                ),
+                percent: entry.percent,
+                selected: selection == entry.code,
+                query: query.isEmpty ? nil : query
+            )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(entry.name)
+        .accessibilityValue("\(entry.percent) %")
+    }
+
+    /// Zeileninhalt. `query` hebt den passenden Teil im Namen hervor, damit
+    /// die Suche sichtbar wirkt (eigene Pille, kein System-Textfeld).
+    private func rowLabel(
+        name: String,
+        detail: String,
+        percent: Int?,
+        selected: Bool,
+        query: String?
+    ) -> some View {
+        HStack(spacing: 10) {
+            ZStack {
+                Circle()
+                    .stroke(selected ? accent.resolved(scheme) : EduFlowPalette.borderStrong(scheme), lineWidth: 2)
+                    .frame(width: 18, height: 18)
+                if selected {
+                    Circle()
+                        .fill(accent.resolved(scheme))
+                        .frame(width: 9, height: 9)
+                }
+            }
+            .frame(width: 20, height: 20)
+            VStack(alignment: .leading, spacing: 3) {
+                highlighted(name, needle: query)
+                    .font(UberFont.text(13, weight: .heavy))
+                    .tracking(-0.2)
+                if let percent {
+                    // Fortschrittsbalken wie in der Onboarding-Sprachseite.
+                    GeometryReader { geometry in
+                        ZStack(alignment: .leading) {
+                            Capsule()
+                                .fill(EduFlowPalette.surface2(scheme))
+                            Capsule()
+                                .fill(percent >= 90 ? EduFlowPalette.green : accent.resolved(scheme))
+                                .frame(width: geometry.size.width * CGFloat(percent) / 100)
+                        }
+                    }
+                    .frame(height: 4)
+                }
+                Text(detail)
+                    .font(UberFont.text(11))
+                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+            }
+            Spacer(minLength: 6)
+            if let percent {
+                Text("\(percent) %")
+                    .font(UberFont.text(13, weight: .heavy))
+                    .foregroundStyle(percent >= 90 ? EduFlowPalette.green : EduFlowPalette.ink(scheme))
+            }
+        }
+        .padding(.vertical, 9)
+        .padding(.horizontal, 11)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(selected ? accent.resolved(scheme).opacity(0.10) : EduFlowPalette.surface1(scheme))
+        .clipShape(.capsule)
+        .overlay {
+            Capsule().stroke(selected ? accent.resolved(scheme) : EduFlowPalette.border(scheme), lineWidth: 1)
+        }
+        .contentShape(Capsule())
+    }
+
+    /// Name mit hervorgehobenem Suchtreffer.
+    private func highlighted(_ name: String, needle: String?) -> Text {
+        guard let needle, !needle.isEmpty,
+              let range = name.range(of: needle, options: [.caseInsensitive, .diacriticInsensitive])
+        else {
+            return Text(verbatim: name)
+        }
+        let prefix = String(name[range.lowerBound..<range.upperBound])
+        let suffix = String(name[range.upperBound...])
+        return Text(verbatim: String(name[..<range.lowerBound]))
+            + Text(verbatim: prefix).bold().foregroundStyle(accent.resolved(scheme))
+            + Text(verbatim: suffix)
+    }
+
+    /// Auswahl anwenden: sofort, ohne Neustart, und den Stand neu lesen.
+    private func choose(_ code: String?) {
+        selection = code
+        AppLanguage.set(code)
+        reload()
+    }
+
+    private func reload() {
+        entries = LanguageEntry.fromBundle()
+    }
+}
+
+// MARK: - Suchfeld (`.searchbar`)
+
+/// Echtes macOS-Suchfeld (`NSSearchField`) in der Optik der App.
+///
+/// Bewusst `NSSearchField` und nicht ein selbst gezeichnetes Textfeld: das
+/// System liefert Fokus-Ring, Lupe, Kreuz-Knopf, Platzhalter-Ausblendung und
+/// die Tastatur-Shortcuts (Esc leert) — das Verhalten ist also das des
+/// Systems, nur die Fläche ist unsere Pille. Kein `TextField`-Optik,
+/// entsprechend keine System-Steuerelement-Kante.
+public struct UberSearchField: View {
+    @Environment(\.colorScheme) private var scheme
+    @Binding var text: String
+    let prompt: String
+    var onSubmit: () -> Void = {}
+    /// Fokus sofort setzen (wichtig, wenn die Ansicht frisch eingeblendet wird).
+    var autofocus: Bool = false
+
+    public init(
+        text: Binding<String>,
+        prompt: String = "",
+        onSubmit: @escaping () -> Void = {},
+        autofocus: Bool = false
+    ) {
+        _text = text
+        self.prompt = prompt
+        self.onSubmit = onSubmit
+        self.autofocus = autofocus
+    }
+
+    public var body: some View {
+        NativeSearchField(text: $text, prompt: prompt, onSubmit: onSubmit, autofocus: autofocus)
+            .frame(height: 26)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(EduFlowPalette.surface2(scheme))
+            .clipShape(.capsule)
+            .overlay {
+                Capsule().stroke(EduFlowPalette.border(scheme), lineWidth: 1)
+            }
+    }
+}
+
+/// Brücke zu `NSSearchField`. Nutzt den Haupt-Thread-Actorrun, weil
+/// AppKit-Steuerelemente dort angelegt werden müssen.
+private struct NativeSearchField: NSViewRepresentable {
+    @Binding var text: String
+    let prompt: String
+    let onSubmit: () -> Void
+    let autofocus: Bool
+
+    @MainActor
+    func makeNSView(context: Context) -> NSSearchField {
+        let field = NSSearchField()
+        field.isBezeled = false
+        field.drawsBackground = false
+        field.focusRingType = .none
+        field.sendsWholeSearchString = false
+        field.sendsSearchStringImmediately = false
+        field.placeholderString = prompt
+        field.controlSize = .small
+        field.font = NSFont.systemFont(ofSize: 13, weight: .medium)
+        field.stringValue = text
+        field.delegate = context.coordinator
+        if autofocus {
+            DispatchQueue.main.async { field.window?.makeFirstResponder(field) }
+        }
+        return field
+    }
+
+    @MainActor
+    func updateNSView(_ field: NSSearchField, context: Context) {
+        // Nur von außen übernehmen, wenn sich der Wert wirklich unterscheidet:
+        // sonst springt der Cursor beim Tippen ans Ende.
+        if field.stringValue != text {
+            field.stringValue = text
+        }
+        if field.placeholderString != prompt {
+            field.placeholderString = prompt
+        }
+        if autofocus, let window = field.window, window.firstResponder !== field {
+            window.makeFirstResponder(field)
+        }
+    }
+
+    @MainActor
+    func makeCoordinator() -> Coordinator {
+        Coordinator(text: $text, onSubmit: onSubmit)
+    }
+
+    @MainActor
+    final class Coordinator: NSObject, NSSearchFieldDelegate {
+        private var text: Binding<String>
+        private let onSubmit: () -> Void
+
+        init(text: Binding<String>, onSubmit: @escaping () -> Void) {
+            self.text = text
+            self.onSubmit = onSubmit
+        }
+
+        func controlTextDidChange(_ obj: Notification) {
+            guard let field = obj.object as? NSSearchField else { return }
+            let value = field.stringValue
+            // Vermeidet Rückkopplung: nur schreiben, wenn sich etwas ändert.
+            if text.wrappedValue != value {
+                text.wrappedValue = value
+            }
+        }
+
+        func control(_ control: NSControl, textView: NSTextView, doCommandBy selector: Selector) -> Bool {
+            if selector == #selector(NSResponder.cancelOperation(_:)) {
+                // Esc leert das Feld (Systemverhalten der Suchleiste).
+                text.wrappedValue = ""
+                return true
+            }
+            return false
+        }
+
+        func controlTextDidEndEditing(_ obj: Notification) {
+            guard let field = obj.object as? NSSearchField, field.stringValue != text.wrappedValue else {
+                return
+            }
+            text.wrappedValue = field.stringValue
+            onSubmit()
+        }
+    }
+}
+
+// MARK: - Topbar reagiert auf Scrollen
+
+/// Zustand der oberen Leiste beim Scrollen (reine Logik, testbar).
+///
+/// Beim Scrollen **nach unten** wird die Leiste kleiner (der Inhalt rückt
+/// nach oben, die Leiste soll aus dem Weg); beim Scrollen **nach oben** und
+/// ganz oben am Seitenanfang wächst sie wieder. Am Offset 0 ist sie immer
+/// groß, sonst wäre sie beim Seitenwechsel verschwunden.
+@MainActor
+@Observable
+public final class TopBarCollapseState {
+    /// Oberhalb dieses Offsets gilt „oben" → Leiste immer groß.
+    public static let topThreshold: CGFloat = 12
+    /// Mindestbewegung, ab der die Richtung überhaupt zählt (sonst zappelt
+    /// sie bei Trackpad-Gesten mit 1 Pixel).
+    public static let minimumDelta: CGFloat = 2
+
+    public private(set) var isCompact = false
+    private var lastOffset: CGFloat = 0
+
+    public init() {}
+
+    /// Scrollposition melden; rechnet die neue Größe aus (rein, testbar).
+    @discardableResult
+    public func update(offset: CGFloat) -> Bool {
+        let clamped = max(offset, 0)
+        let delta = clamped - lastOffset
+        if clamped <= Self.topThreshold {
+            isCompact = false
+        } else if abs(delta) >= Self.minimumDelta {
+            // Nach unten scrollen (Offset wächst) → klein; nach oben → groß.
+            isCompact = delta > 0
+        }
+        lastOffset = clamped
+        return isCompact
+    }
+
+    /// Zustand vergessen (Seitenwechsel): die neue Seite beginnt oben, also
+    /// muss die Leiste wieder groß sein und der Vergleich neu ansetzen.
+    public func reset() {
+        lastOffset = 0
+        isCompact = false
+    }
+}
+
+/// Meldet das Scrollen einer Seite an die obere Leiste.
+///
+/// Zwei Wege, weil das Projekt macOS 14 als Ziel hat:
+/// - ab macOS 15 `onScrollGeometryChange` (die SwiftUI-eigene Größe),
+/// - darunter die Fenster-Suche in `TopBarScrollObserver`.
+///
+/// Als **erstes Kind** in die `ScrollView` gelegt; unsichtbar.
+public struct ScrollOffsetSentinel: View {
+    @Environment(\.topBarCollapse) private var collapse
+
+    public init() {}
+
+    public var body: some View {
+        Group {
+            if #available(macOS 15.0, *) {
+                Color.clear
+                    .onScrollGeometryChange(for: CGFloat.self) { geometry in
+                        // Nach oben gescrollt ist der Versatz negativ.
+                        geometry.contentOffset.y + geometry.contentInsets.top
+                    } action: { _, offset in
+                        collapse.update(offset: offset)
+                    }
+            } else {
+                // Ältere Systeme übernimmt der fensterweite Beobachter.
+                Color.clear
+            }
+        }
+        .frame(width: 0, height: 0)
+        .opacity(0)
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+}
+
+/// Zustand in der Umgebung — bewusst als eigener Schlüssel und **nicht** als
+/// `@Environment(TopBarCollapseState.self)`: fehlte er, würde SwiftUI beim
+/// Rendern abstürzen. Mit Vorgabe bleibt die Seite beim Vorentwurf oder in
+/// einer Testansicht schlicht ohne Reaktion.
+private struct TopBarCollapseKey: EnvironmentKey {
+    /// Gemeinsame Vorgabe: wird nur benutzt, wenn niemand einen Zustand
+    /// gesetzt hat (Vorschau, isolierte Testansicht).
+    @MainActor static let defaultValue = TopBarCollapseState()
+}
+
+extension EnvironmentValues {
+    /// Zustand der oberen Leiste (siehe `TopBarCollapseState`).
+    public var topBarCollapse: TopBarCollapseState {
+        get { self[TopBarCollapseKey.self] }
+        set { self[TopBarCollapseKey.self] = newValue }
+    }
+}
+
+/// Rückfallebene für macOS 14 (dort gibt es `onScrollGeometryChange` noch
+/// nicht): sucht die scrollbare Ansicht der geöffneten Seite im Fenster und
+/// beobachtet deren Clip-View. Ab macOS 15 macht `ScrollOffsetSentinel` das
+/// schon selbst, deshalb läuft dieser Weg nur auf älteren Systemen.
+public struct TopBarScrollObserver: View {
+    let state: TopBarCollapseState
+    /// Zähler für „Seite gewechselt" — treibt die Suche neu.
+    let token: Int
+
+    public init(state: TopBarCollapseState, token: Int) {
+        self.state = state
+        self.token = token
+    }
+
+    public var body: some View {
+        Group {
+            if #available(macOS 15.0, *) {
+                Color.clear
+            } else {
+                ScrollOffsetReporter(state: state, token: token)
+            }
+        }
+        .frame(width: 0, height: 0)
+        .opacity(0)
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+}
+
+/// Trägeransicht: sobald sie im Fenster hängt, wird der passende
+/// Scrollbereich gesucht und beobachtet.
+private final class ScrollObserverView: NSView {
+    var onWindowChange: (() -> Void)?
+
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        guard window != nil else { return }
+        // Eine Runde warten: erst dann ist der Seiteninhalt im Baum.
+        DispatchQueue.main.async { [weak self] in
+            self?.onWindowChange?()
+        }
+    }
+}
+
+private struct ScrollOffsetReporter: NSViewRepresentable {
+    let state: TopBarCollapseState
+    let token: Int
+
+    @MainActor
+    func makeCoordinator() -> Coordinator {
+        Coordinator(state: state)
+    }
+
+    @MainActor
+    func makeNSView(context: Context) -> ScrollObserverView {
+        let view = ScrollObserverView(frame: .zero)
+        view.onWindowChange = { context.coordinator.scan(from: view) }
+        context.coordinator.scan(from: view)
+        return view
+    }
+
+    @MainActor
+    func updateNSView(_ nsView: ScrollObserverView, context: Context) {
+        context.coordinator.state = state
+        // Jede Aktualisierung prüft neu: beim Seitenwechsel entsteht eine
+        // andere Scrollansicht, die alte Beobachtung muss weg.
+        context.coordinator.scan(from: nsView, force: context.coordinator.token != token)
+        context.coordinator.token = token
+    }
+
+    @MainActor
+    final class Coordinator: NSObject {
+        var state: TopBarCollapseState
+        var token: Int = 0
+        private weak var watched: NSScrollView?
+        private var observation: NSKeyValueObservation?
+        private var attempts = 0
+
+        init(state: TopBarCollapseState) {
+            self.state = state
+        }
+
+        deinit {
+            observation?.invalidate()
+        }
+
+        /// Die scrollbare Ansicht der geöffneten Seite suchen und beobachten.
+        func scan(from view: NSView, force: Bool = false) {
+            guard let window = view.window else {
+                retry(from: view)
+                return
+            }
+            if force {
+                observation?.invalidate()
+                observation = nil
+                watched = nil
+                attempts = 0
+            }
+            guard observation == nil else { return }
+
+            guard let scroll = Self.scrollableScrollView(in: window) else {
+                // Inhalt ist noch nicht da: ein paarmal nachfassen.
+                retry(from: view)
+                return
+            }
+            let clip = scroll.contentView
+            watched = scroll
+            attempts = 0
+            state.reset()
+            observation = clip.observe(\.bounds, options: [.new]) { [weak self] _, change in
+                guard let self, let bounds = change.newValue else { return }
+                // Nach unten scrollen bewegt das Clip-View nach oben, sein
+                // Ursprung bekommt also einen negativen Y-Wert.
+                let scrollable = scroll.contentSize.height - clip.bounds.height
+                let offset = scrollable > 0 ? -bounds.origin.y : 0
+                Task { @MainActor in
+                    self.state.update(offset: offset)
+                }
+            }
+        }
+
+        /// Kurzzeitig weiter versuchen (Inhalt baut sich asynchron auf).
+        private func retry(from view: NSView) {
+            guard attempts < 12 else { return }
+            attempts += 1
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.08) { [weak self, weak view] in
+                guard let self, let view else { return }
+                self.scan(from: view)
+            }
+        }
+
+        /// Erste waagerecht unscrollbare, aber senkrecht scrollbare Ansicht
+        /// im Fenster — das ist die Liste der geöffneten Seite.
+        private static func scrollableScrollView(in window: NSWindow) -> NSScrollView? {
+            guard let content = window.contentView else { return nil }
+            var found: NSScrollView?
+            func walk(_ view: NSView) {
+                if found != nil { return }
+                if let scroll = view as? NSScrollView {
+                    let vertical = scroll.hasVerticalScroller
+                        && scroll.contentSize.height > scroll.contentView.bounds.height + 1
+                    let horizontal = scroll.hasHorizontalScroller
+                        && scroll.contentSize.width > scroll.contentView.bounds.width + 1
+                    if vertical && !horizontal {
+                        found = scroll
+                        return
+                    }
+                }
+                for sub in view.subviews { walk(sub) }
+            }
+            walk(content)
+            return found
+        }
+    }
+}
+
 // MARK: - Knöpfe (`.btn`, volle Pillen-Geometrie)
 
 ///

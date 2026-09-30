@@ -26,6 +26,10 @@ struct ContentView: View {
     @Environment(TokenStore.self) private var store
     @Environment(\.colorScheme) private var scheme
     @State private var selection: Route?
+    /// Obere Leiste reagiert auf das Scrollen der jeweils offenen Seite.
+    @State private var topBarCollapse = TopBarCollapseState()
+    /// Zähler für „Seite gewechselt" — treibt die Suche nach der Scrollansicht.
+    @State private var topBarScrollToken = 0
 
     private var isOnboarding: Bool {
         OnboardingState.shouldShow(isLoggedIn: store.isLoggedIn)
@@ -41,10 +45,22 @@ struct ContentView: View {
                     TopPillNav(
                         selection: selection,
                         store: store,
+                        collapse: topBarCollapse,
                         onNavigate: { selection = $0 },
                         onLogout: logout
                     )
                     detailView(for: selection ?? .overview)
+                }
+                // Der Beobachter sucht die Scrollansicht der geöffneten Seite
+                // selbst; `topBarScrollToken` zwingt ihn beim Seitenwechsel
+                // zum Neusuchen.
+                .overlay(alignment: .topLeading) {
+                    TopBarScrollObserver(state: topBarCollapse, token: topBarScrollToken)
+                }
+                .onChange(of: selection) { _, _ in
+                    // Neue Seite beginnt oben → Leiste wieder groß.
+                    topBarCollapse.reset()
+                    topBarScrollToken += 1
                 }
             } else {
                 detailView(for: selection ?? .login)
@@ -153,10 +169,12 @@ struct ContentView: View {
 /// Avatar-Menü. Die Leiste sitzt direkt am oberen Fensterrand.
 private struct TopPillNav: View {
     @Environment(\.colorScheme) var scheme
+    @Environment(\.uberAccent) private var accent
     @State private var profileMenuOpen = false
     @State private var sections = TopBarConfig.visible
     let selection: Route?
     let store: TokenStore
+    let collapse: TopBarCollapseState
     let onNavigate: (Route) -> Void
     let onLogout: () -> Void
 
@@ -175,11 +193,18 @@ private struct TopPillNav: View {
         HStack(spacing: 0) {
             Spacer(minLength: 0)
             HStack(spacing: 4) {
-                BrandMark()
+                // Beim Scrollen nach oben schrumpft die Leiste: Logo wird
+                // kleiner, Reiter zeigen nur noch ihr Symbol, Beschriftung
+                // und Abstände gehen weg.
+                BrandMark(size: collapse.isCompact ? 24 : 32)
                     .padding(.leading, 4)
+                // Pille neben dem Logo: sagt ausschließlich „Demo" und nur im
+                // Demo-Betrieb. Ohne Demo bleibt der Platz leer — hier steht
+                // bewusst nichts Sprachbezogenes.
                 if store.isDemo {
-                    Text("DEMO")
+                    Text(NSLocalizedString("content_demo_badge", value: "Demo", comment: "Navigation: Demo-Pille"))
                         .font(UberFont.text(10, weight: .heavy))
+                        .textCase(.uppercase)
                         .tracking(0.6)
                         .padding(.horizontal, 9)
                         .padding(.vertical, 6)
@@ -188,15 +213,20 @@ private struct TopPillNav: View {
                         .help(NSLocalizedString("content_demo_hint", value: "Only synthetic sample data from the local fake server", comment: "Navigation: Demo-Hinweis"))
                 }
                 ForEach(sections) { section in
-                    NavPill(title: section.title, active: isActive(section)) {
+                    NavPill(
+                        title: section.title,
+                        icon: section.icon,
+                        active: isActive(section),
+                        compact: collapse.isCompact
+                    ) {
                         onNavigate(section.route)
                     }
                 }
                 avatarMenu
                     .padding(.trailing, 4)
             }
-            .padding(.vertical, 8)
-            .padding(.horizontal, 12)
+            .padding(.vertical, collapse.isCompact ? 4 : 8)
+            .padding(.horizontal, collapse.isCompact ? 8 : 12)
             .background(.ultraThinMaterial)
             .clipShape(.capsule)
             .overlay {
@@ -208,6 +238,7 @@ private struct TopPillNav: View {
         }
         .padding(.top, 0)
         .padding(.horizontal, 16)
+        .animation(.easeOut(duration: 0.18), value: collapse.isCompact)
         .onReceive(NotificationCenter.default.publisher(for: .topBarConfigDidChange)) { _ in
             sections = TopBarConfig.visible
         }
@@ -246,6 +277,10 @@ private struct TopPillNav: View {
                             .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     }
                 }
+                Divider()
+                // Sprache direkt im Profilmenü: Auswahl wirkt sofort, zeigt
+                // Suchleiste und den Übersetzungsstand je Sprache.
+                LanguageSwitcher()
                 Divider()
                 profileAction(NSLocalizedString("Settings", value: "Settings", comment: "Navigation: Einstellungen"), icon: "gearshape") {
                     profileMenuOpen = false
@@ -293,22 +328,36 @@ private struct NavPill: View {
     @Environment(\.colorScheme) var scheme
     @State private var hovering = false
     let title: String
+    /// SF-Symbol des Reiters (siehe `TopBarSection.icon`).
+    let icon: String
     let active: Bool
+    /// Kompakt: nur das Symbol, kein Text (Leiste schrumpft beim Scrollen).
+    var compact: Bool = false
     let action: () -> Void
 
     var body: some View {
         Button(action: action) {
-            Text(LocalizedStringKey(title))
-                .font(UberFont.text(15, weight: .semibold))
-                .padding(.vertical, 10)
-                .padding(.horizontal, 16)
-                .foregroundStyle(active || hovering ? EduFlowPalette.ink(scheme) : EduFlowPalette.inkMuted(scheme))
-                .background(active ? EduFlowPalette.surface2(scheme) : (hovering ? EduFlowPalette.surface1(scheme) : Color.clear))
-                .clipShape(.capsule)
+            HStack(spacing: compact ? 0 : 7) {
+                Image(systemName: icon)
+                    .font(.system(size: compact ? 15 : 13, weight: .semibold))
+                    .foregroundStyle(active || hovering ? EduFlowPalette.ink(scheme) : EduFlowPalette.inkDim(scheme))
+                if !compact {
+                    Text(LocalizedStringKey(title))
+                        .font(UberFont.text(15, weight: .semibold))
+                        .fixedSize()
+                }
+            }
+            .padding(.vertical, compact ? 8 : 10)
+            .padding(.horizontal, compact ? 11 : 14)
+            .foregroundStyle(active || hovering ? EduFlowPalette.ink(scheme) : EduFlowPalette.inkMuted(scheme))
+            .background(active ? EduFlowPalette.surface2(scheme) : (hovering ? EduFlowPalette.surface1(scheme) : Color.clear))
+            .clipShape(.capsule)
         }
         .buttonStyle(.plain)
         .onHover { hovering = $0 }
         .animation(.easeOut(duration: 0.15), value: hovering)
+        .help(LocalizedStringKey(title))
+        .accessibilityLabel(LocalizedStringKey(title))
     }
 }
 
