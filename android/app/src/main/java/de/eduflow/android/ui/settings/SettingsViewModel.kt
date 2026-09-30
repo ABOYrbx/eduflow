@@ -309,6 +309,9 @@ class SettingsViewModel(
             try {
                 authRepo.logout()
             } finally {
+                // Abmelden heißt: wieder durchs Onboarding. Sonst landet der
+                // nächste Start direkt im Login (Flag bleibt sonst gesetzt).
+                runCatching { store.resetOnboarding() }
                 onDone()
             }
         }

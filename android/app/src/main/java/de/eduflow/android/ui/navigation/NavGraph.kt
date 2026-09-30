@@ -98,6 +98,18 @@ fun EduFlowNav(
     val settingsVm: SettingsViewModel = viewModel(key = "settings") {
         SettingsViewModel(settingsRepo, authRepo, store)
     }
+    // Explizites Abmelden (Mehr/Einstellungen): Server-Logout, Onboarding-
+    // Flag zuruecksetzen und wieder beim Onboarding starten. Die 401-Pfade
+    // (onReLogin/onSessionExpired) bleiben beim Login — dort ist nur das
+    // Token abgelaufen, die Einrichtung ist unveraendert geblieben.
+    val logoutToOnboarding: () -> Unit = {
+        settingsVm.logout {
+            nav.navigate(Routes.ONBOARDING) {
+                popUpTo(nav.graph.id) { inclusive = true }
+            }
+        }
+    }
+
     // Editierbare Belegung aus den Einstellungen (Mehr immer angepinnt).
     val navTabsRaw by settingsVm.navTabs.collectAsState()
     val bottomTabs = remember(navTabsRaw) { tabsForSelection(NavTabs.parse(navTabsRaw)) }
@@ -313,7 +325,7 @@ fun EduFlowNav(
                         popUpTo(nav.graph.id) { inclusive = true }
                     }
                 },
-                onLogout = { nav.navigate(Routes.LOGIN) { popUpTo(nav.graph.id) { inclusive = true } } },
+                onLogout = logoutToOnboarding,
                 // 401-Verhalten (→ Login, Paket A): Token ungültig/abgelaufen.
                 onSessionExpired = { nav.navigate(Routes.LOGIN) { popUpTo(nav.graph.id) { inclusive = true } } },
                 onSettingsSaved = {
@@ -336,11 +348,7 @@ fun EduFlowNav(
                 onSchool = { nav.navigate(Routes.SCHOOL) },
                 onSettings = { nav.navigate(Routes.SETTINGS) },
                 onDevices = { nav.navigate(Routes.DEVICES) },
-                onLogout = {
-                    settingsVm.logout {
-                        nav.navigate(Routes.LOGIN) { popUpTo(nav.graph.id) { inclusive = true } }
-                    }
-                },
+                onLogout = logoutToOnboarding,
                 vm = settingsVm,
                 baseUrl = session?.baseUrl ?: TokenStore.DEFAULT_BASE_URL,
                 isDemo = session?.isDemo == true,
