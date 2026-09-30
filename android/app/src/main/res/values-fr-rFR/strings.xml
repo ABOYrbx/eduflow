@@ -51,10 +51,10 @@
     <!-- Onboarding -->
     <string name="onboarding_greeting">Bonjour!</string>
     <string name="onboarding_language_title">Choisir la langue</string>
-    <string name="onboarding_language_search">Search language</string>
-    <string name="onboarding_language_no_results">No language found</string>
-    <string name="onboarding_language_system_short">SYSTEM</string>
-    <string name="onboarding_language_system_format">System language: %1$s</string>
+    <string name="onboarding_language_search">Rechercher une langue</string>
+    <string name="onboarding_language_no_results">Aucune langue trouvée</string>
+    <string name="onboarding_language_system_short">SYSTÈME</string>
+    <string name="onboarding_language_system_format">Langue du système : %1$s</string>
     <string name="onboarding_language_sub">EduFlow parle votre langue, la sélection s\'applique immédiatement.</string>
     <string name="onboarding_language_apply_restart">Appliquer &amp; redémarrer</string>
     <string name="onboarding_language_system">Système</string>
@@ -67,6 +67,7 @@
     <string name="onboarding_feat3_title">Horaire &amp; Météo</string>
     <string name="onboarding_feat3_desc">Jour et semaine en plus de la météo sur l\'aperçu.</string>
     <string name="onboarding_server_sub">Entrez où EduFlow s\'exécute en tant que serveur.</string>
+    <string name="onboarding_server_hint">IP alone uses port %1$d. Add :port for another one — the demo server is %2$d.</string>
     <string name="onboarding_connected">Connecté</string>
     <string name="onboarding_unreachable">Serveur inaccessible. Vérifiez l\'adresse et réessayez.</string>
     <string name="onboarding_test_connected">✓ Connecté</string>
@@ -99,17 +100,17 @@
     <string name="settings_theme_system">Système</string>
     <string name="settings_theme_system_sub">Dispositif suivi lumineux/foncé</string>
     <string name="settings_accent">Couleur d\'accentuation</string>
-    <string name="settings_language">Language</string>
-    <string name="settings_language_system">System language</string>
+    <string name="settings_language">Langue</string>
+    <string name="settings_language_system">Langue du système</string>
     <string name="settings_notifications">Notifications</string>
     <string name="settings_notify_news">Nouveaux messages</string>
     <string name="settings_overview_tasks">Aperçu des tâches &amp;</string>
     <string name="settings_landing_label">Page d\'accueil après la connexion</string>
     <string name="settings_hwfilter_label">Tâches : filtre par défaut</string>
     <string name="settings_hwtests_label">Inclure les tests et les examens</string>
-    <string name="settings_time_format_label">Clock format</string>
-    <string name="settings_time_24h">24-hour</string>
-    <string name="settings_time_12h">12-hour</string>
+    <string name="settings_time_format_label">Format de l’heure</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
     <string name="settings_unread_placeholder">Nombre maximum de messages non lus (1–50)</string>
     <string name="settings_homework_placeholder">Max. des devoirs ouverts (1–50)</string>
     <string name="settings_navbar_section">Barre de navigation</string>
@@ -217,12 +218,12 @@
     <string name="messages_compose_send">Envoyer</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
          label() stays the German context-free fallback for tests. -->
-    <string name="message_type_all">All</string>
+    <string name="message_type_all">Tout</string>
     <string name="message_type_sprava">Message</string>
-    <string name="message_type_news">News</string>
-    <string name="message_type_anketa">Poll</string>
-    <string name="message_type_chat">Chat</string>
-    <string name="message_type_genotif">Notice</string>
+    <string name="message_type_news">Actualités</string>
+    <string name="message_type_anketa">Sondage</string>
+    <string name="message_type_chat">Discussion</string>
+    <string name="message_type_genotif">Avis</string>
     <!-- Overview -->
     <string name="overview_customize">Personnaliser l\'aperçu</string>
     <string name="overview_customize_desc">Choisissez les sections qui apparaissent en premier.</string>
