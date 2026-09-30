@@ -75729,6 +75729,23 @@
           }
         }
       }
+    },
+    "content_demo_badge": {
+      "comment": "Navigation: Demo-Pille",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Demo"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

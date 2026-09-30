@@ -177,9 +177,13 @@ private struct TopPillNav: View {
             HStack(spacing: 4) {
                 BrandMark()
                     .padding(.leading, 4)
+                // Pille neben dem Logo: sagt ausschließlich „Demo" und nur im
+                // Demo-Betrieb. Ohne Demo bleibt der Platz leer — hier steht
+                // bewusst nichts Sprachbezogenes.
                 if store.isDemo {
-                    Text("DEMO")
+                    Text(NSLocalizedString("content_demo_badge", value: "Demo", comment: "Navigation: Demo-Pille"))
                         .font(UberFont.text(10, weight: .heavy))
+                        .textCase(.uppercase)
                         .tracking(0.6)
                         .padding(.horizontal, 9)
                         .padding(.vertical, 6)
