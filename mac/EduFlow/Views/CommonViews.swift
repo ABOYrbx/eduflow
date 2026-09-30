@@ -1,6 +1,269 @@
 import AppKit
 import SwiftUI
 
+// MARK: - Sprachwahl (Profilmenü, eigene Pillen — keine System-Schalter)
+
+/// Eine Sprache mit ihrem Übersetzungsstand, aus dem Bundle gelesen
+/// (`AppLocalizations.coverage()`). Neue Crowdin-Sprachen erscheinen damit
+/// automatisch, ohne dass hier Code nachgezogen werden muss.
+public struct LanguageEntry: Identifiable, Equatable, Sendable {
+    public let code: String
+    public let name: String
+    public let percent: Int
+    public let translated: Int
+    public let total: Int
+
+    public var id: String { code }
+
+    /// Katalog-Sprachen mit Eigenname und Stand, nach Eigenname sortiert.
+    /// Die System-Sprache steht nicht in der Liste (sie hat keinen Code in
+    /// der Auswahl) und wird separat angeboten.
+    public static func fromBundle(in bundle: Bundle = .main) -> [LanguageEntry] {
+        AppLocalizations.coverage(in: bundle)
+            .map {
+                LanguageEntry(
+                    code: $0.code,
+                    name: AppLanguage.nativeName($0.code),
+                    percent: $0.percent,
+                    translated: $0.translated,
+                    total: $0.total
+                )
+            }
+            .sorted {
+                $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
+            }
+    }
+}
+
+/// Sprachauswahl als eigene Oberfläche: Suchleiste, Pillen-Liste mit
+/// Prozentzahl und Fortschrittsbalken. Bewusst ohne `Picker`, `Menu` oder
+/// `Toggle` — die Gestaltung folgt den App-Pillen (`.btn`), damit nichts
+/// als System-Steuerelement durchschimmert.
+///
+/// Wirkt sofort (Bundle-Überlagerung, kein Neustart) und informiert über
+/// `.appLanguageDidChange`, damit alle Ansichten neu rendern.
+public struct LanguageSwitcher: View {
+    @Environment(\.colorScheme) private var scheme
+    @Environment(\.uberAccent) private var accent
+    @State private var entries = LanguageEntry.fromBundle()
+    @State private var query = ""
+    /// `nil` = Systemsprache. Startwert aus dem Store, nicht aus der
+    /// Umgebung (damit der Ausgangszustand auch stimmt, wenn die App
+    /// gerade neu gestartet wurde).
+    @State private var selection: String?
+    /// Beim Öffnen einer neuen Liste neu aus dem Bundle lesen.
+    @State private var refreshToken = 0
+
+    public init() {
+        _selection = State(initialValue: AppLanguage.override)
+    }
+
+    public var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            header
+            UberTextField(
+                text: $query,
+                placeholder: NSLocalizedString("language_search_placeholder", value: "Search language", comment: "Sprachwahl: Platzhalter"),
+                icon: "magnifyingglass"
+            )
+            list
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .appLanguageDidChange)) { _ in
+            // Auswahl und Stand frisch halten, wenn die Sprache von woanders
+            // (Onboarding) gewechselt wurde.
+            selection = AppLanguage.override
+            reload()
+        }
+        .onChange(of: refreshToken) { _, _ in reload() }
+    }
+
+    /// Kompakter Kopf: Titel, aktive Sprache und erklärender Text.
+    private var header: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            HStack(spacing: 8) {
+                Image(systemName: "globe")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(accent.resolvedInk(scheme))
+                Text(NSLocalizedString("language_title", value: "Language", comment: "Sprachwahl: Titel"))
+                    .font(UberFont.text(15, weight: .heavy))
+                    .tracking(-0.2)
+                Spacer()
+                Text(verbatim: currentLabel)
+                    .font(UberFont.text(12, weight: .bold))
+                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+            }
+            Text(NSLocalizedString("language_hint", value: "Takes effect right away. The percentage shows how much is translated.", comment: "Sprachwahl: Hinweis"))
+                .font(UberFont.text(12))
+                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                .lineSpacing(2)
+        }
+    }
+
+    private var currentLabel: String {
+        if let selection {
+            return AppLanguage.nativeName(selection)
+        }
+        return NSLocalizedString("language_system", value: "System language", comment: "Sprachwahl: Systemsprache")
+    }
+
+    /// Systemsprache plus gefilterte Sprachen, jede Zeile eine Pille.
+    private var list: some View {
+        ScrollView {
+            VStack(spacing: 6) {
+                systemRow
+                ForEach(filtered) { entry in
+                    languageRow(entry)
+                }
+                if !filtered.isEmpty {
+                    emptyHint
+                }
+            }
+        }
+        .scrollIndicators(.never)
+        .frame(maxHeight: 260)
+    }
+
+    private var filtered: [LanguageEntry] {
+        let needle = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        guard !needle.isEmpty else { return entries }
+        return entries.filter { entry in
+            entry.name.lowercased().contains(needle) || entry.code.lowercased().hasPrefix(needle)
+        }
+    }
+
+    private var emptyHint: some View {
+        Text(NSLocalizedString("language_no_match", value: "No language matches that.", comment: "Sprachwahl: kein Treffer"))
+            .font(UberFont.text(12))
+            .foregroundStyle(EduFlowPalette.inkDim(scheme))
+            .frame(maxWidth: .infinity, alignment: .center)
+            .padding(.vertical, 10)
+    }
+
+    /// Systemsprache ohne Prozent: sie folgt dem System, ihre Texte sind
+    /// automatisch da.
+    private var systemRow: some View {
+        Button {
+            choose(nil)
+        } label: {
+            rowLabel(
+                name: NSLocalizedString("language_system", value: "System language", comment: "Sprachwahl: Systemsprache"),
+                detail: NSLocalizedString("language_system_detail", value: "Follows macOS", comment: "Sprachwahl: Systemsprache Detail"),
+                percent: nil,
+                selected: selection == nil,
+                query: nil
+            )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(NSLocalizedString("language_system", value: "System language", comment: "Sprachwahl: Systemsprache"))
+    }
+
+    private func languageRow(_ entry: LanguageEntry) -> some View {
+        Button {
+            choose(entry.code)
+        } label: {
+            rowLabel(
+                name: entry.name,
+                detail: String(
+                    format: NSLocalizedString("language_progress", value: "%d of %d texts", comment: "Sprachwahl: Fortschritt"),
+                    entry.translated,
+                    entry.total
+                ),
+                percent: entry.percent,
+                selected: selection == entry.code,
+                query: query.isEmpty ? nil : query
+            )
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(entry.name)
+        .accessibilityValue("\(entry.percent) %")
+    }
+
+    /// Zeileninhalt. `query` hebt den passenden Teil im Namen hervor, damit
+    /// die Suche sichtbar wirkt (eigene Pille, kein System-Textfeld).
+    private func rowLabel(
+        name: String,
+        detail: String,
+        percent: Int?,
+        selected: Bool,
+        query: String?
+    ) -> some View {
+        HStack(spacing: 10) {
+            ZStack {
+                Circle()
+                    .stroke(selected ? accent.resolved(scheme) : EduFlowPalette.borderStrong(scheme), lineWidth: 2)
+                    .frame(width: 18, height: 18)
+                if selected {
+                    Circle()
+                        .fill(accent.resolved(scheme))
+                        .frame(width: 9, height: 9)
+                }
+            }
+            .frame(width: 20, height: 20)
+            VStack(alignment: .leading, spacing: 3) {
+                highlighted(name, needle: query)
+                    .font(UberFont.text(13, weight: .heavy))
+                    .tracking(-0.2)
+                if let percent {
+                    // Fortschrittsbalken wie in der Onboarding-Sprachseite.
+                    GeometryReader { geometry in
+                        ZStack(alignment: .leading) {
+                            Capsule()
+                                .fill(EduFlowPalette.surface2(scheme))
+                            Capsule()
+                                .fill(percent >= 90 ? EduFlowPalette.green : accent.resolved(scheme))
+                                .frame(width: geometry.size.width * CGFloat(percent) / 100)
+                        }
+                    }
+                    .frame(height: 4)
+                }
+                Text(detail)
+                    .font(UberFont.text(11))
+                    .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+            }
+            Spacer(minLength: 6)
+            if let percent {
+                Text("\(percent) %")
+                    .font(UberFont.text(13, weight: .heavy))
+                    .foregroundStyle(percent >= 90 ? EduFlowPalette.green : EduFlowPalette.ink(scheme))
+            }
+        }
+        .padding(.vertical, 9)
+        .padding(.horizontal, 11)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(selected ? accent.resolved(scheme).opacity(0.10) : EduFlowPalette.surface1(scheme))
+        .clipShape(.capsule)
+        .overlay {
+            Capsule().stroke(selected ? accent.resolved(scheme) : EduFlowPalette.border(scheme), lineWidth: 1)
+        }
+        .contentShape(Capsule())
+    }
+
+    /// Name mit hervorgehobenem Suchtreffer.
+    private func highlighted(_ name: String, needle: String?) -> Text {
+        guard let needle, !needle.isEmpty,
+              let range = name.range(of: needle, options: [.caseInsensitive, .diacriticInsensitive])
+        else {
+            return Text(verbatim: name)
+        }
+        let prefix = String(name[range.lowerBound..<range.upperBound])
+        let suffix = String(name[range.upperBound...])
+        return Text(verbatim: String(name[..<range.lowerBound]))
+            + Text(verbatim: prefix).bold().foregroundStyle(accent.resolved(scheme))
+            + Text(verbatim: suffix)
+    }
+
+    /// Auswahl anwenden: sofort, ohne Neustart, und den Stand neu lesen.
+    private func choose(_ code: String?) {
+        selection = code
+        AppLanguage.set(code)
+        reload()
+    }
+
+    private func reload() {
+        entries = LanguageEntry.fromBundle()
+    }
+}
+
 // MARK: - Knöpfe (`.btn`, volle Pillen-Geometrie)
 
 ///
