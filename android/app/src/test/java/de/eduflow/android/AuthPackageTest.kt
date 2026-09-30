@@ -5,6 +5,8 @@ import de.eduflow.android.data.ApiException
 import de.eduflow.android.data.ApiService
 import de.eduflow.android.data.ErrorMapper
 import de.eduflow.android.data.SettingsRepository
+import de.eduflow.android.data.TokenStore
+import de.eduflow.android.data.normalizeBaseUrl
 import de.eduflow.android.data.dto.CacheClearResponse
 import de.eduflow.android.data.dto.DeviceDto
 import de.eduflow.android.data.dto.DevicesDto
@@ -390,14 +392,31 @@ class AuthPackageTest {
         assertFalse("Token-Feld im DTO", "token" in encoded.lowercase())
     }
 
-    // ---- Basis-URL: trimEnd('/')-Roundtrip (TokenStore/LoginScreen) ----
+    // ---- Basis-URL: kanonischer Default API :3000, trimEnd('/')-Roundtrip ----
+
+    @Test
+    fun baseUrl_defaultIsApiPort() {
+        // App-Default ist die NestJS-API (:3000), nicht die Web-UI (:8000).
+        // Demo-Server (:3100) bleibt erhalten.
+        assertEquals("http://10.0.2.2:3000/api/v1/", TokenStore.DEFAULT_BASE_URL)
+        assertEquals("http://10.0.2.2:3100/api/v1/", TokenStore.DEMO_BASE_URL)
+    }
+
+    @Test
+    fun baseUrl_normalize() {
+        assertEquals(TokenStore.DEFAULT_BASE_URL, normalizeBaseUrl(""))
+        assertEquals(TokenStore.DEFAULT_BASE_URL, normalizeBaseUrl("   "))
+        assertEquals("http://10.0.2.2:3000/api/v1/", normalizeBaseUrl("10.0.2.2:3000/api/v1"))
+        assertEquals("http://10.0.2.2:3000/api/v1/", normalizeBaseUrl("http://10.0.2.2:3000/api/v1"))
+        assertEquals("http://10.0.2.2:3000/api/v1/", normalizeBaseUrl("http://10.0.2.2:3000/api/v1/"))
+    }
 
     @Test
     fun baseUrl_withAndWithoutTrailingSlash() {
         // ApiClient.create normalisiert (Paket 0) — beide Formen ok.
         listOf(
-            "http://10.0.2.2:8000/api/v1/",
-            "http://10.0.2.2:8000/api/v1",
+            TokenStore.DEFAULT_BASE_URL,
+            TokenStore.DEFAULT_BASE_URL.trimEnd('/'),
         ).forEach { base ->
             // Wirft bei ungültiger Basis-URL (Retrofit verlangt Host + /-Suffix).
             assertNotNull(ApiClient.create(base) { null })

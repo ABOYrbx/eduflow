@@ -48,6 +48,7 @@ import de.eduflow.android.data.dto.displayGradeTermLabel
 import de.eduflow.android.ui.common.AppHeader
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.FilterChips
+import de.eduflow.android.ui.common.PullRefreshBox
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SearchPill
 import de.eduflow.android.ui.common.SectionLabel
@@ -159,6 +160,11 @@ fun GradesScreen(
             )
         }
 
+        PullRefreshBox(
+            refreshing = state.isLoading,
+            onRefresh = viewModel::refresh,
+            modifier = Modifier.weight(1f).fillMaxWidth(),
+        ) {
         if (state.isLoading && state.allItems.isEmpty()) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(32.dp),
@@ -181,7 +187,7 @@ fun GradesScreen(
             LazyColumn(
                 state = listState,
                 verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxSize(),
             ) {
                 items(state.groups, key = { it.subject }) { group ->
                     SubjectRow(group = group)
@@ -213,6 +219,7 @@ fun GradesScreen(
                 item { Spacer(Modifier.height(88.dp)) }
             }
         }
+        }
     }
 }
 
@@ -222,11 +229,12 @@ fun GradesScreen(
 @Composable
 private fun AverageCard(avgDisplay: String, compactFraction: Float = 0f) {
     val scheme = MaterialTheme.colorScheme
-    // Wie NowCard auf der Übersicht: Dark schwarze Karte statt weißer
-    // Primär-Fläche, weiße Schrift dazu statt onPrimary.
+    // Wie NowCard auf der Übersicht: Standard-Dark schwarze Karte statt
+    // weißer Primär-Fläche, echte Akzent-Wahl färbt in beiden Modi.
     val dark = LocalEduFlowDark.current
-    val cardColor = if (dark) Color.Black else scheme.primary
-    val contentColor = if (dark) Color.White else scheme.onPrimary
+    val isDefaultDark = dark && scheme.primary == Color.White
+    val cardColor = if (isDefaultDark) Color.Black else scheme.primary
+    val contentColor = if (isDefaultDark) Color.White else scheme.onPrimary
     val f = compactFraction.coerceIn(0f, 1f)
     Surface(
         shape = RoundedCornerShape(16.dp),

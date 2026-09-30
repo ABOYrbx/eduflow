@@ -6,12 +6,17 @@ import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
 import de.eduflow.android.data.ApiClient
 import de.eduflow.android.data.TokenStore
+import de.eduflow.android.ui.auth.AppLocale
 import de.eduflow.android.ui.navigation.EduFlowNav
 import de.eduflow.android.ui.theme.EduFlowTheme
 import de.eduflow.android.ui.theme.accentByKey
@@ -36,6 +41,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             val nav = rememberNavController()
             val session by store.sessionFlow.collectAsState(initial = null)
+            // Gewählte App-Sprache; LocalContext/LocalConfiguration sorgen dafür,
+            // dass stringResource sofort in der neuen Sprache auflöst — ohne
+            // Activity-Neustart.
+            val appLocale by AppLocale.selectionFlow(this).collectAsState(initial = null)
+            val localized by remember(appLocale) {
+                derivedStateOf { AppLocale.localized(this@MainActivity, appLocale) }
+            }
             // ApiService pro Basis-URL + aktuellem Token (neu bei Wechsel,
             // sonst hielte der Provider einen stalen Token).
             val api = remember(session?.baseUrl, session?.token) {
@@ -54,11 +66,18 @@ class MainActivity : ComponentActivity() {
                 TokenStore.THEME_DARK -> true
                 else -> systemDark
             }
-            EduFlowTheme(
-                darkTheme = dark,
-                accent = accentByKey(accentKey).color,
+            CompositionLocalProvider(
+                // stringResource liest LocalContext, LocalLayoutDirection und
+                // Coercion über LocalConfiguration — alle drei müssen umschalten.
+                LocalContext provides localized,
+                LocalConfiguration provides localized.resources.configuration,
             ) {
-                EduFlowNav(nav = nav, store = store, api = api)
+                EduFlowTheme(
+                    darkTheme = dark,
+                    accent = accentByKey(accentKey).color,
+                ) {
+                    EduFlowNav(nav = nav, store = store, api = api)
+                }
             }
         }
     }

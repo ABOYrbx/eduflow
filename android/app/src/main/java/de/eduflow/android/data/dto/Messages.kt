@@ -1,5 +1,7 @@
 package de.eduflow.android.data.dto
 
+import androidx.annotation.StringRes
+import de.eduflow.android.R
 import kotlinx.serialization.Serializable
 
 /**
@@ -146,16 +148,23 @@ fun MessageDto.bodyLine(max: Int = 220): String {
  * Listen-Filter aus dem Redesign-PNG (Screen 02):
  * Alle / Ungelesen (lokal, nicht in seen-Dateien) / Mit Dateien.
  * Der Server-Typfilter bleibt in der API, die UI nutzt diese Chips.
+ *
+ * [stringRes] ist die übersetzte Anzeige (Compose löst per stringResource
+ * auf); [label] bleibt deutscher kontextfreier Fallback für Unit-Tests.
  */
-enum class MsgFilter(val label: String) {
-    ALLE("Alle"),
-    UNGELESEN("Ungelesen"),
-    MIT_DATEIEN("Mit Dateien"),
+enum class MsgFilter(@StringRes val stringRes: Int, val label: String) {
+    ALLE(R.string.homework_filter_all, "Alle"),
+    UNGELESEN(R.string.messages_filter_unread, "Ungelesen"),
+    MIT_DATEIEN(R.string.messages_filter_files, "Mit Dateien"),
 }
 
 /**
- * Nachrichtentypen mit deutschem Label (app.py MESSAGE_TYPES + TYPE_LABELS).
+ * Nachrichtentypen (app.py MESSAGE_TYPES + TYPE_LABELS).
  * Leerer Typ = alle nachrichtenartigen Typen (Web-Default).
+ *
+ * [label] bleibt deutscher kontextfreier Fallback für Unit-Tests;
+ * [stringResFor] mappt auf die übersetzten `message_type_*`-Strings,
+ * Compose löst per stringResource an den Call-Sites auf.
  */
 object MessageTypes {
     const val ALLE = ""
@@ -174,6 +183,16 @@ object MessageTypes {
         CHAT -> "Chat"
         GENOTIF -> "Mitteilung"
         else -> "Alle"
+    }
+
+    @StringRes
+    fun stringResFor(type: String): Int = when (type) {
+        SPRAVA -> R.string.message_type_sprava
+        NEWS -> R.string.message_type_news
+        ANKETA -> R.string.message_type_anketa
+        CHAT -> R.string.message_type_chat
+        GENOTIF -> R.string.message_type_genotif
+        else -> R.string.message_type_all
     }
 }
 

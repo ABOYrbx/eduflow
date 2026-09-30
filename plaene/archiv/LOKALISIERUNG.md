@@ -29,8 +29,8 @@ Datumsformate, Demo-Daten) — diese bleiben bewusst deutsch.
 
 Kennzahlen (Blätter/Entries gezählt, Duplikate vereint): Web 249 Keys
 (13 Gruppen), Backend 111 Keys (Fehlertexte, Settings-Schema, API-Docs),
-Android 288 Strings + 3 Plurals, macOS 260 Katalog-Keys
-(Source-Sprache `de`). Status-/Typ-/Aktions-Codes bleiben bewusst deutsch,
+Android 288 Strings + 3 Plurals, macOS 405 Katalog-Keys
+(Source-Sprache `en`, de/en je 100 %). Status-/Typ-/Aktions-Codes bleiben bewusst deutsch,
 siehe unten.
 
 ## Sync-Ablauf
@@ -71,8 +71,8 @@ siehe unten.
 - **Wetterbeschreibungen** (`desc`): Fremddaten von OpenWeather.
 - **Android-ViewModel-Fallbacks** (`ErrorMapper`, `*ViewModel`): brauchen
   Context; Tests erzwingen Deutsch.
-- **macOS-`value:`-Fallbacks:** identischer deutscher Text, greift nur wenn
-  der Katalog fehlt.
+- **macOS-`value:`-Fallbacks:** identischer englischer Text (Source-Sprache),
+  greift nur wenn der Katalog fehlt.
 
 ## Regeln für neue Strings (PR-Checkliste)
 
@@ -93,7 +93,7 @@ siehe unten.
    Sprachen/Keys dort neu berechnen:
    Nenner = Keys mit de-Wert ungleich en-Wert, Zähler = davon Keys mit
    eigenem Wert in der Sprache (die Quellsprache zählt als vollständig).
-   Neue UI-Strings auf der Seite als deutsche Literale wie auf den
+   Neue UI-Strings auf der Seite als englische Literale wie auf den
    Nachbarseiten; Katalog-Einträge (de+en) ergänzen.
 5. Abnahmen: `npm test` + `npm run typecheck` (Root), Gradle
    `:app:assembleDebug :app:testDebugUnitTest`, `xcodebuild … test`.
