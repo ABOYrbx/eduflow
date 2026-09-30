@@ -24,7 +24,9 @@
     "tokenNotFound": "Token nicht gefunden.",
     "tokenRejected": "Token ungültig.",
     "twoFactorDemo": "Demo-Code 123456 eingeben.",
-    "twoFactorMessage": "Geben Sie den Zwei-Faktor-Code aus E-Mail oder App ein und senden Sie ihn an /auth/2fa."
+    "twoFactorMessage": "Geben Sie den Zwei-Faktor-Code aus E-Mail oder App ein und senden Sie ihn an /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Ungültige Anfrage.",
@@ -64,7 +66,8 @@
     "trashHomework": "Hausaufgaben in den Papierkorb verschieben",
     "validationDescription": "Validierungsfehler",
     "weather": "Wetter",
-    "weatherSearch": "Wetter-Standort-Suche"
+    "weatherSearch": "Wetter-Standort-Suche",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Falsche Koordinaten",
@@ -103,6 +106,8 @@
     "hwStatusLabel": "Hausarbeit: Standardfilter",
     "hwTestsLabel": "Hausarbeit: Standardmäßig Tests und Prüfungen einbeziehen",
     "landingLabel": "Seite nach Anmeldung starten",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "Alle",
     "optDashboard": "Nachrichten",
     "optDone": "Nur fertig",
@@ -118,7 +123,12 @@
     "ovWetterHint": "Gilt für die Webschnittstelle und die Android-App.",
     "ovWetterLabel": "Wetter-Karte in der Übersicht anzeigen",
     "sectionUebersicht": "Übersicht",
-    "sectionWetter": "Wetter"
+    "sectionWetter": "Wetter",
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor.",
+    "ovSpanLabel": "Section widths",
+    "ovSpanHint": "Sections you set to half width sit next to each other."
   },
   "upstream": {
     "agendaFailed": "Schulereignisse konnten nicht geladen werden: {detail}",
