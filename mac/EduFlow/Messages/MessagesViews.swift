@@ -183,6 +183,7 @@ public struct MessagesView: View {
 
     private var listPane: some View {
         ScrollView {
+            ScrollOffsetSentinel()
             LazyVStack(spacing: 8) {
                 if vm.isLoading && vm.visibleItems.isEmpty {
                     ProgressView()

@@ -381,6 +381,130 @@ private struct NativeSearchField: NSViewRepresentable {
     }
 }
 
+// MARK: - Topbar reagiert auf Scrollen
+
+/// Zustand der oberen Leiste beim Scrollen (reine Logik, testbar).
+///
+/// Die Leiste wird kleiner, wenn nach oben gescrollt wird, und wächst
+/// wieder, wenn man nach unten scrollt oder ganz oben ist. Am Anfang
+/// (Offset 0) ist sie immer groß, sonst wäre sie beim Seitenwechsel
+/// verschwunden.
+@MainActor
+@Observable
+public final class TopBarCollapseState {
+    /// Oberhalb dieses Offsets gilt „oben" → Leiste immer groß.
+    public static let topThreshold: CGFloat = 12
+    /// Mindestbewegung, ab der die Richtung überhaupt zählt (sonst zappelt
+    /// sie bei Trackpad-Gesten mit 1 Pixel).
+    public static let minimumDelta: CGFloat = 2
+
+    public private(set) var isCompact = false
+    private var lastOffset: CGFloat = 0
+
+    public init() {}
+
+    /// Scrollposition melden; rechnet die neue Größe aus (rein, testbar).
+    @discardableResult
+    public func update(offset: CGFloat) -> Bool {
+        let clamped = max(offset, 0)
+        let delta = clamped - lastOffset
+        if clamped <= Self.topThreshold {
+            isCompact = false
+        } else if abs(delta) >= Self.minimumDelta {
+            // Nach unten scrollen (Offset wächst) → groß; nach oben → klein.
+            isCompact = delta < 0
+        }
+        lastOffset = clamped
+        return isCompact
+    }
+}
+
+/// Meldet die Scrollposition der umgebenden Scrollansicht.
+///
+/// `onScrollGeometryChange` gibt es erst ab macOS 15, das Projekt läuft aber
+/// auf macOS 14. Deshalb hängt sich der Beobachter an die vorhandene
+/// `NSScrollView` und liest deren `contentOffset` — dieselbe Größe, die
+/// SwiftUI intern auch auswertet.
+private struct ScrollOffsetReporter: NSViewRepresentable {
+    let state: TopBarCollapseState
+
+    @MainActor
+    func makeCoordinator() -> Coordinator {
+        Coordinator(state: state)
+    }
+
+    @MainActor
+    func makeNSView(context: Context) -> NSView {
+        let view = NSView(frame: .zero)
+        // Die Scrollansicht steht erst nach dem Einbau im Fenster fest.
+        DispatchQueue.main.async { context.coordinator.attach(to: view) }
+        return view
+    }
+
+    @MainActor
+    func updateNSView(_ nsView: NSView, context: Context) {
+        context.coordinator.state = state
+    }
+
+    @MainActor
+    final class Coordinator: NSObject {
+        var state: TopBarCollapseState
+        private weak var scrollView: NSScrollView?
+        private var observation: NSKeyValueObservation?
+
+        init(state: TopBarCollapseState) {
+            self.state = state
+        }
+
+        /// Nächste umgebende Scrollansicht suchen und beobachten.
+        func attach(to view: NSView) {
+            guard observation == nil else { return }
+            guard let scroll = view.enclosingScrollView else {
+                // Noch nicht im Baum: später noch einmal versuchen.
+                DispatchQueue.main.async { [weak self, weak view] in
+                    guard let self, let view else { return }
+                    self.attach(to: view)
+                }
+                return
+            }
+            scrollView = scroll
+            let clip = scroll.contentView
+            observation = clip.observe(\.bounds, options: [.new]) { [weak self] _, change in
+                guard let self, let bounds = change.newValue else { return }
+                // Nach oben scrollen heißt: das Clip-View wandert nach unten,
+                // sein Ursprung bekommt also einen negativen Y-Wert.
+                let visible = clip.bounds.height
+                let scrollable = scroll.contentSize.height - visible
+                let offset = scrollable > 0 ? -bounds.origin.y : 0
+                Task { @MainActor in
+                    self.state.update(offset: offset)
+                }
+            }
+        }
+    }
+}
+
+/// Unsichtbarer Beobachter, der als **erstes Kind** in eine `ScrollView`
+/// gelegt wird. Nur so liegt er im Dokument der `NSScrollView` und findet
+/// sie über `enclosingScrollView`; außen an der Scrollansicht klebend gäbe es
+/// keinen umgebenden Scrollbereich.
+///
+/// Liest den Zustand aus der Umgebung, damit die Seiten nichts um die
+/// Leiste wissen müssen — die setzt ihn in `ContentView`.
+public struct ScrollOffsetSentinel: View {
+    @Environment(TopBarCollapseState.self) private var collapse
+
+    public init() {}
+
+    public var body: some View {
+        ScrollOffsetReporter(state: collapse)
+            .frame(width: 0, height: 0)
+            .opacity(0)
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+    }
+}
+
 // MARK: - Knöpfe (`.btn`, volle Pillen-Geometrie)
 
 ///

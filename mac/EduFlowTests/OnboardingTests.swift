@@ -186,6 +186,42 @@ struct OnboardingTests {
         #expect(Set(entries.map(\.code)).count == entries.count)
     }
 
+    @Test("Topbar wird beim Scrollen nach oben klein, oben immer groß")
+    @MainActor
+    func topBarCollapsesOnScrollUp() {
+        let state = TopBarCollapseState()
+        #expect(!state.isCompact)
+        // Scrollen nach unten: Leiste bleibt groß.
+        state.update(offset: 200)
+        #expect(!state.isCompact)
+        // Scrollen nach oben: Leiste wird klein.
+        state.update(offset: 120)
+        #expect(state.isCompact)
+        // Weiter nach unten: wieder groß.
+        state.update(offset: 260)
+        #expect(!state.isCompact)
+        // Ganz oben ist sie immer groß, auch nach kleinem Zappeln.
+        state.update(offset: 0)
+        #expect(!state.isCompact)
+        state.update(offset: -30)
+        #expect(!state.isCompact)
+        // Winzige Bewegungen (< Mindestbewegung) ändern nichts.
+        state.update(offset: 400)
+        state.update(offset: 399)
+        #expect(!state.isCompact)
+        state.update(offset: 200)
+        #expect(state.isCompact)
+    }
+
+    @Test("Jeder Topbar-Reiter hat ein Symbol und einen Titel")
+    func topBarSectionsHaveIcons() {
+        for section in TopBarSection.allCases {
+            #expect(!section.icon.isEmpty)
+            #expect(!section.title.isEmpty)
+        }
+        #expect(Set(TopBarSection.allCases.map(\.icon)).count == TopBarSection.allCases.count)
+    }
+
     @Test("Health-Abfrage liefert Version gegen Stub")
     func healthCheckOk() async throws {
         MockURLProtocol.handler = { request in

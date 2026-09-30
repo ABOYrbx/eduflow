@@ -280,6 +280,7 @@ struct SchoolView: View {
 
     var body: some View {
         ScrollView {
+            ScrollOffsetSentinel()
             VStack(alignment: .leading, spacing: 18) {
                 HStack(alignment: .center) {
                     VStack(alignment: .leading, spacing: 4) {

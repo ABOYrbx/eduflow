@@ -28,6 +28,7 @@ public struct SettingsView: View {
 
     public var body: some View {
         ScrollView {
+            ScrollOffsetSentinel()
             VStack(alignment: .leading, spacing: 14) {
                 PageHead("Settings")
                 if vm.isLoading && vm.error == nil {
