@@ -24,7 +24,9 @@
     "tokenNotFound": "Token niet gevonden.",
     "tokenRejected": "Token ongeldig.",
     "twoFactorDemo": "Voer democode 123456 in.",
-    "twoFactorMessage": "Voer de tweestapscode van e-mail of app in en stuur deze naar /auth/2fa."
+    "twoFactorMessage": "Voer de tweestapscode van e-mail of app in en stuur deze naar /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Ongeldig verzoek.",
@@ -64,7 +66,8 @@
     "trashHomework": "Verplaats huiswerk naar prullenbak of herstel",
     "validationDescription": "Validatie fout",
     "weather": "Weer",
-    "weatherSearch": "Weer locatie zoeken"
+    "weatherSearch": "Weer locatie zoeken",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Slechte coördinaten",
@@ -103,6 +106,8 @@
     "hwStatusLabel": "Huiswerk: Standaard filter",
     "hwTestsLabel": "Huiswerk: standaard tests en examens opnemen",
     "landingLabel": "Pagina starten na het aanmelden",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "Allemaal",
     "optDashboard": "berichten",
     "optDone": "Alleen klaar",
@@ -118,7 +123,12 @@
     "ovWetterHint": "Van toepassing op de webinterface en de Android-app.",
     "ovWetterLabel": "Laat de weerkaart zien op het overzicht",
     "sectionUebersicht": "Overzicht.",
-    "sectionWetter": "Weer"
+    "sectionWetter": "Weer",
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor.",
+    "ovSpanLabel": "Section widths",
+    "ovSpanHint": "Sections you set to half width sit next to each other."
   },
   "upstream": {
     "agendaFailed": "School events konden niet worden geladen: {detail}",
