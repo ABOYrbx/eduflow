@@ -238,7 +238,8 @@
 
     <!-- Overview -->
     <string name="overview_customize">Customize overview</string>
-    <string name="overview_customize_desc">Choose which sections appear first.</string>
+    <string name="overview_customize_desc">Choose which sections appear first. Press and hold the handle to drag.</string>
+    <string name="overview_customize_action">Sort sections</string>
     <string name="overview_move_up_desc">Move up</string>
     <string name="overview_move_down_desc">Move down</string>
     <string name="overview_messages_count_format">Messages · %1$d</string>

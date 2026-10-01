@@ -238,6 +238,7 @@
     <!-- Übersicht -->
     <string name="overview_customize">Übersicht anpassen</string>
     <string name="overview_customize_desc">Lege fest, welche Bereiche zuerst erscheinen. Zum Verschieben am Griff gedrückt halten und ziehen.</string>
+    <string name="overview_customize_action">Bereiche sortieren</string>
     <string name="overview_move_up_desc">Nach oben</string>
     <string name="overview_move_down_desc">Nach unten</string>
     <string name="overview_messages_count_format">Nachrichten · %1$d</string>
