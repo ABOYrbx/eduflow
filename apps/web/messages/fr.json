@@ -33,14 +33,21 @@
     "noText": "(aucun texte)",
     "requestFailed": "La demande a échoué.",
     "school": "École",
-    "upstreamUnreachable": "Le serveur est inaccessible."
+    "upstreamUnreachable": "Le serveur est inaccessible.",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "Moyenne du sujet pondéré",
     "colClassAvg": "Classe Ø",
     "colComment": "Commenter",
     "colDate": "Date",
-    "colGrade": "Note",
+    "colGrade": "Grade",
     "colTeacher": "Professeur",
     "colTopic": "Sujet",
     "colWeight": "Poids",
@@ -52,7 +59,7 @@
     "halfYear": "{half}mi-année {a}/{b}",
     "halfYearAria": "Semestre",
     "noteMany": "Notes",
-    "noteOne": "Note",
+    "noteOne": "Grade",
     "refresh": "Reload",
     "searchAria": "Rechercher des notes",
     "searchPlaceholder": "Sujet / Sujet / Enseignant…",
@@ -95,7 +102,7 @@
     "trashEmpty": "La corbeille est vide.",
     "trashLabel": "Corbeille",
     "trashWithCount": "Corbeille ({count})",
-    "dueToday": "à faire aujourd'hui"
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "Retour à la connexion",
@@ -185,7 +192,10 @@
     "profileAria": "Ouvrir le menu de profil",
     "profileTitle": "Votre profil",
     "settings": "Réglages",
-    "timetable": "Horaire"
+    "timetable": "Horaire",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right",
+    "sessions": "Sessions"
   },
   "overview": {
     "allMessages": "Tous les messages",
@@ -202,7 +212,7 @@
     "loading": "Chargement de …",
     "loadingTimetable": "Chargement de l'horaire …",
     "messages": "Messages",
-    "newMessages": "{count} neu",
+    "newMessages": "{count} new",
     "nextLesson": "Leçon suivante",
     "noLessonsToday": "pas de cours aujourd'hui",
     "online": "En ligne",
@@ -216,7 +226,20 @@
     "tomorrow": "Demain",
     "weather": "Météo",
     "weatherHint": "Définir l'emplacement dans les paramètres",
-    "weatherUnavailable": "Données météo non disponibles"
+    "weatherUnavailable": "Données météo non disponibles",
+    "editorToggle": "Arrange",
+    "editorHint": "Drag a section to move it, or use the arrows. Hide what you do not need.",
+    "editorDone": "Done",
+    "editorSaving": "Saving…",
+    "editorSaved": "Layout saved",
+    "editorHide": "Hide section",
+    "editorShow": "Show section",
+    "editorHidden": "Hidden",
+    "editorDrag": "Drag to move",
+    "editorReset": "Reset",
+    "editorEmpty": "All sections are hidden. Turn at least one back on.",
+    "editorWide": "Full width",
+    "editorNarrow": "Half width"
   },
   "settings": {
     "accentApplied": "Couleur d'accentuation appliquée.",
@@ -287,7 +310,10 @@
     "title": "Réglages",
     "tokenCreated": "Jeton créé. Copiez la valeur maintenant; elle n'est affichée qu'une seule fois.",
     "unnamedDevice": "Appareil sans nom",
-    "validUntil": "Valable jusqu'à {date}"
+    "validUntil": "Valable jusqu'à {date}",
+    "languageTitle": "Language",
+    "languageHint": "Applies right away. The choice is remembered on this device.",
+    "sessionsPanelNote": "Devices signed in on this account."
   },
   "theme": {
     "language": "Langue",
@@ -324,5 +350,27 @@
     "viewAria": "Voir",
     "weekDetail": "Leçons {count} cette semaine.",
     "weekTab": "Semaine"
+  },
+  "sessions": {
+    "eyebrow": "Sessions",
+    "title": "Signed-in devices",
+    "detail": "Every device with a session on your account. You can sign out individually or all at once.",
+    "searchPlaceholder": "Search device or ID",
+    "searchAria": "Search sessions",
+    "active": "Signed in",
+    "signedOut": "Signed out",
+    "currentBadge": "This device",
+    "revokeAllOthers": "Sign out all other devices",
+    "revokeAllOthersHint": "This device stays signed in.",
+    "noneActive": "No other device is signed in.",
+    "noMatch": "No session matches your search.",
+    "noSessions": "No sessions yet.",
+    "lastSeen": "Signed in {created}",
+    "expires": "Valid until {expires}",
+    "id": "ID",
+    "openSettings": "Manage sessions",
+    "settingsHint": "{count} signed in · this device is {current}",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOthers": "No other sessions"
   }
 }

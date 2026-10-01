@@ -51,6 +51,7 @@ import de.eduflow.android.data.dto.LessonDto
 import de.eduflow.android.data.dto.TimetableView
 import de.eduflow.android.ui.common.AppHeader
 import de.eduflow.android.ui.common.EduCard
+import de.eduflow.android.ui.common.PullRefreshBox
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SectionLabel
 import de.eduflow.android.ui.common.StatusPill
@@ -131,6 +132,11 @@ fun DayScreen(
             )
         }
 
+        PullRefreshBox(
+            refreshing = state.isLoading,
+            onRefresh = viewModel::refresh,
+            modifier = Modifier.weight(1f).fillMaxWidth(),
+        ) {
         if (state.isLoading && day == null) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(32.dp),
@@ -166,7 +172,7 @@ fun DayScreen(
         } else {
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxSize(),
             ) {
                 items(day.lessons, key = { it.period + it.time + it.title }) { lesson ->
                     LessonCard(
@@ -176,6 +182,7 @@ fun DayScreen(
                 }
                 item { Spacer(Modifier.height(88.dp)) }
             }
+        }
         }
     }
 }

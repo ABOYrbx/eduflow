@@ -5,8 +5,12 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
@@ -37,9 +41,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Dns
+import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Checklist
+import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -47,6 +55,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableDoubleStateOf
@@ -60,6 +69,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -72,8 +82,10 @@ import androidx.compose.ui.unit.sp
 import de.eduflow.android.R
 import de.eduflow.android.data.ApiClient
 import de.eduflow.android.data.TokenStore
+import de.eduflow.android.data.normalizeBaseUrl
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.PrimaryButton
+import de.eduflow.android.ui.common.SearchPill
 import de.eduflow.android.ui.theme.EduFlowRiseEasing
 import de.eduflow.android.ui.theme.LocalReducedMotion
 import de.eduflow.android.ui.theme.riseIn
@@ -134,8 +146,12 @@ private fun WelcomePage(onNext: () -> Unit) {
     val density = LocalDensity.current
     val context = androidx.compose.ui.platform.LocalContext.current
     val greetings = remember {
-        AppLocale.availableLocales(context).map { AppLocale.greetingFor(it, context) }.distinct()
+        AppLocale.greetingEntries(AppLocale.availableLocales(context)) {
+            AppLocale.greetingFor(it, context)
+        }
     }
+    // Sprache der aktuell gezeigten Begrüßung — der Weiter-Knopf spricht sie.
+    var buttonLocale by remember { mutableStateOf("") }
     var showButton by remember { mutableStateOf(reducedMotion) }
     LaunchedEffect(reducedMotion) {
         if (reducedMotion) showButton = true else {
@@ -148,7 +164,7 @@ private fun WelcomePage(onNext: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(Modifier.weight(1f))
-        HelloGreeting(greetings)
+        HelloGreeting(greetings) { buttonLocale = it }
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier.fillMaxWidth().height(280.dp).padding(top = 8.dp).riseIn(index = 10),
@@ -171,28 +187,76 @@ private fun WelcomePage(onNext: () -> Unit) {
                     androidx.compose.animation.scaleIn(spring(dampingRatio = 0.55f, stiffness = 260f), initialScale = 0.985f),
             modifier = Modifier.fillMaxWidth(),
         ) {
-            PrimaryButton(text = stringResource(R.string.common_next), onClick = onNext)
+            AnimatedNextButton(
+                text = AppLocale.stringFor(buttonLocale, R.string.common_next, context),
+                onClick = onNext,
+            )
         }
     }
 }
 
-/** Sprachauswahl als zweite Onboarding-Seite: Liste mit Stand, Auswahl + Weiter übernimmt sofort (Activity-Neustart). */
+/**
+ * Weiter-Knopf der Startseite, dessen Text beim Sprachwechsel mitläuft.
+ *
+ * Optisch identisch zu [PrimaryButton] (Paket 0 bleibt unberührt), aber der
+ * Text rollt von unten nach oben, genau wie die Buchstaben der Begrüßung:
+ * der neue Satz steigt ein, während der alte nach oben austritt. Bei
+ * "Bewegung reduzieren" wird ohne Animation getauscht.
+ */
+@Composable
+private fun AnimatedNextButton(text: String, onClick: () -> Unit) {
+    val scheme = MaterialTheme.colorScheme
+    val reduced = LocalReducedMotion.current
+    Button(
+        onClick = onClick,
+        shape = CircleShape,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = scheme.primary,
+            contentColor = scheme.onPrimary,
+        ),
+        modifier = Modifier.fillMaxWidth().height(52.dp),
+    ) {
+        AnimatedContent(
+            targetState = text,
+            transitionSpec = {
+                if (reduced) EnterTransition.None togetherWith ExitTransition.None
+                else (
+                    slideInVertically(tween(380, easing = EduFlowRiseEasing)) { it / 2 } +
+                        fadeIn(tween(380, easing = EduFlowRiseEasing)) +
+                        scaleIn(tween(380, easing = EduFlowRiseEasing), initialScale = 0.92f)
+                    ) togetherWith (
+                    slideOutVertically(tween(240, easing = FastOutSlowInEasing)) { -it / 2 } +
+                        fadeOut(tween(240, easing = FastOutSlowInEasing)) +
+                        scaleOut(tween(240, easing = FastOutSlowInEasing), targetScale = 0.92f)
+                    )
+            },
+            contentAlignment = Alignment.Center,
+            label = "next-label",
+        ) { value ->
+            Text(value, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+        }
+    }
+}
+
+/** Sprachauswahl als zweite Onboarding-Seite: Suchfeld + Liste mit Stand; Auswahl wirkt sofort. */
 @Composable
 private fun LanguagePage(onNext: () -> Unit) {
     val scheme = MaterialTheme.colorScheme
     val context = LocalContext.current
-    val activity = context as? Activity
-    var selected by remember { mutableStateOf(AppLocale.current(context)) }
-    val current = AppLocale.current(context)
-    val changed = selected != current
-    val codes = remember(selected) {
-        buildList {
-            add(null)
-            addAll(AppLocale.availableLocales(context).sortedWith(
-                compareBy({ it != current }, { AppLocale.nativeName(it).lowercase() }),
-            ))
-        }
+    // Auswahl live beobachten, damit der Stand nach dem Setzen stimmt.
+    val current by AppLocale.selectionFlow(context).collectAsState(initial = null)
+    val available = remember { AppLocale.availableLocales(context) }
+    val system = remember(available) { AppLocale.systemCode(available) }
+    // Ohne eigene Wahl gilt die Systemsprache — sie ist einfach markiert,
+    // ein eigener „System"-Eintrag wäre doppelt.
+    var selected by remember(current, system) { mutableStateOf(AppLocale.initialSelection(current, system)) }
+    var query by remember { mutableStateOf("") }
+    val codes = remember(query, available, system) {
+        AppLocale.filterLanguages(AppLocale.orderedLanguages(available, system), query)
     }
+    // Die vorausgewählte Systemsprache wird nicht festgenagelt: erst wenn die
+    // Nutzerin tatsächlich eine Sprache antippt, wird sie gespeichert.
+
     Column(
         modifier = Modifier.fillMaxSize().padding(horizontal = 28.dp, vertical = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -214,16 +278,49 @@ private fun LanguagePage(onNext: () -> Unit) {
             color = scheme.onSurfaceVariant,
             modifier = Modifier.padding(top = 10.dp, start = 24.dp, end = 24.dp).riseIn(index = 3),
         )
+        if (system != null) {
+            Text(
+                stringResource(R.string.onboarding_language_system_format, AppLocale.nativeName(system)),
+                fontSize = 13.sp,
+                color = scheme.onSurfaceVariant,
+                modifier = Modifier.padding(top = 8.dp).riseIn(index = 5),
+            )
+        }
+        SearchPill(
+            value = query,
+            onValueChange = { query = it },
+            placeholder = stringResource(R.string.onboarding_language_search),
+            modifier = Modifier.padding(top = 16.dp).riseIn(index = 4),
+        )
+        // Listenhöhe über weight begrenzt, damit der Weiter-Knopf nie
+        // überlagert wird; zusätzlich Luft nach unten, damit die letzte
+        // Zeile beim Scrollen nicht unter dem Knopf verschwindet.
         Column(
-            modifier = Modifier.fillMaxWidth().weight(1f).verticalScroll(rememberScrollState()).padding(top = 20.dp),
+            modifier = Modifier.fillMaxWidth().weight(1f).verticalScroll(rememberScrollState())
+                .padding(top = 12.dp, bottom = 8.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
+            if (codes.isEmpty()) {
+                Text(
+                    stringResource(R.string.onboarding_language_no_results),
+                    fontSize = 14.sp,
+                    color = scheme.onSurfaceVariant,
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp),
+                    textAlign = TextAlign.Center,
+                )
+            }
             codes.forEach { code ->
                 val isSelected = selected == code
                 EduCard(modifier = Modifier.fillMaxWidth()) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth().padding(16.dp).clickable { selected = code },
+                        // Wirkt sofort: die Umschaltung ist live, ein
+                        // separater "Übernehmen"-Schritt wäre überflüssig —
+                        // der Knopf bleibt daher immer "Weiter".
+                        modifier = Modifier.fillMaxWidth().padding(16.dp).clickable {
+                            selected = code
+                            AppLocale.set(context, code)
+                        },
                     ) {
                         Box(
                             contentAlignment = Alignment.Center,
@@ -236,63 +333,72 @@ private fun LanguagePage(onNext: () -> Unit) {
                         Column(Modifier.padding(start = 14.dp).weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(
-                                    if (code == null) stringResource(R.string.onboarding_language_system)
-                                    else AppLocale.nativeName(code),
+                                    AppLocale.nativeName(code),
                                     fontSize = 15.sp,
                                     fontWeight = FontWeight.Black,
                                     letterSpacing = (-0.2).sp,
                                     color = scheme.onSurface,
                                     modifier = Modifier.weight(1f),
                                 )
-                                if (code != null) {
+                                if (code == system && current == null) {
+                                    // Kennzeichnet, was ohne eigene Wahl gilt.
                                     Text(
-                                        "${AppLocale.coverageFor(code).percent} %",
-                                        fontSize = 13.sp,
+                                        stringResource(R.string.onboarding_language_system_short),
+                                        fontSize = 11.sp,
+                                        fontWeight = FontWeight.Bold,
                                         color = scheme.onSurfaceVariant,
+                                        modifier = Modifier
+                                            .padding(end = 8.dp)
+                                            .clip(CircleShape)
+                                            .background(scheme.surfaceVariant)
+                                            .padding(horizontal = 8.dp, vertical = 2.dp),
                                     )
                                 }
-                            }
-                            if (code != null) {
-                                LinearProgressIndicator(
-                                    progress = { AppLocale.coverageFor(code).percent / 100f },
-                                    modifier = Modifier.fillMaxWidth().height(4.dp).clip(CircleShape),
-                                )
-                            } else {
                                 Text(
-                                    stringResource(R.string.onboarding_language_system_desc),
+                                    "${AppLocale.coverageFor(code).percent} %",
                                     fontSize = 13.sp,
                                     color = scheme.onSurfaceVariant,
                                 )
                             }
+                            LinearProgressIndicator(
+                                progress = { AppLocale.coverageFor(code).percent / 100f },
+                                modifier = Modifier.fillMaxWidth().height(4.dp).clip(CircleShape),
+                            )
                         }
                     }
                 }
             }
         }
         PrimaryButton(
-            text = stringResource(
-                if (changed) R.string.onboarding_language_apply_restart else R.string.common_next,
-            ),
-            onClick = {
-                if (changed) activity?.let { AppLocale.set(it, selected) } ?: onNext()
-                else onNext()
-            },
+            // Die Sprache ist beim Tippen bereits gesetzt — der Knopf ist nur
+            // noch "Weiter" zur naechsten Onboarding-Seite.
+            text = stringResource(R.string.common_next),
+            enabled = selected != null,
+            onClick = onNext,
             modifier = Modifier.riseIn(index = 7),
         )
     }
 }
 
 @Composable
-private fun HelloGreeting(greetings: List<String> = emptyList()) {
+private fun HelloGreeting(
+    entries: List<Pair<String, String>> = emptyList(),
+    onLanguage: (String) -> Unit = {},
+) {
     val reduced = LocalReducedMotion.current
-    val scheme = MaterialTheme.colorScheme
     val fallback = stringResource(R.string.onboarding_greeting)
-    val list = remember(greetings) { greetings.ifEmpty { listOf(fallback) }.distinct() }
+    val list = remember(entries) {
+        if (entries.isEmpty()) listOf("" to fallback) else entries
+    }
     var order by remember(list) { mutableStateOf(AppLocale.shuffledCycle(list.size, null)) }
     var position by remember(list) { mutableIntStateOf(0) }
     val scope = rememberCoroutineScope()
+    val shown = list[order[position % order.size]]
+    // Sprache der gerade gezeigten Begrüßung melden, damit der Weiter-Knopf
+    // auf derselben Seite mitwechselt. Leer = App-Sprache (Fallback).
+    LaunchedEffect(shown.first) { onLanguage(shown.first) }
     key(order, position) {
-        GreetingText(text = list[order[position % order.size]]) {
+        GreetingText(text = shown.second) {
             scope.launch {
                 delay(2_000)
                 val next = position + 1
@@ -438,9 +544,10 @@ private fun FeaturesPage(onNext: () -> Unit) {
                 modifier = Modifier.padding(top = 12.dp).riseIn(index = 2),
             )
             Column(verticalArrangement = Arrangement.spacedBy(10.dp), modifier = Modifier.padding(top = 22.dp)) {
-                FeatureRow("✉", stringResource(R.string.onboarding_feat1_title), stringResource(R.string.onboarding_feat1_desc), 3)
-                FeatureRow("☷", stringResource(R.string.onboarding_feat2_title), stringResource(R.string.onboarding_feat2_desc), 4)
-                FeatureRow("▦", stringResource(R.string.onboarding_feat3_title), stringResource(R.string.onboarding_feat3_desc), 6)
+                // Icons wie in der Navigation zum jeweiligen Bereich.
+                FeatureRow(Icons.Filled.MailOutline, stringResource(R.string.onboarding_feat1_title), stringResource(R.string.onboarding_feat1_desc), 3)
+                FeatureRow(Icons.Filled.Checklist, stringResource(R.string.onboarding_feat2_title), stringResource(R.string.onboarding_feat2_desc), 4)
+                FeatureRow(Icons.Filled.CalendarMonth, stringResource(R.string.onboarding_feat3_title), stringResource(R.string.onboarding_feat3_desc), 6)
             }
             Spacer(Modifier.weight(1f))
             PrimaryButton(text = stringResource(R.string.common_next), onClick = onNext, modifier = Modifier.riseIn(index = 7))
@@ -448,17 +555,30 @@ private fun FeaturesPage(onNext: () -> Unit) {
     }
 }
 
+/**
+ * Karte einer Faehigkeit mit Icon-Kreis. Das Icon kommt aus
+ * material-icons-extended und ist dasselbe wie in der Navigation zum
+ * passenden Bereich — vorher standen hier hartcodierte Unicode-Glyphen
+ * ("✉", "☷", "▦"), die wie fremde Textzeichen aussahen statt wie Icons.
+ */
 @Composable
-private fun FeatureRow(icon: String, title: String, description: String, delayIndex: Int) {
+private fun FeatureRow(icon: ImageVector, title: String, description: String, delayIndex: Int) {
     val scheme = MaterialTheme.colorScheme
     EduCard(modifier = Modifier.fillMaxWidth().riseIn(index = delayIndex)) {
         Row(Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Surface(shape = CircleShape, color = scheme.primary, modifier = Modifier.size(40.dp)) {
                 Box(contentAlignment = Alignment.Center) {
-                    Text(icon, fontSize = 18.sp, fontWeight = FontWeight.SemiBold, color = scheme.onPrimary)
+                    // Dekorativ: der Titel steht direkt daneben, eine
+                    // contentDescription wuerde nur doppelt vorlesen.
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        tint = scheme.onPrimary,
+                        modifier = Modifier.size(20.dp),
+                    )
                 }
             }
-            Column(Modifier.padding(start = 14.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+            Column(Modifier.padding(start = 14.dp).weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                 Text(title, fontSize = 15.sp, fontWeight = FontWeight.Black, letterSpacing = (-0.2).sp, color = scheme.onSurface)
                 Text(description, fontSize = 13.sp, lineHeight = 18.sp, color = scheme.onSurfaceVariant)
             }
@@ -471,7 +591,11 @@ private fun FeatureRow(icon: String, title: String, description: String, delayIn
 private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
     val scheme = MaterialTheme.colorScheme
     val reducedMotion = LocalReducedMotion.current
-    var draft by remember(baseUrl) { mutableStateOf(baseUrl) }
+    // baseUrl ist der interne Notfallwert, wenn nichts gespeichert ist —
+// dann soll das Feld trotzdem leer sein (keine Voreinstellung). Nur eine
+// wirklich gespeicherte Adresse wird vorbelegt.
+    val storedBaseUrl = baseUrl.takeIf { it.isNotBlank() && it != TokenStore.DEFAULT_BASE_URL }
+    var draft by remember(storedBaseUrl) { mutableStateOf(storedBaseUrl.orEmpty()) }
     var checking by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf<String?>(null) }
     var connected by remember { mutableStateOf(false) }
@@ -479,12 +603,13 @@ private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
     val connectedText = stringResource(R.string.onboarding_connected)
     val unreachableText = stringResource(R.string.onboarding_unreachable)
 
-    fun normalizedUrl(): String = draft.trim().let { raw ->
-        val withScheme = if (raw.isNotBlank() && "://" !in raw) "http://$raw" else raw
-        withScheme.trimEnd('/')
-    }.ifBlank { TokenStore.DEFAULT_BASE_URL.trimEnd('/') } + "/"
+    // Ohne Eingabe gibt es nichts zu testen: leer heisst "kein Server
+    // eingetragen", nicht "nimm den Emulator-Host".
+    val canTest = draft.isNotBlank()
+    fun normalizedUrl(): String = normalizeBaseUrl(draft)
 
     suspend fun checkConnection() {
+        if (!canTest) return
         checking = true
         message = null
         connected = false
@@ -529,8 +654,23 @@ private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
         OutlinedTextField(
             value = draft,
             onValueChange = { draft = it; message = null; connected = false },
-            placeholder = { Text(TokenStore.DEFAULT_BASE_URL) },
-            leadingIcon = { androidx.compose.material3.Icon(Icons.Filled.Dns, contentDescription = null) },
+            // Nur IP genügt, Port ist optional — der Hinweis sagt beides.
+            placeholder = { Text(TokenStore.SERVER_PLACEHOLDER) },
+            supportingText = if (draft.isBlank()) {
+                {
+                    Text(
+                        stringResource(
+                            R.string.onboarding_server_hint,
+                            TokenStore.DEFAULT_PORT,
+                            TokenStore.DEMO_PORT,
+                        ),
+                        fontSize = 12.sp,
+                    )
+                }
+            } else {
+                null
+            },
+            leadingIcon = { Icon(Icons.Filled.Dns, contentDescription = null) },
             singleLine = true,
             shape = CircleShape,
             modifier = Modifier.fillMaxWidth().padding(top = 20.dp).riseIn(index = 4),
@@ -541,7 +681,7 @@ private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
       Spacer(Modifier.height(12.dp))
       Button(
           onClick = { scope.launch { checkConnection() } },
-          enabled = !checking,
+          enabled = !checking && canTest,
           shape = CircleShape,
           colors = ButtonDefaults.buttonColors(
               containerColor = when {

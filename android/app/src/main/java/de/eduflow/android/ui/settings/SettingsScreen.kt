@@ -167,8 +167,11 @@ fun SettingsScreen(
                     placeholder = stringResource(R.string.settings_server_placeholder),
                 )
                 PrimaryButton(
+                    // Leeres Feld: den gespeicherten Server stehen lassen,
+                    // statt ihn mit dem Notfallwert zu ueberschreiben.
+                    enabled = baseDraft.isNotBlank(),
                     text = stringResource(R.string.settings_server_apply),
-                    onClick = { onBaseUrlChange(baseDraft.trim().trimEnd('/')); vm.reload() },
+                    onClick = { onBaseUrlChange(baseDraft.trim()); vm.reload() },
                 )
             }
             TextButton(onClick = { vm.logout(onLogout) }) {
@@ -238,58 +241,6 @@ fun SettingsScreen(
                 )
                 Spacer(Modifier.height(8.dp))
                 AccentDotsRow(selected = accentKey, onSelect = vm::setAccent)
-        SectionLabel(stringResource(R.string.settings_navbar_section))
-        EduCard(modifier = Modifier.fillMaxWidth()) {
-            Column(Modifier.fillMaxWidth().padding(16.dp)) {
-                val navTabs by vm.navTabs.collectAsState()
-                Text(
-                    stringResource(R.string.settings_navbar_desc),
-                    fontSize = 13.sp,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                Spacer(Modifier.height(4.dp))
-                TextButton(onClick = {
-                    draftTabs = NavTabs.parse(navTabs)
-                    showNavEditor = true
-                }) {
-                    Icon(Icons.Filled.Tune, contentDescription = null, modifier = Modifier.size(16.dp))
-                    Spacer(Modifier.width(8.dp))
-                    Text(stringResource(R.string.settings_navbar_customize))
-                }
-            }
-        }
-
-        if (showNavEditor) {
-            AlertDialog(
-                onDismissRequest = { showNavEditor = false },
-                title = { Text(stringResource(R.string.settings_navbar_section)) },
-                text = {
-                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text(
-                            stringResource(R.string.settings_navbar_desc),
-                            style = MaterialTheme.typography.bodySmall,
-                        )
-                        NavBarEditor(
-                            selected = draftTabs,
-                            onSelectionChange = { draftTabs = NavTabs.parse(it.joinToString(",")) },
-                            modifier = Modifier.fillMaxWidth().heightIn(max = 340.dp),
-                        )
-                    }
-                },
-                confirmButton = {
-                    TextButton(onClick = {
-                        vm.setNavTabs(draftTabs)
-                        showNavEditor = false
-                    }) { Text(stringResource(R.string.common_save)) }
-                },
-                dismissButton = {
-                    TextButton(onClick = { showNavEditor = false }) {
-                        Text(stringResource(R.string.common_cancel))
-                    }
-                },
-            )
-        }
-
             }
         }
 
@@ -393,6 +344,18 @@ fun SettingsScreen(
                     options = SettingsDefaults.HW_STATUS_OPTIONS.map { key -> key to hwStatusLabel(key) },
                     selectedKey = v.hwStatus,
                     onSelectKey = { key -> vm.update(v.copy(hwStatus = key)) },
+                )
+                Spacer(Modifier.height(12.dp))
+                Text(
+                    stringResource(R.string.settings_time_format_label),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                Spacer(Modifier.height(8.dp))
+                SettingsDropdown(
+                    options = SettingsDefaults.TIME_FORMAT_OPTIONS.map { key -> key to timeFormatLabel(key) },
+                    selectedKey = v.timeFormat,
+                    onSelectKey = { key -> vm.update(v.copy(timeFormat = key)) },
                 )
                 Spacer(Modifier.height(12.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -814,5 +777,12 @@ private fun hwStatusLabel(key: String): String = when (key) {
     "überfällig" -> stringResource(R.string.homework_filter_overdue)
     "erledigt" -> stringResource(R.string.homework_filter_done)
     "papierkorb" -> stringResource(R.string.homework_swipe_trash)
+    else -> key
+}
+
+@Composable
+private fun timeFormatLabel(key: String): String = when (key) {
+    "24h" -> stringResource(R.string.settings_time_24h)
+    "12h" -> stringResource(R.string.settings_time_12h)
     else -> key
 }

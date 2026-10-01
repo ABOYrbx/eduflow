@@ -200,7 +200,7 @@ private fun BottomTabItem(
         Icon(
             tab.icon,
             contentDescription = label,
-            tint = if (selected) scheme.onSurface else scheme.onSurfaceVariant,
+            tint = if (selected) scheme.primary else scheme.onSurfaceVariant,
             modifier = Modifier.size(18.dp),
         )
         AnimatedVisibility(
@@ -213,7 +213,7 @@ private fun BottomTabItem(
                 fontSize = 9.sp,
                 lineHeight = 11.sp,
                 fontWeight = if (selected) FontWeight.Bold else FontWeight.Medium,
-                color = if (selected) scheme.onSurface else scheme.onSurfaceVariant,
+                color = if (selected) scheme.primary else scheme.onSurfaceVariant,
                 maxLines = 1,
                 modifier = Modifier.padding(top = 2.dp),
             )

@@ -110,7 +110,7 @@ public enum OnboardingState {
 }
 
 /// Übersetzungsstand einer Sprache aus dem String-Katalog (Zähler =
-/// Keys mit eigenem Wert, Nenner = Keys mit Übersetzungsbedarf; Deutsch
+/// Keys mit eigenem Wert, Nenner = Keys mit Übersetzungsbedarf; Englisch
 /// als Quelle zählt als vollständig). Per Skript aus
 /// `mac/EduFlow/Resources/Localizable.xcstrings` erzeugt, siehe
 /// `plaene/LOKALISIERUNG.md`.
@@ -125,11 +125,35 @@ public struct LocaleCoverage: Equatable, Sendable {
 /// erzeugt; bei neuen Sprachen/Zahlen dort neu berechnen, siehe
 /// `plaene/LOKALISIERUNG.md`).
 public let localeCoverage: [LocaleCoverage] = [
-    LocaleCoverage(code: "de", translated: 263, total: 263, percent: 100),
-    LocaleCoverage(code: "en", translated: 263, total: 263, percent: 100),
-    LocaleCoverage(code: "fr", translated: 238, total: 263, percent: 90),
-    LocaleCoverage(code: "pl", translated: 238, total: 263, percent: 90),
-    LocaleCoverage(code: "tr", translated: 238, total: 263, percent: 90),
+    LocaleCoverage(code: "de", translated: 394, total: 394, percent: 100),
+    LocaleCoverage(code: "en", translated: 394, total: 394, percent: 100),
+    LocaleCoverage(code: "af", translated: 381, total: 394, percent: 97),
+    LocaleCoverage(code: "ar", translated: 378, total: 394, percent: 96),
+    LocaleCoverage(code: "ca", translated: 381, total: 394, percent: 97),
+    LocaleCoverage(code: "cs", translated: 379, total: 394, percent: 96),
+    LocaleCoverage(code: "da", translated: 371, total: 394, percent: 94),
+    LocaleCoverage(code: "el", translated: 378, total: 394, percent: 96),
+    LocaleCoverage(code: "es", translated: 378, total: 394, percent: 96),
+    LocaleCoverage(code: "fi", translated: 377, total: 394, percent: 96),
+    LocaleCoverage(code: "fr", translated: 372, total: 394, percent: 94),
+    LocaleCoverage(code: "he", translated: 381, total: 394, percent: 97),
+    LocaleCoverage(code: "hu", translated: 381, total: 394, percent: 97),
+    LocaleCoverage(code: "it", translated: 375, total: 394, percent: 95),
+    LocaleCoverage(code: "ja", translated: 378, total: 394, percent: 96),
+    LocaleCoverage(code: "ko", translated: 381, total: 394, percent: 97),
+    LocaleCoverage(code: "nb", translated: 380, total: 394, percent: 96),
+    LocaleCoverage(code: "nl", translated: 373, total: 394, percent: 95),
+    LocaleCoverage(code: "no", translated: 276, total: 394, percent: 70),
+    LocaleCoverage(code: "pl", translated: 380, total: 394, percent: 96),
+    LocaleCoverage(code: "pt", translated: 376, total: 394, percent: 95),
+    LocaleCoverage(code: "pt-BR", translated: 376, total: 394, percent: 95),
+    LocaleCoverage(code: "ro", translated: 376, total: 394, percent: 95),
+    LocaleCoverage(code: "ru", translated: 379, total: 394, percent: 96),
+    LocaleCoverage(code: "sr", translated: 381, total: 394, percent: 97),
+    LocaleCoverage(code: "sv", translated: 376, total: 394, percent: 95),
+    LocaleCoverage(code: "tr", translated: 383, total: 394, percent: 97),
+    LocaleCoverage(code: "uk", translated: 379, total: 394, percent: 96),
+    LocaleCoverage(code: "vi", translated: 381, total: 394, percent: 97),
 ]
 
 /// App-Sprache als Override der Systemsprache (reine Logik, testbar).
@@ -228,14 +252,15 @@ public enum AppLocalizations {
         return found.isEmpty ? fallback : found
     }
 
-    /// Übersetzungsstand je Sprache aus den Tabellen (Nenner = Quell-Keys
-    /// mit Bedarf, Zähler = davon Keys mit eigenem Wert; Quelle zählt voll).
-    public static func coverage(sourceCode: String = "de", in bundle: Bundle = .main) -> [LocaleCoverage] {
-        guard let source = table(for: sourceCode, in: bundle),
+    /// Übersetzungsstand je Sprache aus den Tabellen (Nenner = Keys mit
+    /// unterschiedlichem Deutsch/Englisch-Wert, Zähler = davon Keys mit
+    /// eigenem Wert ungleich Englisch; Quelle zählt voll).
+    public static func coverage(sourceCode: String = "en", in bundle: Bundle = .main) -> [LocaleCoverage] {
+        guard let german = table(for: "de", in: bundle),
               let english = table(for: "en", in: bundle) else {
             return localeCoverage
         }
-        let denominator = source.keys.filter { english[$0] != source[$0] }
+        let denominator = english.keys.filter { german[$0] != english[$0] }
         guard !denominator.isEmpty else { return localeCoverage }
         return availableCodes(in: bundle).map { code in
             if code == sourceCode {
@@ -244,7 +269,7 @@ public enum AppLocalizations {
             guard let target = table(for: code, in: bundle) else {
                 return LocaleCoverage(code: code, translated: 0, total: denominator.count, percent: 0)
             }
-            let done = denominator.filter { target[$0] != nil && target[$0] != source[$0] }
+            let done = denominator.filter { target[$0] != nil && target[$0] != english[$0] }
             let percent = Int((Double(done.count) / Double(denominator.count) * 100).rounded())
             return LocaleCoverage(code: code, translated: done.count, total: denominator.count, percent: percent)
         }

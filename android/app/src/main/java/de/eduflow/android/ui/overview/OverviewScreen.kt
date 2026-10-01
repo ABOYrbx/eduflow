@@ -169,7 +169,7 @@ fun OverviewScreen(
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                item { LiveClockCard() }
+                item { LiveClockCard(timeFormat = state.settings.timeFormat) }
                 item {
                     NowCard(
                         current = state.currentLesson,
@@ -295,7 +295,7 @@ private fun HomeworkOverviewSection(
 
 /** Uhr-Karte (live, jede Sekunde, deutsches Format) + Aktualisieren. */
 @Composable
-private fun LiveClockCard() {
+private fun LiveClockCard(timeFormat: String) {
     var now by remember { mutableStateOf(LocalDateTime.now()) }
     LaunchedEffect(Unit) {
         while (true) {
@@ -303,7 +303,9 @@ private fun LiveClockCard() {
             now = LocalDateTime.now()
         }
     }
-    val timeFmt = remember { DateTimeFormatter.ofPattern("HH:mm") }
+    val timeFmt = remember(timeFormat) {
+        DateTimeFormatter.ofPattern(if (timeFormat == "12h") "hh:mm a" else "HH:mm")
+    }
     EduCard(modifier = Modifier.fillMaxWidth()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -340,11 +342,12 @@ private fun NowCard(
     onTimetable: () -> Unit,
 ) {
     val scheme = MaterialTheme.colorScheme
-    // Dark: schwarze Karte statt weißer Primär-Fläche (Light bleibt
-    // PNG-schwarz) — weiße Schrift dazu statt onPrimary.
+    // Akzent-Karte: Standard-Dark bleibt schwarze Karte (primary wäre dort
+    // Weiß), jede echte Akzent-Wahl färbt die Karte in beiden Modi.
     val dark = LocalEduFlowDark.current
-    val cardColor = if (dark) Color.Black else scheme.primary
-    val contentColor = if (dark) Color.White else scheme.onPrimary
+    val isDefaultDark = dark && scheme.primary == Color.White
+    val cardColor = if (isDefaultDark) Color.Black else scheme.primary
+    val contentColor = if (isDefaultDark) Color.White else scheme.onPrimary
     Surface(
         shape = RoundedCornerShape(16.dp),
         color = cardColor,

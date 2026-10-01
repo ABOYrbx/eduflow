@@ -24,7 +24,9 @@
     "tokenNotFound": "Jeton introuvable.",
     "tokenRejected": "Jeton non valide.",
     "twoFactorDemo": "Entrez le code de démonstration 123456.",
-    "twoFactorMessage": "Entrez le code à deux facteurs de l'e-mail ou de l'application et envoyez-le à /auth/2fa."
+    "twoFactorMessage": "Entrez le code à deux facteurs de l'e-mail ou de l'application et envoyez-le à /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Requête invalide.",
@@ -64,7 +66,8 @@
     "trashHomework": "Déplacer les devoirs vers la corbeille ou la restauration",
     "validationDescription": "Erreur de validation",
     "weather": "Météo",
-    "weatherSearch": "Recherche de localisation météo"
+    "weatherSearch": "Recherche de localisation météo",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Mauvaises coordonnées",
@@ -103,6 +106,8 @@
     "hwStatusLabel": "Devoir : Filtre standard",
     "hwTestsLabel": "Devoir : Inclure les tests et les examens par défaut",
     "landingLabel": "Page d'accueil après la connexion",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "Tous",
     "optDashboard": "Messages",
     "optDone": "Terminé uniquement",
@@ -118,7 +123,12 @@
     "ovWetterHint": "S'applique à l'interface web et à l'application Android.",
     "ovWetterLabel": "Afficher la carte météo sur la vue d'ensemble",
     "sectionUebersicht": "Aperçu",
-    "sectionWetter": "Météo"
+    "sectionWetter": "Météo",
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor.",
+    "ovSpanLabel": "Section widths",
+    "ovSpanHint": "Sections you set to half width sit next to each other."
   },
   "upstream": {
     "agendaFailed": "Les événements de l'école n'ont pas pu être chargés : {detail}",

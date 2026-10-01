@@ -3,6 +3,7 @@ import Script from "next/script";
 import { LocaleProvider } from "../components/locale-provider";
 import { getCatalog, supportedLocales, t } from "../lib/i18n";
 import { requestLocale } from "../lib/request-locale";
+import { languageCoverage } from "../lib/i18n";
 import "./uber.css";
 import "./compat.css";
 
@@ -17,6 +18,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     locale,
     catalog: getCatalog(locale),
     supported: supportedLocales(),
+    coverage: languageCoverage(),
   }).replace(/</g, "\\u003c");
   return <html lang={locale} suppressHydrationWarning>
     <head>

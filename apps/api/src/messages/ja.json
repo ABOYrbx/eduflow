@@ -24,7 +24,9 @@
     "tokenNotFound": "トークンが見つかりません。",
     "tokenRejected": "トークンが無効です。",
     "twoFactorDemo": "デモコード123456を入力してください。",
-    "twoFactorMessage": "メールまたはアプリから2要素コードを入力し、/auth/2faに送信します。"
+    "twoFactorMessage": "メールまたはアプリから2要素コードを入力し、/auth/2faに送信します。",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "無効なリクエストです。",
@@ -64,7 +66,8 @@
     "trashHomework": "宿題をゴミ箱に移動または復元する",
     "validationDescription": "検証エラー",
     "weather": "天気",
-    "weatherSearch": "天気の場所を検索"
+    "weatherSearch": "天気の場所を検索",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "不正な座標",
@@ -103,6 +106,8 @@
     "hwStatusLabel": "宿題: 標準フィルタ",
     "hwTestsLabel": "宿題：テストとテストをデフォルトで含める",
     "landingLabel": "サインイン後に開始ページ",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "すべて",
     "optDashboard": "メッセージ",
     "optDone": "完了のみ",
@@ -118,7 +123,12 @@
     "ovWetterHint": "Web インターフェイスと Android アプリに適用されます。",
     "ovWetterLabel": "概要に天気図を表示する",
     "sectionUebersicht": "概要",
-    "sectionWetter": "天気"
+    "sectionWetter": "天気",
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor.",
+    "ovSpanLabel": "Section widths",
+    "ovSpanHint": "Sections you set to half width sit next to each other."
   },
   "upstream": {
     "agendaFailed": "スクールイベントをロードできませんでした: {detail}",

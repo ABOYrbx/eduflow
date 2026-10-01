@@ -24,7 +24,9 @@
     "tokenNotFound": "Το διακριτικό δεν βρέθηκε.",
     "tokenRejected": "Μη έγκυρο διακριτικό.",
     "twoFactorDemo": "Εισάγετε τον κωδικό επίδειξης 123456.",
-    "twoFactorMessage": "Εισάγετε τον κωδικό δύο παραγόντων από το email ή την εφαρμογή και στείλτε τον στο /auth/2fa."
+    "twoFactorMessage": "Εισάγετε τον κωδικό δύο παραγόντων από το email ή την εφαρμογή και στείλτε τον στο /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Μη έγκυρη αίτηση.",
@@ -64,7 +66,8 @@
     "trashHomework": "Μετακινήστε την εργασία στο κάδο απορριμμάτων ή επαναφορά",
     "validationDescription": "Σφάλμα επικύρωσης",
     "weather": "Καιρός",
-    "weatherSearch": "Αναζήτηση τοποθεσίας καιρού"
+    "weatherSearch": "Αναζήτηση τοποθεσίας καιρού",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Εσφαλμένες συντεταγμένες",
@@ -90,7 +93,7 @@
     "recipientsBody": "Καθορίστε έγκυρους παραλήπτες και ένα σώμα μηνύματος.",
     "sentNotFound": "Στάλθηκε, αλλά το νέο μήνυμα δεν βρέθηκε.",
     "unknownType": "Άγνωστος τύπος μηνύματος.",
-    "unknownTypeValid": "Unbekannter Nachrichtentyp. Gültig: anketa, chat, genotif, news, sprava."
+    "unknownTypeValid": "Unknown message type. Valid: {types}."
   },
   "school": {
     "substitutions": "Το σχέδιο αντικατάστασης δεν μπόρεσε να φορτωθεί.",
@@ -103,6 +106,8 @@
     "hwStatusLabel": "Αρχική σελίδα: Τυποποιημένο φίλτρο",
     "hwTestsLabel": "Εργασία: Συμπερίληψη εξετάσεων και εξετάσεων από προεπιλογή",
     "landingLabel": "Έναρξη σελίδας μετά την είσοδο",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "Όλα",
     "optDashboard": "Μηνύματα",
     "optDone": "Ολοκληρώθηκε μόνο",
@@ -118,7 +123,12 @@
     "ovWetterHint": "Ισχύει για το περιβάλλον εργασίας ιστού και την εφαρμογή Android.",
     "ovWetterLabel": "Εμφάνιση χάρτη καιρού στην επισκόπηση",
     "sectionUebersicht": "Επισκόπηση",
-    "sectionWetter": "Καιρός"
+    "sectionWetter": "Καιρός",
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor.",
+    "ovSpanLabel": "Section widths",
+    "ovSpanHint": "Sections you set to half width sit next to each other."
   },
   "upstream": {
     "agendaFailed": "School events could not be loaded: {detail}",

@@ -24,7 +24,9 @@
     "tokenNotFound": "Token nie znaleziony.",
     "tokenRejected": "Token jest nieprawidłowy.",
     "twoFactorDemo": "Wprowadź kod demo 123456.",
-    "twoFactorMessage": "Wprowadź kod dwustopniowy z adresu e-mail lub aplikacji i wyślij go do /auth/2fa."
+    "twoFactorMessage": "Wprowadź kod dwustopniowy z adresu e-mail lub aplikacji i wyślij go do /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Nieprawidłowe żądanie.",
@@ -64,7 +66,8 @@
     "trashHomework": "Przenieś pracę domową do kosza lub przywróć",
     "validationDescription": "Błąd weryfikacji",
     "weather": "Pogoda",
-    "weatherSearch": "Wyszukiwanie lokalizacji pogody"
+    "weatherSearch": "Wyszukiwanie lokalizacji pogody",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Błędne współrzędne",
@@ -103,6 +106,8 @@
     "hwStatusLabel": "Praca domowa: standardowy filtr",
     "hwTestsLabel": "Praca domowa: domyślnie włączaj testy i egzaminy",
     "landingLabel": "Strona startowa po zalogowaniu",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "Wszystkie",
     "optDashboard": "Wiadomości",
     "optDone": "Tylko zakończone",
@@ -118,7 +123,12 @@
     "ovWetterHint": "Stosuje się do interfejsu internetowego i aplikacji Android.",
     "ovWetterLabel": "Pokaż mapę pogody w przeglądzie",
     "sectionUebersicht": "Przegląd",
-    "sectionWetter": "Pogoda"
+    "sectionWetter": "Pogoda",
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor.",
+    "ovSpanLabel": "Section widths",
+    "ovSpanHint": "Sections you set to half width sit next to each other."
   },
   "upstream": {
     "agendaFailed": "Wydarzenia szkolne nie mogły zostać załadowane: {detail}",

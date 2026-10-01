@@ -93,13 +93,13 @@ public enum Accent: String, CaseIterable, Identifiable, Sendable {
 
     public var displayName: String {
         switch self {
-        case .black: return NSLocalizedString("common_accent_black", value: "Schwarz", comment: "Akzentfarbe")
-        case .blue: return NSLocalizedString("common_accent_blue", value: "Blau", comment: "Akzentfarbe")
-        case .violet: return NSLocalizedString("common_accent_violet", value: "Violett", comment: "Akzentfarbe")
-        case .teal: return NSLocalizedString("common_accent_teal", value: "Petrol", comment: "Akzentfarbe")
-        case .green: return NSLocalizedString("common_accent_green", value: "Grün", comment: "Akzentfarbe")
+        case .black: return NSLocalizedString("common_accent_black", value: "Black", comment: "Akzentfarbe")
+        case .blue: return NSLocalizedString("common_accent_blue", value: "Blue", comment: "Akzentfarbe")
+        case .violet: return NSLocalizedString("common_accent_violet", value: "Violet", comment: "Akzentfarbe")
+        case .teal: return NSLocalizedString("common_accent_teal", value: "Teal", comment: "Akzentfarbe")
+        case .green: return NSLocalizedString("common_accent_green", value: "Green", comment: "Akzentfarbe")
         case .orange: return NSLocalizedString("common_accent_orange", value: "Orange", comment: "Akzentfarbe")
-        case .red: return NSLocalizedString("common_accent_red", value: "Rot", comment: "Akzentfarbe")
+        case .red: return NSLocalizedString("common_accent_red", value: "Red", comment: "Akzentfarbe")
         case .pink: return NSLocalizedString("common_accent_pink", value: "Pink", comment: "Akzentfarbe")
         }
     }

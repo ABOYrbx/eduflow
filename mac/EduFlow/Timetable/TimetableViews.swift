@@ -14,19 +14,20 @@ public struct DayView: View {
 
     public var body: some View {
         ScrollView {
+            ScrollOffsetSentinel()
             VStack(alignment: .leading, spacing: 14) {
                 PageHead(
-                    "Stundenplan",
+                    "Timetable",
                     stats: vm.weekMode ? vm.weekResponse.weekLabel : vm.dayResponse.dayLabel
                 )
                 VStack(spacing: 8) {
                     HStack(spacing: 2) {
-                        Button("Tag") {
+                        Button(NSLocalizedString("Day", value: "Day", comment: "UI-Literal")) {
                             vm.weekMode = false
                             Task { await vm.load(onSessionExpired: onSessionExpired) }
                         }
                         .buttonStyle(TogglePill(active: !vm.weekMode))
-                        Button("Woche") {
+                        Button(NSLocalizedString("Week", value: "Week", comment: "UI-Literal")) {
                             vm.weekMode = true
                             Task { await vm.load(onSessionExpired: onSessionExpired) }
                         }
@@ -39,17 +40,17 @@ public struct DayView: View {
                         Capsule().stroke(EduFlowPalette.border(scheme), lineWidth: 1)
                     }
                     HStack(spacing: 8) {
-                        Button("‹ Zurück") {
+                        Button(NSLocalizedString("‹ Back", value: "‹ Back", comment: "UI-Literal")) {
                             Task { await vm.step(-1, onSessionExpired: onSessionExpired) }
                         }
                         .buttonStyle(UberButtonStyle(.smallLight))
                         .hoverLift()
-                        Button("Heute") {
+                        Button(NSLocalizedString("Today", value: "Today", comment: "UI-Literal")) {
                             Task { await vm.goToday(onSessionExpired: onSessionExpired) }
                         }
                         .buttonStyle(UberButtonStyle(.smallLight))
                         .hoverLift()
-                        Button("Weiter ›") {
+                        Button(NSLocalizedString("Continue ›", value: "Continue ›", comment: "UI-Literal")) {
                             Task { await vm.step(1, onSessionExpired: onSessionExpired) }
                         }
                         .buttonStyle(UberButtonStyle(.smallLight))
@@ -104,7 +105,7 @@ public struct DayView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle(NSLocalizedString("Stundenplan", value: "Stundenplan", comment: "Stundenplan: Titel"))
+        .navigationTitle(NSLocalizedString("Timetable", value: "Timetable", comment: "Stundenplan: Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
         .refreshable { await vm.load(refresh: true, onSessionExpired: onSessionExpired) }
     }
@@ -136,7 +137,7 @@ public struct DayView: View {
             }
             if !lernzeit.isEmpty {
                 HStack(spacing: 8) {
-                    Tag("Lernzeit", style: .muted)
+                    Tag("Study time", style: .muted)
                     Spacer(minLength: 0)
                 }
                 .padding(.top, regular.isEmpty ? 0 : 6)
@@ -284,16 +285,16 @@ public struct LessonCell: View {
             if hasStateTags {
                 HStack(spacing: 6) {
                     if lesson.isCancelled {
-                        Tag("Entfall", style: .red)
+                        Tag("Cancellation", style: .red)
                     }
                     if lesson.isEvent {
-                        Tag("Veranstaltung", style: .amber)
+                        Tag("Event", style: .amber)
                     }
                     if lesson.isOnline {
                         Tag("Online", style: .blue)
                     }
                     if lesson.isLernzeit {
-                        Tag("Lernzeit", style: .muted)
+                        Tag("Study time", style: .muted)
                     }
                 }
             }
@@ -310,7 +311,7 @@ public struct LessonCell: View {
     }
 
     private var roomLine: String {
-        String(format: NSLocalizedString("timetable_room", value: "Raum %@", comment: "Stundenplan: Raumzeile"), lesson.rooms)
+        String(format: NSLocalizedString("timetable_room", value: "Room %@", comment: "Stundenplan: Raumzeile"), lesson.rooms)
     }
 
     private var hasStateTags: Bool {
@@ -353,16 +354,16 @@ public struct LessonRow: View {
                 if hasStateTags {
                     HStack(spacing: 6) {
                         if lesson.isCancelled {
-                            Tag("Entfall", style: .red)
+                            Tag("Cancellation", style: .red)
                         }
                         if lesson.isEvent {
-                            Tag("Veranstaltung", style: .amber)
+                            Tag("Event", style: .amber)
                         }
                         if lesson.isOnline {
                             Tag("Online", style: .blue)
                         }
                         if lesson.isLernzeit {
-                            Tag("Lernzeit", style: .muted)
+                            Tag("Study time", style: .muted)
                         }
                     }
                 }

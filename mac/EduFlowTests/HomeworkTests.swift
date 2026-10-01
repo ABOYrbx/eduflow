@@ -172,8 +172,18 @@ struct HomeworkTests {
         #expect(HalfYear.key(for: "2025-08-30") == .half(yearStart: 2024, half: 2))
         #expect(HalfYear.key(for: nil) == nil)
         #expect(HalfYear.key(for: "falsch") == nil)
-        #expect(HalfYear.half(yearStart: 2024, half: 1).label == "1. Halbjahr 2024/25")
-        #expect(HalfYear.all.label == "Gesamt")
+        // Labels sind uebersetzt — also gegen die aktive App-Sprache pruefen
+        // (Katalog ist mehrsprachig, `value` dient als Quelle).
+        #expect(
+            HalfYear.half(yearStart: 2024, half: 1).label
+                == String(
+                    format: NSLocalizedString("grades_halfyear_format", value: "Semester %d (%d/%@)", comment: "Test"),
+                    1,
+                    2024,
+                    "25"
+                )
+        )
+        #expect(HalfYear.all.label == NSLocalizedString("grades_halfyear_all", value: "All", comment: "Test"))
     }
 
     @Test("Notenliste mit Paginierung und Cache-Info")

@@ -13,15 +13,19 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.ui.platform.LocalContext
+import de.eduflow.android.ui.auth.AppLocale
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Cached
 import androidx.compose.material.icons.filled.Dns
+import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material.icons.filled.Grade
 import androidx.compose.material.icons.filled.PhoneAndroid
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.EventNote
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -44,6 +48,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.eduflow.android.R
+import de.eduflow.android.data.TokenStore
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.settings.SettingsViewModel
@@ -73,6 +78,10 @@ fun MoreScreen(
     }
     var showServer by remember { mutableStateOf(false) }
     var serverDraft by remember(baseUrl) { mutableStateOf(baseUrl) }
+    var showLanguage by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    // Beobachten, damit die Zeile nach dem Wechsel den neuen Namen zeigt.
+    val appLocale by AppLocale.selectionFlow(context).collectAsState(initial = null)
 
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -123,6 +132,13 @@ fun MoreScreen(
             )
         }
         MoreRow(
+            icon = Icons.Filled.Translate,
+            title = stringResource(R.string.settings_language),
+            subtitle = appLocale?.let { AppLocale.nativeName(it) }
+                ?: stringResource(R.string.settings_language_system),
+            onClick = { showLanguage = true },
+        )
+        MoreRow(
             icon = Icons.Filled.Cached,
             title = stringResource(R.string.more_cache_title),
             subtitle = cleared?.let { pluralStringResource(R.plurals.more_cache_cleared, it, it) }
@@ -135,6 +151,37 @@ fun MoreScreen(
             subtitle = stringResource(R.string.more_logout_sub),
             onClick = onLogout,
             destructive = true,
+        )
+    }
+
+    if (showLanguage) {
+        AlertDialog(
+            onDismissRequest = { showLanguage = false },
+            title = { Text(stringResource(R.string.settings_language)) },
+            text = {
+                Column(
+                    modifier = Modifier.verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                ) {
+                    LanguageChoiceRow(
+                        label = stringResource(R.string.settings_language_system),
+                        coverage = null,
+                        selected = appLocale == null,
+                    ) { AppLocale.set(context, null) }
+                    AppLocale.availableLocales(context).forEach { code ->
+                        LanguageChoiceRow(
+                            label = AppLocale.nativeName(code),
+                            coverage = AppLocale.coverageFor(code).percent,
+                            selected = appLocale == code,
+                        ) { AppLocale.set(context, code) }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = { showLanguage = false }) {
+                    Text(stringResource(R.string.common_ok))
+                }
+            },
         )
     }
 
@@ -154,6 +201,7 @@ fun MoreScreen(
                     OutlinedTextField(
                         value = serverDraft,
                         onValueChange = { serverDraft = it },
+                        placeholder = { Text(TokenStore.SERVER_PLACEHOLDER) },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
                         shape = RoundedCornerShape(16.dp),
@@ -169,8 +217,9 @@ fun MoreScreen(
                 }
             },
             confirmButton = {
+                // Leer lassen ist erlaubt: dann bleibt der alte Server stehen.
                 TextButton(onClick = {
-                    onBaseUrlChange(serverDraft.trim().trimEnd('/'))
+                    if (serverDraft.isNotBlank()) onBaseUrlChange(serverDraft.trim())
                     showServer = false
                 }) { Text(stringResource(R.string.common_apply)) }
             },
@@ -178,6 +227,32 @@ fun MoreScreen(
                 TextButton(onClick = { showServer = false }) { Text(stringResource(R.string.common_cancel)) }
             },
         )
+    }
+}
+
+/** Sprache im Dialog: Eigenname + Übersetzungsstand, wählbar. */
+@Composable
+private fun LanguageChoiceRow(
+    label: String,
+    coverage: Int?,
+    selected: Boolean,
+    onClick: () -> Unit,
+) {
+    val scheme = MaterialTheme.colorScheme
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth().clickable(onClick = onClick).padding(vertical = 10.dp),
+    ) {
+        RadioButton(selected = selected, onClick = onClick)
+        Text(
+            label,
+            modifier = Modifier.weight(1f),
+            style = MaterialTheme.typography.bodyLarge,
+            color = scheme.onSurface,
+        )
+        if (coverage != null) {
+            Text("$coverage %", fontSize = 13.sp, color = scheme.onSurfaceVariant)
+        }
     }
 }
 

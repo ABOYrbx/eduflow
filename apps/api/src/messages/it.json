@@ -24,7 +24,9 @@
     "tokenNotFound": "Token non trovato.",
     "tokenRejected": "Token non valido.",
     "twoFactorDemo": "Inserisci il codice demo 123456.",
-    "twoFactorMessage": "Inserisci il codice a due fattori dall'email o dall'app e invialo a /auth/2fa."
+    "twoFactorMessage": "Inserisci il codice a due fattori dall'email o dall'app e invialo a /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Richiesta non valida.",
@@ -64,7 +66,8 @@
     "trashHomework": "Sposta i compiti nel cestino o ripristina",
     "validationDescription": "Errore di convalida",
     "weather": "Meteo",
-    "weatherSearch": "Ricerca posizione meteo"
+    "weatherSearch": "Ricerca posizione meteo",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Coordinate errate",
@@ -103,6 +106,8 @@
     "hwStatusLabel": "Homework: Filtro standard",
     "hwTestsLabel": "Homework: Includi test ed esami per impostazione predefinita",
     "landingLabel": "Pagina iniziale dopo l'accesso",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "Tutti",
     "optDashboard": "Messaggi",
     "optDone": "Completato solo",
@@ -118,7 +123,12 @@
     "ovWetterHint": "Si applica all'interfaccia web e all'app Android.",
     "ovWetterLabel": "Visualizza la mappa meteo nella panoramica",
     "sectionUebersicht": "Panoramica",
-    "sectionWetter": "Meteo"
+    "sectionWetter": "Meteo",
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor.",
+    "ovSpanLabel": "Section widths",
+    "ovSpanHint": "Sections you set to half width sit next to each other."
   },
   "upstream": {
     "agendaFailed": "Gli eventi scolastici non possono essere caricati: {detail}",
@@ -151,7 +161,7 @@
     "invalidDate": "Data non valida (AAAA-MM-GG prevista).",
     "json": "Richiesta non valida (JSON previsto).",
     "jsonObject": "Richiesta non valida (attesa oggetto JSON).",
-    "limitRange": "Limit muss zwischen 1 und 200 liegen.",
+    "limitRange": "Limit must be between 1 and {max}.",
     "negativeOffset": "Lo spostamento non deve essere negativo.",
     "pagination": "Limite e offset devono essere interi.",
     "status": "Stato non valido.",

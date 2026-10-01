@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { t } from "../../lib/i18n";
+import { useLocale } from "../../lib/locale-context";
 
 type LoginReply = { status?: string; error?: string; code?: string; message?: string };
 
@@ -9,6 +10,7 @@ export function LoginForm() {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  useLocale(); // abonniert den Sprachwechsel, damit alle t()-Texte neu rendern
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); setBusy(true); setError("");
@@ -17,7 +19,7 @@ export function LoginForm() {
       method: "POST", headers: { "content-type": "application/json" },
       body: JSON.stringify(pending ? { code: String(form.get("code") ?? "") } : {
         subdomain: String(form.get("subdomain") ?? ""), username: String(form.get("username") ?? ""),
-        password: String(form.get("password") ?? ""), device: "EduFlow Web", remember: form.has("remember"),
+        password: String(form.get("password") ?? ""), device: "EduFlow Web",
       }),
     }).catch(() => null);
     const reply = await response?.json().catch(() => ({})) as LoginReply | undefined;
@@ -41,7 +43,6 @@ export function LoginForm() {
         <input className="input-pill" id="username" name="username" autoComplete="username" required />
         <label htmlFor="password">{t("login.passwordLabel")}</label>
         <input className="input-pill" id="password" name="password" type="password" autoComplete="current-password" required />
-        <label className="check" style={{ marginTop: 14 }}><input type="checkbox" name="remember" value="1" defaultChecked /> {t("login.remember")}</label>
       </>}
       {error && <p className="notice" role="alert">{error}</p>}
       <button className="btn btn-primary" type="submit" disabled={busy}>{busy ? t("login.busy") : pending ? t("login.submit2fa") : t("login.submitLogin")}</button>

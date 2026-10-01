@@ -46,7 +46,7 @@ public final class GradesViewModel {
         }
         var groups: [String: [GradeDTO]] = [:]
         for item in matching {
-            groups[item.subject ?? NSLocalizedString("grades_subject_other", value: "Sonstiges", comment: "Noten: Fach-Fallback"), default: []].append(item)
+            groups[item.subject ?? NSLocalizedString("grades_subject_other", value: "Other", comment: "Noten: Fach-Fallback"), default: []].append(item)
         }
         return groups.keys.sorted {
             $0.localizedCaseInsensitiveCompare($1) == .orderedAscending
@@ -88,7 +88,7 @@ public final class GradesViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
     }
@@ -111,7 +111,7 @@ public final class GradesViewModel {
         } catch {
             self.error = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
     }

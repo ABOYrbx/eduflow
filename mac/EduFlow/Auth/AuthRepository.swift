@@ -24,7 +24,7 @@ public struct AuthRepository: Sendable {
         guard !name.isEmpty, !password.isEmpty else {
             throw APIError(
                 code: ErrorCodes.validation,
-                message: APIError.germanFallback(for: ErrorCodes.validation)
+                message: APIError.englishFallback(for: ErrorCodes.validation)
             )
         }
         // Wie `auth.service.ts`: Subdomain trimmen + kleinschreiben,
@@ -48,7 +48,7 @@ public struct AuthRepository: Sendable {
         guard !pending.isEmpty, !pin.isEmpty else {
             throw APIError(
                 code: ErrorCodes.validation,
-                message: APIError.germanFallback(for: ErrorCodes.validation)
+                message: APIError.englishFallback(for: ErrorCodes.validation)
             )
         }
         let body = try APIClient.jsonData([
@@ -92,7 +92,7 @@ public struct AuthRepository: Sendable {
         else {
             throw APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
         return .loggedIn(

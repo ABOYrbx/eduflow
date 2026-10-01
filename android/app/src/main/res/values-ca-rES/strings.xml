@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">EduFlow</string>
-    <!-- Common (package 0, RedesignUi / CommonUi / BottomBar / errors) -->
-    <string name="common_logo_desc">EduFlow-Logo</string>
+    <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
+    <string name="common_logo_desc">EduFlow logo</string>
     <string name="common_demo_badge">DEMO</string>
     <string name="common_profile_title">El teu perfil</string>
     <string name="common_profile_default_account">Compte</string>
@@ -50,6 +50,7 @@
     <string name="auth_login">Inicia la sessió</string>
     <!-- Onboarding -->
     <string name="onboarding_greeting">Hola!</string>
+    <string name="onboarding_server_hint">Només l’adreça IP; el port i la ruta s’afegeixen automàticament.</string>
     <string name="onboarding_language_title">Tria l’idioma</string>
     <string name="onboarding_language_search">Cerca un idioma</string>
     <string name="onboarding_language_no_results">No s’ha trobat cap idioma</string>
@@ -67,7 +68,6 @@
     <string name="onboarding_feat3_title">Horari i temps</string>
     <string name="onboarding_feat3_desc">Horaris diaris i setmanals, i el temps a la vista general.</string>
     <string name="onboarding_server_sub">Indica on s’executa EduFlow com a servidor.</string>
-    <string name="onboarding_server_hint">Només l’adreça IP; el port i la ruta s’afegeixen automàticament.</string>
     <string name="onboarding_connected">Connectat</string>
     <string name="onboarding_unreachable">No es pot accedir al servidor. Comprova l’adreça i torna-ho a provar.</string>
     <string name="onboarding_test_connected">✓  Connectat</string>
@@ -83,7 +83,7 @@
     <string name="twofa_confirm">Confirma</string>
     <string name="twofa_back">Torna a l’inici de sessió</string>
     <string name="twofa_validity">El codi és vàlid durant 10 minuts.</string>
-    <!-- Settings -->
+    <!-- Einstellungen -->
     <string name="settings_title">Configuració</string>
     <string name="settings_subtitle">El teu compte d’EduFlow</string>
     <string name="settings_demo_text">Només es carreguen dades de mostra sintètiques del servidor de demostració local.</string>
@@ -136,7 +136,7 @@
     <string name="settings_dev_onboarding">Torna a iniciar la configuració inicial</string>
     <string name="settings_dev_onboarding_sub">Tanca la sessió i reinicia la introducció.</string>
     <string name="settings_landing_overview">Vista general</string>
-    <!-- Devices -->
+    <!-- Geräte -->
     <string name="devices_title">Dispositius</string>
     <string name="devices_subtitle">Gestiona els dispositius amb sessió iniciada</string>
     <string name="devices_empty">No hi ha cap altre dispositiu amb sessió iniciada.</string>
@@ -146,7 +146,7 @@
     <string name="devices_expires_format">Caduca: %1$s</string>
     <string name="devices_remove">Elimina</string>
     <string name="device_default_name">Emulador d’Android</string>
-    <!-- Grades -->
+    <!-- Noten -->
     <string name="grades_title">Notes</string>
     <string name="grades_subtitle">El teu rendiment per assignatura</string>
     <string name="grades_search_placeholder">Assignatura, títol o docent</string>
@@ -163,11 +163,11 @@
     <string name="grades_teacher_format">Docent: %1$s</string>
     <string name="grades_class_avg_format">Mitjana de la classe %1$s</string>
     <string name="grades_term_all">Tots</string>
-    <!-- Semester name: %1$d = semester (1/2), %2$s/%3$s = short years (25/26);
-         pattern letters must not be translated, only words/order. -->
+    <!-- Halbjahr-Name: %1$d = Halbjahr (1/2), %2$s/%3$s = Kurzjahre (25/26);
+         Musterbuchstaben nicht übersetzen, nur Worte/Reihenfolge anpassen. -->
     <string name="grades_term_label_format">Semestre %1$d %2$s/%3$s</string>
     <string name="grades_subject_other">Altres</string>
-    <!-- Homework -->
+    <!-- Hausaufgaben -->
     <string name="homework_title">Deures</string>
     <string name="homework_subtitle">Les teves tasques d’un cop d’ull</string>
     <string name="homework_search_placeholder">Títol, assignatura o docent</string>
@@ -185,7 +185,7 @@
     <string name="homework_swipe_restore">Restaura</string>
     <string name="homework_reopen_desc">Torna a obrir</string>
     <string name="homework_title_format">Deure #%1$d</string>
-    <!-- Messages -->
+    <!-- Nachrichten -->
     <string name="messages_title">Missatges</string>
     <string name="messages_subtitle">Missatges de la teva escola</string>
     <string name="messages_search_placeholder">Cerca missatges</string>
@@ -216,15 +216,14 @@
     <string name="messages_recipients_format">%1$d destinataris seleccionats</string>
     <string name="messages_body_placeholder">Text del missatge</string>
     <string name="messages_compose_send">Envia</string>
-    <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
-         label() stays the German context-free fallback for tests. -->
+
     <string name="message_type_all">Tots</string>
     <string name="message_type_sprava">Missatge</string>
     <string name="message_type_news">Notícies</string>
     <string name="message_type_anketa">Enquesta</string>
     <string name="message_type_chat">Xat</string>
     <string name="message_type_genotif">Avís</string>
-    <!-- Overview -->
+    <!-- Übersicht -->
     <string name="overview_customize">Personalitza la vista general</string>
     <string name="overview_customize_desc">Tria quines seccions apareixen primer.</string>
     <string name="overview_move_up_desc">Mou amunt</string>
@@ -232,8 +231,8 @@
     <string name="overview_messages_count_format">Missatges · %1$d</string>
     <string name="overview_action_all_tasks">Totes les tasques</string>
     <string name="overview_clock_label">HORA</string>
-    <!-- Date line below "Home" (EEEE = weekday, MM/dd/yyyy = date:
-         pattern letters must not be translated, only order). -->
+    <!-- Datumszeile unter „Home" (EEEE = Wochentag, dd/MM/yyyy = Datum:
+         Musterbuchstaben nicht übersetzen, nur Reihenfolge anpassen). -->
     <string name="home_date_format">EEEE, dd.MM.yyyy</string>
     <string name="overview_today_hours">CLASSES D’AVUI</string>
     <string name="overview_no_school">Avui no hi ha escola ni classes.</string>
@@ -264,7 +263,7 @@
     <string name="overview_due_suffix_format"> · venç: %1$s</string>
     <string name="overview_subject_suffix_format"> · %1$s</string>
     <string name="overview_weather_high_low_format">Màx. %1$s · Mín. %2$s</string>
-    <!-- School life -->
+    <!-- Schulalltag -->
     <string name="school_title">Vida escolar</string>
     <string name="school_subtitle">Esdeveniments i canvis d’horari</string>
     <string name="school_tab_calendar_format">Calendari · %1$d</string>
@@ -281,7 +280,7 @@
     <string name="school_change_remove">CANCEL·LAT</string>
     <string name="school_change_default">MODIFICAT</string>
     <string name="school_class_format">Classe %1$s</string>
-    <!-- Timetable -->
+    <!-- Stundenplan -->
     <string name="timetable_title">Horari</string>
     <string name="timetable_day_count_format">%1$d períodes</string>
     <string name="timetable_week_count_format">%1$d períodes aquesta setmana</string>
@@ -302,7 +301,7 @@
     <string name="timetable_flag_lernzeit">Temps d’estudi</string>
     <string name="timetable_flag_lernzeit_hours">Temps d’estudi (%1$d h)</string>
     <string name="timetable_flag_event">Esdeveniment</string>
-    <!-- More -->
+    <!-- Mehr -->
     <string name="more_title">Més</string>
     <string name="more_subtitle">Més seccions</string>
     <string name="more_school_title">Esdeveniments i substitucions</string>
@@ -315,19 +314,19 @@
     <string name="more_cache_default">Elimina les dades de la memòria cau</string>
     <string name="more_logout_sub">Tanca la sessió d’aquest dispositiu</string>
     <string name="more_server_dialog_desc">Servidor per a les sol·licituds API (…/api/v1/).</string>
-    <!-- Client-side validation: the ViewModels (ui/auth/AuthViewModel,
-         ui/messages/MessagesViewModel, ui/overview/OverviewViewModel) supply
-         code + German fallback text (context-free for unit tests) plus
-         messageRes — Compose resolves via stringResource at the call sites. -->
+    <!-- Validierung (clientseitig): Die ViewModels (ui/auth/AuthViewModel,
+         ui/messages/MessagesViewModel, ui/overview/OverviewViewModel) liefern
+         Code + deutschen Fallback-Text (kontextfrei für Unit-Tests) plus
+         messageRes — Compose löst per stringResource an den Call-Sites auf. -->
     <string name="auth_error_credentials">Introdueix el nom d’usuari i la contrasenya.</string>
     <string name="twofa_error_empty">Introdueix el codi.</string>
     <string name="messages_compose_no_recipient">Tria almenys un destinatari vàlid.</string>
     <string name="messages_compose_no_body">Introdueix el text del missatge.</string>
     <string name="overview_weather_no_city">Introdueix una ciutat.</string>
-    <!-- Error fallbacks: data/ErrorMapper.messageFor supplies the German
-         fallback (backend texts take precedence, context-free for unit tests);
-         data/ErrorMapper.stringResFor maps codes onto these keys, Compose
-         resolves via localizedApiMessage (ui/timetable/DayScreen.kt). -->
+    <!-- Fehler-Fallbacks: data/ErrorMapper.messageFor liefert den deutschen
+         Fallback (Backend-Texte haben Vorrang, kontextfrei für Unit-Tests);
+         data/ErrorMapper.stringResFor mappt Codes auf diese Keys, Compose
+         löst per localizedApiMessage (ui/timetable/DayScreen.kt) auf. -->
     <string name="error_validation">Entrada no vàlida. Comprova-la i torna-ho a provar.</string>
     <string name="error_token_invalid">La sessió no és vàlida. Torna a iniciar-la.</string>
     <string name="error_token_expired">La sessió ha caducat. Torna a iniciar-la.</string>
@@ -340,7 +339,7 @@
     <string name="error_rate_limited">Hi ha hagut massa intents. Torna-ho a provar més tard.</string>
     <string name="error_config_missing">Falta la clau del servidor. Torna-ho a provar més tard.</string>
     <string name="error_upstream">No s’ha pogut iniciar la sessió. Torna-ho a provar més tard.</string>
-    <!-- Accent colors -->
+    <!-- Akzentfarben -->
     <string name="common_accent_black">Negre</string>
     <string name="common_accent_blue">Blau</string>
     <string name="common_accent_violet">Lila</string>
@@ -349,7 +348,7 @@
     <string name="common_accent_orange">Taronja</string>
     <string name="common_accent_red">Vermell</string>
     <string name="common_accent_pink">Rosa</string>
-    <!-- Plurals -->
+    <!-- Plurale -->
     <plurals name="settings_devices_count">
         <item quantity="one">%1$d dispositiu</item>
         <item quantity="other">%1$d dispositius</item>

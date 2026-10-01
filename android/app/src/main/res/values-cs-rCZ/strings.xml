@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">EduFlow</string>
-    <!-- Common (package 0, RedesignUi / CommonUi / BottomBar / errors) -->
+    <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
     <string name="common_logo_desc">Logo EduFlow</string>
     <string name="common_demo_badge">DEMO</string>
     <string name="common_profile_title">Váš profil</string>
@@ -51,10 +51,6 @@
     <!-- Onboarding -->
     <string name="onboarding_greeting">Ahoj!</string>
     <string name="onboarding_language_title">Vyberte jazyk</string>
-    <string name="onboarding_language_search">Hledat jazyk</string>
-    <string name="onboarding_language_no_results">Žádný jazyk nenalezen</string>
-    <string name="onboarding_language_system_short">SYSTÉM</string>
-    <string name="onboarding_language_system_format">Jazyk systému: %1$s</string>
     <string name="onboarding_language_sub">EduFlow mluví vaším jazykem. Výběr se provádí okamžitě.</string>
     <string name="onboarding_language_apply_restart">Použít &amp; restartovat</string>
     <string name="onboarding_language_system">Systém</string>
@@ -67,7 +63,6 @@
     <string name="onboarding_feat3_title">Časový rozvrh &amp; Počasí</string>
     <string name="onboarding_feat3_desc">Den a týden plus počasí v přehledu.</string>
     <string name="onboarding_server_sub">Zadejte místo, kde EduFlow běží jako server.</string>
-    <string name="onboarding_server_hint">Stačí IP adresa — port a cesta se doplní automaticky.</string>
     <string name="onboarding_connected">Připojeno</string>
     <string name="onboarding_unreachable">Server je nedostupný. Zkontrolujte adresu a zkuste to znovu.</string>
     <string name="onboarding_test_connected">✓ Připojeno</string>
@@ -83,7 +78,7 @@
     <string name="twofa_confirm">Potvrdit</string>
     <string name="twofa_back">Zpět k přihlášení</string>
     <string name="twofa_validity">Kód je platný 10 minut.</string>
-    <!-- Settings -->
+    <!-- Einstellungen -->
     <string name="settings_title">Nastavení</string>
     <string name="settings_subtitle">Váš účet EduFlow</string>
     <string name="settings_demo_text">Z místního demo serveru jsou načtena pouze syntetická vzorová data.</string>
@@ -100,17 +95,12 @@
     <string name="settings_theme_system">Systém</string>
     <string name="settings_theme_system_sub">Sleduje zařízení světlo/tmavý</string>
     <string name="settings_accent">Barva zvýraznění</string>
-    <string name="settings_language">Jazyk</string>
-    <string name="settings_language_system">Jazyk systému</string>
     <string name="settings_notifications">Oznámení</string>
     <string name="settings_notify_news">Nové zprávy</string>
     <string name="settings_overview_tasks">Přehled &amp; úkolů</string>
     <string name="settings_landing_label">Začít stránku po přihlášení</string>
     <string name="settings_hwfilter_label">Úkoly: výchozí filtr</string>
     <string name="settings_hwtests_label">Zahrnout testy a zkoušky</string>
-    <string name="settings_time_format_label">Formát času</string>
-    <string name="settings_time_24h">24 h</string>
-    <string name="settings_time_12h">12 h</string>
     <string name="settings_unread_placeholder">Max. nepřečtené zprávy (1–50)</string>
     <string name="settings_homework_placeholder">Max. otevřené domácí úkoly (1–50)</string>
     <string name="settings_navbar_section">Navigační panel</string>
@@ -136,7 +126,7 @@
     <string name="settings_dev_onboarding">Znovu spustit zapojení</string>
     <string name="settings_dev_onboarding_sub">Vyhlásí tě a restartuje úvod.</string>
     <string name="settings_landing_overview">Přehled</string>
-    <!-- Devices -->
+    <!-- Geräte -->
     <string name="devices_title">Zařízení</string>
     <string name="devices_subtitle">Spravovat podpisová zařízení</string>
     <string name="devices_empty">Žádné další zařízení se nepřihlásilo.</string>
@@ -146,7 +136,7 @@
     <string name="devices_expires_format">Platnost vyprší: %1$s</string>
     <string name="devices_remove">Odebrat</string>
     <string name="device_default_name">Android emulátor</string>
-    <!-- Grades -->
+    <!-- Noten -->
     <string name="grades_title">Třídy</string>
     <string name="grades_subtitle">Váš výkon podle předmětu</string>
     <string name="grades_search_placeholder">Předmět, titul nebo učitel</string>
@@ -163,11 +153,11 @@
     <string name="grades_teacher_format">Učitel: %1$s</string>
     <string name="grades_class_avg_format">Třída avg. %1$s</string>
     <string name="grades_term_all">Vše</string>
-    <!-- Semester name: %1$d = semester (1/2), %2$s/%3$s = short years (25/26);
-         pattern letters must not be translated, only words/order. -->
+    <!-- Halbjahr-Name: %1$d = Halbjahr (1/2), %2$s/%3$s = Kurzjahre (25/26);
+         Musterbuchstaben nicht übersetzen, nur Worte/Reihenfolge anpassen. -->
     <string name="grades_term_label_format">Semester %1$d %2$s/%3$s</string>
     <string name="grades_subject_other">Ostatní</string>
-    <!-- Homework -->
+    <!-- Hausaufgaben -->
     <string name="homework_title">Domácí úkol</string>
     <string name="homework_subtitle">Vaše úkoly na pohled</string>
     <string name="homework_search_placeholder">Název, předmět nebo učitel</string>
@@ -185,7 +175,7 @@
     <string name="homework_swipe_restore">Obnovit</string>
     <string name="homework_reopen_desc">Znovu otevřít</string>
     <string name="homework_title_format">Domácí úkol #%1$d</string>
-    <!-- Messages -->
+    <!-- Nachrichten -->
     <string name="messages_title">Zprávy</string>
     <string name="messages_subtitle">Zprávy z vaší školy</string>
     <string name="messages_search_placeholder">Hledat zprávy</string>
@@ -216,15 +206,7 @@
     <string name="messages_recipients_format">%1$d příjemců vybráno</string>
     <string name="messages_body_placeholder">Text zprávy</string>
     <string name="messages_compose_send">Poslat</string>
-    <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
-         label() stays the German context-free fallback for tests. -->
-    <string name="message_type_all">Vše</string>
-    <string name="message_type_sprava">Zpráva</string>
-    <string name="message_type_news">Novinky</string>
-    <string name="message_type_anketa">Anketa</string>
-    <string name="message_type_chat">Chat</string>
-    <string name="message_type_genotif">Oznámení</string>
-    <!-- Overview -->
+    <!-- Übersicht -->
     <string name="overview_customize">Přizpůsobit přehled</string>
     <string name="overview_customize_desc">Vyberte, které sekce se objeví jako první.</string>
     <string name="overview_move_up_desc">Posunout nahoru</string>
@@ -232,8 +214,8 @@
     <string name="overview_messages_count_format">Zprávy · %1$d</string>
     <string name="overview_action_all_tasks">Všechny úkoly</string>
     <string name="overview_clock_label">ČAS</string>
-    <!-- Date line below "Home" (EEEE = weekday, MM/dd/yyyy = date:
-         pattern letters must not be translated, only order). -->
+    <!-- Datumszeile unter „Home" (EEEE = Wochentag, dd/MM/yyyy = Datum:
+         Musterbuchstaben nicht übersetzen, nur Reihenfolge anpassen). -->
     <string name="home_date_format">EEEE, dd.MM.rrrr</string>
     <string name="overview_today_hours">TŘÍDY TŘÍDY</string>
     <string name="overview_no_school">Žádná škola – v současnosti žádné třídy.</string>
@@ -264,7 +246,7 @@
     <string name="overview_due_suffix_format"> · fällig: %1$s</string>
     <string name="overview_subject_suffix_format"> · %1$s</string>
     <string name="overview_weather_high_low_format">H %1$s · L %2$s</string>
-    <!-- School life -->
+    <!-- Schulalltag -->
     <string name="school_title">Život školy</string>
     <string name="school_subtitle">Události a změny plánu</string>
     <string name="school_tab_calendar_format">Kalendář · %1$d</string>
@@ -281,7 +263,7 @@
     <string name="school_change_remove">ENTFÄLLT</string>
     <string name="school_change_default">GEAYL</string>
     <string name="school_class_format">Třída %1$s</string>
-    <!-- Timetable -->
+    <!-- Stundenplan -->
     <string name="timetable_title">Rozvrh</string>
     <string name="timetable_day_count_format">%1$d období</string>
     <string name="timetable_week_count_format">%1$d období tento týden</string>
@@ -302,7 +284,7 @@
     <string name="timetable_flag_lernzeit">Doba studia</string>
     <string name="timetable_flag_lernzeit_hours">Doba studia (%1$d hodin)</string>
     <string name="timetable_flag_event">Událost</string>
-    <!-- More -->
+    <!-- Mehr -->
     <string name="more_title">Více</string>
     <string name="more_subtitle">Více sekcí</string>
     <string name="more_school_title">Události &amp; náhrady</string>
@@ -315,19 +297,19 @@
     <string name="more_cache_default">Odstranit data uložená v mezipaměti</string>
     <string name="more_logout_sub">Odhlásit se z tohoto zařízení</string>
     <string name="more_server_dialog_desc">Server pro žádosti o API (…/api/v1/).</string>
-    <!-- Client-side validation: the ViewModels (ui/auth/AuthViewModel,
-         ui/messages/MessagesViewModel, ui/overview/OverviewViewModel) supply
-         code + German fallback text (context-free for unit tests) plus
-         messageRes — Compose resolves via stringResource at the call sites. -->
+    <!-- Validierung (clientseitig): Die ViewModels (ui/auth/AuthViewModel,
+         ui/messages/MessagesViewModel, ui/overview/OverviewViewModel) liefern
+         Code + deutschen Fallback-Text (kontextfrei für Unit-Tests) plus
+         messageRes — Compose löst per stringResource an den Call-Sites auf. -->
     <string name="auth_error_credentials">Zadejte prosím uživatelské jméno a heslo.</string>
     <string name="twofa_error_empty">Zadejte prosím kód.</string>
     <string name="messages_compose_no_recipient">Vyberte alespoň jednoho platného příjemce.</string>
     <string name="messages_compose_no_body">Zadejte prosím text zprávy.</string>
     <string name="overview_weather_no_city">Zadejte prosím město.</string>
-    <!-- Error fallbacks: data/ErrorMapper.messageFor supplies the German
-         fallback (backend texts take precedence, context-free for unit tests);
-         data/ErrorMapper.stringResFor maps codes onto these keys, Compose
-         resolves via localizedApiMessage (ui/timetable/DayScreen.kt). -->
+    <!-- Fehler-Fallbacks: data/ErrorMapper.messageFor liefert den deutschen
+         Fallback (Backend-Texte haben Vorrang, kontextfrei für Unit-Tests);
+         data/ErrorMapper.stringResFor mappt Codes auf diese Keys, Compose
+         löst per localizedApiMessage (ui/timetable/DayScreen.kt) auf. -->
     <string name="error_validation">Neplatný vstup. Zkontrolujte a zkuste to znovu.</string>
     <string name="error_token_invalid">Neplatná relace. Přihlaste se prosím znovu.</string>
     <string name="error_token_expired">Relace vypršela. Přihlaste se znovu.</string>
@@ -340,7 +322,7 @@
     <string name="error_rate_limited">Příliš mnoho pokusů. Opakujte akci později.</string>
     <string name="error_config_missing">Chybí klíč serveru. Opakujte akci později.</string>
     <string name="error_upstream">Přihlášení se nezdařilo. Opakujte akci později.</string>
-    <!-- Accent colors -->
+    <!-- Akzentfarben -->
     <string name="common_accent_black">Černý</string>
     <string name="common_accent_blue">Modrá</string>
     <string name="common_accent_violet">Lilák</string>
@@ -349,7 +331,7 @@
     <string name="common_accent_orange">Oranžová</string>
     <string name="common_accent_red">Červená</string>
     <string name="common_accent_pink">Růžová</string>
-    <!-- Plurals -->
+    <!-- Plurale -->
     <plurals name="settings_devices_count">
         <item quantity="one">%1$d Gera&lt;unk&gt; t</item>
         <item quantity="few">%1$d Gera&lt;unk&gt;</item>
@@ -368,4 +350,20 @@
         <item quantity="many">&lt;unk&gt; %1$s · %2$d Poznámka</item>
         <item quantity="other">&lt;unk&gt; %1$s · %2$d Poznámka</item>
     </plurals>
+    <string name="onboarding_language_search">Hledat jazyk</string>
+    <string name="onboarding_language_no_results">Žádný jazyk nenalezen</string>
+    <string name="onboarding_language_system_short">SYSTÉM</string>
+    <string name="onboarding_language_system_format">Jazyk systému: %1$s</string>
+    <string name="onboarding_server_hint">Stačí IP adresa — port a cesta se doplní automaticky.</string>
+    <string name="settings_language">Jazyk</string>
+    <string name="settings_language_system">Jazyk systému</string>
+    <string name="settings_time_format_label">Formát času</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
+    <string name="message_type_all">Vše</string>
+    <string name="message_type_sprava">Zpráva</string>
+    <string name="message_type_news">Novinky</string>
+    <string name="message_type_anketa">Anketa</string>
+    <string name="message_type_chat">Chat</string>
+    <string name="message_type_genotif">Oznámení</string>
 </resources>

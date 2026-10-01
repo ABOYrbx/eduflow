@@ -24,7 +24,9 @@
     "tokenNotFound": "Token não encontrado.",
     "tokenRejected": "Token inválido.",
     "twoFactorDemo": "Digite o código de demonstração 123456.",
-    "twoFactorMessage": "Digite o código de duas etapas do e-mail ou aplicativo e envie-o para /auth/2fa."
+    "twoFactorMessage": "Digite o código de duas etapas do e-mail ou aplicativo e envie-o para /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Solicitação inválida.",
@@ -64,7 +66,8 @@
     "trashHomework": "Mover tarefa de casa para lixeira ou restauração",
     "validationDescription": "Erro de validação",
     "weather": "Tempo",
-    "weatherSearch": "Clima de pesquisa de localização"
+    "weatherSearch": "Clima de pesquisa de localização",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Coordenadas inválidas",
@@ -103,6 +106,8 @@
     "hwStatusLabel": "Homework: Filtro Padrão",
     "hwTestsLabel": "Homework: Incluir testes e exames por padrão",
     "landingLabel": "Página inicial após o login",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "TODOS",
     "optDashboard": "mensagens",
     "optDone": "Só feito",
@@ -118,7 +123,12 @@
     "ovWetterHint": "Aplica-se à interface web e ao aplicativo Android.",
     "ovWetterLabel": "Mostrar mapa meteorológico na visão geral",
     "sectionUebersicht": "Geral",
-    "sectionWetter": "Tempo"
+    "sectionWetter": "Tempo",
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor.",
+    "ovSpanLabel": "Section widths",
+    "ovSpanHint": "Sections you set to half width sit next to each other."
   },
   "upstream": {
     "agendaFailed": "Os eventos da escola não puderam ser carregados: {detail}",

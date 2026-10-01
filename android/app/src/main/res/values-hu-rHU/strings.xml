@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">EduFlow</string>
-    <!-- Common (package 0, RedesignUi / CommonUi / BottomBar / errors) -->
-    <string name="common_logo_desc">EduFlow-Logo</string>
+    <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
+    <string name="common_logo_desc">EduFlow logo</string>
     <string name="common_demo_badge">DEMO</string>
     <string name="common_profile_title">Profilod</string>
     <string name="common_profile_default_account">Fiók</string>
@@ -50,6 +50,7 @@
     <string name="auth_login">Bejelentkezés</string>
     <!-- Onboarding -->
     <string name="onboarding_greeting">Szia!</string>
+    <string name="onboarding_server_hint">Csak az IP-címre van szükség — a port és az útvonal automatikusan hozzáadódik.</string>
     <string name="onboarding_language_title">Nyelv kiválasztása</string>
     <string name="onboarding_language_search">Nyelv keresése</string>
     <string name="onboarding_language_no_results">Nem található nyelv</string>
@@ -67,7 +68,6 @@
     <string name="onboarding_feat3_title">Órarend és időjárás</string>
     <string name="onboarding_feat3_desc">Napi és heti órarend, valamint időjárás az áttekintőben.</string>
     <string name="onboarding_server_sub">Add meg, hol fut az EduFlow szerverként.</string>
-    <string name="onboarding_server_hint">Csak az IP-címre van szükség — a port és az útvonal automatikusan hozzáadódik.</string>
     <string name="onboarding_connected">Csatlakoztatva</string>
     <string name="onboarding_unreachable">A szerver nem érhető el. Ellenőrizd a címet, majd próbáld újra.</string>
     <string name="onboarding_test_connected">✓  Csatlakoztatva</string>
@@ -83,7 +83,7 @@
     <string name="twofa_confirm">Megerősítés</string>
     <string name="twofa_back">Vissza a bejelentkezéshez</string>
     <string name="twofa_validity">A kód 10 percig érvényes.</string>
-    <!-- Settings -->
+    <!-- Einstellungen -->
     <string name="settings_title">Beállítások</string>
     <string name="settings_subtitle">EduFlow-fiókod</string>
     <string name="settings_demo_text">A helyi bemutatószerverről csak mesterséges mintaadatok töltődnek be.</string>
@@ -136,7 +136,7 @@
     <string name="settings_dev_onboarding">Bevezetés újraindítása</string>
     <string name="settings_dev_onboarding_sub">Kijelentkeztet, majd újraindítja a bevezetést.</string>
     <string name="settings_landing_overview">Áttekintő</string>
-    <!-- Devices -->
+    <!-- Geräte -->
     <string name="devices_title">Eszközök</string>
     <string name="devices_subtitle">Bejelentkezett eszközök kezelése</string>
     <string name="devices_empty">Nincs más bejelentkezett eszköz.</string>
@@ -146,7 +146,7 @@
     <string name="devices_expires_format">Lejár: %1$s</string>
     <string name="devices_remove">Eltávolítás</string>
     <string name="device_default_name">Android-emulátor</string>
-    <!-- Grades -->
+    <!-- Noten -->
     <string name="grades_title">Jegyek</string>
     <string name="grades_subtitle">Teljesítmény tantárgyanként</string>
     <string name="grades_search_placeholder">Tantárgy, cím vagy tanár</string>
@@ -163,11 +163,11 @@
     <string name="grades_teacher_format">Tanár: %1$s</string>
     <string name="grades_class_avg_format">Osztályátlag: %1$s</string>
     <string name="grades_term_all">Összes</string>
-    <!-- Semester name: %1$d = semester (1/2), %2$s/%3$s = short years (25/26);
-         pattern letters must not be translated, only words/order. -->
+    <!-- Halbjahr-Name: %1$d = Halbjahr (1/2), %2$s/%3$s = Kurzjahre (25/26);
+         Musterbuchstaben nicht übersetzen, nur Worte/Reihenfolge anpassen. -->
     <string name="grades_term_label_format">%1$d. félév %2$s/%3$s</string>
     <string name="grades_subject_other">Egyéb</string>
-    <!-- Homework -->
+    <!-- Hausaufgaben -->
     <string name="homework_title">Házi feladatok</string>
     <string name="homework_subtitle">Feladataid egy helyen</string>
     <string name="homework_search_placeholder">Cím, tantárgy vagy tanár</string>
@@ -185,7 +185,7 @@
     <string name="homework_swipe_restore">Visszaállítás</string>
     <string name="homework_reopen_desc">Újranyitás</string>
     <string name="homework_title_format">Házi feladat #%1$d</string>
-    <!-- Messages -->
+    <!-- Nachrichten -->
     <string name="messages_title">Üzenetek</string>
     <string name="messages_subtitle">Iskolai üzenetek</string>
     <string name="messages_search_placeholder">Üzenetek keresése</string>
@@ -216,15 +216,14 @@
     <string name="messages_recipients_format">%1$d címzett kiválasztva</string>
     <string name="messages_body_placeholder">Üzenet szövege</string>
     <string name="messages_compose_send">Küldés</string>
-    <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
-         label() stays the German context-free fallback for tests. -->
+
     <string name="message_type_all">Összes</string>
     <string name="message_type_sprava">Üzenet</string>
     <string name="message_type_news">Hírek</string>
     <string name="message_type_anketa">Szavazás</string>
     <string name="message_type_chat">Csevegés</string>
     <string name="message_type_genotif">Értesítés</string>
-    <!-- Overview -->
+    <!-- Übersicht -->
     <string name="overview_customize">Áttekintő testreszabása</string>
     <string name="overview_customize_desc">Válaszd ki, mely szakaszok jelenjenek meg először.</string>
     <string name="overview_move_up_desc">Mozgatás fel</string>
@@ -232,8 +231,8 @@
     <string name="overview_messages_count_format">Üzenetek · %1$d</string>
     <string name="overview_action_all_tasks">Összes feladat</string>
     <string name="overview_clock_label">IDŐ</string>
-    <!-- Date line below "Home" (EEEE = weekday, MM/dd/yyyy = date:
-         pattern letters must not be translated, only order). -->
+    <!-- Datumszeile unter „Home" (EEEE = Wochentag, dd/MM/yyyy = Datum:
+         Musterbuchstaben nicht übersetzen, nur Reihenfolge anpassen). -->
     <string name="home_date_format">EEEE, dd.MM.yyyy</string>
     <string name="overview_today_hours">MAI ÓRÁK</string>
     <string name="overview_no_school">Nincs tanítás — ma nincsenek órák.</string>
@@ -264,7 +263,7 @@
     <string name="overview_due_suffix_format"> · határidő: %1$s</string>
     <string name="overview_subject_suffix_format"> · %1$s</string>
     <string name="overview_weather_high_low_format">Max. %1$s · Min. %2$s</string>
-    <!-- School life -->
+    <!-- Schulalltag -->
     <string name="school_title">Iskolai élet</string>
     <string name="school_subtitle">Események és órarend-változások</string>
     <string name="school_tab_calendar_format">Naptár · %1$d</string>
@@ -281,7 +280,7 @@
     <string name="school_change_remove">ELMARAD</string>
     <string name="school_change_default">MÓDOSULT</string>
     <string name="school_class_format">%1$s osztály</string>
-    <!-- Timetable -->
+    <!-- Stundenplan -->
     <string name="timetable_title">Órarend</string>
     <string name="timetable_day_count_format">%1$d tanóra</string>
     <string name="timetable_week_count_format">%1$d tanóra ezen a héten</string>
@@ -302,7 +301,7 @@
     <string name="timetable_flag_lernzeit">Tanulási idő</string>
     <string name="timetable_flag_lernzeit_hours">Tanulási idő (%1$d óra)</string>
     <string name="timetable_flag_event">Esemény</string>
-    <!-- More -->
+    <!-- Mehr -->
     <string name="more_title">Továbbiak</string>
     <string name="more_subtitle">További szakaszok</string>
     <string name="more_school_title">Események és helyettesítések</string>
@@ -315,19 +314,19 @@
     <string name="more_cache_default">Gyorsítótárazott adatok törlése</string>
     <string name="more_logout_sub">Kijelentkezés erről az eszközről</string>
     <string name="more_server_dialog_desc">API-kérések szervere (…/api/v1/).</string>
-    <!-- Client-side validation: the ViewModels (ui/auth/AuthViewModel,
-         ui/messages/MessagesViewModel, ui/overview/OverviewViewModel) supply
-         code + German fallback text (context-free for unit tests) plus
-         messageRes — Compose resolves via stringResource at the call sites. -->
+    <!-- Validierung (clientseitig): Die ViewModels (ui/auth/AuthViewModel,
+         ui/messages/MessagesViewModel, ui/overview/OverviewViewModel) liefern
+         Code + deutschen Fallback-Text (kontextfrei für Unit-Tests) plus
+         messageRes — Compose löst per stringResource an den Call-Sites auf. -->
     <string name="auth_error_credentials">Add meg a felhasználónevet és a jelszót.</string>
     <string name="twofa_error_empty">Add meg a kódot.</string>
     <string name="messages_compose_no_recipient">Válassz legalább egy érvényes címzettet.</string>
     <string name="messages_compose_no_body">Add meg az üzenet szövegét.</string>
     <string name="overview_weather_no_city">Add meg a várost.</string>
-    <!-- Error fallbacks: data/ErrorMapper.messageFor supplies the German
-         fallback (backend texts take precedence, context-free for unit tests);
-         data/ErrorMapper.stringResFor maps codes onto these keys, Compose
-         resolves via localizedApiMessage (ui/timetable/DayScreen.kt). -->
+    <!-- Fehler-Fallbacks: data/ErrorMapper.messageFor liefert den deutschen
+         Fallback (Backend-Texte haben Vorrang, kontextfrei für Unit-Tests);
+         data/ErrorMapper.stringResFor mappt Codes auf diese Keys, Compose
+         löst per localizedApiMessage (ui/timetable/DayScreen.kt) auf. -->
     <string name="error_validation">Érvénytelen adat. Ellenőrizd, majd próbáld újra.</string>
     <string name="error_token_invalid">Érvénytelen munkamenet. Jelentkezz be újra.</string>
     <string name="error_token_expired">Lejárt munkamenet. Jelentkezz be újra.</string>
@@ -340,7 +339,7 @@
     <string name="error_rate_limited">Túl sok próbálkozás. Próbáld újra később.</string>
     <string name="error_config_missing">Hiányzik a szerverkulcs. Próbáld újra később.</string>
     <string name="error_upstream">A bejelentkezés nem sikerült. Próbáld újra később.</string>
-    <!-- Accent colors -->
+    <!-- Akzentfarben -->
     <string name="common_accent_black">Fekete</string>
     <string name="common_accent_blue">Kék</string>
     <string name="common_accent_violet">Lila</string>
@@ -349,7 +348,7 @@
     <string name="common_accent_orange">Narancssárga</string>
     <string name="common_accent_red">Piros</string>
     <string name="common_accent_pink">Rózsaszín</string>
-    <!-- Plurals -->
+    <!-- Plurale -->
     <plurals name="settings_devices_count">
         <item quantity="one">%1$d eszköz</item>
         <item quantity="other">%1$d eszköz</item>

@@ -24,7 +24,9 @@
     "tokenNotFound": "Token-ul nu a fost găsit.",
     "tokenRejected": "Token invalid.",
     "twoFactorDemo": "Introduceți codul demo 123456.",
-    "twoFactorMessage": "Introduceți codul cu doi factori din e-mail sau aplicație și trimiteți-l la /auth/2fa."
+    "twoFactorMessage": "Introduceți codul cu doi factori din e-mail sau aplicație și trimiteți-l la /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Cerere invalidă.",
@@ -64,7 +66,8 @@
     "trashHomework": "Mută temele la gunoi sau restaurare",
     "validationDescription": "Eroare de validare",
     "weather": "Vreme",
-    "weatherSearch": "Căutare locație meteo"
+    "weatherSearch": "Căutare locație meteo",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Coordonate greșite",
@@ -103,6 +106,8 @@
     "hwStatusLabel": "Acasă: Filtru standard",
     "hwTestsLabel": "Acasă: Include teste și examene în mod implicit",
     "landingLabel": "Pagina de start după autentificare",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "Toate",
     "optDashboard": "Mesaje",
     "optDone": "Doar terminată",
@@ -118,7 +123,12 @@
     "ovWetterHint": "Se aplică interfeței web și aplicației Android.",
     "ovWetterLabel": "Arată harta meteo în prezentarea generală",
     "sectionUebersicht": "Prezentare generală",
-    "sectionWetter": "Vreme"
+    "sectionWetter": "Vreme",
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor.",
+    "ovSpanLabel": "Section widths",
+    "ovSpanHint": "Sections you set to half width sit next to each other."
   },
   "upstream": {
     "agendaFailed": "Evenimentele școlare nu au putut fi încărcate: {detail}",

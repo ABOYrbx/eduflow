@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">EduFlow</string>
-    <!-- Common (package 0, RedesignUi / CommonUi / BottomBar / errors) -->
+    <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
     <string name="common_logo_desc">EduFlow logo</string>
     <string name="common_demo_badge">DEMO</string>
     <string name="common_profile_title">Uw profiel</string>
@@ -51,10 +51,6 @@
     <!-- Onboarding -->
     <string name="onboarding_greeting">Hallo!</string>
     <string name="onboarding_language_title">Taal kiezen</string>
-    <string name="onboarding_language_search">Taal zoeken</string>
-    <string name="onboarding_language_no_results">Geen taal gevonden</string>
-    <string name="onboarding_language_system_short">SYSTEEM</string>
-    <string name="onboarding_language_system_format">Systeemtaal: %1$s</string>
     <string name="onboarding_language_sub">EduFlow spreekt uw taal. De selectie is direct van toepassing.</string>
     <string name="onboarding_language_apply_restart">&amp; herstarten toepassen</string>
     <string name="onboarding_language_system">Systeem</string>
@@ -67,7 +63,6 @@
     <string name="onboarding_feat3_title">Tijdstip &amp; Weer</string>
     <string name="onboarding_feat3_desc">Dag en week plus weer op het overzicht.</string>
     <string name="onboarding_server_sub">Voer in waar EduFlow draait als server.</string>
-    <string name="onboarding_server_hint">IP alone uses port %1$d. Add :port for another one — the demo server is %2$d.</string>
     <string name="onboarding_connected">Verbonden</string>
     <string name="onboarding_unreachable">Server onbereikbaar. Controleer het adres en probeer het opnieuw.</string>
     <string name="onboarding_test_connected">✓ Verbonden</string>
@@ -83,7 +78,7 @@
     <string name="twofa_confirm">Bevestigen</string>
     <string name="twofa_back">Terug naar aanmelden</string>
     <string name="twofa_validity">De code is 10 minuten geldig.</string>
-    <!-- Settings -->
+    <!-- Einstellungen -->
     <string name="settings_title">Instellingen</string>
     <string name="settings_subtitle">Uw EduFlow account</string>
     <string name="settings_demo_text">Alleen synthetische voorbeeldgegevens worden geladen van de lokale demo server.</string>
@@ -100,17 +95,12 @@
     <string name="settings_theme_system">Systeem</string>
     <string name="settings_theme_system_sub">Volgt licht/donker apparaat</string>
     <string name="settings_accent">Accent kleur</string>
-    <string name="settings_language">Taal</string>
-    <string name="settings_language_system">Systeemtaal</string>
     <string name="settings_notifications">Notificaties</string>
     <string name="settings_notify_news">Nieuwe berichten</string>
     <string name="settings_overview_tasks">Overzicht &amp; taken</string>
     <string name="settings_landing_label">Pagina starten na het aanmelden</string>
     <string name="settings_hwfilter_label">Taken: standaard filter</string>
     <string name="settings_hwtests_label">Inclusief testen en examens</string>
-    <string name="settings_time_format_label">Tijdnotatie</string>
-    <string name="settings_time_24h">24 h</string>
-    <string name="settings_time_12h">12 h</string>
     <string name="settings_unread_placeholder">Max. ongelezen berichten (1-50)</string>
     <string name="settings_homework_placeholder">Max. huiswerk openen (1-50)</string>
     <string name="settings_navbar_section">Navigatie balk</string>
@@ -136,7 +126,7 @@
     <string name="settings_dev_onboarding">Onboarding opnieuw uitvoeren</string>
     <string name="settings_dev_onboarding_sub">Tekent een signaal uit en start de introductie opnieuw.</string>
     <string name="settings_landing_overview">Overzicht.</string>
-    <!-- Devices -->
+    <!-- Geräte -->
     <string name="devices_title">Apparaten</string>
     <string name="devices_subtitle">Ingelogde apparaten beheren</string>
     <string name="devices_empty">Geen andere apparaten aangemeld.</string>
@@ -146,7 +136,7 @@
     <string name="devices_expires_format">Verloopt: %1$s</string>
     <string name="devices_remove">Verwijderen</string>
     <string name="device_default_name">Android emulator</string>
-    <!-- Grades -->
+    <!-- Noten -->
     <string name="grades_title">Beoordelingen</string>
     <string name="grades_subtitle">Uw prestaties per onderwerp</string>
     <string name="grades_search_placeholder">Onderwerp, titel of leraar</string>
@@ -163,11 +153,11 @@
     <string name="grades_teacher_format">Leraar: %1$s</string>
     <string name="grades_class_avg_format">Gem. klasse. %1$s</string>
     <string name="grades_term_all">Allemaal</string>
-    <!-- Semester name: %1$d = semester (1/2), %2$s/%3$s = short years (25/26);
-         pattern letters must not be translated, only words/order. -->
+    <!-- Halbjahr-Name: %1$d = Halbjahr (1/2), %2$s/%3$s = Kurzjahre (25/26);
+         Musterbuchstaben nicht übersetzen, nur Worte/Reihenfolge anpassen. -->
     <string name="grades_term_label_format">Semester %1$d %2$s/%3$s</string>
     <string name="grades_subject_other">anders</string>
-    <!-- Homework -->
+    <!-- Hausaufgaben -->
     <string name="homework_title">Huiswerk</string>
     <string name="homework_subtitle">Je taken in een oogopslag</string>
     <string name="homework_search_placeholder">Titel, onderwerp of leraar</string>
@@ -185,7 +175,7 @@
     <string name="homework_swipe_restore">Herstellen</string>
     <string name="homework_reopen_desc">Heropenen</string>
     <string name="homework_title_format">Huiswerk #%1$d</string>
-    <!-- Messages -->
+    <!-- Nachrichten -->
     <string name="messages_title">berichten</string>
     <string name="messages_subtitle">Berichten van je workspace</string>
     <string name="messages_search_placeholder">Zoek berichten</string>
@@ -216,15 +206,7 @@
     <string name="messages_recipients_format">%1$d ontvangers geselecteerd</string>
     <string name="messages_body_placeholder">Bericht tekst</string>
     <string name="messages_compose_send">Verzenden</string>
-    <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
-         label() stays the German context-free fallback for tests. -->
-    <string name="message_type_all">Alles</string>
-    <string name="message_type_sprava">Bericht</string>
-    <string name="message_type_news">Nieuws</string>
-    <string name="message_type_anketa">Enquête</string>
-    <string name="message_type_chat">Chat</string>
-    <string name="message_type_genotif">Melding</string>
-    <!-- Overview -->
+    <!-- Übersicht -->
     <string name="overview_customize">Pas overzicht aan</string>
     <string name="overview_customize_desc">Kies welke secties als eerste worden weergegeven.</string>
     <string name="overview_move_up_desc">Verplaats omhoog</string>
@@ -232,8 +214,8 @@
     <string name="overview_messages_count_format">Berichten · %1$d</string>
     <string name="overview_action_all_tasks">Alle taken</string>
     <string name="overview_clock_label">TIJD</string>
-    <!-- Date line below "Home" (EEEE = weekday, MM/dd/yyyy = date:
-         pattern letters must not be translated, only order). -->
+    <!-- Datumszeile unter „Home" (EEEE = Wochentag, dd/MM/yyyy = Datum:
+         Musterbuchstaben nicht übersetzen, nur Reihenfolge anpassen). -->
     <string name="home_date_format">EEEE, dd.mm.jjjj</string>
     <string name="overview_today_hours">VANDAAG KLASSEN</string>
     <string name="overview_no_school">Geen school - geen lessen vandaag.</string>
@@ -264,7 +246,7 @@
     <string name="overview_due_suffix_format"> · fällig: %1$s</string>
     <string name="overview_subject_suffix_format"> · %1$s</string>
     <string name="overview_weather_high_low_format">H %1$s · L %2$s</string>
-    <!-- School life -->
+    <!-- Schulalltag -->
     <string name="school_title">School leven</string>
     <string name="school_subtitle">Gebeurtenissen en schema wijzigingen</string>
     <string name="school_tab_calendar_format">Kalender · %1$d</string>
@@ -281,7 +263,7 @@
     <string name="school_change_remove">ENTFÄLLT</string>
     <string name="school_change_default">GEAEZE</string>
     <string name="school_class_format">Klasse %1$s</string>
-    <!-- Timetable -->
+    <!-- Stundenplan -->
     <string name="timetable_title">Tijdstip</string>
     <string name="timetable_day_count_format">%1$d periodes</string>
     <string name="timetable_week_count_format">%1$d periodes deze week</string>
@@ -302,7 +284,7 @@
     <string name="timetable_flag_lernzeit">Studie tijd</string>
     <string name="timetable_flag_lernzeit_hours">Studie tijd (%1$d uur)</string>
     <string name="timetable_flag_event">Gebeurtenis</string>
-    <!-- More -->
+    <!-- Mehr -->
     <string name="more_title">Meer</string>
     <string name="more_subtitle">Meer secties</string>
     <string name="more_school_title">Gebeurtenissen &amp; vervangingen</string>
@@ -315,19 +297,19 @@
     <string name="more_cache_default">Gecachete gegevens verwijderen</string>
     <string name="more_logout_sub">Log uit op dit apparaat</string>
     <string name="more_server_dialog_desc">Server voor API-verzoeken (…/api/v1/).</string>
-    <!-- Client-side validation: the ViewModels (ui/auth/AuthViewModel,
-         ui/messages/MessagesViewModel, ui/overview/OverviewViewModel) supply
-         code + German fallback text (context-free for unit tests) plus
-         messageRes — Compose resolves via stringResource at the call sites. -->
+    <!-- Validierung (clientseitig): Die ViewModels (ui/auth/AuthViewModel,
+         ui/messages/MessagesViewModel, ui/overview/OverviewViewModel) liefern
+         Code + deutschen Fallback-Text (kontextfrei für Unit-Tests) plus
+         messageRes — Compose löst per stringResource an den Call-Sites auf. -->
     <string name="auth_error_credentials">Voer gebruikersnaam en wachtwoord in.</string>
     <string name="twofa_error_empty">Voer de code in.</string>
     <string name="messages_compose_no_recipient">Kies ten minste één geldige ontvanger.</string>
     <string name="messages_compose_no_body">Voer een berichttekst in.</string>
     <string name="overview_weather_no_city">Vul een plaats in.</string>
-    <!-- Error fallbacks: data/ErrorMapper.messageFor supplies the German
-         fallback (backend texts take precedence, context-free for unit tests);
-         data/ErrorMapper.stringResFor maps codes onto these keys, Compose
-         resolves via localizedApiMessage (ui/timetable/DayScreen.kt). -->
+    <!-- Fehler-Fallbacks: data/ErrorMapper.messageFor liefert den deutschen
+         Fallback (Backend-Texte haben Vorrang, kontextfrei für Unit-Tests);
+         data/ErrorMapper.stringResFor mappt Codes auf diese Keys, Compose
+         löst per localizedApiMessage (ui/timetable/DayScreen.kt) auf. -->
     <string name="error_validation">Ongeldige invoer. Controleer en probeer het opnieuw.</string>
     <string name="error_token_invalid">Sessie ongeldig. Log opnieuw in.</string>
     <string name="error_token_expired">Sessie verlopen. Log opnieuw in.</string>
@@ -340,7 +322,7 @@
     <string name="error_rate_limited">Te veel pogingen. Probeer het later opnieuw.</string>
     <string name="error_config_missing">Server key ontbreekt. Probeer het later opnieuw.</string>
     <string name="error_upstream">Inloggen mislukt. Probeer het later opnieuw.</string>
-    <!-- Accent colors -->
+    <!-- Akzentfarben -->
     <string name="common_accent_black">Zwart</string>
     <string name="common_accent_blue">Blauw</string>
     <string name="common_accent_violet">Lila</string>
@@ -349,7 +331,7 @@
     <string name="common_accent_orange">Oranje</string>
     <string name="common_accent_red">Rood</string>
     <string name="common_accent_pink">Roze</string>
-    <!-- Plurals -->
+    <!-- Plurale -->
     <plurals name="settings_devices_count">
         <item quantity="one">%1$d Gerazeil</item>
         <item quantity="other">%1$d Geraupgrae</item>
@@ -362,4 +344,19 @@
         <item quantity="one">Ø %1$s · %2$d Notitie</item>
         <item quantity="other">Ø %1$s · %2$d Noten</item>
     </plurals>
+    <string name="onboarding_language_search">Taal zoeken</string>
+    <string name="onboarding_language_no_results">Geen taal gevonden</string>
+    <string name="onboarding_language_system_short">SYSTEEM</string>
+    <string name="onboarding_language_system_format">Systeemtaal: %1$s</string>
+    <string name="settings_language">Taal</string>
+    <string name="settings_language_system">Systeemtaal</string>
+    <string name="settings_time_format_label">Tijdnotatie</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
+    <string name="message_type_all">Alles</string>
+    <string name="message_type_sprava">Bericht</string>
+    <string name="message_type_news">Nieuws</string>
+    <string name="message_type_anketa">Enquête</string>
+    <string name="message_type_chat">Chat</string>
+    <string name="message_type_genotif">Melding</string>
 </resources>

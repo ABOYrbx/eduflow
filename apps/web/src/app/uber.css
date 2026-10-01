@@ -26,15 +26,40 @@ button{font-family:inherit;cursor:pointer}
 .container{max-width:1000px;margin:0 auto;padding:0 24px}
 
 /* ---------- Nav: kleine zentrierte Pille (nur so breit wie der Inhalt) ---------- */
-.nav-wrap{position:sticky;top:12px;z-index:50;width:fit-content;max-width:calc(100vw - 24px);margin:12px auto 0;border:1px solid rgba(255,255,255,.65);border-radius:var(--r-full);background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.45));backdrop-filter:blur(24px) saturate(1.8);-webkit-backdrop-filter:blur(24px) saturate(1.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255,.15),0 12px 40px rgba(0,0,0,.14);transition:box-shadow .2s ease,background .2s ease,border-color .2s ease}
+.nav-wrap{overflow:clip;position:sticky;top:12px;z-index:50;width:fit-content;max-width:calc(100vw - 24px);margin:12px auto 0;border:1px solid rgba(255,255,255,.65);border-radius:var(--r-full);background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,.45));backdrop-filter:blur(24px) saturate(1.8);-webkit-backdrop-filter:blur(24px) saturate(1.8);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255,.15),0 12px 40px rgba(0,0,0,.14);transition:box-shadow .2s ease,background .2s ease,border-color .2s ease}
 .nav-wrap .nav{max-width:none;width:auto;margin:0;padding:5px 8px;justify-content:space-between}
-.nav{display:flex;align-items:center;justify-content:center;gap:6px;padding:14px 0;flex-wrap:nowrap;transition:padding .22s ease}
+.nav{display:flex;align-items:center;justify-content:center;gap:6px;padding:14px 0;flex-wrap:nowrap;min-width:0;transition:padding .22s ease}
 .nav-logo{width:32px;height:32px;flex:0 0 32px;border-radius:50%;overflow:hidden;display:block;transition:transform .12s ease}
 .nav-logo:hover{transform:translateY(-1px)}
 .nav-logo img{display:block;width:100%;height:100%;object-fit:cover}
+/* Das Logo ist ein blaues '#1163F9' auf Durchsicht. Auf der schwarzen
+   Leiste ist dieses Blau zu dunkel und geht unter - im hellen Modus
+   dagegen ist es klar erkennbar, deshalb nur fuer dark.
+   (filter:invert() faellt aus: der CSS-Prozessor normalisiert invert(1) zu
+   invert(), und das ist zur Rechenzeit ungueltig - die Deklaration
+   verschwindet dann. Ueber eine Variable kommt die 1 zwar an, der Browser
+   wertet invert(var(...)) aber trotzdem nicht aus.) */
+[data-theme="dark"] .nav-logo img{filter:brightness(1.7) saturate(1.05)}
 .brand{display:flex;align-items:center;gap:0;font-weight:800;font-size:0;letter-spacing:-.8px;transition:font-size .22s ease}
 .brand-mark{width:26px;height:26px;border-radius:8px;background:var(--accent);display:grid;place-items:center;color:var(--accent-ink);font-weight:900;font-size:15px;transition:width .22s ease,height .22s ease,font-size .22s ease,background .15s;flex-shrink:0}
-.nav-mid{display:flex;gap:2px;background:rgba(255,255,255,.35);border-radius:var(--r-full);padding:3px;box-shadow:inset 0 1px 2px rgba(0,0,0,.05);flex:1;justify-content:center;margin:0 8px;flex-wrap:nowrap;max-width:100%;overflow-x:auto;scrollbar-width:none}
+.nav-mid{display:flex;gap:2px;background:rgba(255,255,255,.35);border-radius:var(--r-full);padding:3px;box-shadow:inset 0 1px 2px rgba(0,0,0,.05);flex:1 1 auto;min-width:0;justify-content:flex-start;margin:0 8px;flex-wrap:nowrap;max-width:100%;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scroll-behavior:smooth}
+.nav-mid::-webkit-scrollbar{display:none}
+.nav-scroll{flex:0 0 auto;width:26px;height:26px;display:grid;place-items:center;border:0;border-radius:50%;background:rgba(255,255,255,.7);color:var(--ink);cursor:pointer;opacity:.8;transition:opacity .15s,transform .15s}
+.nav-scroll:hover{opacity:1;transform:scale(1.08)}
+/* Am Anfang bzw. Ende verschwindet der Knopf und gibt seinen Platz an die
+   Bar zurueck, statt als Luecke stehen zu bleiben. width:0 statt
+   visibility:hidden allein - nur so waechst .nav-mid bis an die Seite. */
+.nav-scroll.is-idle{width:0;margin:0;overflow:hidden;visibility:hidden}
+.nav-scroll:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+/* Gleicher Abstand auf beiden Seiten: .nav-mid hat 8px Rand, der auch zwischen
+   der Leiste und dem Chevron liegt. Rechts fehlte dieser Abstand, dadurch
+   klebte der Knopf am Profilbild (4px statt 12px). */
+.nav-scroll-end{margin-right:8px}
+[data-theme="dark"] .nav-scroll{background:rgba(255,255,255,.14);color:#fff}
+/* Weiche Kante zeigt an, dass links oder rechts noch etwas liegt. */
+.nav-wrap.has-start .nav-mid{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 30px);mask-image:linear-gradient(90deg,transparent 0,#000 30px)}
+.nav-wrap.has-end .nav-mid{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 30px),transparent 100%);mask-image:linear-gradient(90deg,#000 calc(100% - 30px),transparent 100%)}
+.nav-wrap.has-start.has-end .nav-mid{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 30px,#000 calc(100% - 30px),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 30px,#000 calc(100% - 30px),transparent 100%)}
 .nav-mid::-webkit-scrollbar{display:none}
 .nav-pill{padding:7px 12px;border-radius:var(--r-full);font-size:13px;font-weight:600;color:var(--ink-muted);transition:padding .22s ease,font-size .22s ease,background .15s,color .15s;white-space:nowrap}
 .nav-pill:hover{color:var(--ink);background:var(--surface-1)}
@@ -90,6 +115,17 @@ select.input-pill{appearance:none;-webkit-appearance:none;padding-right:38px;cur
 .select-wrap::after{content:"";position:absolute;right:16px;top:50%;width:8px;height:8px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:translateY(-70%) rotate(45deg);pointer-events:none}
 .select-wrap select{width:100%}
 .check{display:flex;gap:8px;align-items:center;font-size:14px;font-weight:500;padding-bottom:13px}
+/* Eigene Kästchen statt der Browser-Darstellung; das echte input bleibt
+   für Tastatur, Formular und Screenreader erhalten. */
+.check input[type="checkbox"]{appearance:none;-webkit-appearance:none;flex:0 0 20px;width:20px;height:20px;margin:0;display:grid;place-content:center;border:1.5px solid var(--border-strong);border-radius:6px;background:#fff;cursor:pointer;transition:background .15s,border-color .15s,transform .12s}
+.check input[type="checkbox"]::after{content:"";width:11px;height:11px;transform:scale(0);transform-origin:center;clip-path:polygon(14% 44%,0 65%,50% 100%,100% 16%,80% 0%,43% 62%);background:var(--accent-ink);transition:transform .12s ease}
+.check input[type="checkbox"]:checked{background:var(--accent);border-color:var(--accent)}
+.check input[type="checkbox"]:checked::after{transform:scale(1)}
+.check input[type="checkbox"]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.check input[type="checkbox"]:active{transform:scale(.94)}
+/* Dark-Override bewusst nur für den unmarkierten Zustand, sonst hat es
+   dieselbe Spezifität wie :checked und gewinnt per Reihenfolge. */
+[data-theme="dark"] .check input[type="checkbox"]:not(:checked){background:#101010}
 .check input{width:18px;height:18px;accent-color:var(--accent)}
 
 /* ---------- Meta + Tags (Pills) ---------- */
@@ -97,6 +133,12 @@ select.input-pill{appearance:none;-webkit-appearance:none;padding-right:38px;cur
 .meta strong{color:var(--ink)}
 .tag{display:inline-block;font-size:11px;font-weight:700;padding:5px 12px;border-radius:var(--r-full);letter-spacing:.2px}
 .tag-solid{background:var(--accent);color:var(--accent-ink)}
+/* Die Heute-Markierung im Stundenplan ist ueber tag-solid schwarz im hellen
+   und weiss im dunklen Modus. Sie soll genau umgekehrt sein: weiss auf
+   hellem, schwarz auf dunklem Grund. Ohne Rand verschmilzt die Pille sonst
+   mit dem Kopf der Spalte, deshalb bekommt sie einen. */
+.tt-day .tag-solid{background:#ffffff;color:#000000;border:1px solid var(--border-strong)}
+[data-theme="dark"] .tt-day .tag-solid{background:#000000;color:#ffffff;border-color:rgba(255,255,255,.45)}
 .tag-soft{background:var(--surface-2);color:var(--ink)}
 .tag-outline{background:#fff;color:#000;border:1px solid var(--ink)}
 .tag-muted{background:var(--surface-1);color:var(--ink-muted);border:1px solid var(--border)}
@@ -380,6 +422,18 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 .theme-toggle.is-dark .theme-icon-moon{opacity:0;transform:rotate(80deg) scale(.55)}
 .theme-toggle.is-dark .theme-icon-sun{opacity:1;transform:rotate(0) scale(1)}
 .auth-top-right{position:fixed;top:18px;right:18px;z-index:99}
+.auth-top-left{position:fixed;top:18px;left:18px;z-index:99}
+/* Sprachwahl als Button-Pille mit Custom-Menü (Profilmenü-Stil) */
+.lang-wrap .lang-btn{position:relative;padding-right:36px;cursor:pointer;font-family:inherit}
+.lang-btn::after{content:"";position:absolute;right:15px;top:50%;width:8px;height:8px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-70%) rotate(45deg);pointer-events:none}
+.lang-wrap .profile-menu{display:block;left:0;right:auto;min-width:190px;max-height:min(60vh,380px);overflow:auto;scrollbar-width:none;-ms-overflow-style:none}
+.lang-wrap .profile-menu::-webkit-scrollbar{display:none}
+.lang-option{width:100%;background:none;border:0;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.lang-option[aria-checked="true"]{font-weight:800}
+.lang-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.lang-pct{font-size:12px;font-weight:700;color:var(--ink-muted)}
+.lang-bar{display:block;height:4px;border-radius:99px;background:var(--surface-2);margin-top:6px;overflow:hidden}
+.lang-bar > span{display:block;height:100%;background:var(--accent);border-radius:99px}
 
 /* ---------- Dark Mode ---------- */
 [data-theme="dark"]{
@@ -407,6 +461,20 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 [data-accent="orange"]{--accent:#EA580C;--accent-hover:#C2410C;--accent-ink:#ffffff}
 [data-accent="red"]{--accent:#DC2626;--accent-hover:#B91C1C;--accent-ink:#ffffff}
 [data-accent="pink"]{--accent:#DB2777;--accent-hover:#BE185C;--accent-ink:#ffffff}
+/* Die schwarze Akzentfarbe waere auf dunklem Grund unsichtbar - und nicht
+   nur als Punkt in der Auswahl: Knöpfe, Eyebrows, Tags und aktive Pillen
+   holen ihre Farbe aus --accent. Beide Attribute stehen am <html>.
+   theme.js schreibt 'black' heute gar nicht erst als data-accent (Schwarz
+   ist der Standard und laeuft ueber 'kein Attribut', was der Dunkel-Block
+   bereits auf weiss stellt). Diese Regel greift fuer Geraete, in deren
+   localStorage noch ein 'black' aus einer aelteren Fassung liegt - dann
+   wuerde [data-accent="black"] das --accent sonst auf Schwarz setzen und
+   die Oberflaeche im dunklen Modus schwarz auf schwarz zeichnen. */
+[data-theme="dark"][data-accent="black"]{--accent:#ffffff;--accent-hover:#D4D4D4;--accent-ink:#000000}
+/* Der Punkt in der Auswahl bekommt seine Farbe inline gesetzt, deshalb
+   laeuft die Anpassung im dunklen Modus ueber --swatch statt ueber ein
+   !important auf der Hintergrundfarbe. */
+[data-theme="dark"] .accent-dot[data-set-accent="black"]{--swatch:#ffffff}
 [data-theme="dark"] .nav-wrap{background:linear-gradient(180deg,rgba(42,42,44,.7),rgba(42,42,44,.45));border:1px solid rgba(255,255,255,.14);box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 12px 40px rgba(0,0,0,.6)}
 [data-theme="dark"] .btn-light{background:transparent;color:#fff}
 [data-theme="dark"] .btn-light:hover{background:var(--surface-1)}
@@ -423,7 +491,7 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 
 /* ---------- Akzent-Auswahl (Dots in der Navi) ---------- */
 .accent-dots{display:flex;gap:7px;align-items:center}
-.accent-dot{width:18px;height:18px;border-radius:50%;background:var(--c);border:1px solid var(--border-strong);padding:0;flex-shrink:0}
+.accent-dot{width:18px;height:18px;border-radius:50%;background:var(--swatch, var(--c));border:1px solid var(--border-strong);padding:0;flex-shrink:0}
 .accent-dot:hover{transform:scale(1.15)}
 .accent-dot.active{outline:2px solid var(--ink);outline-offset:2px}
 @media(max-width:720px){
@@ -505,6 +573,137 @@ footer p{font-size:12px;color:var(--ink-dim);text-align:center}
 .overview-order-editor{display:flex;flex-direction:column;gap:8px;margin-top:8px}
 .overview-order-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 12px;border:1px solid var(--border);border-radius:12px;background:var(--surface-1);font-size:14px;font-weight:650}
 .overview-order-actions{display:flex;gap:6px}
+/* Rhythmus im Einstellungsformular: gleichmäßige Abstände zwischen
+   Feldern, damit Labels nicht am Bedienelement darüber kleben. */
+.settings-form{display:grid;gap:16px;align-content:start}
+.settings-form>.set-title,.settings-form>.set-note{margin-bottom:0}
+.settings-form .set-sub{margin:6px 0 0}
+.settings-form .check{padding-bottom:0}
+
+/* ---------- Eigene Auswahlfelder (statt native <select>) ---------- */
+.picker{position:relative;min-width:0}
+.picker-trigger{position:relative;width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;font-family:inherit;font-size:14px;font-weight:600;color:var(--ink);background:#fff;border:1px solid var(--border-strong);border-radius:var(--r-full);padding:12px 40px 12px 18px;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.picker-trigger:hover{border-color:var(--ink)}
+.picker-trigger:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+[data-theme="dark"] .picker-trigger{background:#101010}
+.picker-trigger::after{content:"";position:absolute;right:18px;top:50%;width:8px;height:8px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:translateY(-70%) rotate(45deg);pointer-events:none;transition:transform .18s}
+.picker-open .picker-trigger::after{transform:translateY(-30%) rotate(225deg)}
+.picker-value{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.picker-placeholder{color:var(--ink-muted)}
+.picker-menu{position:absolute;z-index:120;left:0;right:0;top:calc(100% + 6px);max-height:min(50vh,320px);overflow:auto;overscroll-behavior:contain;background:#fff;border:1px solid var(--border);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.14);padding:6px;scrollbar-width:none;-ms-overflow-style:none}
+[data-theme="dark"] .picker-menu{background:#101010;box-shadow:0 12px 40px rgba(0,0,0,.6)}
+.picker-menu::-webkit-scrollbar{display:none}
+.picker-menu-end{left:auto;right:0;min-width:220px}
+.picker-option{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:10px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;user-select:none}
+.picker-option:hover,.picker-option[data-active]{background:var(--surface-1)}
+.picker-option[aria-selected="true"]{font-weight:800}
+.picker-option[aria-disabled="true"]{opacity:.45;cursor:not-allowed}
+.picker-check{flex:0 0 auto;font-size:13px;font-weight:800;color:var(--accent)}
+.filter-select{width:180px}
+
+/* ---------- Eigener Kalender (statt input[type=date]) ---------- */
+.cal{position:absolute;z-index:130;left:0;top:calc(100% + 6px);width:min(292px,calc(100vw - 48px));background:#fff;border:1px solid var(--border);border-radius:16px;box-shadow:0 16px 44px rgba(0,0,0,.16);padding:12px}
+[data-theme="dark"] .cal{background:#101010;box-shadow:0 16px 44px rgba(0,0,0,.62)}
+.cal-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.cal-title{font-size:14px;font-weight:800;letter-spacing:-.2px}
+.cal-nav{width:28px;height:28px;display:grid;place-items:center;border:1px solid var(--border);border-radius:9px;background:var(--surface-1);color:var(--ink);cursor:pointer;transition:background .14s,border-color .14s}
+.cal-nav:hover{background:var(--surface-2);border-color:var(--border-strong)}
+.cal-nav:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.cal-week,.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.cal-week{margin-bottom:4px}
+.cal-week span{text-align:center;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-muted);padding:2px 0}
+.cal-day{height:32px;display:grid;place-items:center;border:0;border-radius:9px;background:transparent;color:var(--ink);font:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:background .12s,color .12s}
+.cal-day:hover:not(:disabled){background:var(--surface-1)}
+.cal-day.is-out{color:var(--ink-dim);font-weight:500}
+.cal-day[data-today]{box-shadow:inset 0 0 0 1.5px var(--border-strong)}
+.cal-day.is-picked{background:var(--accent);color:var(--accent-ink);font-weight:800}
+.cal-day:disabled{opacity:.3;cursor:not-allowed}
+.cal-day:focus-visible{outline:2px solid var(--ink);outline-offset:-2px}
+.cal-foot{display:flex;gap:6px;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.cal-foot .btn-sm{padding:7px 12px;font-size:12px}
+
+/* ---------- Eigene Stepper (statt Browser-Pfeile im Zahlenfeld) ---------- */
+input[type="number"]{-moz-appearance:textfield;appearance:textfield}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.num-field{position:relative;min-width:0}
+.num-field .input-pill{width:100%;padding-right:38px}
+.num-step{position:absolute;right:6px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:1px}
+.num-btn{width:24px;height:15px;display:grid;place-items:center;border:0;border-radius:5px;background:transparent;color:var(--ink-muted);cursor:pointer;transition:background .12s,color .12s}
+.num-btn:hover:not(:disabled){background:var(--surface-2);color:var(--ink)}
+.num-btn:disabled{opacity:.25;cursor:not-allowed}
+
+/* ---------- Suchfeld ohne Browser-Knopf ---------- */
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-decoration{-webkit-appearance:none;appearance:none}
+.search-wrap{position:relative;display:flex;align-items:center;min-width:0}
+.search-wrap>.ico{position:absolute;left:16px;z-index:1;pointer-events:none;color:var(--ink-muted)}
+.search-wrap input[type="search"]{width:100%;padding-left:40px;padding-right:36px}
+.search-wrap input[type="search"]::-webkit-search-cancel-button{display:none}
+.search-clear{position:absolute;right:12px;width:22px;height:22px;display:grid;place-items:center;border:0;border-radius:50%;background:var(--surface-2);color:var(--ink-muted);cursor:pointer;transition:background .14s,color .14s}
+.search-clear:hover{background:var(--border);color:var(--ink)}
+.search-clear:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+
+/* Sprachwahl in den Einstellungen: volle Breite wie ein Feld. */
+.lang-block{position:relative}
+.lang-block .lang-btn{width:100%;justify-content:space-between;padding:12px 40px 12px 18px;font-size:14px;font-weight:600;box-shadow:none}
+.lang-block .lang-btn::after{right:18px}
+.lang-block .lang-menu{position:absolute;left:0;right:0;min-width:0;top:calc(100% + 6px)}
+
+/* ---------- Sitzungen (eigene Seite) ---------- */
+.crumb{margin:0 0 14px}
+.crumb .pm-link{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--border);border-radius:999px;text-decoration:none;color:var(--ink)}
+.crumb .pm-link:hover{background:var(--surface-1)}
+.sessions-toolbar{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.sessions-search{flex:1 1 260px;min-width:200px}
+.sessions-search input[type="search"]{width:100%}
+.sessions-bulk{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.sessions-bulk-hint{font-size:12px;color:var(--ink-muted);max-width:22ch}
+.session-list{display:flex;flex-direction:column;gap:8px}
+.session-row{display:flex;align-items:center;gap:14px;padding:12px 14px;border:1px solid var(--border);border-radius:14px;background:var(--surface-1);transition:opacity .15s,border-color .15s}
+.session-row.is-off{opacity:.55}
+.session-row .secondary{flex:0 0 auto}
+.session-state{flex:0 0 auto;width:24px;height:24px;display:grid;place-items:center;border-radius:50%;background:var(--accent);color:var(--accent-ink)}
+.session-state.is-off{background:var(--surface-2);color:var(--ink-muted)}
+.session-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.session-body strong{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:750;flex-wrap:wrap}
+.session-meta{font-size:12px;color:var(--ink-muted)}
+.session-id{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;color:var(--ink-dim)}
+.session-row .tag{flex:0 0 auto}
+@media(max-width:720px){
+  /* Umbruch: Zustand oben, Name darunter, danach Status und Knopf. Ohne
+     die Reihenfolge fuer alle Kinder rueckte der Text hinter die Knoepfe. */
+  .session-row{flex-wrap:wrap}
+  .session-state{order:0}
+  .session-body{flex:1 1 100%;order:1}
+  .session-row .tag{order:2}
+  .session-row .secondary{order:3;width:100%;justify-content:center}
+}
+
+/* ---------- Icons ---------- */
+.ico{flex:0 0 auto;display:block;opacity:.85}
+.btn .ico,.secondary .ico,.primary .ico{opacity:.95}
+.pm-link{display:flex;align-items:center;gap:10px}
+.picker-option .ico{opacity:.9}
+
+/* ---------- Editor für die Übersichts-Abschnitte ---------- */
+.sec-editor{display:flex;flex-direction:column;gap:8px;transition:opacity .15s}
+.sec-editor.is-busy{opacity:.6;pointer-events:none}
+.sec-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);border-radius:12px;background:var(--surface-1);transition:transform .14s ease,border-color .14s,box-shadow .14s,opacity .14s}
+.sec-row.is-off{opacity:.55}
+.sec-row.is-dragging{border-color:var(--ink);box-shadow:0 10px 28px rgba(0,0,0,.16);transform:scale(1.01)}
+.sec-row.is-target{border-color:var(--accent)}
+.sec-grip{flex:0 0 auto;width:30px;height:30px;display:grid;place-items:center;border:0;border-radius:9px;background:transparent;color:var(--ink-muted);cursor:grab;touch-action:none;transition:background .14s,color .14s}
+.sec-grip:hover{background:var(--surface-2);color:var(--ink)}
+.sec-grip:active{cursor:grabbing}
+.sec-name{flex:1;min-width:0;font-size:14px;font-weight:650;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sec-flag{flex:0 0 auto;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--ink-muted);border:1px solid var(--border-strong);border-radius:999px;padding:3px 8px}
+.sec-actions{flex:0 0 auto;display:flex;gap:4px}
+.sec-btn{width:30px;height:30px;display:grid;place-items:center;border:1px solid transparent;border-radius:9px;background:transparent;color:var(--ink-muted);cursor:pointer;transition:background .14s,color .14s,border-color .14s}
+.sec-btn:hover:not(:disabled){background:var(--surface-2);color:var(--ink);border-color:var(--border)}
+.sec-btn:disabled{opacity:.28;cursor:not-allowed}
+.sec-btn[aria-pressed="true"]{background:var(--surface-2);color:var(--ink);border-color:var(--border-strong)}
+
 /* Einmal angezeigter API-Token: monospace, umbrechbar, mit Kopieren-Button. */
 .token-box{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border:1px dashed var(--border-strong);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:var(--surface-1)}
 .token-box code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;word-break:break-all;flex:1;min-width:200px}
@@ -608,7 +807,15 @@ body.wx-open{overflow:hidden}
   .ov-top > *{flex:1 1 100%;min-width:0}
   .now-card.now-right{margin-left:0}
   .weather-card{min-height:136px;padding:12px}
-  .wx-summary{flex-basis:62px;padding-right:8px}
+  /* Schmale Karte: der Titelbereich (61px) und sein senkrechter Strich
+     nahmen so viel Platz, dass fuer die drei Tage nur 56px blieben, also
+     16px je Tag - der Text wurde weggeklippt und der Strich lief durch
+     die ganze Hoehe. Darum unter 720px uebereinander: Titel und Stadt in
+     einer Zeile, der Strich wird zu einer Unterkante, die Tage bekommen
+     den vollen Breitenrest. */
+  .weather-card{flex-direction:column;gap:8px}
+  .wx-summary{flex:0 0 auto;flex-direction:row;align-items:baseline;gap:8px;border-right:0;border-bottom:1px solid var(--border);padding-right:0;padding-bottom:6px}
+  .wx-forecast{flex:0 0 auto}
   .wx-img{width:34px;height:34px}
   .wx-temp{font-size:19px}
   .wx-cond{font-size:10px}

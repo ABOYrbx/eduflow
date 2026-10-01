@@ -255,9 +255,14 @@ class SettingsViewModel(
         _state.value = _state.value.copy(devicesLoading = true)
         viewModelScope.launch {
             try {
-                _state.value = _state.value.copy(
-                    devices = authRepo.devices(), devicesLoading = false,
-                )
+                // Wichtig: erst das Ergebnis abwarten, dann den State lesen.
+                // Ein `copy(devices = authRepo.devices(), …)` liest _state.value
+                // VOR dem Suspend und schreibt danach eine Kopie des alten
+                // Zustands zurück — dabei riss es das zwischenzeitlich auf
+                // loading=false gesetzte Feld wieder auf true und der Screen
+                // blieb dauerhaft im Lade-Spinner (Settings, ~1 s nach /devices).
+                val devices = authRepo.devices()
+                _state.value = _state.value.copy(devices = devices, devicesLoading = false)
             } catch (e: ApiException) {
                 if (!noteAuthFailure(e)) {
                     _state.value = _state.value.copy(devicesLoading = false)
@@ -296,11 +301,16 @@ class SettingsViewModel(
         }
     }
 
+    /**
+     * Server-Adresse uebernehmen. Leere Eingabe wird ignoriert — sonst
+     * wuerde schon das Leeren des Feldes die gespeicherte Adresse
+     * ueberschreiben. Die fertige URL normalisiert [TokenStore.setBaseUrl],
+     * sobald etwas drinsteht.
+     */
     fun setBaseUrl(url: String) {
+        if (url.isBlank()) return
         viewModelScope.launch {
-            val normalized = url.trim().trimEnd('/')
-                .ifBlank { TokenStore.DEFAULT_BASE_URL.trimEnd('/') }
-            store.setBaseUrl(normalized)
+            store.setBaseUrl(url.trim())
         }
     }
 
@@ -309,6 +319,9 @@ class SettingsViewModel(
             try {
                 authRepo.logout()
             } finally {
+                // Abmelden heißt: wieder durchs Onboarding. Sonst landet der
+                // nächste Start direkt im Login (Flag bleibt sonst gesetzt).
+                runCatching { store.resetOnboarding() }
                 onDone()
             }
         }

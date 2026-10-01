@@ -150,7 +150,7 @@ public final class OverviewViewModel {
             }
             orderSaveError = apiError.message
         } catch {
-            orderSaveError = APIError.germanFallback(for: ErrorCodes.upstream)
+            orderSaveError = APIError.englishFallback(for: ErrorCodes.upstream)
         }
         return false
     }
@@ -166,7 +166,7 @@ public final class OverviewViewModel {
             wetter = WetterResponse()
             wetterError = APIError(
                 code: ErrorCodes.validation,
-                message: NSLocalizedString("overview_city_missing", value: "Bitte eine Stadt in den Einstellungen eintragen.", comment: "Übersicht: Stadt fehlt")
+                message: NSLocalizedString("overview_city_missing", value: "Please enter a city in settings.", comment: "Übersicht: Stadt fehlt")
             )
             return
         }
@@ -181,7 +181,7 @@ public final class OverviewViewModel {
             wetter = WetterResponse()
             wetterError = APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
     }
@@ -229,7 +229,7 @@ public final class OverviewViewModel {
         } catch {
             return .failure(APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             ))
         }
     }

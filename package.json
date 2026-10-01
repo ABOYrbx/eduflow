@@ -14,7 +14,7 @@
     "typecheck": "npm run typecheck --workspace @eduflow/api && npm run typecheck --workspace @eduflow/web && npm run typecheck --workspace @eduflow/contracts",
     "db:generate": "npm run db:generate --workspace @eduflow/api",
     "db:migrate": "npm run db:migrate --workspace @eduflow/api",
-    "db:deploy": "npm run db:deploy --workspace @eduflow/api"
+    "db:deploy": "npm run db:deploy --workspace @eduflow/api", "check:catalogs": "python3 migration/check-catalogs.py && python3 migration/check-macos-catalog.py"
   },
   "allowScripts": {
     "prisma@6.19.3": true,

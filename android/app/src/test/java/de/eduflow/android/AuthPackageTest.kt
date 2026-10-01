@@ -5,6 +5,8 @@ import de.eduflow.android.data.ApiException
 import de.eduflow.android.data.ApiService
 import de.eduflow.android.data.ErrorMapper
 import de.eduflow.android.data.SettingsRepository
+import de.eduflow.android.data.TokenStore
+import de.eduflow.android.data.normalizeBaseUrl
 import de.eduflow.android.data.dto.CacheClearResponse
 import de.eduflow.android.data.dto.DeviceDto
 import de.eduflow.android.data.dto.DevicesDto
@@ -248,11 +250,13 @@ class AuthPackageTest {
             "hw_status" to "gibts-nicht",
             "ov_unread" to "999",
             "ov_homework" to "-5",
+            "time_format" to "13h",
         ).typedValues()
         assertEquals("uebersicht", values.landing)
         assertEquals("alle", values.hwStatus)
         assertEquals(50, values.ovUnread)
         assertEquals(1, values.ovHomework)
+        assertEquals("24h", values.timeFormat)
         assertTrue(values.ovWetter) // Default: Wetterkarte an
         assertEquals("", values.wetterCity)
     }
@@ -388,14 +392,74 @@ class AuthPackageTest {
         assertFalse("Token-Feld im DTO", "token" in encoded.lowercase())
     }
 
-    // ---- Basis-URL: trimEnd('/')-Roundtrip (TokenStore/LoginScreen) ----
+    // ---- Basis-URL: Eingabe ist nur die IP, App ergänzt Port und Pfad ----
+
+    @Test
+    fun baseUrl_noPresetButInternalFallback() {
+        // Kein Notfallwert ist der Default der App, sondern nur der letzte
+        // Ausweg: DEFAULT_BASE_URL wird nirgends angezeigt oder vorbelegt.
+        assertEquals("http://10.0.2.2:3000/api/v1/", TokenStore.DEFAULT_BASE_URL)
+        assertEquals("http://10.0.2.2:3100/api/v1/", TokenStore.DEMO_BASE_URL)
+        // Der Platzhalter ist eine IP und keine fertige URL.
+        assertEquals("192.168.1.5", TokenStore.SERVER_PLACEHOLDER)
+        assertFalse(TokenStore.SERVER_PLACEHOLDER.startsWith("http"))
+        assertFalse(TokenStore.SERVER_PLACEHOLDER.contains("/api/v1"))
+    }
+
+    @Test
+    fun baseUrl_normalizeAddsSchemePortAndPath() {
+        // Kern der Anforderung: nur die IP tippen, mehr nicht.
+        assertEquals("http://192.168.1.5:3000/api/v1/", normalizeBaseUrl("192.168.1.5"))
+        assertEquals("http://10.0.2.2:3000/api/v1/", normalizeBaseUrl("10.0.2.2"))
+        // Port aus der Eingabe gewinnt (Demo-Server auf 3100).
+        assertEquals("http://192.168.1.5:3100/api/v1/", normalizeBaseUrl("192.168.1.5:3100"))
+        // Leerzeichen aussen und innen weg.
+        assertEquals("http://192.168.1.5:3000/api/v1/", normalizeBaseUrl("  192.168.1.5  "))
+        // Hostname statt IP geht auch.
+        assertEquals("http://mein-mac.local:3000/api/v1/", normalizeBaseUrl("mein-mac.local"))
+    }
+
+    @Test
+    fun baseUrl_normalizeAcceptsFullUrlsWithoutDoublingPath() {
+        // Alte Gespeicherte Werte und Werte aus dem Chatverlauf bleiben gueltig.
+        assertEquals("http://10.0.2.2:3000/api/v1/", normalizeBaseUrl("10.0.2.2:3000/api/v1"))
+        assertEquals("http://10.0.2.2:3000/api/v1/", normalizeBaseUrl("http://10.0.2.2:3000/api/v1"))
+        assertEquals("http://10.0.2.2:3000/api/v1/", normalizeBaseUrl("http://10.0.2.2:3000/api/v1/"))
+        // Ohne doppelten Pfad, egal wie oft /api/v1 schon drinsteht.
+        assertEquals("http://10.0.2.2:3000/api/v1/", normalizeBaseUrl("http://10.0.2.2:3000/api/v1/api/v1"))
+        // HTTPS bleibt erhalten, wenn ausdruecklich angegeben.
+        assertEquals("https://192.168.1.5:3000/api/v1/", normalizeBaseUrl("https://192.168.1.5"))
+    }
+
+    @Test
+    fun baseUrl_normalizeKeepsBrokenAuthorityVisible() {
+        // Zwei Ports sind keine gueltige Authority. Die Eingabe wird
+        // unveraendert zurueckgegeben, damit der Verbindungsfehler sichtbar
+        // wird, statt still auf einen anderen Server zu zeigen.
+        assertEquals("http://1.2.3.4:80:90", normalizeBaseUrl("1.2.3.4:80:90"))
+    }
+
+    @Test
+    fun baseUrl_normalizeSupportsIpv6Literals() {
+        // IPv6 braucht Klammern, sonst kaeme der Doppelpunkt mit dem Port
+        // durcheinander. Port ergaenzt die App auch hier.
+        assertEquals("http://[::1]:3000/api/v1/", normalizeBaseUrl("[::1]"))
+        assertEquals("http://[::1]:3100/api/v1/", normalizeBaseUrl("[::1]:3100"))
+    }
+
+    @Test
+    fun baseUrl_normalizeBlankFallsBackInternally() {
+        // Leer darf nur intern greifen — kein Client mit leerer URL.
+        assertEquals(TokenStore.DEFAULT_BASE_URL, normalizeBaseUrl(""))
+        assertEquals(TokenStore.DEFAULT_BASE_URL, normalizeBaseUrl("   "))
+    }
 
     @Test
     fun baseUrl_withAndWithoutTrailingSlash() {
         // ApiClient.create normalisiert (Paket 0) — beide Formen ok.
         listOf(
-            "http://10.0.2.2:8000/api/v1/",
-            "http://10.0.2.2:8000/api/v1",
+            TokenStore.DEFAULT_BASE_URL,
+            TokenStore.DEFAULT_BASE_URL.trimEnd('/'),
         ).forEach { base ->
             // Wirft bei ungültiger Basis-URL (Retrofit verlangt Host + /-Suffix).
             assertNotNull(ApiClient.create(base) { null })

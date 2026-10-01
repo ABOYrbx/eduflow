@@ -138,7 +138,7 @@ public struct APIClient: Sendable {
         } catch {
             throw APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
         let file = FileManager.default.temporaryDirectory
@@ -148,7 +148,7 @@ public struct APIClient: Sendable {
         } catch {
             throw APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
         return file
@@ -168,7 +168,7 @@ public struct APIClient: Sendable {
         } catch {
             throw APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
     }
@@ -181,7 +181,7 @@ public struct APIClient: Sendable {
         } catch {
             throw APIError(
                 code: ErrorCodes.validation,
-                message: APIError.germanFallback(for: ErrorCodes.validation)
+                message: APIError.englishFallback(for: ErrorCodes.validation)
             )
         }
     }
@@ -202,7 +202,7 @@ public struct APIClient: Sendable {
         guard let url = parts?.url else {
             throw APIError(
                 code: ErrorCodes.validation,
-                message: APIError.germanFallback(for: ErrorCodes.validation)
+                message: APIError.englishFallback(for: ErrorCodes.validation)
             )
         }
         var request = URLRequest(url: url)
@@ -226,7 +226,7 @@ public struct APIClient: Sendable {
         } catch {
             throw APIError(
                 code: ErrorCodes.upstream,
-                message: APIError.germanFallback(for: ErrorCodes.upstream)
+                message: APIError.englishFallback(for: ErrorCodes.upstream)
             )
         }
         let status = (response as? HTTPURLResponse)?.statusCode ?? 0
@@ -241,12 +241,12 @@ public struct APIClient: Sendable {
             !body.code.isEmpty
         {
             let message = body.error.isEmpty
-                ? APIError.germanFallback(for: body.code) : body.error
+                ? APIError.englishFallback(for: body.code) : body.error
             return APIError(code: body.code, message: message, httpStatus: status)
         }
         return APIError(
             code: ErrorCodes.upstream,
-            message: APIError.germanFallback(for: ErrorCodes.upstream),
+            message: APIError.englishFallback(for: ErrorCodes.upstream),
             httpStatus: status
         )
     }

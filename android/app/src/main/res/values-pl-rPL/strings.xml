@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">EduFlow</string>
-    <!-- Common (package 0, RedesignUi / CommonUi / BottomBar / errors) -->
+    <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
     <string name="common_logo_desc">Logo EduFlow</string>
     <string name="common_demo_badge">DEMO</string>
     <string name="common_profile_title">Twój profil</string>
@@ -51,10 +51,6 @@
     <!-- Onboarding -->
     <string name="onboarding_greeting">Witaj!</string>
     <string name="onboarding_language_title">Wybierz język</string>
-    <string name="onboarding_language_search">Szukaj języka</string>
-    <string name="onboarding_language_no_results">Nie znaleziono języka</string>
-    <string name="onboarding_language_system_short">SYSTEM</string>
-    <string name="onboarding_language_system_format">Język systemu: %1$s</string>
     <string name="onboarding_language_sub">EduFlow mówi twoim językiem. Wybór stosuje się natychmiast.</string>
     <string name="onboarding_language_apply_restart">Zastosuj &amp; restart</string>
     <string name="onboarding_language_system">System</string>
@@ -67,7 +63,6 @@
     <string name="onboarding_feat3_title">Harmonogram &amp; Pogoda</string>
     <string name="onboarding_feat3_desc">Dzień i tydzień plus pogoda na ekranie.</string>
     <string name="onboarding_server_sub">Wprowadź gdzie EduFlow działa jako serwer.</string>
-    <string name="onboarding_server_hint">Wystarczy adres IP — port i ścieżka zostaną dodane automatycznie.</string>
     <string name="onboarding_connected">Połączono</string>
     <string name="onboarding_unreachable">Serwer nieosiągalny. Sprawdź adres i spróbuj ponownie.</string>
     <string name="onboarding_test_connected">✓ Połączono</string>
@@ -83,7 +78,7 @@
     <string name="twofa_confirm">Potwierdź</string>
     <string name="twofa_back">Powrót do logowania</string>
     <string name="twofa_validity">Kod jest ważny przez 10 minut.</string>
-    <!-- Settings -->
+    <!-- Einstellungen -->
     <string name="settings_title">Ustawienia</string>
     <string name="settings_subtitle">Twoje konto EduFlow</string>
     <string name="settings_demo_text">Tylko syntetyczne dane przykładowe są wczytywane z lokalnego serwera demonstracyjnego.</string>
@@ -100,17 +95,12 @@
     <string name="settings_theme_system">System</string>
     <string name="settings_theme_system_sub">Śledź urządzenie jasny/ciemny</string>
     <string name="settings_accent">Kolor akcentu</string>
-    <string name="settings_language">Język</string>
-    <string name="settings_language_system">Język systemu</string>
     <string name="settings_notifications">Powiadomienia</string>
     <string name="settings_notify_news">Nowe wiadomości</string>
     <string name="settings_overview_tasks">Przegląd zadań &amp;</string>
     <string name="settings_landing_label">Strona startowa po zalogowaniu</string>
     <string name="settings_hwfilter_label">Zadania: domyślny filtr</string>
     <string name="settings_hwtests_label">Uwzględnij testy i egzaminy</string>
-    <string name="settings_time_format_label">Format godziny</string>
-    <string name="settings_time_24h">24 h</string>
-    <string name="settings_time_12h">12 h</string>
     <string name="settings_unread_placeholder">Max. nieprzeczytane wiadomości (1–50)</string>
     <string name="settings_homework_placeholder">Maks. otwarta praca domowa (1–50)</string>
     <string name="settings_navbar_section">Pasek nawigacji</string>
@@ -136,7 +126,7 @@
     <string name="settings_dev_onboarding">Uruchom ponownie wdrożenie</string>
     <string name="settings_dev_onboarding_sub">Wyloguje Cię i uruchamia ponownie wprowadzenie.</string>
     <string name="settings_landing_overview">Przegląd</string>
-    <!-- Devices -->
+    <!-- Geräte -->
     <string name="devices_title">Urządzenia</string>
     <string name="devices_subtitle">Zarządzaj zalogowanymi urządzeniami</string>
     <string name="devices_empty">Brak zalogowanych urządzeń.</string>
@@ -146,7 +136,7 @@
     <string name="devices_expires_format">Wygasa: %1$s</string>
     <string name="devices_remove">Usuń</string>
     <string name="device_default_name">Emulator Android</string>
-    <!-- Grades -->
+    <!-- Noten -->
     <string name="grades_title">Oceny</string>
     <string name="grades_subtitle">Twoja wydajność wg tematu</string>
     <string name="grades_search_placeholder">Temat, tytuł lub nauczyciel</string>
@@ -163,11 +153,11 @@
     <string name="grades_teacher_format">Nauczyciel %1$s</string>
     <string name="grades_class_avg_format">Klasa średnia %1$s</string>
     <string name="grades_term_all">Wszystkie</string>
-    <!-- Semester name: %1$d = semester (1/2), %2$s/%3$s = short years (25/26);
-         pattern letters must not be translated, only words/order. -->
+    <!-- Halbjahr-Name: %1$d = Halbjahr (1/2), %2$s/%3$s = Kurzjahre (25/26);
+         Musterbuchstaben nicht übersetzen, nur Worte/Reihenfolge anpassen. -->
     <string name="grades_term_label_format">Semester %1$d %2$s/%3$s</string>
     <string name="grades_subject_other">Inne</string>
-    <!-- Homework -->
+    <!-- Hausaufgaben -->
     <string name="homework_title">Praca domowa</string>
     <string name="homework_subtitle">Twoje zadania na rzut oka</string>
     <string name="homework_search_placeholder">Tytuł, przedmiot lub nauczyciel</string>
@@ -185,7 +175,7 @@
     <string name="homework_swipe_restore">Przywróć</string>
     <string name="homework_reopen_desc">Otwórz ponownie</string>
     <string name="homework_title_format">Praca domowa #%1$d</string>
-    <!-- Messages -->
+    <!-- Nachrichten -->
     <string name="messages_title">Wiadomości</string>
     <string name="messages_subtitle">Wiadomości z Twojej szkoły</string>
     <string name="messages_search_placeholder">Szukaj wiadomości</string>
@@ -216,15 +206,7 @@
     <string name="messages_recipients_format">%1$d wybranych odbiorców</string>
     <string name="messages_body_placeholder">Tekst wiadomości</string>
     <string name="messages_compose_send">Wyślij</string>
-    <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
-         label() stays the German context-free fallback for tests. -->
-    <string name="message_type_all">Wszystkie</string>
-    <string name="message_type_sprava">Wiadomość</string>
-    <string name="message_type_news">Aktualności</string>
-    <string name="message_type_anketa">Ankieta</string>
-    <string name="message_type_chat">Czat</string>
-    <string name="message_type_genotif">Powiadomienie</string>
-    <!-- Overview -->
+    <!-- Übersicht -->
     <string name="overview_customize">Dostosuj podgląd</string>
     <string name="overview_customize_desc">Wybierz, które sekcje pojawią się najpierw.</string>
     <string name="overview_move_up_desc">Przesuń w górę</string>
@@ -232,8 +214,8 @@
     <string name="overview_messages_count_format">Wiadomości · %1$d</string>
     <string name="overview_action_all_tasks">Wszystkie zadania</string>
     <string name="overview_clock_label">CZAS</string>
-    <!-- Date line below "Home" (EEEE = weekday, MM/dd/yyyy = date:
-         pattern letters must not be translated, only order). -->
+    <!-- Datumszeile unter „Home" (EEEE = Wochentag, dd/MM/yyyy = Datum:
+         Musterbuchstaben nicht übersetzen, nur Reihenfolge anpassen). -->
     <string name="home_date_format">EEEE, dd.MM.rrrr</string>
     <string name="overview_today_hours">KLASY TODAJ</string>
     <string name="overview_no_school">Brak szkoły – dziś nie ma żadnych zajęć.</string>
@@ -264,7 +246,7 @@
     <string name="overview_due_suffix_format"> · fällig: %1$s</string>
     <string name="overview_subject_suffix_format"> · %1$s</string>
     <string name="overview_weather_high_low_format">H %1$s · L %2$s</string>
-    <!-- School life -->
+    <!-- Schulalltag -->
     <string name="school_title">Życie w szkole</string>
     <string name="school_subtitle">Zdarzenia i zmiany harmonogramu</string>
     <string name="school_tab_calendar_format">Kalendarz · %1$d</string>
@@ -281,7 +263,7 @@
     <string name="school_change_remove">ENTFÄLLT</string>
     <string name="school_change_default">GEA&lt;unk&gt; NDERT</string>
     <string name="school_class_format">Klasa %1$s</string>
-    <!-- Timetable -->
+    <!-- Stundenplan -->
     <string name="timetable_title">Harmonogram</string>
     <string name="timetable_day_count_format">%1$d okresów</string>
     <string name="timetable_week_count_format">%1$d okresy w tym tygodniu</string>
@@ -302,7 +284,7 @@
     <string name="timetable_flag_lernzeit">Czas nauki</string>
     <string name="timetable_flag_lernzeit_hours">Czas nauki (%1$d godz.)</string>
     <string name="timetable_flag_event">Wydarzenie</string>
-    <!-- More -->
+    <!-- Mehr -->
     <string name="more_title">Więcej</string>
     <string name="more_subtitle">Więcej sekcji</string>
     <string name="more_school_title">Zdarzenia &amp; podstawienia</string>
@@ -315,19 +297,19 @@
     <string name="more_cache_default">Usuń pamięć podręczną danych</string>
     <string name="more_logout_sub">Wyloguj się z tego urządzenia</string>
     <string name="more_server_dialog_desc">Serwer dla żądań API (…/api/v1/).</string>
-    <!-- Client-side validation: the ViewModels (ui/auth/AuthViewModel,
-         ui/messages/MessagesViewModel, ui/overview/OverviewViewModel) supply
-         code + German fallback text (context-free for unit tests) plus
-         messageRes — Compose resolves via stringResource at the call sites. -->
+    <!-- Validierung (clientseitig): Die ViewModels (ui/auth/AuthViewModel,
+         ui/messages/MessagesViewModel, ui/overview/OverviewViewModel) liefern
+         Code + deutschen Fallback-Text (kontextfrei für Unit-Tests) plus
+         messageRes — Compose löst per stringResource an den Call-Sites auf. -->
     <string name="auth_error_credentials">Wprowadź nazwę użytkownika i hasło.</string>
     <string name="twofa_error_empty">Wprowadź kod.</string>
     <string name="messages_compose_no_recipient">Wybierz co najmniej jednego prawidłowego odbiorcę.</string>
     <string name="messages_compose_no_body">Wprowadź tekst wiadomości.</string>
     <string name="overview_weather_no_city">Wprowadź miasto.</string>
-    <!-- Error fallbacks: data/ErrorMapper.messageFor supplies the German
-         fallback (backend texts take precedence, context-free for unit tests);
-         data/ErrorMapper.stringResFor maps codes onto these keys, Compose
-         resolves via localizedApiMessage (ui/timetable/DayScreen.kt). -->
+    <!-- Fehler-Fallbacks: data/ErrorMapper.messageFor liefert den deutschen
+         Fallback (Backend-Texte haben Vorrang, kontextfrei für Unit-Tests);
+         data/ErrorMapper.stringResFor mappt Codes auf diese Keys, Compose
+         löst per localizedApiMessage (ui/timetable/DayScreen.kt) auf. -->
     <string name="error_validation">Nieprawidłowe dane wejściowe. Proszę sprawdzić i spróbować ponownie.</string>
     <string name="error_token_invalid">Sesja jest nieprawidłowa. Zaloguj się ponownie.</string>
     <string name="error_token_expired">Sesja wygasła. Zaloguj się ponownie.</string>
@@ -340,7 +322,7 @@
     <string name="error_rate_limited">Zbyt wiele prób. Spróbuj ponownie później.</string>
     <string name="error_config_missing">Brakuje klucza serwera. Spróbuj ponownie później.</string>
     <string name="error_upstream">Logowanie nie powiodło się. Spróbuj ponownie później.</string>
-    <!-- Accent colors -->
+    <!-- Akzentfarben -->
     <string name="common_accent_black">Czarny</string>
     <string name="common_accent_blue">Niebieski</string>
     <string name="common_accent_violet">Lilak</string>
@@ -349,7 +331,7 @@
     <string name="common_accent_orange">Pomarańczowy</string>
     <string name="common_accent_red">Czerwony</string>
     <string name="common_accent_pink">Różowy</string>
-    <!-- Plurals -->
+    <!-- Plurale -->
     <plurals name="settings_devices_count">
         <item quantity="one">%1$d Gera&lt;unk&gt; t</item>
         <item quantity="few">%1$d Gera&lt;unk&gt; te</item>
@@ -368,4 +350,20 @@
         <item quantity="many">Ø %1$s · %2$d Noten</item>
         <item quantity="other">Ø %1$s · %2$d Noten</item>
     </plurals>
+    <string name="onboarding_language_search">Szukaj języka</string>
+    <string name="onboarding_language_no_results">Nie znaleziono języka</string>
+    <string name="onboarding_language_system_short">SYSTEM</string>
+    <string name="onboarding_language_system_format">Język systemu: %1$s</string>
+    <string name="onboarding_server_hint">Wystarczy adres IP — port i ścieżka zostaną dodane automatycznie.</string>
+    <string name="settings_language">Język</string>
+    <string name="settings_language_system">Język systemu</string>
+    <string name="settings_time_format_label">Format godziny</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
+    <string name="message_type_all">Wszystkie</string>
+    <string name="message_type_sprava">Wiadomość</string>
+    <string name="message_type_news">Aktualności</string>
+    <string name="message_type_anketa">Ankieta</string>
+    <string name="message_type_chat">Czat</string>
+    <string name="message_type_genotif">Powiadomienie</string>
 </resources>

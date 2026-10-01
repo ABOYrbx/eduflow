@@ -3,7 +3,7 @@
     <string name="app_name">EduFlow</string>
 
     <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
-    <string name="common_logo_desc">EduFlow-Logo</string>
+    <string name="common_logo_desc">EduFlow logo</string>
     <string name="common_demo_badge">DEMO</string>
     <string name="common_profile_title">Dein Profil</string>
     <string name="common_profile_default_account">Konto</string>
@@ -46,7 +46,7 @@
     <string name="auth_label_device">Gerätename</string>
     <string name="auth_placeholder_device">z. B. Pixel 9 Pro</string>
     <string name="auth_hint_server">Wo läuft dein Server?</string>
-    <string name="auth_label_server">Server-URL</string>
+    <string name="auth_label_server">Server-IP</string>
     <string name="auth_server_current_format">Server: %1$s</string>
     <string name="auth_privacy_note">Lokales Werkzeug — Zugangsdaten bleiben auf diesem Gerät.</string>
     <string name="auth_login_loading">Anmelden …</string>
@@ -66,7 +66,8 @@
     <string name="onboarding_feat2_desc">Fälligkeiten mit Zählern, Halbjahr-Tabs und Schnitt.</string>
     <string name="onboarding_feat3_title">Stundenplan &amp; Wetter</string>
     <string name="onboarding_feat3_desc">Tag und Woche und Wetter auf der Übersicht.</string>
-    <string name="onboarding_server_sub">Trage ein, wo EduFlow als Server läuft.</string>
+    <string name="onboarding_server_sub">Trage die IP-Adresse deines EduFlow-Servers ein.</string>
+    <string name="onboarding_server_hint">Nur die IP-Adresse verwendet Port %1$d. Für einen anderen Port :Port ergänzen — der Demo-Server nutzt %2$d.</string>
     <string name="onboarding_connected">Verbunden</string>
     <string name="onboarding_unreachable">Server nicht erreichbar. Prüfe die Adresse und versuche es erneut.</string>
     <string name="onboarding_test_connected">✓  Verbunden</string>
@@ -89,7 +90,7 @@
     <string name="settings_subtitle">Dein EduFlow-Konto</string>
     <string name="settings_demo_text">Es werden ausschließlich synthetische Beispieldaten vom lokalen Demo-Server geladen.</string>
     <string name="settings_server_section">Server</string>
-    <string name="settings_server_placeholder">Server (…/api/v1/)</string>
+    <string name="settings_server_placeholder">192.168.1.5</string>
     <string name="settings_server_apply">Server übernehmen</string>
     <string name="settings_school_fallback">Schule</string>
     <string name="settings_connected_format">%1$s · verbunden</string>
@@ -105,6 +106,9 @@
     <string name="settings_notify_news">Neue Nachrichten</string>
     <string name="settings_overview_tasks">Übersicht &amp; Aufgaben</string>
     <string name="settings_landing_label">Startseite nach Anmeldung</string>
+    <string name="settings_time_format_label">Uhrzeitformat</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
     <string name="settings_hwfilter_label">Aufgaben: Standardfilter</string>
     <string name="settings_hwtests_label">Tests und Prüfungen einbeziehen</string>
     <string name="settings_unread_placeholder">Max. ungelesene Nachrichten (1–50)</string>
@@ -306,11 +310,11 @@
     <string name="more_settings_sub">Darstellung, Konto und Server</string>
     <string name="more_demo_title">Demo-Modus</string>
     <string name="more_demo_sub">Nur Beispieldaten · keine echten Schulverbindungen</string>
-    <string name="more_server_fallback">Server für API-Anfragen</string>
+    <string name="more_server_fallback">Kein Server eingetragen</string>
     <string name="more_cache_title">Cache leeren</string>
     <string name="more_cache_default">Zwischengespeicherte Daten löschen</string>
     <string name="more_logout_sub">Von diesem Gerät abmelden</string>
-    <string name="more_server_dialog_desc">Server für API-Anfragen (…/api/v1/).</string>
+    <string name="more_server_dialog_desc">Trage nur die IP deines Servers ein. Port und Pfad ergänzt die App.</string>
 
     <!-- Validierung (clientseitig): Die ViewModels (ui/auth/AuthViewModel,
          ui/messages/MessagesViewModel, ui/overview/OverviewViewModel) liefern

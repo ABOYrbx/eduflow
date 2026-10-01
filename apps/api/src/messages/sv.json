@@ -24,7 +24,9 @@
     "tokenNotFound": "Token hittades inte.",
     "tokenRejected": "Token ogiltig.",
     "twoFactorDemo": "Ange demokod 123456.",
-    "twoFactorMessage": "Ange tvåfaktorskoden från e-post eller app och skicka den till /auth/2fa."
+    "twoFactorMessage": "Ange tvåfaktorskoden från e-post eller app och skicka den till /auth/2fa.",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOtherSessions": "No other sessions"
   },
   "common": {
     "badRequest": "Ogiltig begäran.",
@@ -64,7 +66,8 @@
     "trashHomework": "Flytta läxor till papperskorgen eller återställ",
     "validationDescription": "Valideringsfel",
     "weather": "Väder",
-    "weatherSearch": "Sök på väderplats"
+    "weatherSearch": "Sök på väderplats",
+    "revokeOtherDevices": "Sign out other sessions"
   },
   "geo": {
     "badCoords": "Dåliga koordinater",
@@ -103,6 +106,8 @@
     "hwStatusLabel": "Hemsida: Standardfilter",
     "hwTestsLabel": "Hemsida: Inkludera tester och prov som standard",
     "landingLabel": "Startsidan efter inloggning",
+    "opt12h": "12-hour",
+    "opt24h": "24-hour",
     "optAll": "Alla",
     "optDashboard": "Meddelanden",
     "optDone": "Endast klart",
@@ -118,7 +123,12 @@
     "ovWetterHint": "Gäller för webbgränssnittet och Android-appen.",
     "ovWetterLabel": "Visa väderkarta på översikten",
     "sectionUebersicht": "Översikt",
-    "sectionWetter": "Väder"
+    "sectionWetter": "Väder",
+    "timeFormatLabel": "Clock: Time format",
+    "ovHiddenLabel": "Hidden sections",
+    "ovHiddenHint": "Sections you switched off in the overview editor.",
+    "ovSpanLabel": "Section widths",
+    "ovSpanHint": "Sections you set to half width sit next to each other."
   },
   "upstream": {
     "agendaFailed": "Skolevenemang kunde inte laddas: {detail}",

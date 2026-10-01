@@ -33,7 +33,14 @@
     "noText": "(немає тексту)",
     "requestFailed": "Не вдалося виконати запит.",
     "school": "Школа",
-    "upstreamUnreachable": "Сервер недоступний."
+    "upstreamUnreachable": "Сервер недоступний.",
+    "pickDate": "Pick a date",
+    "today": "Today",
+    "clear": "Clear",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "search": "Search",
+    "clearSearch": "Clear search"
   },
   "grades": {
     "avgTitle": "Середня за вагою",
@@ -44,7 +51,7 @@
     "colTeacher": "Вчитель",
     "colTopic": "Тема",
     "colWeight": "Зважування",
-    "detailCount": "{count} Noten · Schnitt Ø {avg}",
+    "detailCount": "{count} grades · average Ø {avg}",
     "details": "Подробиці",
     "empty": "За цей період немає оцінок.",
     "emptyFiltered": "Немає оцінок за цей вибір.",
@@ -79,7 +86,7 @@
     "reopen": "Відкрити знову",
     "restore": "Відновити",
     "searchLabel": "Пошук",
-    "searchPlaceholder": "Titel / Fach / Lehrer…",
+    "searchPlaceholder": "Title / Subject / Teacher…",
     "shownCount": "{count} {label} показано.",
     "sinceLabel": "Історія з",
     "starred": "★ Позначені",
@@ -95,7 +102,7 @@
     "trashEmpty": "Смітник пустий.",
     "trashLabel": "Кошик",
     "trashWithCount": "Кошик ({count})",
-    "dueToday": "до сьогодні"
+    "dueToday": "due today"
   },
   "login": {
     "backToLogin": "Повернутися до Входу",
@@ -132,7 +139,7 @@
     "markAllRead": "Позначити всі як прочитані",
     "markedRead": "Повідомлення {marked} позначено як прочитані.",
     "messageLabel": "Повідомлення",
-    "messagePlaceholder": "Deine Nachricht…",
+    "messagePlaceholder": "Your message…",
     "multipleHint": "Вибрати декількох одержувачів.",
     "new": "+ Новий",
     "newMessage": "Нове повідомлення",
@@ -140,7 +147,7 @@
     "next": "Уперед",
     "noRecipients": "Немає відповідних отримувачів.",
     "noSelection": "Не вибрано жодного повідомлення",
-    "page": "Seite {n}",
+    "page": "Page {n}",
     "panelTitle": "Повідомлення",
     "recipientPlaceholder": "Введіть ім'я, напр. Mu<unk> ller…",
     "recipientSearch": "Пошук отримувачів",
@@ -185,7 +192,10 @@
     "profileAria": "Відкрити меню профілю",
     "profileTitle": "Ваш профіль",
     "settings": "Налаштування",
-    "timetable": "Розклад"
+    "timetable": "Розклад",
+    "scrollBack": "Scroll left",
+    "scrollForward": "Scroll right",
+    "sessions": "Sessions"
   },
   "overview": {
     "allMessages": "Усі повідомлення",
@@ -200,9 +210,9 @@
     "homework": "Домашня робота",
     "lessonsToday": "Уроків сьогодні",
     "loading": "Завантаження …",
-    "loadingTimetable": "Stundenplan wird geladen.",
+    "loadingTimetable": "Loading timetable …",
     "messages": "Повідомлення",
-    "newMessages": "{count} neu",
+    "newMessages": "{count} new",
     "nextLesson": "Наступний урок",
     "noLessonsToday": "немає уроків сьогодні",
     "online": "Онлайн",
@@ -216,7 +226,20 @@
     "tomorrow": "Завтра",
     "weather": "Погода",
     "weatherHint": "Встановити місце в налаштуваннях",
-    "weatherUnavailable": "Дані погоди не доступні"
+    "weatherUnavailable": "Дані погоди не доступні",
+    "editorToggle": "Arrange",
+    "editorHint": "Drag a section to move it, or use the arrows. Hide what you do not need.",
+    "editorDone": "Done",
+    "editorSaving": "Saving…",
+    "editorSaved": "Layout saved",
+    "editorHide": "Hide section",
+    "editorShow": "Show section",
+    "editorHidden": "Hidden",
+    "editorDrag": "Drag to move",
+    "editorReset": "Reset",
+    "editorEmpty": "All sections are hidden. Turn at least one back on.",
+    "editorWide": "Full width",
+    "editorNarrow": "Half width"
   },
   "settings": {
     "accentApplied": "Колір акценту застосовано.",
@@ -242,7 +265,7 @@
     "copy": "Копія",
     "copyFailed": "Скопіюйте не можливо. Виберіть маркер та скопіюйте його вручну.",
     "createToken": "Створити новий токен",
-    "creating": "Erstellt …",
+    "creating": "Creating …",
     "dataNote": "Кеш локального API збільшує завантаження. Очищення очищає все, коли ваші налаштування зберігаються.",
     "dataTitle": "Дані",
     "detail": "Налаштуйте зовнішній вигляд і поведінку EduFlow.",
@@ -287,7 +310,10 @@
     "title": "Налаштування",
     "tokenCreated": "Токен створено. Скопіюйте значення зараз; він відображається лише один раз.",
     "unnamedDevice": "Неназваний пристрій",
-    "validUntil": "Gültig bis {date}."
+    "validUntil": "Valid until {date}",
+    "languageTitle": "Language",
+    "languageHint": "Applies right away. The choice is remembered on this device.",
+    "sessionsPanelNote": "Devices signed in on this account."
   },
   "theme": {
     "language": "Мова:",
@@ -324,5 +350,27 @@
     "viewAria": "Дивитись",
     "weekDetail": "Уроки {count} цього тижня.",
     "weekTab": "Тижні"
+  },
+  "sessions": {
+    "eyebrow": "Sessions",
+    "title": "Signed-in devices",
+    "detail": "Every device with a session on your account. You can sign out individually or all at once.",
+    "searchPlaceholder": "Search device or ID",
+    "searchAria": "Search sessions",
+    "active": "Signed in",
+    "signedOut": "Signed out",
+    "currentBadge": "This device",
+    "revokeAllOthers": "Sign out all other devices",
+    "revokeAllOthersHint": "This device stays signed in.",
+    "noneActive": "No other device is signed in.",
+    "noMatch": "No session matches your search.",
+    "noSessions": "No sessions yet.",
+    "lastSeen": "Signed in {created}",
+    "expires": "Valid until {expires}",
+    "id": "ID",
+    "openSettings": "Manage sessions",
+    "settingsHint": "{count} signed in · this device is {current}",
+    "revokedOthers": "Signed out {count} other sessions.",
+    "noOthers": "No other sessions"
   }
 }

@@ -2,7 +2,6 @@ package de.eduflow.android.ui.school
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -49,6 +48,7 @@ import de.eduflow.android.data.dto.SubstitutionDayDto
 import de.eduflow.android.ui.common.AppHeader
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.FilterChips
+import de.eduflow.android.ui.common.PullRefreshBox
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SectionLabel
 import de.eduflow.android.ui.navigation.Routes
@@ -151,6 +151,11 @@ private fun SchoolScreen(
                 onDismiss = viewModel::dismissError,
             )
         }
+        PullRefreshBox(
+            refreshing = state.isLoading,
+            onRefresh = { viewModel.load(refresh = true) },
+            modifier = Modifier.weight(1f).fillMaxWidth(),
+        ) {
         if (state.isLoading && state.agenda.isEmpty() && state.substitutions.isEmpty()) {
             Row(Modifier.fillMaxWidth().padding(32.dp), horizontalArrangement = Arrangement.Center) {
                 CircularProgressIndicator()
@@ -160,17 +165,18 @@ private fun SchoolScreen(
         } else {
             SubstitutionList(state.substitutions, dateFormatter)
         }
+        }
     }
 }
 
 @Composable
-private fun ColumnScope.AgendaList(items: List<SchoolAgendaItemDto>, formatter: DateTimeFormatter) {
+private fun AgendaList(items: List<SchoolAgendaItemDto>, formatter: DateTimeFormatter) {
     if (items.isEmpty()) {
         EmptyMessage(stringResource(R.string.school_empty_agenda))
         return
     }
     LazyColumn(
-        modifier = Modifier.weight(1f),
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(9.dp),
     ) {
         items(items, key = { "${it.kind}-${it.id}-${it.date}" }) { item ->
@@ -207,14 +213,14 @@ private fun AgendaCard(item: SchoolAgendaItemDto) {
 }
 
 @Composable
-private fun ColumnScope.SubstitutionList(days: List<SubstitutionDayDto>, formatter: DateTimeFormatter) {
+private fun SubstitutionList(days: List<SubstitutionDayDto>, formatter: DateTimeFormatter) {
     val changes = days.flatMap { it.changes.map { change -> it.date to change } }
     if (changes.isEmpty()) {
         EmptyMessage(stringResource(R.string.school_empty_substitutions))
         return
     }
     LazyColumn(
-        modifier = Modifier.weight(1f),
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(9.dp),
     ) {
         items(changes, key = { "${it.first}-${it.second.schoolClass}-${it.second.lesson}-${it.second.title}" }) { (day, change) ->
@@ -260,8 +266,8 @@ private fun SubstitutionCard(change: SubstitutionChangeDto) {
 }
 
 @Composable
-private fun ColumnScope.EmptyMessage(text: String) {
-    Column(Modifier.weight(1f).fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally,
+private fun EmptyMessage(text: String) {
+    Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
         Text(text, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
