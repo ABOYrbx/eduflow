@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Едуфов</string>
+    <string name="app_name">EduFlow</string>
     <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
-    <string name="common_logo_desc">EduFlow logo</string>
+    <string name="common_logo_desc">Логотип EduFlow</string>
     <string name="common_demo_badge">Демо-версія</string>
     <string name="common_profile_title">Ваш профіль</string>
     <string name="common_profile_default_account">Обліковий запис</string>

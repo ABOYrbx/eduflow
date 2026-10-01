@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">EduFlow</string>
     <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
-    <string name="common_logo_desc">EduFlow logo</string>
+    <string name="common_logo_desc">شعار EduFlow</string>
     <string name="common_demo_badge">ديمو</string>
     <string name="common_profile_title">ملفك الشخصي</string>
     <string name="common_profile_default_account">حساب</string>
