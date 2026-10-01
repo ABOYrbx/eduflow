@@ -11,12 +11,12 @@ declare global {
 
 export function ThemeToggle() {
   const [dark, setDark] = useState(false);
-  const [locale, setLocale] = useState("de");
-  const [supported, setSupported] = useState<string[]>(["de"]);
+  const [locale, setLocale] = useState("en");
+  const [supported, setSupported] = useState<string[]>(["en"]);
 
   useEffect(() => {
     setDark(document.documentElement.dataset.theme === "dark");
-    setLocale(document.documentElement.lang || "de");
+    setLocale(document.documentElement.lang || "en");
     const list = window.__EDUFLOW_MESSAGES__?.supported;
     if (Array.isArray(list) && list.length) setSupported(list);
   }, []);
@@ -39,7 +39,7 @@ export function ThemeToggle() {
       aria-label={t("theme.language")}
       value={locale}
       onChange={(event) => {
-        const next = normalizeLocaleTag(event.target.value) ?? "de";
+        const next = normalizeLocaleTag(event.target.value) ?? "en";
         document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=31536000; samesite=lax`;
         window.location.reload();
       }}

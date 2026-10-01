@@ -12,7 +12,7 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
   const [, force] = useReducer((count: number) => count + 1, 0);
   useEffect(() => {
     const locale = window.__EDUFLOW_MESSAGES__?.locale ?? null;
-    if (locale && locale !== "de") {
+    if (locale && locale !== "en") {
       setActiveLocale(locale);
       force();
     }

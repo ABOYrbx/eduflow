@@ -4,7 +4,9 @@ import ar from "../../messages/ar.json";
 import ca from "../../messages/ca.json";
 import cs from "../../messages/cs.json";
 import da from "../../messages/da.json";
+import de from "../../messages/de.json";
 import el from "../../messages/el.json";
+import en from "../../messages/en.json";
 import en from "../../messages/en.json";
 import es from "../../messages/es.json";
 import fi from "../../messages/fi.json";
@@ -31,6 +33,6 @@ import zh from "../../messages/zh.json";
 // WICHTIG: Neue Crowdin-Sprache = hier Import + Eintrag ergänzen, sonst
 // bleibt sie ungenutzt (t() fällt dann auf Deutsch zurück).
 registerCatalogs({
-  af, ar, ca, cs, da, el, en, es, fi, fr, he, hu, it, ja, ko, nl, no,
+  af, ar, ca, cs, da, de, el, en, es, fi, fr, he, hu, it, ja, ko, nl, no,
   pl, pt, ro, ru, sr, sv, tr, uk, vi, zh,
 });

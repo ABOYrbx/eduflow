@@ -21,11 +21,11 @@ describe("t", () => {
   });
 
   it("liefert Deutsch als Standard", () => {
-    expect(t("nav.overview")).toBe("Übersicht");
+    expect(t("nav.overview")).toBe("Overview");
   });
 
   it("ersetzt Variablen", () => {
-    expect(t("overview.newMessages", { count: 3 })).toBe("3 neu");
+    expect(t("overview.newMessages", { count: 3 })).toBe("3 new");
   });
 
   it("gibt unbekannte Keys unverändert zurück", () => {
@@ -37,18 +37,18 @@ describe("t", () => {
   });
 
   it("fällt für fehlende Keys auf Deutsch zurück", () => {
-    expect(t("nav.messages", undefined, "fr")).toBe("Nachrichten");
+    expect(t("nav.messages", undefined, "fr")).toBe("Messages");
   });
 
   it("fällt für unbekannte Sprachen auf Deutsch zurück", () => {
-    expect(t("nav.overview", undefined, "xx")).toBe("Übersicht");
+    expect(t("nav.overview", undefined, "xx")).toBe("Overview");
   });
 
   it("nutzt den eingespritzten Katalog erst nach Aktivierung", () => {
     (globalThis as { window?: unknown }).window = {
-      __EDUFLOW_MESSAGES__: { locale: "fr", catalog: { nav: { overview: "Aperçu" } }, supported: ["de", "fr"] },
+      __EDUFLOW_MESSAGES__: { locale: "fr", catalog: { nav: { overview: "Aperçu" } }, supported: ["en", "fr"] },
     };
-    expect(t("nav.overview")).toBe("Übersicht");
+    expect(t("nav.overview")).toBe("Overview");
     setActiveLocale("fr");
     expect(t("nav.overview")).toBe("Aperçu");
   });
@@ -57,12 +57,12 @@ describe("t", () => {
 describe("getCatalog/supportedLocales", () => {
   it("liefert registrierte Kataloge und Deutsch als Fallback", () => {
     expect(getCatalog("fr")).toEqual({ nav: { overview: "Aperçu" }, onlyFr: "Seulement FR" });
-    expect(getCatalog("xx")).toEqual(getCatalog("de"));
+    expect(getCatalog("xx")).toEqual(getCatalog("en"));
   });
 
   it("listet Deutsch zuerst", () => {
     const locales = supportedLocales();
-    expect(locales[0]).toBe("de");
+    expect(locales[0]).toBe("en");
     expect(locales).toContain("fr");
   });
 });
@@ -96,7 +96,7 @@ describe("parseAcceptLanguage", () => {
 });
 
 describe("resolveLocale", () => {
-  const supported = ["de", "en", "fr"];
+  const supported = ["en", "de", "fr"];
 
   it("nimmt den ersten unterstützten Kandidaten (Cookie zuerst)", () => {
     expect(resolveLocale(["fr", "en"], supported)).toBe("fr");
@@ -105,7 +105,7 @@ describe("resolveLocale", () => {
 
   it("überspringt Nicht-Unterstütztes und fällt auf Deutsch zurück", () => {
     expect(resolveLocale(["xx", "fr"], supported)).toBe("fr");
-    expect(resolveLocale(["xx", null], supported)).toBe("de");
-    expect(resolveLocale([], supported)).toBe("de");
+    expect(resolveLocale(["xx", null], supported)).toBe("en");
+    expect(resolveLocale([], supported)).toBe("en");
   });
 });
