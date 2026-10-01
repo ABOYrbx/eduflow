@@ -1,9 +1,9 @@
-import de from "../../messages/de.json";
+import en from "../../messages/en.json";
 
 type Vars = Record<string, string | number>;
 
-/** Deutsch ist Quellsprache und Fallback (Crowdin liefert weitere Kataloge). */
-export const FALLBACK_LOCALE = "de";
+/** Englisch ist Quellsprache und Fallback (Crowdin liefert weitere Kataloge). */
+export const FALLBACK_LOCALE = "en";
 export const LOCALE_COOKIE = "eduflow_locale";
 
 /** Zusätzliche Kataloge (der Server registriert alle via lib/locales). */
@@ -15,7 +15,7 @@ export function supportedLocales(): string[] {
   return [FALLBACK_LOCALE, ...Object.keys(extraCatalogs)];
 }
 export function getCatalog(locale: string): unknown {
-  return locale !== FALLBACK_LOCALE && extraCatalogs[locale] ? extraCatalogs[locale] : de;
+  return locale !== FALLBACK_LOCALE && extraCatalogs[locale] ? extraCatalogs[locale] : en;
 }
 
 /** Eigennamen der Sprachen (Crowdin-Neuzugänge fallen auf den Code zurück). */
@@ -43,7 +43,7 @@ function injected(): { locale: string; catalog: unknown } | null {
 
 /**
  * Aktive Sprache im Browser (setzt der LocaleProvider nach der Hydration,
- * damit der erste Client-Render mit dem Server-HTML auf Deutsch übereinstimmt).
+ * damit der erste Client-Render mit dem Server-HTML auf Englisch übereinstimmt).
  */
 let activeLocale: string | null = null;
 export function setActiveLocale(locale: string | null): void {
@@ -68,7 +68,7 @@ export function parseAcceptLanguage(header: string | null | undefined): string[]
   return out;
 }
 
-/** Erste unterstützte Sprache aus den Kandidaten, sonst Deutsch. */
+/** Erste unterstützte Sprache aus den Kandidaten, sonst Englisch. */
 export function resolveLocale(candidates: Array<string | null | undefined>, supported: string[] = supportedLocales()): string {
   for (const candidate of candidates) {
     const tag = normalizeLocaleTag(candidate);
@@ -88,13 +88,13 @@ function lookup(catalog: unknown, key: string): string | undefined {
 
 export function t(key: string, vars?: Vars, locale?: string): string {
   const injection = injected();
-  let catalog: unknown = de;
+  let catalog: unknown = en;
   if (locale && locale !== FALLBACK_LOCALE && extraCatalogs[locale]) {
     catalog = extraCatalogs[locale];
   } else if (!locale && activeLocale && injection && injection.locale === activeLocale) {
     catalog = injection.catalog;
   }
-  const out = lookup(catalog, key) ?? lookup(de, key) ?? key;
+  const out = lookup(catalog, key) ?? lookup(en, key) ?? key;
   if (!vars) return out;
   let text = out;
   for (const [name, value] of Object.entries(vars)) text = text.split(`{${name}}`).join(String(value));

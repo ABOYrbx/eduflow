@@ -520,7 +520,7 @@ public struct UberSecureField: View {
                         .foregroundStyle(EduFlowPalette.inkDim(scheme))
                 }
                 .buttonStyle(.plain)
-                .help(revealed ? NSLocalizedString("common_password_hide", value: "Passwort verbergen", comment: "Passwort: verbergen") : NSLocalizedString("common_password_show", value: "Passwort anzeigen", comment: "Passwort: anzeigen"))
+                .help(revealed ? NSLocalizedString("common_password_hide", value: "Hide password", comment: "Passwort: verbergen") : NSLocalizedString("common_password_show", value: "Show password", comment: "Passwort: anzeigen"))
             } else if !text.isEmpty {
                 Button { text = "" } label: {
                     Image(systemName: "xmark.circle.fill")
@@ -655,7 +655,7 @@ public struct ErrorView: View {
                 .font(UberFont.text(15))
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 24)
-            PillButton("Erneut versuchen", action: onRetry)
+            PillButton("Try again", action: onRetry)
                 .padding(.horizontal, 24)
             Spacer()
         }
@@ -784,7 +784,7 @@ public struct HelloGreeting: View {
     private let text: String
     private let fontSize: CGFloat
 
-    public init(_ text: String = "Hallo!", fontSize: CGFloat = 44) {
+    public init(_ text: String = "Hello!", fontSize: CGFloat = 44) {
         self.text = text
         self.fontSize = fontSize
     }

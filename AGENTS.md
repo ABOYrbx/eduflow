@@ -168,7 +168,9 @@ alte Web-Templates und `static/uber.css` werden fürs App-Design IGNORIERT).
   Benutzerpfade (`/Users/<name>/…`, Hostnamen) gehören weder in Commits noch
   in getrackte Dateien; Build-/Output-Ordner (`build/`, `.gradle/`,
   `DerivedData/`, `xcuserdata/`) werden nie committet.
-- Alle UI-Strings deutsch, kurz, ohne Secrets/Stacktraces/Pfade.
+- Alle UI-Strings englisch (Quellsprache, Details: `plaene/LOKALISIERUNG.md`),
+  kurz, ohne Secrets/Stacktraces/Pfade. Deutsche Übersetzungen liegen daneben
+  (`de.json`, `values-de/`, xcstrings-`de`); Status-/Typ-Codes bleiben deutsch.
   401-Verhalten überall → Login (`TOKEN_INVALID/EXPIRED`, `EDUPAGE_2FA` →
   neu anmelden). Jeder arbeitet auf eigenem Branch ab `main`; bei
   parallelen Bearbeitungen derselben Dateien zuerst Stand per Build

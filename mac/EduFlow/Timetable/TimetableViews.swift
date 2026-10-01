@@ -16,17 +16,17 @@ public struct DayView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
                 PageHead(
-                    "Stundenplan",
+                    "Timetable",
                     stats: vm.weekMode ? vm.weekResponse.weekLabel : vm.dayResponse.dayLabel
                 )
                 VStack(spacing: 8) {
                     HStack(spacing: 2) {
-                        Button("Tag") {
+                        Button("Day") {
                             vm.weekMode = false
                             Task { await vm.load(onSessionExpired: onSessionExpired) }
                         }
                         .buttonStyle(TogglePill(active: !vm.weekMode))
-                        Button("Woche") {
+                        Button("Week") {
                             vm.weekMode = true
                             Task { await vm.load(onSessionExpired: onSessionExpired) }
                         }
@@ -39,17 +39,17 @@ public struct DayView: View {
                         Capsule().stroke(EduFlowPalette.border(scheme), lineWidth: 1)
                     }
                     HStack(spacing: 8) {
-                        Button("‹ Zurück") {
+                        Button("‹ Back") {
                             Task { await vm.step(-1, onSessionExpired: onSessionExpired) }
                         }
                         .buttonStyle(UberButtonStyle(.smallLight))
                         .hoverLift()
-                        Button("Heute") {
+                        Button("Today") {
                             Task { await vm.goToday(onSessionExpired: onSessionExpired) }
                         }
                         .buttonStyle(UberButtonStyle(.smallLight))
                         .hoverLift()
-                        Button("Weiter ›") {
+                        Button("Continue ›") {
                             Task { await vm.step(1, onSessionExpired: onSessionExpired) }
                         }
                         .buttonStyle(UberButtonStyle(.smallLight))
@@ -72,7 +72,7 @@ public struct DayView: View {
                 } else if vm.weekMode {
                     weekMatrix
                 } else if vm.dayResponse.lessons.isEmpty {
-                    Text("Schulfrei.")
+                    Text("No school.")
                         .font(UberFont.text(15))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                         .frame(maxWidth: .infinity)
@@ -94,7 +94,7 @@ public struct DayView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle(NSLocalizedString("Stundenplan", value: "Stundenplan", comment: "Stundenplan: Titel"))
+        .navigationTitle(NSLocalizedString("Timetable", value: "Timetable", comment: "Stundenplan: Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
         .refreshable { await vm.load(refresh: true, onSessionExpired: onSessionExpired) }
     }
@@ -274,13 +274,13 @@ public struct LessonRow: View {
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 HStack(spacing: 6) {
                     if lesson.isCancelled {
-                        Tag("Entfall", style: .muted)
+                        Tag("Cancellation", style: .muted)
                     }
                     if lesson.isOnline {
                         Tag("Online", style: .blue)
                     }
                     if lesson.isLernzeit {
-                        Tag("Lernzeit", style: .muted)
+                        Tag("Study time", style: .muted)
                     }
                 }
             }

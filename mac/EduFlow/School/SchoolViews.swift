@@ -130,8 +130,8 @@ private enum SchoolTab: String, CaseIterable, Identifiable {
     var id: String { rawValue }
     var displayName: String {
         switch self {
-        case .agenda: return NSLocalizedString("school_tab_agenda", value: "Kalender", comment: "Schule: Tab Kalender")
-        case .substitutions: return NSLocalizedString("school_tab_substitutions", value: "Vertretungen", comment: "Schule: Tab Vertretungen")
+        case .agenda: return NSLocalizedString("school_tab_agenda", value: "Calendar", comment: "Schule: Tab Kalender")
+        case .substitutions: return NSLocalizedString("school_tab_substitutions", value: "Substitutions", comment: "Schule: Tab Vertretungen")
         }
     }
 }
@@ -152,8 +152,8 @@ struct SchoolView: View {
             VStack(alignment: .leading, spacing: 18) {
                 HStack(alignment: .center) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Schulalltag").font(UberFont.text(26, weight: .heavy))
-                        Text("Termine und Planänderungen")
+                        Text("School life").font(UberFont.text(26, weight: .heavy))
+                        Text("Events and schedule changes")
                             .font(UberFont.text(14)).foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     }
                     Spacer()
@@ -163,7 +163,7 @@ struct SchoolView: View {
                     .buttonStyle(.bordered)
                     .disabled(vm.isLoading)
                 }
-                Picker(NSLocalizedString("school_picker_section", value: "Bereich", comment: "Schule: Bereichsfilter"), selection: $tab) {
+                Picker(NSLocalizedString("school_picker_section", value: "Section", comment: "Schule: Bereichsfilter"), selection: $tab) {
                     ForEach(SchoolTab.allCases) { Text($0.displayName).tag($0) }
                 }
                 .pickerStyle(.segmented)
@@ -178,11 +178,11 @@ struct SchoolView: View {
                 }
                 if tab == .substitutions {
                     HStack {
-                        Button("← Vorwoche") { Task { await vm.moveWeek(-1, onSessionExpired: onSessionExpired) } }
+                        Button("← Previous week") { Task { await vm.moveWeek(-1, onSessionExpired: onSessionExpired) } }
                         Spacer()
                         Text(weekLabel(vm.selectedDay)).font(UberFont.text(12, weight: .semibold))
                         Spacer()
-                        Button("Nächste →") { Task { await vm.moveWeek(1, onSessionExpired: onSessionExpired) } }
+                        Button("Next →") { Task { await vm.moveWeek(1, onSessionExpired: onSessionExpired) } }
                     }
                     .buttonStyle(.bordered)
                 }
@@ -199,14 +199,14 @@ struct SchoolView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle(NSLocalizedString("school_nav", value: "Termine & Vertretungen", comment: "Schule: Titel"))
+        .navigationTitle(NSLocalizedString("school_nav", value: "Events & substitutions", comment: "Schule: Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
         .refreshable { await vm.load(refresh: true, onSessionExpired: onSessionExpired) }
     }
 
     @ViewBuilder private var agendaContent: some View {
         if vm.agenda.isEmpty {
-            emptyCard("Keine Schultermine oder Prüfungen in diesem Zeitraum.")
+            emptyCard("No school events or exams in this period.")
         } else {
             ForEach(vm.agenda) { item in
                 VStack(alignment: .leading, spacing: 6) {
@@ -236,7 +236,7 @@ struct SchoolView: View {
     @ViewBuilder private var substitutionsContent: some View {
         let daysWithChanges = vm.substitutions.filter { !$0.changes.isEmpty }
         if daysWithChanges.isEmpty {
-            emptyCard("Für diese Woche sind keine Vertretungen eingetragen.")
+            emptyCard("No substitutions scheduled for this week.")
         } else {
             ForEach(daysWithChanges) { day in
                 VStack(alignment: .leading, spacing: 8) {
@@ -247,7 +247,7 @@ struct SchoolView: View {
                                 .frame(width: 54, alignment: .leading)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(change.title).font(UberFont.text(14, weight: .semibold))
-                                Text(String(format: NSLocalizedString("school_class_format", value: "Klasse %@", comment: "Schule: Klasse"), change.schoolClass)).font(UberFont.text(12))
+                                Text(String(format: NSLocalizedString("school_class_format", value: "Class %@", comment: "Schule: Klasse"), change.schoolClass)).font(UberFont.text(12))
                                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                             }
                             Spacer()
@@ -291,6 +291,6 @@ struct SchoolView: View {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "de_DE")
         formatter.dateFormat = "dd.MM.yyyy"
-        return String(format: NSLocalizedString("school_week_from", value: "Woche ab %@", comment: "Schule: Wochenlabel"), formatter.string(from: day))
+        return String(format: NSLocalizedString("school_week_from", value: "Week of %@", comment: "Schule: Wochenlabel"), formatter.string(from: day))
     }
 }

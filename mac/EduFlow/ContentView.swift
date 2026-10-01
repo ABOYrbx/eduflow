@@ -185,24 +185,24 @@ private struct TopPillNav: View {
                         .padding(.vertical, 6)
                         .background(EduFlowPalette.surface2(scheme))
                         .clipShape(.capsule)
-                        .help(NSLocalizedString("content_demo_hint", value: "Nur synthetische Beispieldaten vom lokalen Fake-Server", comment: "Navigation: Demo-Hinweis"))
+                        .help(NSLocalizedString("content_demo_hint", value: "Only synthetic sample data from the local fake server", comment: "Navigation: Demo-Hinweis"))
                 }
-                NavPill(title: "Übersicht", active: activeSection == .overview) {
+                NavPill(title: "Overview", active: activeSection == .overview) {
                     onNavigate(.overview)
                 }
-                NavPill(title: "Nachrichten", active: activeSection == .messages) {
+                NavPill(title: "Messages", active: activeSection == .messages) {
                     onNavigate(.messages)
                 }
-                NavPill(title: "Hausaufgaben", active: activeSection == .homework) {
+                NavPill(title: "Homework", active: activeSection == .homework) {
                     onNavigate(.homework)
                 }
-                NavPill(title: "Noten", active: activeSection == .grades) {
+                NavPill(title: "Grades", active: activeSection == .grades) {
                     onNavigate(.grades)
                 }
-                NavPill(title: "Stundenplan", active: activeSection == .timetable) {
+                NavPill(title: "Timetable", active: activeSection == .timetable) {
                     onNavigate(.timetable)
                 }
-                NavPill(title: "Termine", active: activeSection == .school) {
+                NavPill(title: "Events", active: activeSection == .school) {
                     onNavigate(.school)
                 }
                 avatarMenu
@@ -235,7 +235,7 @@ private struct TopPillNav: View {
                 .overlay(Circle().stroke(EduFlowPalette.border(scheme), lineWidth: 1))
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(NSLocalizedString("common_profile_menu_open", value: "Profilmenü öffnen", comment: "Navigation: Profilmenü"))
+        .accessibilityLabel(NSLocalizedString("common_profile_menu_open", value: "Open profile menu", comment: "Navigation: Profilmenü"))
         .help("\(store.username) @ \(store.subdomain)")
         .popover(isPresented: $profileMenuOpen, arrowEdge: .top) {
             VStack(alignment: .leading, spacing: 14) {
@@ -247,23 +247,23 @@ private struct TopPillNav: View {
                         .foregroundStyle(EduFlowPalette.ink(scheme))
                         .clipShape(.circle)
                     VStack(alignment: .leading, spacing: 3) {
-                        Text("Dein Profil").font(UberFont.text(14, weight: .bold))
+                        Text("Your profile").font(UberFont.text(14, weight: .bold))
                         Text(verbatim: "\(store.username) @ \(store.subdomain)")
                             .font(UberFont.text(12))
                             .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     }
                 }
                 Divider()
-                profileAction("Einstellungen", icon: "gearshape") {
+                profileAction("Settings", icon: "gearshape") {
                     profileMenuOpen = false
                     onNavigate(.settings)
                 }
-                profileAction("Geräte", icon: "laptopcomputer.and.iphone") {
+                profileAction("Devices", icon: "laptopcomputer.and.iphone") {
                     profileMenuOpen = false
                     onNavigate(.devices)
                 }
                 Divider()
-                profileAction("Abmelden", icon: "rectangle.portrait.and.arrow.right", isDestructive: true) {
+                profileAction("Sign out", icon: "rectangle.portrait.and.arrow.right", isDestructive: true) {
                     profileMenuOpen = false
                     onLogout()
                 }

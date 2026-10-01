@@ -16,8 +16,8 @@ public struct HomeworkView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 14) {
                 PageHead(
-                    "Hausaufgaben",
-                    stats: vm.total == 0 ? nil : String(format: NSLocalizedString("homework_count", value: "%d Aufgaben", comment: "Hausaufgaben: Anzahl"), vm.total)
+                    "Homework",
+                    stats: vm.total == 0 ? nil : String(format: NSLocalizedString("homework_count", value: "%d homework", comment: "Hausaufgaben: Anzahl"), vm.total)
                 )
                 controlsCard
                 statGrid
@@ -31,7 +31,7 @@ public struct HomeworkView: View {
                         .frame(maxWidth: .infinity)
                         .padding(48)
                 } else if vm.items.isEmpty {
-                    Text("Keine Hausaufgaben.")
+                    Text("No homework.")
                         .font(UberFont.text(15))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                         .frame(maxWidth: .infinity)
@@ -47,7 +47,7 @@ public struct HomeworkView: View {
                                 HStack(spacing: 8) {
                                     Tag(item.status, style: statusTag(item.status))
                                     if item.isHidden {
-                                        Tag("Gelöscht", style: .muted)
+                                        Tag("Deleted", style: .muted)
                                     }
                                     (Text("fällig: ")
                                         + Text(item.dueDisplay).bold())
@@ -61,16 +61,16 @@ public struct HomeworkView: View {
                                         .font(UberFont.text(13))
                                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                                 }
-                                (item.description.isEmpty ? Text("(keine Beschreibung)") : Text(verbatim: item.description))
+                                (item.description.isEmpty ? Text("(no description)") : Text(verbatim: item.description))
                                     .font(UberFont.text(15))
                                     .lineSpacing(4)
                                 HStack(spacing: 8) {
-                                    Button(item.isDone ? "Wieder öffnen" : "Fertig") {
+                                    Button(item.isDone ? "Reopen" : "Done") {
                                         Task { await vm.toggleDone(item, onSessionExpired: onSessionExpired) }
                                     }
                                     .buttonStyle(UberButtonStyle(.smallPrimary))
                                     .hoverLift()
-                                    Button(item.isHidden ? "Zurückholen" : "Papierkorb") {
+                                    Button(item.isHidden ? "Restore" : "Papierkorb") {
                                         Task { await vm.toggleTrash(item, onSessionExpired: onSessionExpired) }
                                     }
                                     .buttonStyle(UberButtonStyle(.smallLight))
@@ -80,17 +80,17 @@ public struct HomeworkView: View {
                             }
                         }
                         .contextMenu {
-                            Button(item.isDone ? "Wieder öffnen" : "Als erledigt markieren") {
+                            Button(item.isDone ? "Reopen" : "Mark as done") {
                                 Task { await vm.toggleDone(item, onSessionExpired: onSessionExpired) }
                             }
-                            Button(item.isHidden ? "Zurückholen (als offen)" : "In den Papierkorb") {
+                            Button(item.isHidden ? "Restore (as open)" : "Move to trash") {
                                 Task { await vm.toggleTrash(item, onSessionExpired: onSessionExpired) }
                             }
                         }
                         .riseIn(delay: Double(min(index, 8)) * 0.06)
                     }
                     if vm.canLoadMore {
-                        Button(vm.isLoadingMore ? "Lädt …" : String(format: NSLocalizedString("grades_load_more", value: "Mehr laden (%d/%d)", comment: "Hausaufgaben: mehr laden"), vm.items.count, vm.total)) {
+                        Button(vm.isLoadingMore ? "Loading …" : String(format: NSLocalizedString("grades_load_more", value: "Load more (%d/%d)", comment: "Hausaufgaben: mehr laden"), vm.items.count, vm.total)) {
                             Task { await vm.loadMore(onSessionExpired: onSessionExpired) }
                         }
                         .buttonStyle(UberButtonStyle(.smallLight))
@@ -112,7 +112,7 @@ public struct HomeworkView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle(NSLocalizedString("Hausaufgaben", value: "Hausaufgaben", comment: "Hausaufgaben: Titel"))
+        .navigationTitle(NSLocalizedString("Homework", value: "Homework", comment: "Hausaufgaben: Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
         .refreshable { await vm.load(refresh: true, onSessionExpired: onSessionExpired) }
     }
@@ -137,17 +137,17 @@ public struct HomeworkView: View {
                     }
                 }
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Suche")
+                    Text("Search")
                         .font(UberFont.text(12, weight: .bold))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                    TextField(NSLocalizedString("grades_search_placeholder", value: "Suchen", comment: "Hausaufgaben: Suche Platzhalter"), text: $vm.query)
+                    TextField(NSLocalizedString("grades_search_placeholder", value: "Search", comment: "Hausaufgaben: Suche Platzhalter"), text: $vm.query)
                         .uberInput()
                         .autocorrectionDisabled()
                         .onSubmit {
                             Task { await vm.load(onSessionExpired: onSessionExpired) }
                         }
                 }
-                Toggle(NSLocalizedString("homework_toggle_tests", value: "Tests einbeziehen", comment: "Hausaufgaben: Tests einbeziehen"), isOn: $vm.includeTests)
+                Toggle(NSLocalizedString("homework_toggle_tests", value: "Include tests", comment: "Hausaufgaben: Tests einbeziehen"), isOn: $vm.includeTests)
                     .font(UberFont.text(14, weight: .medium))
                     .onChange(of: vm.includeTests) {
                         Task { await vm.load(onSessionExpired: onSessionExpired) }

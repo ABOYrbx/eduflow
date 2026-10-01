@@ -3,34 +3,33 @@
 Quelle für Design-/Plattformregeln: `AGENTS.md` (dort gelten weiterhin alle
 Projektgrenzen). iOS ist ausgenommen (zurückgestellt).
 
-## Stand: Quellen befüllt, Crowdin kann übersetzen
+## Stand: Englisch ist Source-Sprache und Fallback
 
-Deutsch ist überall Source-Sprache **und** Fallback. Alle nutzersichtbaren
-UI-Strings liegen in Quelldateien und erscheinen nach dem nächsten Sync in
-Crowdin. Es gibt noch keine übersetzten UI-Texte; Crowdin liefert später nur
-Ergänzungen, kein Verhalten ändert sich. Die API-Fehler-`code`s werden nie
+Englisch ist überall Source-Sprache **und** Fallback. Alle nutzersichtbaren
+UI-Strings liegen auf Englisch in den Quelldateien und erscheinen nach dem
+nächsten Sync in Crowdin. Deutsch liegt als vollständige Übersetzung daneben
+(`de.json`, `values-de/`, xcstrings-`de`). Die API-Fehler-`code`s werden nie
 übersetzt — nur die `error`-Texte.
 
-Android- und macOS-UI sind vollständig auf die Quelldateien umgestellt
-(keine Hardcodings mehr): Android nutzt `stringResource` aus
-`values/strings.xml`, macOS `LocalizedStringKey` aus dem String-Katalog.
-Ausgenommen bleiben nur die unten dokumentierten Fälle
-(ViewModel-Fallbacks ohne Context, Protokoll-Strings/Status,
-Datumsformate, Demo-Daten) — diese bleiben bewusst deutsch.
+Alle Clients lesen Englisch als Standard: Web via `t()` (`src/lib/i18n.ts`,
+Fallback `en`), Backend via `t()` (`src/i18n.ts`), Android via `values/`
+(Fallback, Deutsch in `values-de/`), macOS via String-Katalog
+(`sourceLanguage: en`). Ausgenommen bleiben nur die unten dokumentierten
+Fälle (Protokoll-Strings/Status, Datumsformate, Demo-Daten) — diese bleiben
+bewusst deutsch.
 
 ## Dateizuordnung (`crowdin.yml` im Root)
 
-| Plattform | Quelle im Repo (deutsch) | Übersetzung via Crowdin |
+| Plattform | Quelle im Repo (englisch) | Übersetzung via Crowdin |
 |---|---|---|
-| Web (Next.js) | `apps/web/messages/de.json` (`t()` aus `src/lib/i18n.ts`) | `apps/web/messages/<locale>.json` |
-| Backend (NestJS) | `apps/api/src/messages/de.json` (`t()` aus `src/i18n.ts`) | `apps/api/src/messages/<locale>.json` |
+| Web (Next.js) | `apps/web/messages/en.json` (`t()` aus `src/lib/i18n.ts`) | `apps/web/messages/<locale>.json` |
+| Backend (NestJS) | `apps/api/src/messages/en.json` (`t()` aus `src/i18n.ts`) | `apps/api/src/messages/<locale>.json` |
 | Android | `android/app/src/main/res/values/strings.xml` (`stringResource`) | `res/values-<android_code>/strings.xml` |
-| macOS | `mac/EduFlow/Resources/Localizable.xcstrings` (Source `de`, im Bundle registriert) | gleiche Datei (String Catalog) |
+| macOS | `mac/EduFlow/Resources/Localizable.xcstrings` (Source `en`, im Bundle registriert) | gleiche Datei (String Catalog) |
 
-Kennzahlen (Blätter/Entries gezählt, Duplikate vereint): Web 249 Keys
-(13 Gruppen), Backend 111 Keys (Fehlertexte, Settings-Schema, API-Docs),
-Android 288 Strings + 3 Plurals, macOS 260 Katalog-Keys
-(Source-Sprache `de`).
+Kennzahlen: Web 296 Keys (13 Gruppen, inkl. `theme.language`), Backend
+111 Keys (Fehlertexte, Settings-Schema, API-Docs), Android 288 Strings +
+3 Plurals, macOS 338 Katalog-Keys (Source-Sprache `en`).
 
 ## Sync-Ablauf
 
@@ -46,7 +45,7 @@ Android 288 Strings + 3 Plurals, macOS 260 Katalog-Keys
 
 ## Was du manuell in Crowdin / GitHub tun musst
 
-1. Crowdin-Projekt anlegen (privat, Source-Sprache Deutsch). ✅ (erledigt)
+1. Crowdin-Projekt anlegen (privat, Source-Sprache Englisch). ✅ (erledigt)
 2. Crowdin-GitHub-App für `ABOYrbx/eduflow` installieren (nur `main`,
    Service-Branch `l10n_main`, Sync-Schedule täglich). ✅ (erledigt)
 3. In GitHub unter Settings → Secrets: `CROWDIN_PROJECT_ID` und
@@ -67,16 +66,24 @@ Android 288 Strings + 3 Plurals, macOS 260 Katalog-Keys
 - **Demo-Inhalte** (Fake-Provider, `demo-data.ts`): simulierte Schul-Daten.
 - **Wetterbeschreibungen** (`desc`): Fremddaten von OpenWeather.
 - **Android-ViewModel-Fallbacks** (`ErrorMapper`, `*ViewModel`): brauchen
-  Context; Tests erzwingen Deutsch.
-- **macOS-`value:`-Fallbacks:** identischer deutscher Text, greift nur wenn
+  Context; Tests laufen mit englischem Standardkatalog.
+- **macOS-`value:`-Fallbacks:** identischer englischer Text, greift nur wenn
   der Katalog fehlt.
 
 ## Regeln für neue Strings (PR-Checkliste)
 
-1. Neue UI-Strings gehören immer in die Quelldatei der Plattform
-   (keine Hardcodings): Web → `messages/de.json`, Backend → `src/messages/de.json`,
+1. Neue UI-Strings gehören immer **auf Englisch** in die Quelldatei der Plattform
+   (keine Hardcodings): Web → `messages/en.json`, Backend → `src/messages/en.json`,
    Android → `values/strings.xml`, macOS → `xcstrings` (+ `NSLocalizedString`
-   bei dynamischen Stellen).
+   bei dynamischen Stellen). Deutsche Übersetzung jeweils daneben pflegen
+   (`de.json`, `values-de/`, xcstrings-`de`).
 2. `code`-Vokabular und Status-/Typ-Werte stabil halten (siehe oben).
-3. Abnahmen: `npm test` + `npm run typecheck` (Root), Gradle
+3. Web: Neue Crowdin-Sprache = Import + Eintrag in `apps/web/src/lib/locales.ts`
+   ergänzen (sonst fällt `t()` auf Englisch zurück); Katalog-Änderungen brauchen
+   einen Web-Rebuild (JSONs sind gebündelt). Neue UI-Strings brauchen nur
+   `en.json` (+ `de.json`) — andere Kataloge fallen pro Key auf Englisch zurück.
+   Der Übersetzungsstand (`src/lib/locale-coverage.generated.ts` für die
+   Sprachauswahl auf der Login-Seite) erzeugt sich vor jedem Build neu
+   (`npm run locales:stats`, siehe `prebuild` in `apps/web/package.json`).
+4. Abnahmen: `npm test` + `npm run typecheck` (Root), Gradle
    `:app:assembleDebug :app:testDebugUnitTest`, `xcodebuild … test`.

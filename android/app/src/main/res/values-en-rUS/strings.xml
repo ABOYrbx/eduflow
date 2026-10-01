@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">EduFlow</string>
+
     <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
     <string name="common_logo_desc">EduFlow logo</string>
     <string name="common_demo_badge">DEMO</string>
@@ -8,12 +9,10 @@
     <string name="common_profile_default_account">Account</string>
     <string name="common_profile_default_domain">EduPage</string>
     <string name="common_profile_subtitle_format">%1$s @ %2$s</string>
-    <string name="common_menu_settings">Settings</string>
     <string name="common_menu_logout">Sign out</string>
     <string name="common_retry">Try again</string>
     <string name="common_reload">Reload</string>
     <string name="common_refresh_desc">Refresh</string>
-    <string name="common_relogin">Sign in</string>
     <string name="common_ok">OK</string>
     <string name="common_back">Back</string>
     <string name="common_next">Continue</string>
@@ -23,12 +22,13 @@
     <string name="common_save">Save</string>
     <string name="common_saving">Saving …</string>
     <string name="common_load_more_format">Load more (%1$d/%2$d)</string>
+
     <!-- BottomBar -->
     <string name="bottom_home">Home</string>
     <string name="bottom_tasks">Tasks</string>
     <string name="bottom_messages">Messages</string>
     <string name="bottom_plan">Plan</string>
-    <string name="bottom_more">More</string>
+
     <!-- Auth / Login -->
     <string name="auth_demo_banner">Demo mode · synthetic sample data only</string>
     <string name="auth_step_format">Step %1$d of %2$d</string>
@@ -52,6 +52,7 @@
     <string name="auth_login">Sign in</string>
     <string name="auth_demo_leave">Leave demo</string>
     <string name="auth_demo_view">View demo</string>
+
     <!-- Onboarding -->
     <string name="onboarding_greeting">Hello!</string>
     <string name="onboarding_features_title">Everything in one place.</string>
@@ -67,6 +68,7 @@
     <string name="onboarding_test_connected">✓ Connected</string>
     <string name="onboarding_test_failed">× Failed</string>
     <string name="onboarding_test_action">Test connection</string>
+
     <!-- 2FA -->
     <string name="twofa_section">2 of 2 · Confirm code</string>
     <string name="twofa_title">Confirm code</string>
@@ -77,10 +79,10 @@
     <string name="twofa_confirm">Confirm</string>
     <string name="twofa_back">Back to sign-in</string>
     <string name="twofa_validity">The code is valid for 10 minutes.</string>
+
     <!-- Einstellungen -->
     <string name="settings_title">Settings</string>
     <string name="settings_subtitle">Your EduFlow account</string>
-    <string name="settings_demo_section">Demo mode</string>
     <string name="settings_demo_text">Only synthetic sample data is loaded from the local demo server.</string>
     <string name="settings_server_section">Server</string>
     <string name="settings_server_placeholder">Server (…/api/v1/)</string>
@@ -103,7 +105,6 @@
     <string name="settings_hwtests_label">Include tests and exams</string>
     <string name="settings_unread_placeholder">Max. unread messages (1–50)</string>
     <string name="settings_homework_placeholder">Max. open homework (1–50)</string>
-    <string name="settings_weather_section">Weather</string>
     <string name="settings_weather_show">Show weather map</string>
     <string name="settings_weather_sub">On the overview, on Android and the web</string>
     <string name="settings_weather_city_placeholder">City for weather map (e.g. Berlin)</string>
@@ -121,15 +122,7 @@
     <string name="settings_dev_onboarding">Run onboarding again</string>
     <string name="settings_dev_onboarding_sub">Signs you out and restarts the introduction.</string>
     <string name="settings_landing_overview">Overview</string>
-    <string name="settings_landing_messages">Messages</string>
-    <string name="settings_landing_tasks">Tasks</string>
-    <string name="settings_landing_grades">Grades</string>
-    <string name="settings_landing_plan">Plan</string>
-    <string name="settings_hwstatus_all">Alle</string>
-    <string name="settings_hwstatus_open">Offen</string>
-    <string name="settings_hwstatus_overdue">Überfällig</string>
-    <string name="settings_hwstatus_done">Completed</string>
-    <string name="settings_hwstatus_trash">Recycle bin</string>
+
     <!-- Geräte -->
     <string name="devices_title">Devices</string>
     <string name="devices_subtitle">Manage signed-in devices</string>
@@ -139,6 +132,7 @@
     <string name="devices_created_format">Created: %1$s</string>
     <string name="devices_expires_format">Expires: %1$s</string>
     <string name="devices_remove">Remove</string>
+
     <!-- Noten -->
     <string name="grades_title">Grades</string>
     <string name="grades_subtitle">Your performance by subject</string>
@@ -155,6 +149,7 @@
     <string name="grades_weight_default">×1</string>
     <string name="grades_teacher_format">Teacher: %1$s</string>
     <string name="grades_class_avg_format">Class avg. %1$s</string>
+
     <!-- Hausaufgaben -->
     <string name="homework_title">Homework</string>
     <string name="homework_subtitle">Your tasks at a glance</string>
@@ -169,17 +164,15 @@
     <string name="homework_trash_open_format">Trash (%1$d)</string>
     <string name="homework_empty_trash">The trash is empty.</string>
     <string name="homework_empty">No homework found.</string>
-    <string name="homework_swipe_trash">Trash</string>
+    <string name="homework_swipe_trash">Papierkorb</string>
     <string name="homework_swipe_restore">Restore</string>
     <string name="homework_reopen_desc">Reopen</string>
     <string name="homework_title_format">Homework #%1$d</string>
-    <string name="homework_status_trash">Recycle bin</string>
-    <string name="homework_status_open">Offen</string>
+
     <!-- Nachrichten -->
     <string name="messages_title">Messages</string>
     <string name="messages_subtitle">Messages from your school</string>
     <string name="messages_search_placeholder">Search messages</string>
-    <string name="messages_filter_all">Alle</string>
     <string name="messages_filter_unread">Ungelesen</string>
     <string name="messages_filter_files">With files</string>
     <string name="messages_count_format">%1$d of %2$d messages</string>
@@ -202,22 +195,19 @@
     <string name="messages_reply_placeholder">Reply …</string>
     <string name="messages_sending">Sending …</string>
     <string name="messages_reply_send">Reply</string>
-    <string name="messages_compose_title">New message</string>
     <string name="messages_compose_subtitle">Choose teachers and classmates</string>
     <string name="messages_recipient_search">Search recipients</string>
     <string name="messages_recipients_format">%1$d recipients chosen</string>
     <string name="messages_body_placeholder">Message text</string>
     <string name="messages_compose_send">Send</string>
+
     <!-- Übersicht -->
     <string name="overview_customize">Customize overview</string>
     <string name="overview_customize_desc">Choose which sections appear first.</string>
     <string name="overview_move_up_desc">Move up</string>
     <string name="overview_move_down_desc">Move down</string>
     <string name="overview_messages_count_format">Messages · %1$d</string>
-    <string name="overview_action_all">Alle</string>
-    <string name="overview_homework_count_format">%1$d offen · %2$d überfällig</string>
     <string name="overview_action_all_tasks">All tasks</string>
-    <string name="overview_action_timetable">Timetable</string>
     <string name="overview_clock_label">TIME</string>
     <string name="overview_today_hours">CLASSES TODAY</string>
     <string name="overview_no_school">No school — no classes today.</string>
@@ -239,17 +229,15 @@
     <string name="overview_weather_feels">FEELS LIKE</string>
     <string name="overview_weather_wind">WIND</string>
     <string name="overview_weather_next_days">COMING DAYS</string>
-    <string name="overview_weather_today">Today</string>
     <string name="overview_weather_tomorrow">Tomorrow</string>
     <string name="overview_weather_day3">Day after tomorrow</string>
     <string name="overview_messages_empty">No new messages.</string>
     <string name="overview_homework_empty">No open homework. Well done.</string>
-    <string name="overview_order_messages">Messages</string>
-    <string name="overview_order_homework">Homework</string>
     <string name="overview_order_weather">Weather</string>
     <string name="overview_due_suffix_format"> · fällig: %1$s</string>
     <string name="overview_subject_suffix_format"> · %1$s</string>
     <string name="overview_weather_high_low_format">H %1$s · L %2$s</string>
+
     <!-- Schulalltag -->
     <string name="school_title">School life</string>
     <string name="school_subtitle">Events and schedule changes</string>
@@ -267,6 +255,7 @@
     <string name="school_change_remove">ENTFÄLLT</string>
     <string name="school_change_default">GEÄNDERT</string>
     <string name="school_class_format">Class %1$s</string>
+
     <!-- Stundenplan -->
     <string name="timetable_title">Timetable</string>
     <string name="timetable_day_count_format">%1$d periods</string>
@@ -280,34 +269,29 @@
     <string name="timetable_now">Now</string>
     <string name="timetable_day_tab">Day</string>
     <string name="timetable_week_tab">Week</string>
-    <string name="timetable_cancelled_with_time">%1$s · %2$s cancelled with time</string>
-    <string name="timetable_cancelled">%1$s cancelled</string>
+    <string name="timetable_cancelled_with_time">%1$s · %2$s entfällt</string>
+    <string name="timetable_cancelled">%1$s entfällt</string>
     <string name="timetable_lesson_fallback">Lesson</string>
     <string name="timetable_room_format">Room %1$s</string>
     <string name="timetable_flag_online">Online</string>
     <string name="timetable_flag_lernzeit">Study time</string>
     <string name="timetable_flag_lernzeit_hours">Study time (%1$d hrs.)</string>
     <string name="timetable_flag_event">Event</string>
+
     <!-- Mehr -->
     <string name="more_title">More</string>
     <string name="more_subtitle">More sections</string>
     <string name="more_school_title">Events &amp; substitutions</string>
     <string name="more_school_sub">Exams, school events and changes</string>
-    <string name="more_grades_title">Grades</string>
-    <string name="more_grades_sub">Your performance by subject</string>
-    <string name="more_settings_title">Settings</string>
     <string name="more_settings_sub">Appearance, account and server</string>
-    <string name="more_devices_title">Devices</string>
-    <string name="more_devices_sub">Manage signed-in devices</string>
     <string name="more_demo_title">Demo mode</string>
     <string name="more_demo_sub">Sample data only · no real school connections</string>
-    <string name="more_server_title">Server URL</string>
     <string name="more_server_fallback">Server for API requests</string>
     <string name="more_cache_title">Clear cache</string>
     <string name="more_cache_default">Delete cached data</string>
-    <string name="more_logout_title">Sign out</string>
     <string name="more_logout_sub">Sign out from this device</string>
     <string name="more_server_dialog_desc">Server for API requests (…/api/v1/).</string>
+
     <!-- Validierung (clientseitig: Quelle der deutschen ViewModel-Fallbacks in
          ui/auth/AuthViewModel, ui/messages/MessagesViewModel,
          ui/overview/OverviewViewModel — Laufzeit-Fallback bleibt dort
@@ -317,6 +301,7 @@
     <string name="messages_compose_no_recipient">Please choose at least one valid recipient.</string>
     <string name="messages_compose_no_body">Please enter a message text.</string>
     <string name="overview_weather_no_city">Please enter a city.</string>
+
     <!-- Fehler-Fallbacks (Quelle der deutschen Texte in
          data/ErrorMapper.messageFor — Backend-Texte haben Vorrang,
          Laufzeit-Fallback bleibt dort hartkodiert für Context-freie Tests) -->
@@ -332,6 +317,7 @@
     <string name="error_rate_limited">Too many attempts. Please try again later.</string>
     <string name="error_config_missing">Server key missing. Please try again later.</string>
     <string name="error_upstream">Sign-in failed. Please try again later.</string>
+
     <!-- Akzentfarben -->
     <string name="common_accent_black">Black</string>
     <string name="common_accent_blue">Blue</string>
@@ -341,6 +327,7 @@
     <string name="common_accent_orange">Orange</string>
     <string name="common_accent_red">Red</string>
     <string name="common_accent_pink">Pink</string>
+
     <!-- Plurale -->
     <plurals name="settings_devices_count">
         <item quantity="one">%1$d device</item>

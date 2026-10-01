@@ -1,8 +1,10 @@
+import { LanguageSelect } from "../../components/language-select";
 import { LoginForm } from "./login-form";
 import { ThemeToggle } from "./theme-toggle";
 
 export default function LoginPage() {
   return <>
+    <LanguageSelect />
     <ThemeToggle />
     <main className="auth-wrap auth-welcome">
       <div className="auth-particles" aria-hidden="true" />

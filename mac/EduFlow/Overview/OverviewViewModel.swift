@@ -130,7 +130,7 @@ public final class OverviewViewModel {
             wetter = WetterResponse()
             wetterError = APIError(
                 code: ErrorCodes.validation,
-                message: NSLocalizedString("overview_city_missing", value: "Bitte eine Stadt in den Einstellungen eintragen.", comment: "Übersicht: Stadt fehlt")
+                message: NSLocalizedString("overview_city_missing", value: "Please enter a city in settings.", comment: "Übersicht: Stadt fehlt")
             )
             return
         }

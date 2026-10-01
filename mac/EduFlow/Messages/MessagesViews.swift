@@ -25,8 +25,8 @@ public struct MessagesView: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             PageHead(
-                "Nachrichten",
-                stats: vm.total == 0 ? nil : String(format: NSLocalizedString("messages_count", value: "%d Nachrichten", comment: "Nachrichten: Anzahl"), vm.total)
+                "Messages",
+                stats: vm.total == 0 ? nil : String(format: NSLocalizedString("messages_count", value: "%d messages", comment: "Nachrichten: Anzahl"), vm.total)
             )
             searchbar
             if let error = vm.error, vm.items.isEmpty {
@@ -39,7 +39,7 @@ public struct MessagesView: View {
         }
         .padding(20)
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle(NSLocalizedString("messages_nav_list", value: "Nachrichten", comment: "Nachrichten: Titel"))
+        .navigationTitle(NSLocalizedString("messages_nav_list", value: "Messages", comment: "Nachrichten: Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
     }
 
@@ -48,7 +48,7 @@ public struct MessagesView: View {
     private var searchbar: some View {
         VStack(spacing: 8) {
             HStack {
-                TextField(NSLocalizedString("grades_search_placeholder", value: "Suchen", comment: "Nachrichten: Suche Platzhalter"), text: $vm.query)
+                TextField(NSLocalizedString("grades_search_placeholder", value: "Search", comment: "Nachrichten: Suche Platzhalter"), text: $vm.query)
                     .font(UberFont.text(15, weight: .medium))
                     .autocorrectionDisabled()
                     .onSubmit {
@@ -65,7 +65,7 @@ public struct MessagesView: View {
                         .clipShape(.circle)
                 }
                 .buttonStyle(.plain)
-                Picker(NSLocalizedString("messages_picker_type", value: "Typ", comment: "Nachrichten: Typfilter"), selection: $vm.type) {
+                Picker(NSLocalizedString("messages_picker_type", value: "Type", comment: "Nachrichten: Typfilter"), selection: $vm.type) {
                     ForEach(MessageTypes.all, id: \.self) { type in
                         Text(MessageTypes.label(type)).tag(type)
                     }
@@ -85,18 +85,18 @@ public struct MessagesView: View {
                 Capsule().stroke(EduFlowPalette.borderStrong(scheme), lineWidth: 1)
             }
             HStack(spacing: 8) {
-                Button("Neu laden") {
+                Button("Reload") {
                     Task { await vm.load(refresh: true, onSessionExpired: onSessionExpired) }
                 }
                 .buttonStyle(UberButtonStyle(.smallLight))
                 .hoverLift()
-                Button("Alle als gelesen") {
+                Button("Mark all as read") {
                     Task { await vm.markAllRead(onSessionExpired: onSessionExpired) }
                 }
                 .buttonStyle(UberButtonStyle(.smallLight))
                 .hoverLift()
                 Spacer()
-                Button("Neue Nachricht", action: onCompose)
+                Button("New message", action: onCompose)
                     .buttonStyle(UberButtonStyle(.smallPrimary))
                     .hoverLift()
             }
@@ -114,7 +114,7 @@ public struct MessagesView: View {
                         .frame(maxWidth: .infinity)
                         .padding(48)
                 } else if vm.items.isEmpty {
-                    Text("Keine Nachrichten.")
+                    Text("No messages.")
                         .font(UberFont.text(15))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                         .frame(maxWidth: .infinity)
@@ -130,7 +130,7 @@ public struct MessagesView: View {
                         .riseIn(delay: Double(min(index, 8)) * 0.06)
                     }
                     if vm.canLoadMore {
-                        Button(vm.isLoadingMore ? "Lädt …" : String(format: NSLocalizedString("grades_load_more", value: "Mehr laden (%d/%d)", comment: "Nachrichten: mehr laden"), vm.items.count, vm.total)) {
+                        Button(vm.isLoadingMore ? "Loading …" : String(format: NSLocalizedString("grades_load_more", value: "Load more (%d/%d)", comment: "Nachrichten: mehr laden"), vm.items.count, vm.total)) {
                             Task { await vm.loadMore(onSessionExpired: onSessionExpired) }
                         }
                         .buttonStyle(UberButtonStyle(.smallLight))
@@ -159,7 +159,7 @@ private struct MessageRow: View {
         Button(action: action) {
             VStack(alignment: .leading, spacing: 4) {
                 HStack(alignment: .firstTextBaseline, spacing: 8) {
-                    (message.author.isEmpty ? Text("(unbekannt)") : Text(verbatim: message.author))
+                    (message.author.isEmpty ? Text("(unknown)") : Text(verbatim: message.author))
                         .font(UberFont.text(14, weight: .heavy))
                         .tracking(-0.2)
                         .lineLimit(1)
@@ -248,7 +248,7 @@ public struct ThreadDetail: View {
                 }
                 .buttonStyle(.plain)
                 if vm.thread.cached {
-                    Text("Zwischengespeichert")
+                    Text("Cached")
                         .font(UberFont.text(12))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 }
@@ -259,7 +259,7 @@ public struct ThreadDetail: View {
             } else {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack(spacing: 8) {
-                        (message.author.isEmpty ? Text("(unbekannt)") : Text(verbatim: message.author))
+                        (message.author.isEmpty ? Text("(unknown)") : Text(verbatim: message.author))
                             .font(UberFont.text(15, weight: .bold))
                         Spacer()
                         Text(message.timestamp)
@@ -273,7 +273,7 @@ public struct ThreadDetail: View {
                 }
             }
             if !message.attachmentNames.isEmpty {
-                Text("Dateien")
+                Text("Files")
                     .font(UberFont.text(14, weight: .heavy))
                 VStack(spacing: 8) {
                     ForEach(message.attachmentNames.indices, id: \.self) { index in
@@ -285,7 +285,7 @@ public struct ThreadDetail: View {
                                 ProgressView()
                                     .controlSize(.small)
                             } else {
-                                Button("Laden") {
+                                Button("Load") {
                                     Task {
                                         await vm.download(
                                             eventId: message.id,
@@ -309,12 +309,12 @@ public struct ThreadDetail: View {
                     }
                 }
                 if let file = vm.downloadedFile {
-                    ShareLink("Geladene Datei teilen", item: file)
+                    ShareLink("Share downloaded file", item: file)
                         .font(UberFont.text(14, weight: .semibold))
                 }
             }
             if !vm.thread.replies.isEmpty {
-                Text(String(format: NSLocalizedString("messages_replies_count", value: "Antworten (%d)", comment: "Nachrichten: Antwortanzahl"), vm.thread.summary.replies))
+                Text(String(format: NSLocalizedString("messages_replies_count", value: "Replies (%d)", comment: "Nachrichten: Antwortanzahl"), vm.thread.summary.replies))
                     .font(UberFont.text(14, weight: .heavy))
                 VStack(spacing: 8) {
                     ForEach(vm.thread.replies.indices, id: \.self) { index in
@@ -343,7 +343,7 @@ public struct ThreadDetail: View {
                     }
                 }
             }
-            Text("Antwort schreiben")
+            Text("Write a reply")
                 .font(UberFont.text(14, weight: .heavy))
             TextEditor(text: $vm.replyText)
                 .font(UberFont.text(14))
@@ -355,7 +355,7 @@ public struct ThreadDetail: View {
                     RoundedRectangle(cornerRadius: 12)
                         .stroke(EduFlowPalette.borderStrong(scheme), lineWidth: 1)
                 }
-            PillButton(vm.isReplying ? "Sendet …" : "Antworten") {
+            PillButton(vm.isReplying ? "Sending …" : "Replies") {
                 Task { await vm.sendReply(id: message.id, onSessionExpired: onSessionExpired) }
             }
             .disabled(vm.isReplying || vm.replyText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
@@ -379,7 +379,7 @@ public struct ThreadDetail: View {
     private var likesList: some View {
         VStack(alignment: .leading, spacing: 6) {
             if vm.thread.likes.isEmpty {
-                Text("Keine Likes.")
+                Text("No likes.")
                     .font(UberFont.text(14))
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
             } else {
@@ -421,7 +421,7 @@ public struct ThreadView: View {
     public var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
-                Button("‹ Zurück") { onBack() }
+                Button("‹ Back") { onBack() }
                     .font(UberFont.text(13, weight: .bold))
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     .buttonStyle(.plain)
@@ -456,13 +456,13 @@ public struct ComposeView: View {
     public var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
-                PageHead("Neue Nachricht")
+                PageHead("New message")
                 UberCard {
                     VStack(alignment: .leading, spacing: 10) {
-                        Text(String(format: NSLocalizedString("messages_recipients_chosen", value: "Empfänger (%d gewählt)", comment: "Nachrichten: Empfängerzahl"), vm.selected.count))
+                        Text(String(format: NSLocalizedString("messages_recipients_chosen", value: "Recipients (%d selected)", comment: "Nachrichten: Empfängerzahl"), vm.selected.count))
                             .font(UberFont.text(12, weight: .bold))
                             .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                        TextField(NSLocalizedString("Suche", value: "Suche", comment: "Nachrichten: Empfängersuche Platzhalter"), text: $vm.search)
+                        TextField(NSLocalizedString("Search", value: "Search", comment: "Nachrichten: Empfängersuche Platzhalter"), text: $vm.search)
                             .uberInput()
                             .autocorrectionDisabled()
                         if vm.isLoading {
@@ -500,7 +500,7 @@ public struct ComposeView: View {
                 if let error = vm.error {
                     Notice(error.message)
                 }
-                PillButton(vm.isSending ? "Sendet …" : "Senden") {
+                PillButton(vm.isSending ? "Sending …" : "Send") {
                     Task {
                         if await vm.send(onSessionExpired: onSessionExpired) {
                             onSent()
@@ -514,7 +514,7 @@ public struct ComposeView: View {
             .frame(maxWidth: .infinity)
         }
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle(NSLocalizedString("Neue Nachricht", value: "Neue Nachricht", comment: "Nachrichten: Verfassen-Titel"))
+        .navigationTitle(NSLocalizedString("New message", value: "New message", comment: "Nachrichten: Verfassen-Titel"))
         .task { await vm.load(onSessionExpired: onSessionExpired) }
     }
 }

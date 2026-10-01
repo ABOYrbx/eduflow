@@ -179,7 +179,7 @@ public struct OnboardingWelcomePage: View {
             .padding(.top, 8)
             .riseIn(delay: 0.45)
             Spacer()
-            PillButton("Weiter", action: onNext)
+            PillButton("Continue", action: onNext)
                 .opacity(showButton ? 1 : 0)
                 .offset(y: showButton ? 0 : 22)
                 .scaleEffect(showButton ? 1 : 0.985)
@@ -217,19 +217,19 @@ public struct OnboardingFeaturesPage: View {
     public var body: some View {
         VStack(spacing: 0) {
             Spacer()
-            Text("Alles an einem Ort.")
+            Text("Everything in one place.")
                 .font(UberFont.text(30, weight: .heavy))
                 .tracking(-1.2)
                 .padding(.top, 12)
                 .riseIn(delay: 0.08)
             VStack(spacing: 10) {
-                featureRow(icon: "envelope", title: NSLocalizedString("onboarding_feature_messages_title", value: "Nachrichten & Threads", comment: "Onboarding: Nachrichten Titel"), text: NSLocalizedString("onboarding_feature_messages_text", value: "Alle EduPage-Nachrichten im Mail-Layout — mit Likes, Antworten und Dateien.", comment: "Onboarding: Nachrichten Beschreibung"), delay: 0.14)
-                featureRow(icon: "checklist", title: NSLocalizedString("onboarding_feature_homework_title", value: "Hausaufgaben & Noten", comment: "Onboarding: Aufgaben Titel"), text: NSLocalizedString("onboarding_feature_homework_text", value: "Fälligkeiten mit Zählern, Halbjahr-Tabs und Schnitt.", comment: "Onboarding: Aufgaben Beschreibung"), delay: 0.2)
-                featureRow(icon: "calendar", title: NSLocalizedString("onboarding_feature_timetable_title", value: "Stundenplan & Wetter", comment: "Onboarding: Stundenplan Titel"), text: NSLocalizedString("onboarding_feature_timetable_text", value: "Tag und Woche und Wetter auf der Übersicht.", comment: "Onboarding: Stundenplan Beschreibung"), delay: 0.26)
+                featureRow(icon: "envelope", title: NSLocalizedString("onboarding_feature_messages_title", value: "Messages & Threads", comment: "Onboarding: Nachrichten Titel"), text: NSLocalizedString("onboarding_feature_messages_text", value: "All EduPage messages in a mail layout — with likes, replies and files.", comment: "Onboarding: Nachrichten Beschreibung"), delay: 0.14)
+                featureRow(icon: "checklist", title: NSLocalizedString("onboarding_feature_homework_title", value: "Homework & Grades", comment: "Onboarding: Aufgaben Titel"), text: NSLocalizedString("onboarding_feature_homework_text", value: "Due dates with counters, semester tabs and average.", comment: "Onboarding: Aufgaben Beschreibung"), delay: 0.2)
+                featureRow(icon: "calendar", title: NSLocalizedString("onboarding_feature_timetable_title", value: "Timetable & Weather", comment: "Onboarding: Stundenplan Titel"), text: NSLocalizedString("onboarding_feature_timetable_text", value: "Day and week plus weather on the overview.", comment: "Onboarding: Stundenplan Beschreibung"), delay: 0.26)
             }
             .padding(.top, 22)
             Spacer()
-            PillButton("Weiter", action: onNext)
+            PillButton("Continue", action: onNext)
                 .riseIn(delay: 0.32)
         }
         .padding(.vertical, 24)
@@ -290,12 +290,12 @@ public struct OnboardingServerPage: View {
     public var body: some View {
         VStack(spacing: 0) {
             Spacer()
-            Text("Wo läuft dein Server?")
+            Text("Where does your server run?")
                 .font(UberFont.text(30, weight: .heavy))
                 .tracking(-1.2)
                 .padding(.top, 12)
                 .riseIn(delay: 0.08)
-            Text("Trage ein, wo EduFlow als Server läuft.")
+            Text("Enter where EduFlow runs as server.")
                 .font(UberFont.text(14))
                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 .multilineTextAlignment(.center)
@@ -332,15 +332,15 @@ public struct OnboardingServerPage: View {
                     case .ok:
                         HStack(spacing: 6) {
                             Image(systemName: "checkmark.circle.fill")
-                            Text("Verbunden")
+                            Text("Connected")
                         }
                     case .failed:
                         HStack(spacing: 6) {
                             Image(systemName: "xmark.circle.fill")
-                            Text("Fehlgeschlagen")
+                            Text("Failed")
                         }
                     case .none:
-                        (model.checking ? Text("Prüft …") : Text("Verbindung testen"))
+                        (model.checking ? Text("Checking …") : Text("Test connection"))
                     }
                 }
             }
@@ -362,7 +362,7 @@ public struct OnboardingServerPage: View {
                             .font(.system(size: 20, weight: .bold))
                             .foregroundStyle(EduFlowPalette.green)
                     } else {
-                        (model.checking ? Text("Prüft …") : Text("Übernehmen & weiter"))
+                        (model.checking ? Text("Checking …") : Text("Apply & continue"))
                     }
                 }
             }

@@ -33,7 +33,7 @@ public struct LoginView: View {
                     .padding(.top, 20)
                 stepDots
                     .padding(.top, 12)
-                Text(String(format: NSLocalizedString("auth_step_counter", value: "Schritt %d von %d", comment: "Anmeldung: Schrittzähler"), step + 1, totalSteps))
+                Text(String(format: NSLocalizedString("auth_step_counter", value: "Step %d of %d", comment: "Anmeldung: Schrittzähler"), step + 1, totalSteps))
                     .font(UberFont.text(12))
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     .padding(.top, 4)
@@ -51,12 +51,12 @@ public struct LoginView: View {
                 navRow
                     .padding(.top, 22)
                 if step == totalSteps - 1 {
-                    PillButton(vm.isLoading ? "Anmelden …" : "Anmelden") {
+                    PillButton(vm.isLoading ? "Signing in …" : "Sign in") {
                         doLogin()
                     }
                     .disabled(vm.isLoading)
                     .padding(.top, 12)
-                    Text("Lokales Werkzeug — Zugangsdaten bleiben auf diesem Mac.")
+                    Text("Local tool — credentials stay on this Mac.")
                         .font(UberFont.text(12))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                         .multilineTextAlignment(.center)
@@ -64,16 +64,16 @@ public struct LoginView: View {
                         .padding(.top, 18)
                 }
                 if store.isDemo {
-                    Text("Demo-Modus · nur synthetische Beispieldaten")
+                    Text("Demo mode · synthetic sample data only")
                         .font(UberFont.text(12, weight: .semibold))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                         .multilineTextAlignment(.center)
                         .padding(.top, 10)
-                    Button("Demo verlassen") { vm.stopDemo() }
+                    Button("Leave demo") { vm.stopDemo() }
                         .font(UberFont.text(13, weight: .bold))
                         .padding(.top, 4)
                 } else {
-                    Button("Demo ansehen") { startDemo() }
+                    Button("View demo") { startDemo() }
                         .font(UberFont.text(13, weight: .bold))
                         .padding(.top, 10)
                 }
@@ -86,7 +86,7 @@ public struct LoginView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle(NSLocalizedString("auth_nav_login", value: "Anmelden", comment: "Anmeldung: Titel"))
+        .navigationTitle(NSLocalizedString("auth_nav_login", value: "Sign in", comment: "Anmeldung: Titel"))
     }
 
     private var stepDots: some View {
@@ -104,56 +104,56 @@ public struct LoginView: View {
     private var stepContent: some View {
         switch step {
         case 0:
-            stepHint(NSLocalizedString("auth_hint_school", value: "Zu welcher Schule gehörst du?", comment: "Anmeldung: Schulhinweis"))
+            stepHint(NSLocalizedString("auth_hint_school", value: "Which school do you belong to?", comment: "Anmeldung: Schulhinweis"))
             AuthLabel(NSLocalizedString("auth_label_subdomain", value: "Subdomain (optional)", comment: "Anmeldung: Subdomain-Label"))
             UberTextField(
                 text: $vm.subdomain,
-                placeholder: NSLocalizedString("auth_placeholder_subdomain", value: "z. B. musterschule", comment: "Anmeldung: Subdomain-Platzhalter"),
+                placeholder: NSLocalizedString("auth_placeholder_subdomain", value: "e.g. musterschule", comment: "Anmeldung: Subdomain-Platzhalter"),
                 icon: "building.2",
                 autofocus: true
             ) { advance() }
             .onChange(of: vm.subdomain) { vm.clearError() }
         case 1:
-            stepHint(NSLocalizedString("auth_hint_username", value: "Wie heißt du bei EduPage?", comment: "Anmeldung: Benutzerhinweis"))
-            AuthLabel(NSLocalizedString("auth_label_username", value: "Benutzername", comment: "Anmeldung: Benutzername-Label"))
+            stepHint(NSLocalizedString("auth_hint_username", value: "What is your EduPage username?", comment: "Anmeldung: Benutzerhinweis"))
+            AuthLabel(NSLocalizedString("auth_label_username", value: "Username", comment: "Anmeldung: Benutzername-Label"))
             UberTextField(
                 text: $vm.username,
-                placeholder: NSLocalizedString("auth_placeholder_username", value: "z. B. max.muster", comment: "Anmeldung: Benutzername-Platzhalter"),
+                placeholder: NSLocalizedString("auth_placeholder_username", value: "e.g. max.muster", comment: "Anmeldung: Benutzername-Platzhalter"),
                 icon: "person",
                 isError: vm.error != nil,
                 autofocus: true
             ) { advance() }
             .onChange(of: vm.username) { vm.clearError() }
         case 2:
-            stepHint(NSLocalizedString("auth_hint_password", value: "Und dein Passwort?", comment: "Anmeldung: Passworthinweis"))
-            AuthLabel(NSLocalizedString("auth_label_password", value: "Passwort", comment: "Anmeldung: Passwort-Label"))
+            stepHint(NSLocalizedString("auth_hint_password", value: "And your password?", comment: "Anmeldung: Passworthinweis"))
+            AuthLabel(NSLocalizedString("auth_label_password", value: "Password", comment: "Anmeldung: Passwort-Label"))
             UberSecureField(
                 text: $vm.password,
-                placeholder: NSLocalizedString("auth_placeholder_password", value: "Passwort eingeben", comment: "Anmeldung: Passwort-Platzhalter"),
+                placeholder: NSLocalizedString("auth_placeholder_password", value: "Enter password", comment: "Anmeldung: Passwort-Platzhalter"),
                 icon: "lock",
                 isError: vm.error != nil,
                 autofocus: true
             ) { advance() }
             .onChange(of: vm.password) { vm.clearError() }
         case 3:
-            stepHint(NSLocalizedString("auth_hint_device", value: "Welches Gerät meldest du an?", comment: "Anmeldung: Gerätehinweis"))
-            AuthLabel(NSLocalizedString("auth_label_device", value: "Gerät (optional)", comment: "Anmeldung: Gerät-Label"))
+            stepHint(NSLocalizedString("auth_hint_device", value: "Which device are you signing in?", comment: "Anmeldung: Gerätehinweis"))
+            AuthLabel(NSLocalizedString("auth_label_device", value: "Device (optional)", comment: "Anmeldung: Gerät-Label"))
             UberTextField(
                 text: $vm.device,
-                placeholder: NSLocalizedString("auth_placeholder_device", value: "z. B. MacBook", comment: "Anmeldung: Gerät-Platzhalter"),
+                placeholder: NSLocalizedString("auth_placeholder_device", value: "e.g. MacBook", comment: "Anmeldung: Gerät-Platzhalter"),
                 icon: "desktopcomputer",
                 autofocus: true
             ) { advance() }
         default:
-            stepHint(NSLocalizedString("Wo läuft dein Server?", value: "Wo läuft dein Server?", comment: "Anmeldung: Serverhinweis"))
-            AuthLabel(NSLocalizedString("auth_label_server", value: "Server-URL", comment: "Anmeldung: Server-Label"))
+            stepHint(NSLocalizedString("Where does your server run?", value: "Where does your server run?", comment: "Anmeldung: Serverhinweis"))
+            AuthLabel(NSLocalizedString("auth_label_server", value: "Server URL", comment: "Anmeldung: Server-Label"))
             UberTextField(
                 text: $vm.baseURL,
                 placeholder: TokenStore.defaultBaseURL,
                 icon: "server.rack",
                 autofocus: true
             ) { doLogin() }
-            Button("Übernehmen") { vm.applyBaseURL() }
+            Button("Apply") { vm.applyBaseURL() }
                 .font(UberFont.text(13, weight: .bold))
                 .padding(.top, 4)
             Text(String(format: NSLocalizedString("auth_server_line", value: "Server: %@", comment: "Anmeldung: Serverzeile"), vm.baseURL))
@@ -200,13 +200,13 @@ public struct LoginView: View {
     private var navRow: some View {
         HStack(spacing: 12) {
             if step > 0 {
-                Button("Zurück") { go(to: step - 1) }
+                Button("Back") { go(to: step - 1) }
                     .font(UberFont.text(14, weight: .bold))
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
             }
             Spacer()
             if step < totalSteps - 1 {
-                PillButton("Weiter", style: .smallPrimary) { advance() }
+                PillButton("Continue", style: .smallPrimary) { advance() }
                     .disabled(!canAdvance)
             }
         }
@@ -258,11 +258,11 @@ public struct TwoFAView: View {
         ScrollView {
             VStack(spacing: 0) {
                 BrandMark()
-                Text("Code eingeben")
+                Text("Enter code")
                     .font(UberFont.text(28, weight: .heavy))
                     .tracking(-0.8)
                     .padding(.top, 20)
-                Text("Code aus E-Mail oder App eingeben.")
+                Text("Enter the code from your email or app.")
                     .font(UberFont.text(14))
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     .multilineTextAlignment(.center)
@@ -275,19 +275,19 @@ public struct TwoFAView: View {
                 AuthLabel(NSLocalizedString("auth_label_code", value: "Code", comment: "Anmeldung: Code-Label"))
                 UberSecureField(
                     text: $vm.code,
-                    placeholder: NSLocalizedString("auth_placeholder_code", value: "6-stelliger Code", comment: "Anmeldung: Code-Platzhalter"),
+                    placeholder: NSLocalizedString("auth_placeholder_code", value: "6-digit code", comment: "Anmeldung: Code-Platzhalter"),
                     icon: "key",
                     isError: vm.error != nil,
                     autofocus: true,
                     allowReveal: false
                 ) { doSubmit() }
                 .onChange(of: vm.code) { vm.clearError() }
-                PillButton(vm.isLoading ? "Prüfen …" : "Bestätigen") {
+                PillButton(vm.isLoading ? "Checking …" : "Confirm") {
                     doSubmit()
                 }
                 .disabled(vm.isLoading || vm.code.trimmingCharacters(in: .whitespaces).isEmpty)
                 .padding(.top, 22)
-                Button("Zurück zur Anmeldung", action: onBack)
+                Button("Back to sign-in", action: onBack)
                     .font(UberFont.text(13, weight: .bold))
                     .padding(.top, 12)
             }
@@ -299,7 +299,7 @@ public struct TwoFAView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(EduFlowPalette.canvas(scheme))
-        .navigationTitle(NSLocalizedString("auth_nav_2fa", value: "Zwei-Faktor-Code", comment: "Anmeldung: 2FA-Titel"))
+        .navigationTitle(NSLocalizedString("auth_nav_2fa", value: "Two-factor code", comment: "Anmeldung: 2FA-Titel"))
     }
 
     private func doSubmit() {
