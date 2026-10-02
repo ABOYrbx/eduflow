@@ -4,11 +4,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { localeTag, t } from "../lib/i18n";
 import { useLocale } from "../lib/locale-context";
-import { api, Empty, Notice, PageTitle } from "./dashboard-app";
+import { api } from "../lib/api";
+import type { Device } from "../lib/types";
 import { Icon } from "./icon";
+import { Empty, Notice, PageTitle } from "./ui";
 import { SearchField } from "./search-field";
-
-type Device = { id: string; device: string; created: string; expires: string; short?: string; current?: boolean; revoked?: boolean };
 
 function stamp(value: string, locale: string, options: Intl.DateTimeFormatOptions): string {
   const date = new Date(value);
