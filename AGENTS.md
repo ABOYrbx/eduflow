@@ -92,10 +92,26 @@ Web-Design wird fürs App-Design IGNORIERT).
 - Logo: `static/icons/icon.png` → `res/mipmap-*/ic_launcher.png` (Manifest)
   + `res/drawable-nodpi/logo.png` (AppHeader).
 - Default-URL `http://10.0.2.2:3000/api/v1/` (Emulator-Loopback, in Login +
-  Einstellungen änderbar). Bauen/Testen (Gradle liegt NICHT im PATH):
-  `<GRADLE-DIST>/gradle-8.7/bin/gradle :app:assembleDebug
-  :app:testDebugUnitTest` in `android/` → 58 Unit-Tests offline mit
-  Fake-`ApiService` (`Auth/Logic/ResourcesPackageTest`).
+  Einstellungen änderbar). Demo-Server `http://10.0.2.2:3100/api/v1/`
+  (`./run.sh --demo`): Port 3100 schaltet den Demo-Modus automatisch, es
+  gibt dafür keinen UI-Schalter.
+- Bauen/Testen: `./gradlew :app:assembleDebug :app:testDebugUnitTest` in
+  `android/`. Der Gradle-Wrapper (8.13, AGP 8.13.2) liegt im Repo — ein
+  Gradle im PATH wird **nicht** gebraucht, die frühere Angabe
+  „`<GRADLE-DIST>/gradle-8.7/bin/gradle`" ist überholt.
+- `android/local.properties` ist gitignored und fehlt in einem frischen
+  Worktree; ohne die Datei findet Gradle kein SDK. Aus einem bestehenden
+  Checkout übernehmen (`cp <anderer-worktree>/android/local.properties
+  android/`). Sie enthält nur einen lokalen Pfad und wird nie committet.
+- Unit-Tests (zuletzt 97 — Ausgabe von `:app:testDebugUnitTest` ist die
+  Wahrheit, die Zahl wächst mit den Paketen) laufen offline gegen eine
+  handgeschriebene `FakeResourceApi`, die das ganze `ApiService` nachbildet:
+  `AccentThemeTest`, `AuthPackageTest`, `LogicPackageTest`, `NavBarTest`,
+  `OnboardingLocaleTest`, `ResourcesPackageTest`. Kein Netz, kein Login.
+- Zwei Compiler-Warnungen sind bekannte Altlast und kein Fehler:
+  `ui/more/MoreScreen.kt` (veraltetes `Icons.Filled.EventNote`) und
+  `ui/timetable/DayScreen.kt` (Condition immer true). Alles andere unter
+  `compileDebugKotlin` ist neu und zu beheben.
 
 ## macOS (`mac/`, Pakete 0, A–D = GEBAUT)
 
@@ -137,8 +153,9 @@ Web-Design wird fürs App-Design IGNORIERT).
   `./run.sh --demo` → Demo (`demo`/`demo`). Ersteinrichtung: `./install.sh`
   (Postgres, `.env.local` mit 0600). Session-Proxy unter `src/app/api/`
   zeigt per `API_SERVER_URL` auf die API.
-- Prüfen: `npm run typecheck` (alle Pakete) + `npm test` (API: 88 Jest-Tests,
-  offline mit Fake-Provider) — beide müssen grün bleiben.
+- Prüfen: `npm run typecheck` (alle Pakete) + `npm test` (zuletzt API 125 /
+  Web 121 / Contracts 1, offline mit Fake-Provider) — beide müssen grün
+  bleiben. Zahlen mit dem Ausgabestand prüfen, sie wachsen mit den Paketen.
 
 ## iOS (`ios/` — ZURÜCKGESTELLT, nicht aktiv weiterbauen)
 
@@ -181,7 +198,24 @@ Web-Design wird fürs App-Design IGNORIERT).
   neu anmelden). Jeder arbeitet auf eigenem Branch ab `main`; bei
   parallelen Bearbeitungen derselben Dateien zuerst Stand per Build
   verifizieren, nichts blind überschreiben.
+- **Jeder startet seinen eigenen Emulator bzw. Simulator.** Laufende Geräte
+  werden parallel benutzt; das endet in Konflikten (fremde App-Version,
+  vertauschte Koordinaten, falsches `adb`-Ziel). Also eigener Port und —
+  Android — eigenes AVD. `avdmanager` fehlt in dieser SDK-Installation, ein
+  AVD lässt sich aber per Config-Klon anlegen: `~/.android/avd/<Name>.avd/`
+  (ohne `userdata-qemu.img*`, `snapshots`, `encryptionkey*` — das erzeugt der
+  Emulator neu) plus `~/.android/avd/<Name>.ini`, darin `AvdId` und
+  `avd.ini.displayname` anpassen. Start:
+  `emulator -avd <Name> -port <5556, 5558, …> -no-snapshot-load -no-boot-anim`.
+  Danach **immer** mit `-s emulator-<Port>` adressieren, nie mit blankem
+  `adb`, und Port/Gerät im Protokoll nennen. Android-`-read-only` hilft nur,
+  wenn **alle** Instanzen es nutzen — ein bereits laufender Emulator ohne das
+  Flag blockiert den Start (`Another emulator instance is running`).
+- Screenshots als Beleg: vorher das installierte APK per SHA256 gegen den
+  lokalen Build prüfen. Ein liegengebliebenes `assembleDebug` liefert sonst
+  ein APK mit altem Stand, und `adb install -r` fällt das nicht auf — der
+  Screenshot zeigt dann den Stand eines anderen Branches.
 - Tests laufen offline (Fake-Provider / Fake-Clients / URL-Stubs), nie mit
-  echten Zugangsdaten. Backend: `npm test` (88 Jest-Tests) + `npm run
-  typecheck` müssen grün bleiben.
+  echten Zugangsdaten. Backend: `npm test` (zuletzt API 125 / Web 121 /
+  Contracts 1) + `npm run typecheck` müssen grün bleiben.
 - Nicht-Ziele: Push, Datei-Uploads aus Apps, Mehrbenutzer, Produktiv-Betrieb.
