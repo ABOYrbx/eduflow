@@ -38,7 +38,7 @@ export function SettingsView() {
   const [layout, setLayout] = useState<SectionState>({ order: SECTION_KEYS.slice(), hidden: [], spans: {} });
   const layoutOrder = normalizeOrder({ ov_order: layout.order.join(",") });
   const layoutHidden = layout.hidden;
-  const sectionHints = { drag: t("overview.editorDrag"), up: t("settings.moveUp"), down: t("settings.moveDown"), hide: t("overview.editorHide"), show: t("overview.editorShow"), hidden: t("overview.editorHidden"), wide: t("overview.editorWide"), narrow: t("overview.editorNarrow") };
+  const sectionHints = { drag: t("overview.editorDrag"), up: (name: string) => t("settings.moveUp", { name }), down: (name: string) => t("settings.moveDown", { name }), hide: t("overview.editorHide"), show: t("overview.editorShow"), hidden: t("overview.editorHidden"), wide: t("overview.editorWide"), narrow: t("overview.editorNarrow") };
   const [cityValue, setCityValue] = useState(""); const [cityQuery, setCityQuery] = useState("");
   const [cityOptions, setCityOptions] = useState<Array<{ name: string; country?: string }>>([]); const [cityStatus, setCityStatus] = useState("");
   const load = useCallback(async () => {
@@ -46,7 +46,7 @@ export function SettingsView() {
       const [nextSettings, nextDevices] = await Promise.all([api<Settings>("/settings"), api<{ items: typeof devices }>("/devices")]);
       setSettings(nextSettings); setDevices(nextDevices.items); setError("");
       setOrder(String(nextSettings.values.ov_order ?? "messages,homework,weather"));
-      setLayout({ order: normalizeOrder(nextSettings.values), hidden: normalizeHidden(nextSettings.values), spans: normalizeSpans(nextSettings.values) });
+      setLayout({ order: normalizeOrder(nextSettings.values.ov_order), hidden: normalizeHidden(nextSettings.values.ov_hidden), spans: normalizeSpans(nextSettings.values.ov_span) });
       setCityValue(String(nextSettings.values.wetter_city ?? ""));
     } catch (e) { setError((e as Error).message); }
   }, []);
@@ -73,7 +73,7 @@ export function SettingsView() {
     }
     try {
       const result = await api<{ values: Record<string, unknown> }>("/settings", { method: "PUT", body: JSON.stringify(payload) });
-      setSettings({ ...settings, values: result.values }); setOrder(String(result.values.ov_order ?? order)); setLayout({ order: normalizeOrder(result.values), hidden: normalizeHidden(result.values), spans: normalizeSpans(result.values) }); setCityValue(String(result.values.wetter_city ?? "")); setFeedback(t("settings.saved")); setError("");
+      setSettings({ ...settings, values: result.values }); setOrder(String(result.values.ov_order ?? order)); setLayout({ order: normalizeOrder(result.values.ov_order), hidden: normalizeHidden(result.values.ov_hidden), spans: normalizeSpans(result.values.ov_span) }); setCityValue(String(result.values.wetter_city ?? "")); setFeedback(t("settings.saved")); setError("");
     } catch (e) { setError((e as Error).message); } finally { setBusy(false); }
   }
   async function revoke(id: string) { try { await api(`/devices/${id}`, { method: "DELETE" }); await load(); setFeedback(t("settings.revoked")); } catch (e) { setError((e as Error).message); } }
