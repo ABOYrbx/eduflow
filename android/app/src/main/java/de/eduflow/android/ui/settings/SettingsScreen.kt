@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material3.AlertDialog
@@ -37,6 +38,7 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -98,6 +100,11 @@ private object NotifyPrefs {
  * Sektion WETTER (Karte an/aus + Stadt, Speichern via PUT settings),
  * Sektion KONTO & SICHERHEIT (Verbundene Geräte + Anzahl, Datenschutz,
  * Abmelden rot). Server-URL und Cache leeren leben im Mehr-Tab.
+ *
+ * Kopf mit Zurück-Pfeil (wie Thread/Verfassen): die Einstellungen lassen
+ * sich aus mehreren Ecken öffnen (Mehr-Tab, aber auch `onOpenSettings` aus
+ * den Content-Screens), deshalb führt [onBack] per `popBackStack()` auf
+ * genau die Seite zurück, von der man kam — nicht auf einen festen Zielort.
  */
 @Composable
 fun SettingsScreen(
@@ -107,6 +114,7 @@ fun SettingsScreen(
     onBaseUrlChange: (String) -> Unit,
     onDevices: () -> Unit,
     onLogout: () -> Unit,
+    onBack: () -> Unit,
     onRestartOnboarding: () -> Unit = {},
     onSessionExpired: () -> Unit = onLogout,
     onSettingsSaved: () -> Unit = {},
@@ -153,7 +161,16 @@ fun SettingsScreen(
             modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            ScreenHead(title = stringResource(R.string.settings_title), subtitle = stringResource(R.string.settings_subtitle))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                IconButton(onClick = onBack) {
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
+                }
+                ScreenHead(
+                    title = stringResource(R.string.settings_title),
+                    subtitle = stringResource(R.string.settings_subtitle),
+                    modifier = Modifier.weight(1f),
+                )
+            }
             Text(msg, color = MaterialTheme.colorScheme.error)
             PrimaryButton(text = stringResource(R.string.common_retry), onClick = { vm.reload() })
             if (isDemo) {
@@ -186,7 +203,16 @@ fun SettingsScreen(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        ScreenHead(title = stringResource(R.string.settings_title), subtitle = stringResource(R.string.settings_subtitle))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onClick = onBack) {
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
+            }
+            ScreenHead(
+                title = stringResource(R.string.settings_title),
+                subtitle = stringResource(R.string.settings_subtitle),
+                modifier = Modifier.weight(1f),
+            )
+        }
 
         EduCard(modifier = Modifier.fillMaxWidth()) {
             Row(

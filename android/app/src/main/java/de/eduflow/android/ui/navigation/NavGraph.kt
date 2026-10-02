@@ -320,6 +320,11 @@ fun EduFlowNav(
                 isDemo = session?.isDemo == true,
                 onBaseUrlChange = { url -> scope.launch { store.setBaseUrl(url) } },
                 onDevices = { nav.navigate(Routes.DEVICES) },
+                // Zurück auf die Seite, von der die Einstellungen geöffnet
+                // wurden (Mehr-Tab oder ein Content-Screen) — die Einstellungen
+                // werden nie als Startdestination geladen, der Stack ist also
+                // nie leer.
+                onBack = { nav.popBackStack() },
                 onRestartOnboarding = {
                     nav.navigate(Routes.ONBOARDING) {
                         popUpTo(nav.graph.id) { inclusive = true }
