@@ -38,9 +38,10 @@ if [ -z "${EDUFLOW_KEYSTORE_PASSWORD:-}" ]; then
   stty echo 2>/dev/null || true
   printf '\n'
 fi
+GENERATED=false
 if [ -z "${EDUFLOW_KEYSTORE_PASSWORD:-}" ]; then
   EDUFLOW_KEYSTORE_PASSWORD=$(LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 32)
-  echo "Zufallspasswort erzeugt."
+  GENERATED=true
 fi
 
 # PKCS12 kann KEINE getrennten Store-/Key-Passwörter: keytool ignoriert
@@ -48,6 +49,22 @@ fi
 # auf JKS umgestellt, braucht es hier wieder zwei Werte.
 if [ -z "${EDUFLOW_KEY_PASSWORD:-}" ]; then
   EDUFLOW_KEY_PASSWORD="$EDUFLOW_KEYSTORE_PASSWORD"
+fi
+
+# WICHTIG: Ein selbst erzeugtes Passwort muss sichtbar sein. Ein leeres
+# Secret auf GitHub ist kein Passwort, sondern ein Leerstring – der
+# Release-Workflow laeuft dann mit leerem Passwort gegen die Keytool-Prompt
+# und bricht ab. Deshalb hier bewusst Klartext (steht nur im Terminal des
+# Erzeugenden, nie im Repo).
+if [ "$GENERATED" = true ]; then
+  printf '\n====================================================\n'
+  printf '  Zufallspasswort erzeugt – BITTE NOTIEREN\n'
+  printf '\n'
+  printf '  %s\n' "$EDUFLOW_KEYSTORE_PASSWORD"
+  printf '\n'
+  printf '  Ohne dieses Passwort sind spaetere Updates auf diesem\n'
+  printf '  Signing-Key nicht mehr installierbar.\n'
+  printf '====================================================\n\n'
 fi
 
 if [ -f "$KEYSTORE" ]; then
