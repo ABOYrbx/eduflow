@@ -1,0 +1,295 @@
+name: Release
+
+# Erstellt ein signiertes GitHub-Release fuer Android und/oder macOS.
+#
+# WICHTIG: Dieser Workflow startet NIE automatisch. Es gibt keinen `push`- und
+# keinen `tag`-Trigger. Ein Release entsteht ausschliesslich, wenn jemand
+# explizit "release 0.1.0" sagt und der Lauf manuell angestossen wird. Das haelt
+# die Versionsnummer unter Kontrolle, solange das Projekt frueh ist.
+#
+# Secrets (Repository -> Settings -> Secrets and variables -> Actions),
+# vollstaendig erklaert in .github/RELEASING.md:
+#   Android : ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS
+#   macOS   : keine (ad-hoc signiert, kein Apple-Programm noetig)
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version ohne fuehrendes v, z. B. 0.1.0"
+        required: true
+        type: string
+      platform:
+        description: "Welche App wird gebaut"
+        required: true
+        default: both
+        type: choice
+        options:
+          - both
+          - android
+          - macos
+      dry_run:
+        description: "Nur bauen, kein Release veroeffentlichen"
+        required: false
+        default: false
+        type: boolean
+      prerelease:
+        description: "Als Pre-Release markieren"
+        required: false
+        default: true
+        type: boolean
+      notes:
+        description: "Release-Notizen (Markdown, optional)"
+        required: false
+        default: ""
+        type: string
+
+# Zwei Laeufe derselben Version hintereinander (z. B. nach einem Abbruch).
+concurrency:
+  group: release-${{ inputs.version }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+env:
+  TAG: v${{ inputs.version }}
+
+jobs:
+  verify:
+    name: Version und Tag pruefen
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      notes: ${{ steps.notes.outputs.text }}
+    steps:
+      - name: Quellen holen
+        uses: actions/checkout@v4
+
+      - name: Versionen pruefen
+        run: ./scripts/check-version.sh "${{ inputs.version }}"
+
+      # Ein Tag darf nicht doppelt vergeben werden – sonst waere das
+      # veroeffentlichte Release nicht mehr reproduzierbar.
+      - name: Tag ist frei
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -eu
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "::error::Release $TAG existiert bereits. Bitte eine neue Version waehlen."
+            exit 1
+          fi
+          echo "Tag $TAG ist frei."
+
+      # Standard-Notizen nennen den Gatekeeper-Weg: die macOS-App ist
+      # ad-hoc signiert, also verlangt der erste Start einen Klick auf
+      # "Oeffnen" im Kontextmenue. Ohne diesen Hinweis haelt die App fuer
+      # einen Fehler.
+      - name: Notizen vorbereiten
+        id: notes
+        run: |
+          if [ -n "${{ inputs.notes }}" ]; then
+            printf 'text<<NOTES_EOF\n%s\nNOTES_EOF\n' "${{ inputs.notes }}" >> "$GITHUB_OUTPUT"
+          else
+            cat >> "$GITHUB_OUTPUT" <<'NOTES_EOF'
+          Automatisches Release aus dem Workflow `release.yml`.
+
+          ### macOS: erster Start
+
+          Die App ist ad-hoc signiert, also **nicht** von Apple notarisiert.
+          Beim ersten Öffnen blockiert Gatekeeper den Start. Einmalig:
+
+          1. DMG öffnen und `EduFlow.app` nach „Programme" ziehen
+          2. `EduFlow` in „Programme" **rechts anklicken** → **Öffnen** → **Öffnen**
+
+          Ab dann startet die App normal. Es ist kein Apple-Developer-Account
+          nötig; nur macOS/Xcode bzw. die Command-Line-Tools zum Bauen.
+          NOTES_EOF
+          fi
+
+  android:
+    name: Android (signierte universelle APK)
+    needs: verify
+    if: inputs.platform == 'android' || inputs.platform == 'both'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Quellen holen
+        uses: actions/checkout@v4
+
+      - name: JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Android SDK
+        uses: android-actions/setup-android@v3
+
+      # Der Keystore kommt als base64-Secret und wird nur im Runner-Memory
+      # materialisiert. Er wird nirgends geschrieben oder geloggt.
+      - name: Keystore bereitstellen
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          set -eu
+          # PKCS12 kennt kein getrenntes Key-Passwort, keytool ignoriert
+          # -keypass. Darum nur ein Passwort-Secret (siehe build.gradle.kts).
+          for name in KEYSTORE_BASE64 STORE_PASSWORD KEY_ALIAS; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Secret $name fehlt. Siehe .github/RELEASING.md"
+              exit 1
+            fi
+          done
+          KEYSTORE="$RUNNER_TEMP/release.jks"
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$KEYSTORE"
+          keytool -list -keystore "$KEYSTORE" -storepass "$STORE_PASSWORD" -alias "$KEY_ALIAS" >/dev/null
+          {
+            echo "EDUFLOW_KEYSTORE_PATH=$KEYSTORE"
+            echo "EDUFLOW_KEYSTORE_PASSWORD=$STORE_PASSWORD"
+            echo "EDUFLOW_KEY_ALIAS=$KEY_ALIAS"
+            # fuer JKS vorbereitet; bei PKCS12 harmlos, weil Gradle den Wert
+            # nur nutzt, wenn ein Key-Passwort noetig ist.
+            echo "EDUFLOW_KEY_PASSWORD=$STORE_PASSWORD"
+          } >> "$GITHUB_ENV"
+
+      # -PeduflowRequireReleaseSigning=true: bricht ab, falls die
+      # Keystore-Umgebung nicht angekommen ist, statt still einen
+      # debug-signierten APK zu veroeffentlichen.
+      - name: Release-APK bauen
+        run: |
+          ./gradlew :app:assembleRelease \
+            --console=plain \
+            -PeduflowRequireReleaseSigning=true \
+            -PeduflowVersionName="${{ inputs.version }}" \
+            -PeduflowVersionCode=1
+        working-directory: android
+
+      - name: Signatur pruefen
+        run: |
+          set -eu
+          APK=$(find android/app/build/outputs/apk/release -name '*.apk' | head -1)
+          [ -n "$APK" ] || { echo "::error::Keine APK im Release-Output."; exit 1; }
+          echo "APK: $APK"
+          "$ANDROID_HOME/build-tools/34.0.0/apksigner" verify --print-certs "$APK" \
+            || "$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)/apksigner" verify --print-certs "$APK"
+
+      - name: APK umbenennen und hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: eduflow-android-${{ inputs.version }}
+          path: android/app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
+
+  macos:
+    name: macOS (ad-hoc signiert, DMG + ZIP)
+    needs: verify
+    if: inputs.platform == 'macos' || inputs.platform == 'both'
+    runs-on: macos-14
+    timeout-minutes: 60
+    # Bewusst ohne Apple-Programm: kein Developer-ID-Zertifikat, keine
+    # Notarisierung. Die App wird ad-hoc signiert (CODE_SIGN_IDENTITY = "-"),
+    # exakt wie im Projekt hinterlegt. Gatekeeper verlangt dann beim ersten
+    # Start ein "Oeffnen" im Kontextmenue – der Hinweis steht in den
+    # Release-Notizen, siehe .github/RELEASING.md.
+    steps:
+      - name: Quellen holen
+        uses: actions/checkout@v4
+
+      # PRODUCT_NAME = "$(TARGET_NAME)" – der Target heisst "EduFlow",
+      # auch wenn Projekt und Scheme "EduFlow Mac" heissen.
+      - name: Release-Build (ad-hoc signiert)
+        run: |
+          set -eu
+          APP="$RUNNER_TEMP/Build/Products/Release/EduFlow.app"
+          xcodebuild build \
+            -project "mac/EduFlow Mac.xcodeproj" \
+            -scheme "EduFlow Mac" \
+            -configuration Release \
+            -destination 'platform=macOS,arch=arm64' \
+            -derivedDataPath "$RUNNER_TEMP/Build" \
+            MARKETING_VERSION="${{ inputs.version }}" \
+            CURRENT_PROJECT_VERSION=1 \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGN_STYLE=Manual \
+            DEVELOPMENT_TEAM=""
+          [ -d "$APP" ] || { echo "::error::App nicht gebaut: $APP"; exit 1; }
+          # Ad-hoc ist eine echte Signatur, aber keine Vertrauenssignatur –
+          # die Pruefung darf hier nicht fehlschlagen.
+          codesign --verify --deep --strict --verbose=2 "$APP"
+          codesign -dvv "$APP" 2>&1 | sed -n '1,12p'
+          echo "APP_PATH=$APP" >> "$GITHUB_ENV"
+
+      - name: DMG und ZIP bauen
+        run: |
+          set -eu
+          cd "$RUNNER_TEMP"
+          STAGE="$RUNNER_TEMP/dmg"
+          rm -rf "$STAGE" && mkdir -p "$STAGE"
+          cp -R "$APP_PATH" "$STAGE/"
+          ln -s /Applications "$STAGE/Applications"
+          # diskutil statt hdiutil create: Letzteres ist deprecated und
+          # warnt auf neuen Runnern. Das Ergebnis ist ein UDZO-komprimiertes
+          # Image mit gesetztem Volumennamen.
+          diskutil image create from "$STAGE" \
+            --volumeName "EduFlow ${{ inputs.version }}" \
+            -format UDZO \
+            "$RUNNER_TEMP/EduFlow-${{ inputs.version }}.dmg"
+          # ditto statt zip: nur ditto bewahrt die Code-Signatur im Archiv.
+          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" \
+            "$RUNNER_TEMP/EduFlow-${{ inputs.version }}.zip"
+          hdiutil verify "$RUNNER_TEMP/EduFlow-${{ inputs.version }}.dmg"
+
+      - name: DMG und ZIP hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: eduflow-macos-${{ inputs.version }}
+          path: |
+            ${{ runner.temp }}/EduFlow-${{ inputs.version }}.dmg
+            ${{ runner.temp }}/EduFlow-${{ inputs.version }}.zip
+          if-no-files-found: error
+
+  release:
+    name: GitHub-Release veroeffentlichen
+    needs: [verify, android, macos]
+    # Wenn eine Plattform uebersprungen wurde (platform-Eingabe), faellt der
+    # Job normal durch – deshalb hier bewusst nicht 'if: always()'.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Quellen holen
+        uses: actions/checkout@v4
+
+      - name: Artefakte einsammeln
+        uses: actions/download-artifact@v4
+        with:
+          pattern: "eduflow-*${{ inputs.version }}"
+          path: dist
+          merge-multiple: true
+
+      - name: Inhalt zeigen
+        run: ls -lh dist
+
+      - name: Release veroeffentlichen
+        if: ${{ !inputs.dry_run }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -eu
+          PRERELEASE_FLAG=""
+          if [ "${{ inputs.prerelease }}" = "true" ]; then
+            PRERELEASE_FLAG="--prerelease"
+          fi
+          gh release create "$TAG" \
+            --title "EduFlow $TAG" \
+            --notes "${{ needs.verify.outputs.notes }}" \
+            $PRERELEASE_FLAG \
+            dist/*
+
+      - name: Dry-Run bestaetigen
+        if: ${{ inputs.dry_run }}
+        run: |
+          echo "Dry-Run: Artefakte liegen in dist/ und wurden NICHT veroeffentlicht."
+          echo "Tag $TAG existiert bewusst noch nicht."

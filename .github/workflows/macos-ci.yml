@@ -1,0 +1,68 @@
+name: macOS CI
+
+# Baut und testet die SwiftUI-App auf einem GitHub-MacOS-Runner.
+# Ohne Secrets nutzbar – der Release-Workflow hat eine eigene, signierte Pipeline.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "mac/**"
+      - "VERSION"
+      - "scripts/check-version.sh"
+      - ".github/workflows/macos-ci.yml"
+  pull_request:
+    paths:
+      - "mac/**"
+      - "VERSION"
+      - "scripts/check-version.sh"
+      - ".github/workflows/macos-ci.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: macos-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Build und Unit-Tests
+    # Deployment-Target ist macOS 14, deshalb der 14er Runner statt 'latest'.
+    runs-on: macos-14
+    timeout-minutes: 60
+    steps:
+      - name: Quellen holen
+        uses: actions/checkout@v4
+
+      - name: Xcode-Version
+        run: xcodebuild -version
+
+      - name: Versionen pruefen
+        run: ./scripts/check-version.sh
+
+      # Ad-hoc-Signatur wie im Projekt hinterlegt (CODE_SIGN_IDENTITY = "-"),
+      # daher ohne Zertifikat lauffaehig. Nur Offline-Tests (URL-Stubs).
+      # Kein xcpretty: auf dem Runner nicht vorinstalliert, -quiet haelt das Log lesbar.
+      - name: Tests
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project "mac/EduFlow Mac.xcodeproj" \
+            -scheme "EduFlow Mac" \
+            -destination 'platform=macOS' \
+            -derivedDataPath "$RUNNER_TEMP/dd" \
+            -quiet \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Ergebnis zusammenfassen
+        if: always()
+        run: |
+          RESULT=$(find "$RUNNER_TEMP/dd/Logs/Test" -name '*.xcresult' -maxdepth 1 | head -1 || true)
+          if [ -n "$RESULT" ]; then
+            xcrun xcresulttool get test-results summary --path "$RESULT" || true
+          else
+            echo "Kein .xcresult gefunden – Tests moeglicherweise uebersprungen?"
+          fi

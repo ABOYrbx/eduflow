@@ -5,6 +5,43 @@ plugins {
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
+// ---------------------------------------------------------------------------
+// Release-Signatur (nur Umgebung, nie Datei im Repo)
+// ---------------------------------------------------------------------------
+// Der Keystore kommt als GitHub Secret (base64) bzw. aus der lokalen Shell.
+// Pflichtnamen, siehe .github/RELEASING.md:
+//   EDUFLOW_KEYSTORE_PATH, EDUFLOW_KEYSTORE_PASSWORD,
+//   EDUFLOW_KEY_ALIAS, EDUFLOW_KEY_PASSWORD
+// Ohne Keystore nutzt der Release-Build den Debug-Key, damit `assembleRelease`
+// auch ohne Secrets baubar bleibt. Der Release-Workflow setzt zusätzlich
+// -PeduflowRequireReleaseSigning=true und bricht dann hart ab, statt
+// versehentlich einen debug-signierten APK zu veroeffentlichen.
+val keystorePath = providers.environmentVariable("EDUFLOW_KEYSTORE_PATH").orNull
+    ?.trim()
+    ?.takeIf { it.isNotEmpty() && file(it).exists() }
+// Der Keystore ist PKCS12, und PKCS12 kennt kein getrenntes Key-Passwort:
+// keytool ignoriert -keypass mit einer Warnung. Deshalb reicht das
+// Store-Passwort; EDUFLOW_KEY_PASSWORD wird nur gelesen, falls künftig
+// auf JKS umgestellt wird (dort sind zwei Passwörter nötig).
+val hasReleaseKeystore = keystorePath != null
+val requireReleaseSigning =
+    providers.gradleProperty("eduflowRequireReleaseSigning").orNull == "true"
+
+if (requireReleaseSigning && !hasReleaseKeystore) {
+    throw GradleException(
+        "Release-Signatur ist Pflicht, aber es ist kein Keystore hinterlegt. " +
+            "EDUFLOW_KEYSTORE_PATH (plus Passwort/Alias) setzen oder " +
+            "-PeduflowRequireReleaseSigning weglassen."
+    )
+}
+
+// Versions_override aus der CI: der Release-Workflow liest die VERSION-Datei
+// im Repo-Root und injiziert sie hier, damit APK und Tag nicht auseinanderlaufen.
+val versionNameOverride =
+    (providers.gradleProperty("eduflowVersionName").orNull ?: "").trim()
+val versionCodeOverride =
+    (providers.gradleProperty("eduflowVersionCode").orNull ?: "").trim()
+
 android {
     namespace = "de.eduflow.android"
     compileSdk = 34
@@ -13,13 +50,33 @@ android {
         applicationId = "de.eduflow.android"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = versionCodeOverride.toIntOrNull() ?: 1
+        versionName = versionNameOverride.ifEmpty { "0.1.0" }
         vectorDrawables { useSupportLibrary = true }
+    }
+
+    signingConfigs {
+        if (hasReleaseKeystore) {
+            create("release") {
+                storeFile = file(keystorePath!!)
+                storePassword = providers.environmentVariable("EDUFLOW_KEYSTORE_PASSWORD").orNull
+                keyAlias = providers.environmentVariable("EDUFLOW_KEY_ALIAS").orNull
+                keyPassword = providers.environmentVariable("EDUFLOW_KEY_PASSWORD")
+                    .orElse(providers.environmentVariable("EDUFLOW_KEYSTORE_PASSWORD"))
+                    .orNull
+            }
+        }
     }
 
     buildTypes {
         release {
+            // Absichtlich keine ABI-Splits: assembleRelease erzeugt genau eine
+            // universelle APK, die auf jedem Geraet per Sideload laeuft.
+            signingConfig = if (hasReleaseKeystore) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
