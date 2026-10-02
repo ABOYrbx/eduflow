@@ -91,6 +91,7 @@ jobs:
           if [ -n "${{ inputs.notes }}" ]; then
             printf 'text<<NOTES_EOF\n%s\nNOTES_EOF\n' "${{ inputs.notes }}" >> "$GITHUB_OUTPUT"
           else
+            printf 'text<<NOTES_EOF\n' >> "$GITHUB_OUTPUT"
             cat >> "$GITHUB_OUTPUT" <<'NOTES_EOF'
           Automatisches Release aus dem Workflow `release.yml`.
 
@@ -105,6 +106,7 @@ jobs:
           Ab dann startet die App normal. Es ist kein Apple-Developer-Account
           nötig; nur macOS/Xcode bzw. die Command-Line-Tools zum Bauen.
           NOTES_EOF
+            printf 'NOTES_EOF\n' >> "$GITHUB_OUTPUT"
           fi
 
   android:
