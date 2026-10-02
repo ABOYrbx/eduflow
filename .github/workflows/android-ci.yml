@@ -41,8 +41,17 @@ jobs:
           distribution: temurin
           java-version: "17"
 
+      # Ohne pins zieht die Action eine Preview-Version der Command-Line-Tools
+      # und scheitert an deren Lizenz. 11076708 ist stabil.
       - name: Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: 11076708
+
+      - name: Pakete und Lizenzen
+        run: |
+          yes | sdkmanager --licenses >/dev/null 2>&1 || true
+          sdkmanager "platform-tools" "platforms;android-34"
 
       - name: Gradle-Cache
         uses: actions/cache@v4

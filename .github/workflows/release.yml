@@ -125,8 +125,19 @@ jobs:
           distribution: temurin
           java-version: "17"
 
+      # Ohne pins will die Action eine Preview-Version der Command-Line-Tools
+      # ziehen und deren Lizenz zwingend ablehnen. 11076708 ist stabil.
       - name: Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: 11076708
+
+      # build-tools 34.0.0 ist die zum compileSdk 34 passende Version und wird
+      # fuer apksigner im Schritt "Signatur pruefen" gebraucht.
+      - name: Pakete und Lizenzen
+        run: |
+          yes | sdkmanager --licenses >/dev/null 2>&1 || true
+          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
       # Der Keystore kommt als base64-Secret und wird nur im Runner-Memory
       # materialisiert. Er wird nirgends geschrieben oder geloggt.
@@ -189,7 +200,11 @@ jobs:
     name: macOS (ad-hoc signiert, DMG + ZIP)
     needs: verify
     if: inputs.platform == 'macos' || inputs.platform == 'both'
-    runs-on: macos-14
+    # Aktuelles Xcode noetig: der Code nutzt APIs aus dem macOS-15-SDK
+    # (onScrollGeometryChange) und strengere Swift-6-Concurrency-Pruefungen.
+    # Auf macos-14 (Xcode 15.4) bricht der Release-Build ab, waehrend lokal
+    # alles gruen ist; 'latest' traegt den passenden Xcode automatisch nach.
+    runs-on: macos-latest
     timeout-minutes: 60
     # Bewusst ohne Apple-Programm: kein Developer-ID-Zertifikat, keine
     # Notarisierung. Die App wird ad-hoc signiert (CODE_SIGN_IDENTITY = "-"),

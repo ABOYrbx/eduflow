@@ -28,15 +28,21 @@ permissions:
 jobs:
   test:
     name: Build und Unit-Tests
-    # Deployment-Target ist macOS 14, deshalb der 14er Runner statt 'latest'.
-    runs-on: macos-14
+    # Deployment-Target ist macOS 14, aber gebaut wird mit einem aktuellen
+    # Xcode: der Code nutzt APIs aus dem macOS-15-SDK (onScrollGeometryChange)
+    # und strengere Swift-6-Concurrency-Pruefungen. Auf macos-14 (Xcode 15.4)
+    # scheitert der Build daran, obwohl lokal alles gruen ist. 'latest' traegt
+    # den passenden Xcode automatisch nach.
+    runs-on: macos-latest
     timeout-minutes: 60
     steps:
       - name: Quellen holen
         uses: actions/checkout@v4
 
       - name: Xcode-Version
-        run: xcodebuild -version
+        run: |
+          xcodebuild -version
+          echo "Ausgewähltes Xcode: $(xcode-select -p)"
 
       - name: Versionen pruefen
         run: ./scripts/check-version.sh
