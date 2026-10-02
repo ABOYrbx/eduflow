@@ -189,6 +189,13 @@ ok "Version $VERSION, Tag $TAG"
 if gh release view "$TAG" >/dev/null 2>&1; then
   die "Release $TAG existiert bereits. Version erhoehen – ein Tag wird nie ueberschrieben."
 fi
+# Auch verwaiste Tags ohne Release aufspueren: gh release create wuerde
+# bei einem vorhandenen Tag mit einem leeren Exit abbrechen, ohne Datei.
+if gh api "repos/$REPO/git/refs/tags/$TAG" >/dev/null 2>&1; then
+  die "Tag $TAG existiert bereits (verwaist, ohne Release).
+       Nachziehen:  gh release create $TAG --generate-notes
+       Oder loeschen: git push origin :refs/tags/$TAG"
+fi
 info "Tag $TAG ist frei"
 
 if [ "$PLAN" = true ]; then

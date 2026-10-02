@@ -27,6 +27,13 @@ const defaults: Record<string, unknown> = Object.fromEntries(settingsSchema.map(
 const hash = (text: string) => createHash("sha256").update(text).digest("hex");
 const norm = (text: unknown) => typeof text === "string" ? text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLocaleLowerCase("en") : "";
 const dateOnly = (value: string | Date) => new Date(value).toISOString().slice(0, 10);
+const pad2 = (value: number): string => String(value).padStart(2, "0");
+/** Wie `fmtLikeDate` im Echt-Provider (`edupage/serializers.ts`): TT.MM.JJJJ HH:MM. */
+const threadDate = (value: string): string => {
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return value;
+  return `${pad2(parsed.getDate())}.${pad2(parsed.getMonth() + 1)}.${parsed.getFullYear()} ${pad2(parsed.getHours())}:${pad2(parsed.getMinutes())}`;
+};
 const englishDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const parseDate = (input: unknown, fallback: Date): Date => {
   if (input === undefined || input === "") return fallback;
@@ -84,8 +91,18 @@ export class DemoSchoolService {
   private threadPayload(id: number) {
     const root = this.sentMessages.find((item) => item.id === id);
     if (!root) throw new NotFoundException({ error: t("messages.notFound"), code: "NOT_FOUND" });
-    const reply = this.sentMessages.find((item) => item.additional_data.textReply === String(id));
-    return { likes: [{ name: "Lea Beispiel", date: "25.09.2026 14:12" }], replies: reply ? [{ name: reply.author, date: reply.timestamp, text: reply.text }] : [], reply_ids: reply ? [String(reply.id)] : [], summary: { total: 1 + Number(Boolean(reply)), likes: 1, replies: Number(Boolean(reply)), seen: 1 }, cached: true };
+    // Alle Antworten des Threads, nicht nur die erste: eine Demo-Nachricht
+    // kann mehrere Antworten haben (siehe demoMessages, `textReply`).
+    const replies = this.sentMessages.filter((item) => item.additional_data.textReply === String(id));
+    const likes = [{ name: "Lea Beispiel", date: "25.09.2026 14:12" }];
+    const seen = 1;
+    return {
+      likes,
+      replies: replies.map((reply) => ({ name: reply.author, date: threadDate(reply.timestamp_iso), text: reply.text })),
+      reply_ids: replies.map((reply) => String(reply.id)),
+      summary: { total: likes.length + replies.length + seen, likes: likes.length, replies: replies.length, seen },
+      cached: true,
+    };
   }
 
   async thread(claims: AuthClaims, id: number) {

@@ -125,19 +125,16 @@ jobs:
           distribution: temurin
           java-version: "17"
 
-      # Ohne pins will die Action eine Preview-Version der Command-Line-Tools
-      # ziehen und deren Lizenz zwingend ablehnen. 11076708 ist stabil.
-      - name: Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          cmdline-tools-version: 11076708
-
-      # build-tools 34.0.0 ist die zum compileSdk 34 passende Version und wird
-      # fuer apksigner im Schritt "Signatur pruefen" gebraucht.
-      - name: Pakete und Lizenzen
+      # Die Runner bringen Android-SDK, platform-tools und die passenden
+      # build-tools bereits mit. setup-android wird deshalb gar nicht
+      # benoetigt: ohne eigene Pins versucht die Action, eine Preview-Version
+      # der Command-Line-Tools nachzuladen, und scheitert an deren Lizenz.
+      - name: Android SDK pruefen
         run: |
-          yes | sdkmanager --licenses >/dev/null 2>&1 || true
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          sdkmanager --version
           sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+          ls "$ANDROID_HOME/build-tools"
 
       # Der Keystore kommt als base64-Secret und wird nur im Runner-Memory
       # materialisiert. Er wird nirgends geschrieben oder geloggt.
@@ -186,8 +183,12 @@ jobs:
           APK=$(find android/app/build/outputs/apk/release -name '*.apk' | head -1)
           [ -n "$APK" ] || { echo "::error::Keine APK im Release-Output."; exit 1; }
           echo "APK: $APK"
-          "$ANDROID_HOME/build-tools/34.0.0/apksigner" verify --print-certs "$APK" \
-            || "$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)/apksigner" verify --print-certs "$APK"
+          # Neueste installierte build-tools nehmen, nicht auf eine feste
+          # Version bauen – der Runner liefert sie bereits mit.
+          APKSIGNER="$ANDROID_HOME/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)/apksigner"
+          [ -x "$APKSIGNER" ] || { echo "::error::apksigner fehlt: $APKSIGNER"; exit 1; }
+          "$APKSIGNER" verify --print-certs "$APK"
+          "$APKSIGNER" verify --verbose "$APK" | grep -i "v2 scheme\|v3 scheme" | head -4 || true
 
       - name: APK umbenennen und hochladen
         uses: actions/upload-artifact@v4
@@ -221,18 +222,27 @@ jobs:
         run: |
           set -eu
           APP="$RUNNER_TEMP/Build/Products/Release/EduFlow.app"
+          # Ohne destination baut xcodebuild fuer die aktive Architektur des
+          # Runners. Die Image-Bezeichnung arm64 allein genuegt nicht: der
+          # Bild-Name sagt nichts darueber, welches Xcode-Archiv tatsaechlich
+          # als erstes gebaut wird. 'platform=macOS' ueberlaesst das dem
+          # Toolchain und vermeidet den leeren Products-Ordner.
           xcodebuild build \
             -project "mac/EduFlow Mac.xcodeproj" \
             -scheme "EduFlow Mac" \
             -configuration Release \
-            -destination 'platform=macOS,arch=arm64' \
+            -destination 'platform=macOS' \
             -derivedDataPath "$RUNNER_TEMP/Build" \
             MARKETING_VERSION="${{ inputs.version }}" \
             CURRENT_PROJECT_VERSION=1 \
             CODE_SIGN_IDENTITY="-" \
             CODE_SIGN_STYLE=Manual \
             DEVELOPMENT_TEAM=""
-          [ -d "$APP" ] || { echo "::error::App nicht gebaut: $APP"; exit 1; }
+          if [ ! -d "$APP" ]; then
+            echo "::error::App nicht unter $APP. Vorhandene Produkte:"
+            find "$RUNNER_TEMP/Build/Products" -maxdepth 2 -name '*.app' || true
+            exit 1
+          fi
           # Ad-hoc ist eine echte Signatur, aber keine Vertrauenssignatur –
           # die Pruefung darf hier nicht fehlschlagen.
           codesign --verify --deep --strict --verbose=2 "$APP"

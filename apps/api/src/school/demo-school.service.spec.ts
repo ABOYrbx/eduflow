@@ -37,6 +37,42 @@ describe("DemoSchoolService", () => {
     await expect(service.messages({ sub: "acct", jti: "t", tokenUse: "access" }, { type: "bogus" })).rejects.toMatchObject({ response: { code: "VALIDATION" } });
   });
 
+  it("lists multi-paragraph message texts and keeps replies out of the list", async () => {
+    const list = await service.messages({ sub: "acct", jti: "t", tokenUse: "access" }, { limit: "50" });
+    const root = list.items.find((item) => item.id === 4101);
+    expect(root?.text).toContain("\n\n");
+    expect(root?.text.length).toBeGreaterThan(400);
+    // Antworten (`textReply`) gehören in den Thread, nicht in die Nachrichtenliste.
+    expect(list.items.map((item) => item.id)).toEqual([4101, 4102, 4103]);
+  });
+
+  it("returns every reply of a thread with a consistent summary", async () => {
+    const claims = { sub: "acct", jti: "t", tokenUse: "access" as const };
+    const thread = await service.thread(claims, 4101);
+    expect(thread.replies.map((reply) => reply.name)).toEqual(["Lea Example", "Jonas Example", "Ms. Berger"]);
+    expect(thread.reply_ids).toEqual(["4104", "4110", "4111"]);
+    expect(thread.summary.replies).toBe(thread.replies.length);
+    expect(thread.summary.likes).toBe(thread.likes.length);
+    expect(thread.summary.total).toBe(thread.summary.likes + thread.summary.replies + thread.summary.seen);
+    // Datumsformat wie der Echt-Provider (`fmtLikeDate`): TT.MM.JJJJ HH:MM.
+    expect(thread.replies[0]?.date).toBe("25.09.2026 14:12");
+    expect(thread.replies[0]?.text).toContain("\n\n");
+    // Ein Thread ohne Antworten bleibt möglich (Umfrage 4103).
+    expect((await service.thread(claims, 4103)).replies).toHaveLength(0);
+  });
+
+  it("appends a sent reply to the thread summary", async () => {
+    const claims = { sub: "acct", jti: "t", tokenUse: "access" as const };
+    const before = (await service.thread(claims, 4103)).summary.replies;
+    const updated = await service.reply(4103, { body: "Thanks for the reminder!" });
+    expect(updated.replies).toHaveLength(before + 1);
+    expect(updated.summary.replies).toBe(before + 1);
+    expect(updated.summary.total).toBe(updated.summary.likes + updated.summary.replies + updated.summary.seen);
+    expect(updated.cached).toBe(false);
+    // Antworten erscheinen danach in der Thread-Ansicht, nicht in der Liste.
+    expect((await service.thread(claims, 4103)).summary.replies).toBe(before + 1);
+  });
+
   it("filters, counts and changes homework state in PostgreSQL-backed local state", async () => {
     const claims = { sub: "acct", jti: "t", tokenUse: "access" as const };
     const list = await service.homework(claims, { include_tests: "0" });
