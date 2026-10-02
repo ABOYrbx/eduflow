@@ -232,6 +232,8 @@
     <string name="messages_compose_subtitle">Lehrer und Mitschüler wählen</string>
     <string name="messages_recipient_search">Empfänger suchen</string>
     <string name="messages_recipients_format">%1$d Empfänger gewählt</string>
+    <string name="messages_recipients_empty">Keine Empfänger geladen.</string>
+    <string name="messages_recipients_no_match">Kein Empfänger passt zur Suche.</string>
     <string name="messages_body_placeholder">Nachrichtentext</string>
     <string name="messages_compose_send">Senden</string>
 

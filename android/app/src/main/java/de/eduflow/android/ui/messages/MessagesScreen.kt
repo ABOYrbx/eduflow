@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -61,6 +62,7 @@ import de.eduflow.android.data.dto.MessageDto
 import de.eduflow.android.data.dto.MsgFilter
 import de.eduflow.android.data.dto.RecipientDto
 import de.eduflow.android.data.dto.bodyLine
+import de.eduflow.android.data.dto.filterRecipients
 import de.eduflow.android.ui.common.AppHeader
 import de.eduflow.android.ui.common.AvatarDot
 import de.eduflow.android.ui.common.EduCard
@@ -617,14 +619,11 @@ private fun RecipientDropdown(
 ) {
     var expanded by remember { mutableStateOf(false) }
     var filter by remember { mutableStateOf("") }
-    val visible = remember(recipients, filter) {
-        if (filter.isBlank()) recipients
-        else recipients.filter { it.name.contains(filter, ignoreCase = true) }
-    }
+    val visible = remember(recipients, filter) { filterRecipients(recipients, filter) }
     val scheme = MaterialTheme.colorScheme
     ExposedDropdownMenuBox(
         expanded = expanded,
-        onExpandedChange = { expanded = it },
+        onExpandedChange = { if (it != expanded) expanded = it },
         modifier = modifier,
     ) {
         OutlinedTextField(
@@ -644,12 +643,26 @@ private fun RecipientDropdown(
                 focusedBorderColor = scheme.primary,
                 cursorColor = scheme.primary,
             ),
-            modifier = Modifier.fillMaxWidth().clickable { expanded = true },
+            // menuAnchor() ist der vom Material3-Implizit erwartete Weg, das
+            // Menue zu oeffnen. Ein blosses `clickable` auf dem Feld
+            // genuegt hier nicht: `readOnly` schluckt den Klick, das Feld
+            // blieb zu und man kam nicht an die Liste. Die parameterlose
+            // Form ist die von Compose BOM 2024.06 (kein Anchor-Typ).
+            modifier = Modifier
+                .fillMaxWidth()
+                .menuAnchor(),
         )
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
+            // Ohne Hoehe waechst das Menue mit der Liste und schiebt die
+            // Nachrichtenliste aus dem Bild; die Empfangerzahl ist
+            // begrenzt (max. 200 aus GET /recipients).
+            modifier = Modifier.heightIn(max = 320.dp),
         ) {
+            // Suchfeld im Menue: `onExpandedChange` ignoriert den Wechsel,
+            // den Material3 beim Fokussieren ausloest — sonst klappte das
+            // Menue beim Tippen sofort wieder zu.
             OutlinedTextField(
                 value = filter,
                 onValueChange = { filter = it },
@@ -657,6 +670,13 @@ private fun RecipientDropdown(
                 placeholder = { Text(stringResource(R.string.messages_recipient_search)) },
                 shape = RoundedCornerShape(16.dp),
                 textStyle = MaterialTheme.typography.bodyMedium,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = scheme.surface,
+                    unfocusedContainerColor = scheme.surface,
+                    unfocusedBorderColor = scheme.outlineVariant,
+                    focusedBorderColor = scheme.primary,
+                    cursorColor = scheme.primary,
+                ),
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp),
             )
             if (isLoading) {
@@ -664,6 +684,19 @@ private fun RecipientDropdown(
                     modifier = Modifier.fillMaxWidth().padding(16.dp),
                     horizontalArrangement = Arrangement.Center,
                 ) { CircularProgressIndicator(Modifier.size(20.dp)) }
+            } else if (visible.isEmpty()) {
+                // Ohne diesen Zweig blieb bei leerer Trefferliste einfach
+                // nichts stehen — man konnte nicht unterscheiden, ob noch
+                // geladen wird oder die Eingabe nichts gefunden hat.
+                Text(
+                    stringResource(
+                        if (filter.isBlank()) R.string.messages_recipients_empty
+                        else R.string.messages_recipients_no_match,
+                    ),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = scheme.onSurfaceVariant,
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 20.dp),
+                )
             } else {
                 visible.forEach { rec ->
                     DropdownMenuItem(
@@ -677,11 +710,19 @@ private fun RecipientDropdown(
                                 Spacer(Modifier.width(10.dp))
                                 Column(Modifier.weight(1f)) {
                                     Text(rec.name, fontWeight = FontWeight.Medium)
-                                    Text(
-                                        rec.kind,
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = scheme.onSurfaceVariant,
-                                    )
+                                    // Fach/Klasse statt des rohen Rollenwerts —
+                                    // „teacher" sagt nichts, „Math, Physics"
+                                    // schon. Deshalb auch durchsuchbar.
+                                    val sub = listOf(rec.kind, rec.detail)
+                                        .filter { it.isNotBlank() }
+                                        .joinToString(" · ")
+                                    if (sub.isNotBlank()) {
+                                        Text(
+                                            sub,
+                                            style = MaterialTheme.typography.labelSmall,
+                                            color = scheme.onSurfaceVariant,
+                                        )
+                                    }
                                 }
                             }
                         },

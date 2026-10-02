@@ -224,6 +224,8 @@
     <string name="messages_compose_subtitle">Choose teachers and classmates</string>
     <string name="messages_recipient_search">Search recipients</string>
     <string name="messages_recipients_format">%1$d recipients chosen</string>
+    <string name="messages_recipients_empty">No recipients loaded.</string>
+    <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">Message text</string>
     <string name="messages_compose_send">Send</string>
 

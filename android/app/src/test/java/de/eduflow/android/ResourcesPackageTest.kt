@@ -12,6 +12,8 @@ import de.eduflow.android.data.dto.LoginRequest
 import de.eduflow.android.data.dto.LoginResponse
 import de.eduflow.android.data.dto.MeDto
 import de.eduflow.android.data.dto.SettingsResponse
+import de.eduflow.android.data.dto.RecipientDto
+import de.eduflow.android.data.dto.filterRecipients
 import de.eduflow.android.data.dto.StatusDto
 import de.eduflow.android.data.dto.TwoFaRequest
 import de.eduflow.android.data.repository.GradesRepository
@@ -391,5 +393,42 @@ class ResourcesPackageTest {
         // Leere Stadt → null (Backend meldet dann VALIDATION statt leere Query).
         assertNull(fake.lastWetter["city"])
         Unit
+    }
+
+    // ---- Empfänger-Suche (Verfassen) ----
+
+    private val recipients = listOf(
+        RecipientDto("Teacher7", "Ms. Berger", "teacher", "Math, Physics"),
+        RecipientDto("Teacher8", "Mr. Özdemir", "teacher", "German"),
+        RecipientDto("Student9", "Lea Example", "student", "8A"),
+    )
+
+    @Test
+    fun filterRecipients_matchesNameCaseInsensitive() {
+        assertEquals(listOf("Ms. Berger"), filterRecipients(recipients, "berger").map { it.name })
+        assertEquals(listOf("Lea Example"), filterRecipients(recipients, "lea").map { it.name })
+    }
+
+    @Test
+    fun filterRecipients_ignoresAccents() {
+        // Ohne Diakritika-Faltung wäre „Ozdemir" nicht auffindbar,
+        // weil die Daten „Özdemir" heißen.
+        assertEquals(listOf("Mr. Özdemir"), filterRecipients(recipients, "Ozdemir").map { it.name })
+    }
+
+    @Test
+    fun filterRecipients_matchesKindAndDetail() {
+        // Die Suche geht über alle Felder: „German" findet den Lehrer über
+        // sein Fach, „teacher" die Rolle, „8A" die Klasse.
+        assertEquals(listOf("Mr. Özdemir"), filterRecipients(recipients, "german").map { it.name })
+        assertEquals(2, filterRecipients(recipients, "teacher").size)
+        assertEquals(listOf("Lea Example"), filterRecipients(recipients, "8a").map { it.name })
+    }
+
+    @Test
+    fun filterRecipients_blankKeepsAll() {
+        assertEquals(recipients, filterRecipients(recipients, ""))
+        assertEquals(recipients, filterRecipients(recipients, "   "))
+        assertTrue(filterRecipients(recipients, "gibtesnicht").isEmpty())
     }
 }
