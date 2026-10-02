@@ -129,11 +129,30 @@ jobs:
       # build-tools bereits mit. setup-android wird deshalb gar nicht
       # benoetigt: ohne eigene Pins versucht die Action, eine Preview-Version
       # der Command-Line-Tools nachzuladen, und scheitert an deren Lizenz.
+      # Wichtig: sdkmanager liegt im Image NICHT im PATH, der Pfad muss
+      # selbst gesetzt werden, sonst endet der Schritt mit exit 127.
       - name: Android SDK pruefen
         run: |
+          set -eu
           echo "ANDROID_HOME=$ANDROID_HOME"
-          sdkmanager --version
-          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+          SDKMANAGER=""
+          for candidate in \
+            "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager \
+            "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager \
+            "$ANDROID_HOME"/tools/bin/sdkmanager \
+            /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
+            /usr/local/lib/android/sdk/cmdline-tools/*/bin/sdkmanager
+          do
+            if [ -x "$candidate" ]; then SDKMANAGER="$candidate"; break; fi
+          done
+          [ -n "$SDKMANAGER" ] || {
+            echo "::error::sdkmanager nicht gefunden. Kandidaten:"
+            ls -d "$ANDROID_HOME"/cmdline-tools/*/bin 2>/dev/null || true
+            exit 1
+          }
+          echo "sdkmanager: $SDKMANAGER"
+          "$SDKMANAGER" --version
+          "$SDKMANAGER" "platform-tools" "platforms;android-34" "build-tools;34.0.0"
           ls "$ANDROID_HOME/build-tools"
 
       # Der Keystore kommt als base64-Secret und wird nur im Runner-Memory
