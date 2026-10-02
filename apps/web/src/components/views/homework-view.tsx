@@ -13,6 +13,7 @@ import { Select } from "../select-field";
 import { Empty, Notice, PageTitle } from "../ui";
 
 export function HomeworkView() {
+  useLocale(); // abonniert den Sprachwechsel, damit alle t()-Texte neu rendern
   const [items, setItems] = useState<Homework[]>([]); const [counts, setCounts] = useState<Record<string, number>>({}); const [status, setStatus] = useState("alle"); const [query, setQuery] = useState(""); const [since, setSince] = useState("2000-01-01"); const [includeTests, setIncludeTests] = useState(false); const [error, setError] = useState("");
   const load = useCallback(async () => { try { const params = new URLSearchParams({ status, q: query, since, limit: "200", include_tests: includeTests ? "1" : "0" }); const response = await api<Page<Homework>>(`/homework?${params}`); setItems(response.items); setCounts(response.counts ?? {}); setError(""); } catch (e) { setError((e as Error).message); } }, [status, query, since, includeTests]);
   useEffect(() => { void load(); }, [load]);

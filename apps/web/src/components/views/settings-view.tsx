@@ -28,8 +28,9 @@ declare global {
 }
 
 export function SettingsView() {
+  useLocale(); // abonniert den Sprachwechsel, damit alle t()-Texte neu rendern
   const [settings, setSettings] = useState<Settings | null>(null);
-  const [devices, setDevices] = useState<Array<{ id: string; device: string; created: string; expires: string; short?: string; current?: boolean; revoked?: boolean }>>([]);
+  const [devices, setDevices] = useState<Device[]>([]);
   const [error, setError] = useState(""); const [feedback, setFeedback] = useState(""); const [busy, setBusy] = useState(false);
   const [deviceName, setDeviceName] = useState(""); const [newToken, setNewToken] = useState<{ token: string; refresh_token?: string; expires: string; device: string } | null>(null);
   const [themeChoice, setThemeChoice] = useState("system"); const [accent, setAccent] = useState("black");

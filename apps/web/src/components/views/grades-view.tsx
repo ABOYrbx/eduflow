@@ -28,6 +28,7 @@ function weightedAverage(items: Grade[]) {
 }
 
 export function GradesView() {
+  useLocale(); // abonniert den Sprachwechsel, damit alle t()-Texte neu rendern
   const [grades, setGrades] = useState<Grade[]>([]); const [error, setError] = useState(""); const [refreshing, setRefreshing] = useState(false); const [term, setTerm] = useState(currentGradeTerm()); const [query, setQuery] = useState("");
   async function load(refresh = false) { setRefreshing(refresh); try { const result = await api<Page<Grade>>(`/grades?limit=200${refresh ? "&refresh=1" : ""}`); setGrades(result.items); setError(""); } catch (e) { setError((e as Error).message); } finally { setRefreshing(false); } }
   useEffect(() => { void load(); }, []);
