@@ -1,6 +1,12 @@
 import {
   hitIndexByMidline,
   moveItem,
+  moveSection,
+  moveSectionTo,
+  sectionFlags,
+  toggleHidden,
+  toggleSectionWidth,
+  type SectionState,
   normalizeHidden,
   normalizeOrder,
   normalizeSpans,
@@ -108,5 +114,70 @@ describe("Spaltenbreiten", () => {
     expect(serializeSpans({ weather: 6, messages: 6 }, ["messages", "homework", "weather"]))
       .toBe("messages:6,weather:6");
     expect(serializeSpans({}, ["messages"])).toBe("");
+  });
+
+  // ---------------------------------------- Übergänge des Layouts
+  //
+  // `SectionBar` und `SectionEditor` bieten dieselben drei Elemente und
+  // benutzen diese Funktionen beide — sonst rechnete jede Stelle ihre
+  // Callbacks selbst.
+
+  const base = (): SectionState => ({
+    order: ["messages", "homework", "weather"],
+    hidden: [],
+    spans: {},
+  });
+
+  describe("Layout-Übergänge", () => {
+    it("verschiebt einen Abschnitt um eine Position", () => {
+      expect(moveSection(base(), 0, 1).order).toEqual(["homework", "messages", "weather"]);
+      expect(moveSection(base(), 2, -1).order).toEqual(["messages", "weather", "homework"]);
+    });
+
+    it("schneidet am Anfang und am Ende ab", () => {
+      expect(moveSection(base(), 0, -1).order).toEqual(base().order);
+      expect(moveSection(base(), 2, 1).order).toEqual(base().order);
+    });
+
+    it("verändert beim Verschieben nichts ausser der Reihenfolge", () => {
+      const next = moveSection(base(), 0, 1);
+      expect(next.hidden).toEqual([]);
+      expect(next.spans).toEqual({});
+    });
+
+    it("zieht einen Abschnitt auf eine Zielposition", () => {
+      expect(moveSectionTo(base(), 0, 2).order).toEqual(["homework", "weather", "messages"]);
+      // Grenzen werden abgeschnitten wie beim Verschieben.
+      expect(moveSectionTo(base(), 1, 9).order).toEqual(["messages", "weather", "homework"]);
+    });
+
+    it("blendet aus und wieder ein", () => {
+      const hidden = toggleHidden(base(), "weather");
+      expect(hidden.hidden).toEqual(["weather"]);
+      expect(toggleHidden(hidden, "weather").hidden).toEqual([]);
+    });
+
+    it("behaelt beim Ein- und Ausblenden die uebrigen Abschnitte", () => {
+      const state: SectionState = { ...base(), hidden: ["weather"] };
+      expect(toggleHidden(state, "messages").hidden).toEqual(["weather", "messages"]);
+    });
+
+    it("wechselt die Breite eines Abschnitts", () => {
+      expect(toggleSectionWidth(base(), "messages").spans).toEqual({ messages: SPAN_HALF });
+      const half = toggleSectionWidth(base(), "messages");
+      expect(toggleSectionWidth(half, "messages").spans).toEqual({ messages: SPAN_FULL });
+    });
+
+    it("laesst die Breiten der anderen Abschnitte unberuehrt", () => {
+      const state: SectionState = { ...base(), spans: { weather: SPAN_HALF } };
+      expect(toggleSectionWidth(state, "messages").spans).toEqual({ weather: SPAN_HALF, messages: SPAN_HALF });
+    });
+
+    it("meldet die Flags eines Abschnitts", () => {
+      const state: SectionState = { ...base(), hidden: ["homework"], spans: { weather: SPAN_HALF } };
+      expect(sectionFlags(state, "messages", 0)).toEqual({ off: false, wide: true, first: true, last: false });
+      expect(sectionFlags(state, "homework", 1)).toEqual({ off: true, wide: true, first: false, last: false });
+      expect(sectionFlags(state, "weather", 2)).toEqual({ off: false, wide: false, first: false, last: true });
+    });
   });
 });
