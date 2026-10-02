@@ -313,7 +313,8 @@
     "validUntil": "Valid until {date}",
     "languageTitle": "Language",
     "languageHint": "Applies right away. The choice is remembered on this device.",
-    "sessionsPanelNote": "Devices signed in on this account."
+    "sessionsPanelNote": "Devices signed in on this account.",
+    "spanHint": "Imposta le larghezze delle sezioni direttamente nella panoramica, con il pulsante su ogni scheda."
   },
   "theme": {
     "language": "Lingua",

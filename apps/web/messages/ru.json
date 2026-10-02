@@ -313,7 +313,8 @@
     "validUntil": "Действителен до {date}",
     "languageTitle": "Language",
     "languageHint": "Applies right away. The choice is remembered on this device.",
-    "sessionsPanelNote": "Devices signed in on this account."
+    "sessionsPanelNote": "Devices signed in on this account.",
+    "spanHint": "Задайте ширину разделов в обзоре, кнопкой на каждой карточке."
   },
   "theme": {
     "language": "Язык",

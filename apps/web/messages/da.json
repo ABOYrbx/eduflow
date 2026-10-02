@@ -313,7 +313,8 @@
     "validUntil": "Gyldig indtil {date}",
     "languageTitle": "Language",
     "languageHint": "Applies right away. The choice is remembered on this device.",
-    "sessionsPanelNote": "Devices signed in on this account."
+    "sessionsPanelNote": "Devices signed in on this account.",
+    "spanHint": "Sæt sektionernes bredder i oversigten, med knappen på hvert kort."
   },
   "theme": {
     "language": "Sprog",

@@ -313,7 +313,8 @@
     "validUntil": "صالح حتى {date}",
     "languageTitle": "Language",
     "languageHint": "Applies right away. The choice is remembered on this device.",
-    "sessionsPanelNote": "Devices signed in on this account."
+    "sessionsPanelNote": "Devices signed in on this account.",
+    "spanHint": "اضبط عروض الأقسام في النظرة العامة باستخدام الزر الموجود على كل بطاقة."
   },
   "theme": {
     "language": "اللغة",
