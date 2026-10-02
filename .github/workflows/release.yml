@@ -53,6 +53,10 @@ permissions:
 
 env:
   TAG: v${{ inputs.version }}
+  # Auch die Version ueber env statt in den run-Text: so wird der Wert nie
+  # vom Shell-Parser erneut interpretiert. check-version.sh prueft ohnehin das
+  # Format, aber die Verteidigung gehoert in beide Schichten.
+  RELEASE_VERSION: ${{ inputs.version }}
 
 jobs:
   verify:
@@ -87,9 +91,14 @@ jobs:
       # einen Fehler.
       - name: Notizen vorbereiten
         id: notes
+        env:
+          # Auch hier ueber env: der Notiztext kommt vom Menschen und darf
+          # Backticks, $(…) oder Anfuehrungszeichen enthalten, ohne dass die
+          # Shell sie interpretiert.
+          INPUT_NOTES: ${{ inputs.notes }}
         run: |
-          if [ -n "${{ inputs.notes }}" ]; then
-            printf 'text<<NOTES_EOF\n%s\nNOTES_EOF\n' "${{ inputs.notes }}" >> "$GITHUB_OUTPUT"
+          if [ -n "$INPUT_NOTES" ]; then
+            printf 'text<<NOTES_EOF\n%s\nNOTES_EOF\n' "$INPUT_NOTES" >> "$GITHUB_OUTPUT"
           else
             printf 'text<<NOTES_EOF\n' >> "$GITHUB_OUTPUT"
             cat >> "$GITHUB_OUTPUT" <<'NOTES_EOF'
@@ -341,19 +350,28 @@ jobs:
       - name: Inhalt zeigen
         run: ls -lh dist
 
+      # WICHTIG: Die Notizen kommen ueber env, nicht direkt in den run-Text.
+          # Ein ${{ … }} im Skript wird vom Text ersetzt – und der Notiztext
+          # enthaelt Backticks (`` `release.yml` ``) sowie Umlaute. Im
+          # Skript fuehrt die Shell die Backticks als Befehl aus, Umlaute in
+          # Anfuehrungszeichen loesen Globbing aus. In einer env-Variablen
+          # wird der Wert nie erneut geparst.
       - name: Release veroeffentlichen
         if: ${{ !inputs.dry_run }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NOTES: ${{ needs.verify.outputs.notes }}
+          PRERELEASE: ${{ inputs.prerelease }}
         run: |
           set -eu
+          printf '%s\n' "$NOTES" > "$RUNNER_TEMP/notes.md"
           PRERELEASE_FLAG=""
-          if [ "${{ inputs.prerelease }}" = "true" ]; then
+          if [ "$PRERELEASE" = "true" ]; then
             PRERELEASE_FLAG="--prerelease"
           fi
           gh release create "$TAG" \
             --title "EduFlow $TAG" \
-            --notes "${{ needs.verify.outputs.notes }}" \
+            --notes-file "$RUNNER_TEMP/notes.md" \
             $PRERELEASE_FLAG \
             dist/*
 
