@@ -214,6 +214,8 @@
     <string name="messages_compose_subtitle">Válassz tanárokat és osztálytársakat</string>
     <string name="messages_recipient_search">Címzettek keresése</string>
     <string name="messages_recipients_format">%1$d címzett kiválasztva</string>
+    <string name="messages_recipients_empty">No recipients loaded.</string>
+    <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">Üzenet szövege</string>
     <string name="messages_compose_send">Küldés</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
@@ -227,6 +229,7 @@
     <!-- Overview -->
     <string name="overview_customize">Áttekintő testreszabása</string>
     <string name="overview_customize_desc">Válaszd ki, mely szakaszok jelenjenek meg először.</string>
+    <string name="overview_customize_action">Sort sections</string>
     <string name="overview_move_up_desc">Mozgatás fel</string>
     <string name="overview_move_down_desc">Mozgatás le</string>
     <string name="overview_messages_count_format">Üzenetek · %1$d</string>
