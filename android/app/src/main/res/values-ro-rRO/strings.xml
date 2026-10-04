@@ -214,6 +214,8 @@
     <string name="messages_compose_subtitle">Alege profesori și colegi de clasă</string>
     <string name="messages_recipient_search">Caută destinatari</string>
     <string name="messages_recipients_format">%1$d destinatari selectați</string>
+    <string name="messages_recipients_empty">No recipients loaded.</string>
+    <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">Text mesaj</string>
     <string name="messages_compose_send">Trimite</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
@@ -227,6 +229,7 @@
     <!-- Overview -->
     <string name="overview_customize">Personalizare prezentare generală</string>
     <string name="overview_customize_desc">Alegeţi secţiunile care apar mai întâi.</string>
+    <string name="overview_customize_action">Sort sections</string>
     <string name="overview_move_up_desc">Mută în sus</string>
     <string name="overview_move_down_desc">Mută în jos</string>
     <string name="overview_messages_count_format">Mesaje · %1$d</string>
