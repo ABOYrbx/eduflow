@@ -214,6 +214,8 @@
     <string name="messages_compose_subtitle">Chọn giáo viên và bạn cùng lớp</string>
     <string name="messages_recipient_search">Tìm người nhận</string>
     <string name="messages_recipients_format">Đã chọn %1$d người nhận</string>
+    <string name="messages_recipients_empty">No recipients loaded.</string>
+    <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">Nội dung tin nhắn</string>
     <string name="messages_compose_send">Gửi</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
@@ -227,6 +229,7 @@
     <!-- Overview -->
     <string name="overview_customize">Tùy chỉnh tổng quan</string>
     <string name="overview_customize_desc">Chọn mục nào sẽ xuất hiện trước.</string>
+    <string name="overview_customize_action">Sort sections</string>
     <string name="overview_move_up_desc">Di chuyển lên</string>
     <string name="overview_move_down_desc">Di chuyển xuống</string>
     <string name="overview_messages_count_format">Tin nhắn · %1$d</string>
