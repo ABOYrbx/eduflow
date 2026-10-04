@@ -214,6 +214,8 @@
     <string name="messages_compose_subtitle">교사와 반 친구 선택</string>
     <string name="messages_recipient_search">받는 사람 검색</string>
     <string name="messages_recipients_format">%1$d명 선택됨</string>
+    <string name="messages_recipients_empty">No recipients loaded.</string>
+    <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">메시지 내용</string>
     <string name="messages_compose_send">보내기</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
@@ -227,6 +229,7 @@
     <!-- Overview -->
     <string name="overview_customize">개요 맞춤설정</string>
     <string name="overview_customize_desc">먼저 표시할 섹션을 선택하세요.</string>
+    <string name="overview_customize_action">Sort sections</string>
     <string name="overview_move_up_desc">위로 이동</string>
     <string name="overview_move_down_desc">아래로 이동</string>
     <string name="overview_messages_count_format">메시지 · %1$d</string>
