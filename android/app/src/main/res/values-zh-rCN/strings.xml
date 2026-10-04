@@ -214,6 +214,8 @@
     <string name="messages_compose_subtitle">选择老师和学生</string>
     <string name="messages_recipient_search">搜索收件人</string>
     <string name="messages_recipients_format">已选择%1$d 收件人</string>
+    <string name="messages_recipients_empty">No recipients loaded.</string>
+    <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">消息文本</string>
     <string name="messages_compose_send">发送</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
@@ -227,6 +229,7 @@
     <!-- Overview -->
     <string name="overview_customize">自定义概述</string>
     <string name="overview_customize_desc">选择哪个章节首先出现。</string>
+    <string name="overview_customize_action">Sort sections</string>
     <string name="overview_move_up_desc">上移</string>
     <string name="overview_move_down_desc">向下移动</string>
     <string name="overview_messages_count_format">消息 · %1$d</string>
