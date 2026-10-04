@@ -214,6 +214,8 @@
     <string name="messages_compose_subtitle">Välj lärare och klasskamrater</string>
     <string name="messages_recipient_search">Sök mottagare</string>
     <string name="messages_recipients_format">%1$d mottagare valda</string>
+    <string name="messages_recipients_empty">No recipients loaded.</string>
+    <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">Meddelande text</string>
     <string name="messages_compose_send">Skicka</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
@@ -227,6 +229,7 @@
     <!-- Overview -->
     <string name="overview_customize">Anpassa översikt</string>
     <string name="overview_customize_desc">Välj vilka sektioner som visas först.</string>
+    <string name="overview_customize_action">Sort sections</string>
     <string name="overview_move_up_desc">Flytta upp</string>
     <string name="overview_move_down_desc">Flytta ner</string>
     <string name="overview_messages_count_format">Meddelanden · %1$d</string>
