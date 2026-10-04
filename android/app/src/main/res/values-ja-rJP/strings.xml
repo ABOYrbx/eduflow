@@ -214,6 +214,8 @@
     <string name="messages_compose_subtitle">先生とクラスメートを選択</string>
     <string name="messages_recipient_search">検索の受信者</string>
     <string name="messages_recipients_format">%1$d 受信者が選択されました</string>
+    <string name="messages_recipients_empty">No recipients loaded.</string>
+    <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">メッセージ テキスト</string>
     <string name="messages_compose_send">送信</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
@@ -227,6 +229,7 @@
     <!-- Overview -->
     <string name="overview_customize">概要をカスタマイズ</string>
     <string name="overview_customize_desc">最初に表示するセクションを選択します。</string>
+    <string name="overview_customize_action">Sort sections</string>
     <string name="overview_move_up_desc">上へ移動</string>
     <string name="overview_move_down_desc">下に移動</string>
     <string name="overview_messages_count_format">メッセージ · %1$d</string>
