@@ -427,8 +427,35 @@ class AuthPackageTest {
         assertEquals("http://10.0.2.2:3000/api/v1/", normalizeBaseUrl("http://10.0.2.2:3000/api/v1/"))
         // Ohne doppelten Pfad, egal wie oft /api/v1 schon drinsteht.
         assertEquals("http://10.0.2.2:3000/api/v1/", normalizeBaseUrl("http://10.0.2.2:3000/api/v1/api/v1"))
-        // HTTPS bleibt erhalten, wenn ausdruecklich angegeben.
-        assertEquals("https://192.168.1.5:3000/api/v1/", normalizeBaseUrl("https://192.168.1.5"))
+        // HTTPS bleibt erhalten und bekommt den HTTPS-Standardport, nicht
+        // den lokalen 3000: ueber einen TLS-Reverse-Proxy (Netbird o. Ae.)
+        // laeuft die App auf 443, wo 3000 zu ist.
+        assertEquals("https://192.168.1.5:443/api/v1/", normalizeBaseUrl("https://192.168.1.5"))
+        // Ein gesetzter Port gewinnt auch bei https.
+        assertEquals("https://192.168.1.5:8443/api/v1/", normalizeBaseUrl("https://192.168.1.5:8443"))
+    }
+
+    @Test
+    fun baseUrl_normalizeUsesHttpsDefaultPort() {
+        // Der gemeldete Fall: eine vollstaendige HTTPS-Domain ohne Port
+        // darf nicht auf den lokalen 3000 umgeschrieben werden.
+        assertEquals(
+            "https://eduflow.eu1.netbird.services:443/api/v1/",
+            normalizeBaseUrl("https://eduflow.eu1.netbird.services/"),
+        )
+        assertEquals(
+            "https://eduflow.eu1.netbird.services:443/api/v1/",
+            normalizeBaseUrl("https://eduflow.eu1.netbird.services"),
+        )
+        // Auch mit schon angehaengtem /api/v1 und mit Unterpfad.
+        assertEquals(
+            "https://eduflow.eu1.netbird.services:443/api/v1/",
+            normalizeBaseUrl("https://eduflow.eu1.netbird.services/api/v1/"),
+        )
+        // Gross-/Kleinschreibung des Schemes spielt keine Rolle.
+        assertEquals("https://beispiel.de:443/api/v1/", normalizeBaseUrl("HTTPS://beispiel.de"))
+        // http bleibt auf 3000 — dort startet der lokale Server.
+        assertEquals("http://beispiel.de:3000/api/v1/", normalizeBaseUrl("http://beispiel.de"))
     }
 
     @Test
