@@ -214,6 +214,8 @@
     <string name="messages_compose_subtitle">Vyberte učitele a spolužáky</string>
     <string name="messages_recipient_search">Hledat příjemce</string>
     <string name="messages_recipients_format">%1$d příjemců vybráno</string>
+    <string name="messages_recipients_empty">No recipients loaded.</string>
+    <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">Text zprávy</string>
     <string name="messages_compose_send">Poslat</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
@@ -227,6 +229,7 @@
     <!-- Overview -->
     <string name="overview_customize">Přizpůsobit přehled</string>
     <string name="overview_customize_desc">Vyberte, které sekce se objeví jako první.</string>
+    <string name="overview_customize_action">Sort sections</string>
     <string name="overview_move_up_desc">Posunout nahoru</string>
     <string name="overview_move_down_desc">Přesunout dolů</string>
     <string name="overview_messages_count_format">Zprávy · %1$d</string>
