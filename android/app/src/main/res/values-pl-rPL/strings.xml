@@ -213,7 +213,7 @@
     <string name="messages_reply_send">Odpowiedz</string>
     <string name="messages_compose_subtitle">Wybierz nauczycieli i kolegów z klasy</string>
     <string name="messages_recipient_search">Szukaj odbiorców</string>
-    <string name="messages_recipients_format">%1$d wybranych odbiorców</string>
+    <string name="common_clear">Clear search</string>
     <string name="messages_recipients_empty">No recipients loaded.</string>
     <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">Tekst wiadomości</string>
@@ -370,5 +370,11 @@
         <item quantity="few">Ø %1$s · %2$d Noten</item>
         <item quantity="many">Ø %1$s · %2$d Noten</item>
         <item quantity="other">Ø %1$s · %2$d Noten</item>
+    </plurals>
+    <plurals name="messages_recipients_format">
+        <item quantity="one">%1$d recipient chosen</item>
+        <item quantity="few">%1$d recipients chosen</item>
+        <item quantity="many">%1$d recipients chosen</item>
+        <item quantity="other">%1$d recipients chosen</item>
     </plurals>
 </resources>
