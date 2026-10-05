@@ -213,7 +213,7 @@
     <string name="messages_reply_send">Ответ</string>
     <string name="messages_compose_subtitle">Выберите учителей и одноклассников</string>
     <string name="messages_recipient_search">Поиск получателей</string>
-    <string name="messages_recipients_format">Выбрано получателей %1$d</string>
+    <string name="common_clear">Clear search</string>
     <string name="messages_recipients_empty">No recipients loaded.</string>
     <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">Текст сообщения</string>
@@ -370,5 +370,11 @@
         <item quantity="few">Ø %1$s · %2$d Нотен</item>
         <item quantity="many">Ø %1$s · %2$d Нотен</item>
         <item quantity="other">Ø %1$s · %2$d Нотен</item>
+    </plurals>
+    <plurals name="messages_recipients_format">
+        <item quantity="one">%1$d recipient chosen</item>
+        <item quantity="few">%1$d recipients chosen</item>
+        <item quantity="many">%1$d recipients chosen</item>
+        <item quantity="other">%1$d recipients chosen</item>
     </plurals>
 </resources>
