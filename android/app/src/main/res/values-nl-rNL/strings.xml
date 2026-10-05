@@ -214,6 +214,8 @@
     <string name="messages_compose_subtitle">Kies leraren en klasgenoten</string>
     <string name="messages_recipient_search">Ontvangers zoeken</string>
     <string name="messages_recipients_format">%1$d ontvangers geselecteerd</string>
+    <string name="messages_recipients_empty">No recipients loaded.</string>
+    <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">Bericht tekst</string>
     <string name="messages_compose_send">Verzenden</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
@@ -227,6 +229,7 @@
     <!-- Overview -->
     <string name="overview_customize">Pas overzicht aan</string>
     <string name="overview_customize_desc">Kies welke secties als eerste worden weergegeven.</string>
+    <string name="overview_customize_action">Sort sections</string>
     <string name="overview_move_up_desc">Verplaats omhoog</string>
     <string name="overview_move_down_desc">Verplaats naar beneden</string>
     <string name="overview_messages_count_format">Berichten · %1$d</string>

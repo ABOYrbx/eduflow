@@ -214,6 +214,8 @@
     <string name="messages_compose_subtitle">Escolha professores e colegas de aula</string>
     <string name="messages_recipient_search">Pesquisar destinatários</string>
     <string name="messages_recipients_format">%1$d destinatários escolhidos</string>
+    <string name="messages_recipients_empty">No recipients loaded.</string>
+    <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">Texto da mensagem</string>
     <string name="messages_compose_send">Mandar</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
@@ -227,6 +229,7 @@
     <!-- Overview -->
     <string name="overview_customize">Personalizar visão geral</string>
     <string name="overview_customize_desc">Escolha quais seções aparecem primeiro.</string>
+    <string name="overview_customize_action">Sort sections</string>
     <string name="overview_move_up_desc">Mover para cima</string>
     <string name="overview_move_down_desc">Mover para baixo</string>
     <string name="overview_messages_count_format">Mensagens · %1$d</string>

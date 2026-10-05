@@ -214,6 +214,8 @@
     <string name="messages_compose_subtitle">Öğretmenleri ve sınıf arkadaşlarını seç</string>
     <string name="messages_recipient_search">Alıcı ara</string>
     <string name="messages_recipients_format">%1$d alıcı seçildi</string>
+    <string name="messages_recipients_empty">No recipients loaded.</string>
+    <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">Mesaj metni</string>
     <string name="messages_compose_send">Gönder</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
@@ -227,6 +229,7 @@
     <!-- Overview -->
     <string name="overview_customize">Genel bakışı özelleştir</string>
     <string name="overview_customize_desc">Önce hangi bölümlerin görüneceğini seç.</string>
+    <string name="overview_customize_action">Sort sections</string>
     <string name="overview_move_up_desc">Yukarı taşı</string>
     <string name="overview_move_down_desc">Aşağı taşı</string>
     <string name="overview_messages_count_format">Mesajlar · %1$d</string>

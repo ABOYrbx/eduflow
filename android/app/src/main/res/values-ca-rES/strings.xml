@@ -214,6 +214,8 @@
     <string name="messages_compose_subtitle">Tria docents i companys de classe</string>
     <string name="messages_recipient_search">Cerca destinataris</string>
     <string name="messages_recipients_format">%1$d destinataris seleccionats</string>
+    <string name="messages_recipients_empty">No recipients loaded.</string>
+    <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">Text del missatge</string>
     <string name="messages_compose_send">Envia</string>
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
@@ -227,6 +229,7 @@
     <!-- Overview -->
     <string name="overview_customize">Personalitza la vista general</string>
     <string name="overview_customize_desc">Tria quines seccions apareixen primer.</string>
+    <string name="overview_customize_action">Sort sections</string>
     <string name="overview_move_up_desc">Mou amunt</string>
     <string name="overview_move_down_desc">Mou avall</string>
     <string name="overview_messages_count_format">Missatges · %1$d</string>
