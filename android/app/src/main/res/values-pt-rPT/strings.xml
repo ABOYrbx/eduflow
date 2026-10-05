@@ -213,7 +213,7 @@
     <string name="messages_reply_send">Responder</string>
     <string name="messages_compose_subtitle">Escolha professores e colegas de aula</string>
     <string name="messages_recipient_search">Pesquisar destinatários</string>
-    <string name="messages_recipients_format">%1$d destinatários escolhidos</string>
+    <string name="common_clear">Clear search</string>
     <string name="messages_recipients_empty">No recipients loaded.</string>
     <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">Texto da mensagem</string>
@@ -364,5 +364,9 @@
     <plurals name="grades_notes_count">
         <item quantity="one">· %1$s · %2$d Nota</item>
         <item quantity="other">├ %1$s · %2$d Noten</item>
+    </plurals>
+    <plurals name="messages_recipients_format">
+        <item quantity="one">%1$d recipient chosen</item>
+        <item quantity="other">%1$d recipients chosen</item>
     </plurals>
 </resources>
