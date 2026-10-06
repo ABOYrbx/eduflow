@@ -19,18 +19,20 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AttachFile
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,6 +40,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Snackbar
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.ButtonDefaults
@@ -51,7 +54,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -562,7 +567,7 @@ fun ComposeScreen(
             )
         }
 
-        RecipientDropdown(
+        RecipientPicker(
             recipients = state.recipients,
             selectedIds = state.selectedIds,
             isLoading = state.isLoadingRecipients,
@@ -605,12 +610,17 @@ fun ComposeScreen(
 }
 
 /**
- * Empfänger-Dropdown (Mehrfachauswahl): geschlossen zeigt es die Anzahl der
- * Auswahl, geöffnet Suche plus Checkbox-Liste. Auswahl schließt nicht.
+ * Recipient picker (multi-select): one field that both takes typing and
+ * shows the selection — not two stacked fields.
+ *
+ * Deliberately no `ExposedDropdownMenuBox` any more: the search field used
+ * to live inside the popup, and the keyboard did not reliably come up
+ * there (a popup is its own window without a dependable IME connection).
+ * The filter is now a plain field in the screen flow and the list unfolds
+ * right below it.
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun RecipientDropdown(
+private fun RecipientPicker(
     recipients: List<RecipientDto>,
     selectedIds: Set<String>,
     isLoading: Boolean,
@@ -621,19 +631,46 @@ private fun RecipientDropdown(
     var filter by remember { mutableStateOf("") }
     val visible = remember(recipients, filter) { filterRecipients(recipients, filter) }
     val scheme = MaterialTheme.colorScheme
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { if (it != expanded) expanded = it },
-        modifier = modifier,
-    ) {
+    val selectedNames = remember(selectedIds, recipients) {
+        selectedIds.mapNotNull { id -> recipients.firstOrNull { it.id == id }?.name }
+    }
+    Column(modifier = modifier) {
+        // One single field: takes typing, opens the list. `readOnly` is
+        // deliberately gone here — that is what used to swallow the input.
         OutlinedTextField(
-            value = if (selectedIds.isEmpty()) "" else
-                stringResource(R.string.messages_recipients_format, selectedIds.size),
-            onValueChange = {},
-            readOnly = true,
+            value = filter,
+            onValueChange = {
+                filter = it
+                if (!expanded) expanded = true
+            },
             singleLine = true,
             placeholder = { Text(stringResource(R.string.messages_recipient_search)) },
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+            leadingIcon = {
+                Icon(
+                    Icons.Filled.Search,
+                    contentDescription = null,
+                    tint = scheme.onSurfaceVariant,
+                    modifier = Modifier.size(20.dp),
+                )
+            },
+            trailingIcon = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (filter.isNotEmpty()) {
+                        IconButton(onClick = { filter = "" }) {
+                            Icon(
+                                Icons.Filled.Close,
+                                contentDescription = stringResource(R.string.common_clear),
+                                modifier = Modifier.size(18.dp),
+                            )
+                        }
+                    }
+                    Icon(
+                        if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
+                        contentDescription = null,
+                        tint = scheme.onSurfaceVariant,
+                    )
+                }
+            },
             shape = RoundedCornerShape(16.dp),
             textStyle = MaterialTheme.typography.bodyMedium,
             colors = OutlinedTextFieldDefaults.colors(
@@ -643,92 +680,124 @@ private fun RecipientDropdown(
                 focusedBorderColor = scheme.primary,
                 cursorColor = scheme.primary,
             ),
-            // menuAnchor() ist der vom Material3-Implizit erwartete Weg, das
-            // Menue zu oeffnen. Ein blosses `clickable` auf dem Feld
-            // genuegt hier nicht: `readOnly` schluckt den Klick, das Feld
-            // blieb zu und man kam nicht an die Liste. Die parameterlose
-            // Form ist die von Compose BOM 2024.06 (kein Anchor-Typ).
             modifier = Modifier
                 .fillMaxWidth()
-                .menuAnchor(),
+                // Focus, not click: the text field consumes the touch to
+                // place the cursor, so an outer `clickable` never fires —
+                // tapping an empty field then opened nothing at all. Focus
+                // arrives reliably and covers both cases.
+                .onFocusChanged { if (it.isFocused) expanded = true },
         )
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-            // Ohne Hoehe waechst das Menue mit der Liste und schiebt die
-            // Nachrichtenliste aus dem Bild; die Empfangerzahl ist
-            // begrenzt (max. 200 aus GET /recipients).
-            modifier = Modifier.heightIn(max = 320.dp),
-        ) {
-            // Suchfeld im Menue: `onExpandedChange` ignoriert den Wechsel,
-            // den Material3 beim Fokussieren ausloest — sonst klappte das
-            // Menue beim Tippen sofort wieder zu.
-            OutlinedTextField(
-                value = filter,
-                onValueChange = { filter = it },
-                singleLine = true,
-                placeholder = { Text(stringResource(R.string.messages_recipient_search)) },
-                shape = RoundedCornerShape(16.dp),
-                textStyle = MaterialTheme.typography.bodyMedium,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = scheme.surface,
-                    unfocusedContainerColor = scheme.surface,
-                    unfocusedBorderColor = scheme.outlineVariant,
-                    focusedBorderColor = scheme.primary,
-                    cursorColor = scheme.primary,
-                ),
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 4.dp),
+        // Show the shared selection only while nothing is typed. While
+        // typing, the input wins — otherwise "Berger" could not be typed
+        // into a field showing "Ms. Berger, Mr. Özdemir".
+        if (selectedNames.isNotEmpty() && filter.isBlank()) {
+            Text(
+                // Plural, not a plain format string: "1 recipients chosen"
+                // is wrong, and this summary is now always visible.
+                pluralStringResource(
+                    R.plurals.messages_recipients_format,
+                    selectedNames.size,
+                    selectedNames.size,
+                ) + ": " + selectedNames.joinToString(", "),
+                style = MaterialTheme.typography.bodySmall,
+                color = scheme.onSurfaceVariant,
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp),
             )
-            if (isLoading) {
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    horizontalArrangement = Arrangement.Center,
-                ) { CircularProgressIndicator(Modifier.size(20.dp)) }
-            } else if (visible.isEmpty()) {
-                // Ohne diesen Zweig blieb bei leerer Trefferliste einfach
-                // nichts stehen — man konnte nicht unterscheiden, ob noch
-                // geladen wird oder die Eingabe nichts gefunden hat.
-                Text(
-                    stringResource(
-                        if (filter.isBlank()) R.string.messages_recipients_empty
-                        else R.string.messages_recipients_no_match,
-                    ),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = scheme.onSurfaceVariant,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 20.dp),
-                )
-            } else {
-                visible.forEach { rec ->
-                    DropdownMenuItem(
-                        text = {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Checkbox(
-                                    checked = rec.id in selectedIds,
-                                    onCheckedChange = null,
-                                )
-                                AvatarDot(initials = initialsOf(rec.name))
-                                Spacer(Modifier.width(10.dp))
-                                Column(Modifier.weight(1f)) {
-                                    Text(rec.name, fontWeight = FontWeight.Medium)
-                                    // Fach/Klasse statt des rohen Rollenwerts —
-                                    // „teacher" sagt nichts, „Math, Physics"
-                                    // schon. Deshalb auch durchsuchbar.
-                                    val sub = listOf(rec.kind, rec.detail)
-                                        .filter { it.isNotBlank() }
-                                        .joinToString(" · ")
-                                    if (sub.isNotBlank()) {
-                                        Text(
-                                            sub,
-                                            style = MaterialTheme.typography.labelSmall,
-                                            color = scheme.onSurfaceVariant,
-                                        )
-                                    }
-                                }
-                            }
-                        },
-                        onClick = { onToggle(rec.id) },
+        }
+        // The list unfolds below the field as part of the screen flow,
+        // not as a popup window — that was what kept the keyboard from
+        // coming up.
+        if (expanded) {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = scheme.surface,
+                tonalElevation = 3.dp,
+                modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
+            ) {
+                if (isLoading) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth().padding(16.dp),
+                        horizontalArrangement = Arrangement.Center,
+                    ) { CircularProgressIndicator(Modifier.size(20.dp)) }
+                } else if (visible.isEmpty()) {
+                    // Without this branch an empty result list showed nothing at
+                    // all — you could not tell "still loading" from
+                    // "your search matched nobody".
+                    Text(
+                        stringResource(
+                            if (filter.isBlank()) R.string.messages_recipients_empty
+                            else R.string.messages_recipients_no_match,
+                        ),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = scheme.onSurfaceVariant,
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 20.dp),
                     )
+                } else {
+                    // Not a LazyColumn: GET /recipients bounds the list, and in a
+                    // LazyColumn an open keyboard would lose focus once
+                    // the last item had been scrolled past.
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 280.dp)
+                            .verticalScroll(rememberScrollState()),
+                    ) {
+                        visible.forEach { rec ->
+                            RecipientRow(
+                                recipient = rec,
+                                selected = rec.id in selectedIds,
+                                onClick = { onToggle(rec.id) },
+                            )
+                        }
+                    }
                 }
+            }
+        }
+    }
+}
+
+/**
+ * A recipient row: checkbox, avatar, name and role/subjects.
+ *
+ * The checkbox deliberately has no `onCheckedChange` of its own: the
+ * whole row toggles, otherwise a tap on the box would not toggle while
+ * the row around it still reacted.
+ */
+@Composable
+private fun RecipientRow(
+    recipient: RecipientDto,
+    selected: Boolean,
+    onClick: () -> Unit,
+) {
+    val scheme = MaterialTheme.colorScheme
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+    ) {
+        Checkbox(checked = selected, onCheckedChange = null)
+        AvatarDot(initials = initialsOf(recipient.name))
+        Spacer(Modifier.width(10.dp))
+        Column(Modifier.weight(1f)) {
+            Text(
+                recipient.name,
+                fontWeight = FontWeight.Medium,
+                color = scheme.onSurface,
+            )
+            // Subject/class instead of the raw role word — "teacher" tells
+            // the user nothing, "Math, Physics" does. Also searchable.
+            val sub = listOf(recipient.kind, recipient.detail)
+                .filter { it.isNotBlank() }
+                .joinToString(" · ")
+            if (sub.isNotBlank()) {
+                Text(
+                    sub,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = scheme.onSurfaceVariant,
+                )
             }
         }
     }
