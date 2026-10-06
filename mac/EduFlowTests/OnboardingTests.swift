@@ -186,6 +186,24 @@ struct OnboardingTests {
         #expect(Set(entries.map(\.code)).count == entries.count)
     }
 
+    @Test("Ohne brauchbare Übersetzung wird eine Sprache nicht angeboten")
+    func untranslatedLanguagesAreHidden() {
+        // Eine Sprache mit 0 % zeigt englische Quelltexte und kann nichts
+        // liefern, was sie verspricht — sie gehoert nicht in die Auswahl.
+        let entries = LanguageEntry.fromBundle()
+        for entry in entries {
+            #expect(entry.percent >= LanguageEntry.minimumPercent)
+        }
+        // Der Katalog enthaelt sehr wohl unuebersetzte Sprachen; sie
+        // duerfen nur nicht angeboten werden.
+        let unbrauchbar = AppLocalizations.coverage()
+            .filter { $0.percent < LanguageEntry.minimumPercent }
+        #expect(!unbrauchbar.isEmpty)
+        for row in unbrauchbar {
+            #expect(!entries.contains { $0.code == row.code })
+        }
+    }
+
     @Test("Topbar wird beim Scrollen nach unten klein, oben immer groß")
     @MainActor
     func topBarCollapsesOnScrollDown() {

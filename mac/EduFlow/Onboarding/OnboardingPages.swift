@@ -214,8 +214,11 @@ public struct OnboardingLanguagePage: View {
 
     /// Zeilen-Codes stabil nach Eigenname sortiert (kein Umsortieren bei
     /// Auswahl, sonst springt die getappte Zeile weg und wirkt falsch).
+    ///
+    /// Ohne brauchbare eigene Übersetzung wird eine Sprache nicht angeboten:
+    /// sie zeigt englische Quelltexte, kann aber nichts, was sie verspricht.
     private var orderedCodes: [String] {
-        let codes = rows.map(\.code)
+        let codes = rows.filter { $0.percent >= LanguageEntry.minimumPercent }.map(\.code)
         return codes.sorted {
             AppLanguage.nativeName($0).localizedCaseInsensitiveCompare(AppLanguage.nativeName($1)) == .orderedAscending
         }
@@ -232,14 +235,6 @@ public struct OnboardingLanguagePage: View {
                 .tracking(-1.2)
                 .padding(.top, 12)
                 .riseIn(delay: 0.08)
-            Text(NSLocalizedString("onboarding_language_subtitle", value: "EduFlow speaks your language. The choice applies immediately.", comment: "Onboarding: Sprachauswahl Untertitel"))
-                .font(UberFont.text(14))
-                .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                .multilineTextAlignment(.center)
-                .lineSpacing(3)
-                .padding(.top, 10)
-                .padding(.horizontal, 24)
-                .riseIn(delay: 0.14)
             ScrollView {
                 VStack(spacing: 10) {
                     languageRow(

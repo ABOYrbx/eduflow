@@ -121,39 +121,43 @@ public struct LocaleCoverage: Equatable, Sendable {
     public let percent: Int
 }
 
-/// Übersetzungsstand pro Sprache (manuell per Python aus dem Katalog
-/// erzeugt; bei neuen Sprachen/Zahlen dort neu berechnen, siehe
-/// `plaene/LOKALISIERUNG.md`).
+/// Übersetzungsstand pro Sprache — NUR NOCH als Rückfall, wenn die
+/// Bundle-Tabellen nicht lesbar sind (`AppLocalizations.coverage()`).
+/// Der Normalfall misst den Katalog zur Laufzeit; diese Liste wird nicht
+/// gepflegt und darf nicht als Anzeige dienen: sie lag zuvor deutlich
+/// daneben (Afrikaans 97 % statt 0 %). Nach einem Crowdin-Sync neu
+/// erzeugen, falls der Rückfall überhaupt noch gebraucht wird.
 public let localeCoverage: [LocaleCoverage] = [
-    LocaleCoverage(code: "de", translated: 394, total: 394, percent: 100),
-    LocaleCoverage(code: "en", translated: 394, total: 394, percent: 100),
-    LocaleCoverage(code: "af", translated: 381, total: 394, percent: 97),
-    LocaleCoverage(code: "ar", translated: 378, total: 394, percent: 96),
-    LocaleCoverage(code: "ca", translated: 381, total: 394, percent: 97),
-    LocaleCoverage(code: "cs", translated: 379, total: 394, percent: 96),
-    LocaleCoverage(code: "da", translated: 371, total: 394, percent: 94),
-    LocaleCoverage(code: "el", translated: 378, total: 394, percent: 96),
-    LocaleCoverage(code: "es", translated: 378, total: 394, percent: 96),
-    LocaleCoverage(code: "fi", translated: 377, total: 394, percent: 96),
-    LocaleCoverage(code: "fr", translated: 372, total: 394, percent: 94),
-    LocaleCoverage(code: "he", translated: 381, total: 394, percent: 97),
-    LocaleCoverage(code: "hu", translated: 381, total: 394, percent: 97),
-    LocaleCoverage(code: "it", translated: 375, total: 394, percent: 95),
-    LocaleCoverage(code: "ja", translated: 378, total: 394, percent: 96),
-    LocaleCoverage(code: "ko", translated: 381, total: 394, percent: 97),
-    LocaleCoverage(code: "nb", translated: 380, total: 394, percent: 96),
-    LocaleCoverage(code: "nl", translated: 373, total: 394, percent: 95),
-    LocaleCoverage(code: "no", translated: 276, total: 394, percent: 70),
-    LocaleCoverage(code: "pl", translated: 380, total: 394, percent: 96),
-    LocaleCoverage(code: "pt", translated: 376, total: 394, percent: 95),
-    LocaleCoverage(code: "pt-BR", translated: 376, total: 394, percent: 95),
-    LocaleCoverage(code: "ro", translated: 376, total: 394, percent: 95),
-    LocaleCoverage(code: "ru", translated: 379, total: 394, percent: 96),
-    LocaleCoverage(code: "sr", translated: 381, total: 394, percent: 97),
-    LocaleCoverage(code: "sv", translated: 376, total: 394, percent: 95),
-    LocaleCoverage(code: "tr", translated: 383, total: 394, percent: 97),
-    LocaleCoverage(code: "uk", translated: 379, total: 394, percent: 96),
-    LocaleCoverage(code: "vi", translated: 381, total: 394, percent: 97),
+    LocaleCoverage(code: "af", translated: 2, total: 425, percent: 0),
+    LocaleCoverage(code: "ar", translated: 330, total: 425, percent: 78),
+    LocaleCoverage(code: "ca", translated: 2, total: 425, percent: 0),
+    LocaleCoverage(code: "cs", translated: 369, total: 425, percent: 87),
+    LocaleCoverage(code: "da", translated: 350, total: 425, percent: 82),
+    LocaleCoverage(code: "de", translated: 425, total: 425, percent: 100),
+    LocaleCoverage(code: "el", translated: 372, total: 425, percent: 88),
+    LocaleCoverage(code: "en", translated: 425, total: 425, percent: 100),
+    LocaleCoverage(code: "es", translated: 373, total: 425, percent: 88),
+    LocaleCoverage(code: "fi", translated: 372, total: 425, percent: 88),
+    LocaleCoverage(code: "fr", translated: 361, total: 425, percent: 85),
+    LocaleCoverage(code: "he", translated: 2, total: 425, percent: 0),
+    LocaleCoverage(code: "hu", translated: 2, total: 425, percent: 0),
+    LocaleCoverage(code: "it", translated: 362, total: 425, percent: 85),
+    LocaleCoverage(code: "ja", translated: 372, total: 425, percent: 88),
+    LocaleCoverage(code: "ko", translated: 2, total: 425, percent: 0),
+    LocaleCoverage(code: "nb", translated: 366, total: 425, percent: 86),
+    LocaleCoverage(code: "nl", translated: 352, total: 425, percent: 83),
+    LocaleCoverage(code: "pl", translated: 374, total: 425, percent: 88),
+    LocaleCoverage(code: "pt", translated: 377, total: 425, percent: 89),
+    LocaleCoverage(code: "pt-BR", translated: 377, total: 425, percent: 89),
+    LocaleCoverage(code: "ro", translated: 367, total: 425, percent: 86),
+    LocaleCoverage(code: "ru", translated: 380, total: 425, percent: 89),
+    LocaleCoverage(code: "sr", translated: 2, total: 425, percent: 0),
+    LocaleCoverage(code: "sv", translated: 357, total: 425, percent: 84),
+    LocaleCoverage(code: "tr", translated: 2, total: 425, percent: 0),
+    LocaleCoverage(code: "uk", translated: 375, total: 425, percent: 88),
+    LocaleCoverage(code: "vi", translated: 2, total: 425, percent: 0),
+    LocaleCoverage(code: "zh-Hans", translated: 374, total: 425, percent: 88),
+    LocaleCoverage(code: "zh-Hant", translated: 2, total: 425, percent: 0),
 ]
 
 /// App-Sprache als Override der Systemsprache (reine Logik, testbar).
