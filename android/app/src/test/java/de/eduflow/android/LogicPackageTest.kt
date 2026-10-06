@@ -15,6 +15,7 @@ import de.eduflow.android.data.dto.gradeTermKey
 import de.eduflow.android.data.dto.gradeTermLabel
 import de.eduflow.android.data.dto.gradesAverage
 import de.eduflow.android.data.dto.groupGradesBySubject
+import de.eduflow.android.ui.overview.OverviewOrder
 import de.eduflow.android.ui.overview.OverviewViewModel
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
@@ -76,6 +77,49 @@ class LogicPackageTest {
         val l = LessonDto(period = "2", time = "09:50-10:10", title = "Englisch")
         val (current, _) = OverviewViewModel.currentAndNext(listOf(l), LocalTime.of(10, 0))
         assertEquals("Englisch", current?.title)
+    }
+
+    // ---- Übersichts-Reihenfolge (ov_order) ----
+
+    @Test
+    fun overviewOrder_parseKeepsKnownKeysOnly() {
+        assertEquals(
+            listOf("homework", "messages", "weather"),
+            OverviewOrder.parse("homework,messages"),
+        )
+    }
+
+    @Test
+    fun overviewOrder_parseAppendsMissingAndIgnoresGarbage() {
+        // Unbekanntes raus, Vorhandenes in der Wunschreihenfolge, fehlende
+        // Sektionen hinten anfügen — sonst verschwände eine Sektion.
+        assertEquals(
+            listOf("weather", "messages", "homework"),
+            OverviewOrder.parse("weather,bogus,messages"),
+        )
+        assertEquals(OverviewOrder.keys, OverviewOrder.parse(""))
+    }
+
+    @Test
+    fun overviewOrder_moveClampsAndReorders() {
+        val base = listOf("messages", "homework", "weather")
+        assertEquals(listOf("homework", "messages", "weather"), OverviewOrder.move(base, 0, 1))
+        assertEquals(listOf("messages", "weather", "homework"), OverviewOrder.move(base, 1, 1))
+        assertEquals(listOf("messages", "weather", "homework"), OverviewOrder.move(base, 2, -1))
+        // Weit über das Ende hinaus → kein Absturz, das Ziel wird geklemmt.
+        assertEquals(base, OverviewOrder.move(base, 0, -5))
+        assertEquals(base, OverviewOrder.move(base, 2, 5))
+    }
+
+    @Test
+    fun overviewOrder_serializeIsStableRoundTrip() {
+        val base = OverviewOrder.keys
+        assertEquals(base, OverviewOrder.parse(OverviewOrder.serialize(base)))
+        // Duplikate und Fremdwerte dürfen nicht in den String geraten.
+        assertEquals(
+            listOf("messages", "homework", "weather"),
+            OverviewOrder.parse(OverviewOrder.serialize(listOf("messages", "messages", "nope", "homework"))),
+        )
     }
 
     // ---- Noten ----

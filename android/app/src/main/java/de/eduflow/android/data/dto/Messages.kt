@@ -3,6 +3,7 @@ package de.eduflow.android.data.dto
 import androidx.annotation.StringRes
 import de.eduflow.android.R
 import kotlinx.serialization.Serializable
+import java.util.Locale
 
 /**
  * Nachricht 1:1 zum Web-Bauer (app.py event_to_dict).
@@ -92,6 +93,8 @@ data class RecipientDto(
     val id: String = "",
     val name: String = "",
     val kind: String = "",
+    /** Zusatzinfo der API (bei Lehrern die Fächer, bei Schülern die Klasse). */
+    val detail: String = "",
 )
 
 @Serializable
@@ -101,6 +104,34 @@ data class RecipientsListResponse(
     val limit: Int = 50,
     val offset: Int = 0,
 )
+
+/**
+ * Ohne Diakritika und kleingeschrieben, damit „Ozdemir" auch „Özdemir"
+ * findet. Wie die Web-Suche (`dashboard-app.tsx`, normalisiert auf NFD).
+ * `Locale.ROOT` bewusst: mit der System-Locale greifen die Sonderregeln
+ * der türkischen I/di, dann wäre „I" nicht mehr „i".
+ */
+private fun foldAccents(text: String): String =
+    java.text.Normalizer.normalize(text.lowercase(Locale.ROOT), java.text.Normalizer.Form.NFD)
+        .replace("\\p{InCombiningDiacriticalMarks}+".toRegex(), "")
+
+/**
+ * Empfängerliste nach Suchbegriff filtern (Name, Rolle, Zusatzinfo).
+ *
+ * Die Suche geht über alle drei Felder, nicht nur den Namen: „Deutsch"
+ * findet sonst weder einen Lehrer mit diesem Fach noch eine Klasse, und
+ * „teacher" sagt nichts. Leerer Begriff liefert die Liste unverändert.
+ * Reine Logik ohne Context — offline testbar.
+ */
+fun filterRecipients(recipients: List<RecipientDto>, filter: String): List<RecipientDto> {
+    val needle = foldAccents(filter.trim())
+    if (needle.isEmpty()) return recipients
+    return recipients.filter { rec ->
+        foldAccents(rec.name).contains(needle) ||
+            foldAccents(rec.kind).contains(needle) ||
+            foldAccents(rec.detail).contains(needle)
+    }
+}
 
 // ------------------------------------------------------------ Schreiben
 

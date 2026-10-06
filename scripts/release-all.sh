@@ -237,9 +237,36 @@ else
     if [ "$PLAN" = true ]; then
       plan "Keystore erzeugen: $KEYSTORE_FILE"
     else
-      "$ROOT_DIR/scripts/generate-android-keystore.sh"
+      # Passwort VOR dem Generator sicherstellen. Sonst erfindet der
+      # Generator ein eigenes, das dieser Prozess nicht kennt – und es
+      # müsste ein zweites Mal abgefragt werden. Entweder interaktiv
+      # oder zufällig; in beiden Fällen steht es genau einmal im Terminal.
+      GENERATED_PASSWORD=false
+      if [ -z "${EDUFLOW_KEYSTORE_PASSWORD:-}" ]; then
+        if [ -t 0 ]; then
+          EDUFLOW_KEYSTORE_PASSWORD=$(ask_secret "Passwort fuer den neuen Keystore (leer = Zufall)" "EDUFLOW_KEYSTORE_PASSWORD")
+          [ -n "$EDUFLOW_KEYSTORE_PASSWORD" ] || {
+            EDUFLOW_KEYSTORE_PASSWORD=$(LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 32)
+            GENERATED_PASSWORD=true
+          }
+        else
+          EDUFLOW_KEYSTORE_PASSWORD=$(LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c 32)
+          GENERATED_PASSWORD=true
+        fi
+      fi
+      EDUFLOW_KEYSTORE_PASSWORD="$EDUFLOW_KEYSTORE_PASSWORD" \
+        "$ROOT_DIR/scripts/generate-android-keystore.sh"
       [ -f "$KEYSTORE_FILE" ] || die "Keystore wurde nicht erzeugt."
       ok "Keystore erzeugt: $KEYSTORE_FILE"
+      if [ "$GENERATED_PASSWORD" = true ]; then
+        printf '\n====================================================\n'
+        printf '  Zufallspasswort – BITTE NOTIEREN\n\n'
+        printf '  %s\n' "$EDUFLOW_KEYSTORE_PASSWORD"
+        printf '\n'
+        printf '  Ohne dieses Passwort sind spaetere Updates auf diesem\n'
+        printf '  Signing-Key nicht mehr installierbar.\n'
+        printf '====================================================\n\n'
+      fi
     fi
   fi
 
@@ -259,7 +286,7 @@ else
   elif [ "$PLAN" = true ]; then
     plan "Android-Secrets hochladen (3)"
   else
-    [ -n "${EDUFLOW_KEYSTORE_PASSWORD:-}" ] || EDUFLOW_KEYSTORE_PASSWORD=$(ask_secret "Passwort fuer den Keystore-Store" "EDUFLOW_KEYSTORE_PASSWORD")
+    [ -n "${EDUFLOW_KEYSTORE_PASSWORD:-}" ] || EDUFLOW_KEYSTORE_PASSWORD=$(ask_secret "Passwort des Keystores (bereits erzeugt?)" "EDUFLOW_KEYSTORE_PASSWORD")
     [ -n "${EDUFLOW_KEY_ALIAS:-}" ]         || EDUFLOW_KEY_ALIAS="eduflow-release"
     for _s in $ANDROID_SECRETS; do
       if gh_secret_exists "$_s" && [ "$FORCE_SECRETS" != true ]; then

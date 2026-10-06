@@ -44,12 +44,26 @@ jobs:
       # Die Runner bringen Android-SDK, platform-tools und build-tools bereits
       # mit. setup-android wird nicht benoetigt: ohne eigene Pins versucht
       # die Action, eine Preview-Version der Command-Line-Tools nachzuladen,
-      # und scheitert dann an deren Lizenz.
+      # und scheitert dann an deren Lizenz. Achtung: sdkmanager liegt im
+      # Image nicht im PATH, der Pfad muss selbst gesetzt werden.
       - name: Android SDK pruefen
         run: |
+          set -eu
           echo "ANDROID_HOME=$ANDROID_HOME"
-          sdkmanager --version
-          sdkmanager "platform-tools" "platforms;android-34"
+          SDKMANAGER=""
+          for candidate in \
+            "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager \
+            "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager \
+            "$ANDROID_HOME"/tools/bin/sdkmanager \
+            /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
+            /usr/local/lib/android/sdk/cmdline-tools/*/bin/sdkmanager
+          do
+            if [ -x "$candidate" ]; then SDKMANAGER="$candidate"; break; fi
+          done
+          [ -n "$SDKMANAGER" ] || { echo "::error::sdkmanager nicht gefunden"; exit 1; }
+          echo "sdkmanager: $SDKMANAGER"
+          "$SDKMANAGER" --version
+          "$SDKMANAGER" "platform-tools" "platforms;android-34"
 
       - name: Gradle-Cache
         uses: actions/cache@v4

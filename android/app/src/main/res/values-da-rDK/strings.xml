@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">EduFlow</string>
-    <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
+    <!-- Common (package 0, RedesignUi / CommonUi / BottomBar / errors) -->
     <string name="common_logo_desc">EduFlow logo</string>
     <string name="common_demo_badge">DEMO</string>
     <string name="common_profile_title">Din profil</string>
@@ -51,6 +51,10 @@
     <!-- Onboarding -->
     <string name="onboarding_greeting">Hej!</string>
     <string name="onboarding_language_title">Vælg sprog</string>
+    <string name="onboarding_language_search">Søg efter sprog</string>
+    <string name="onboarding_language_no_results">Intet sprog fundet</string>
+    <string name="onboarding_language_system_short">SYSTEM</string>
+    <string name="onboarding_language_system_format">Systemsprog: %1$s</string>
     <string name="onboarding_language_sub">EduFlow taler dit sprog. Valget gælder med det samme.</string>
     <string name="onboarding_language_apply_restart">Anvend &amp; genstart</string>
     <string name="onboarding_language_system">System</string>
@@ -63,6 +67,7 @@
     <string name="onboarding_feat3_title">Tidsplan &amp; Vejr</string>
     <string name="onboarding_feat3_desc">Dag og uge plus vejr på oversigten.</string>
     <string name="onboarding_server_sub">Angiv hvor EduFlow kører som server.</string>
+    <string name="onboarding_server_hint">Kun IP-adressen — port og sti tilføjes automatisk.</string>
     <string name="onboarding_connected">Forbundet</string>
     <string name="onboarding_unreachable">Server ikke tilgængelig. Tjek adressen og prøv igen.</string>
     <string name="onboarding_test_connected">✓ Forbundet</string>
@@ -78,7 +83,7 @@
     <string name="twofa_confirm">Bekræft</string>
     <string name="twofa_back">Tilbage til log ind</string>
     <string name="twofa_validity">Koden er gyldig i 10 minutter.</string>
-    <!-- Einstellungen -->
+    <!-- Settings -->
     <string name="settings_title">Indstillinger</string>
     <string name="settings_subtitle">Din EduFlow konto</string>
     <string name="settings_demo_text">Kun syntetisk prøve data er indlæst fra den lokale demo-server.</string>
@@ -95,12 +100,17 @@
     <string name="settings_theme_system">System</string>
     <string name="settings_theme_system_sub">Følger enhed lys/mørk</string>
     <string name="settings_accent">Accent farve</string>
+    <string name="settings_language">Sprog</string>
+    <string name="settings_language_system">Systemsprog</string>
     <string name="settings_notifications">Notifikationer</string>
     <string name="settings_notify_news">Nye beskeder</string>
     <string name="settings_overview_tasks">Oversigt &amp; opgaver</string>
     <string name="settings_landing_label">Startside efter log ind</string>
     <string name="settings_hwfilter_label">Opgaver: standardfilter</string>
     <string name="settings_hwtests_label">Inkluder tests og eksamener</string>
+    <string name="settings_time_format_label">Tidsformat</string>
+    <string name="settings_time_24h">24 h</string>
+    <string name="settings_time_12h">12 h</string>
     <string name="settings_unread_placeholder">Maks. ulæste beskeder (1–50)</string>
     <string name="settings_homework_placeholder">Maks. åbne lektier (1–50)</string>
     <string name="settings_navbar_section">Navigation bar</string>
@@ -126,7 +136,7 @@
     <string name="settings_dev_onboarding">Kør onboarding igen</string>
     <string name="settings_dev_onboarding_sub">Signerer dig ud og genstarter introduktionen.</string>
     <string name="settings_landing_overview">Oversigt</string>
-    <!-- Geräte -->
+    <!-- Devices -->
     <string name="devices_title">Enheder</string>
     <string name="devices_subtitle">Administrer signerede enheder</string>
     <string name="devices_empty">Ingen andre enheder logget ind.</string>
@@ -136,7 +146,7 @@
     <string name="devices_expires_format">Udløber: %1$s</string>
     <string name="devices_remove">Fjern</string>
     <string name="device_default_name">Android emulator</string>
-    <!-- Noten -->
+    <!-- Grades -->
     <string name="grades_title">Kvaliteter</string>
     <string name="grades_subtitle">Din præstation efter emne</string>
     <string name="grades_search_placeholder">Emne, titel eller lærer</string>
@@ -153,11 +163,11 @@
     <string name="grades_teacher_format">Underviser: %1$s</string>
     <string name="grades_class_avg_format">Klasse avg. %1$s</string>
     <string name="grades_term_all">Alle</string>
-    <!-- Halbjahr-Name: %1$d = Halbjahr (1/2), %2$s/%3$s = Kurzjahre (25/26);
-         Musterbuchstaben nicht übersetzen, nur Worte/Reihenfolge anpassen. -->
+    <!-- Semester name: %1$d = semester (1/2), %2$s/%3$s = short years (25/26);
+         pattern letters must not be translated, only words/order. -->
     <string name="grades_term_label_format">Semester %1$d %2$s/%3$s</string>
     <string name="grades_subject_other">Andet</string>
-    <!-- Hausaufgaben -->
+    <!-- Homework -->
     <string name="homework_title">Lektier</string>
     <string name="homework_subtitle">Dine opgaver med et overblik</string>
     <string name="homework_search_placeholder">Titel, emne eller lærer</string>
@@ -175,7 +185,7 @@
     <string name="homework_swipe_restore">Gendan</string>
     <string name="homework_reopen_desc">Genåbn</string>
     <string name="homework_title_format">Lektier #%1$d</string>
-    <!-- Nachrichten -->
+    <!-- Messages -->
     <string name="messages_title">Beskeder</string>
     <string name="messages_subtitle">Beskeder fra din skole</string>
     <string name="messages_search_placeholder">Søg efter beskeder</string>
@@ -204,18 +214,29 @@
     <string name="messages_compose_subtitle">Vælg lærere og klassekammerater</string>
     <string name="messages_recipient_search">Søg efter modtagere</string>
     <string name="messages_recipients_format">%1$d modtagere valgt</string>
+    <string name="messages_recipients_empty">No recipients loaded.</string>
+    <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">Besked tekst</string>
     <string name="messages_compose_send">Send</string>
-    <!-- Übersicht -->
+    <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
+         label() stays the German context-free fallback for tests. -->
+    <string name="message_type_all">Alle</string>
+    <string name="message_type_sprava">Besked</string>
+    <string name="message_type_news">Nyheder</string>
+    <string name="message_type_anketa">Afstemning</string>
+    <string name="message_type_chat">Chat</string>
+    <string name="message_type_genotif">Meddelelse</string>
+    <!-- Overview -->
     <string name="overview_customize">Tilpas oversigt</string>
     <string name="overview_customize_desc">Vælg hvilke afsnit der skal vises først.</string>
+    <string name="overview_customize_action">Sort sections</string>
     <string name="overview_move_up_desc">Flyt op</string>
     <string name="overview_move_down_desc">Flyt ned</string>
     <string name="overview_messages_count_format">Beskeder · %1$d</string>
     <string name="overview_action_all_tasks">Alle opgaver</string>
     <string name="overview_clock_label">TID</string>
-    <!-- Datumszeile unter „Home" (EEEE = Wochentag, dd/MM/yyyy = Datum:
-         Musterbuchstaben nicht übersetzen, nur Reihenfolge anpassen). -->
+    <!-- Date line below "Home" (EEEE = weekday, MM/dd/yyyy = date:
+         pattern letters must not be translated, only order). -->
     <string name="home_date_format">EEEE, dd.MM.yyyy</string>
     <string name="overview_today_hours">KLASSER I DAGE</string>
     <string name="overview_no_school">Ingen skole — ingen klasser i dag.</string>
@@ -246,7 +267,7 @@
     <string name="overview_due_suffix_format"> · fällig: %1$s</string>
     <string name="overview_subject_suffix_format"> · %1$s</string>
     <string name="overview_weather_high_low_format">H %1$s · L %2$s</string>
-    <!-- Schulalltag -->
+    <!-- School life -->
     <string name="school_title">Skole liv</string>
     <string name="school_subtitle">Begivenheder og tidsplan ændringer</string>
     <string name="school_tab_calendar_format">Kalender · %1$d</string>
@@ -263,7 +284,7 @@
     <string name="school_change_remove">ENTFÄLLT</string>
     <string name="school_change_default">GEAŽNDERT</string>
     <string name="school_class_format">Klasse %1$s</string>
-    <!-- Stundenplan -->
+    <!-- Timetable -->
     <string name="timetable_title">Tidsplan</string>
     <string name="timetable_day_count_format">%1$d perioder</string>
     <string name="timetable_week_count_format">%1$d perioder i denne uge</string>
@@ -284,7 +305,7 @@
     <string name="timetable_flag_lernzeit">Studiets tid</string>
     <string name="timetable_flag_lernzeit_hours">Studietid (%1$d timer.)</string>
     <string name="timetable_flag_event">Begivenhed</string>
-    <!-- Mehr -->
+    <!-- More -->
     <string name="more_title">Mere</string>
     <string name="more_subtitle">Flere sektioner</string>
     <string name="more_school_title">Hændelser &amp; substitutioner</string>
@@ -297,19 +318,19 @@
     <string name="more_cache_default">Slet cachelagrede data</string>
     <string name="more_logout_sub">Log ud fra denne enhed</string>
     <string name="more_server_dialog_desc">Server for API-anmodninger (…/api/v1/).</string>
-    <!-- Validierung (clientseitig): Die ViewModels (ui/auth/AuthViewModel,
-         ui/messages/MessagesViewModel, ui/overview/OverviewViewModel) liefern
-         Code + deutschen Fallback-Text (kontextfrei für Unit-Tests) plus
-         messageRes — Compose löst per stringResource an den Call-Sites auf. -->
+    <!-- Client-side validation: the ViewModels (ui/auth/AuthViewModel,
+         ui/messages/MessagesViewModel, ui/overview/OverviewViewModel) supply
+         code + German fallback text (context-free for unit tests) plus
+         messageRes — Compose resolves via stringResource at the call sites. -->
     <string name="auth_error_credentials">Indtast brugernavn og adgangskode.</string>
     <string name="twofa_error_empty">Indtast venligst koden.</string>
     <string name="messages_compose_no_recipient">Vælg venligst mindst en gyldig modtager.</string>
     <string name="messages_compose_no_body">Indtast venligst en beskedtekst.</string>
     <string name="overview_weather_no_city">Indtast venligst en by.</string>
-    <!-- Fehler-Fallbacks: data/ErrorMapper.messageFor liefert den deutschen
-         Fallback (Backend-Texte haben Vorrang, kontextfrei für Unit-Tests);
-         data/ErrorMapper.stringResFor mappt Codes auf diese Keys, Compose
-         löst per localizedApiMessage (ui/timetable/DayScreen.kt) auf. -->
+    <!-- Error fallbacks: data/ErrorMapper.messageFor supplies the German
+         fallback (backend texts take precedence, context-free for unit tests);
+         data/ErrorMapper.stringResFor maps codes onto these keys, Compose
+         resolves via localizedApiMessage (ui/timetable/DayScreen.kt). -->
     <string name="error_validation">Ugyldigt input. Kontroller og prøv igen.</string>
     <string name="error_token_invalid">Session ugyldig. Log venligst ind igen.</string>
     <string name="error_token_expired">Session udløbet. Log venligst ind igen.</string>
@@ -322,7 +343,7 @@
     <string name="error_rate_limited">For mange forsøg. Prøv igen senere.</string>
     <string name="error_config_missing">Servernøgle mangler. Prøv igen senere.</string>
     <string name="error_upstream">Log ind mislykkedes. Prøv igen senere.</string>
-    <!-- Akzentfarben -->
+    <!-- Accent colors -->
     <string name="common_accent_black">Sort</string>
     <string name="common_accent_blue">Blå</string>
     <string name="common_accent_violet">Lilac</string>
@@ -331,7 +352,7 @@
     <string name="common_accent_orange">Orange</string>
     <string name="common_accent_red">Rød</string>
     <string name="common_accent_pink">Lyserød</string>
-    <!-- Plurale -->
+    <!-- Plurals -->
     <plurals name="settings_devices_count">
         <item quantity="one">%1$d Gera t</item>
         <item quantity="other">%1$d Gera te</item>
@@ -344,20 +365,4 @@
         <item quantity="one">Ø %1$s · %2$d Note</item>
         <item quantity="other">Ø %1$s · %2$d Noten</item>
     </plurals>
-    <string name="onboarding_language_search">Søg efter sprog</string>
-    <string name="onboarding_language_no_results">Intet sprog fundet</string>
-    <string name="onboarding_language_system_short">SYSTEM</string>
-    <string name="onboarding_language_system_format">Systemsprog: %1$s</string>
-    <string name="onboarding_server_hint">Kun IP-adressen — port og sti tilføjes automatisk.</string>
-    <string name="settings_language">Sprog</string>
-    <string name="settings_language_system">Systemsprog</string>
-    <string name="settings_time_format_label">Tidsformat</string>
-    <string name="settings_time_24h">24 h</string>
-    <string name="settings_time_12h">12 h</string>
-    <string name="message_type_all">Alle</string>
-    <string name="message_type_sprava">Besked</string>
-    <string name="message_type_news">Nyheder</string>
-    <string name="message_type_anketa">Afstemning</string>
-    <string name="message_type_chat">Chat</string>
-    <string name="message_type_genotif">Meddelelse</string>
 </resources>
