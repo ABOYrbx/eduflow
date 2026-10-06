@@ -55,11 +55,12 @@ GoogleService-Info.plist
 .env.local
 .env.*.local
 
-# AI Agents
+# AI Agents und lokale Tool-Zustände (Projekt-IDs, Sitzungsdaten)
 .opencode
 .codex
 .claude
 .openchamber
+.freebuff
 
 # anderes
 .cache

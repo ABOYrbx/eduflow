@@ -55,6 +55,8 @@
 .attachment-button { margin: 4px 6px 4px 0; }
 .pager { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-top: 12px; border-top: 1px solid var(--border); color: var(--ink-muted); font-size: 13px; }
 .message-detail { padding: 10px 0 18px; border-bottom: 1px solid var(--border); line-height: 1.6; }
+/* Nachrichtentexte enthalten Absätze (`\n\n`) – wie in der Liste, wo `.message-row` schon `pre-wrap` setzt. */
+.message-detail p, .reply p { white-space: pre-wrap; }
 .reply { margin: 12px 0; }
 .count-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin: 20px 0 4px; }
 .count-card { display: flex; flex-direction: column; gap: 5px; border: 1px solid var(--border); border-radius: 14px; background: #fff; padding: 16px 18px; }

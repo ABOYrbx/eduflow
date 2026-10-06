@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">EduFlow</string>
-    <!-- Common (Paket 0, RedesignUi / CommonUi / BottomBar / Fehler) -->
-    <string name="common_logo_desc">EduFlow logo</string>
+    <!-- Common (package 0, RedesignUi / CommonUi / BottomBar / errors) -->
+    <string name="common_logo_desc">EduFlow-Logo</string>
     <string name="common_demo_badge">DEMO</string>
     <string name="common_profile_title">Hồ sơ của bạn</string>
     <string name="common_profile_default_account">Tài khoản</string>
@@ -67,6 +67,7 @@
     <string name="onboarding_feat3_title">Thời khóa biểu và thời tiết</string>
     <string name="onboarding_feat3_desc">Thời khóa biểu ngày và tuần cùng thời tiết trên trang tổng quan.</string>
     <string name="onboarding_server_sub">Nhập địa chỉ máy chủ EduFlow đang chạy.</string>
+    <string name="onboarding_server_hint">IP alone uses port %1$d. Add :port for another one — the demo server is %2$d.</string>
     <string name="onboarding_connected">Đã kết nối</string>
     <string name="onboarding_unreachable">Không thể kết nối máy chủ. Hãy kiểm tra địa chỉ rồi thử lại.</string>
     <string name="onboarding_test_connected">✓  Đã kết nối</string>
@@ -82,7 +83,7 @@
     <string name="twofa_confirm">Xác nhận</string>
     <string name="twofa_back">Quay lại đăng nhập</string>
     <string name="twofa_validity">Mã có hiệu lực trong 10 phút.</string>
-    <!-- Einstellungen -->
+    <!-- Settings -->
     <string name="settings_title">Cài đặt</string>
     <string name="settings_subtitle">Tài khoản EduFlow của bạn</string>
     <string name="settings_demo_text">Chỉ dữ liệu mẫu tổng hợp được tải từ máy chủ dùng thử cục bộ.</string>
@@ -135,7 +136,7 @@
     <string name="settings_dev_onboarding">Chạy lại phần giới thiệu</string>
     <string name="settings_dev_onboarding_sub">Đăng xuất và khởi động lại phần giới thiệu.</string>
     <string name="settings_landing_overview">Tổng quan</string>
-    <!-- Geräte -->
+    <!-- Devices -->
     <string name="devices_title">Thiết bị</string>
     <string name="devices_subtitle">Quản lý thiết bị đã đăng nhập</string>
     <string name="devices_empty">Không có thiết bị nào khác đã đăng nhập.</string>
@@ -145,7 +146,7 @@
     <string name="devices_expires_format">Hết hạn: %1$s</string>
     <string name="devices_remove">Xóa</string>
     <string name="device_default_name">Trình giả lập Android</string>
-    <!-- Noten -->
+    <!-- Grades -->
     <string name="grades_title">Điểm số</string>
     <string name="grades_subtitle">Kết quả học tập theo môn</string>
     <string name="grades_search_placeholder">Môn học, tiêu đề hoặc giáo viên</string>
@@ -162,11 +163,11 @@
     <string name="grades_teacher_format">Giáo viên: %1$s</string>
     <string name="grades_class_avg_format">Điểm trung bình lớp %1$s</string>
     <string name="grades_term_all">Tất cả</string>
-    <!-- Halbjahr-Name: %1$d = Halbjahr (1/2), %2$s/%3$s = Kurzjahre (25/26);
-         Musterbuchstaben nicht übersetzen, nur Worte/Reihenfolge anpassen. -->
+    <!-- Semester name: %1$d = semester (1/2), %2$s/%3$s = short years (25/26);
+         pattern letters must not be translated, only words/order. -->
     <string name="grades_term_label_format">Học kỳ %1$d %2$s/%3$s</string>
     <string name="grades_subject_other">Khác</string>
-    <!-- Hausaufgaben -->
+    <!-- Homework -->
     <string name="homework_title">Bài tập</string>
     <string name="homework_subtitle">Tổng quan bài tập của bạn</string>
     <string name="homework_search_placeholder">Tiêu đề, môn học hoặc giáo viên</string>
@@ -184,7 +185,7 @@
     <string name="homework_swipe_restore">Khôi phục</string>
     <string name="homework_reopen_desc">Mở lại</string>
     <string name="homework_title_format">Bài tập #%1$d</string>
-    <!-- Nachrichten -->
+    <!-- Messages -->
     <string name="messages_title">Tin nhắn</string>
     <string name="messages_subtitle">Tin nhắn từ trường của bạn</string>
     <string name="messages_search_placeholder">Tìm tin nhắn</string>
@@ -213,24 +214,29 @@
     <string name="messages_compose_subtitle">Chọn giáo viên và bạn cùng lớp</string>
     <string name="messages_recipient_search">Tìm người nhận</string>
     <string name="messages_recipients_format">Đã chọn %1$d người nhận</string>
+    <string name="messages_recipients_empty">No recipients loaded.</string>
+    <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">Nội dung tin nhắn</string>
     <string name="messages_compose_send">Gửi</string>
+    <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
+         label() stays the German context-free fallback for tests. -->
     <string name="message_type_all">Tất cả</string>
     <string name="message_type_sprava">Tin nhắn</string>
     <string name="message_type_news">Tin tức</string>
     <string name="message_type_anketa">Khảo sát</string>
     <string name="message_type_chat">Trò chuyện</string>
     <string name="message_type_genotif">Thông báo</string>
-    <!-- Übersicht -->
+    <!-- Overview -->
     <string name="overview_customize">Tùy chỉnh tổng quan</string>
     <string name="overview_customize_desc">Chọn mục nào sẽ xuất hiện trước.</string>
+    <string name="overview_customize_action">Sort sections</string>
     <string name="overview_move_up_desc">Di chuyển lên</string>
     <string name="overview_move_down_desc">Di chuyển xuống</string>
     <string name="overview_messages_count_format">Tin nhắn · %1$d</string>
     <string name="overview_action_all_tasks">Tất cả bài tập</string>
     <string name="overview_clock_label">GIỜ</string>
-    <!-- Datumszeile unter „Home" (EEEE = Wochentag, dd/MM/yyyy = Datum:
-         Musterbuchstaben nicht übersetzen, nur Reihenfolge anpassen). -->
+    <!-- Date line below "Home" (EEEE = weekday, MM/dd/yyyy = date:
+         pattern letters must not be translated, only order). -->
     <string name="home_date_format">EEEE, dd.MM.yyyy</string>
     <string name="overview_today_hours">TIẾT HỌC HÔM NAY</string>
     <string name="overview_no_school">Hôm nay không có buổi học.</string>
@@ -261,7 +267,7 @@
     <string name="overview_due_suffix_format"> · hạn nộp: %1$s</string>
     <string name="overview_subject_suffix_format"> · %1$s</string>
     <string name="overview_weather_high_low_format">Cao nhất %1$s · Thấp nhất %2$s</string>
-    <!-- Schulalltag -->
+    <!-- School life -->
     <string name="school_title">Hoạt động ở trường</string>
     <string name="school_subtitle">Sự kiện và thay đổi thời khóa biểu</string>
     <string name="school_tab_calendar_format">Lịch · %1$d</string>
@@ -278,7 +284,7 @@
     <string name="school_change_remove">ĐÃ HỦY</string>
     <string name="school_change_default">ĐÃ THAY ĐỔI</string>
     <string name="school_class_format">Lớp %1$s</string>
-    <!-- Stundenplan -->
+    <!-- Timetable -->
     <string name="timetable_title">Thời khóa biểu</string>
     <string name="timetable_day_count_format">%1$d tiết học</string>
     <string name="timetable_week_count_format">%1$d tiết học trong tuần này</string>
@@ -299,7 +305,7 @@
     <string name="timetable_flag_lernzeit">Giờ tự học</string>
     <string name="timetable_flag_lernzeit_hours">Giờ tự học (%1$d giờ)</string>
     <string name="timetable_flag_event">Sự kiện</string>
-    <!-- Mehr -->
+    <!-- More -->
     <string name="more_title">Thêm</string>
     <string name="more_subtitle">Các mục khác</string>
     <string name="more_school_title">Sự kiện và lịch dạy thay</string>
@@ -312,19 +318,19 @@
     <string name="more_cache_default">Xóa dữ liệu đã lưu trong bộ nhớ đệm</string>
     <string name="more_logout_sub">Đăng xuất khỏi thiết bị này</string>
     <string name="more_server_dialog_desc">Máy chủ cho yêu cầu API (…/api/v1/).</string>
-    <!-- Validierung (clientseitig): Die ViewModels (ui/auth/AuthViewModel,
-         ui/messages/MessagesViewModel, ui/overview/OverviewViewModel) liefern
-         Code + deutschen Fallback-Text (kontextfrei für Unit-Tests) plus
-         messageRes — Compose löst per stringResource an den Call-Sites auf. -->
+    <!-- Client-side validation: the ViewModels (ui/auth/AuthViewModel,
+         ui/messages/MessagesViewModel, ui/overview/OverviewViewModel) supply
+         code + German fallback text (context-free for unit tests) plus
+         messageRes — Compose resolves via stringResource at the call sites. -->
     <string name="auth_error_credentials">Vui lòng nhập tên người dùng và mật khẩu.</string>
     <string name="twofa_error_empty">Vui lòng nhập mã.</string>
     <string name="messages_compose_no_recipient">Vui lòng chọn ít nhất một người nhận hợp lệ.</string>
     <string name="messages_compose_no_body">Vui lòng nhập nội dung tin nhắn.</string>
     <string name="overview_weather_no_city">Vui lòng nhập tên thành phố.</string>
-    <!-- Fehler-Fallbacks: data/ErrorMapper.messageFor liefert den deutschen
-         Fallback (Backend-Texte haben Vorrang, kontextfrei für Unit-Tests);
-         data/ErrorMapper.stringResFor mappt Codes auf diese Keys, Compose
-         löst per localizedApiMessage (ui/timetable/DayScreen.kt) auf. -->
+    <!-- Error fallbacks: data/ErrorMapper.messageFor supplies the German
+         fallback (backend texts take precedence, context-free for unit tests);
+         data/ErrorMapper.stringResFor maps codes onto these keys, Compose
+         resolves via localizedApiMessage (ui/timetable/DayScreen.kt). -->
     <string name="error_validation">Dữ liệu không hợp lệ. Hãy kiểm tra rồi thử lại.</string>
     <string name="error_token_invalid">Phiên đăng nhập không hợp lệ. Hãy đăng nhập lại.</string>
     <string name="error_token_expired">Phiên đăng nhập đã hết hạn. Hãy đăng nhập lại.</string>
@@ -337,7 +343,7 @@
     <string name="error_rate_limited">Bạn đã thử quá nhiều lần. Hãy thử lại sau.</string>
     <string name="error_config_missing">Thiếu khóa máy chủ. Hãy thử lại sau.</string>
     <string name="error_upstream">Đăng nhập thất bại. Hãy thử lại sau.</string>
-    <!-- Akzentfarben -->
+    <!-- Accent colors -->
     <string name="common_accent_black">Đen</string>
     <string name="common_accent_blue">Xanh dương</string>
     <string name="common_accent_violet">Tím</string>
@@ -346,17 +352,14 @@
     <string name="common_accent_orange">Cam</string>
     <string name="common_accent_red">Đỏ</string>
     <string name="common_accent_pink">Hồng</string>
-    <!-- Plurale -->
+    <!-- Plurals -->
     <plurals name="settings_devices_count">
-        <item quantity="one">%1$d thiết bị</item>
         <item quantity="other">%1$d thiết bị</item>
     </plurals>
     <plurals name="more_cache_cleared">
-        <item quantity="one">Đã xóa %1$d tệp</item>
         <item quantity="other">Đã xóa %1$d tệp</item>
     </plurals>
     <plurals name="grades_notes_count">
-        <item quantity="one">Trung bình %1$s · %2$d điểm</item>
         <item quantity="other">Trung bình %1$s · %2$d điểm</item>
     </plurals>
 </resources>

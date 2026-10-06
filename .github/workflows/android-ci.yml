@@ -1,0 +1,93 @@
+name: Android CI
+
+# Baut die Android-App und laesst die Offline-Unit-Tests laufen. Ohne Secrets
+# nutzbar – der Release-Workflow hat eine eigene, signierte Pipeline.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "android/**"
+      - "VERSION"
+      - "scripts/check-version.sh"
+      - ".github/workflows/android-ci.yml"
+  pull_request:
+    paths:
+      - "android/**"
+      - "VERSION"
+      - "scripts/check-version.sh"
+      - ".github/workflows/android-ci.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: android-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Debug-Build und Unit-Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Quellen holen
+        uses: actions/checkout@v4
+
+      # compileOptions/kotlinOptions stehen auf JVM 17 (android/app/build.gradle.kts).
+      - name: JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      # Die Runner bringen Android-SDK, platform-tools und build-tools bereits
+      # mit. setup-android wird nicht benoetigt: ohne eigene Pins versucht
+      # die Action, eine Preview-Version der Command-Line-Tools nachzuladen,
+      # und scheitert dann an deren Lizenz. Achtung: sdkmanager liegt im
+      # Image nicht im PATH, der Pfad muss selbst gesetzt werden.
+      - name: Android SDK pruefen
+        run: |
+          set -eu
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          SDKMANAGER=""
+          for candidate in \
+            "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager \
+            "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager \
+            "$ANDROID_HOME"/tools/bin/sdkmanager \
+            /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
+            /usr/local/lib/android/sdk/cmdline-tools/*/bin/sdkmanager
+          do
+            if [ -x "$candidate" ]; then SDKMANAGER="$candidate"; break; fi
+          done
+          [ -n "$SDKMANAGER" ] || { echo "::error::sdkmanager nicht gefunden"; exit 1; }
+          echo "sdkmanager: $SDKMANAGER"
+          "$SDKMANAGER" --version
+          "$SDKMANAGER" "platform-tools" "platforms;android-34"
+
+      - name: Gradle-Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+            android/.gradle
+            android/app/build
+          key: android-gradle-${{ runner.os }}-${{ hashFiles("android/gradle/wrapper/gradle-wrapper.properties", "android/**/*.kts") }}
+          restore-keys: |
+            android-gradle-${{ runner.os }}-
+
+      - name: Versionen pruefen
+        run: ./scripts/check-version.sh
+
+      # Nur Offline-Tests: Fake-ApiService, keine echten Zugangsdaten.
+      - name: Debug-Build und Unit-Tests
+        run: ./gradlew :app:assembleDebug :app:testDebugUnitTest --console=plain
+        working-directory: android
+
+      - name: Debug-APK als Artefakt
+        uses: actions/upload-artifact@v4
+        with:
+          name: eduflow-android-debug-${{ github.sha }}
+          path: android/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: warn

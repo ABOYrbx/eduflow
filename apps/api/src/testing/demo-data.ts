@@ -1,8 +1,95 @@
+/**
+ * Absätze: `\n\n` trennt Absätze, so wie es echte EduPage-Nachrichten tun.
+ * Web (`pre-wrap` in `compat.css`), SwiftUI (`Text`) und Compose (`Text`)
+ * stellen die Umbrüche dar; die Demo soll diese Darstellung zeigen.
+ */
+const paragraphs = (...parts: string[]): string => parts.join("\n\n");
+
 export const demoMessages = [
-  { id: 4101, timestamp: "2026-09-25 14:10:00", timestamp_iso: "2026-09-25T14:10:00", sort_key: "2026-09-25T14:10:00", text: "Reminder: parent-teacher conferences on Thursday at 6 PM.", author: "Ms. Berger", recipient: "Class 8A", type: "sprava", type_label: "Message", additional_data: {}, is_starred: false, is_done: false, done_at: "", reaction_count: 1, created_at: "2026-09-25T14:10:00", is_removed: false },
-  { id: 4102, timestamp: "2026-09-24 09:35:00", timestamp_iso: "2026-09-24T09:35:00", sort_key: "2026-09-24T09:35:00", text: "The field trip to Berlin starts Friday at 8:15 AM.", author: "Mr. Özdemir", recipient: "Class 8A", type: "news", type_label: "News", additional_data: { filename: "PackingList.pdf", file: "/cloud/demo-packing-list.pdf" }, is_starred: true, is_done: false, done_at: "", reaction_count: 0, created_at: "2026-09-24T09:35:00", is_removed: false },
-  { id: 4103, timestamp: "2026-09-23 11:20:00", timestamp_iso: "2026-09-23T11:20:00", sort_key: "2026-09-23T11:20:00", text: "Please vote on the project title by tomorrow.", author: "Student council", recipient: "Class 8A", type: "anketa", type_label: "Poll", additional_data: {}, is_starred: false, is_done: false, done_at: "", reaction_count: 3, created_at: "2026-09-23T11:20:00", is_removed: false },
-  { id: 4104, timestamp: "2026-09-22 12:00:00", timestamp_iso: "2026-09-22T12:00:00", sort_key: "2026-09-22T12:00:00", text: "Thanks for your feedback!", author: "Lea Example", recipient: "Ms. Berger", type: "sprava", type_label: "Message", additional_data: { textReply: "4101" }, is_starred: false, is_done: false, done_at: "", reaction_count: 0, created_at: "2026-09-22T12:00:00", is_removed: false },
+  {
+    id: 4101, timestamp: "2026-09-25 14:10:00", timestamp_iso: "2026-09-25T14:10:00", sort_key: "2026-09-25T14:10:00",
+    text: paragraphs(
+      "Dear Class 8A,",
+      "parent-teacher conferences take place this Thursday from 4:00 pm to 7:30 pm in the main building. I have reserved six time slots for our class; the sign-up sheet is in the office and you can also add your name online.",
+      "Please pick a slot before Wednesday so that I can prepare your individual progress report beforehand. If none of the slots work for your family, write to me and I will find an alternative on Friday morning.",
+      "A short reminder about the format: the first ten minutes are a general update from me, the following fifteen minutes are your own slot with your parents, and the last slot of the hour is reserved for parents who could not come earlier.",
+      "Please bring your current grade sheet and your reading journal. It is much easier to talk about concrete work than about a single number.",
+      "Kind regards,\nMs. Berger",
+    ),
+    author: "Ms. Berger", recipient: "Class 8A", type: "sprava", type_label: "Message", additional_data: {}, is_starred: false, is_done: false, done_at: "", reaction_count: 1, created_at: "2026-09-25T14:10:00", is_removed: false,
+  },
+  {
+    id: 4102, timestamp: "2026-09-24 09:35:00", timestamp_iso: "2026-09-24T09:35:00", sort_key: "2026-09-24T09:35:00",
+    text: paragraphs(
+      "Dear Class 8A,",
+      "as announced in class, our class trip to Berlin will start on Friday at 8:15 am in front of the main entrance. The bus leaves punctually, so please be there five minutes early.",
+      "We will first visit the Museum Island and take a guided tour of the Pergamon collection. After lunch we walk along the Spree and continue to the Tiergarten, where a boat tour is reserved for the whole class.",
+      "Because of the afternoon program, lessons in the first two periods will be cancelled. The bus departs for the return trip at 4:30 pm and should reach us by 7:00 pm.",
+      "The attached packing list contains everything you need. Please hand in the signed permission slip by Tuesday; without it you cannot join the trip.",
+      "If you have any questions, please speak to me during the study hall on Wednesday.",
+      "Kind regards,\nMr. Özdemir",
+    ),
+    author: "Mr. Özdemir", recipient: "Class 8A", type: "news", type_label: "News", additional_data: { filename: "PackingList.pdf", file: "/cloud/demo-packing-list.pdf" }, is_starred: true, is_done: false, done_at: "", reaction_count: 0, created_at: "2026-09-24T09:35:00", is_removed: false,
+  },
+  {
+    id: 4103, timestamp: "2026-09-23 11:20:00", timestamp_iso: "2026-09-23T11:20:00", sort_key: "2026-09-23T11:20:00",
+    text: paragraphs(
+      "Hi everyone,",
+      "we need your vote on the title for our class project by tomorrow evening. The three options on the ballot are \"Water for tomorrow\", \"City in transition\" and \"Our neighborhood, seen differently\".",
+      "You can change your vote as often as you like until the poll closes. The ballot is anonymous and only the total number of votes per option is published.",
+      "We will announce the winning title in the assembly on Monday, so a strong participation really matters.",
+      "If you have an idea for a completely different title, reply to this message or come to the council meeting on Thursday during the study hall.",
+      "Thank you!\nStudent council",
+    ),
+    author: "Student council", recipient: "Class 8A", type: "anketa", type_label: "Poll", additional_data: {}, is_starred: false, is_done: false, done_at: "", reaction_count: 3, created_at: "2026-09-23T11:20:00", is_removed: false,
+  },
+  // Antworten auf 4101 (ms. berger -> klasse 8a).
+  {
+    id: 4104, timestamp: "2026-09-25 14:12:00", timestamp_iso: "2026-09-25T14:12:00", sort_key: "2026-09-25T14:12:00",
+    text: paragraphs(
+      "Thank you for the detailed information.",
+      "I signed up for 5:10 pm and brought my grade sheet as you asked.",
+      "Could you also show my parents the reading journal from the last two units? They would like to know what we are working on at the moment.",
+    ),
+    author: "Lea Example", recipient: "Ms. Berger", type: "sprava", type_label: "Message", additional_data: { textReply: "4101" }, is_starred: false, is_done: false, done_at: "", reaction_count: 0, created_at: "2026-09-25T14:12:00", is_removed: false,
+  },
+  {
+    id: 4110, timestamp: "2026-09-25 16:40:00", timestamp_iso: "2026-09-25T16:40:00", sort_key: "2026-09-25T16:40:00",
+    text: paragraphs(
+      "Hello Ms. Berger,",
+      "my parents can only come on Friday. Is the Friday morning slot still free, and could you talk through the chemistry grade with them as well?",
+      "Thank you in advance!",
+    ),
+    author: "Jonas Example", recipient: "Ms. Berger", type: "sprava", type_label: "Message", additional_data: { textReply: "4101" }, is_starred: false, is_done: false, done_at: "", reaction_count: 0, created_at: "2026-09-25T16:40:00", is_removed: false,
+  },
+  {
+    id: 4111, timestamp: "2026-09-25 17:05:00", timestamp_iso: "2026-09-25T17:05:00", sort_key: "2026-09-25T17:05:00",
+    text: paragraphs(
+      "Hello Jonas,",
+      "Friday at 9:00 am is still free for our class. Both of you are welcome to come; we will talk about the reading journal first and then about the chemistry test.",
+      "Please confirm the time with me on Thursday morning so that I can keep the slot reserved.",
+    ),
+    author: "Ms. Berger", recipient: "Jonas Example", type: "sprava", type_label: "Message", additional_data: { textReply: "4101" }, is_starred: false, is_done: false, done_at: "", reaction_count: 0, created_at: "2026-09-25T17:05:00", is_removed: false,
+  },
+  // Antworten auf 4102 (ausflug nach berlin).
+  {
+    id: 4112, timestamp: "2026-09-24 11:20:00", timestamp_iso: "2026-09-24T11:20:00", sort_key: "2026-09-24T11:20:00",
+    text: paragraphs(
+      "Hello Mr. Özdemir,",
+      "my parents will hand in the permission slip tomorrow.",
+      "Two questions about the day: do we need warm clothing? The forecast says it will rain in the afternoon. And may we bring our own lunch, or do we eat somewhere together?",
+    ),
+    author: "Lea Example", recipient: "Mr. Özdemir", type: "news", type_label: "News", additional_data: { textReply: "4102" }, is_starred: false, is_done: false, done_at: "", reaction_count: 0, created_at: "2026-09-24T11:20:00", is_removed: false,
+  },
+  {
+    id: 4113, timestamp: "2026-09-24 12:02:00", timestamp_iso: "2026-09-24T12:02:00", sort_key: "2026-09-24T12:02:00",
+    text: paragraphs(
+      "Hello Lea,",
+      "yes, please bring warm and rainproof clothing. We will be outside for a good part of the afternoon, and the boat tour takes place in the open as well.",
+      "We eat together in a restaurant near the museum, so please bring some money for your own part. I will hand in the list of participants on Tuesday morning.",
+    ),
+    author: "Mr. Özdemir", recipient: "Lea Example", type: "news", type_label: "News", additional_data: { textReply: "4102" }, is_starred: false, is_done: false, done_at: "", reaction_count: 0, created_at: "2026-09-24T12:02:00", is_removed: false,
+  },
 ];
 
 const due = (offset: number): string => {
