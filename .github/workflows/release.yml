@@ -53,6 +53,10 @@ permissions:
 
 env:
   TAG: v${{ inputs.version }}
+  # Auch die Version ueber env statt in den run-Text: so wird der Wert nie
+  # vom Shell-Parser erneut interpretiert. check-version.sh prueft ohnehin das
+  # Format, aber die Verteidigung gehoert in beide Schichten.
+  RELEASE_VERSION: ${{ inputs.version }}
 
 jobs:
   verify:
@@ -87,9 +91,14 @@ jobs:
       # einen Fehler.
       - name: Notizen vorbereiten
         id: notes
+        env:
+          # Auch hier ueber env: der Notiztext kommt vom Menschen und darf
+          # Backticks, $(…) oder Anfuehrungszeichen enthalten, ohne dass die
+          # Shell sie interpretiert.
+          INPUT_NOTES: ${{ inputs.notes }}
         run: |
-          if [ -n "${{ inputs.notes }}" ]; then
-            printf 'text<<NOTES_EOF\n%s\nNOTES_EOF\n' "${{ inputs.notes }}" >> "$GITHUB_OUTPUT"
+          if [ -n "$INPUT_NOTES" ]; then
+            printf 'text<<NOTES_EOF\n%s\nNOTES_EOF\n' "$INPUT_NOTES" >> "$GITHUB_OUTPUT"
           else
             printf 'text<<NOTES_EOF\n' >> "$GITHUB_OUTPUT"
             cat >> "$GITHUB_OUTPUT" <<'NOTES_EOF'
@@ -129,11 +138,30 @@ jobs:
       # build-tools bereits mit. setup-android wird deshalb gar nicht
       # benoetigt: ohne eigene Pins versucht die Action, eine Preview-Version
       # der Command-Line-Tools nachzuladen, und scheitert an deren Lizenz.
+      # Wichtig: sdkmanager liegt im Image NICHT im PATH, der Pfad muss
+      # selbst gesetzt werden, sonst endet der Schritt mit exit 127.
       - name: Android SDK pruefen
         run: |
+          set -eu
           echo "ANDROID_HOME=$ANDROID_HOME"
-          sdkmanager --version
-          sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+          SDKMANAGER=""
+          for candidate in \
+            "$ANDROID_HOME"/cmdline-tools/latest/bin/sdkmanager \
+            "$ANDROID_HOME"/cmdline-tools/*/bin/sdkmanager \
+            "$ANDROID_HOME"/tools/bin/sdkmanager \
+            /usr/local/lib/android/sdk/cmdline-tools/latest/bin/sdkmanager \
+            /usr/local/lib/android/sdk/cmdline-tools/*/bin/sdkmanager
+          do
+            if [ -x "$candidate" ]; then SDKMANAGER="$candidate"; break; fi
+          done
+          [ -n "$SDKMANAGER" ] || {
+            echo "::error::sdkmanager nicht gefunden. Kandidaten:"
+            ls -d "$ANDROID_HOME"/cmdline-tools/*/bin 2>/dev/null || true
+            exit 1
+          }
+          echo "sdkmanager: $SDKMANAGER"
+          "$SDKMANAGER" --version
+          "$SDKMANAGER" "platform-tools" "platforms;android-34" "build-tools;34.0.0"
           ls "$ANDROID_HOME/build-tools"
 
       # Der Keystore kommt als base64-Secret und wird nur im Runner-Memory
@@ -216,37 +244,60 @@ jobs:
       - name: Quellen holen
         uses: actions/checkout@v4
 
-      # PRODUCT_NAME = "$(TARGET_NAME)" – der Target heisst "EduFlow",
-      # auch wenn Projekt und Scheme "EduFlow Mac" heissen.
+      # Der Pfad zur .app wird von Xcode aufgeloest, nicht geraten: bei
+      # -derivedDataPath landen die Produkte in <pfad>/Build/Products/<config>/
+      # und der Produktname folgt aus dem Target ("EduFlow"), nicht aus dem
+      # Scheme ("EduFlow Mac"). Ein hart gecodeter Pfad lag daneben.
       - name: Release-Build (ad-hoc signiert)
         run: |
           set -eu
-          APP="$RUNNER_TEMP/Build/Products/Release/EduFlow.app"
-          # Ohne destination baut xcodebuild fuer die aktive Architektur des
-          # Runners. Die Image-Bezeichnung arm64 allein genuegt nicht: der
-          # Bild-Name sagt nichts darueber, welches Xcode-Archiv tatsaechlich
-          # als erstes gebaut wird. 'platform=macOS' ueberlaesst das dem
-          # Toolchain und vermeidet den leeren Products-Ordner.
+          DD="$RUNNER_TEMP/Build"
+          SETTINGS=$(xcodebuild -project "mac/EduFlow Mac.xcodeproj" \
+            -scheme "EduFlow Mac" \
+            -configuration Release \
+            -destination 'platform=macOS' \
+            -derivedDataPath "$DD" \
+            MARKETING_VERSION="${{ inputs.version }}" \
+            CURRENT_PROJECT_VERSION=1 \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGN_STYLE=Manual \
+            DEVELOPMENT_TEAM="" \
+            -showBuildSettings)
+          PRODUCTS=$(printf '%s\n' "$SETTINGS" | sed -n 's/^ *BUILT_PRODUCTS_DIR = //p' | head -1)
+          FULLNAME=$(printf '%s\n' "$SETTINGS" | sed -n 's/^ *FULL_PRODUCT_NAME = //p' | head -1)
+          [ -n "$PRODUCTS" ] && [ -n "$FULLNAME" ] || {
+            echo "::error::BUILT_PRODUCTS_DIR oder FULL_PRODUCT_NAME nicht gefunden"
+            printf '%s\n' "$SETTINGS" | head -40
+            exit 1
+          }
+          APP="$PRODUCTS/$FULLNAME"
+          echo "App-Pfad: $APP"
+
+          # Ohne arch-Angabe bestimmt das Toolchain die Architektur; eine
+          # feste Angabe erzeugte auf dem arm64-Runner ein leeres .app.
           xcodebuild build \
             -project "mac/EduFlow Mac.xcodeproj" \
             -scheme "EduFlow Mac" \
             -configuration Release \
             -destination 'platform=macOS' \
-            -derivedDataPath "$RUNNER_TEMP/Build" \
+            -derivedDataPath "$DD" \
             MARKETING_VERSION="${{ inputs.version }}" \
             CURRENT_PROJECT_VERSION=1 \
             CODE_SIGN_IDENTITY="-" \
             CODE_SIGN_STYLE=Manual \
             DEVELOPMENT_TEAM=""
-          if [ ! -d "$APP" ]; then
-            echo "::error::App nicht unter $APP. Vorhandene Produkte:"
-            find "$RUNNER_TEMP/Build/Products" -maxdepth 2 -name '*.app' || true
+          [ -d "$APP" ] || {
+            echo "::error::App fehlt unter $APP. Vorhandene Produkte:"
+            find "$PRODUCTS" -maxdepth 1 -name '*.app' || true
             exit 1
-          fi
+          }
           # Ad-hoc ist eine echte Signatur, aber keine Vertrauenssignatur –
           # die Pruefung darf hier nicht fehlschlagen.
           codesign --verify --deep --strict --verbose=2 "$APP"
           codesign -dvv "$APP" 2>&1 | sed -n '1,12p'
+          # Die gebaute Version muss der Tag-Version entsprechen.
+          /usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" "$APP/Contents/Info.plist"
+          echo "APP_PATH=$APP" >> "$GITHUB_ENV"
           echo "APP_PATH=$APP" >> "$GITHUB_ENV"
 
       - name: DMG und ZIP bauen
@@ -299,19 +350,28 @@ jobs:
       - name: Inhalt zeigen
         run: ls -lh dist
 
+      # WICHTIG: Die Notizen kommen ueber env, nicht direkt in den run-Text.
+          # Ein ${{ … }} im Skript wird vom Text ersetzt – und der Notiztext
+          # enthaelt Backticks (`` `release.yml` ``) sowie Umlaute. Im
+          # Skript fuehrt die Shell die Backticks als Befehl aus, Umlaute in
+          # Anfuehrungszeichen loesen Globbing aus. In einer env-Variablen
+          # wird der Wert nie erneut geparst.
       - name: Release veroeffentlichen
         if: ${{ !inputs.dry_run }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NOTES: ${{ needs.verify.outputs.notes }}
+          PRERELEASE: ${{ inputs.prerelease }}
         run: |
           set -eu
+          printf '%s\n' "$NOTES" > "$RUNNER_TEMP/notes.md"
           PRERELEASE_FLAG=""
-          if [ "${{ inputs.prerelease }}" = "true" ]; then
+          if [ "$PRERELEASE" = "true" ]; then
             PRERELEASE_FLAG="--prerelease"
           fi
           gh release create "$TAG" \
             --title "EduFlow $TAG" \
-            --notes "${{ needs.verify.outputs.notes }}" \
+            --notes-file "$RUNNER_TEMP/notes.md" \
             $PRERELEASE_FLAG \
             dist/*
 
