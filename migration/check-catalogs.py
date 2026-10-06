@@ -163,9 +163,13 @@ def main():
             flach = flatten(daten)
             echt = sum(1 for k in flach if k in en and flach[k] != en[k] and flach[k] != de.get(k))
             gering = echt < ABDECKUNG_GUT
+            # Schluessel, die es in `en.json` nicht (mehr) gibt, haben keinen
+            # englischen Quelltext, auf den zurueckgefallen werden koennte —
+            # sie sind Reste eines entfernten Eintrags und werden beim naechsten
+            # Crowdin-Sync ohnehin aus den Uebersetzungen entfernt.
             treffer = {
                 k: v for k, v in flach.items()
-                if ist_deutsch(v, de.get(k), en.get(k), deutsch_woerter, sprache)
+                if k in en and ist_deutsch(v, de.get(k), en.get(k), deutsch_woerter, sprache)
             }
             if not treffer:
                 continue
