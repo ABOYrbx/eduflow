@@ -25,18 +25,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AcUnit
 import androidx.compose.material.icons.filled.Cloud
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Thunderstorm
-import androidx.compose.material.icons.filled.Tune
 import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -92,6 +88,10 @@ import kotlinx.coroutines.delay
  * Logik im ViewModel — hier nur Anzeige); Abschnittsköpfe verlinken
  * auf die Listen; 401-Verhalten → Login. Aktualisieren läuft über
  * Pull-to-Refresh (von oben ziehen) über den gesamten Inhalt.
+ *
+ * Die Reihenfolge der Abschnitte (`ov_order`) wird nicht mehr hier
+ * geändert, sondern in den Einstellungen (Paket F) per Drag sortiert —
+ * dort liegt auch [de.eduflow.android.ui.settings.OverviewOrderEditor].
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -108,10 +108,6 @@ fun OverviewScreen(
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsState()
-    var showOrderEditor by remember { mutableStateOf(false) }
-    var draftOrder by remember(state.settings.ovOrder) {
-        mutableStateOf(OverviewOrder.parse(state.settings.ovOrder))
-    }
     // Wochentag immer deutsch (System-Sprache wird ignoriert, wie macOS
     // mit de_DE); Muster kommt aus strings.xml und ist damit via Crowdin
     // pro Sprache anpassbar.
@@ -131,14 +127,6 @@ fun OverviewScreen(
         )
         Spacer(Modifier.height(12.dp))
         ScreenHead(title = stringResource(R.string.bottom_home), subtitle = todayLabel)
-        TextButton(onClick = {
-            draftOrder = OverviewOrder.parse(state.settings.ovOrder)
-            showOrderEditor = true
-        }) {
-            Icon(Icons.Filled.Tune, contentDescription = null, modifier = Modifier.size(16.dp))
-            Spacer(Modifier.width(8.dp))
-            Text(stringResource(R.string.overview_customize))
-        }
         Spacer(Modifier.height(12.dp))
 
         state.error?.let { err ->
@@ -213,43 +201,6 @@ fun OverviewScreen(
                 )
             }
         }
-    }
-
-    if (showOrderEditor) {
-        AlertDialog(
-            onDismissRequest = { if (!state.savingOverviewOrder) showOrderEditor = false },
-            title = { Text(stringResource(R.string.overview_customize)) },
-            text = {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(stringResource(R.string.overview_customize_desc), style = MaterialTheme.typography.bodySmall)
-                    draftOrder.forEachIndexed { index, key ->
-                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-                            Text(OverviewOrder.label(key), modifier = Modifier.weight(1f))
-                            IconButton(onClick = { draftOrder = OverviewOrder.move(draftOrder, index, -1) }, enabled = index > 0) {
-                                Icon(Icons.Filled.KeyboardArrowUp, contentDescription = stringResource(R.string.overview_move_up_desc))
-                            }
-                            IconButton(onClick = { draftOrder = OverviewOrder.move(draftOrder, index, 1) }, enabled = index < draftOrder.lastIndex) {
-                                Icon(Icons.Filled.KeyboardArrowDown, contentDescription = stringResource(R.string.overview_move_down_desc))
-                            }
-                        }
-                    }
-                }
-            },
-            confirmButton = {
-                TextButton(
-                    enabled = !state.savingOverviewOrder,
-                    onClick = {
-                        viewModel.saveOverviewOrder(draftOrder)
-                        showOrderEditor = false
-                    },
-                ) { Text(if (state.savingOverviewOrder) stringResource(R.string.common_saving) else stringResource(R.string.common_save)) }
-            },
-            dismissButton = {
-                TextButton(onClick = { showOrderEditor = false }, enabled = !state.savingOverviewOrder) {
-                    Text(stringResource(R.string.common_cancel))
-                }
-            },
-        )
     }
 }
 
