@@ -13,6 +13,13 @@ export type SectionHints = {
   narrow: string;
 };
 
+/** Substitute `{name}` in a hint with the section name. Hints arrive from
+ *  the catalog with the placeholder still raw — without this, screen readers
+ *  announced "Move {name} up: Messages" verbatim. */
+function mitName(template: string, name: string): string {
+  return template.replace(/\{name\}/g, name);
+}
+
 /**
  * Bedienelemente eines Abschnitts: Ziehen, eine Position hoch/runter,
  * Aus-/Einblenden und zwischen halber und voller Breite wechseln.
@@ -59,8 +66,8 @@ export function SectionControls({
         type="button"
         className="sec-btn"
         disabled={first}
-        aria-label={`${hints.up}: ${label}`}
-        title={hints.up}
+        aria-label={mitName(hints.up, label)}
+        title={mitName(hints.up, label)}
         onClick={() => onMove(-1)}
       >
         <Icon name="up" />
@@ -69,8 +76,8 @@ export function SectionControls({
         type="button"
         className="sec-btn"
         disabled={last}
-        aria-label={`${hints.down}: ${label}`}
-        title={hints.down}
+        aria-label={mitName(hints.down, label)}
+        title={mitName(hints.down, label)}
         onClick={() => onMove(1)}
       >
         <Icon name="down" />
@@ -79,8 +86,8 @@ export function SectionControls({
         type="button"
         className="sec-btn"
         aria-pressed={wide}
-        aria-label={`${wide ? hints.narrow : hints.wide}: ${label}`}
-        title={wide ? hints.narrow : hints.wide}
+        aria-label={mitName(wide ? hints.narrow : hints.wide, label)}
+        title={mitName(wide ? hints.narrow : hints.wide, label)}
         onClick={onWidth}
       >
         <Icon name={wide ? "narrow" : "wide"} />
@@ -89,8 +96,8 @@ export function SectionControls({
         type="button"
         className="sec-btn"
         aria-pressed={off}
-        aria-label={`${off ? hints.show : hints.hide}: ${label}`}
-        title={off ? hints.show : hints.hide}
+        aria-label={mitName(off ? hints.show : hints.hide, label)}
+        title={mitName(off ? hints.show : hints.hide, label)}
         onClick={onToggle}
       >
         <Icon name={off ? "eyeOff" : "eye"} />

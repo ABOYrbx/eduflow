@@ -24,6 +24,14 @@ describe("normalizeOrder", () => {
   it("fällt ohne Wert auf die Standardreihenfolge zurück", () => {
     expect(normalizeOrder(undefined)).toEqual(SECTION_KEYS);
   });
+
+  it("does not confuse a values object with an order", () => {
+    // These read a single setting value, not the whole `values` object.
+    // `String({...})` yields "[object Object]" and would silently fall back
+    // to the default order.
+    expect(normalizeOrder({ ov_order: "weather,messages,homework" })).toEqual(SECTION_KEYS);
+    expect(normalizeOrder("weather,messages,homework")).toEqual(["weather", "messages", "homework"]);
+  });
 });
 
 describe("normalizeHidden", () => {
@@ -34,6 +42,11 @@ describe("normalizeHidden", () => {
   it("leerer Wert bedeutet nichts ausgeblendet", () => {
     expect(normalizeHidden("")).toEqual([]);
     expect(normalizeHidden(undefined)).toEqual([]);
+  });
+
+  it("reads the stored key, not the values object", () => {
+    expect(normalizeHidden({ ov_hidden: "weather" })).toEqual([]);
+    expect(normalizeHidden("weather")).toEqual(["weather"]);
   });
 });
 
@@ -97,6 +110,11 @@ describe("Spaltenbreiten", () => {
     expect(spanOf({}, "messages")).toBe(SPAN_FULL);
     expect(spanOf({ messages: 6 }, "messages")).toBe(SPAN_HALF);
     expect(spanOf({ messages: 9 }, "messages")).toBe(SPAN_FULL);
+  });
+
+  it("reads the stored value instead of the values object", () => {
+    expect(normalizeSpans({ ov_span: "messages:6" })).toEqual({});
+    expect(normalizeSpans("messages:6")).toEqual({ messages: SPAN_HALF });
   });
 
   it("wechselt zwischen halb und voll", () => {
