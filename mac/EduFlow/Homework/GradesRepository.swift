@@ -16,7 +16,7 @@ public struct GradesRepository: Sendable {
         limit: Int = defaultLimit,
         offset: Int = 0,
         refresh: Bool = false
-    ) async throws -> GradesListResponse {
+    ) async throws -> CachedGradesList {
         var items = [
             URLQueryItem(name: "limit", value: String(limit)),
             URLQueryItem(name: "offset", value: String(offset)),
@@ -24,7 +24,23 @@ public struct GradesRepository: Sendable {
         if refresh {
             items.append(URLQueryItem(name: "refresh", value: "1"))
         }
-        let data = try await client.get(APIClient.Paths.grades, query: items)
-        return try APIClient.decode(GradesListResponse.self, from: data)
+        let payload = try await client.getCached(
+            APIClient.Paths.grades, query: items, as: GradesListResponse.self
+        )
+        return CachedGradesList(
+            response: try APIClient.decode(GradesListResponse.self, from: payload.data),
+            savedAt: payload.savedAt
+        )
+    }
+
+    /// Notenliste plus Zeitpunkt (nil = frisch vom Server).
+    public struct CachedGradesList: Sendable {
+        public let response: GradesListResponse
+        public let savedAt: Date?
+
+        public var items: [GradeDTO] { response.items }
+        public var total: Int { response.total }
+        public var cacheInfo: String? { response.cacheInfo }
+        public var isFromCache: Bool { savedAt != nil }
     }
 }

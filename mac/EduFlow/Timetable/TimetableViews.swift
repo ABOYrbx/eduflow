@@ -91,7 +91,9 @@ public struct DayView: View {
                 } else {
                     dayList(vm.dayResponse.lessons)
                 }
-                if let info = vm.weekMode ? vm.weekResponse.cacheInfo : vm.dayResponse.cacheInfo,
+                if vm.cachedAt != nil {
+                    OfflineNotice(savedAt: vm.cachedAt)
+                } else if let info = vm.weekMode ? vm.weekResponse.cacheInfo : vm.dayResponse.cacheInfo,
                     !info.isEmpty
                 {
                     Text(info)

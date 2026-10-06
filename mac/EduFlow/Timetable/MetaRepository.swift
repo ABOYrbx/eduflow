@@ -18,7 +18,7 @@ public struct MetaRepository: Sendable {
 
     /// Wetter (Stadt aus den Einstellungen; Koordinaten optional wie
     /// im Backend; ohne Ort clientseitig Validierung).
-    public func wetter(city: String, lat: Double? = nil, lon: Double? = nil) async throws -> WetterResponse {
+    public func wetter(city: String, lat: Double? = nil, lon: Double? = nil) async throws -> CachedWeather {
         var items: [URLQueryItem] = []
         if let lat, let lon {
             items.append(URLQueryItem(name: "lat", value: String(lat)))
@@ -33,7 +33,26 @@ public struct MetaRepository: Sendable {
             }
             items.append(URLQueryItem(name: "city", value: trimmed))
         }
-        let data = try await client.get(APIClient.Paths.wetter, query: items)
-        return try APIClient.decode(WetterResponse.self, from: data)
+        let payload = try await client.getCached(
+            APIClient.Paths.wetter, query: items, as: WetterResponse.self
+        )
+        return CachedWeather(
+            response: try APIClient.decode(WetterResponse.self, from: payload.data),
+            savedAt: payload.savedAt
+        )
+    }
+
+    /// Wetter plus Zeitpunkt (nil = frisch vom Server).
+    public struct CachedWeather: Sendable {
+        public let response: WetterResponse
+        public let savedAt: Date?
+
+        public var city: String? { response.city }
+        public var today: WetterToday? { response.today }
+        public var tomorrow: WetterDay? { response.tomorrow }
+        public var day3: WetterDay? { response.day3 }
+        public var hourly: [WetterHour]? { response.hourly }
+        public var details: WetterDetails? { response.details }
+        public var isFromCache: Bool { savedAt != nil }
     }
 }

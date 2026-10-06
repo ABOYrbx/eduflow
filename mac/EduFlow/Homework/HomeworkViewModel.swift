@@ -8,6 +8,9 @@ public final class HomeworkViewModel {
     public var total: Int = 0
     public var counts = HomeworkCounts()
     public var cacheInfo: String?
+    /// Zeitpunkt der zuletzt geladenen Antwort, falls sie aus dem lokalen
+    /// Cache kam (Backend neu gestartet oder nicht erreichbar).
+    public var cachedAt: Date?
     public var status = HomeworkStatusFilter.alle
     public var includeTests = false
     public var query = ""
@@ -45,6 +48,7 @@ public final class HomeworkViewModel {
             total = response.total
             counts = response.counts ?? HomeworkCounts()
             cacheInfo = response.cacheInfo
+            cachedAt = response.savedAt
         } catch let apiError as APIError {
             if SessionRecovery.forceLogout(error: apiError, isLoggedIn: store.isLoggedIn) {
                 store.clear()

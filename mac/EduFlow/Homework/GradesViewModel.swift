@@ -7,6 +7,9 @@ public final class GradesViewModel {
     public var items: [GradeDTO] = []
     public var total: Int = 0
     public var cacheInfo: String?
+    /// Zeitpunkt der zuletzt geladenen Antwort, falls sie aus dem lokalen
+    /// Cache kam (Backend neu gestartet oder nicht erreichbar).
+    public var cachedAt: Date?
     public var tab: HalfYear = .all
     public var search = ""
     public var isLoading = false
@@ -75,6 +78,7 @@ public final class GradesViewModel {
             items = response.items
             total = response.total
             cacheInfo = response.cacheInfo
+            cachedAt = response.savedAt
             if !tabs.contains(tab) {
                 tab = .all
             }
