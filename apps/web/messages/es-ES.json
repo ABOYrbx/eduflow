@@ -137,7 +137,7 @@
     "liked": "♥️ {name} reaccionó · {date}",
     "loadFile": "Cargar archivo · {name}",
     "markAllRead": "Marcar todo como leído",
-    "markedRead": "{marked} Nachrichten als gelesen markiert.",
+    "markedRead": "{marked} messages marked as read.",
     "messageLabel": "Mensaje",
     "messagePlaceholder": "Tu mensaje…",
     "multipleHint": "Seleccionar múltiples destinatarios.",
@@ -247,7 +247,7 @@
     "accentBlue": "Azul",
     "accentGreen": "Verde",
     "accentOrange": "Naranja",
-    "accentPink": "Rosa",
+    "accentPink": "Pink",
     "accentRed": "Rojo",
     "accentTeal": "Cereal",
     "accentTitle": "Color de acento",
@@ -261,7 +261,7 @@
     "citySearchFailed": "La búsqueda de ciudad no está disponible actualmente.",
     "clearCache": "Borrar caché ahora",
     "colorScheme": "esquema de color",
-    "copiedToClipboard": "{label} in die Zwischenablage kopiert.",
+    "copiedToClipboard": "{label} copied to clipboard.",
     "copy": "Copiar",
     "copyFailed": "Copia no posible. Selecciona el token y cópialo manualmente.",
     "createToken": "Crear nuevo token",
@@ -313,7 +313,8 @@
     "validUntil": "Válido hasta {date}",
     "languageTitle": "Language",
     "languageHint": "Applies right away. The choice is remembered on this device.",
-    "sessionsPanelNote": "Devices signed in on this account."
+    "sessionsPanelNote": "Devices signed in on this account.",
+    "spanHint": "Set the section widths on the overview itself, with the button on each card."
   },
   "theme": {
     "language": "Idioma",
