@@ -31,6 +31,9 @@ public final class TimetableViewModel {
     public var weekResponse = TimetableWeekResponse()
     public var isLoading = false
     public var error: APIError?
+    /// Zeitpunkt der zuletzt geladenen Antwort, falls sie aus dem lokalen
+    /// Cache kam (Backend neu gestartet oder nicht erreichbar).
+    public var cachedAt: Date?
 
     private let store: TokenStore
 
@@ -45,9 +48,13 @@ public final class TimetableViewModel {
         defer { isLoading = false }
         do {
             if weekMode {
-                weekResponse = try await repo().week(day, refresh: refresh)
+                let loaded = try await repo().week(day, refresh: refresh)
+                weekResponse = loaded.response
+                cachedAt = loaded.savedAt
             } else {
-                dayResponse = try await repo().day(day, refresh: refresh)
+                let loaded = try await repo().day(day, refresh: refresh)
+                dayResponse = loaded.response
+                cachedAt = loaded.savedAt
             }
         } catch let apiError as APIError {
             if SessionRecovery.forceLogout(error: apiError, isLoggedIn: store.isLoggedIn) {

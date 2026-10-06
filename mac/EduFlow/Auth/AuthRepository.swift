@@ -75,8 +75,8 @@ public struct AuthRepository: Sendable {
 
     /// Eigener Benutzer (Subdomain und Benutzername des Token-Inhabers).
     public func me() async throws -> MeInfo {
-        let data = try await client.get(APIClient.Paths.me)
-        return try APIClient.decode(MeInfo.self, from: data)
+        let payload = try await client.getCached(APIClient.Paths.me, as: MeInfo.self)
+        return try APIClient.decode(MeInfo.self, from: payload.data)
     }
 
     // MARK: - Privat

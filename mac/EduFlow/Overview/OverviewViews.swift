@@ -129,13 +129,20 @@ public struct OverviewView: View {
     }
 
     private var layoutRow: some View {
-        HStack {
-            Spacer()
-            Button(NSLocalizedString("Customize overview", value: "Customize overview", comment: "UI-Literal")) {
-                layoutDraft = Self.normalizedOrder(vm.settings.ovOrder)
-                showLayoutEditor = true
+        VStack(spacing: 10) {
+            // Offline-Hinweis über der Übersicht: die Zahlen bleiben
+            // sichtbar, nur ihre Herkunft wird benannt.
+            if vm.cachedAt != nil {
+                OfflineNotice(savedAt: vm.cachedAt)
             }
-            .buttonStyle(UberButtonStyle(.smallLight))
+            HStack {
+                Spacer()
+                Button(NSLocalizedString("Customize overview", value: "Customize overview", comment: "UI-Literal")) {
+                    layoutDraft = Self.normalizedOrder(vm.settings.ovOrder)
+                    showLayoutEditor = true
+                }
+                .buttonStyle(UberButtonStyle(.smallLight))
+            }
         }
     }
 
@@ -318,6 +325,8 @@ public struct OverviewView: View {
                 Spacer()
                 Button(NSLocalizedString("Timetable", value: "Timetable", comment: "Einstellungen: Startseite Stundenplan / Stundenplan: Titel")) { onNavigate(.timetable) }
                     .font(UberFont.text(13, weight: .bold))
+                    .foregroundStyle(accent.resolved(scheme))
+                    .buttonStyle(.plain)
                     .opacity(0.75)
                 Spacer()
                 NowArrow("›") { stepLesson(1, count: slides.count) }
@@ -583,10 +592,20 @@ private struct OverviewOrderEditor: View {
                     Text(LocalizedStringKey(labels[order[index]] ?? order[index]))
                         .font(UberFont.text(15, weight: .semibold))
                     Spacer()
-                    Button("↑") { order = OverviewOrderEditor.move(order, from: index, by: -1) }
-                        .disabled(index == 0)
-                    Button("↓") { order = OverviewOrderEditor.move(order, from: index, by: 1) }
-                        .disabled(index == order.count - 1)
+                    IconButton(
+                        icon: "arrow.up",
+                        label: NSLocalizedString("common_move_up", value: "Move up", comment: "Aktion: nach oben"),
+                        disabled: index == 0
+                    ) {
+                        order = OverviewOrderEditor.move(order, from: index, by: -1)
+                    }
+                    IconButton(
+                        icon: "arrow.down",
+                        label: NSLocalizedString("common_move_down", value: "Move down", comment: "Aktion: nach unten"),
+                        disabled: index == order.count - 1
+                    ) {
+                        order = OverviewOrderEditor.move(order, from: index, by: 1)
+                    }
                 }
                 .padding(12)
                 .background(EduFlowPalette.card(scheme))

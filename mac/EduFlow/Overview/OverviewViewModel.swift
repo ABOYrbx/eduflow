@@ -31,6 +31,9 @@ public final class OverviewViewModel {
     public var wetter = WetterResponse()
     public var wetterError: APIError?
     public var isLoading = false
+    /// Zeitpunkt, falls ein Bereich aus dem lokalen Cache kam (Backend
+    /// neu gestartet oder nicht erreichbar). `nil` = alles frisch.
+    public var cachedAt: Date?
     public var isSavingOrder = false
     public var orderSaveError: String?
 
@@ -38,6 +41,15 @@ public final class OverviewViewModel {
 
     public init(store: TokenStore) {
         self.store = store
+    }
+
+    /// Merkt sich den ältesten Cache-Zeitpunkt der geladenen Bereiche.
+    ///
+    /// Der älteste, nicht der neueste: die Anzeige sagt dann, wie alt die
+    /// **schlechteste** sichtbare Zahl ist — konservativ und ehrlich.
+    private func noteCached(_ savedAt: Date?) {
+        guard let savedAt else { return }
+        cachedAt = cachedAt.map { min($0, savedAt) } ?? savedAt
     }
 
     /// Alle Bereiche laden (jeder für sich best-effort).
@@ -72,6 +84,7 @@ public final class OverviewViewModel {
             messages = page.items
             messagesTotal = page.total
             messagesError = nil
+            noteCached(page.savedAt)
         case .failure(let error):
             messages = []
             messagesTotal = 0
@@ -101,6 +114,7 @@ public final class OverviewViewModel {
             let relevant = max(counts.offen + counts.ueberfaellig, visible.count)
             homeworkHasMore = relevant > visible.count
             homeworkError = nil
+            noteCached(response.savedAt)
         case .failure(let error):
             homework = []
             homeworkOpen = 0
@@ -116,6 +130,7 @@ public final class OverviewViewModel {
         case .success(let response):
             lessons = response.lessons
             lessonsError = nil
+            noteCached(response.savedAt)
         case .failure(let error):
             lessons = []
             lessonsError = error
@@ -171,8 +186,10 @@ public final class OverviewViewModel {
             return
         }
         do {
-            wetter = try await MetaRepository(client: client).wetter(city: city)
+            let loaded = try await MetaRepository(client: client).wetter(city: city)
+            wetter = loaded.response
             wetterError = nil
+            noteCached(loaded.savedAt)
         } catch let apiError as APIError {
             expired = expired || SessionRecovery.forceLogout(error: apiError, isLoggedIn: store.isLoggedIn)
             wetter = WetterResponse()

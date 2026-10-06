@@ -21,7 +21,7 @@ public struct MessagesRepository: Sendable {
         limit: Int = defaultLimit,
         offset: Int = 0,
         refresh: Bool = false
-    ) async throws -> Page<MessageDTO> {
+    ) async throws -> CachedMessagePage {
         var items = [
             URLQueryItem(name: "since", value: since),
             URLQueryItem(name: "limit", value: String(limit)),
@@ -36,18 +36,56 @@ public struct MessagesRepository: Sendable {
         if refresh {
             items.append(URLQueryItem(name: "refresh", value: "1"))
         }
-        let data = try await client.get(APIClient.Paths.messages, query: items)
-        return try APIClient.decode(Page<MessageDTO>.self, from: data)
+        let payload = try await client.getCached(
+            APIClient.Paths.messages, query: items, as: Page<MessageDTO>.self
+        )
+        return CachedMessagePage(
+            page: try APIClient.decode(Page<MessageDTO>.self, from: payload.data),
+            savedAt: payload.savedAt
+        )
+    }
+
+    /// Nachrichtenseite plus Zeitpunkt (nil = frisch vom Server).
+    public struct CachedMessagePage: Sendable {
+        public let page: Page<MessageDTO>
+        public let savedAt: Date?
+
+        public var items: [MessageDTO] { page.items }
+        public var total: Int { page.total }
+        public var limit: Int { page.limit }
+        public var offset: Int { page.offset }
+        public var isFromCache: Bool { savedAt != nil }
     }
 
     /// Thread (Likes, Antworten, Zusammenfassung plus Cache-Hinweis).
-    public func thread(id: Int, refresh: Bool = false) async throws -> ThreadResponse {
+    public func thread(id: Int, refresh: Bool = false) async throws -> CachedThread {
         var items: [URLQueryItem] = []
         if refresh {
             items.append(URLQueryItem(name: "refresh", value: "1"))
         }
-        let data = try await client.get(APIClient.Paths.thread(id), query: items)
-        return try APIClient.decode(ThreadResponse.self, from: data)
+        let payload = try await client.getCached(
+            APIClient.Paths.thread(id), query: items, as: ThreadResponse.self
+        )
+        return CachedThread(
+            response: try APIClient.decode(ThreadResponse.self, from: payload.data),
+            savedAt: payload.savedAt
+        )
+    }
+
+    /// Thread plus Zeitpunkt (nil = frisch vom Server).
+    ///
+    /// Leitet alle Felder durch, damit Aufrufer unverändert `.likes`,
+    /// `.replies` und `.cached` lesen können — Letzteres kommt vom Server.
+    public struct CachedThread: Sendable {
+        public let response: ThreadResponse
+        public let savedAt: Date?
+
+        public var likes: [ThreadLike] { response.likes }
+        public var replies: [ThreadReply] { response.replies }
+        public var replyIds: [String] { response.replyIds }
+        public var summary: ThreadSummary { response.summary }
+        public var cached: Bool { response.cached }
+        public var isFromLocalCache: Bool { savedAt != nil }
     }
 
     /// Alle aktuellen Nachrichten als gelesen markieren (meldet Zähler).
@@ -61,13 +99,28 @@ public struct MessagesRepository: Sendable {
     public func recipients(
         limit: Int = 200,
         offset: Int = 0
-    ) async throws -> Page<RecipientItem> {
+    ) async throws -> CachedRecipients {
         let items = [
             URLQueryItem(name: "limit", value: String(limit)),
             URLQueryItem(name: "offset", value: String(offset)),
         ]
-        let data = try await client.get(APIClient.Paths.recipients, query: items)
-        return try APIClient.decode(Page<RecipientItem>.self, from: data)
+        let payload = try await client.getCached(
+            APIClient.Paths.recipients, query: items, as: Page<RecipientItem>.self
+        )
+        return CachedRecipients(
+            page: try APIClient.decode(Page<RecipientItem>.self, from: payload.data),
+            savedAt: payload.savedAt
+        )
+    }
+
+    /// Empfängerliste plus Zeitpunkt (nil = frisch vom Server).
+    public struct CachedRecipients: Sendable {
+        public let page: Page<RecipientItem>
+        public let savedAt: Date?
+
+        public var items: [RecipientItem] { page.items }
+        public var total: Int { page.total }
+        public var isFromCache: Bool { savedAt != nil }
     }
 
     /// Senden (leere Empfänger oder leerer Text melden clientseitig
