@@ -178,7 +178,7 @@ object AppLocale {
         "ca" to LocaleCoverage("ca", 312, 327),
         "cs" to LocaleCoverage("cs", 304, 327),
         "da" to LocaleCoverage("da", 295, 327),
-        "de" to LocaleCoverage("de", 307, 327),
+        "de" to LocaleCoverage("de", 298, 327),
         "el" to LocaleCoverage("el", 300, 327),
         "es" to LocaleCoverage("es", 306, 327),
         "fi" to LocaleCoverage("fi", 307, 327),
