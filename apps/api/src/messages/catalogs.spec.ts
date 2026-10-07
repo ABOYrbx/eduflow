@@ -28,14 +28,19 @@ const KOGNITE = new Set([
   "laden", "kopiert", "desc", "standardfilter",
 ]);
 const ABDECKUNG_GUT = 200;
+/** `de-DE` -> `de`, `zh-CN` -> `zh`. Crowdin liefert inzwischen regionale
+ *  Dateinamen; Sprache ist aber der Teil vor dem Gebietsschema. Ohne das
+ *  gilt `de-DE` als Fremdsprache und `KEEP_WERTE` passt nicht mehr. */
+const basis = (code: string): string => code.split("-")[0]!.toLowerCase();
 // Ganze Werte, die in der jeweiligen Sprache richtig sind und dem Deutschen
 // nur gleichen: 'Datum:' ist im Tschechischen und Niederlaendischen richtig,
 // 'Alle typen' im Niederlaendischen, '{lesson}. lektion' in Daenisch und
-// Schwedisch.
+// Schwedisch, 'Alle' im Daenischen, 'Cache legen' im Niederlaendischen.
+// Schluessel ist der Basiscode, damit auch `da-DK` und `nl-NL` greifen.
 const KEEP_WERTE: Record<string, Set<string>> = {
   cs: new Set(["Datum:"]),
-  da: new Set(["{lesson}. lektion"]),
-  nl: new Set(["Datum:", "Alle typen"]),
+  da: new Set(["{lesson}. lektion", "Alle"]),
+  nl: new Set(["Datum:", "Alle typen", "Cache legen"]),
   sv: new Set(["{lesson}. lektion"]),
 };
 
@@ -67,10 +72,17 @@ const deutschWoerter = new Set<string>(
 );
 
 function melde(catalog: Record<string, string>, sprache: string): string[] {
+  // Nach Basiscode nachschlagen: `da-DK` soll dieselbe Ausnahmeliste wie
+  // `da` benutzen.
+  const behalten = KEEP_WERTE[basis(sprache)];
   const treffer: string[] = [];
   for (const [key, wert] of Object.entries(catalog)) {
     if (!(key in en) || wert === en[key]) continue;
-    if (key in de && normalisiert(de[key]) !== normalisiert(en[key]) && normalisiert(wert) === normalisiert(de[key]) && !KEEP_WERTE[sprache]?.has(wert)) {
+    // Ganzwert-Ausnahmen gelten fuer beide Pruefzweige, sonst wuerde ein
+    // zielsprachlich richtiger Wert wie 'Cache legen' trotzdem melden, weil
+    // 'legen' auch ein deutsches Wort ist.
+    if (behalten?.has(wert)) continue;
+    if (key in de && normalisiert(de[key]) !== normalisiert(en[key]) && normalisiert(wert) === normalisiert(de[key])) {
       treffer.push(`${key} = ${wert}`);
       continue;
     }
@@ -100,7 +112,12 @@ describe("Backend-Kataloge", () => {
   });
 
   for (const [sprache, catalog] of catalogs) {
-    if (sprache === "en" || sprache === "de") continue;
+    // Nach Basiscode: `de-DE` ist ein zweiter deutscher Katalog und darf
+    // nicht als Fremdsprache geprueft werden — sonst meldet der Waechter
+    // jede deutsche Zeile als "nicht uebersetzt". `pt-BR`, `zh-CN` usw. sind
+    // dagegen echte eigene Sprachfassungen und werden weiter geprueft.
+    const code = basis(sprache);
+    if (code === "en" || code === "de") continue;
     it(`${sprache} zeigt keine deutschen Texte`, () => {
       expect(melde(catalog, sprache)).toEqual([]);
     });
