@@ -1,4 +1,5 @@
 import { DemoSchoolService } from "./demo-school.service";
+import { demoGrades, demoHomework, demoLessons } from "../testing/demo-data";
 
 describe("DemoSchoolService", () => {
   const states = new Map<string, unknown>();
@@ -43,10 +44,38 @@ describe("DemoSchoolService", () => {
     expect(root?.text).toContain("\n\n");
     expect(root?.text.length).toBeGreaterThan(400);
     // Antworten (`textReply`) gehören in den Thread, nicht in die Nachrichtenliste.
-    expect(list.items.map((item) => item.id)).toEqual([4101, 4102, 4103]);
+    // Nach `sort_key` absteigend, also rein chronologisch.
+    expect(list.items.map((item) => item.id)).toEqual([4105, 4101, 4106, 4107, 4102, 4103]);
   });
 
-  it("returns every reply of a thread with a consistent summary", async () => {
+  it("offers every demo teacher and student as a recipient", async () => {
+    const claims = { sub: "acct", jti: "t", tokenUse: "access" as const };
+    const list = await service.recipients() as unknown as { items: { id: string; name: string; kind: string; detail: string }[]; total: number };
+    const teachers = list.items.filter((item) => item.kind === "teacher");
+    const students = list.items.filter((item) => item.kind === "student");
+    expect(teachers.length).toBe(5);
+    expect(students.length).toBe(6);
+    expect(list.total).toBe(11);
+    // Jede Lehrkraft, die in Hausaufgaben/Noten/Plan auftaucht, muss auch
+    // anschreibbar sein – sonst fehlt sie im Verfassen-Dialog.
+    const names = list.items.map((item) => item.name);
+    for (const teacher of [...demoHomework, ...demoGrades].map((item) => item.teacher)) {
+      expect(names).toContain(teacher);
+    }
+    for (const lesson of demoLessons) if (lesson.teachers) expect(names).toContain(lesson.teachers);
+    // IDs sind eindeutig und folgen dem `Teacher<key>`/`Student<key>`-Muster.
+    expect(new Set(list.items.map((item) => item.id)).size).toBe(list.items.length);
+    for (const item of list.items) expect(item.id).toMatch(/^(Teacher|Student)\w+$/);
+  });
+
+it("accepts several recipients and names them in the sent message", async () => {
+    const sent = await service.sendMessage({ recipients: ["Teacher10", "Student12"], body: "Question about the poster." }) as unknown as { recipient: string; text: string };
+    expect(sent.recipient).toBe("Mr. Meyer, Lea Example");
+    // Unbekannte IDs bleiben ungültig – der Katalog ist die einzige Quelle.
+    await expect(service.sendMessage({ recipients: ["Teacher99"], body: "x" })).rejects.toMatchObject({ response: { code: "VALIDATION" } });
+  });
+
+it("returns every reply of a thread with a consistent summary", async () => {
     const claims = { sub: "acct", jti: "t", tokenUse: "access" as const };
     const thread = await service.thread(claims, 4101);
     expect(thread.replies.map((reply) => reply.name)).toEqual(["Lea Example", "Jonas Example", "Ms. Berger"]);
@@ -99,7 +128,7 @@ describe("DemoSchoolService", () => {
     const week = service.timetableWeek({ day: "2026-09-24" });
     expect(week.days).toHaveLength(5);
     expect(week.days[0]?.day_name).toBe("Monday");
-    expect(service.timetableDay({ day: "2026-09-25" }).lessons).toHaveLength(4);
+    expect(service.timetableDay({ day: "2026-09-25" }).lessons).toHaveLength(6);
     expect(service.timetableDay({ day: "2026-09-26" }).lessons).toHaveLength(0);
     expect(service.agenda({}).items.map((item) => item.kind)).toEqual(expect.arrayContaining(["event", "exam", "attendance"]));
     expect(service.grades({ limit: "1" }).items).toHaveLength(1);

@@ -5,7 +5,10 @@ import de.eduflow.android.data.dto.GradeDto
 import de.eduflow.android.data.dto.LessonDto
 import de.eduflow.android.data.dto.MessageDto
 import de.eduflow.android.data.dto.MessageTypes
+import de.eduflow.android.R
+import de.eduflow.android.data.dto.RecipientDto
 import de.eduflow.android.data.dto.RecipientIds
+import de.eduflow.android.data.dto.kindLabelRes
 import de.eduflow.android.data.dto.bodyLine
 import de.eduflow.android.data.dto.buildGradeTerms
 import de.eduflow.android.data.dto.currentTermKey
@@ -19,6 +22,7 @@ import de.eduflow.android.ui.overview.OverviewViewModel
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Assert.assertFalse
@@ -203,6 +207,22 @@ class LogicPackageTest {
     }
 
     // ---- Empfänger + Typen (Paket B) ----
+
+    @Test
+    fun recipientKind_mapsToCatalogLabels_notRawValues() {
+        // `kind` ist ein stabiler API-Wert. Die App zeigt die Anzeige aus dem
+        // Katalog, nie den Rohwert – sonst stünde deutsches "Lehrer" in einer
+        // englischen Oberfläche.
+        val teacher = RecipientDto(id = "Teacher7", name = "Ms. Berger", kind = "teacher")
+        val student = RecipientDto(id = "Student9", name = "Lea Example", kind = "student")
+        assertEquals(R.string.messages_role_teacher, teacher.kindLabelRes())
+        assertEquals(R.string.messages_role_student, student.kindLabelRes())
+        // Verschiedene Rollen -> verschiedene Labels.
+        assertNotEquals(teacher.kindLabelRes(), student.kindLabelRes())
+        // Alte deutsche Werte und unbekanntes fallen sicher auf "Student" zurueck.
+        assertEquals(R.string.messages_role_student, student.copy(kind = "Lehrer").kindLabelRes())
+        assertEquals(R.string.messages_role_student, student.copy(kind = "").kindLabelRes())
+    }
 
     @Test
     fun recipientIds_matchBackendRegex() {

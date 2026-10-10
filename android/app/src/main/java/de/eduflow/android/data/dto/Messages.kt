@@ -94,6 +94,19 @@ data class RecipientDto(
     val kind: String = "",
 )
 
+/**
+ * Anzeige-Ressourcen-ID fuer [RecipientDto.kind].
+ *
+ * `kind` ist ein stabiler API-Wert ("teacher"/"student"), kein uebersetzbarer
+ * Text – das Backend liefert bewusst englische Schluessel. Deshalb wird hier
+ * auf eine String-Ressource abgebildet und der Rohwert nie direkt angezeigt.
+ */
+fun RecipientDto.kindLabelRes(): Int = when (kind) {
+    "teacher" -> R.string.messages_role_teacher
+    "student" -> R.string.messages_role_student
+    else -> R.string.messages_role_student
+}
+
 @Serializable
 data class RecipientsListResponse(
     val items: List<RecipientDto> = emptyList(),

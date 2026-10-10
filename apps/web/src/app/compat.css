@@ -25,6 +25,12 @@
 .notice-error { background: var(--surface-1); border: 1px solid var(--border-strong); color: var(--ink); }
 .notice-success { color: var(--ink-muted); }
 .notice-success:empty { display: none; }
+.pill-new { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border: 1px solid var(--border-strong); border-radius: var(--r-full); background: var(--accent); color: var(--accent-ink); font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; }
+.pill-new:hover { background: var(--accent-hover); }
+/* Marker für neue Nachrichten: legt sich über die Filterleiste, damit er den
+   Listenbereich nicht verschiebt (sonst springt die Liste beim Erscheinen). */
+.new-messages-marker { position: sticky; top: 10px; z-index: 5; display: flex; align-items: center; gap: 8px; margin: 12px 0 0; padding: 8px 16px; border: 1px solid var(--border-strong); border-radius: var(--r-full); background: var(--accent); color: var(--accent-ink); font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 18px rgba(0, 0, 0, .12); }
+.new-messages-marker:hover { background: var(--accent-hover); }
 .two-column { display: grid; grid-template-columns: minmax(280px,370px) minmax(0,1fr); gap: 24px; align-items: start; margin-top: 20px; }
 .two-column > .panel:first-child { position: sticky; top: 82px; }
 .filters { display: flex; flex-wrap: wrap; align-items: end; gap: 10px; padding: 14px 0; margin: 0 0 6px; }

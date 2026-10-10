@@ -57,9 +57,18 @@ describe("serializers (Parität zu app.py)", () => {
   it("listet Empfänger sortiert ohne Eltern", () => {
     const recs = recipientsFromDbi({ teachers: { 5: { firstname: "Zoe", lastname: "Lehrerin", classroomid: "3" } }, students: { 9: { firstname: "Max", lastname: "A", numberinclass: 4 }, 10: { firstname: "Papa", lastname: "Eltern" } } });
     expect(recs).toEqual([
-      { id: "Student9", name: "Max A", kind: "Schüler" },
-      { id: "Teacher5", name: "Zoe Lehrerin", kind: "Lehrer" },
+      { id: "Student9", name: "Max A", kind: "student" },
+      { id: "Teacher5", name: "Zoe Lehrerin", kind: "teacher" },
     ]);
+  });
+
+  it("liefert `kind` als stabilen englischen Typ-Wert, nie übersetzt", () => {
+    // Die Clients vergleichen gegen "teacher" (Web) und zeigen sonst deutschen
+    // Klartext unübersetzt an (Android/macOS). Deshalb muss der Wert englisch
+    // und im Vokabular der Fehlercodes bleiben – siehe AGENTS.md.
+    const recs = recipientsFromDbi({ teachers: { 5: { firstname: "Zoe", lastname: "L", classroomid: "3" } }, students: { 9: { firstname: "Max", lastname: "A", numberinclass: 4 } } });
+    for (const kind of recs.map((rec) => rec.kind)) expect(["teacher", "student"]).toContain(kind);
+    for (const rec of recs) expect(rec.kind).toMatch(/^[a-z]+$/);
   });
 
   it("normt Suche und Namen", () => {

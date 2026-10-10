@@ -716,7 +716,12 @@ public struct ComposeView: View {
                                         Text(recipient.name)
                                             .font(UberFont.text(14, weight: .medium))
                                         Spacer()
-                                        Text(recipient.kind)
+                                        // `kind` ist ein stabiler API-Wert ("teacher"/"student"), kein Text – der
+                                            // Klartext kommt aus dem Katalog, sonst stünde hier das deutsche
+                                            // "Lehrer" unübersetzt in einer englischen Oberfläche.
+                                            Text(NSLocalizedString(recipient.kind == "teacher" ? "messages_role_teacher" : "messages_role_student",
+                                                                  value: recipient.kind == "teacher" ? "Teacher" : "Student",
+                                                                  comment: "Messages: recipient role"))
                                             .font(UberFont.text(12))
                                             .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                                     }

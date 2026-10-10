@@ -2,7 +2,15 @@
   "sourceLanguage" : "en",
   "strings" : {
     "‹ Back" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "‹ Back"
+          }
+        }
+      }
     },
     "‹ Zurück" : {
       "comment" : "UI-Literal",
@@ -563,10 +571,25 @@
       }
     },
     "%@ %%" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ %%"
+          }
+        }
+      }
     },
     "← Previous week" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "← Previous week"
+          }
+        }
+      }
     },
     "← Vorwoche" : {
       "comment" : "UI-Literal",
@@ -1499,10 +1522,26 @@
       }
     },
     "All homework" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All homework"
+          }
+        }
+      }
     },
     "All messages" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All messages"
+          }
+        }
+      }
     },
     "Alle" : {
       "comment" : "UI-Literal",
@@ -3737,10 +3776,25 @@
       }
     },
     "Appearance" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appearance"
+          }
+        }
+      }
     },
     "Apply" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apply"
+          }
+        }
+      }
     },
     "Ausgeblendete" : {
       "comment" : "UI-Literal",
@@ -8008,10 +8062,26 @@
       }
     },
     "Back" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back"
+          }
+        }
+      }
     },
     "Back to sign-in" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back to sign-in"
+          }
+        }
+      }
     },
     "Basis-URL" : {
       "comment" : "UI-Literal",
@@ -9502,31 +9572,98 @@
       }
     },
     "Cached" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cached"
+          }
+        }
+      }
     },
     "Cancel" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
     },
     "Cancelled" : {
-      "comment" : "Übersicht: entfällt"
+      "comment" : "Übersicht: entfällt",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelled"
+          }
+        }
+      }
     },
     "Checking …" : {
-      "comment" : "Anmeldung: prüft"
+      "comment" : "Anmeldung: prüft",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Checking …"
+          }
+        }
+      }
     },
     "Choose language" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose language"
+          }
+        }
+      }
     },
     "Choose which sections appear first." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose which sections appear first."
+          }
+        }
+      }
     },
     "Class Ø" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Class Ø"
+          }
+        }
+      }
     },
     "Classes today" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Classes today"
+          }
+        }
+      }
     },
     "Close" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close"
+          }
+        }
+      }
     },
     "Code" : {
       "comment" : "UI-Literal",
@@ -15267,7 +15404,15 @@
       }
     },
     "Confirm" : {
-      "comment" : "Anmeldung: bestätigen"
+      "comment" : "Anmeldung: bestätigen",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirm"
+          }
+        }
+      }
     },
     "content_demo_badge" : {
       "comment" : "Navigation: Demo-Pille",
@@ -15472,16 +15617,47 @@
       }
     },
     "Continue" : {
-      "comment" : "Anmeldung: weiter"
+      "comment" : "Anmeldung: weiter",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue"
+          }
+        }
+      }
     },
     "Continue ›" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue ›"
+          }
+        }
+      }
     },
     "Customize overview" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Customize overview"
+          }
+        }
+      }
     },
     "Date" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date"
+          }
+        }
+      }
     },
     "Dateien" : {
       "comment" : "UI-Literal",
@@ -15856,13 +16032,36 @@
       }
     },
     "Day" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Day"
+          }
+        }
+      }
     },
     "Day after tomorrow" : {
-      "comment" : "Übersicht: Übermorgen"
+      "comment" : "Übersicht: Übermorgen",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Day after tomorrow"
+          }
+        }
+      }
     },
     "Default filter" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default filter"
+          }
+        }
+      }
     },
     "Dein Profil" : {
       "comment" : "UI-Literal",
@@ -16423,7 +16622,14 @@
       }
     },
     "Demo mode · synthetic sample data only" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demo mode · synthetic sample data only"
+          }
+        }
+      }
     },
     "Demo verlassen" : {
       "comment" : "UI-Literal",
@@ -17168,10 +17374,25 @@
       }
     },
     "Developer options" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Developer options"
+          }
+        }
+      }
     },
     "Devices" : {
-      "comment" : "Navigation: Geräte"
+      "comment" : "Navigation: Geräte",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Devices"
+          }
+        }
+      }
     },
     "devices_count" : {
       "comment" : "Geräte: Sitzungszahl",
@@ -18845,7 +19066,14 @@
       }
     },
     "EduFlow Dashboard · local" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EduFlow Dashboard · local"
+          }
+        }
+      }
     },
     "EduFlow Dashboard · lokal" : {
       "comment" : "UI-Literal",
@@ -19034,7 +19262,14 @@
       }
     },
     "EduFlow is ready" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EduFlow is ready"
+          }
+        }
+      }
     },
     "EduFlow ist bereit" : {
       "comment" : "UI-Literal",
@@ -19595,13 +19830,34 @@
       }
     },
     "Enter code" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter code"
+          }
+        }
+      }
     },
     "Enter the code from your email or app." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the code from your email or app."
+          }
+        }
+      }
     },
     "Enter where EduFlow runs as server." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter where EduFlow runs as server."
+          }
+        }
+      }
     },
     "Entfall" : {
       "comment" : "UI-Literal",
@@ -21464,10 +21720,24 @@
       }
     },
     "Events and schedule changes" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Events and schedule changes"
+          }
+        }
+      }
     },
     "Everything in one place." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Everything in one place."
+          }
+        }
+      }
     },
     "fällig: " : {
       "comment" : "UI-Literal",
@@ -22400,7 +22670,14 @@
       }
     },
     "Files" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Files"
+          }
+        }
+      }
     },
     "Folgt der Systemsprache" : {
       "comment" : "Onboarding: Sprachauswahl",
@@ -24635,7 +24912,15 @@
       }
     },
     "Grade" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grade"
+          }
+        }
+      }
     },
     "grades_average_hint" : {
       "comment" : "Noten: Schnitt-Hinweis",
@@ -28902,7 +29187,15 @@
       }
     },
     "Homework" : {
-      "comment" : "Einstellungen: Startseite Aufgaben\nHausaufgaben: Titel\nÜbersicht: Bereich Aufgaben\nÜbersicht: Bereich Hausaufgaben"
+      "comment" : "Einstellungen: Startseite Aufgaben\nHausaufgaben: Titel\nÜbersicht: Bereich Aufgaben\nÜbersicht: Bereich Hausaufgaben",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Homework"
+          }
+        }
+      }
     },
     "homework_action_done" : {
       "comment" : "Hausaufgaben: fertig",
@@ -36631,7 +36924,15 @@
       }
     },
     "Leave demo" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leave demo"
+          }
+        }
+      }
     },
     "Lege fest, welche Bereiche zuerst erscheinen." : {
       "comment" : "UI-Literal",
@@ -37006,16 +37307,46 @@
       }
     },
     "Light and dark follow the system. Accent color:" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light and dark follow the system. Accent color:"
+          }
+        }
+      }
     },
     "Load" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load"
+          }
+        }
+      }
     },
     "Loading …" : {
-      "comment" : "Noten: lädt"
+      "comment" : "Noten: lädt",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading …"
+          }
+        }
+      }
     },
     "Local tool — credentials stay on this Mac." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Local tool — credentials stay on this Mac."
+          }
+        }
+      }
     },
     "Lokales Werkzeug — Zugangsdaten bleiben auf diesem Mac." : {
       "comment" : "UI-Literal",
@@ -37576,7 +37907,15 @@
       }
     },
     "Manage devices" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manage devices"
+          }
+        }
+      }
     },
     "Meldet dich ab und startet die Einführung erneut." : {
       "comment" : "UI-Literal",
@@ -37765,7 +38104,15 @@
       }
     },
     "Messages" : {
-      "comment" : "Übersicht: Bereich Nachrichten"
+      "comment" : "Übersicht: Bereich Nachrichten",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Messages"
+          }
+        }
+      }
     },
     "messages_action_mark_read" : {
       "comment" : "Nachrichten: alle als gelesen",
@@ -44667,31 +45014,98 @@
       }
     },
     "New message" : {
-      "comment" : "Nachrichten: Verfassen-Titel"
+      "comment" : "Nachrichten: Verfassen-Titel",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New message"
+          }
+        }
+      }
     },
     "Next →" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next →"
+          }
+        }
+      }
     },
     "Next 24 hours" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next 24 hours"
+          }
+        }
+      }
     },
     "no classes today" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no classes today"
+          }
+        }
+      }
     },
     "No likes." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No likes."
+          }
+        }
+      }
     },
     "No other sessions." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No other sessions."
+          }
+        }
+      }
     },
     "No school" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No school"
+          }
+        }
+      }
     },
     "No school events or exams in this period." : {
-      "comment" : "Schule: keine Termine"
+      "comment" : "Schule: keine Termine",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No school events or exams in this period."
+          }
+        }
+      }
     },
     "No substitutions scheduled for this week." : {
-      "comment" : "Schule: keine Vertretungen"
+      "comment" : "Schule: keine Vertretungen",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No substitutions scheduled for this week."
+          }
+        }
+      }
     },
     "Note" : {
       "comment" : "UI-Literal",
@@ -45066,7 +45480,14 @@
       }
     },
     "Now" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Now"
+          }
+        }
+      }
     },
     "Nur erledigte" : {
       "comment" : "UI-Literal",
@@ -48410,10 +48831,25 @@
       }
     },
     "Only synthetic sample data is loaded from the local demo server." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only synthetic sample data is loaded from the local demo server."
+          }
+        }
+      }
     },
     "Overview" : {
-      "comment" : "Einstellungen: Startseite Übersicht\nÜbersicht: Titel"
+      "comment" : "Einstellungen: Startseite Übersicht\nÜbersicht: Titel",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overview"
+          }
+        }
+      }
     },
     "overview_city_missing" : {
       "comment" : "Übersicht: Stadt fehlt",
@@ -52681,22 +53117,70 @@
       }
     },
     "Reload" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reload"
+          }
+        }
+      }
     },
     "Remove" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove"
+          }
+        }
+      }
     },
     "Run onboarding again" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Run onboarding again"
+          }
+        }
+      }
     },
     "Save" : {
-      "comment" : "Einstellungen: Speichern\nÜbersicht: speichern"
+      "comment" : "Einstellungen: Speichern\nÜbersicht: speichern",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save"
+          }
+        }
+      }
     },
     "Saving …" : {
-      "comment" : "Einstellungen: Speichern läuft"
+      "comment" : "Einstellungen: Speichern läuft",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saving …"
+          }
+        }
+      }
     },
     "Saving overview …" : {
-      "comment" : "Übersicht: speichert"
+      "comment" : "Übersicht: speichert",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saving overview …"
+          }
+        }
+      }
     },
     "Schließen" : {
       "comment" : "UI-Literal",
@@ -52885,10 +53369,24 @@
       }
     },
     "School" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "School"
+          }
+        }
+      }
     },
     "School life" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "School life"
+          }
+        }
+      }
     },
     "school_action_add" : {
       "comment" : "Schule: neu",
@@ -56045,7 +56543,15 @@
       }
     },
     "Search" : {
-      "comment" : "Nachrichten: Empfängersuche Platzhalter"
+      "comment" : "Nachrichten: Empfängersuche Platzhalter",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search"
+          }
+        }
+      }
     },
     "Senden" : {
       "comment" : "UI-Literal",
@@ -56977,7 +57483,15 @@
       }
     },
     "Settings" : {
-      "comment" : "Navigation: Einstellungen\nÜbersicht: Bereich Einstellungen"
+      "comment" : "Navigation: Einstellungen\nÜbersicht: Bereich Einstellungen",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        }
+      }
     },
     "settings_baseurl_placeholder" : {
       "comment" : "Einstellungen: Basis-URL Platzhalter",
@@ -64078,7 +64592,15 @@
       }
     },
     "Share downloaded file" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share downloaded file"
+          }
+        }
+      }
     },
     "Sicht" : {
       "comment" : "UI-Literal",
@@ -64267,19 +64789,58 @@
       }
     },
     "Sign in" : {
-      "comment" : "Anmeldung: anmelden"
+      "comment" : "Anmeldung: anmelden",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in"
+          }
+        }
+      }
     },
     "Sign out" : {
-      "comment" : "Einstellungen: Abmelden\nNavigation: Abmelden"
+      "comment" : "Einstellungen: Abmelden\nNavigation: Abmelden",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign out"
+          }
+        }
+      }
     },
     "Signing in …" : {
-      "comment" : "Anmeldung: meldet an"
+      "comment" : "Anmeldung: meldet an",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signing in …"
+          }
+        }
+      }
     },
     "Signing out …" : {
-      "comment" : "Einstellungen: Abmelden läuft\nUI-Literal"
+      "comment" : "Einstellungen: Abmelden läuft\nUI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signing out …"
+          }
+        }
+      }
     },
     "Signs you out and restarts the introduction." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Signs you out and restarts the introduction."
+          }
+        }
+      }
     },
     "Sonnenaufgang" : {
       "comment" : "UI-Literal",
@@ -65584,7 +66145,14 @@
       }
     },
     "Start page after sign-in" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start page after sign-in"
+          }
+        }
+      }
     },
     "Startseite nach Anmeldung" : {
       "comment" : "UI-Literal",
@@ -68369,7 +68937,15 @@
       }
     },
     "Timetable" : {
-      "comment" : "Einstellungen: Startseite Stundenplan\nEinstellungen: Startseite Stundenplan / Stundenplan: Titel\nStundenplan: Titel\nÜbersicht: Bereich Stundenplan"
+      "comment" : "Einstellungen: Startseite Stundenplan\nEinstellungen: Startseite Stundenplan / Stundenplan: Titel\nStundenplan: Titel\nÜbersicht: Bereich Stundenplan",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timetable"
+          }
+        }
+      }
     },
     "timetable_nav" : {
       "comment" : "Stundenplan: Titel",
@@ -68929,10 +69505,25 @@
       }
     },
     "Today" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today"
+          }
+        }
+      }
     },
     "Topic" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Topic"
+          }
+        }
+      }
     },
     "Trage ein, wo EduFlow als Server läuft." : {
       "comment" : "UI-Literal",
@@ -69121,7 +69712,15 @@
       }
     },
     "Try again" : {
-      "comment" : "Fehler: erneut versuchen"
+      "comment" : "Fehler: erneut versuchen",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try again"
+          }
+        }
+      }
     },
     "Typ" : {
       "comment" : "UI-Literal",
@@ -71356,7 +71955,14 @@
       }
     },
     "Unknown device" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown device"
+          }
+        }
+      }
     },
     "Veranstaltung" : {
       "comment" : "UI-Literal",
@@ -72103,16 +72709,47 @@
       }
     },
     "View demo" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View demo"
+          }
+        }
+      }
     },
     "Weather" : {
-      "comment" : "Übersicht: Bereich Wetter"
+      "comment" : "Übersicht: Bereich Wetter",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weather"
+          }
+        }
+      }
     },
     "Week" : {
-      "comment" : "UI-Literal"
+      "comment" : "UI-Literal",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Week"
+          }
+        }
+      }
     },
     "Weighting" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weighting"
+          }
+        }
+      }
     },
     "Weiter" : {
       "comment" : "UI-Literal",
@@ -73231,7 +73868,15 @@
       }
     },
     "Where does your server run?" : {
-      "comment" : "Anmeldung: Serverhinweis"
+      "comment" : "Anmeldung: Serverhinweis",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Where does your server run?"
+          }
+        }
+      }
     },
     "Wie heißt du bei EduPage?" : {
       "comment" : "UI-Literal",
@@ -74350,10 +74995,24 @@
       }
     },
     "Write a reply" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Write a reply"
+          }
+        }
+      }
     },
     "Your profile" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your profile"
+          }
+        }
+      }
     },
     "z. B. MacBook" : {
       "comment" : "UI-Literal",
@@ -76199,6 +76858,376 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zwischengespeichert"
+          }
+        }
+      }
+    },
+    "messages_role_teacher" : {
+      "comment" : "Messages: recipient role teacher",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teacher"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lehrer"
+          }
+        },
+        "af" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onderwyser"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "معلّم"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Docent"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Učitel"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lærer"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δάσκαλος"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profesor"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opettaja"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enseignant"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "מורה"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tanár"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insegnante"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "担任教師"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "교사"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Docent"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lærer"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nauczyciel"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Professor"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Professor"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profesor"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Учитель"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Наставник"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lärare"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öğretmen"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Вчитель"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Giáo viên"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "教师"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "教師"
+          }
+        }
+      }
+    },
+    "messages_role_student" : {
+      "comment" : "Messages: recipient role student",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Student"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schüler"
+          }
+        },
+        "af" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leerling"
+          }
+        },
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "طالب"
+          }
+        },
+        "ca" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alumne"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Žák"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elev"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Μαθητής"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alumno"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oppilas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Élève"
+          }
+        },
+        "he" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "תלמיד"
+          }
+        },
+        "hu" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diák"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Studente"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "生徒"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "학생"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leerling"
+          }
+        },
+        "no" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elev"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uczeń"
+          }
+        },
+        "pt" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aluno"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aluno"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elev"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ученик"
+          }
+        },
+        "sr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ученик"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elev"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öğrenci"
+          }
+        },
+        "uk" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Учень"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Học sinh"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "学生"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "學生"
           }
         }
       }
