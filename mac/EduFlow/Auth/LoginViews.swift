@@ -146,12 +146,17 @@ public struct LoginView: View {
                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 .multilineTextAlignment(.center)
                 .padding(.top, 10)
+            // Eigener Textknopf (`.plain`): reiner Text-Look ohne System-Bezel.
             Button(NSLocalizedString("Leave demo", value: "Leave demo", comment: "UI-Literal")) { vm.stopDemo() }
                 .font(UberFont.text(13, weight: .bold))
+                .foregroundStyle(EduFlowPalette.inkDim(scheme))
+                .buttonStyle(.plain)
                 .padding(.top, 4)
         } else {
             Button(NSLocalizedString("View demo", value: "View demo", comment: "UI-Literal")) { startDemo() }
                 .font(UberFont.text(13, weight: .bold))
+                .foregroundStyle(accent.resolved(scheme))
+                .buttonStyle(.plain)
                 .padding(.top, 10)
         }
     }
@@ -173,6 +178,7 @@ public struct LoginView: View {
         Button(NSLocalizedString("Back", value: "Back", comment: "UI-Literal")) { go(to: step - 1) }
             .font(UberFont.text(14, weight: .bold))
             .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+            .buttonStyle(.plain)
             .opacity(step > 0 ? 1 : 0)
             .disabled(step == 0)
             .accessibilityHidden(step == 0)
@@ -183,12 +189,17 @@ public struct LoginView: View {
                 .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 .multilineTextAlignment(.center)
                 .padding(.top, 10)
+            // Eigener Textknopf (`.plain`): reiner Text-Look ohne System-Bezel.
             Button(NSLocalizedString("Leave demo", value: "Leave demo", comment: "UI-Literal")) { vm.stopDemo() }
                 .font(UberFont.text(13, weight: .bold))
+                .foregroundStyle(EduFlowPalette.inkDim(scheme))
+                .buttonStyle(.plain)
                 .padding(.top, 4)
         } else {
             Button(NSLocalizedString("View demo", value: "View demo", comment: "UI-Literal")) { startDemo() }
                 .font(UberFont.text(13, weight: .bold))
+                .foregroundStyle(accent.resolved(scheme))
+                .buttonStyle(.plain)
                 .padding(.top, 10)
         }
     }
@@ -262,6 +273,8 @@ public struct LoginView: View {
                 ) { doLogin() }
                 Button(NSLocalizedString("Apply", value: "Apply", comment: "UI-Literal")) { vm.applyBaseURL() }
                     .font(UberFont.text(13, weight: .bold))
+                    .foregroundStyle(accent.resolved(scheme))
+                    .buttonStyle(.plain)
                     .padding(.top, 4)
                 Text(String(format: NSLocalizedString("auth_server_line", value: "Server: %@", comment: "Anmeldung: Serverzeile"), vm.baseURL))
                     .font(UberFont.text(12))
@@ -314,6 +327,7 @@ public struct LoginView: View {
                 Button(NSLocalizedString("Back", value: "Back", comment: "UI-Literal")) { go(to: step - 1) }
                     .font(UberFont.text(14, weight: .bold))
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+                    .buttonStyle(.plain)
             }
             Spacer()
             if step < totalSteps - 1 {
@@ -405,6 +419,8 @@ public struct TwoFAView: View {
                 .padding(.top, 22)
                 Button(NSLocalizedString("Back to sign-in", value: "Back to sign-in", comment: "UI-Literal"), action: onBack)
                     .font(UberFont.text(13, weight: .bold))
+                    .foregroundStyle(EduFlowPalette.inkDim(scheme))
+                    .buttonStyle(.plain)
                     .padding(.top, 12)
             }
             .padding(.vertical, 36)

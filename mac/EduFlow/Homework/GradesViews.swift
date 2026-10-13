@@ -49,7 +49,9 @@ public struct GradesView: View {
                         .padding(.vertical, 8)
                     }
                 }
-                if let info = vm.cacheInfo, !info.isEmpty {
+                if vm.cachedAt != nil {
+                    OfflineNotice(savedAt: vm.cachedAt)
+                } else if let info = vm.cacheInfo, !info.isEmpty {
                     Text(info)
                         .font(UberFont.text(12))
                         .foregroundStyle(EduFlowPalette.inkDim(scheme))
@@ -102,18 +104,16 @@ public struct GradesView: View {
     }
 
     private var halfYearPicker: some View {
-        Picker(NSLocalizedString("grades_picker_halfyear", value: "Semester", comment: "Noten: Halbjahrfilter"), selection: $vm.tab) {
-            ForEach(vm.tabs, id: \.self) { tab in
-                Text(tab.label).tag(tab)
-            }
+        UberSegmented(options: vm.tabs, selection: $vm.tab) { tab in
+            tab.label
         }
-        .pickerStyle(.segmented)
     }
 
     private var searchField: some View {
-        TextField(NSLocalizedString("grades_search_placeholder", value: "Search", comment: "Noten: Suche Platzhalter"), text: $vm.search)
-            .uberInput()
-            .autocorrectionDisabled()
+        UberSearchField(
+            text: $vm.search,
+            prompt: NSLocalizedString("grades_search_placeholder", value: "Search", comment: "Noten: Suche Platzhalter")
+        )
     }
 
     /// Fach-Karte (`.subj`): Kopf mit Titel, Anzahl und großem Schnitt,

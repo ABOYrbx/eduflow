@@ -256,20 +256,33 @@ public struct LanguageSwitcher: View {
 
 // MARK: - Suchfeld (`.searchbar`)
 
-/// Echtes macOS-Suchfeld (`NSSearchField`) in der Optik der App.
+/// Suchfeld im Web-Stil (`.searchbar`): **selbst gezeichnet**, kein
+/// `NSSearchField` und keine System-Steuerelement-Kante.
 ///
-/// Bewusst `NSSearchField` und nicht ein selbst gezeichnetes Textfeld: das
-/// System liefert Fokus-Ring, Lupe, Kreuz-Knopf, Platzhalter-Ausblendung und
-/// die Tastatur-Shortcuts (Esc leert) — das Verhalten ist also das des
-/// Systems, nur die Fläche ist unsere Pille. Kein `TextField`-Optik,
-/// entsprechend keine System-Steuerelement-Kante.
+/// Vorher lag hier eine AppKit-Brücke auf `NSSearchField`. Sie lieferte
+/// Fokus, Lupe und Kreuz-Knopf mit Systemoptik — genau die Elemente, die in
+/// dieser App nirgends sonst auftauchen (alle anderen Felder sind eigene
+/// Pillen aus `UberTextField`). Alles, was die Suchleiste tatsächlich
+/// braucht, ist hier von Hand gebaut:
+///
+/// - Fokus-Ring in Akzentfarbe (wie `UberTextField`)
+/// - Lupe als eigenes Symbol, Kreuz-Knopf als eigener `IconButton`
+/// - Platzhalter in derselben Schrift wie der Inhalt
+/// - Esc leert das Feld, Return löst `onSubmit` aus
+///
+/// Der Fokus hängt an `@FocusState`, damit `autofocus` und der Ring ohne
+/// Fensterzugriff funktionieren.
 public struct UberSearchField: View {
     @Environment(\.colorScheme) private var scheme
+    @Environment(\.uberAccent) private var accent
     @Binding var text: String
     let prompt: String
     var onSubmit: () -> Void = {}
     /// Fokus sofort setzen (wichtig, wenn die Ansicht frisch eingeblendet wird).
     var autofocus: Bool = false
+
+    @FocusState private var focused: Bool
+    @State private var hovering = false
 
     public init(
         text: Binding<String>,
@@ -284,100 +297,59 @@ public struct UberSearchField: View {
     }
 
     public var body: some View {
-        NativeSearchField(text: $text, prompt: prompt, onSubmit: onSubmit, autofocus: autofocus)
-            .frame(height: 26)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .background(EduFlowPalette.surface2(scheme))
-            .clipShape(.capsule)
-            .overlay {
-                Capsule().stroke(EduFlowPalette.border(scheme), lineWidth: 1)
+        HStack(spacing: 7) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(EduFlowPalette.inkDim(scheme))
+            TextField(
+                "",
+                text: $text,
+                prompt: Text(LocalizedStringKey(prompt))
+                    .font(UberFont.text(13, weight: .medium))
+                    .foregroundStyle(EduFlowPalette.inkDim(scheme))
+            )
+            .textFieldStyle(.plain)
+            .font(UberFont.text(13, weight: .semibold))
+            .foregroundStyle(EduFlowPalette.ink(scheme))
+            .focused($focused)
+            .onSubmit(onSubmit)
+            .autocorrectionDisabled()
+            // Esc leert das Feld (wie die frühere System-Suchleiste).
+            .onExitCommand { text = "" }
+            if !text.isEmpty {
+                IconButton(
+                    icon: "xmark",
+                    label: NSLocalizedString(
+                        "common_clear_input", value: "Clear input",
+                        comment: "Eingabefeld: löschen"
+                    )
+                ) {
+                    text = ""
+                    focused = true
+                }
             }
-    }
-}
-
-/// Brücke zu `NSSearchField`. Nutzt den Haupt-Thread-Actorrun, weil
-/// AppKit-Steuerelemente dort angelegt werden müssen.
-private struct NativeSearchField: NSViewRepresentable {
-    @Binding var text: String
-    let prompt: String
-    let onSubmit: () -> Void
-    let autofocus: Bool
-
-    @MainActor
-    func makeNSView(context: Context) -> NSSearchField {
-        let field = NSSearchField()
-        field.isBezeled = false
-        field.drawsBackground = false
-        field.focusRingType = .none
-        field.sendsWholeSearchString = false
-        field.sendsSearchStringImmediately = false
-        field.placeholderString = prompt
-        field.controlSize = .small
-        field.font = NSFont.systemFont(ofSize: 13, weight: .medium)
-        field.stringValue = text
-        field.delegate = context.coordinator
-        if autofocus {
-            DispatchQueue.main.async { field.window?.makeFirstResponder(field) }
         }
-        return field
-    }
-
-    @MainActor
-    func updateNSView(_ field: NSSearchField, context: Context) {
-        // Nur von außen übernehmen, wenn sich der Wert wirklich unterscheidet:
-        // sonst springt der Cursor beim Tippen ans Ende.
-        if field.stringValue != text {
-            field.stringValue = text
+        .padding(.horizontal, 12)
+        .frame(height: 34)
+        .background(EduFlowPalette.surface2(scheme))
+        .clipShape(.capsule)
+        .overlay {
+            Capsule()
+                .stroke(borderColor, lineWidth: focused ? 1.5 : 1)
         }
-        if field.placeholderString != prompt {
-            field.placeholderString = prompt
-        }
-        if autofocus, let window = field.window, window.firstResponder !== field {
-            window.makeFirstResponder(field)
+        .animation(.easeOut(duration: 0.15), value: focused)
+        .onHover { hovering = $0 }
+        .onAppear {
+            if autofocus {
+                DispatchQueue.main.async { focused = true }
+            }
         }
     }
 
-    @MainActor
-    func makeCoordinator() -> Coordinator {
-        Coordinator(text: $text, onSubmit: onSubmit)
-    }
-
-    @MainActor
-    final class Coordinator: NSObject, NSSearchFieldDelegate {
-        private var text: Binding<String>
-        private let onSubmit: () -> Void
-
-        init(text: Binding<String>, onSubmit: @escaping () -> Void) {
-            self.text = text
-            self.onSubmit = onSubmit
-        }
-
-        func controlTextDidChange(_ obj: Notification) {
-            guard let field = obj.object as? NSSearchField else { return }
-            let value = field.stringValue
-            // Vermeidet Rückkopplung: nur schreiben, wenn sich etwas ändert.
-            if text.wrappedValue != value {
-                text.wrappedValue = value
-            }
-        }
-
-        func control(_ control: NSControl, textView: NSTextView, doCommandBy selector: Selector) -> Bool {
-            if selector == #selector(NSResponder.cancelOperation(_:)) {
-                // Esc leert das Feld (Systemverhalten der Suchleiste).
-                text.wrappedValue = ""
-                return true
-            }
-            return false
-        }
-
-        func controlTextDidEndEditing(_ obj: Notification) {
-            guard let field = obj.object as? NSSearchField, field.stringValue != text.wrappedValue else {
-                return
-            }
-            text.wrappedValue = field.stringValue
-            onSubmit()
-        }
+    private var borderColor: Color {
+        if focused { return accent.resolved(scheme) }
+        if hovering { return EduFlowPalette.inkMuted(scheme) }
+        return EduFlowPalette.border(scheme)
     }
 }
 
@@ -738,6 +710,46 @@ private struct LightBorderIfNeeded: ViewModifier {
     }
 }
 
+/// Auswahlzeile mit eigenem Kreis-Knopf (statt `Toggle`).
+///
+/// Eigener Knopf statt System-Kästchen: `Toggle` brachte die NS-Optik mit.
+/// Der Knopf ist ein `Button` mit `.isSelected`-Trait, damit VoiceOver den
+/// Zustand weiterhin als „an/aus" vorliest.
+public struct UberCheckRow: View {
+    @Environment(\.colorScheme) private var scheme
+    @Environment(\.uberAccent) private var accent
+    public let isOn: Bool
+    public let action: () -> Void
+    private let content: AnyView
+
+    public init<Content: View>(
+        isOn: Bool,
+        @ViewBuilder content: () -> Content,
+        action: @escaping () -> Void
+    ) {
+        self.isOn = isOn
+        self.action = action
+        self.content = AnyView(content())
+    }
+
+    public var body: some View {
+        Button(action: action) {
+            HStack(spacing: 10) {
+                Image(systemName: isOn ? "checkmark.circle.fill" : "circle")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(
+                        isOn ? accent.resolved(scheme) : EduFlowPalette.inkMuted(scheme)
+                    )
+                content
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(.rect)
+        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isOn ? [.isSelected] : [])
+    }
+}
+
 // MARK: - Gemeinsame Schaltflächen-Schnittstelle (Paket 0/F, für alle Pakete)
 //
 // Verbindlich für alle macOS-Ansichten, damit nirgends die native
@@ -803,6 +815,264 @@ public struct IconButton: View {
         .accessibilityLabel(LocalizedStringKey(label))
         .help(LocalizedStringKey(help ?? label))
         .onHover { hovering = $0 && !disabled }
+    }
+}
+
+// MARK: - Schalter, Zähler, Segmentwahl (statt `Toggle`/`Stepper`/`Picker`)
+//
+// Die drei System-Steuerelemente wurden durch eigene Pillen ersetzt. Grund:
+// `Toggle` (NS-Switch), `Stepper` (NS-Stepper) und `Picker` (NS-PopUpButton)
+// brachten die Systemoptik und -Maße mit, die es sonst nirgends in der App
+// gibt. Verhalten bleibt erhalten: Tastaturbedienung, VoiceOver-Rolle und
+// Tooltips sind unten ausdrücklich gesetzt, damit die Eigenoptik nichts
+// kostet.
+
+/// Schalter-Pille im Web-Stil: Beschriftung links, Wippe rechts.
+///
+/// Ersetzt `Toggle`. Die Wippe ist eine eigene Zeichnung; der Button trägt
+/// `accessibilityAddTraits(.isSelected)`, damit VoiceOver „an/aus" meldet.
+public struct UberToggle: View {
+    @Environment(\.colorScheme) private var scheme
+    @Environment(\.uberAccent) private var accent
+    @Binding private var isOn: Bool
+    public let label: String
+    public let help: String?
+
+    public init(
+        _ label: String,
+        isOn: Binding<Bool>,
+        help: String? = nil
+    ) {
+        self.label = label
+        self.help = help
+        _isOn = isOn
+    }
+
+    public var body: some View {
+        Button {
+            isOn.toggle()
+        } label: {
+            HStack(spacing: 12) {
+                Text(LocalizedStringKey(label))
+                    .font(UberFont.text(14, weight: .medium))
+                    .foregroundStyle(EduFlowPalette.ink(scheme))
+                Spacer(minLength: 0)
+                knob
+                    .frame(width: 44, height: 24)
+            }
+            .padding(.horizontal, 14)
+            .frame(height: 40)
+            .background(EduFlowPalette.card(scheme))
+            .clipShape(.capsule)
+            .overlay {
+                // Der Rahmen bleibt in beiden Zuständen gleich — sonst wirkt
+                // die Zeile beim Umschalten springend.
+                Capsule().stroke(EduFlowPalette.border(scheme), lineWidth: 1)
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(LocalizedStringKey(label))
+        .accessibilityValue(
+            isOn
+                ? NSLocalizedString("common_on", value: "On", comment: "Schalter: an")
+                : NSLocalizedString("common_off", value: "Off", comment: "Schalter: aus")
+        )
+        .accessibilityAddTraits(isOn ? [.isSelected] : [])
+        .help(LocalizedStringKey(help ?? label))
+    }
+
+    /// Wippe: Kreis wandert auf der Fläche, Fläche folgt dem Schalterzustand.
+    ///
+    /// Fläche und Kreis liegen in **einem** `ZStack` mit fester Größe
+    /// 44×24. Das ist der entscheidende Punkt: läge der Kreis in einem
+    /// zweiten `.overlay`, bekäme er die volle Overlay-Fläche und würde
+    /// sich zur Ellipse dehnen; läge er in einem `ZStack` neben einem
+    /// `Spacer`, dehnte der Spacer die Klammer über die Fläche hinaus.
+    /// Der Rand von 3 pt steckt im Padding des Kreises.
+    private var knob: some View {
+        ZStack(alignment: isOn ? .trailing : .leading) {
+            Capsule()
+                .fill(isOn ? accent.resolved(scheme) : EduFlowPalette.surface2(scheme))
+                .overlay {
+                    Capsule().stroke(EduFlowPalette.borderStrong(scheme), lineWidth: 1)
+                }
+            Circle()
+                // `resolvedInk` ist die Schriftfarbe **auf** der Akzentfläche
+                // (bei Schwarz im Dark-Modus wird der Kreis also dunkel).
+                // Fester Weiß wäre unsichtbar, weil der Standardakzent
+                // `black` im Dark-Modus selbst zu Weiß auflöst.
+                .fill(accent.resolvedInk(scheme))
+                .frame(width: 18, height: 18)
+                .overlay {
+                    Circle().stroke(
+                        EduFlowPalette.borderStrong(scheme).opacity(0.6),
+                        lineWidth: 1
+                    )
+                }
+                .shadow(color: .black.opacity(0.25), radius: 2, y: 1)
+                .padding(.horizontal, 3)
+        }
+        .frame(width: 44, height: 24)
+        .animation(.easeOut(duration: 0.18), value: isOn)
+    }
+}
+
+/// Zähler-Pille im Web-Stil: minus, Wert, plus.
+///
+/// Ersetzt `Stepper`. Der Kern ist ein einzeiliges `TextField`, damit der
+/// Wert wie in der Web-Oberfläche direkt tippbar bleibt (der System-Stepper
+/// erlaubte nur Tippen auf die Pfeile).
+public struct UberStepper: View {
+    @Environment(\.colorScheme) private var scheme
+    @Environment(\.uberAccent) private var accent
+    @Binding private var value: Int
+    public let range: ClosedRange<Int>
+    public let label: String
+
+    @FocusState private var focused: Bool
+
+    public init(
+        _ label: String,
+        value: Binding<Int>,
+        in range: ClosedRange<Int> = 1...50
+    ) {
+        self.label = label
+        self.range = range
+        _value = value
+    }
+
+    public var body: some View {
+        HStack(spacing: 12) {
+            Text(LocalizedStringKey(label))
+                .font(UberFont.text(14, weight: .medium))
+                .foregroundStyle(EduFlowPalette.ink(scheme))
+            Spacer(minLength: 0)
+            HStack(spacing: 0) {
+                step(
+                    icon: "minus",
+                    delta: -1,
+                    enabled: value > range.lowerBound,
+                    label: NSLocalizedString(
+                        "common_decrease", value: "Decrease",
+                        comment: "Zähler: verringern"
+                    )
+                )
+                TextField("", text: Binding(
+                    get: { String(value) },
+                    set: { raw in
+                        let digits = raw.filter(\.isNumber)
+                        // Mehr als zwei Stellen sind in diesem Bereich
+                        // sinnlos; Eingabe auf Zeichen beschränken.
+                        guard let parsed = Int(digits.prefix(2)) else { return }
+                        value = min(max(parsed, range.lowerBound), range.upperBound)
+                    }
+                ))
+                .textFieldStyle(.plain)
+                .multilineTextAlignment(.center)
+                .font(UberFont.text(14, weight: .bold))
+                .foregroundStyle(EduFlowPalette.ink(scheme))
+                .frame(width: 42)
+                .focused($focused)
+                step(
+                    icon: "plus",
+                    delta: 1,
+                    enabled: value < range.upperBound,
+                    label: NSLocalizedString(
+                        "common_increase", value: "Increase",
+                        comment: "Zähler: erhöhen"
+                    )
+                )
+            }
+            .padding(.horizontal, 4)
+            .frame(height: 30)
+            .background(EduFlowPalette.surface2(scheme))
+            .clipShape(.capsule)
+            .overlay {
+                Capsule().stroke(EduFlowPalette.border(scheme), lineWidth: 1)
+            }
+        }
+        .padding(.horizontal, 14)
+        .frame(height: 40)
+        .background(EduFlowPalette.card(scheme))
+        .clipShape(.capsule)
+        .overlay {
+            Capsule().stroke(EduFlowPalette.border(scheme), lineWidth: 1)
+        }
+    }
+
+    private func step(icon: String, delta: Int, enabled: Bool, label: String) -> some View {
+        Button {
+            guard enabled else { return }
+            value = min(max(value + delta, range.lowerBound), range.upperBound)
+        } label: {
+            Image(systemName: icon)
+                .font(.system(size: 11, weight: .bold))
+                .foregroundStyle(
+                    enabled ? EduFlowPalette.ink(scheme) : EduFlowPalette.inkDim(scheme)
+                )
+                .frame(width: 26, height: 26)
+                .contentShape(.rect)
+                .background(EduFlowPalette.card(scheme).opacity(0.6))
+                .clipShape(.circle)
+        }
+        .buttonStyle(.plain)
+        .disabled(!enabled)
+        .accessibilityLabel(LocalizedStringKey(label))
+    }
+}
+
+/// Segmentwahl im Web-Stil: eine Pillen-Reihe mit genau einer Auswahl.
+///
+/// Ersetzt `Picker`. Anders als `NSPopUpButton` ist die Auswahl sofort
+/// sichtbar (kein Aufklappen), und die Pillenreihe entspricht der
+/// Filterleiste der Web-Oberfläche.
+public struct UberSegmented<Value: Hashable>: View {
+    @Environment(\.colorScheme) private var scheme
+    @Environment(\.uberAccent) private var accent
+    @Binding private var selection: Value
+    public let options: [Value]
+    public let label: (Value) -> String
+
+    public init(
+        options: [Value],
+        selection: Binding<Value>,
+        label: @escaping (Value) -> String
+    ) {
+        self.options = options
+        self.label = label
+        _selection = selection
+    }
+
+    public var body: some View {
+        HStack(spacing: 4) {
+            ForEach(options, id: \.self) { option in
+                let active = option == selection
+                Button {
+                    selection = option
+                } label: {
+                    Text(LocalizedStringKey(label(option)))
+                        .font(UberFont.text(13, weight: .semibold))
+                        .fixedSize()
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 14)
+                        .background(
+                            active ? EduFlowPalette.surface2(scheme) : Color.clear
+                        )
+                        .clipShape(.capsule)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(LocalizedStringKey(label(option)))
+                .accessibilityAddTraits(active ? [.isSelected] : [])
+            }
+        }
+        .padding(.horizontal, 4)
+        .padding(.vertical, 4)
+        .background(EduFlowPalette.card(scheme))
+        .clipShape(.capsule)
+        .overlay {
+            Capsule().stroke(EduFlowPalette.border(scheme), lineWidth: 1)
+        }
+        .animation(.easeOut(duration: 0.15), value: selection)
     }
 }
 
@@ -1300,6 +1570,68 @@ public struct UberInput: ViewModifier {
 public extension View {
     func uberInput() -> some View {
         modifier(UberInput())
+    }
+}
+
+/// Offline-Hinweis (`.notice`, gedämpfte Variante).
+///
+/// Sichtbar, wenn eine Liste aus dem lokalen Cache kommt — meist weil
+/// das Backend neu gestartet wurde und der Bearer-Token nicht mehr
+/// gilt. Der Text nennt den Zeitpunkt, damit klar ist, dass die Daten
+/// **nicht** frisch sind; ein Grund, sich neu anzumelden, ist das nicht.
+public struct OfflineNotice: View {
+    @Environment(\.colorScheme) private var scheme
+    public let savedAt: Date?
+
+    public init(savedAt: Date?) {
+        self.savedAt = savedAt
+    }
+
+    public var body: some View {
+        if let savedAt {
+            HStack(spacing: 8) {
+                Image(systemName: "wifi.slash")
+                    .font(.system(size: 12, weight: .semibold))
+                Text(
+                    String(
+                        format: NSLocalizedString(
+                            "common_offline_cache",
+                            value: "Showing saved data from %@ — the server is not reachable.",
+                            comment: "Offline-Hinweis: Zeitpunkt der lokalen Daten"
+                        ),
+                        Self.relative(savedAt)
+                    )
+                )
+                .font(UberFont.text(12, weight: .medium))
+                Spacer(minLength: 0)
+            }
+            .foregroundStyle(EduFlowPalette.inkMuted(scheme))
+            .padding(.horizontal, 14)
+            .frame(height: 34)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(EduFlowPalette.surface2(scheme))
+            .clipShape(.capsule)
+            .overlay {
+                Capsule().stroke(EduFlowPalette.border(scheme), lineWidth: 1)
+            }
+            .accessibilityElement(children: .combine)
+        }
+    }
+
+    /// „gerade eben" / „vor 5 Min." / mit Datum, wenn älter als ein Tag.
+    static func relative(_ date: Date, now: Date = Date()) -> String {
+        let seconds = Int(now.timeIntervalSince(date))
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .full
+        if seconds < 90 { return NSLocalizedString("common_just_now", value: "just now", comment: "Relative Zeit: gerade eben") }
+        if seconds < 3600 { return formatter.localizedString(for: date, relativeTo: now) }
+        if seconds < 86_400 {
+            return String(
+                format: NSLocalizedString("common_at_time", value: "today at %@", comment: "Relative Zeit: heute um"),
+                date.formatted(date: .omitted, time: .shortened)
+            )
+        }
+        return date.formatted(date: .abbreviated, time: .omitted)
     }
 }
 

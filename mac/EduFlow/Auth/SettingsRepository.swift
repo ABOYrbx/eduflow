@@ -9,10 +9,22 @@ public struct SettingsRepository: Sendable {
     }
 
     /// Einstellungen lesen (Schema plus typisierte Werte mit Defaults).
+    ///
+    /// Mit lokalem Rückfall: ohne sie fiele die App nach einem
+    /// Backend-Neustart auf Standardwerte zurück und lädte mit den
+    /// falschen Limits (etwa „10 Aufgaben"), sodass selbst der Cache
+    /// nicht mehr träfe.
     public func load() async throws -> (schema: [SettingSpec], values: SettingsValues) {
-        let data = try await client.get(APIClient.Paths.settings)
-        let response = try APIClient.decode(SettingsResponse.self, from: data)
+        let payload = try await client.getCached(
+            APIClient.Paths.settings, as: SettingsResponse.self
+        )
+        let response = try APIClient.decode(SettingsResponse.self, from: payload.data)
         return (response.schema, SettingsValues.from(response.values))
+    }
+
+    /// Liegt der letzte Stand aus dem lokalen Cache?
+    public func isCached() -> Bool {
+        LocalCache.shared.load(APIClient.cacheKey(APIClient.Paths.settings, [])) != nil
     }
 
     /// Einstellungen speichern (Booleans als echte JSON-Bools, wie
@@ -51,8 +63,10 @@ public struct SettingsRepository: Sendable {
 
     /// Eigene Geräte (Tokens ohne Secrets, neueste zuerst).
     public func devices() async throws -> [DeviceInfo] {
-        let data = try await client.get(APIClient.Paths.devices)
-        return try APIClient.decode(DevicesResponse.self, from: data).items
+        let payload = try await client.getCached(
+            APIClient.Paths.devices, as: DevicesResponse.self
+        )
+        return try APIClient.decode(DevicesResponse.self, from: payload.data).items
     }
 
     /// Gerät gezielt widerrufen (Besitzschutz serverseitig).

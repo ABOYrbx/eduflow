@@ -119,7 +119,11 @@ public final class TokenStore: @unchecked Sendable {
         APIClient(
             baseURL: { [weak self] in self?.baseURLString ?? TokenStore.defaultBaseURL },
             token: { [weak self] in self?.token },
-            session: session ?? TokenStore.defaultSession()
+            session: session ?? TokenStore.defaultSession(),
+            // Nur die App verdraengt den lokalen Rückfall: Faellt das
+            // Backend nach einem Neustart aus, zeigt die App weiter die
+            // zuletzt geladenen Daten statt den Login zu erzwingen.
+            cache: LocalCache.shared
         )
     }
 

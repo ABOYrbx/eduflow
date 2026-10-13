@@ -93,7 +93,7 @@
     "recipientsBody": "Καθορίστε έγκυρους παραλήπτες και ένα σώμα μηνύματος.",
     "sentNotFound": "Στάλθηκε, αλλά το νέο μήνυμα δεν βρέθηκε.",
     "unknownType": "Άγνωστος τύπος μηνύματος.",
-    "unknownTypeValid": "Unbekannter Nachrichtentyp. Gültig: anketa, chat, genotif, news, sprava."
+    "unknownTypeValid": "Unknown message type. Valid: {types}."
   },
   "school": {
     "substitutions": "Το σχέδιο αντικατάστασης δεν μπόρεσε να φορτωθεί.",

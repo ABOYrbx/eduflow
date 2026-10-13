@@ -10,15 +10,22 @@ public struct APIClient: Sendable {
     public var baseURL: @Sendable () -> String
     public var token: @Sendable () -> String?
     public var session: URLSession
+    /// Lokaler Rückfall für `getCached`. **Nil heißt: kein Cache.**
+    /// Absichtlich so — ein direkt gebauter Client (Tests, Werkzeuge)
+    /// schreibt damit nicht ungefragt in den echten Cache der App.
+    /// Die App reicht ihn über `TokenStore.makeClient()` herein.
+    public var cache: LocalCache?
 
     public init(
         baseURL: @escaping @Sendable () -> String,
         token: @escaping @Sendable () -> String?,
-        session: URLSession = TokenStore.defaultSession()
+        session: URLSession = TokenStore.defaultSession(),
+        cache: LocalCache? = nil
     ) {
         self.baseURL = baseURL
         self.token = token
         self.session = session
+        self.cache = cache
     }
 
     /// Gemeinsamer Decoder (tolerant wie der Web-Cache).
@@ -115,6 +122,61 @@ public struct APIClient: Sendable {
         var request = try buildRequest(path: path, authenticated: authenticated)
         request.httpMethod = "DELETE"
         return try await perform(request)
+    }
+
+    // MARK: - Lesen mit lokalem Rückfall
+
+    /// `GET` mit lokalem Cache als Rückfall.
+    ///
+    /// Startet das Backend neu, sind die Bearer-Token ungültig und jedes
+    /// `get` liefert `401`. Statt den Aufrufer ins Leere laufen zu
+    /// lassen, kommt hier die zuletzt gesehene Antwort zurück. Der
+    /// Rückfall gilt **nur** bei Sitzungsfehlern (`needsReLogin`) und bei
+    /// Netzfehlern — ein echter Serverfehler wie `VALIDATION` oder
+    /// `RATE_LIMITED` wird weiterhin durchgereicht, sonst würde die App
+    /// alte Daten zeigen und den Fehler verschlucken.
+    ///
+    /// - Returns: frische Daten (`savedAt == nil`) oder Cache-Daten mit
+    ///   Zeitstempel. Schreibende Routen sind ausgeschlossen.
+    public func getCached<T: Decodable & Sendable>(
+        _ path: String,
+        query: [URLQueryItem] = [],
+        authenticated: Bool = true,
+        as type: T.Type
+    ) async throws -> CachedPayload {
+        let cache = cache
+        do {
+            let data = try await get(path, query: query, authenticated: authenticated)
+            _ = try Self.decode(type, from: data)
+            cache?.store(data, for: Self.cacheKey(path, query))
+            return CachedPayload(data: data, savedAt: nil)
+        } catch let apiError as APIError {
+            // `needsReLogin` deckt 401/TOKEN_EXPIRED/EDUPAGE_2FA ab,
+            // `upstream` den Fall, dass der Server gar nicht antwortet.
+            guard apiError.needsReLogin || apiError.code == ErrorCodes.upstream,
+                let cached = cache?.load(Self.cacheKey(path, query))
+            else { throw apiError }
+            // Decodeprobe: passt die alte Antwort nicht (Schema geändert),
+            // ist sie unbrauchbar und der echte Fehler zählt.
+            _ = try Self.decode(type, from: cached.data)
+            return cached
+        }
+    }
+
+    /// Cache-Schlüssel aus Route und Query. Query-Einträge werden sortiert,
+    /// damit Reihenfolge im Aufruf den Schlüssel nicht verfälscht.
+    ///
+    /// `refresh=1` bleibt **außen vor**: es ist ein erzwungener Neustand
+    /// ("hol neu vom Server"), keine andere Ansicht. Ohne das würde jeder
+    /// Refresh einen zweiten Cache-Eintrag anlegen und der Rückfall nach
+    /// einem Neustart wäre leer.
+    public static func cacheKey(_ path: String, _ query: [URLQueryItem]) -> String {
+        let pairs = query
+            .filter { $0.name != "refresh" }
+            .map { "\($0.name)=\($0.value ?? "")" }
+            .sorted()
+            .joined(separator: "&")
+        return pairs.isEmpty ? path : "\(path)?\(pairs)"
     }
 
     /// Datei-Download mit Query-Token (BACKEND.md §1: native Downloader

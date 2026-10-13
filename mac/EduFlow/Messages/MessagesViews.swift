@@ -7,7 +7,8 @@ public struct MessagesView: View {
     @Environment(\.colorScheme) private var scheme
     @Environment(\.uberAccent) private var accent
     @State private var vm: MessagesViewModel
-    /// Nur die Eingabe; das Suchfeld selbst ist ein `NSSearchField`.
+    /// Nur die Eingabe; das Suchfeld selbst ist von uns gezeichnet
+    /// (`UberSearchField`, kein `NSSearchField`).
     @State private var searchText = ""
     /// Absender-Auswahl aufgeklappt.
     @State private var senderMenuOpen = false
@@ -65,14 +66,14 @@ public struct MessagesView: View {
         return total + " · " + String(format: NSLocalizedString("messages_unread_count", value: "%d unread", comment: "Nachrichten: Anzahl ungelesen"), vm.unreadCount)
     }
 
-    // MARK: - Suchleiste (`.searchbar`, macOS-Suchfeld + eigene Knöpfe)
+    // MARK: - Suchleiste (`.searchbar`, eigenes Suchfeld + eigene Knöpfe)
 
     private var searchbar: some View {
         VStack(spacing: 8) {
             HStack(spacing: 8) {
-                // Echtes macOS-Suchfeld (NSSearchField) in der App-Pille:
-                // Lupe und Kreuz kommen vom System, Schrift und Rahmen von
-                // uns — die Geometrie bleibt die der Web-Suchleiste.
+                // Selbst gezeichnetes Suchfeld: Lupe, Kreuz und Fokus-Ring
+                // kommen aus `UberSearchField`, damit die Leiste in allen
+                // Ansichten genau so aussieht wie im Web.
                 UberSearchField(
                     text: $searchText,
                     prompt: NSLocalizedString("messages_search_placeholder", value: "Search messages and senders", comment: "Nachrichten: Suche Platzhalter")
@@ -235,6 +236,13 @@ public struct MessagesView: View {
         ScrollView {
             ScrollOffsetSentinel()
             LazyVStack(spacing: 8) {
+                // Offline-Hinweis über der Liste: die Nachrichten selbst
+                // bleiben sichtbar, nur ihre Herkunft wird benannt.
+                if vm.cachedAt != nil {
+                    OfflineNotice(savedAt: vm.cachedAt)
+                        .padding(.horizontal, 6)
+                        .padding(.top, 6)
+                }
                 if vm.isLoading && vm.visibleItems.isEmpty {
                     ProgressView()
                         .controlSize(.large)
@@ -663,6 +671,11 @@ public struct ThreadView: View {
                     .font(UberFont.text(13, weight: .bold))
                     .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     .buttonStyle(.plain)
+                // Offline-Hinweis, wenn der Thread aus dem lokalen Cache
+                // kommt (Likes und Antworten bleiben lesbar).
+                if vm.threadCachedAt != nil {
+                    OfflineNotice(savedAt: vm.threadCachedAt)
+                }
                 ThreadDetail(message: message, vm: vm, onSessionExpired: onSessionExpired)
             }
             .padding(20)
@@ -700,18 +713,19 @@ public struct ComposeView: View {
                         Text(String(format: NSLocalizedString("messages_recipients_chosen", value: "Recipients (%d selected)", comment: "Nachrichten: Empfängerzahl"), vm.selected.count))
                             .font(UberFont.text(12, weight: .bold))
                             .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                        TextField(NSLocalizedString("Search", value: "Search", comment: "Nachrichten: Empfängersuche Platzhalter"), text: $vm.search)
-                            .uberInput()
-                            .autocorrectionDisabled()
+                        UberSearchField(
+                            text: $vm.search,
+                            prompt: NSLocalizedString("Search", value: "Search", comment: "Nachrichten: Empfängersuche Platzhalter")
+                        )
+                        if vm.recipientsCachedAt != nil {
+                            OfflineNotice(savedAt: vm.recipientsCachedAt)
+                        }
                         if vm.isLoading {
                             ProgressView()
                                 .frame(maxWidth: .infinity)
                         } else {
                             ForEach(vm.filtered, id: \.id) { recipient in
-                                Toggle(isOn: Binding(
-                                    get: { vm.selected.contains(recipient.id) },
-                                    set: { _ in vm.toggle(recipient.id) }
-                                )) {
+                                UberCheckRow(isOn: vm.selected.contains(recipient.id)) {
                                     HStack {
                                         Text(recipient.name)
                                             .font(UberFont.text(14, weight: .medium))
@@ -720,6 +734,8 @@ public struct ComposeView: View {
                                             .font(UberFont.text(12))
                                             .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                                     }
+                                } action: {
+                                    vm.toggle(recipient.id)
                                 }
                             }
                             if vm.canLoadMoreRecipients {
