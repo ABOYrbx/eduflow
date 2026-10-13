@@ -213,7 +213,7 @@
     <string name="messages_reply_send">답장</string>
     <string name="messages_compose_subtitle">교사와 반 친구 선택</string>
     <string name="messages_recipient_search">받는 사람 검색</string>
-    <string name="messages_recipients_format">%1$d명 선택됨</string>
+    <string name="common_clear">Clear search</string>
     <string name="messages_recipients_empty">No recipients loaded.</string>
     <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">메시지 내용</string>
@@ -361,5 +361,8 @@
     </plurals>
     <plurals name="grades_notes_count">
         <item quantity="other">평균 %1$s · 성적 %2$d개</item>
+    </plurals>
+    <plurals name="messages_recipients_format">
+        <item quantity="other">%1$d recipients chosen</item>
     </plurals>
 </resources>

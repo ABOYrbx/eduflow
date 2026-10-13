@@ -213,7 +213,7 @@
     <string name="messages_reply_send">答复</string>
     <string name="messages_compose_subtitle">选择老师和学生</string>
     <string name="messages_recipient_search">搜索收件人</string>
-    <string name="messages_recipients_format">已选择%1$d 收件人</string>
+    <string name="common_clear">Clear search</string>
     <string name="messages_recipients_empty">No recipients loaded.</string>
     <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">消息文本</string>
@@ -361,5 +361,8 @@
     </plurals>
     <plurals name="grades_notes_count">
         <item quantity="other">预设 %1$s · %2$d</item>
+    </plurals>
+    <plurals name="messages_recipients_format">
+        <item quantity="other">%1$d recipients chosen</item>
     </plurals>
 </resources>
