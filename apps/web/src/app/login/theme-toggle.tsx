@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { t } from "../../lib/i18n";
+import { LOCALE_COOKIE, NATIVE_NAMES, normalizeLocaleTag, t } from "../../lib/i18n";
+
+declare global {
+  interface Window {
+    __EDUFLOW_MESSAGES__?: { locale: string; catalog: unknown; supported: string[] };
+  }
+}
 
 /**
  * Nur der Dunkel-/Hell-Schalter fuer die Login-Seite. Die Sprachwahl
@@ -10,9 +16,14 @@ import { t } from "../../lib/i18n";
  */
 export function ThemeToggle() {
   const [dark, setDark] = useState(false);
+  const [locale, setLocale] = useState("de");
+  const [supported, setSupported] = useState<string[]>(["de"]);
 
   useEffect(() => {
     setDark(document.documentElement.dataset.theme === "dark");
+    setLocale(document.documentElement.lang || "de");
+    const list = window.__EDUFLOW_MESSAGES__?.supported;
+    if (Array.isArray(list) && list.length) setSupported(list);
   }, []);
 
   function toggleTheme() {
@@ -27,6 +38,19 @@ export function ThemeToggle() {
   }
 
   return (
+    <>
+    <select
+      className="auth-top-right auth-lang-select"
+      aria-label={t("theme.language")}
+      value={locale}
+      onChange={(event) => {
+        const next = normalizeLocaleTag(event.target.value) ?? "de";
+        document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=31536000; samesite=lax`;
+        window.location.reload();
+      }}
+    >
+      {supported.map((code) => <option key={code} value={code}>{NATIVE_NAMES[code] ?? code}</option>)}
+    </select>
     <button
       className={`theme-toggle auth-top-right${dark ? " is-dark" : ""}`}
       type="button"
@@ -44,5 +68,6 @@ export function ThemeToggle() {
         </svg>
       </span>
     </button>
+    </>
   );
 }
