@@ -23,7 +23,6 @@ public enum LoginAction: Equatable, Sendable {
 public final class LoginViewModel {
     public var username = ""
     public var password = ""
-    public var subdomain = ""
     public var device = Host.current().localizedName ?? ""
     public var baseURL: String
     public var isLoading = false
@@ -45,7 +44,6 @@ public final class LoginViewModel {
         store.startDemo()
         username = "demo"
         password = "demo"
-        subdomain = "demo"
         return await login()
     }
 
@@ -70,7 +68,7 @@ public final class LoginViewModel {
             let result = try await repo.login(
                 username: username,
                 password: password,
-                subdomain: subdomain,
+                subdomain: "",
                 device: device
             )
             switch result {
