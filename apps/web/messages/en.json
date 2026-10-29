@@ -117,7 +117,9 @@
     "title": "Sign in to EduFlow",
     "twoFaSub": "EduFlow requires 2FA. Enter the code from your sign-in.",
     "twoFaTitle": "Two-factor code",
-    "usernameLabel": "Username"
+    "usernameLabel": "Username",
+    "subdomainLabel": "School subdomain",
+    "subdomainPlaceholder": "e.g. my-school"
   },
   "messages": {
     "allMessages": "All messages",
@@ -230,7 +232,14 @@
     "editorHidden": "Hidden",
     "editorDrag": "Drag to move",
     "editorWide": "Full width",
-    "editorNarrow": "Half width"
+    "editorNarrow": "Half width",
+    "editorToggle": "Arrange",
+    "editorHint": "Drag a section to move it, or use the arrows. Hide what you do not need.",
+    "editorDone": "Done",
+    "editorSaving": "Saving…",
+    "editorSaved": "Layout saved",
+    "editorReset": "Reset",
+    "editorEmpty": "All sections are hidden. Turn at least one back on."
   },
   "settings": {
     "accentApplied": "Accent color applied.",
