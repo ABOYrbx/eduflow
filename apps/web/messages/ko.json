@@ -313,7 +313,8 @@
     "validUntil": "Valid until {date}",
     "languageTitle": "Language",
     "languageHint": "Applies right away. The choice is remembered on this device.",
-    "sessionsPanelNote": "Devices signed in on this account."
+    "sessionsPanelNote": "Devices signed in on this account.",
+    "spanHint": "섹션 너비는 개요의 각 카드 버튼에서 설정합니다."
   },
   "theme": {
     "language": "Language",

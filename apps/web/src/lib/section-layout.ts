@@ -84,3 +84,44 @@ export function hitIndexByMidline(
   }
   return best;
 }
+
+// ------------------------------------------------ Übergänge des Layouts
+//
+// `SectionBar` (Übersicht) und `SectionEditor` (Einstellungen) bieten
+// dieselben drei Bedienelemente. Die Übergänge stehen hier, damit beide
+// Stellen dasselbe rechnen — vorher hatte jede ihre eigenen Callbacks
+// gebaut, mit `SPAN_FULL` hier und der Zahl 12 dort.
+
+/** Abschnitt um eine Position verschieben. */
+export function moveSection(state: SectionState, index: number, direction: 1 | -1): SectionState {
+  return { ...state, order: moveItem(state.order, index, index + direction) };
+}
+
+/** Abschnitt auf eine bestimmte Position ziehen (Ziehen auf der Übersicht). */
+export function moveSectionTo(state: SectionState, from: number, to: number): SectionState {
+  return { ...state, order: moveItem(state.order, from, to) };
+}
+
+/** Abschnitt aus- oder einblenden. */
+export function toggleHidden(state: SectionState, key: string): SectionState {
+  const hidden = state.hidden.includes(key);
+  return {
+    ...state,
+    hidden: hidden ? state.hidden.filter((entry) => entry !== key) : [...state.hidden, key],
+  };
+}
+
+/** Zwischen halber und voller Breite wechseln. */
+export function toggleSectionWidth(state: SectionState, key: string): SectionState {
+  return { ...state, spans: toggleSpan(state.spans, key) };
+}
+
+/** Zustand für einen Abschnitt, wie beide Bedienleisten ihn brauchen. */
+export function sectionFlags(state: SectionState, key: string, index: number) {
+  return {
+    off: state.hidden.includes(key),
+    wide: spanOf(state.spans, key) === SPAN_FULL,
+    first: index === 0,
+    last: index === state.order.length - 1,
+  };
+}

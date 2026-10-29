@@ -313,7 +313,8 @@
     "validUntil": "Geldig tot {date}",
     "languageTitle": "Language",
     "languageHint": "Applies right away. The choice is remembered on this device.",
-    "sessionsPanelNote": "Devices signed in on this account."
+    "sessionsPanelNote": "Devices signed in on this account.",
+    "spanHint": "Stel de breedtes van de secties in op het overzicht zelf in, met de knop op elke kaart."
   },
   "theme": {
     "language": "Taal",

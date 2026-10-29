@@ -313,7 +313,8 @@
     "validUntil": "Valid until {date}",
     "languageTitle": "Language",
     "languageHint": "Applies right away. The choice is remembered on this device.",
-    "sessionsPanelNote": "Devices signed in on this account."
+    "sessionsPanelNote": "Devices signed in on this account.",
+    "spanHint": "Stel seksiebreedtes in die oorsig in, met die knoppie op elke kaart."
   },
   "theme": {
     "language": "Language",

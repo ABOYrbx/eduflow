@@ -313,7 +313,8 @@
     "validUntil": "Ważne do {date}",
     "languageTitle": "Language",
     "languageHint": "Applies right away. The choice is remembered on this device.",
-    "sessionsPanelNote": "Devices signed in on this account."
+    "sessionsPanelNote": "Devices signed in on this account.",
+    "spanHint": "Ustaw szerokości sekcji bezpośrednio w podsumowaniu, przyciskiem na każdej karcie."
   },
   "theme": {
     "language": "Język",

@@ -2,23 +2,22 @@
 
 import { Icon } from "./icon";
 
+/**
+ * Beschriftungen der Bedienelemente. `up`/`down` erwarten den
+ * Abschnittsnamen als `{name}` — ohne das blieb im aria-label die
+ * Platzhalterzeile "Move {name} up" stehen. Die uebrigen sind reine
+ * Aktionen und werden wie bisher angehaengt.
+ */
 export type SectionHints = {
   drag: string;
-  up: string;
-  down: string;
+  up: (name: string) => string;
+  down: (name: string) => string;
   hide: string;
   show: string;
   hidden: string;
   wide: string;
   narrow: string;
 };
-
-/** Substitute `{name}` in a hint with the section name. Hints arrive from
- *  the catalog with the placeholder still raw — without this, screen readers
- *  announced "Move {name} up: Messages" verbatim. */
-function mitName(template: string, name: string): string {
-  return template.replace(/\{name\}/g, name);
-}
 
 /**
  * Bedienelemente eines Abschnitts: Ziehen, eine Position hoch/runter,
@@ -49,6 +48,8 @@ export function SectionControls({
   onToggle: () => void;
   onWidth: () => void;
 }) {
+  const up = hints.up(label);
+  const down = hints.down(label);
   return (
     <span className="sec-actions">
       {onDragStart && (
@@ -66,8 +67,8 @@ export function SectionControls({
         type="button"
         className="sec-btn"
         disabled={first}
-        aria-label={mitName(hints.up, label)}
-        title={mitName(hints.up, label)}
+        aria-label={up}
+        title={up}
         onClick={() => onMove(-1)}
       >
         <Icon name="up" />
@@ -76,8 +77,8 @@ export function SectionControls({
         type="button"
         className="sec-btn"
         disabled={last}
-        aria-label={mitName(hints.down, label)}
-        title={mitName(hints.down, label)}
+        aria-label={down}
+        title={down}
         onClick={() => onMove(1)}
       >
         <Icon name="down" />
@@ -86,8 +87,8 @@ export function SectionControls({
         type="button"
         className="sec-btn"
         aria-pressed={wide}
-        aria-label={mitName(wide ? hints.narrow : hints.wide, label)}
-        title={mitName(wide ? hints.narrow : hints.wide, label)}
+        aria-label={`${wide ? hints.narrow : hints.wide}: ${label}`}
+        title={wide ? hints.narrow : hints.wide}
         onClick={onWidth}
       >
         <Icon name={wide ? "narrow" : "wide"} />
@@ -96,8 +97,8 @@ export function SectionControls({
         type="button"
         className="sec-btn"
         aria-pressed={off}
-        aria-label={mitName(off ? hints.show : hints.hide, label)}
-        title={mitName(off ? hints.show : hints.hide, label)}
+        aria-label={`${off ? hints.show : hints.hide}: ${label}`}
+        title={off ? hints.show : hints.hide}
         onClick={onToggle}
       >
         <Icon name={off ? "eyeOff" : "eye"} />

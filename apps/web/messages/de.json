@@ -313,7 +313,8 @@
     "validUntil": "Gültig bis {date}",
     "languageTitle": "Sprache",
     "languageHint": "Gilt sofort. Die Auswahl bleibt auf diesem Gerät gespeichert.",
-    "sessionsPanelNote": "Geräte, die auf diesem Konto angemeldet sind."
+    "sessionsPanelNote": "Geräte, die auf diesem Konto angemeldet sind.",
+    "spanHint": "Die Breiten der Abschnitte stellst du direkt auf der Übersicht mit dem Knopf an jeder Karte ein."
   },
   "theme": {
     "language": "Sprache",

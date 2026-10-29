@@ -313,7 +313,8 @@
     "validUntil": "Valid until {date}",
     "languageTitle": "Language",
     "languageHint": "Applies right away. The choice is remembered on this device.",
-    "sessionsPanelNote": "Devices signed in on this account."
+    "sessionsPanelNote": "Devices signed in on this account.",
+    "spanHint": "Set the section widths on the overview itself, with the button on each card."
   },
   "theme": {
     "language": "Language",

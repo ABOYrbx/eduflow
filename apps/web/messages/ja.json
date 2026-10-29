@@ -313,7 +313,8 @@
     "validUntil": "有効期限： {date}",
     "languageTitle": "Language",
     "languageHint": "Applies right away. The choice is remembered on this device.",
-    "sessionsPanelNote": "Devices signed in on this account."
+    "sessionsPanelNote": "Devices signed in on this account.",
+    "spanHint": "各セクションの幅は概要の各カードのボタンで設定します。"
   },
   "theme": {
     "language": "言語",
