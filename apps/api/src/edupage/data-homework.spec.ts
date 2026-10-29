@@ -135,6 +135,19 @@ describe("EdupageDataService (Paket N-C, Python-Parität)", () => {
     await expect(service.homeworkList(claims, { include_tests: "vielleicht" })).rejects.toMatchObject({ response: { error: "Invalid boolean (expected true/false)." } });
   });
 
+  it("weist `assigned` die Sendezeit (cas_pridania) statt `timestamp` zu", async () => {
+    // `hwItem` setzt `timestamp` 08:00; `cas_pridania` ist die echte Sendezeit.
+    seedTimeline([{ ...hwItem("201", "homework", isoDay(1), "Vokabeln", "Deutsch"), cas_pridania: "2026-09-19 07:30:00" }]);
+    const listed = await service.homeworkList(claims, {}) as unknown as { items: { id: number; assigned_iso: string; assigned_display: string }[] };
+    expect(listed.items[0]).toMatchObject({ id: 201, assigned_iso: "2026-09-19T07:30:00" });
+  });
+
+  it("fällt ohne `cas_pridania` auf `timestamp` zurück", async () => {
+    seedTimeline([hwItem("201", "homework", isoDay(1), "Vokabeln", "Deutsch")]);
+    const listed = await service.homeworkList(claims, {}) as unknown as { items: { id: number; assigned_iso: string }[] };
+    expect(listed.items[0]?.assigned_iso).toBe("2026-09-18T08:00:00");
+  });
+
   it("markiert erledigt und legt in den Papierkorb", async () => {
     seedTimeline([hwItem("201", "homework", isoDay(-1), "Vokabeln", "Deutsch"), hwItem("202", "homework", isoDay(1), "Lesen", "Deutsch")]);
     const done = await service.homeworkDone(claims, "202", { done: true }) as unknown as { is_done: boolean; status: string };

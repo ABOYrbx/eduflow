@@ -224,6 +224,10 @@
     <string name="messages_compose_subtitle">Choose teachers and classmates</string>
     <string name="messages_recipient_search">Search recipients</string>
     <string name="messages_recipients_format">%1$d recipients chosen</string>
+    <!-- `Recipient.kind` is a stable API value ("teacher"/"student"), never
+         translated. These are its display labels. -->
+    <string name="messages_role_teacher">Teacher</string>
+    <string name="messages_role_student">Student</string>
     <string name="messages_body_placeholder">Message text</string>
     <string name="messages_compose_send">Send</string>
 

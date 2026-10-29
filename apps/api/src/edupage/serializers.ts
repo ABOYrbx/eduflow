@@ -173,9 +173,23 @@ export function extractAttachments(extra: unknown): Attachment[] {
   return found;
 }
 
+/**
+ * Sendezeit eines Timeline-Eintrags.
+ *
+ * EduPage liefert zwei Zeitstempel: `timestamp` (wann der Eintrag in der
+ * Timeline des Empfängers gelandet ist) und `cas_pridania` (wann er
+ * tatsächlich erstellt/versendet wurde). Angezeigt wird die Sendezeit, sonst
+ * wirkt eine Nachricht so, als sei sie erst beim Empfang geschrieben worden.
+ * `cas_pridania` fehlt bei einzelnen Typen → Rückfall auf `timestamp`.
+ */
+export function sentAt(event: { timestamp: Date; createdAt?: Date | null }): Date {
+  return event.createdAt ?? event.timestamp;
+}
+
 /** TimelineEvent → API-Dict (Port von `event_to_dict`). */
 export function eventToDict(event: TimelineEvent, today = new Date()): Record<string, unknown> {
-  const tsIso = formatIsoLocal(event.timestamp);
+  const sent = sentAt(event);
+  const tsIso = formatIsoLocal(sent);
   let text = event.text || "";
   const extra = event.additionalData ?? {};
   let extraJson = "";
@@ -196,7 +210,7 @@ export function eventToDict(event: TimelineEvent, today = new Date()): Record<st
   const typeValue = event.eventType ?? "unknown";
   return {
     id: event.eventId,
-    timestamp: prettyTimestamp(event.timestamp, today),
+    timestamp: prettyTimestamp(sent, today),
     timestamp_iso: tsIso,
     sort_key: tsIso,
     author: formatPerson(event.author),
@@ -314,15 +328,26 @@ export function parseLikesResponse(data: unknown, rootId: number | string | null
   };
 }
 
-export interface Recipient { id: string; name: string; kind: string; }
+/**
+ * Rolle eines Empfängers.
+ *
+ * Stabile englische Werte – wie `code`, Status- und Typ-Felder werden sie nie
+ * übersetzt; die Clients holen sich den Klartext aus ihrem Katalog. Vorher
+ * stand hier `"Lehrer"`/`"Schüler"`: dadurch beschriftete das Web im
+ * Echtmodus jeden Empfänger als Schüler, und Android/macOS zeigten deutsche
+ * Wörter unübersetzt an. Der Fake-Provider lieferte schon `teacher`/`student`.
+ */
+export type RecipientKind = "teacher" | "student";
+
+export interface Recipient { id: string; name: string; kind: RecipientKind; }
 
 /** Empfänger aus Login-`dbi` (Port von `get_recipients`). */
 export function recipientsFromDbi(dbi: unknown): Recipient[] {
   const out: Recipient[] = [];
   const seen = new Set<string>();
-  const groups: Array<[unknown, "Lehrer" | "Schüler", string]> = (() => {
+  const groups: Array<[unknown, RecipientKind, string]> = (() => {
     const record = typeof dbi === "object" && dbi !== null ? (dbi as Record<string, unknown>) : {};
-    return [[record.teachers, "Lehrer", "Teacher"], [record.students, "Schüler", "Student"]];
+    return [[record.teachers, "teacher", "Teacher"], [record.students, "student", "Student"]];
   })();
   for (const [group, kind, prefix] of groups) {
     if (typeof group !== "object" || group === null) continue;
@@ -380,6 +405,7 @@ const SHORT_WEEKDAYS = ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
 interface HomeworkEvent {
   eventId: number;
   timestamp: Date;
+  createdAt: Date | null;
   text: string;
   author: string | null;
   recipient: string | null;
@@ -393,7 +419,7 @@ interface HomeworkEvent {
 /** TimelineEvent (Hausaufgabe/Test) → Dict (Port von `homework_to_dict`). */
 export function homeworkToDict(event: HomeworkEvent, today = new Date()): Record<string, unknown> {
   const typeValue = event.eventType ?? "unknown";
-  const assigned = event.timestamp;
+  const assigned = sentAt(event);
   const pad = (value: number): string => String(value).padStart(2, "0");
   const assignedStr = `${assigned.getFullYear()}-${pad(assigned.getMonth() + 1)}-${pad(assigned.getDate())} ${pad(assigned.getHours())}:${pad(assigned.getMinutes())}`;
   const assignedIso = formatIsoLocal(assigned);

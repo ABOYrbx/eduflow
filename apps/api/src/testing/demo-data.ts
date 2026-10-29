@@ -71,6 +71,52 @@ export const demoMessages = [
     ),
     author: "Ms. Berger", recipient: "Jonas Example", type: "sprava", type_label: "Message", additional_data: { textReply: "4101" }, is_starred: false, is_done: false, done_at: "", reaction_count: 0, created_at: "2026-09-25T17:05:00", is_removed: false,
   },
+  {
+    id: 4106, timestamp: "2026-09-25 08:05:00", timestamp_iso: "2026-09-25T08:05:00", sort_key: "2026-09-25T08:05:00",
+    text: paragraphs(
+      "Dear Class 8A,",
+      "the unit test I announced for this week moves to next Tuesday. I want to give you the extra lesson on conditionals first, and testing the same grammar two days later helps nobody.",
+      "Next Tuesday, second period, same room. Please review pages 44 to 61 in the meantime.",
+      "Kind regards,\nMr. Meyer",
+    ),
+    author: "Mr. Meyer", recipient: "Class 8A", type: "news", type_label: "News", additional_data: {}, is_starred: false, is_done: false, done_at: "", reaction_count: 1, created_at: "2026-09-25T08:05:00", is_removed: false,
+  },
+  {
+    id: 4107, timestamp: "2026-09-24 15:15:00", timestamp_iso: "2026-09-24T15:15:00", sort_key: "2026-09-24T15:15:00",
+    text: paragraphs(
+      "Hello all,",
+      "the poster project has a second round: we will exhibit the best sketches in the entrance hall, so everyone gets an audience.",
+      "Bring your finished draft to the next art lesson. If you have not started yet, talk to me beforehand rather than on Monday morning.",
+      "Kind regards,\nMs. Lang",
+    ),
+    author: "Ms. Lang", recipient: "Class 8A", type: "news", type_label: "News", additional_data: {}, is_starred: false, is_done: false, done_at: "", reaction_count: 2, created_at: "2026-09-24T15:15:00", is_removed: false,
+  },
+  // Chat der Klasse: zeigt die neuen Personen als Autoren.
+  {
+    id: 4105, timestamp: "2026-09-26 09:02:00", timestamp_iso: "2026-09-26T09:02:00", sort_key: "2026-09-26T09:02:00",
+    text: paragraphs(
+      "Morning everyone,",
+      "I uploaded the photos from the museum trip to the class drive. The folder is 8A/Berlin if anyone still needs a picture of the boat tour.",
+      "If you send me yours tonight, I will add them all to one album.",
+    ),
+    author: "Jonas Example", recipient: "Class 8A", type: "chat", type_label: "Chat", additional_data: {}, is_starred: false, is_done: false, done_at: "", reaction_count: 4, created_at: "2026-09-26T09:02:00", is_removed: false,
+  },
+  {
+    id: 4115, timestamp: "2026-09-26 09:20:00", timestamp_iso: "2026-09-26T09:20:00", sort_key: "2026-09-26T09:20:00",
+    text: paragraphs(
+      "Thanks, I was looking for exactly those two from the Spree.",
+      "Mine are in, I took mostly the Pergamon hall.",
+    ),
+    author: "Miriam Example", recipient: "Class 8A", type: "chat", type_label: "Chat", additional_data: { textReply: "4105" }, is_starred: false, is_done: false, done_at: "", reaction_count: 0, created_at: "2026-09-26T09:20:00", is_removed: false,
+  },
+  {
+    id: 4116, timestamp: "2026-09-26 09:41:00", timestamp_iso: "2026-09-26T09:41:00", sort_key: "2026-09-26T09:41:00",
+    text: paragraphs(
+      "Album link: I made it public.",
+      "Please do not download the whole thing at once, the drive is already at 80 percent.",
+    ),
+    author: "Sofia Example", recipient: "Class 8A", type: "chat", type_label: "Chat", additional_data: { textReply: "4105" }, is_starred: false, is_done: false, done_at: "", reaction_count: 0, created_at: "2026-09-26T09:41:00", is_removed: false,
+  },
   // Antworten auf 4102 (ausflug nach berlin).
   {
     id: 4112, timestamp: "2026-09-24 11:20:00", timestamp_iso: "2026-09-24T11:20:00", sort_key: "2026-09-24T11:20:00",
@@ -115,10 +161,31 @@ export const demoLessons = [
   { period: "2–3", time: "08:35–10:20", title: "Study hall", is_lernzeit: true, teachers: "", rooms: "Study room", is_cancelled: false, is_event: false, is_online: false },
   { period: "4", time: "10:25–11:10", title: "English", is_lernzeit: false, teachers: "Mr. Meyer", rooms: "R108", is_cancelled: true, is_event: false, is_online: false },
   { period: "5", time: "11:15–12:00", title: "Physics", is_lernzeit: false, teachers: "Ms. Berger", rooms: "R305", is_cancelled: false, is_event: false, is_online: true },
+  { period: "6", time: "12:05–12:50", title: "History", is_lernzeit: false, teachers: "Mr. Kowalski", rooms: "R112", is_cancelled: false, is_event: false, is_online: false },
+  { period: "7–8", time: "12:55–14:30", title: "Art", is_lernzeit: false, teachers: "Ms. Lang", rooms: "M101", is_cancelled: false, is_event: false, is_online: false },
 ];
 
+/**
+ * Empfängerliste der Demo: dieselben IDs, die der echte Provider aus den
+ * dbi-Schlüsseln bildet (`Teacher<key>` / `Student<key>`). Innerhalb der
+ * Gruppen alphabetisch nach `name.toLowerCase()`, wie `recipientsFromDbi` –
+ * dort wird allerdings über alle Gruppen hinweg sortiert, hier stehen die
+ * Lehrkräfte im Verfassen-Dialog vorne.
+ *
+ * Alle Lehrkräfte, die in `demoHomework`, `demoGrades` oder `demoLessons`
+ * auftauchen, stehen auch hier, damit man ihnen im Verfassen-Dialog schreiben
+ * kann. `detail` trägt das Fach bzw. die Klasse.
+ */
 export const demoRecipients = [
-  { id: "Teacher7", name: "Ms. Berger", kind: "teacher", detail: "Math, Physics" },
+  { id: "Teacher9", name: "Mr. Kowalski", kind: "teacher", detail: "History" },
+  { id: "Teacher10", name: "Mr. Meyer", kind: "teacher", detail: "English" },
   { id: "Teacher8", name: "Mr. Özdemir", kind: "teacher", detail: "German" },
-  { id: "Student9", name: "Lea Example", kind: "student", detail: "8A" },
+  { id: "Teacher7", name: "Ms. Berger", kind: "teacher", detail: "Math, Physics" },
+  { id: "Teacher11", name: "Ms. Lang", kind: "teacher", detail: "Art" },
+  { id: "Student9", name: "David Example", kind: "student", detail: "8A" },
+  { id: "Student10", name: "Elias Example", kind: "student", detail: "8A" },
+  { id: "Student11", name: "Jonas Example", kind: "student", detail: "8A" },
+  { id: "Student12", name: "Lea Example", kind: "student", detail: "8A" },
+  { id: "Student13", name: "Miriam Example", kind: "student", detail: "8A" },
+  { id: "Student14", name: "Sofia Example", kind: "student", detail: "8A" },
 ];

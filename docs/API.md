@@ -38,7 +38,7 @@ Demo logins (fake provider only): `demo`/`demo` for instant access, `demo-2fa`/`
 | `GET` | `/messages` | `?since=YYYY-MM-DD`, `?type=sprava\|news\|anketa\|chat\|genotif`, `?q=`, `?refresh=1`, `limit/offset` | List envelope |
 | `GET` | `/messages/:id/thread` | `?refresh=1` | `{likes, replies, reply_ids, summary, cached}` |
 | `POST` | `/messages/read` | — | `{marked: n}` |
-| `GET` | `/recipients` | `limit/offset` | List envelope |
+| `GET` | `/recipients` | `limit/offset` | List envelope; `kind` = `teacher`\|`student` |
 | `POST` | `/messages/send` | `{recipients: string[]\|"a,b", body}` (`body` ≤ 5000) | New message |
 | `POST` | `/messages/:id/reply` | `{body}` (≤ 5000) | Fresh thread |
 | `POST` | `/messages/download-token` | `{event_id, idx}` | `{download_token, expires_in: 300}` |

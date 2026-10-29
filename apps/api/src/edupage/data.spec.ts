@@ -115,6 +115,23 @@ describe("EdupageDataService (Paket N-B, Python-Parität)", () => {
     await expect(service.messages(claims, { limit: "0" })).rejects.toMatchObject({ response: { error: "Limit must be between 1 and 200." } });
   });
 
+  it("zeigt die Sendezeit (cas_pridania) statt des Timeline-Zeitpunkts", async () => {
+    const listed = await service.messages(claims, { q: "Elternabend" }) as unknown as { items: { id: number; timestamp_iso: string; sort_key: string }[] };
+    // Fixture 101: `timestamp` 10:00 = in der Timeline gelandet,
+    // `cas_pridania` 09:00 = tatsächlich versendet. Angezeigt wird 09:00.
+    expect(listed.items[0]).toMatchObject({ id: 101, timestamp_iso: "2026-09-20T09:00:00", sort_key: "2026-09-20T09:00:00" });
+  });
+
+  it("beantwortet wiederholte Nachrichtenabrufe aus dem Cache, ohne EduPage neu zu logarithmieren", async () => {
+    await service.messages(claims, {});
+    const logins = calls.filter((call) => call.includes("akcia=login")).length;
+    expect(logins).toBeGreaterThan(0);
+    const again = await service.messages(claims, {}) as unknown as { total: number };
+    expect(again.total).toBe(2);
+    // Polling darf keinen zweiten Login pro Abruf auslösen.
+    expect(calls.filter((call) => call.includes("akcia=login"))).toHaveLength(logins);
+  });
+
   it("liefert Threads frisch und aus dem Cache", async () => {
     const fresh = await service.thread(claims, 101, false) as unknown as { cached: boolean; summary: unknown };
     expect(fresh.cached).toBe(false);

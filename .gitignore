@@ -26,22 +26,22 @@ venv/
 /packages/contracts/tsconfig.tsbuildinfo
 .DS_Store
 .idea/
-# Lokale Build-/IDE-Dateien (nie committen)
+
 android/local.properties
 xcuserdata/
 *.xcuserstate
-# Build-/Output-Ordner (nie committen, enthalten lokale Pfade)
+
 build/
 .gradle/
 android/.gradle/
 android/.kotlin/
 android/app/build/
 DerivedData/
-# Lokale Worktree-Ablage (verknüpfte Arbeitskopien, nie committen)
+
 .worktrees/
-# Generierte Docs-Website (mkdocs build)
+
 site/
-# Signing-/Schlüsseldateien (nie committen, auch später nicht)
+
 *.jks
 *.keystore
 *.p12
@@ -51,16 +51,15 @@ site/
 *.provisionprofile
 google-services.json
 GoogleService-Info.plist
-# Lokale Env-Varianten (Beispiele als *.example sind ok)
 .env.local
 .env.*.local
 
-# AI Agents und lokale Tool-Zustände (Projekt-IDs, Sitzungsdaten)
+# AI Agents
 .opencode
 .codex
 .claude
 .openchamber
 .freebuff
 
-# anderes
+# other
 .cache

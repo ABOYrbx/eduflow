@@ -61,6 +61,7 @@ import de.eduflow.android.data.dto.MessageDto
 import de.eduflow.android.data.dto.MsgFilter
 import de.eduflow.android.data.dto.RecipientDto
 import de.eduflow.android.data.dto.bodyLine
+import de.eduflow.android.data.dto.kindLabelRes
 import de.eduflow.android.ui.common.AppHeader
 import de.eduflow.android.ui.common.AvatarDot
 import de.eduflow.android.ui.common.EduCard
@@ -678,7 +679,7 @@ private fun RecipientDropdown(
                                 Column(Modifier.weight(1f)) {
                                     Text(rec.name, fontWeight = FontWeight.Medium)
                                     Text(
-                                        rec.kind,
+                                        stringResource(rec.kindLabelRes()),
                                         style = MaterialTheme.typography.labelSmall,
                                         color = scheme.onSurfaceVariant,
                                     )

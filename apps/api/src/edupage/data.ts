@@ -17,7 +17,11 @@ import { page, parsePage } from "../common/pagination";
 import { openPassword } from "./vault";
 import { t } from "../i18n";
 
-const TIMELINE_TTL_S = 900;
+// Timeline-Cache: bestimmt, wie schnell neue Nachrichten auftauchen. Kurz
+// genug, damit die Clients (60-s-Polling) neue Nachrichten in <=2 Min sehen,
+// lang genug, um EduPage nicht bei jedem Abruf neu zu belasten (TTL = Kosten
+// eines Logins pro Account).
+const TIMELINE_TTL_S = 120;
 const LIKES_TTL_S = 3600;
 const GRADES_TTL_S = 3600;
 const DL_TTL_S = 300;
@@ -167,15 +171,27 @@ export class EdupageDataService {
     });
   }
 
+  /**
+   * Timeline aus dem Cache, **ohne** EduPage-Login. Liefert `null`, wenn nichts
+   * Brauchbares da ist – dann holt der Aufrufer die Events live nach.
+   *
+   * Wichtig fürs Polling: `loginFor()` entschlüsselt das Passwort und macht
+   * jedes Mal einen Login-RPC. Ohne diesen Vorab-Check würde jeder 60-s-Poll
+   * einen Login auslösen und EduPage damit unnötig belasten.
+   */
+  private async cachedTimeline(accountId: string, since: string, force: boolean): Promise<TimelineEvent[] | null> {
+    if (force) return null;
+    const cached = await this.readCache(accountId, "timeline");
+    if (!cached || !cached.fresh) return null;
+    const payload = cached.payload as { earliest?: string; events?: StoredEvent[] };
+    if (typeof payload.earliest !== "string" || payload.earliest > since || !Array.isArray(payload.events)) return null;
+    return payload.events.map(reviveEvent);
+  }
+
   /** Timeline mit Cache (stale/fehlend/`force` → voll neu; beobachtbar wie Python). */
   async timelineEvents(client: EdupageClient, subdomain: string, accountId: string, since: string, force: boolean): Promise<{ events: TimelineEvent[]; info: string }> {
-    const cached = await this.readCache(accountId, "timeline");
-    if (cached && cached.fresh && !force) {
-      const payload = cached.payload as { earliest?: string; events?: StoredEvent[] };
-      if (typeof payload.earliest === "string" && payload.earliest <= since && Array.isArray(payload.events)) {
-        return { events: payload.events.map(reviveEvent), info: "aus Cache" };
-      }
-    }
+    const cached = await this.cachedTimeline(accountId, since, force);
+    if (cached) return { events: cached, info: "aus Cache" };
     const attempts = [since];
     for (const days of [730, 365]) {
       const fallback = isoDaysAgo(days);
@@ -224,13 +240,17 @@ export class EdupageDataService {
     }
     const words = norm(typeof query.q === "string" ? query.q.trim().slice(0, 200) : "").split(/\s+/).filter(Boolean);
     const force = query.refresh === "1";
-    const { client, subdomain } = await this.loginFor(claims.sub, t("auth.badCredentialsAlt"));
-    let events: TimelineEvent[];
-    try {
-      ({ events } = await this.timelineEvents(client, subdomain, claims.sub, sinceRaw, force));
-    } catch (error) {
-      const detail = error instanceof Error ? error.message : String(error);
-      throw new HttpException({ error: t("upstream.messagesFailed", { detail }), code: "UPSTREAM" }, 502);
+    // Erst Cache, dann Login: ein Cache-Treffer erspart den EduPage-Login und
+    // macht Polling billig (siehe `cachedTimeline`).
+    let events = await this.cachedTimeline(claims.sub, sinceRaw, force);
+    if (!events) {
+      const { client, subdomain } = await this.loginFor(claims.sub, t("auth.badCredentialsAlt"));
+      try {
+        ({ events } = await this.timelineEvents(client, subdomain, claims.sub, sinceRaw, force));
+      } catch (error) {
+        const detail = error instanceof Error ? error.message : String(error);
+        throw new HttpException({ error: t("upstream.messagesFailed", { detail }), code: "UPSTREAM" }, 502);
+      }
     }
     const items: Record<string, unknown>[] = [];
     for (const event of events) {
