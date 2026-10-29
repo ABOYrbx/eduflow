@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-eduflow}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-eduflow}
+      POSTGRES_DB: ${POSTGRES_DB:-eduflow_dev}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-eduflow} -d ${POSTGRES_DB:-eduflow_dev}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-eduflow}:${POSTGRES_PASSWORD:-eduflow}@db:5432/${POSTGRES_DB:-eduflow_dev}?schema=public
+      PORT: ${API_PORT:-3000}
+      API_HOST: "0.0.0.0"
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-change-me-to-a-random-secret-of-at-least-32-bytes-for-production}
+      CREDENTIAL_ENCRYPTION_KEY: ${CREDENTIAL_ENCRYPTION_KEY:-0000000000000000000000000000000000000000000000000000000000000000}
+      DEMO: ${DEMO:-false}
+      EDUFLOW_PROVIDER: ${EDUFLOW_PROVIDER:-edupage}
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${API_PORT:-3000}:3000"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

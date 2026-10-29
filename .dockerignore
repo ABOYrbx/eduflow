@@ -1,0 +1,15 @@
+node_modules
+apps/api/node_modules
+apps/web/node_modules
+packages/contracts/node_modules
+apps/api/dist
+apps/web/.next
+apps/web/.next-demo
+packages/contracts/dist
+.git
+.cache
+*.log
+apps/api/.env
+apps/api/.env.local
+apps/web/.env*
+.DS_Store
