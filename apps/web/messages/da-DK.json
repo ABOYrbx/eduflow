@@ -117,7 +117,9 @@
     "title": "Log ind på EduFlow",
     "twoFaSub": "EduFlow kræver 2FA. Indtast koden fra dit login.",
     "twoFaTitle": "To-faktor-kode",
-    "usernameLabel": "Brugernavn"
+    "usernameLabel": "Brugernavn",
+    "subdomainLabel": "School subdomain",
+    "subdomainPlaceholder": "e.g. my-school"
   },
   "messages": {
     "allMessages": "Alle beskeder",
@@ -230,7 +232,14 @@
     "editorHidden": "Hidden",
     "editorDrag": "Drag to move",
     "editorWide": "Full width",
-    "editorNarrow": "Half width"
+    "editorNarrow": "Half width",
+    "editorToggle": "Arrange",
+    "editorHint": "Drag a section to move it, or use the arrows. Hide what you do not need.",
+    "editorDone": "Done",
+    "editorSaving": "Saving…",
+    "editorSaved": "Layout saved",
+    "editorReset": "Reset",
+    "editorEmpty": "All sections are hidden. Turn at least one back on."
   },
   "settings": {
     "accentApplied": "Accent farve anvendt.",

@@ -119,7 +119,7 @@ describe("Web-Kataloge", () => {
   });
 
   for (const [sprache, catalog] of catalogs) {
-    if (sprache === "en" || sprache === "de") continue;
+    if (sprache === "en" || sprache === "de" || sprache.startsWith("de-")) continue;
 
     it(`${sprache} zeigt keine deutschen Texte`, () => {
       expect(meldeDeutscheReste(en, de, catalog, sprache, deutschWoerter)).toEqual([]);

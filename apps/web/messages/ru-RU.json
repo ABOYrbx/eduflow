@@ -117,7 +117,9 @@
     "title": "Войти в EduFlow",
     "twoFaSub": "EduFlow требует 2FA. Введите код из вашего входа.",
     "twoFaTitle": "Двухфакторный код",
-    "usernameLabel": "Имя пользователя"
+    "usernameLabel": "Имя пользователя",
+    "subdomainLabel": "School subdomain",
+    "subdomainPlaceholder": "e.g. my-school"
   },
   "messages": {
     "allMessages": "Все сообщения",
@@ -230,7 +232,14 @@
     "editorHidden": "Hidden",
     "editorDrag": "Drag to move",
     "editorWide": "Full width",
-    "editorNarrow": "Half width"
+    "editorNarrow": "Half width",
+    "editorToggle": "Arrange",
+    "editorHint": "Drag a section to move it, or use the arrows. Hide what you do not need.",
+    "editorDone": "Done",
+    "editorSaving": "Saving…",
+    "editorSaved": "Layout saved",
+    "editorReset": "Reset",
+    "editorEmpty": "All sections are hidden. Turn at least one back on."
   },
   "settings": {
     "accentApplied": "Применяется цвет Акцента.",

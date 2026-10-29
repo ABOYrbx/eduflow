@@ -117,7 +117,9 @@
     "title": "Συνδεθείτε στο EduFlow",
     "twoFaSub": "Το EduFlow απαιτεί 2FA. Εισάγετε τον κωδικό από τη σύνδεσή σας.",
     "twoFaTitle": "Κωδικός δύο παραγόντων",
-    "usernameLabel": "Όνομα Χρήστη"
+    "usernameLabel": "Όνομα Χρήστη",
+    "subdomainLabel": "School subdomain",
+    "subdomainPlaceholder": "e.g. my-school"
   },
   "messages": {
     "allMessages": "Όλα τα μηνύματα",
@@ -230,7 +232,14 @@
     "editorHidden": "Hidden",
     "editorDrag": "Drag to move",
     "editorWide": "Full width",
-    "editorNarrow": "Half width"
+    "editorNarrow": "Half width",
+    "editorToggle": "Arrange",
+    "editorHint": "Drag a section to move it, or use the arrows. Hide what you do not need.",
+    "editorDone": "Done",
+    "editorSaving": "Saving…",
+    "editorSaved": "Layout saved",
+    "editorReset": "Reset",
+    "editorEmpty": "All sections are hidden. Turn at least one back on."
   },
   "settings": {
     "accentApplied": "Το χρώμα έμφασης εφαρμόστηκε.",
