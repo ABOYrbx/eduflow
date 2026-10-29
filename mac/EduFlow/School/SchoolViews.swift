@@ -185,7 +185,7 @@ public struct SchoolRepository: Sendable {
         self.client = client
     }
 
-    public func agenda(day: Date, refresh: Bool = false) async throws -> [SchoolAgendaItem] {
+    public func agenda(day: Date, refresh: Bool = false) async throws -> CachedAgenda {
         var query = [
             URLQueryItem(name: "since", value: SchoolDates.isoDay(SchoolDates.shifted(day, days: -30))),
             URLQueryItem(name: "until", value: SchoolDates.isoDay(SchoolDates.shifted(day, days: 60))),
@@ -193,15 +193,60 @@ public struct SchoolRepository: Sendable {
         if refresh {
             query.append(URLQueryItem(name: "refresh", value: "1"))
         }
-        let data = try await client.get(APIClient.Paths.schoolAgenda, query: query)
-        return try APIClient.decode(SchoolAgendaResponse.self, from: data).items
+        let payload = try await client.getCached(
+            APIClient.Paths.schoolAgenda, query: query, as: SchoolAgendaResponse.self
+        )
+        let response = try APIClient.decode(SchoolAgendaResponse.self, from: payload.data)
+        return CachedAgenda(items: response.items, savedAt: payload.savedAt)
     }
 
-    public func substitutions(day: Date) async throws -> [SchoolSubstitutionDay] {
-        let data = try await client.get(APIClient.Paths.substitutionsWeek, query: [
-            URLQueryItem(name: "day", value: SchoolDates.isoDay(day)),
-        ])
-        return try APIClient.decode(SchoolSubstitutionResponse.self, from: data).days
+    /// Termine plus Zeitpunkt (nil = frisch vom Server).
+    ///
+    /// `RandomAccessCollection` statt einzelner Durchreicher-Eigenschaften:
+    /// damit bekommen Aufrufer `count`, `isEmpty`, `first` und `first(where:)`
+    /// aus der Standardbibliothek und alle bisherigen Stellen bleiben
+    /// unverändert — ein eigenes `first` würde `Array.first(where:)`
+    /// verdecken.
+    public struct CachedAgenda: RandomAccessCollection, Sendable {
+        public let items: [SchoolAgendaItem]
+        public let savedAt: Date?
+
+        public init(items: [SchoolAgendaItem], savedAt: Date?) {
+            self.items = items
+            self.savedAt = savedAt
+        }
+
+        public var startIndex: Int { items.startIndex }
+        public var endIndex: Int { items.endIndex }
+        public func index(after i: Int) -> Int { items.index(after: i) }
+        public subscript(position: Int) -> SchoolAgendaItem { items[position] }
+        public var isFromCache: Bool { savedAt != nil }
+    }
+
+    public func substitutions(day: Date) async throws -> CachedSubstitutions {
+        let query = [URLQueryItem(name: "day", value: SchoolDates.isoDay(day))]
+        let payload = try await client.getCached(
+            APIClient.Paths.substitutionsWeek, query: query, as: SchoolSubstitutionResponse.self
+        )
+        let response = try APIClient.decode(SchoolSubstitutionResponse.self, from: payload.data)
+        return CachedSubstitutions(days: response.days, savedAt: payload.savedAt)
+    }
+
+    /// Vertretungswoche plus Zeitpunkt (nil = frisch vom Server).
+    public struct CachedSubstitutions: RandomAccessCollection, Sendable {
+        public let days: [SchoolSubstitutionDay]
+        public let savedAt: Date?
+
+        public init(days: [SchoolSubstitutionDay], savedAt: Date?) {
+            self.days = days
+            self.savedAt = savedAt
+        }
+
+        public var startIndex: Int { days.startIndex }
+        public var endIndex: Int { days.endIndex }
+        public func index(after i: Int) -> Int { days.index(after: i) }
+        public subscript(position: Int) -> SchoolSubstitutionDay { days[position] }
+        public var isFromCache: Bool { savedAt != nil }
     }
 }
 
@@ -210,6 +255,8 @@ public struct SchoolRepository: Sendable {
 private final class SchoolViewModel {
     var agenda: [SchoolAgendaItem] = []
     var substitutions: [SchoolSubstitutionDay] = []
+    /// Ältester Cache-Zeitpunkt der geladenen Bereiche (nil = frisch).
+    var cachedAt: Date?
     var error: APIError?
     var isLoading = false
     var selectedDay = SchoolDates.monday(of: Date())
@@ -227,11 +274,15 @@ private final class SchoolViewModel {
         async let substitutionResult = Self.capture { try await repo.substitutions(day: selectedDay) }
         let (agenda, substitutions) = await (agendaResult, substitutionResult)
         switch agenda {
-        case .success(let value): self.agenda = value
+        case .success(let value):
+            self.agenda = value.items
+            noteCached(value.savedAt)
         case .failure(let apiError): self.error = apiError
         }
         switch substitutions {
-        case .success(let value): self.substitutions = value
+        case .success(let value):
+            self.substitutions = value.days
+            noteCached(value.savedAt)
         case .failure(let apiError): self.error = self.error ?? apiError
         }
         if let error, SessionRecovery.forceLogout(error: error, isLoggedIn: store.isLoggedIn) {
@@ -243,6 +294,13 @@ private final class SchoolViewModel {
     func moveWeek(_ offset: Int, onSessionExpired: () -> Void) async {
         selectedDay = SchoolDates.shifted(selectedDay, days: offset * 7)
         await load(onSessionExpired: onSessionExpired)
+    }
+
+    /// Merkt sich den ältesten Cache-Zeitpunkt (die schlechteste sichtbare
+    /// Zahl bestimmt, was angezeigt wird).
+    private func noteCached(_ savedAt: Date?) {
+        guard let savedAt else { return }
+        cachedAt = cachedAt.map { min($0, savedAt) } ?? savedAt
     }
 
     private static func capture<T: Sendable>(
@@ -289,16 +347,20 @@ struct SchoolView: View {
                             .font(UberFont.text(14)).foregroundStyle(EduFlowPalette.inkMuted(scheme))
                     }
                     Spacer()
-                    Button { Task { await vm.load(refresh: true, onSessionExpired: onSessionExpired) } } label: {
-                        Image(systemName: "arrow.clockwise").font(.system(size: 15, weight: .semibold))
+                    IconButton(
+                        icon: "arrow.clockwise",
+                        label: NSLocalizedString("common_refresh", value: "Refresh", comment: "Aktion: neu laden"),
+                        disabled: vm.isLoading
+                    ) {
+                        Task { await vm.load(refresh: true, onSessionExpired: onSessionExpired) }
                     }
-                    .buttonStyle(.bordered)
-                    .disabled(vm.isLoading)
                 }
-                Picker(NSLocalizedString("school_picker_section", value: "Section", comment: "Schule: Bereichsfilter"), selection: $tab) {
-                    ForEach(SchoolTab.allCases) { Text($0.displayName).tag($0) }
+                UberSegmented(options: SchoolTab.allCases, selection: $tab) { $0.displayName }
+                // Offline-Hinweis: Termine bleiben lesbar, nur ihre
+                // Herkunft wird benannt.
+                if vm.cachedAt != nil {
+                    OfflineNotice(savedAt: vm.cachedAt)
                 }
-                .pickerStyle(.segmented)
                 if let error = vm.error {
                     Text(error.message)
                         .font(UberFont.text(13, weight: .medium))
@@ -310,13 +372,16 @@ struct SchoolView: View {
                 }
                 if tab == .substitutions {
                     HStack {
-                        Button(NSLocalizedString("← Previous week", value: "← Previous week", comment: "UI-Literal")) { Task { await vm.moveWeek(-1, onSessionExpired: onSessionExpired) } }
+                        PillButton(NSLocalizedString("school_prev_week", value: "← Previous week", comment: "Schule: Woche zurück"), style: .smallLight) {
+                            Task { await vm.moveWeek(-1, onSessionExpired: onSessionExpired) }
+                        }
                         Spacer()
                         Text(weekLabel(vm.selectedDay)).font(UberFont.text(12, weight: .semibold))
                         Spacer()
-                        Button(NSLocalizedString("Next →", value: "Next →", comment: "UI-Literal")) { Task { await vm.moveWeek(1, onSessionExpired: onSessionExpired) } }
+                        PillButton(NSLocalizedString("school_next_week", value: "Next →", comment: "Schule: Woche weiter"), style: .smallLight) {
+                            Task { await vm.moveWeek(1, onSessionExpired: onSessionExpired) }
+                        }
                     }
-                    .buttonStyle(.bordered)
                 }
                 if vm.isLoading && vm.agenda.isEmpty && vm.substitutions.isEmpty {
                     ProgressView().frame(maxWidth: .infinity).padding(40)

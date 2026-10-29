@@ -171,9 +171,7 @@ public struct SettingsView: View {
                     RadioCard(title: NSLocalizedString("settings_filter_done_title", value: "Only completed", comment: "Einstellungen: Filter erledigte"), desc: NSLocalizedString("settings_filter_done_desc", value: "Completed tasks", comment: "Einstellungen: Filter erledigte Beschreibung"), value: "erledigt", selection: $vm.values.hwStatus)
                     RadioCard(title: NSLocalizedString("homework_filter_trash", value: "Recycle bin", comment: "Einstellungen: Filter Papierkorb"), desc: NSLocalizedString("settings_filter_trash_desc", value: "Hidden", comment: "Einstellungen: Filter Papierkorb Beschreibung"), value: "papierkorb", selection: $vm.values.hwStatus)
                 }
-                Toggle(NSLocalizedString("settings_toggle_hw_tests", value: "Include tests and exams", comment: "Einstellungen: Tests einbeziehen"), isOn: $vm.values.hwTests)
-                    .font(UberFont.text(14, weight: .medium))
-                    .tint(accent.resolved(scheme))
+                UberToggle(NSLocalizedString("settings_toggle_hw_tests", value: "Include tests and exams", comment: "Einstellungen: Tests einbeziehen"), isOn: $vm.values.hwTests)
             }
         }
     }
@@ -184,16 +182,14 @@ public struct SettingsView: View {
                 Text("Overview")
                     .font(UberFont.text(19, weight: .heavy))
                     .tracking(-0.4)
-                Stepper(String(format: NSLocalizedString("settings_max_unread", value: "Max. unread messages: %d", comment: "Einstellungen: ungelesene Nachrichten"), vm.values.ovUnread), value: $vm.values.ovUnread, in: 1...50)
-                    .font(UberFont.text(14, weight: .medium))
-                Stepper(String(format: NSLocalizedString("settings_max_homework", value: "Max. open homework: %d", comment: "Einstellungen: offene Hausaufgaben"), vm.values.ovHomework), value: $vm.values.ovHomework, in: 1...50)
-                    .font(UberFont.text(14, weight: .medium))
-                Toggle(NSLocalizedString("settings_toggle_wetter_map", value: "Show weather map", comment: "Einstellungen: Wetterkarte"), isOn: $vm.values.ovWetter)
-                    .font(UberFont.text(14, weight: .medium))
-                    .tint(accent.resolved(scheme))
-                TextField(NSLocalizedString("settings_wetter_city_placeholder", value: "Weather: city (optional)", comment: "Einstellungen: Wetterstadt Platzhalter"), text: $vm.values.wetterCity)
-                    .uberInput()
-                    .autocorrectionDisabled()
+                UberStepper(NSLocalizedString("settings_max_unread_label", value: "Max. unread messages", comment: "Einstellungen: ungelesene Nachrichten"), value: $vm.values.ovUnread, in: 1...50)
+                UberStepper(NSLocalizedString("settings_max_homework_label", value: "Max. open homework", comment: "Einstellungen: offene Hausaufgaben"), value: $vm.values.ovHomework, in: 1...50)
+                UberToggle(NSLocalizedString("settings_toggle_wetter_map", value: "Show weather map", comment: "Einstellungen: Wetterkarte"), isOn: $vm.values.ovWetter)
+                UberTextField(
+                    text: $vm.values.wetterCity,
+                    placeholder: NSLocalizedString("settings_wetter_city_placeholder", value: "Weather: city (optional)", comment: "Einstellungen: Wetterstadt Platzhalter"),
+                    icon: "mappin.and.ellipse"
+                )
                 Text(NSLocalizedString("settings_ov_order_title", value: "Section order", comment: "Einstellungen: Reihenfolge Titel"))
                     .font(UberFont.text(13, weight: .bold))
                     .tracking(0.8)
@@ -272,9 +268,11 @@ public struct SettingsView: View {
                         .font(UberFont.text(13))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
                 } else {
-                    TextField(NSLocalizedString("settings_baseurl_placeholder", value: "Base URL", comment: "Einstellungen: Basis-URL Platzhalter"), text: $vm.baseURL)
-                        .uberInput()
-                        .autocorrectionDisabled()
+                    UberTextField(
+                        text: $vm.baseURL,
+                        placeholder: NSLocalizedString("settings_baseurl_placeholder", value: "Base URL", comment: "Einstellungen: Basis-URL Platzhalter"),
+                        icon: "server.rack"
+                    )
                     Button(NSLocalizedString("Apply", value: "Apply", comment: "UI-Literal")) { vm.applyBaseURL() }
                         .buttonStyle(UberButtonStyle(.smallLight))
                         .hoverLift()
@@ -317,9 +315,7 @@ public struct SettingsView: View {
                 Text("Developer options")
                     .font(UberFont.text(19, weight: .heavy))
                     .tracking(-0.4)
-                Toggle(NSLocalizedString("settings_toggle_dev_options", value: "Enable developer options", comment: "Einstellungen: Entwickleroptionen"), isOn: $developerOptionsEnabled)
-                    .font(UberFont.text(14, weight: .medium))
-                    .tint(accent.resolved(scheme))
+                UberToggle(NSLocalizedString("settings_toggle_dev_options", value: "Enable developer options", comment: "Einstellungen: Entwickleroptionen"), isOn: $developerOptionsEnabled)
 
                 if developerOptionsEnabled {
                     Text("Signs you out and restarts the introduction.")

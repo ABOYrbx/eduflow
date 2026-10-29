@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { hitIndexByMidline, moveItem, SPAN_FULL, spanOf, type SectionState } from "../lib/section-layout";
+import { hitIndexByMidline, moveSection, moveSectionTo, sectionFlags, toggleHidden, toggleSectionWidth, type SectionState } from "../lib/section-layout";
 import { SectionControls, type SectionHints } from "./section-controls";
 
 /**
@@ -35,8 +35,7 @@ export function SectionBar({
   const [dragging, setDragging] = useState(false);
   const over = { current: index };
 
-  const wide = spanOf(state.spans, sectionKey) === SPAN_FULL;
-  const off = state.hidden.includes(sectionKey);
+  const { wide, off } = sectionFlags(state, sectionKey, index);
 
   useEffect(() => {
     function stop() {
@@ -61,7 +60,7 @@ export function SectionBar({
       const next = hitIndexByMidline(measure(), pointer.clientY, over.current < 0 ? index : over.current);
       if (next === over.current) return;
       over.current = next;
-      onChange({ ...state, order: moveItem(state.order, index, next) });
+      onChange(moveSectionTo(state, index, next));
     }
 
     function onUp() {
@@ -89,12 +88,9 @@ export function SectionBar({
         last={index === total - 1}
         hints={hints}
         onDragStart={start}
-        onMove={(direction) => onChange({ ...state, order: moveItem(state.order, index, index + direction) })}
-        onToggle={() => onChange({
-          ...state,
-          hidden: off ? state.hidden.filter((key: string) => key !== sectionKey) : [...state.hidden, sectionKey],
-        })}
-        onWidth={() => onChange({ ...state, spans: { ...state.spans, [sectionKey]: wide ? 6 : SPAN_FULL } })}
+        onMove={(direction) => onChange(moveSection(state, index, direction))}
+        onToggle={() => onChange(toggleHidden(state, sectionKey))}
+        onWidth={() => onChange(toggleSectionWidth(state, sectionKey))}
       />
     </div>
   );

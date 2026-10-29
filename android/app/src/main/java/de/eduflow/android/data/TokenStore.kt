@@ -33,6 +33,21 @@ private const val API_PATH = "/api/v1"
 private val AUTHORITY = Regex("""^(\[[^\]]+\]|[^:/?#]+)(:\d+)?$""")
 
 /**
+ * Standard-Port je Scheme.
+ *
+ * Nur `http` bekommt den lokalen Server-Port 3000 (so startet `run.sh`).
+ * Bei `https` waere :3000 falsch und der Verbindungsversuch liefe ins
+ * Leere: hinter einem TLS-Reverse-Proxy (z. B. Netbird, Tailscale,
+ * Caddy, nginx) laeuft die App auf 443, und 3000 ist dort zu oder
+ * antwortet gar nicht. Ohne Port im Scheme-Standard zu belassen, ist
+ * darum das Richtige — `https://mein-server/` meint genau 443.
+ */
+private fun defaultPortFor(scheme: String): String = when (scheme.lowercase()) {
+    "https" -> ":443"
+    else -> ":${TokenStore.DEFAULT_PORT}"
+}
+
+/**
  * Basis-URL normalisieren (Paket 0). Eingabe ist bewusst kurz: die
  * Nutzerin tippt nur die IP des Servers, optional mit Port
  * (`192.168.1.5` oder `192.168.1.5:3100`). Scheme, Port und Pfad
@@ -42,11 +57,19 @@ private val AUTHORITY = Regex("""^(\[[^\]]+\]|[^:/?#]+)(:\d+)?$""")
  *     192.168.1.5:3100   -> http://192.168.1.5:3100/api/v1/
  *     mein-mac.local     -> http://mein-mac.local:3000/api/v1/
  *
+ *     https://server/    -> https://server:443/api/v1/
+ *
  * Vollstaendige URLs bleiben gueltig (Alteingaben aus aelteren
  * App-Versionen und Werte aus dem Chatverlauf): ein bereits
  * gesetzter Scheme bleibt, ein gesetzter Port bleibt, und ein
  * vorhandenes `/api/v1` wird abgeschnitten, bevor der Pfad erneut
  * angehaengt wird — sonst entstuende `/api/v1/api/v1`.
+ *
+ * Der fehlende Port richtet sich nach dem Scheme (siehe
+ * [defaultPortFor]): `https://server/` wird zu `https://server:443/…`,
+ * nicht zu `https://server:3000/…`. Ueber einen TLS-Reverse-Proxy
+ * (Netbird o. Ae.) ist die App auf 443 erreichbar; der Port 3000 ist
+ * dort zu. Nur bei `http` greift weiter der lokale Port 3000.
  *
  * Leer -> interner Notfallwert. Er wird nirgends angezeigt oder
  * vorbelegt, existiert nur, damit Retrofit nie eine leere URL
@@ -59,7 +82,11 @@ internal fun normalizeBaseUrl(raw: String): String {
     // Scheme ergaenzen, falls keins da ist.
     val withScheme = if ("://" in input) input else "http://$input"
 
-    val scheme = withScheme.substringBefore("://")
+    // Scheme kleinschreiben: RFC 3986 definiert es als case-insensitiv, aber
+    // gespeichert und verglichen wird es als String. Sonst entstuende
+    // je nach Eingabe `HTTPS://` oder `https://` und die Demo-Erkennung
+    // (Vergleich ueber den Port) faelle bei Schreibweisen auseinander.
+    val scheme = withScheme.substringBefore("://").lowercase()
     val rest = withScheme.substringAfter("://")
     // Pfad abtrennen, damit die Authority unten isoliert ist.
     val authority = rest.substringBefore('/')
@@ -70,7 +97,9 @@ internal fun normalizeBaseUrl(raw: String): String {
     // zu einem falschen Server fuehren.
     val match = AUTHORITY.matchEntire(authority) ?: return withScheme
     val host = match.groupValues[1]
-    val port = match.groupValues[2].ifEmpty { ":${TokenStore.DEFAULT_PORT}" }
+    // Ein gesetzter Port gewinnt immer; sonst der Standard des Schemes
+    // (https -> 443, http -> 3000).
+    val port = match.groupValues[2].ifEmpty { defaultPortFor(scheme) }
 
     // Doppelten API-Pfad vermeiden. removeSuffix trifft nur das letzte
     // Vorkommen, darum in einer Schleife — sonst bliebe bei

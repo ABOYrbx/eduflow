@@ -2,10 +2,16 @@
 
 import { Icon } from "./icon";
 
+/**
+ * Beschriftungen der Bedienelemente. `up`/`down` erwarten den
+ * Abschnittsnamen als `{name}` — ohne das blieb im aria-label die
+ * Platzhalterzeile "Move {name} up" stehen. Die uebrigen sind reine
+ * Aktionen und werden wie bisher angehaengt.
+ */
 export type SectionHints = {
   drag: string;
-  up: string;
-  down: string;
+  up: (name: string) => string;
+  down: (name: string) => string;
   hide: string;
   show: string;
   hidden: string;
@@ -42,6 +48,8 @@ export function SectionControls({
   onToggle: () => void;
   onWidth: () => void;
 }) {
+  const up = hints.up(label);
+  const down = hints.down(label);
   return (
     <span className="sec-actions">
       {onDragStart && (
@@ -59,8 +67,8 @@ export function SectionControls({
         type="button"
         className="sec-btn"
         disabled={first}
-        aria-label={`${hints.up}: ${label}`}
-        title={hints.up}
+        aria-label={up}
+        title={up}
         onClick={() => onMove(-1)}
       >
         <Icon name="up" />
@@ -69,8 +77,8 @@ export function SectionControls({
         type="button"
         className="sec-btn"
         disabled={last}
-        aria-label={`${hints.down}: ${label}`}
-        title={hints.down}
+        aria-label={down}
+        title={down}
         onClick={() => onMove(1)}
       >
         <Icon name="down" />

@@ -67,6 +67,7 @@ import de.eduflow.android.ui.common.PrimaryButton
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SectionLabel
 import de.eduflow.android.ui.navigation.NavTabs
+import de.eduflow.android.ui.overview.OverviewOrder
 import de.eduflow.android.ui.common.StatusPill
 import de.eduflow.android.ui.theme.Accents
 
@@ -95,6 +96,9 @@ private object NotifyPrefs {
  * „Schule · verbunden"), Sektion DARSTELLUNG (Erscheinungsbild
  * Hell/Dunkel/System als Radio-Zeilen + System-Pill, Akzentfarbe mit
  * Farb-Dots), Sektion BENACHRICHTIGUNGEN (Schalter „Neue Nachrichten"),
+ * Sektion ÜBERSICHT & AUFGABEN (Startseite, Aufgabenfilter, Uhrformat,
+ * Tests, Limits — dazu „Übersicht anpassen" per Drag-Sortierung der
+ * Abschnitte, früher im Übersichts-Screen selbst),
  * Sektion WETTER (Karte an/aus + Stadt, Speichern via PUT settings),
  * Sektion KONTO & SICHERHEIT (Verbundene Geräte + Anzahl, Datenschutz,
  * Abmelden rot). Server-URL und Cache leeren leben im Mehr-Tab.
@@ -123,6 +127,8 @@ fun SettingsScreen(
     var saveStateObserved by remember { mutableStateOf(false) }
     var showNavEditor by remember { mutableStateOf(false) }
     var draftTabs by remember { mutableStateOf(NavTabs.default) }
+    var showOverviewEditor by remember { mutableStateOf(false) }
+    var draftOverviewOrder by remember { mutableStateOf(OverviewOrder.default) }
 
     // Frisch laden beim Öffnen (VM wird im NavGraph eager erzeugt,
     // ggf. noch ohne Token geladen).
@@ -260,7 +266,7 @@ fun SettingsScreen(
                 }) {
                     Icon(Icons.Filled.Tune, contentDescription = null, modifier = Modifier.size(16.dp))
                     Spacer(Modifier.width(8.dp))
-                    Text(stringResource(R.string.settings_navbar_customize))
+                    Text(stringResource(R.string.overview_customize_action))
                 }
             }
         }
@@ -290,6 +296,38 @@ fun SettingsScreen(
                 },
                 dismissButton = {
                     TextButton(onClick = { showNavEditor = false }) {
+                        Text(stringResource(R.string.common_cancel))
+                    }
+                },
+            )
+        }
+
+        if (showOverviewEditor) {
+            AlertDialog(
+                onDismissRequest = { showOverviewEditor = false },
+                title = { Text(stringResource(R.string.overview_customize)) },
+                text = {
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            stringResource(R.string.overview_customize_desc),
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                        OverviewOrderEditor(
+                            order = draftOverviewOrder,
+                            onOrderChange = { draftOverviewOrder = it },
+                            modifier = Modifier.fillMaxWidth().heightIn(max = 340.dp),
+                        )
+                    }
+                },
+                confirmButton = {
+                    TextButton(onClick = {
+                        vm.update(v.copy(ovOrder = OverviewOrder.serialize(draftOverviewOrder)))
+                        vm.save()
+                        showOverviewEditor = false
+                    }) { Text(stringResource(R.string.common_save)) }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showOverviewEditor = false }) {
                         Text(stringResource(R.string.common_cancel))
                     }
                 },
@@ -395,6 +433,25 @@ fun SettingsScreen(
                     },
                     placeholder = stringResource(R.string.settings_homework_placeholder),
                 )
+                Spacer(Modifier.height(12.dp))
+                Text(
+                    stringResource(R.string.overview_customize),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                Text(
+                    stringResource(R.string.overview_customize_desc),
+                    fontSize = 13.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                TextButton(onClick = {
+                    draftOverviewOrder = OverviewOrder.parse(v.ovOrder)
+                    showOverviewEditor = true
+                }) {
+                    Icon(Icons.Filled.Tune, contentDescription = null, modifier = Modifier.size(16.dp))
+                    Spacer(Modifier.width(8.dp))
+                    Text(stringResource(R.string.settings_navbar_customize))
+                }
             }
         }
 

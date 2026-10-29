@@ -45,7 +45,6 @@ data class OverviewUiState(
     val isLoading: Boolean = false,
     val error: ApiException? = null,
     val cacheInfo: String = "",
-    val savingOverviewOrder: Boolean = false,
 )
 
 private fun Throwable.toApiException(): ApiException =
@@ -146,22 +145,6 @@ class OverviewViewModel(
             }
 
             _state.update { it.copy(isLoading = false, error = firstError) }
-        }
-    }
-
-    /** Persist the user's overview layout across their devices. */
-    fun saveOverviewOrder(order: List<String>) {
-        viewModelScope.launch {
-            _state.update { it.copy(savingOverviewOrder = true, error = null) }
-            try {
-                val current = _state.value.settings
-                val saved = settingsRepo.save(
-                    current.copy(ovOrder = OverviewOrder.serialize(order)),
-                )
-                _state.update { it.copy(settings = saved, savingOverviewOrder = false) }
-            } catch (e: Exception) {
-                _state.update { it.copy(savingOverviewOrder = false, error = e.toApiException()) }
-            }
         }
     }
 

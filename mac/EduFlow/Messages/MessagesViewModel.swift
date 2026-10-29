@@ -89,6 +89,9 @@ public final class MessagesViewModel {
     /// weil der Server keinen Absender-Parameter kennt.
     public var sender = ""
     public var isLoading = false
+    /// Zeitpunkt der zuletzt geladenen Liste, falls sie aus dem lokalen
+    /// Cache kam (Backend neu gestartet oder nicht erreichbar).
+    public var cachedAt: Date?
     public var isLoadingMore = false
     public var error: APIError?
     public var markedMessage: String?
@@ -194,8 +197,10 @@ public final class MessagesViewModel {
         markedMessage = nil
         defer { isLoading = false }
         do {
-            let page = try await repo().list(
+            let loaded = try await repo().list(
                 type: type, query: query, offset: 0, refresh: refresh)
+            let page = loaded.page
+            cachedAt = loaded.savedAt
             items = page.items
             total = page.total
             // Absender- und Textfilter, die der Server nicht kann: erst
@@ -284,6 +289,8 @@ public final class MessagesViewModel {
 public final class ThreadViewModel {
     public var thread = ThreadResponse()
     public var isLoading = false
+    /// Thread kam aus dem lokalen Cache (Backend neu gestartet oder weg).
+    public var threadCachedAt: Date?
     public var isReplying = false
     public var replyText = ""
     public var error: APIError?
@@ -301,7 +308,9 @@ public final class ThreadViewModel {
         error = nil
         defer { isLoading = false }
         do {
-            thread = try await repo().thread(id: id, refresh: refresh)
+            let loaded = try await repo().thread(id: id, refresh: refresh)
+            thread = loaded.response
+            threadCachedAt = loaded.savedAt
         } catch let apiError as APIError {
             if SessionRecovery.forceLogout(error: apiError, isLoggedIn: store.isLoggedIn) {
                 store.clear()
@@ -379,6 +388,8 @@ public final class ComposeViewModel {
     public var isLoadingMoreRecipients = false
     public var isSending = false
     public var error: APIError?
+    /// Empfängerliste kam aus dem lokalen Cache (nur lesbar, kein Senden).
+    public var recipientsCachedAt: Date?
 
     private static let recipientPageSize = 200
 
@@ -410,6 +421,7 @@ public final class ComposeViewModel {
             let page = try await repo().recipients(limit: Self.recipientPageSize)
             recipients = page.items
             recipientTotal = page.total
+            recipientsCachedAt = page.savedAt
         } catch let apiError as APIError {
             if SessionRecovery.forceLogout(error: apiError, isLoggedIn: store.isLoggedIn) {
                 store.clear()

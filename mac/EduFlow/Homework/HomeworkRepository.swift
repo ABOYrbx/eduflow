@@ -22,7 +22,7 @@ public struct HomeworkRepository: Sendable {
         limit: Int = defaultLimit,
         offset: Int = 0,
         refresh: Bool = false
-    ) async throws -> HomeworkListResponse {
+    ) async throws -> CachedHomeworkList {
         var items = [
             URLQueryItem(name: "since", value: since),
             URLQueryItem(name: "status", value: status),
@@ -38,8 +38,31 @@ public struct HomeworkRepository: Sendable {
         if refresh {
             items.append(URLQueryItem(name: "refresh", value: "1"))
         }
-        let data = try await client.get(APIClient.Paths.homework, query: items)
-        return try APIClient.decode(HomeworkListResponse.self, from: data)
+        // `refresh=1` geht mit raus (der Server soll neu laden), der
+        // Cache-Schlüssel lässt es aber weg — siehe `APIClient.cacheKey`.
+        let payload = try await client.getCached(
+            APIClient.Paths.homework,
+            query: items,
+            as: HomeworkListResponse.self
+        )
+        let response = try APIClient.decode(HomeworkListResponse.self, from: payload.data)
+        return CachedHomeworkList(response: response, savedAt: payload.savedAt)
+    }
+
+    /// Hausaufgabenliste plus Zeitpunkt (nil = frisch vom Server).
+    ///
+    /// Der Rückgabetyp ist ein Wrapper, damit bestehende Aufrufer unverändert
+    /// `.items`, `.counts` usw. behalten und nur die neuen Fälle
+    /// dazukommen.
+    public struct CachedHomeworkList: Sendable {
+        public let response: HomeworkListResponse
+        public let savedAt: Date?
+
+        public var items: [HomeworkDTO] { response.items }
+        public var total: Int { response.total }
+        public var counts: HomeworkCounts? { response.counts }
+        public var cacheInfo: String? { response.cacheInfo }
+        public var isFromCache: Bool { savedAt != nil }
     }
 
     /// Erledigt-Schalter (`{done}`, Default true; sofort sichtbar).

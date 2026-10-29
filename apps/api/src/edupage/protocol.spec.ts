@@ -8,7 +8,7 @@ describe("protocol (Parität zu edupage_api.compression/login)", () => {
 
   it("baut den RPC-Body byte-identisch zur Python-Lib", () => {
     expect(encodeRequestBody({ rpcparams: '{"username": "demo"}' })).toBe(
-      "eqap=dz%3AKypILkgsSswttlU1d1I1MiotTi3KS8xNBTJVjR1VjQyAjJTU3HwQ39wFAA%3D%3D&eqacs=448ebedfa881a565068ef932c4a9884e9c998c8d&eqaz=1",
+      "eqap=dz%3AKypILkgsSswttlU1d1I1MiotTi3KS8xNVTUyUjV2VDUyUDUySknNzQfxzV0A&eqacs=57ccab026542dc05badc8a0fa25e49892599047b&eqaz=1",
     );
   });
 

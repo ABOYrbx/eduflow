@@ -161,7 +161,9 @@ public struct HomeworkView: View {
                         .padding(.vertical, 8)
                     }
                 }
-                if let info = vm.cacheInfo, !info.isEmpty {
+                if vm.cachedAt != nil {
+                    OfflineNotice(savedAt: vm.cachedAt)
+                } else if let info = vm.cacheInfo, !info.isEmpty {
                     Text(info)
                         .font(UberFont.text(12))
                         .foregroundStyle(EduFlowPalette.inkDim(scheme))
@@ -186,13 +188,14 @@ public struct HomeworkView: View {
                     Text("Status")
                         .font(UberFont.text(12, weight: .bold))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                    Picker(NSLocalizedString("Status", value: "Status", comment: "Hausaufgaben: Statusfilter"), selection: $vm.status) {
-                        ForEach(HomeworkStatusFilter.all, id: \.self) { status in
-                            Text(HomeworkStatusFilter.displayName(status)).tag(status)
-                        }
-                    }
-                    .pickerStyle(.menu)
-                    .frame(maxWidth: 200)
+                    // Kein `maxWidth`: die Pille soll ihre natürliche Breite
+                    // behalten, sonst schiebt der Rahmen den ersten Knopf
+                    // (den aktiven) aus der sichtbaren Fläche.
+                    UberSegmented(
+                        options: HomeworkStatusFilter.all,
+                        selection: $vm.status,
+                        label: HomeworkStatusFilter.displayName
+                    )
                     .onChange(of: vm.status) {
                         Task { await vm.load(onSessionExpired: onSessionExpired) }
                     }
@@ -201,12 +204,13 @@ public struct HomeworkView: View {
                     Text("Search")
                         .font(UberFont.text(12, weight: .bold))
                         .foregroundStyle(EduFlowPalette.inkMuted(scheme))
-                    TextField(NSLocalizedString("grades_search_placeholder", value: "Search", comment: "Hausaufgaben: Suche Platzhalter"), text: $vm.query)
-                        .uberInput()
-                        .autocorrectionDisabled()
-                        .onSubmit {
+                    UberSearchField(
+                        text: $vm.query,
+                        prompt: NSLocalizedString("grades_search_placeholder", value: "Search", comment: "Hausaufgaben: Suche Platzhalter"),
+                        onSubmit: {
                             Task { await vm.load(onSessionExpired: onSessionExpired) }
                         }
+                    )
                 }
                 CheckRow(isOn: $vm.includeTests, titleKey: "homework_toggle_tests")
                     .onChange(of: vm.includeTests) {
