@@ -7,6 +7,11 @@ import SwiftUI
 /// (`AppLocalizations.coverage()`). Neue Crowdin-Sprachen erscheinen damit
 /// automatisch, ohne dass hier Code nachgezogen werden muss.
 public struct LanguageEntry: Identifiable, Equatable, Sendable {
+    /// Ab hier gilt eine Sprache als benutzbar. Kognite (Ungarisch sagt
+    /// „Kalender") zählen mit, ohne dass ein echter Übersetzungsstand
+    /// dahintersteht — 1 % ist also kein brauchbarer Stand, 5 % auch nicht.
+    public static let minimumPercent = 5
+
     public let code: String
     public let name: String
     public let percent: Int
@@ -18,8 +23,14 @@ public struct LanguageEntry: Identifiable, Equatable, Sendable {
     /// Katalog-Sprachen mit Eigenname und Stand, nach Eigenname sortiert.
     /// Die System-Sprache steht nicht in der Liste (sie hat keinen Code in
     /// der Auswahl) und wird separat angeboten.
+    ///
+    /// Sprachen ohne brauchbare eigene Übersetzung fallen heraus: sie würden
+    /// englische Quelltexte zeigen und damit genau das, was die Auswahl
+    /// verspricht — eine Anwendung in dieser Sprache — nicht liefern. Sie
+    /// tauchen erst auf, wenn Crowdin sie gefüllt hat.
     public static func fromBundle(in bundle: Bundle = .main) -> [LanguageEntry] {
         AppLocalizations.coverage(in: bundle)
+            .filter { $0.percent >= minimumPercent }
             .map {
                 LanguageEntry(
                     code: $0.code,
