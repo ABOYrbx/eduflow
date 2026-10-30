@@ -13,6 +13,7 @@ FROM node:22-bookworm AS build
 WORKDIR /app
 COPY --from=deps /app ./
 COPY . .
+RUN rm -f packages/contracts/tsconfig.tsbuildinfo apps/api/tsconfig.tsbuildinfo
 RUN npm run build --workspace @eduflow/contracts
 RUN npx prisma generate --schema apps/api/prisma/schema.prisma
 RUN npm run build --workspace @eduflow/api
