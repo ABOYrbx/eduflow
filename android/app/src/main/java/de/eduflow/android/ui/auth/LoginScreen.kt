@@ -12,6 +12,7 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -116,8 +117,10 @@ fun LoginScreen(
                 painter = painterResource(R.drawable.logo),
                 contentDescription = stringResource(R.string.app_name),
                 contentScale = ContentScale.Fit,
-                modifier = Modifier.size(96.dp).clip(androidx.compose.foundation.shape.RoundedCornerShape(22.dp))
-                    .shadow(12.dp, androidx.compose.foundation.shape.RoundedCornerShape(22.dp)),
+                modifier = Modifier.size(96.dp)
+                    .shadow(12.dp, androidx.compose.foundation.shape.RoundedCornerShape(22.dp))
+                    .clip(androidx.compose.foundation.shape.RoundedCornerShape(22.dp))
+                    .background(MaterialTheme.colorScheme.surface),
             )
             Text(stringResource(R.string.app_name), fontSize = 28.sp, fontWeight = FontWeight.Black, letterSpacing = (-0.8).sp, color = scheme.onBackground, modifier = Modifier.padding(top = 20.dp))
 

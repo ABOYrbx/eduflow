@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -174,7 +175,7 @@ fun MessagesScreen(
             }
 
             PullRefreshBox(
-                refreshing = state.isLoading,
+                refreshing = state.isLoading && state.items.isNotEmpty(),
                 onRefresh = viewModel::refresh,
                 modifier = Modifier.weight(1f).fillMaxWidth(),
             ) {
@@ -247,7 +248,7 @@ fun MessagesScreen(
             contentColor = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.align(Alignment.BottomEnd)
                 .navigationBarsPadding()
-                .padding(end = 16.dp, bottom = 88.dp)
+                .padding(end = 16.dp, bottom = 160.dp)
                 .size(56.dp),
         ) {
             Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.messages_new_desc))
@@ -262,6 +263,7 @@ fun MessageCard(
     onOpenThread: () -> Unit,
     onAttachment: (Int) -> Unit,
     unread: Boolean = false,
+    fullText: Boolean = false,
 ) {
     val scheme = MaterialTheme.colorScheme
     EduCard(
@@ -287,7 +289,7 @@ fun MessageCard(
                     )
                 }
                 Text(
-                    item.bodyLine(),
+                    if (fullText) item.text.trim().ifBlank { item.bodyLine() } else item.bodyLine(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = scheme.onSurfaceVariant,
                 )
@@ -347,7 +349,7 @@ fun ThreadScreen(
     val state by viewModel.state.collectAsState()
     val thread = state.thread
 
-    Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
+    Column(modifier = modifier.fillMaxSize().navigationBarsPadding().imePadding().padding(16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onBack) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
@@ -400,6 +402,7 @@ fun ThreadScreen(
                         item = it,
                         onOpenThread = {},
                         onAttachment = { idx -> onAttachment(it.id, idx) },
+                        fullText = true,
                     )
                 }
             }
@@ -545,7 +548,7 @@ fun ComposeScreen(
 
     // Verfassen läuft ohne Bottom-Bar (NavGraph blendet sie auf dieser
     // Route aus); Systemleiste unten per navigationBarsPadding freihalten.
-    Column(modifier = modifier.fillMaxSize().navigationBarsPadding().padding(16.dp)) {
+    Column(modifier = modifier.fillMaxSize().navigationBarsPadding().imePadding().padding(16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onBack) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))

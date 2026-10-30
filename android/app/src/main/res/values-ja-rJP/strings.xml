@@ -67,7 +67,7 @@
     <string name="onboarding_feat3_title">タイムテーブル &amp; 天気</string>
     <string name="onboarding_feat3_desc">日と週プラス天気の概要。</string>
     <string name="onboarding_server_sub">EduFlow がサーバーとして実行される場所を入力します。</string>
-    <string name="onboarding_server_hint">IP alone uses port %1$d. Add :port for another one — the demo server is %2$d.</string>
+    <string name="onboarding_server_hint">IP alone uses port %1$d. Add :port for another one</string>
     <string name="onboarding_connected">接続しました</string>
     <string name="onboarding_unreachable">サーバーに接続できません。アドレスを確認して再度お試し下さい。</string>
     <string name="onboarding_test_connected">✓ 接続</string>
@@ -213,6 +213,8 @@
     <string name="messages_reply_send">返信</string>
     <string name="messages_compose_subtitle">先生とクラスメートを選択</string>
     <string name="messages_recipient_search">検索の受信者</string>
+    <string name="messages_role_teacher">担任教師</string>
+    <string name="messages_role_student">生徒</string>
     <string name="common_clear">Clear search</string>
     <string name="messages_recipients_empty">No recipients loaded.</string>
     <string name="messages_recipients_no_match">No recipient matches that search.</string>

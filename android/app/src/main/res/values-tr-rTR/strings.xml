@@ -67,7 +67,7 @@
     <string name="onboarding_feat3_title">Ders programı ve hava durumu</string>
     <string name="onboarding_feat3_desc">Günlük ve haftalık ders programı ile genel bakışta hava durumu.</string>
     <string name="onboarding_server_sub">EduFlow sunucusunun çalıştığı adresi gir.</string>
-    <string name="onboarding_server_hint">IP alone uses port %1$d. Add :port for another one — the demo server is %2$d.</string>
+    <string name="onboarding_server_hint">IP alone uses port %1$d. Add :port for another one</string>
     <string name="onboarding_connected">Bağlandı</string>
     <string name="onboarding_unreachable">Sunucuya ulaşılamıyor. Adresi kontrol edip tekrar dene.</string>
     <string name="onboarding_test_connected">✓  Bağlandı</string>
@@ -213,6 +213,8 @@
     <string name="messages_reply_send">Yanıtla</string>
     <string name="messages_compose_subtitle">Öğretmenleri ve sınıf arkadaşlarını seç</string>
     <string name="messages_recipient_search">Alıcı ara</string>
+    <string name="messages_role_teacher">Öğretmen</string>
+    <string name="messages_role_student">Öğrenci</string>
     <string name="common_clear">Clear search</string>
     <string name="messages_recipients_empty">No recipients loaded.</string>
     <string name="messages_recipients_no_match">No recipient matches that search.</string>

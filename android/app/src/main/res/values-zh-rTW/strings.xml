@@ -67,7 +67,7 @@
     <string name="onboarding_feat3_title">Stundenplan &amp; Wetter</string>
     <string name="onboarding_feat3_desc">Tag und Woche und Wetter auf der Übersicht.</string>
     <string name="onboarding_server_sub">Trage ein, wo EduFlow als Server läuft.</string>
-    <string name="onboarding_server_hint">IP alone uses port %1$d. Add :port for another one — the demo server is %2$d.</string>
+    <string name="onboarding_server_hint">IP alone uses port %1$d. Add :port for another one</string>
     <string name="onboarding_connected">Verbunden</string>
     <string name="onboarding_unreachable">Server nicht erreichbar. Prüfe die Adresse und versuche es erneut.</string>
     <string name="onboarding_test_connected">✓  Verbunden</string>
@@ -213,6 +213,8 @@
     <string name="messages_reply_send">Antworten</string>
     <string name="messages_compose_subtitle">Lehrer und Mitschüler wählen</string>
     <string name="messages_recipient_search">Empfänger suchen</string>
+    <string name="messages_role_teacher">教師</string>
+    <string name="messages_role_student">學生</string>
     <string name="common_clear">Clear search</string>
     <string name="messages_recipients_empty">No recipients loaded.</string>
     <string name="messages_recipients_no_match">No recipient matches that search.</string>

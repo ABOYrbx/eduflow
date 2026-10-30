@@ -71,7 +71,8 @@
     <string name="onboarding_feat3_title">Stundenplan &amp; Wetter</string>
     <string name="onboarding_feat3_desc">Tag und Woche und Wetter auf der Übersicht.</string>
     <string name="onboarding_server_sub">Trage die IP-Adresse deines EduFlow-Servers ein.</string>
-    <string name="onboarding_server_hint">Nur die IP-Adresse verwendet Port %1$d. Für einen anderen Port :Port ergänzen — der Demo-Server nutzt %2$d.</string>
+    <string name="onboarding_server_hint">Nur die IP-Adresse verwendet Port %1$d. Für einen anderen Port :Port ergänzen</string>
+    <string name="onboarding_server_placeholder">z. B. http://192.168.1.5:3000</string>
     <string name="onboarding_connected">Verbunden</string>
     <string name="onboarding_unreachable">Server nicht erreichbar. Prüfe die Adresse und versuche es erneut.</string>
     <string name="onboarding_test_connected">✓  Verbunden</string>
@@ -112,9 +113,6 @@
     <string name="settings_notify_news">Neue Nachrichten</string>
     <string name="settings_overview_tasks">Übersicht &amp; Aufgaben</string>
     <string name="settings_landing_label">Startseite nach Anmeldung</string>
-    <string name="settings_time_format_label">Uhrzeitformat</string>
-    <string name="settings_time_24h">24 h</string>
-    <string name="settings_time_12h">12 h</string>
     <string name="settings_hwfilter_label">Aufgaben: Standardfilter</string>
     <string name="settings_hwtests_label">Tests und Prüfungen einbeziehen</string>
     <string name="settings_time_format_label">Uhrzeitformat</string>
@@ -234,6 +232,8 @@
     <string name="messages_reply_send">Antworten</string>
     <string name="messages_compose_subtitle">Lehrer und Mitschüler wählen</string>
     <string name="messages_recipient_search">Empfänger suchen</string>
+    <string name="messages_role_teacher">Lehrer</string>
+    <string name="messages_role_student">Schüler</string>
     <string name="common_clear">Suche löschen</string>
     <string name="messages_recipients_empty">Keine Empfänger geladen.</string>
     <string name="messages_recipients_no_match">Kein Empfänger passt zur Suche.</string>

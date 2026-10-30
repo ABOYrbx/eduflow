@@ -133,7 +133,7 @@ fun DayScreen(
         }
 
         PullRefreshBox(
-            refreshing = state.isLoading,
+            refreshing = state.isLoading && day != null,
             onRefresh = viewModel::refresh,
             modifier = Modifier.weight(1f).fillMaxWidth(),
         ) {
