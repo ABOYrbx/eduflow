@@ -113,11 +113,11 @@
     <string name="settings_notify_news">Neue Nachrichten</string>
     <string name="settings_overview_tasks">Übersicht &amp; Aufgaben</string>
     <string name="settings_landing_label">Startseite nach Anmeldung</string>
-    <string name="settings_hwfilter_label">Aufgaben: Standardfilter</string>
-    <string name="settings_hwtests_label">Tests und Prüfungen einbeziehen</string>
     <string name="settings_time_format_label">Uhrzeitformat</string>
     <string name="settings_time_24h">24 Stunden</string>
     <string name="settings_time_12h">12 Stunden</string>
+    <string name="settings_hwfilter_label">Aufgaben: Standardfilter</string>
+    <string name="settings_hwtests_label">Tests und Prüfungen einbeziehen</string>
     <string name="settings_unread_placeholder">Max. ungelesene Nachrichten (1–50)</string>
     <string name="settings_homework_placeholder">Max. offene Hausaufgaben (1–50)</string>
     <string name="settings_navbar_section">Navigationsleiste</string>
@@ -185,6 +185,8 @@
     <string name="homework_filter_open">Offen</string>
     <string name="homework_filter_overdue">Überfällig</string>
     <string name="homework_filter_done">Erledigt</string>
+    <string name="homework_status_today">Heute fällig</string>
+    <string name="homework_status_no_date">Ohne Datum</string>
     <string name="homework_include_tests">Tests/Prüfungen einbeziehen</string>
     <string name="homework_section_trash_format">Papierkorb · %1$d Einträge</string>
     <string name="homework_section_open_format">%1$d offen · %2$d überfällig</string>

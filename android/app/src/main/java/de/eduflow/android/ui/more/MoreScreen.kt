@@ -51,6 +51,7 @@ import de.eduflow.android.R
 import de.eduflow.android.data.TokenStore
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.ScreenHead
+import de.eduflow.android.ui.common.rememberCollapsedHeader
 import de.eduflow.android.ui.settings.SettingsViewModel
 
 /**
@@ -82,13 +83,19 @@ fun MoreScreen(
     val context = LocalContext.current
     // Beobachten, damit die Zeile nach dem Wechsel den neuen Namen zeigt.
     val appLocale by AppLocale.selectionFlow(context).collectAsState(initial = null)
+    val scrollState = rememberScrollState()
+    val collapsed = rememberCollapsedHeader(scrollState)
 
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier.fillMaxSize()
-            .verticalScroll(rememberScrollState()).padding(16.dp),
+            .verticalScroll(scrollState).padding(16.dp),
     ) {
-        ScreenHead(title = stringResource(R.string.more_title), subtitle = stringResource(R.string.more_subtitle))
+        ScreenHead(
+            title = stringResource(R.string.more_title),
+            subtitle = stringResource(R.string.more_subtitle),
+            collapsed = collapsed,
+        )
         MoreRow(
             icon = Icons.Filled.EventNote,
             title = stringResource(R.string.more_school_title),

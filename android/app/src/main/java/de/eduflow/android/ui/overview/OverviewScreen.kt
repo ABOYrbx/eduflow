@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -69,6 +71,7 @@ import de.eduflow.android.ui.common.AppHeader
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SectionLabel
+import de.eduflow.android.ui.common.rememberCollapsedHeader
 import de.eduflow.android.ui.theme.LocalEduFlowDark
 import de.eduflow.android.ui.timetable.AuthAwareError
 import de.eduflow.android.ui.timetable.localizedApiMessage
@@ -108,6 +111,8 @@ fun OverviewScreen(
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsState()
+    val listState = rememberLazyListState()
+    val collapsed = rememberCollapsedHeader(listState)
     // Wochentag immer deutsch (System-Sprache wird ignoriert, wie macOS
     // mit de_DE); Muster kommt aus strings.xml und ist damit via Crowdin
     // pro Sprache anpassbar.
@@ -126,7 +131,11 @@ fun OverviewScreen(
             onLogout = onLogout,
         )
         Spacer(Modifier.height(12.dp))
-        ScreenHead(title = stringResource(R.string.bottom_home), subtitle = todayLabel)
+        ScreenHead(
+            title = stringResource(R.string.bottom_home),
+            subtitle = todayLabel,
+            collapsed = collapsed,
+        )
         Spacer(Modifier.height(12.dp))
 
         state.error?.let { err ->
@@ -154,6 +163,7 @@ fun OverviewScreen(
             )
             Box(modifier = Modifier.weight(1f).pullRefresh(pullState)) {
                 LazyColumn(
+                    state = listState,
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier.fillMaxSize(),
                 ) {
@@ -293,15 +303,16 @@ private fun NowCard(
     onTimetable: () -> Unit,
 ) {
     val scheme = MaterialTheme.colorScheme
-    // Akzent-Karte: Standard-Dark bleibt schwarze Karte (primary wäre dort
-    // Weiß), jede echte Akzent-Wahl färbt die Karte in beiden Modi.
+    // Default accent: match the clock card above (surface + hairline border).
+    // A real accent choice still tints the card in both modes.
     val dark = LocalEduFlowDark.current
-    val isDefaultDark = dark && scheme.primary == Color.White
-    val cardColor = if (isDefaultDark) Color.Black else scheme.primary
-    val contentColor = if (isDefaultDark) Color.White else scheme.onPrimary
+    val isDefaultAccent = scheme.primary == if (dark) Color.White else Color.Black
+    val cardColor = if (isDefaultAccent) scheme.surface else scheme.primary
+    val contentColor = if (isDefaultAccent) scheme.onSurface else scheme.onPrimary
     Surface(
         shape = RoundedCornerShape(16.dp),
         color = cardColor,
+        border = if (isDefaultAccent) BorderStroke(1.dp, scheme.outlineVariant) else null,
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {

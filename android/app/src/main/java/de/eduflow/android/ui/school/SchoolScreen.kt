@@ -9,7 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
@@ -46,11 +48,13 @@ import de.eduflow.android.data.dto.SchoolAgendaItemDto
 import de.eduflow.android.data.dto.SubstitutionChangeDto
 import de.eduflow.android.data.dto.SubstitutionDayDto
 import de.eduflow.android.ui.common.AppHeader
+import de.eduflow.android.ui.common.CollapsibleHeaderContent
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.FilterChips
 import de.eduflow.android.ui.common.PullRefreshBox
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SectionLabel
+import de.eduflow.android.ui.common.rememberCollapsedHeader
 import de.eduflow.android.ui.navigation.Routes
 import de.eduflow.android.ui.timetable.AuthAwareError
 import de.eduflow.android.ui.timetable.localizedApiMessage
@@ -91,6 +95,8 @@ private fun SchoolScreen(
     onLogout: () -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
+    val listState = rememberLazyListState()
+    val collapsed = rememberCollapsedHeader(listState)
     var section by remember { mutableStateOf(SchoolSection.AGENDA) }
     val dateFormatter = remember { DateTimeFormatter.ofPattern("EEEE, d. MMMM", Locale.GERMAN) }
     val agendaCount = state.agenda.size
@@ -108,35 +114,40 @@ private fun SchoolScreen(
                 title = stringResource(R.string.school_title),
                 subtitle = stringResource(R.string.school_subtitle),
                 modifier = Modifier.weight(1f),
+                collapsed = collapsed,
             )
             IconButton(onClick = { viewModel.load(refresh = true) }, enabled = !state.isLoading) {
                 Icon(Icons.Filled.Refresh, contentDescription = stringResource(R.string.common_refresh_desc))
             }
         }
-        Spacer(Modifier.height(12.dp))
-        FilterChips(
-            options = tabOptions,
-            selected = selectedTab,
-            onSelect = { value ->
-                section = if (value == tabCalendar) SchoolSection.AGENDA else SchoolSection.SUBSTITUTIONS
-            },
-        )
-        if (section == SchoolSection.SUBSTITUTIONS) {
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { viewModel.load(day = state.selectedDay.minusWeeks(1)) }) {
-                    Icon(Icons.Filled.ChevronLeft, contentDescription = stringResource(R.string.school_prev_week_desc))
-                }
-                Text(
-                    text = stringResource(
-                        R.string.school_week_format,
-                        state.selectedDay.with(java.time.DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
-                    ),
-                    modifier = Modifier.weight(1f),
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Medium,
+        CollapsibleHeaderContent(collapsed = collapsed) {
+            Column {
+                Spacer(Modifier.height(12.dp))
+                FilterChips(
+                    options = tabOptions,
+                    selected = selectedTab,
+                    onSelect = { value ->
+                        section = if (value == tabCalendar) SchoolSection.AGENDA else SchoolSection.SUBSTITUTIONS
+                    },
                 )
-                IconButton(onClick = { viewModel.load(day = state.selectedDay.plusWeeks(1)) }) {
-                    Icon(Icons.Filled.ChevronRight, contentDescription = stringResource(R.string.school_next_week_desc))
+                if (section == SchoolSection.SUBSTITUTIONS) {
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        IconButton(onClick = { viewModel.load(day = state.selectedDay.minusWeeks(1)) }) {
+                            Icon(Icons.Filled.ChevronLeft, contentDescription = stringResource(R.string.school_prev_week_desc))
+                        }
+                        Text(
+                            text = stringResource(
+                                R.string.school_week_format,
+                                state.selectedDay.with(java.time.DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("dd.MM.yyyy")),
+                            ),
+                            modifier = Modifier.weight(1f),
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium,
+                        )
+                        IconButton(onClick = { viewModel.load(day = state.selectedDay.plusWeeks(1)) }) {
+                            Icon(Icons.Filled.ChevronRight, contentDescription = stringResource(R.string.school_next_week_desc))
+                        }
+                    }
                 }
             }
         }
@@ -161,21 +172,26 @@ private fun SchoolScreen(
                 CircularProgressIndicator()
             }
         } else if (section == SchoolSection.AGENDA) {
-            AgendaList(state.agenda, dateFormatter)
+            AgendaList(state.agenda, dateFormatter, listState)
         } else {
-            SubstitutionList(state.substitutions, dateFormatter)
+            SubstitutionList(state.substitutions, dateFormatter, listState)
         }
         }
     }
 }
 
 @Composable
-private fun AgendaList(items: List<SchoolAgendaItemDto>, formatter: DateTimeFormatter) {
+private fun AgendaList(
+    items: List<SchoolAgendaItemDto>,
+    formatter: DateTimeFormatter,
+    state: LazyListState,
+) {
     if (items.isEmpty()) {
         EmptyMessage(stringResource(R.string.school_empty_agenda))
         return
     }
     LazyColumn(
+        state = state,
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(9.dp),
     ) {
@@ -213,13 +229,18 @@ private fun AgendaCard(item: SchoolAgendaItemDto) {
 }
 
 @Composable
-private fun SubstitutionList(days: List<SubstitutionDayDto>, formatter: DateTimeFormatter) {
+private fun SubstitutionList(
+    days: List<SubstitutionDayDto>,
+    formatter: DateTimeFormatter,
+    state: LazyListState,
+) {
     val changes = days.flatMap { it.changes.map { change -> it.date to change } }
     if (changes.isEmpty()) {
         EmptyMessage(stringResource(R.string.school_empty_substitutions))
         return
     }
     LazyColumn(
+        state = state,
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(9.dp),
     ) {

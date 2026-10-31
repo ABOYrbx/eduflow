@@ -1,5 +1,13 @@
 package de.eduflow.android.ui.messages
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +26,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.rememberScrollState
@@ -48,14 +57,18 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -78,9 +91,28 @@ import de.eduflow.android.ui.common.PullRefreshBox
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SearchPill
 import de.eduflow.android.ui.common.SectionLabel
+import de.eduflow.android.ui.common.rememberCollapsedHeader
+import de.eduflow.android.ui.navigation.LocalBottomBarCollapsed
 import de.eduflow.android.ui.timetable.localizedApiMessage
+import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 private const val BODY_MAX = 5000
+
+private val MESSAGE_TIMESTAMP_FORMAT =
+    DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm", Locale.getDefault())
+
+/** Prefer the ISO value and render the same short format as the like list. */
+private fun formatMessageTimestamp(item: MessageDto): String {
+    val raw = item.timestamp_iso.ifBlank { item.timestamp }.trim()
+    if (raw.isBlank()) return ""
+    val parsed = runCatching {
+        LocalDateTime.parse(raw.replace(' ', 'T'), DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+    }.getOrNull()
+    return parsed?.format(MESSAGE_TIMESTAMP_FORMAT) ?: raw
+}
 
 private fun initialsOf(name: String): String =
     name.split(" ", " ").mapNotNull { it.firstOrNull()?.toString() }.take(2).joinToString("")
@@ -106,45 +138,99 @@ fun MessagesScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val visible = state.visible
+    val listState = rememberLazyListState()
+    val barCollapsed = LocalBottomBarCollapsed.current
+    val fabBottom by animateDpAsState(
+        targetValue = if (barCollapsed) 148.dp else 160.dp,
+        label = "messages-fab-bottom",
+    )
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
             AppHeader(
-                    onSettings = onOpenSettings,
+                onSettings = onOpenSettings,
                 onLogout = onLogout,
             )
             Spacer(Modifier.height(12.dp))
-            ScreenHead(
-                title = stringResource(R.string.messages_title),
-                subtitle = stringResource(R.string.messages_subtitle),
-            )
-            Spacer(Modifier.height(12.dp))
-            SearchPill(
-                value = state.query,
-                onValueChange = viewModel::onQuery,
-                placeholder = stringResource(R.string.messages_search_placeholder),
-            )
-            Spacer(Modifier.height(10.dp))
-            val filterAll = stringResource(MsgFilter.ALLE.stringRes)
-            val filterUnread = stringResource(MsgFilter.UNGELESEN.stringRes)
-            val filterFiles = stringResource(MsgFilter.MIT_DATEIEN.stringRes)
-            val filterOptions = listOf(filterAll, filterUnread, filterFiles)
-            val filterSelected = when (state.filter) {
-                MsgFilter.UNGELESEN -> filterUnread
-                MsgFilter.MIT_DATEIEN -> filterFiles
-                MsgFilter.ALLE -> filterAll
+            // Collapse the secondary header while scrolling down, like the
+            // bottom bar. Scrolling back up restores search and filters.
+            val headerCollapsed by remember {
+                derivedStateOf {
+                    listState.firstVisibleItemIndex > 0 ||
+                        listState.firstVisibleItemScrollOffset > 24
+                }
             }
-            FilterChips(
-                options = filterOptions,
-                selected = filterSelected,
-                onSelect = { label ->
-                    when (label) {
-                        filterUnread -> viewModel.onFilter(MsgFilter.UNGELESEN)
-                        filterFiles -> viewModel.onFilter(MsgFilter.MIT_DATEIEN)
-                        else -> viewModel.onFilter(MsgFilter.ALLE)
-                    }
-                },
+            val titleSize by animateFloatAsState(
+                targetValue = if (headerCollapsed) 20f else 24f,
+                label = "messages-title-size",
             )
+            val searchFocus = remember { FocusRequester() }
+            var searchRequested by remember { mutableStateOf(false) }
+            val keyboard = LocalSoftwareKeyboardController.current
+            val showSearch = !headerCollapsed || searchRequested
+            LaunchedEffect(searchRequested) {
+                if (searchRequested) {
+                    listState.scrollToItem(0)
+                    kotlinx.coroutines.delay(180)
+                    searchFocus.requestFocus()
+                    keyboard?.show()
+                    searchRequested = false
+                }
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    stringResource(R.string.messages_title),
+                    fontSize = titleSize.sp,
+                    lineHeight = (titleSize + 4).sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.weight(1f),
+                )
+                AnimatedVisibility(visible = headerCollapsed && !searchRequested) {
+                    IconButton(onClick = { searchRequested = true }) {
+                        Icon(
+                            Icons.Filled.Search,
+                            contentDescription = stringResource(R.string.messages_search_placeholder),
+                        )
+                    }
+                }
+            }
+            AnimatedVisibility(
+                visible = showSearch,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically(),
+            ) {
+                Column {
+                    Spacer(Modifier.height(12.dp))
+                    SearchPill(
+                        value = state.query,
+                        onValueChange = viewModel::onQuery,
+                        placeholder = stringResource(R.string.messages_search_placeholder),
+                        focusRequester = searchFocus,
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    val filterAll = stringResource(MsgFilter.ALLE.stringRes)
+                    val filterUnread = stringResource(MsgFilter.UNGELESEN.stringRes)
+                    val filterFiles = stringResource(MsgFilter.MIT_DATEIEN.stringRes)
+                    val filterOptions = listOf(filterAll, filterUnread, filterFiles)
+                    val filterSelected = when (state.filter) {
+                        MsgFilter.UNGELESEN -> filterUnread
+                        MsgFilter.MIT_DATEIEN -> filterFiles
+                        MsgFilter.ALLE -> filterAll
+                    }
+                    FilterChips(
+                        options = filterOptions,
+                        selected = filterSelected,
+                        onSelect = { label ->
+                            when (label) {
+                                filterUnread -> viewModel.onFilter(MsgFilter.UNGELESEN)
+                                filterFiles -> viewModel.onFilter(MsgFilter.MIT_DATEIEN)
+                                else -> viewModel.onFilter(MsgFilter.ALLE)
+                            }
+                        },
+                    )
+                }
+            }
             Spacer(Modifier.height(10.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 SectionLabel(
@@ -203,6 +289,7 @@ fun MessagesScreen(
                 }
             } else {
                 LazyColumn(
+                    state = listState,
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier.fillMaxSize(),
                 ) {
@@ -248,7 +335,7 @@ fun MessagesScreen(
             contentColor = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.align(Alignment.BottomEnd)
                 .navigationBarsPadding()
-                .padding(end = 16.dp, bottom = 160.dp)
+                .padding(end = 16.dp, bottom = fabBottom)
                 .size(56.dp),
         ) {
             Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.messages_new_desc))
@@ -283,7 +370,7 @@ fun MessageCard(
                         modifier = Modifier.weight(1f),
                     )
                     Text(
-                        item.timestamp.ifBlank { item.timestamp_iso },
+                        formatMessageTimestamp(item),
                         style = MaterialTheme.typography.labelSmall,
                         color = scheme.onSurfaceVariant,
                     )
@@ -312,14 +399,6 @@ fun MessageCard(
                         }
                     }
                 }
-                if (item.reaction_count > 0) {
-                    Text(
-                        stringResource(R.string.messages_like_format, item.reaction_count),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = scheme.onSurfaceVariant,
-                        modifier = Modifier.padding(top = 2.dp),
-                    )
-                }
             }
             if (unread) {
                 Box(
@@ -347,6 +426,8 @@ fun ThreadScreen(
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsState()
+    val listState = rememberLazyListState()
+    val collapsed = rememberCollapsedHeader(listState)
     val thread = state.thread
 
     Column(modifier = modifier.fillMaxSize().navigationBarsPadding().imePadding().padding(16.dp)) {
@@ -358,6 +439,7 @@ fun ThreadScreen(
                 title = stringResource(R.string.messages_thread_title),
                 subtitle = message?.author.orEmpty(),
                 modifier = Modifier.weight(1f),
+                collapsed = collapsed,
             )
             IconButton(onClick = viewModel::refresh, enabled = !state.isLoading) {
                 Icon(Icons.Filled.Refresh, contentDescription = stringResource(R.string.common_reload))
@@ -393,6 +475,7 @@ fun ThreadScreen(
         }
 
         LazyColumn(
+            state = listState,
             verticalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier.weight(1f),
         ) {
@@ -468,7 +551,7 @@ fun ThreadScreen(
             thread?.replies?.forEach { reply ->
                 item {
                     EduCard(modifier = Modifier.fillMaxWidth()) {
-                        Column(Modifier.fillMaxWidth()) {
+                        Column(Modifier.fillMaxWidth().padding(16.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 AvatarDot(initials = initialsOf(reply.name))
                                 Spacer(Modifier.width(10.dp))

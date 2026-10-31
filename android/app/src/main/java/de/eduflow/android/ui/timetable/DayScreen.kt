@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -54,6 +55,7 @@ import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.PullRefreshBox
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SectionLabel
+import de.eduflow.android.ui.common.rememberCollapsedHeader
 import de.eduflow.android.ui.common.StatusPill
 import de.eduflow.android.ui.theme.RDotBlue
 import java.time.DayOfWeek
@@ -82,6 +84,8 @@ fun DayScreen(
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsState()
+    val listState = rememberLazyListState()
+    val collapsed = rememberCollapsedHeader(listState)
     val day = state.dayData
     val isTodayShown = day != null &&
         (day.day == day.today || day.day == LocalDate.now().toString())
@@ -96,6 +100,7 @@ fun DayScreen(
         ScreenHead(
             title = stringResource(R.string.timetable_title),
             subtitle = day?.day_label ?: state.day,
+            collapsed = collapsed,
         )
         Spacer(Modifier.height(12.dp))
         TimetableSegmented(view = state.view, onView = viewModel::setView)
@@ -171,6 +176,7 @@ fun DayScreen(
             }
         } else {
             LazyColumn(
+                state = listState,
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier.fillMaxSize(),
             ) {
@@ -333,7 +339,9 @@ fun LessonCard(
                 Text(
                     startOf(lesson.time).ifBlank { "–" },
                     fontSize = 13.sp,
-                    color = scheme.onSurfaceVariant,
+                    // Running lesson: use the high-contrast ink so the time is
+                    // black in light mode and white in dark mode.
+                    color = if (isNow) scheme.onSurface else scheme.onSurfaceVariant,
                     modifier = Modifier.width(52.dp).padding(top = 2.dp),
                 )
                 Box(

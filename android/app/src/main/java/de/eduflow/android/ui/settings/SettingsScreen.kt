@@ -68,6 +68,7 @@ import de.eduflow.android.ui.common.LoadingBox
 import de.eduflow.android.ui.common.PrimaryButton
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SectionLabel
+import de.eduflow.android.ui.common.rememberCollapsedHeader
 import de.eduflow.android.ui.navigation.NavTabs
 import de.eduflow.android.ui.overview.OverviewOrder
 import de.eduflow.android.ui.common.StatusPill
@@ -137,6 +138,8 @@ fun SettingsScreen(
     var draftTabs by remember { mutableStateOf(NavTabs.default) }
     var showOverviewEditor by remember { mutableStateOf(false) }
     var draftOverviewOrder by remember { mutableStateOf(OverviewOrder.default) }
+    val scrollState = rememberScrollState()
+    val collapsed = rememberCollapsedHeader(scrollState)
 
     // Frisch laden beim Öffnen (VM wird im NavGraph eager erzeugt,
     // ggf. noch ohne Token geladen).
@@ -164,7 +167,7 @@ fun SettingsScreen(
     // Server-URL muss man sie hier korrigieren oder sich abmelden können.
     state.error?.let { msg ->
         Column(
-            modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
+            modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -175,6 +178,7 @@ fun SettingsScreen(
                     title = stringResource(R.string.settings_title),
                     subtitle = stringResource(R.string.settings_subtitle),
                     modifier = Modifier.weight(1f),
+                    collapsed = collapsed,
                 )
             }
             Text(msg, color = MaterialTheme.colorScheme.error)
@@ -206,7 +210,7 @@ fun SettingsScreen(
 
     val v = state.values
     Column(
-        modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
+        modifier = Modifier.fillMaxSize().verticalScroll(scrollState).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -217,6 +221,7 @@ fun SettingsScreen(
                 title = stringResource(R.string.settings_title),
                 subtitle = stringResource(R.string.settings_subtitle),
                 modifier = Modifier.weight(1f),
+                collapsed = collapsed,
             )
         }
 

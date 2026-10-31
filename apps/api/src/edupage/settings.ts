@@ -39,7 +39,7 @@ export const SETTINGS_SCHEMA: SettingSpec[] = [
   { key: "ov_span", kind: "span", section: t("settings.sectionUebersicht"), label: t("settings.ovSpanLabel"),
     hint: t("settings.ovSpanHint"), default: "" },
   { key: "ov_wetter", kind: "bool", section: t("settings.sectionWetter"), label: t("settings.ovWetterLabel"),
-    hint: t("settings.ovWetterHint"), default: true },
+    hint: t("settings.ovWetterHint"), default: false },
   { key: "wetter_city", kind: "text", section: t("settings.sectionWetter"), label: t("settings.cityLabel"),
     placeholder: t("settings.cityPlaceholder"), maxlength: 100, hint: t("settings.cityHint"), default: "" },
 ];

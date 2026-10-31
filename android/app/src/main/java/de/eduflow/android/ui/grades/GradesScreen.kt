@@ -1,5 +1,6 @@
 package de.eduflow.android.ui.grades
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -46,10 +47,12 @@ import de.eduflow.android.data.dto.GradeSubjectGroup
 import de.eduflow.android.data.dto.SUBJECT_OTHER_DE
 import de.eduflow.android.data.dto.displayGradeTermLabel
 import de.eduflow.android.ui.common.AppHeader
+import de.eduflow.android.ui.common.CollapsibleHeaderContent
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.FilterChips
 import de.eduflow.android.ui.common.PullRefreshBox
 import de.eduflow.android.ui.common.ScreenHead
+import de.eduflow.android.ui.common.rememberCollapsedHeader
 import de.eduflow.android.ui.common.SearchPill
 import de.eduflow.android.ui.common.SectionLabel
 import de.eduflow.android.ui.common.StatusPill
@@ -85,6 +88,7 @@ fun GradesScreen(
     val state by viewModel.state.collectAsState()
     // Schnitt-Karte kollabiert beim Scrollen, damit die Noten Platz haben.
     val listState = rememberLazyListState()
+    val collapsed = rememberCollapsedHeader(listState)
     val collapseTarget =
         if (listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 60) 1f else 0f
     val collapseFraction by animateFloatAsState(collapseTarget, tween(220), label = "avg-collapse")
@@ -98,37 +102,42 @@ fun GradesScreen(
         ScreenHead(
             title = stringResource(R.string.grades_title),
             subtitle = stringResource(R.string.grades_subtitle),
+            collapsed = collapsed,
         )
         Spacer(Modifier.height(12.dp))
         AverageCard(avgDisplay = state.avgDisplay, compactFraction = collapseFraction)
-        Spacer(Modifier.height(12.dp))
-        SearchPill(
-            value = state.query,
-            onValueChange = viewModel::onQuery,
-            placeholder = stringResource(R.string.grades_search_placeholder),
-        )
-        if (state.terms.size > 1) {
-            Spacer(Modifier.height(10.dp))
-            // Anzeige lokalisiert, Abgleich über dieselben Ressourcen-Strings (sprachunabhängig).
-            val allLabel = stringResource(R.string.grades_term_all)
-            val termFormat = stringResource(R.string.grades_term_label_format)
-            val labelByKeyLocalized = state.terms.associate { term ->
-                term.key to stringResource(
-                    R.string.grades_term_format,
-                    displayGradeTermLabel(term.key, allLabel, termFormat),
-                    term.count,
+        CollapsibleHeaderContent(collapsed = collapsed) {
+            Column {
+                Spacer(Modifier.height(12.dp))
+                SearchPill(
+                    value = state.query,
+                    onValueChange = viewModel::onQuery,
+                    placeholder = stringResource(R.string.grades_search_placeholder),
                 )
+                if (state.terms.size > 1) {
+                    Spacer(Modifier.height(10.dp))
+                    // Anzeige lokalisiert, Abgleich über dieselben Ressourcen-Strings (sprachunabhängig).
+                    val allLabel = stringResource(R.string.grades_term_all)
+                    val termFormat = stringResource(R.string.grades_term_label_format)
+                    val labelByKeyLocalized = state.terms.associate { term ->
+                        term.key to stringResource(
+                            R.string.grades_term_format,
+                            displayGradeTermLabel(term.key, allLabel, termFormat),
+                            term.count,
+                        )
+                    }
+                    val labels = state.terms.map { labelByKeyLocalized[it.key].orEmpty() }
+                    val selected = labelByKeyLocalized[state.term].orEmpty()
+                    FilterChips(
+                        options = labels,
+                        selected = selected,
+                        onSelect = { label ->
+                            labelByKeyLocalized.entries.firstOrNull { it.value == label }
+                                ?.let { viewModel.onTerm(it.key) }
+                        },
+                    )
+                }
             }
-            val labels = state.terms.map { labelByKeyLocalized[it.key].orEmpty() }
-            val selected = labelByKeyLocalized[state.term].orEmpty()
-            FilterChips(
-                options = labels,
-                selected = selected,
-                onSelect = { label ->
-                    labelByKeyLocalized.entries.firstOrNull { it.value == label }
-                        ?.let { viewModel.onTerm(it.key) }
-                },
-            )
         }
         Spacer(Modifier.height(4.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -229,16 +238,17 @@ fun GradesScreen(
 @Composable
 private fun AverageCard(avgDisplay: String, compactFraction: Float = 0f) {
     val scheme = MaterialTheme.colorScheme
-    // Wie NowCard auf der Übersicht: Standard-Dark schwarze Karte statt
-    // weißer Primär-Fläche, echte Akzent-Wahl färbt in beiden Modi.
+    // Wie NowCard auf der Übersicht: default accent matches the clock card
+    // (surface + hairline border). A real accent still tints the card.
     val dark = LocalEduFlowDark.current
-    val isDefaultDark = dark && scheme.primary == Color.White
-    val cardColor = if (isDefaultDark) Color.Black else scheme.primary
-    val contentColor = if (isDefaultDark) Color.White else scheme.onPrimary
+    val isDefaultAccent = scheme.primary == if (dark) Color.White else Color.Black
+    val cardColor = if (isDefaultAccent) scheme.surface else scheme.primary
+    val contentColor = if (isDefaultAccent) scheme.onSurface else scheme.onPrimary
     val f = compactFraction.coerceIn(0f, 1f)
     Surface(
         shape = RoundedCornerShape(16.dp),
         color = cardColor,
+        border = if (isDefaultAccent) BorderStroke(1.dp, scheme.outlineVariant) else null,
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(Modifier.padding(horizontal = 20.dp, vertical = (20 - 8 * f).dp)) {
