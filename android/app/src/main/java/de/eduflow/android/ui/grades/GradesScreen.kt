@@ -229,12 +229,21 @@ fun GradesScreen(
 @Composable
 private fun AverageCard(avgDisplay: String, compactFraction: Float = 0f) {
     val scheme = MaterialTheme.colorScheme
-    // Wie NowCard auf der Übersicht: Standard-Dark schwarze Karte statt
-    // weißer Primär-Fläche, echte Akzent-Wahl färbt in beiden Modi.
+    // Wie NowCard auf der Übersicht: the black card is only used in dark
+    // mode; light mode keeps a light surface with dark ink. A real accent
+    // choice still tints the card in both modes.
     val dark = LocalEduFlowDark.current
-    val isDefaultDark = dark && scheme.primary == Color.White
-    val cardColor = if (isDefaultDark) Color.Black else scheme.primary
-    val contentColor = if (isDefaultDark) Color.White else scheme.onPrimary
+    val isDefaultAccent = scheme.primary == if (dark) Color.White else Color.Black
+    val cardColor = when {
+        isDefaultAccent && dark -> Color.Black
+        isDefaultAccent -> scheme.surfaceVariant
+        else -> scheme.primary
+    }
+    val contentColor = when {
+        isDefaultAccent && dark -> Color.White
+        isDefaultAccent -> scheme.onSurface
+        else -> scheme.onPrimary
+    }
     val f = compactFraction.coerceIn(0f, 1f)
     Surface(
         shape = RoundedCornerShape(16.dp),
