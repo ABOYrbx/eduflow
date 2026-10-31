@@ -29,6 +29,12 @@ services:
       OPENWEATHER_KEY: ${OPENWEATHER_KEY:-}
       EDUFLOW_TRUST_PROXY: ${EDUFLOW_TRUST_PROXY:-false}
       EDUFLOW_API_TOKEN_DAYS: ${EDUFLOW_API_TOKEN_DAYS:-30}
+      EDUFLOW_ATTACHMENT_DIR: /app/data/attachments
+      EDUFLOW_ATTACHMENT_TTL_S: ${EDUFLOW_ATTACHMENT_TTL_S:-86400}
+      EDUFLOW_POLL_ENABLED: ${EDUFLOW_POLL_ENABLED:-true}
+      EDUFLOW_POLL_INTERVAL_MS: ${EDUFLOW_POLL_INTERVAL_MS:-60000}
+    volumes:
+      - attachment_data:/app/data/attachments
     depends_on:
       db:
         condition: service_healthy
@@ -38,3 +44,4 @@ services:
 
 volumes:
   postgres_data:
+  attachment_data:

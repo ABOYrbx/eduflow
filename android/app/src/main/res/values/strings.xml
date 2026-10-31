@@ -224,6 +224,7 @@
     <string name="messages_reply_placeholder">Reply …</string>
     <string name="messages_sending">Sending …</string>
     <string name="messages_reply_send">Reply</string>
+    <string name="messages_saved_format">Saved: %1$s</string>
     <string name="messages_compose_subtitle">Choose teachers and classmates</string>
     <string name="messages_recipient_search">Search recipients</string>
     <string name="messages_role_teacher">Teacher</string>

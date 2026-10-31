@@ -15,6 +15,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import androidx.compose.ui.platform.LocalContext
 import de.eduflow.android.data.ApiService
 import de.eduflow.android.data.MessagesRepository
 import de.eduflow.android.data.TokenStore
@@ -64,10 +65,10 @@ private class ComposeViewModelFactory(
  * Nutzt die eingefrorene Route [Routes.MESSAGES] und den geteilten
  * [ApiService] — kein eigener Client, keine eigenen Kern-Routen.
  *
- * Liste (Routes.MESSAGES) -> Thread -> Verfassen. Anhänge meldet
- * [onAttachment] als fertige Download-URL (Kurzzeit-Token `?dl=`, per
- * Bearer-Header ausgestellt — das langlebige API-Token steht nie in der
- * URL). Abgelaufene Sitzung meldet [onReLogin] (401-Verhalten → Login).
+ * Liste (Routes.MESSAGES) -> Thread -> Verfassen. Anhänge werden über die
+ * API geladen und auf dem Gerät gespeichert; [onAttachment] meldet den
+ * gespeicherten Dateinamen. Abgelaufene Sitzung meldet [onReLogin]
+ * (401-Verhalten → Login).
  */
 fun NavGraphBuilder.messagesDestination(
     api: () -> ApiService,
@@ -84,6 +85,7 @@ fun NavGraphBuilder.messagesDestination(
             MessagesRepository(api, baseUrl)
         }
         val scope = rememberCoroutineScope()
+        val context = LocalContext.current
         // VM an der Listen-Route verankern (eigener Eintrag): Der Thread
         // unten nutzt dieselbe Instanz (Header + kein Doppel-Request).
         val owner = remember(nav) {
@@ -109,7 +111,7 @@ fun NavGraphBuilder.messagesDestination(
             onCompose = { nav.navigate(MESSAGES_COMPOSE_ROUTE) },
             onAttachment = { id, idx ->
                 scope.launch {
-                    repository.attachmentUrl(id, idx)
+                    repository.downloadAttachment(context, id, idx)
                         .onSuccess(onAttachment)
                         .onFailure(vm::showDownloadError)
                 }
@@ -128,6 +130,7 @@ fun NavGraphBuilder.messagesDestination(
             MessagesRepository(api, baseUrl)
         }
         val scope = rememberCoroutineScope()
+        val context = LocalContext.current
         // Dieselbe Listen-Instanz wie in der Liste oben: Thread-Header aus
         // geladenen Daten, kein zweiter Listen-Request (eine eigene VM
         // hätte leere Items und würde erneut laden).
@@ -150,7 +153,7 @@ fun NavGraphBuilder.messagesDestination(
             message = message,
             onAttachment = { mid, idx ->
                 scope.launch {
-                    repository.attachmentUrl(mid, idx)
+                    repository.downloadAttachment(context, mid, idx)
                         .onSuccess(onAttachment)
                         .onFailure(vm::showDownloadError)
                 }
@@ -191,6 +194,7 @@ fun MessagesEntry(
         MessagesRepository(api, baseUrl)
     }
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     val vm: MessagesViewModel = viewModel(
         key = "messages",
         factory = MessagesViewModelFactory(repository, store),
@@ -201,7 +205,7 @@ fun MessagesEntry(
         onCompose = {},
         onAttachment = { id, idx ->
             scope.launch {
-                repository.attachmentUrl(id, idx)
+                repository.downloadAttachment(context, id, idx)
                     .onSuccess(onAttachment)
                     .onFailure(vm::showDownloadError)
             }
