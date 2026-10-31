@@ -392,15 +392,27 @@ private fun cardTitle(item: HomeworkDto): String {
     return if (item.subject.isNotBlank()) "${item.subject} - $title" else title
 }
 
+@Composable
 private fun cardSub(item: HomeworkDto): String {
-    val whenText = item.due_display.ifBlank { item.status }
+    val whenText = item.due_display.ifBlank { homeworkStatusLabel(item.status) }
     return if (item.author.isNotBlank()) "$whenText · ${item.author}" else whenText
 }
 
 @Composable
 private fun pillText(item: HomeworkDto): String =
     if (item.is_hidden) stringResource(R.string.homework_swipe_trash)
-    else item.status.ifBlank { stringResource(R.string.homework_filter_open) }
+    else homeworkStatusLabel(item.status).ifBlank { stringResource(R.string.homework_filter_open) }
+
+/** API status values stay German by contract; the UI shows localized labels. */
+@Composable
+private fun homeworkStatusLabel(status: String): String = when (status) {
+    HomeworkItemStatus.UEBERFAELLIG -> stringResource(R.string.homework_filter_overdue)
+    HomeworkItemStatus.HEUTE -> stringResource(R.string.homework_status_today)
+    HomeworkItemStatus.ERLEDIGT -> stringResource(R.string.homework_filter_done)
+    HomeworkItemStatus.OFFEN -> stringResource(R.string.homework_filter_open)
+    HomeworkItemStatus.OHNE_DATUM -> stringResource(R.string.homework_status_no_date)
+    else -> status
+}
 
 @Composable
 private fun statusDot(item: HomeworkDto): Color = when {

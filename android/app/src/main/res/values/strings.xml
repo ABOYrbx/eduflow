@@ -184,6 +184,8 @@
     <string name="homework_filter_open">Open</string>
     <string name="homework_filter_overdue">Overdue</string>
     <string name="homework_filter_done">Done</string>
+    <string name="homework_status_today">Due today</string>
+    <string name="homework_status_no_date">No date</string>
     <string name="homework_include_tests">Include tests/exams</string>
     <string name="homework_section_trash_format">Trash · %1$d entries</string>
     <string name="homework_section_open_format">%1$d open · %2$d overdue</string>
