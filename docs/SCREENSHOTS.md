@@ -1,4 +1,4 @@
-# Screenshots
+# Screenshots & UI
 
 Screenshots of the Android and web apps, captured with synthetic demo data (`demo` / `demo`). Captions are short descriptions of each screen.
 
