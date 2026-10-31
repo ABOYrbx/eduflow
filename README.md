@@ -173,7 +173,7 @@ Full reference: [docs/API.md](docs/API.md). Quick facts:
 
 1. Fork the project
 2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit in English
+3. Commit
 4. Push and open a Pull Request
 
 Keep tests offline (fake provider / fakes / URL stubs, never real credentials)
