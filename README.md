@@ -48,6 +48,19 @@ npm install
 `install.sh` configures PostgreSQL, generates `apps/api/.env.local` (mode `0600`),
 runs Prisma migrations, and never reads or overwrites existing secrets.
 
+### Docker backend (quick start)
+
+For a quick start without a local PostgreSQL setup, use the Docker backend:
+
+```sh
+./install-docker.sh            # real mode
+./install-docker.sh --demo     # demo mode (login: demo / demo)
+./install-docker.sh --stop     # stop the services
+```
+
+See [docs/INSTALLATION.md](docs/INSTALLATION.md#docker-backend-recommended-for-quick-start)
+for `.env` generation, secrets, ports and the health check. The native
+`./install.sh` remains available for a local PostgreSQL/NestJS setup.
 ### Run with run.sh
 
 ```sh
