@@ -3,6 +3,7 @@ package de.eduflow.android
 import android.content.Context
 import android.os.Bundle
 import android.os.Build
+import androidx.core.content.ContextCompat
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -16,6 +17,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
 import de.eduflow.android.data.ApiClient
 import de.eduflow.android.data.TokenStore
+import de.eduflow.android.notifications.NotificationHelper
+import de.eduflow.android.notifications.NotificationScheduler
+import androidx.activity.result.contract.ActivityResultContracts
+import android.Manifest
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import de.eduflow.android.ui.auth.AppLocale
 import de.eduflow.android.ui.navigation.EduFlowNav
 import de.eduflow.android.ui.theme.EduFlowTheme
@@ -38,6 +45,29 @@ class MainActivity : ComponentActivity() {
             window.navigationBarDividerColor = android.graphics.Color.TRANSPARENT
         }
         store = TokenStore(applicationContext)
+        NotificationHelper.ensureChannel(applicationContext)
+
+        // Benachrichtigungs-Berechtigung (Android 13+).
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val launcher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
+                android.content.pm.PackageManager.PERMISSION_GRANTED
+            ) {
+                launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+
+        // Periodische Prüfung planen/abbrechen je nach Anmeldestatus.
+        lifecycleScope.launch {
+            store.sessionFlow.collect { session ->
+                if (session?.isLoggedIn == true) {
+                    NotificationScheduler.schedule(applicationContext)
+                } else {
+                    NotificationScheduler.cancel(applicationContext)
+                }
+            }
+        }
+
         setContent {
             val nav = rememberNavController()
             val session by store.sessionFlow.collectAsState(initial = null)

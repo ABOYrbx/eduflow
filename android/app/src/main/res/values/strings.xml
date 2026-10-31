@@ -2,6 +2,13 @@
 <resources>
     <string name="app_name">EduFlow</string>
 
+    <!-- Push-/Poll-Benachrichtigungen (Android) -->
+    <string name="notif_new_message_title">New message</string>
+    <string name="notif_new_message_fallback">You have a new message</string>
+    <string name="notif_new_homework_title">New homework</string>
+    <string name="notif_new_grade_title">New grade</string>
+    <string name="notif_permission_rationale">Allow notifications to be informed about new messages, homework and grades.</string>
+
     <!-- Common (package 0, RedesignUi / CommonUi / BottomBar / errors) -->
     <string name="common_logo_desc">EduFlow logo</string>
     <string name="common_demo_badge">DEMO</string>

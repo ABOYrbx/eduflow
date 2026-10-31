@@ -150,6 +150,12 @@ class TokenStore(private val context: Context) {
         // Gelesene Nachrichten-IDs (Paket C, „Ungelesen"-Chip): Der Server
         // kennt kein Ungelesen-Flag, darum lokal (kommagetrennt, max. 2000).
         val SEEN_MESSAGES = stringPreferencesKey("seen_messages")
+        // Push-/Poll-Benachrichtigungen: zuletzt gesehene IDs (lokal, wie
+        // seen_messages). Der Server kennt kein Ungelesen-Flag.
+        val NOTIF_LAST_MESSAGES = stringPreferencesKey("notif_last_messages")
+        val NOTIF_LAST_HOMEWORK = stringPreferencesKey("notif_last_homework")
+        val NOTIF_LAST_GRADES = stringPreferencesKey("notif_last_grades")
+        val NOTIF_INITIALIZED = booleanPreferencesKey("notif_initialized")
         // Aussehen, lokal wie localStorage im Web (static/theme.js):
         // "system" = System folgen (Standard), "light"/"dark" = explizit.
         val THEME = stringPreferencesKey("theme")
@@ -286,6 +292,48 @@ class TokenStore(private val context: Context) {
             cur.addAll(ids)
             val trimmed = if (cur.size > 2000) cur.toList().takeLast(2000).toSet() else cur
             prefs[Keys.SEEN_MESSAGES] = trimmed.joinToString(",")
+        }
+    }
+
+    /** Zuletzt gesehene Nachrichten-IDs für Benachrichtigungen. */
+    suspend fun notifLastMessageIds(): Set<Int> =
+        context.tokenDataStore.data.first()[Keys.NOTIF_LAST_MESSAGES]
+            ?.split(",")?.mapNotNull { it.toIntOrNull() }?.toSet() ?: emptySet()
+
+    suspend fun setNotifLastMessageIds(ids: Set<Int>) {
+        context.tokenDataStore.edit { prefs ->
+            prefs[Keys.NOTIF_LAST_MESSAGES] = ids.joinToString(",")
+        }
+    }
+
+    /** Zuletzt gesehene Hausaufgaben-IDs (Long als String). */
+    suspend fun notifLastHomeworkIds(): Set<Long> =
+        context.tokenDataStore.data.first()[Keys.NOTIF_LAST_HOMEWORK]
+            ?.split(",")?.mapNotNull { it.toLongOrNull() }?.toSet() ?: emptySet()
+
+    suspend fun setNotifLastHomeworkIds(ids: Set<Long>) {
+        context.tokenDataStore.edit { prefs ->
+            prefs[Keys.NOTIF_LAST_HOMEWORK] = ids.joinToString(",")
+        }
+    }
+
+    /** Zuletzt gesehene Noten-IDs (String). */
+    suspend fun notifLastGradeIds(): Set<String> =
+        context.tokenDataStore.data.first()[Keys.NOTIF_LAST_GRADES]
+            ?.split(",")?.map { it.trim() }?.filter { it.isNotEmpty() }?.toSet() ?: emptySet()
+
+    suspend fun setNotifLastGradeIds(ids: Set<String>) {
+        context.tokenDataStore.edit { prefs ->
+            prefs[Keys.NOTIF_LAST_GRADES] = ids.joinToString(",")
+        }
+    }
+
+    suspend fun notifInitialized(): Boolean =
+        context.tokenDataStore.data.first()[Keys.NOTIF_INITIALIZED] ?: false
+
+    suspend fun setNotifInitialized(value: Boolean) {
+        context.tokenDataStore.edit { prefs ->
+            prefs[Keys.NOTIF_INITIALIZED] = value
         }
     }
 
