@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -74,6 +75,9 @@ import kotlinx.coroutines.launch
  * Navigation über die Bottom-Bar aus dem Redesign-PNG
  * (Home, Aufgaben, Nachr., Plan, Mehr).
  */
+/** Whether the bottom bar is in its compact (scrolled) state. */
+val LocalBottomBarCollapsed = compositionLocalOf { false }
+
 @Composable
 fun EduFlowNav(
     nav: NavHostController,
@@ -182,7 +186,10 @@ fun EduFlowNav(
         contentColor = MaterialTheme.colorScheme.onBackground,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
     ) { _ ->
-        CompositionLocalProvider(LocalEduFlowSession provides (session ?: Session())) {
+        CompositionLocalProvider(
+            LocalEduFlowSession provides (session ?: Session()),
+            LocalBottomBarCollapsed provides barCollapsed,
+        ) {
         Box(Modifier.fillMaxSize().nestedScroll(barScrollConnection)) {
         NavHost(
             navController = nav,

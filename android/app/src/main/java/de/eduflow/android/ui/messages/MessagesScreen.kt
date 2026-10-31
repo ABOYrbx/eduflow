@@ -2,6 +2,7 @@ package de.eduflow.android.ui.messages
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -90,6 +91,7 @@ import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SearchPill
 import de.eduflow.android.ui.common.SectionLabel
 import de.eduflow.android.ui.common.rememberCollapsedHeader
+import de.eduflow.android.ui.navigation.LocalBottomBarCollapsed
 import de.eduflow.android.ui.timetable.localizedApiMessage
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -136,6 +138,11 @@ fun MessagesScreen(
     val state by viewModel.state.collectAsState()
     val visible = state.visible
     val listState = rememberLazyListState()
+    val barCollapsed = LocalBottomBarCollapsed.current
+    val fabBottom by animateDpAsState(
+        targetValue = if (barCollapsed) 76.dp else 88.dp,
+        label = "messages-fab-bottom",
+    )
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
@@ -327,7 +334,7 @@ fun MessagesScreen(
             contentColor = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier.align(Alignment.BottomEnd)
                 .navigationBarsPadding()
-                .padding(end = 16.dp, bottom = 88.dp)
+                .padding(end = 16.dp, bottom = fabBottom)
                 .size(56.dp),
         ) {
             Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.messages_new_desc))
