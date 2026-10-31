@@ -232,6 +232,7 @@
     <string name="messages_reply_placeholder">Antworten …</string>
     <string name="messages_sending">Wird gesendet …</string>
     <string name="messages_reply_send">Antworten</string>
+    <string name="messages_saved_format">Gespeichert: %1$s</string>
     <string name="messages_compose_subtitle">Lehrer und Mitschüler wählen</string>
     <string name="messages_recipient_search">Empfänger suchen</string>
     <string name="messages_role_teacher">Lehrer</string>

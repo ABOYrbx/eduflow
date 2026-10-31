@@ -1,5 +1,6 @@
 package de.eduflow.android.ui.navigation
 
+import android.widget.Toast
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.padding
@@ -27,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -46,6 +48,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navArgument
+import de.eduflow.android.R
 import de.eduflow.android.data.ApiService
 import de.eduflow.android.data.AuthRepository
 import de.eduflow.android.data.SettingsRepository
@@ -89,6 +92,7 @@ fun EduFlowNav(
     // DataStore-Schreibzugriffe nie per runBlocking auf Main (ANR-Risiko),
     // sondern über den Scope (gilt auch für setBaseUrl unten).
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     // ViewModels überleben Recompositionen und dürfen nicht die beim ersten
     // Compose-Lauf erzeugte API-Factory festhalten (session == null → kein
@@ -261,6 +265,13 @@ fun EduFlowNav(
                 settingsVm.logout {
                     nav.navigate(Routes.LOGIN) { popUpTo(nav.graph.id) { inclusive = true } }
                 }
+            },
+            onAttachment = { name ->
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.messages_saved_format, name),
+                    Toast.LENGTH_SHORT,
+                ).show()
             },
         )
         homeworkDestination(
