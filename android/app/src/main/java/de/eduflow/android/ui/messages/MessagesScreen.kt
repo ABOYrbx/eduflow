@@ -58,10 +58,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.eduflow.android.R
@@ -80,7 +77,6 @@ import de.eduflow.android.ui.common.PullRefreshBox
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SearchPill
 import de.eduflow.android.ui.common.SectionLabel
-import de.eduflow.android.ui.theme.StatusRed
 import de.eduflow.android.ui.timetable.localizedApiMessage
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -307,15 +303,7 @@ fun MessageCard(
                     )
                 }
                 Text(
-                    buildAnnotatedString {
-                        append(item.bodyLine())
-                        if (item.reaction_count > 0) {
-                            append("  ")
-                            withStyle(SpanStyle(color = StatusRed, fontWeight = FontWeight.SemiBold)) {
-                                append("♥ ${item.reaction_count}")
-                            }
-                        }
-                    },
+                    item.bodyLine(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = scheme.onSurfaceVariant,
                 )
@@ -470,7 +458,7 @@ fun ThreadScreen(
                 thread?.likes?.forEach { like ->
                     item {
                         Text(
-                            "${like.name} · ${like.date}",
+                            stringResource(R.string.messages_like_detail_format, like.name, like.date),
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.padding(horizontal = 4.dp),
                         )
