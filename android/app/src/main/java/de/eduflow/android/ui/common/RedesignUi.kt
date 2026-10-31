@@ -40,6 +40,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -219,6 +221,7 @@ fun SearchPill(
     onValueChange: (String) -> Unit,
     placeholder: String,
     modifier: Modifier = Modifier,
+    focusRequester: FocusRequester? = null,
 ) {
     val scheme = MaterialTheme.colorScheme
     OutlinedTextField(
@@ -236,7 +239,11 @@ fun SearchPill(
             focusedBorderColor = scheme.primary,
             cursorColor = scheme.primary,
         ),
-        modifier = modifier.fillMaxWidth(),
+        modifier = if (focusRequester == null) {
+            modifier.fillMaxWidth()
+        } else {
+            modifier.fillMaxWidth().focusRequester(focusRequester)
+        },
     )
 }
 

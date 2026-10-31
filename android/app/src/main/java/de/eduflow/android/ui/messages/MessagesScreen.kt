@@ -59,11 +59,14 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -87,6 +90,7 @@ import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SearchPill
 import de.eduflow.android.ui.common.SectionLabel
 import de.eduflow.android.ui.timetable.localizedApiMessage
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -151,29 +155,49 @@ fun MessagesScreen(
                 targetValue = if (headerCollapsed) 20f else 24f,
                 label = "messages-title-size",
             )
-            Text(
-                stringResource(R.string.messages_title),
-                fontSize = titleSize.sp,
-                lineHeight = (titleSize + 4).sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground,
-            )
+            val searchFocus = remember { FocusRequester() }
+            var searchRequested by remember { mutableStateOf(false) }
+            val keyboard = LocalSoftwareKeyboardController.current
+            val showSearch = !headerCollapsed || searchRequested
+            LaunchedEffect(searchRequested) {
+                if (searchRequested) {
+                    listState.scrollToItem(0)
+                    kotlinx.coroutines.delay(180)
+                    searchFocus.requestFocus()
+                    keyboard?.show()
+                    searchRequested = false
+                }
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    stringResource(R.string.messages_title),
+                    fontSize = titleSize.sp,
+                    lineHeight = (titleSize + 4).sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier.weight(1f),
+                )
+                AnimatedVisibility(visible = headerCollapsed && !searchRequested) {
+                    IconButton(onClick = { searchRequested = true }) {
+                        Icon(
+                            Icons.Filled.Search,
+                            contentDescription = stringResource(R.string.messages_search_placeholder),
+                        )
+                    }
+                }
+            }
             AnimatedVisibility(
-                visible = !headerCollapsed,
+                visible = showSearch,
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut() + shrinkVertically(),
             ) {
                 Column {
-                    Text(
-                        stringResource(R.string.messages_subtitle),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
                     Spacer(Modifier.height(12.dp))
                     SearchPill(
                         value = state.query,
                         onValueChange = viewModel::onQuery,
                         placeholder = stringResource(R.string.messages_search_placeholder),
+                        focusRequester = searchFocus,
                     )
                     Spacer(Modifier.height(10.dp))
                     val filterAll = stringResource(MsgFilter.ALLE.stringRes)
