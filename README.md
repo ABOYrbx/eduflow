@@ -113,28 +113,28 @@ before use; never commit secrets.
 
 <table>
   <tr>
-    <td><img src="docs/images/android/and_home.png" alt="Android home" width="320"></td>
-    <td><img src="docs/images/android/and_grades.png" alt="Android grades" width="320"></td>
+    <td><img src="docs/images/android/and_home.png" alt="Android home" width="320"><br><em>Home: clock, next lesson, weather, latest messages</em></td>
+    <td><img src="docs/images/android/and_grades.png" alt="Android grades" width="320"><br><em>Grades: averages and subjects</em></td>
   </tr>
   <tr>
-    <td><img src="docs/images/android/and_tasks.png" alt="Android tasks" width="320"></td>
-    <td><img src="docs/images/android/and_plan.png" alt="Android plan" width="320"></td>
+    <td><img src="docs/images/android/and_tasks.png" alt="Android tasks" width="320"><br><em>Homework: filters and counters</em></td>
+    <td><img src="docs/images/android/and_plan.png" alt="Android plan" width="320"><br><em>Timetable / plan view</em></td>
   </tr>
   <tr>
-    <td><img src="docs/images/android/and_events.png" alt="Android events" width="320"></td>
-    <td><img src="docs/images/android/and_messages.png" alt="Android messages" width="320"></td>
+    <td><img src="docs/images/android/and_events.png" alt="Android events" width="320"><br><em>Events and substitutions</em></td>
+    <td><img src="docs/images/android/and_messages.png" alt="Android messages" width="320"><br><em>Messages inbox and thread</em></td>
   </tr>
   <tr>
-    <td><img src="docs/images/android/and_settings.png" alt="Android settings" width="320"></td>
-    <td><img src="docs/images/android/and_devices.png" alt="Android devices" width="320"></td>
+    <td><img src="docs/images/android/and_settings.png" alt="Android settings" width="320"><br><em>Settings</em></td>
+    <td><img src="docs/images/android/and_devices.png" alt="Android devices" width="320"><br><em>Devices and sessions</em></td>
   </tr>
   <tr>
-    <td><img src="docs/images/android/and_more.png" alt="Android more" width="320"></td>
-    <td><img src="docs/images/android/and_onboarding0.png" alt="Android login/onboarding" width="320"></td>
+    <td><img src="docs/images/android/and_more.png" alt="Android more" width="320"><br><em>More menu</em></td>
+    <td><img src="docs/images/android/and_onboarding0.png" alt="Android login/onboarding" width="320"><br><em>Login / onboarding</em></td>
   </tr>
   <tr>
-    <td><img src="docs/images/android/and_homework_detail.png" alt="Android homework detail" width="320"></td>
-    <td><img src="docs/images/android/and_message_thread.png" alt="Android message thread" width="320"></td>
+    <td><img src="docs/images/android/and_homework_detail.png" alt="Android homework detail" width="320"><br><em>Homework detail</em></td>
+    <td><img src="docs/images/android/and_message_thread.png" alt="Android message thread" width="320"><br><em>Message thread</em></td>
   </tr>
 </table>
 
@@ -142,20 +142,20 @@ before use; never commit secrets.
 
 <table>
   <tr>
-    <td><img src="docs/images/web/web_home.png" alt="Web home" width="320"></td>
-    <td><img src="docs/images/web/web_homework.png" alt="Web homework" width="320"></td>
+    <td><img src="docs/images/web/web_home.png" alt="Web home" width="320"><br><em>Home dashboard</em></td>
+    <td><img src="docs/images/web/web_homework.png" alt="Web homework" width="320"><br><em>Homework</em></td>
   </tr>
   <tr>
-    <td><img src="docs/images/web/web_grades.png" alt="Web grades" width="320"></td>
-    <td><img src="docs/images/web/web_timetable.png" alt="Web timetable" width="320"></td>
+    <td><img src="docs/images/web/web_grades.png" alt="Web grades" width="320"><br><em>Grades</em></td>
+    <td><img src="docs/images/web/web_timetable.png" alt="Web timetable" width="320"><br><em>Timetable</em></td>
   </tr>
   <tr>
-    <td><img src="docs/images/web/web_messages.png" alt="Web messages" width="320"></td>
-    <td><img src="docs/images/web/web_agenda.png" alt="Web agenda" width="320"></td>
+    <td><img src="docs/images/web/web_messages.png" alt="Web messages" width="320"><br><em>Messages</em></td>
+    <td><img src="docs/images/web/web_agenda.png" alt="Web agenda" width="320"><br><em>Events and substitutions</em></td>
   </tr>
   <tr>
-    <td><img src="docs/images/web/web_settings.png" alt="Web settings" width="320"></td>
-    <td><img src="docs/images/web/web_login.png" alt="Web login" width="320"></td>
+    <td><img src="docs/images/web/web_settings.png" alt="Web settings" width="320"><br><em>Settings</em></td>
+    <td><img src="docs/images/web/web_login.png" alt="Web login" width="320"><br><em>Login</em></td>
   </tr>
 </table>
 
