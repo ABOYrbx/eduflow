@@ -132,6 +132,58 @@ Testkonten (synthetische Daten, nur Demo):
   Bauen/Testen: `xcodebuild -project "mac/EduFlow Mac.xcodeproj" -scheme "EduFlow Mac" -destination 'platform=macOS' test` (52 Tests).
 - **iOS** (`ios/`, Projekt `EduFlow iOS`): gebaut, aber bis auf Weiteres zurückgestellt.
 
+### Screenshots
+
+#### Android
+
+<table>
+  <tr>
+    <td><img src="docs/images/android/and_home.png" alt="Android-Startseite" width="320"><br><em>Start: Uhr, nächste Stunde, Wetter, neueste Nachrichten</em></td>
+    <td><img src="docs/images/android/and_grades.png" alt="Android-Noten" width="320"><br><em>Noten: Durchschnitte und Fächer</em></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/android/and_tasks.png" alt="Android-Aufgaben" width="320"><br><em>Hausaufgaben: Filter und Zähler</em></td>
+    <td><img src="docs/images/android/and_plan.png" alt="Android-Stundenplan" width="320"><br><em>Stundenplan / Plan-Ansicht</em></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/android/and_events.png" alt="Android-Ereignisse" width="320"><br><em>Ereignisse und Vertretungen</em></td>
+    <td><img src="docs/images/android/and_messages.png" alt="Android-Nachrichten" width="320"><br><em>Nachrichten: Posteingang und Thread</em></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/android/and_settings.png" alt="Android-Einstellungen" width="320"><br><em>Einstellungen</em></td>
+    <td><img src="docs/images/android/and_devices.png" alt="Android-Geräte" width="320"><br><em>Geräte und Sitzungen</em></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/android/and_more.png" alt="Android-Mehr" width="320"><br><em>Mehr-Menü</em></td>
+    <td><img src="docs/images/android/and_onboarding0.png" alt="Android-Anmeldung" width="320"><br><em>Anmeldung / Onboarding</em></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/android/and_homework_detail.png" alt="Android-Aufgabendetail" width="320"><br><em>Aufgabendetail</em></td>
+    <td><img src="docs/images/android/and_message_thread.png" alt="Android-Nachrichtenthread" width="320"><br><em>Nachrichtenthread</em></td>
+  </tr>
+</table>
+
+#### Web
+
+<table>
+  <tr>
+    <td><img src="docs/images/web/web_home.png" alt="Web-Startseite" width="320"><br><em>Startseite</em></td>
+    <td><img src="docs/images/web/web_homework.png" alt="Web-Hausaufgaben" width="320"><br><em>Hausaufgaben</em></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/web/web_grades.png" alt="Web-Noten" width="320"><br><em>Noten</em></td>
+    <td><img src="docs/images/web/web_timetable.png" alt="Web-Stundenplan" width="320"><br><em>Stundenplan</em></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/web/web_messages.png" alt="Web-Nachrichten" width="320"><br><em>Nachrichten</em></td>
+    <td><img src="docs/images/web/web_agenda.png" alt="Web-Ereignisse" width="320"><br><em>Ereignisse und Vertretungen</em></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/web/web_settings.png" alt="Web-Einstellungen" width="320"><br><em>Einstellungen</em></td>
+    <td><img src="docs/images/web/web_login.png" alt="Web-Anmeldung" width="320"><br><em>Anmeldung</em></td>
+  </tr>
+</table>
+
 ### API-Referenz
 
 - `GET /api/v1/health` (ohne Auth) und `GET /api/v1/openapi.json` (Routen-Referenz)
