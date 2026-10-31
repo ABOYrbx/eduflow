@@ -213,6 +213,8 @@
     <string name="messages_reply_send">Válasz</string>
     <string name="messages_compose_subtitle">Válassz tanárokat és osztálytársakat</string>
     <string name="messages_recipient_search">Címzettek keresése</string>
+    <string name="messages_role_teacher">Tanár</string>
+    <string name="messages_role_student">Diák</string>
     <string name="common_clear">Clear search</string>
     <string name="messages_recipients_empty">No recipients loaded.</string>
     <string name="messages_recipients_no_match">No recipient matches that search.</string>

@@ -213,6 +213,8 @@
     <string name="messages_reply_send">Απάντηση</string>
     <string name="messages_compose_subtitle">Επιλέξτε καθηγητές και συμμαθητές</string>
     <string name="messages_recipient_search">Αναζήτηση παραλήπτες</string>
+    <string name="messages_role_teacher">Δάσκαλος</string>
+    <string name="messages_role_student">Μαθητής</string>
     <string name="common_clear">Clear search</string>
     <string name="messages_recipients_empty">No recipients loaded.</string>
     <string name="messages_recipients_no_match">No recipient matches that search.</string>
