@@ -465,7 +465,7 @@ fun ThreadScreen(
             thread?.replies?.forEach { reply ->
                 item {
                     EduCard(modifier = Modifier.fillMaxWidth()) {
-                        Column(Modifier.fillMaxWidth()) {
+                        Column(Modifier.fillMaxWidth().padding(16.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 AvatarDot(initials = initialsOf(reply.name))
                                 Spacer(Modifier.width(10.dp))
