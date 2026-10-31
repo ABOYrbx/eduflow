@@ -333,7 +333,9 @@ fun LessonCard(
                 Text(
                     startOf(lesson.time).ifBlank { "–" },
                     fontSize = 13.sp,
-                    color = scheme.onSurfaceVariant,
+                    // Running lesson: use the high-contrast ink so the time is
+                    // black in light mode and white in dark mode.
+                    color = if (isNow) scheme.onSurface else scheme.onSurfaceVariant,
                     modifier = Modifier.width(52.dp).padding(top = 2.dp),
                 )
                 Box(
