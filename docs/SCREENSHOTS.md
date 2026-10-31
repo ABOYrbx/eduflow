@@ -4,50 +4,63 @@ Screenshots of the Android and web apps, captured with synthetic demo data (`dem
 
 ## Android
 
-![Home screen with live clock, current/next lesson, weather and latest messages](images/android/and_home.png)
-
-![Grades with average card and expandable subjects](images/android/and_grades.png)
-
-![Homework tasks with filters and counters](images/android/and_tasks.png)
-
-![Timetable / plan view](images/android/and_plan.png)
-
-![Events and substitutions](images/android/and_events.png)
-
-![Messages inbox and thread](images/android/and_messages.png)
-
-![Settings](images/android/and_settings.png)
-
-![Devices and sessions](images/android/and_devices.png)
-
-![More menu](images/android/and_more.png)
+<table>
+  <tr>
+    <td><img src="images/android/and_home.png" alt="Home screen with live clock, current/next lesson, weather and latest messages" width="320"></td>
+    <td><img src="images/android/and_grades.png" alt="Grades with average card and expandable subjects" width="320"></td>
+  </tr>
+  <tr>
+    <td><img src="images/android/and_tasks.png" alt="Homework tasks with filters and counters" width="320"></td>
+    <td><img src="images/android/and_plan.png" alt="Timetable / plan view" width="320"></td>
+  </tr>
+  <tr>
+    <td><img src="images/android/and_events.png" alt="Events and substitutions" width="320"></td>
+    <td><img src="images/android/and_messages.png" alt="Messages inbox and thread" width="320"></td>
+  </tr>
+  <tr>
+    <td><img src="images/android/and_settings.png" alt="Settings" width="320"></td>
+    <td><img src="images/android/and_devices.png" alt="Devices and sessions" width="320"></td>
+  </tr>
+  <tr>
+    <td><img src="images/android/and_more.png" alt="More menu" width="320"></td>
+    <td></td>
+  </tr>
+</table>
 
 ## Android (additional)
 
-![Login/onboarding welcome](images/android/and_onboarding0.png)
-
-![Onboarding features](images/android/and_onboarding1.png)
-
-![Onboarding page 2](images/android/and_onboarding2.png)
-
-![Homework detail](images/android/and_homework_detail.png)
-
-![Message thread](images/android/and_message_thread.png)
+<table>
+  <tr>
+    <td><img src="images/android/and_onboarding0.png" alt="Login/onboarding welcome" width="320"></td>
+    <td><img src="images/android/and_onboarding1.png" alt="Onboarding features" width="320"></td>
+  </tr>
+  <tr>
+    <td><img src="images/android/and_onboarding2.png" alt="Onboarding page 2" width="320"></td>
+    <td><img src="images/android/and_homework_detail.png" alt="Homework detail" width="320"></td>
+  </tr>
+  <tr>
+    <td><img src="images/android/and_message_thread.png" alt="Message thread" width="320"></td>
+    <td></td>
+  </tr>
+</table>
 
 ## Web
 
-![Web login](images/web/web_login.png)
-
-![Web home dashboard](images/web/web_home.png)
-
-![Web homework](images/web/web_homework.png)
-
-![Web grades](images/web/web_grades.png)
-
-![Web timetable](images/web/web_timetable.png)
-
-![Web messages](images/web/web_messages.png)
-
-![Web agenda (events and substitutions)](images/web/web_agenda.png)
-
-![Web settings](images/web/web_settings.png)
+<table>
+  <tr>
+    <td><img src="images/web/web_login.png" alt="Web login" width="320"></td>
+    <td><img src="images/web/web_home.png" alt="Web home dashboard" width="320"></td>
+  </tr>
+  <tr>
+    <td><img src="images/web/web_homework.png" alt="Web homework" width="320"></td>
+    <td><img src="images/web/web_grades.png" alt="Web grades" width="320"></td>
+  </tr>
+  <tr>
+    <td><img src="images/web/web_timetable.png" alt="Web timetable" width="320"></td>
+    <td><img src="images/web/web_messages.png" alt="Web messages" width="320"></td>
+  </tr>
+  <tr>
+    <td><img src="images/web/web_agenda.png" alt="Web agenda (events and substitutions)" width="320"></td>
+    <td><img src="images/web/web_settings.png" alt="Web settings" width="320"></td>
+  </tr>
+</table>
