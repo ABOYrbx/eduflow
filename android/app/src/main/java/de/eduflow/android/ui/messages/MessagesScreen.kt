@@ -58,7 +58,10 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.eduflow.android.R
@@ -77,9 +80,26 @@ import de.eduflow.android.ui.common.PullRefreshBox
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SearchPill
 import de.eduflow.android.ui.common.SectionLabel
+import de.eduflow.android.ui.theme.StatusRed
 import de.eduflow.android.ui.timetable.localizedApiMessage
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 private const val BODY_MAX = 5000
+
+private val MESSAGE_TIMESTAMP_FORMAT =
+    DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm", Locale.getDefault())
+
+/** Prefer the ISO value and render the same short format as the like list. */
+private fun formatMessageTimestamp(item: MessageDto): String {
+    val raw = item.timestamp_iso.ifBlank { item.timestamp }.trim()
+    if (raw.isBlank()) return ""
+    val parsed = runCatching {
+        LocalDateTime.parse(raw.replace(' ', 'T'), DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+    }.getOrNull()
+    return parsed?.format(MESSAGE_TIMESTAMP_FORMAT) ?: raw
+}
 
 private fun initialsOf(name: String): String =
     name.split(" ", " ").mapNotNull { it.firstOrNull()?.toString() }.take(2).joinToString("")
@@ -281,13 +301,21 @@ fun MessageCard(
                         modifier = Modifier.weight(1f),
                     )
                     Text(
-                        item.timestamp.ifBlank { item.timestamp_iso },
+                        formatMessageTimestamp(item),
                         style = MaterialTheme.typography.labelSmall,
                         color = scheme.onSurfaceVariant,
                     )
                 }
                 Text(
-                    item.bodyLine(),
+                    buildAnnotatedString {
+                        append(item.bodyLine())
+                        if (item.reaction_count > 0) {
+                            append("  ")
+                            withStyle(SpanStyle(color = StatusRed, fontWeight = FontWeight.SemiBold)) {
+                                append("♥ ${item.reaction_count}")
+                            }
+                        }
+                    },
                     style = MaterialTheme.typography.bodyMedium,
                     color = scheme.onSurfaceVariant,
                 )
@@ -309,14 +337,6 @@ fun MessageCard(
                             }
                         }
                     }
-                }
-                if (item.reaction_count > 0) {
-                    Text(
-                        stringResource(R.string.messages_like_format, item.reaction_count),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = scheme.onSurfaceVariant,
-                        modifier = Modifier.padding(top = 2.dp),
-                    )
                 }
             }
             if (unread) {
@@ -450,7 +470,7 @@ fun ThreadScreen(
                 thread?.likes?.forEach { like ->
                     item {
                         Text(
-                            stringResource(R.string.messages_like_detail_format, like.name, like.date),
+                            "${like.name} · ${like.date}",
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.padding(horizontal = 4.dp),
                         )
