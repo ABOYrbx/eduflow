@@ -1,5 +1,12 @@
 package de.eduflow.android.ui.messages
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +24,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.rememberScrollState
@@ -47,6 +55,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -121,45 +130,74 @@ fun MessagesScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val visible = state.visible
+    val listState = rememberLazyListState()
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(Modifier.fillMaxSize().padding(16.dp)) {
             AppHeader(
-                    onSettings = onOpenSettings,
+                onSettings = onOpenSettings,
                 onLogout = onLogout,
             )
             Spacer(Modifier.height(12.dp))
-            ScreenHead(
-                title = stringResource(R.string.messages_title),
-                subtitle = stringResource(R.string.messages_subtitle),
-            )
-            Spacer(Modifier.height(12.dp))
-            SearchPill(
-                value = state.query,
-                onValueChange = viewModel::onQuery,
-                placeholder = stringResource(R.string.messages_search_placeholder),
-            )
-            Spacer(Modifier.height(10.dp))
-            val filterAll = stringResource(MsgFilter.ALLE.stringRes)
-            val filterUnread = stringResource(MsgFilter.UNGELESEN.stringRes)
-            val filterFiles = stringResource(MsgFilter.MIT_DATEIEN.stringRes)
-            val filterOptions = listOf(filterAll, filterUnread, filterFiles)
-            val filterSelected = when (state.filter) {
-                MsgFilter.UNGELESEN -> filterUnread
-                MsgFilter.MIT_DATEIEN -> filterFiles
-                MsgFilter.ALLE -> filterAll
+            // Collapse the secondary header while scrolling down, like the
+            // bottom bar. Scrolling back up restores search and filters.
+            val headerCollapsed by remember {
+                derivedStateOf {
+                    listState.firstVisibleItemIndex > 0 ||
+                        listState.firstVisibleItemScrollOffset > 24
+                }
             }
-            FilterChips(
-                options = filterOptions,
-                selected = filterSelected,
-                onSelect = { label ->
-                    when (label) {
-                        filterUnread -> viewModel.onFilter(MsgFilter.UNGELESEN)
-                        filterFiles -> viewModel.onFilter(MsgFilter.MIT_DATEIEN)
-                        else -> viewModel.onFilter(MsgFilter.ALLE)
-                    }
-                },
+            val titleSize by animateFloatAsState(
+                targetValue = if (headerCollapsed) 20f else 24f,
+                label = "messages-title-size",
             )
+            Text(
+                stringResource(R.string.messages_title),
+                fontSize = titleSize.sp,
+                lineHeight = (titleSize + 4).sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
+            )
+            AnimatedVisibility(
+                visible = !headerCollapsed,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically(),
+            ) {
+                Column {
+                    Text(
+                        stringResource(R.string.messages_subtitle),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Spacer(Modifier.height(12.dp))
+                    SearchPill(
+                        value = state.query,
+                        onValueChange = viewModel::onQuery,
+                        placeholder = stringResource(R.string.messages_search_placeholder),
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    val filterAll = stringResource(MsgFilter.ALLE.stringRes)
+                    val filterUnread = stringResource(MsgFilter.UNGELESEN.stringRes)
+                    val filterFiles = stringResource(MsgFilter.MIT_DATEIEN.stringRes)
+                    val filterOptions = listOf(filterAll, filterUnread, filterFiles)
+                    val filterSelected = when (state.filter) {
+                        MsgFilter.UNGELESEN -> filterUnread
+                        MsgFilter.MIT_DATEIEN -> filterFiles
+                        MsgFilter.ALLE -> filterAll
+                    }
+                    FilterChips(
+                        options = filterOptions,
+                        selected = filterSelected,
+                        onSelect = { label ->
+                            when (label) {
+                                filterUnread -> viewModel.onFilter(MsgFilter.UNGELESEN)
+                                filterFiles -> viewModel.onFilter(MsgFilter.MIT_DATEIEN)
+                                else -> viewModel.onFilter(MsgFilter.ALLE)
+                            }
+                        },
+                    )
+                }
+            }
             Spacer(Modifier.height(10.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 SectionLabel(
@@ -218,6 +256,7 @@ fun MessagesScreen(
                 }
             } else {
                 LazyColumn(
+                    state = listState,
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier.fillMaxSize(),
                 ) {
