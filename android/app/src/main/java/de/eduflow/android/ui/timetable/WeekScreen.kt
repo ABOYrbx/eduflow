@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -36,6 +37,7 @@ import de.eduflow.android.ui.common.AppHeader
 import de.eduflow.android.ui.common.PullRefreshBox
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.StatusPill
+import de.eduflow.android.ui.common.rememberCollapsedHeader
 import de.eduflow.android.ui.theme.RDotBlue
 
 /**
@@ -56,6 +58,8 @@ fun WeekScreen(
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsState()
+    val listState = rememberLazyListState()
+    val collapsed = rememberCollapsedHeader(listState)
     val week = state.weekData
 
     Column(modifier = modifier.fillMaxSize().padding(16.dp).swipeToStep(viewModel::step)) {
@@ -67,6 +71,7 @@ fun WeekScreen(
         ScreenHead(
             title = stringResource(R.string.timetable_title),
             subtitle = week?.week_label ?: state.day,
+            collapsed = collapsed,
         )
         Spacer(Modifier.height(12.dp))
         TimetableSegmented(view = state.view, onView = viewModel::setView)
@@ -130,6 +135,7 @@ fun WeekScreen(
             }
         } else {
             LazyColumn(
+                state = listState,
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxSize(),
             ) {

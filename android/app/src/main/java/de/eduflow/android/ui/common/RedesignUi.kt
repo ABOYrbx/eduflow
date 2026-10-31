@@ -1,7 +1,14 @@
 package de.eduflow.android.ui.common
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -13,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,6 +40,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -158,20 +167,68 @@ fun ScreenHead(
     title: String,
     subtitle: String,
     modifier: Modifier = Modifier,
+    collapsed: Boolean = false,
 ) {
     val scheme = MaterialTheme.colorScheme
+    val titleSize by animateFloatAsState(
+        targetValue = if (collapsed) 20f else 24f,
+        label = "screen-title-size",
+    )
     Column(modifier = modifier) {
         Text(
             title,
             style = MaterialTheme.typography.headlineSmall,
+            fontSize = titleSize.sp,
+            lineHeight = (titleSize + 4).sp,
             fontWeight = FontWeight.Bold,
             color = scheme.onBackground,
         )
-        Text(
-            subtitle,
-            style = MaterialTheme.typography.bodyMedium,
-            color = scheme.onSurfaceVariant,
-        )
+        AnimatedVisibility(
+            visible = !collapsed,
+            enter = fadeIn() + expandVertically(),
+            exit = fadeOut() + shrinkVertically(),
+        ) {
+            Text(
+                subtitle,
+                style = MaterialTheme.typography.bodyMedium,
+                color = scheme.onSurfaceVariant,
+            )
+        }
+    }
+}
+
+/** True once a list has scrolled past the top; used by [ScreenHead]. */
+@Composable
+fun rememberCollapsedHeader(
+    state: LazyListState,
+    threshold: Int = 24,
+): Boolean = remember(state) {
+    derivedStateOf {
+        state.firstVisibleItemIndex > 0 || state.firstVisibleItemScrollOffset > threshold
+    }
+}.value
+
+/** Same for regular vertical scroll containers (Settings, More, …). */
+@Composable
+fun rememberCollapsedHeader(
+    state: ScrollState,
+    threshold: Int = 24,
+): Boolean = remember(state) {
+    derivedStateOf { state.value > threshold }
+}.value
+
+/** Secondary header content that fades/expands with the same motion as [ScreenHead]. */
+@Composable
+fun CollapsibleHeaderContent(
+    collapsed: Boolean,
+    content: @Composable () -> Unit,
+) {
+    AnimatedVisibility(
+        visible = !collapsed,
+        enter = fadeIn() + expandVertically(),
+        exit = fadeOut() + shrinkVertically(),
+    ) {
+        content()
     }
 }
 

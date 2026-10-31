@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -24,6 +25,7 @@ import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.EmptyBox
 import de.eduflow.android.ui.common.LoadingBox
 import de.eduflow.android.ui.common.ScreenHead
+import de.eduflow.android.ui.common.rememberCollapsedHeader
 
 /**
  * Eigene Tokens (ohne Secrets) + gezieltes Widerrufen — wie /einstellungen
@@ -44,10 +46,13 @@ fun DevicesScreen(
         LoadingBox()
         return
     }
+    val listState = rememberLazyListState()
+    val collapsed = rememberCollapsedHeader(listState)
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         ScreenHead(
             title = stringResource(R.string.devices_title),
             subtitle = stringResource(R.string.devices_subtitle),
+            collapsed = collapsed,
         )
         if (state.devicesLoading) {
             LoadingBox()
@@ -57,7 +62,7 @@ fun DevicesScreen(
             EmptyBox(stringResource(R.string.devices_empty))
             return
         }
-        LazyColumn(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        LazyColumn(state = listState, verticalArrangement = Arrangement.spacedBy(10.dp)) {
             items(state.devices, key = { it.id }) { d ->
                 EduCard(modifier = Modifier.fillMaxWidth()) {
                     Row(

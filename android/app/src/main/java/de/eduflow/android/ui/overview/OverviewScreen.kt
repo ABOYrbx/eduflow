@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -70,6 +71,7 @@ import de.eduflow.android.ui.common.AppHeader
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SectionLabel
+import de.eduflow.android.ui.common.rememberCollapsedHeader
 import de.eduflow.android.ui.theme.LocalEduFlowDark
 import de.eduflow.android.ui.timetable.AuthAwareError
 import de.eduflow.android.ui.timetable.localizedApiMessage
@@ -109,6 +111,8 @@ fun OverviewScreen(
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsState()
+    val listState = rememberLazyListState()
+    val collapsed = rememberCollapsedHeader(listState)
     // Wochentag immer deutsch (System-Sprache wird ignoriert, wie macOS
     // mit de_DE); Muster kommt aus strings.xml und ist damit via Crowdin
     // pro Sprache anpassbar.
@@ -127,7 +131,11 @@ fun OverviewScreen(
             onLogout = onLogout,
         )
         Spacer(Modifier.height(12.dp))
-        ScreenHead(title = stringResource(R.string.bottom_home), subtitle = todayLabel)
+        ScreenHead(
+            title = stringResource(R.string.bottom_home),
+            subtitle = todayLabel,
+            collapsed = collapsed,
+        )
         Spacer(Modifier.height(12.dp))
 
         state.error?.let { err ->
@@ -155,6 +163,7 @@ fun OverviewScreen(
             )
             Box(modifier = Modifier.weight(1f).pullRefresh(pullState)) {
                 LazyColumn(
+                    state = listState,
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                     modifier = Modifier.fillMaxSize(),
                 ) {

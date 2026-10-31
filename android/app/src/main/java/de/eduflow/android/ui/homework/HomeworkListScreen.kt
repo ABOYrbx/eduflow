@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -49,10 +50,12 @@ import de.eduflow.android.data.dto.HomeworkDto
 import de.eduflow.android.data.dto.HomeworkItemStatus
 import de.eduflow.android.data.dto.HomeworkStatus
 import de.eduflow.android.ui.common.AppHeader
+import de.eduflow.android.ui.common.CollapsibleHeaderContent
 import de.eduflow.android.ui.common.EduCard
 import de.eduflow.android.ui.common.FilterChips
 import de.eduflow.android.ui.common.PullRefreshBox
 import de.eduflow.android.ui.common.ScreenHead
+import de.eduflow.android.ui.common.rememberCollapsedHeader
 import de.eduflow.android.ui.common.SearchPill
 import de.eduflow.android.ui.common.SectionLabel
 import de.eduflow.android.ui.common.StatusPill
@@ -95,6 +98,8 @@ fun HomeworkListScreen(
 ) {
     val state by viewModel.state.collectAsState()
     val inTrash = state.status == HomeworkStatus.PAPIERKORB
+    val listState = rememberLazyListState()
+    val collapsed = rememberCollapsedHeader(listState)
 
     Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
         AppHeader(
@@ -105,30 +110,35 @@ fun HomeworkListScreen(
         ScreenHead(
             title = stringResource(R.string.homework_title),
             subtitle = stringResource(R.string.homework_subtitle),
+            collapsed = collapsed,
         )
-        Spacer(Modifier.height(12.dp))
-        SearchPill(
-            value = state.query,
-            onValueChange = viewModel::onQuery,
-            placeholder = stringResource(R.string.homework_search_placeholder),
-        )
-        Spacer(Modifier.height(10.dp))
-        val chips = chipOptions()
-        FilterChips(
-            options = chips.map { it.first },
-            selected = chips.firstOrNull { it.second == state.status }?.first.orEmpty(),
-            onSelect = { label ->
-                chips.firstOrNull { it.first == label }?.let { viewModel.onStatus(it.second) }
-            },
-        )
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                stringResource(R.string.homework_include_tests),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.weight(1f),
-            )
-            Switch(checked = state.includeTests, onCheckedChange = viewModel::onIncludeTests)
+        CollapsibleHeaderContent(collapsed = collapsed) {
+            Column {
+                Spacer(Modifier.height(12.dp))
+                SearchPill(
+                    value = state.query,
+                    onValueChange = viewModel::onQuery,
+                    placeholder = stringResource(R.string.homework_search_placeholder),
+                )
+                Spacer(Modifier.height(10.dp))
+                val chips = chipOptions()
+                FilterChips(
+                    options = chips.map { it.first },
+                    selected = chips.firstOrNull { it.second == state.status }?.first.orEmpty(),
+                    onSelect = { label ->
+                        chips.firstOrNull { it.first == label }?.let { viewModel.onStatus(it.second) }
+                    },
+                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        stringResource(R.string.homework_include_tests),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.weight(1f),
+                    )
+                    Switch(checked = state.includeTests, onCheckedChange = viewModel::onIncludeTests)
+                }
+            }
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             SectionLabel(
@@ -195,6 +205,7 @@ fun HomeworkListScreen(
             }
         } else {
             LazyColumn(
+                state = listState,
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier.fillMaxSize(),
             ) {

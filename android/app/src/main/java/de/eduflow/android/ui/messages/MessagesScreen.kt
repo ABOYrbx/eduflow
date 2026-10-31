@@ -89,6 +89,7 @@ import de.eduflow.android.ui.common.PullRefreshBox
 import de.eduflow.android.ui.common.ScreenHead
 import de.eduflow.android.ui.common.SearchPill
 import de.eduflow.android.ui.common.SectionLabel
+import de.eduflow.android.ui.common.rememberCollapsedHeader
 import de.eduflow.android.ui.timetable.localizedApiMessage
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
@@ -416,6 +417,8 @@ fun ThreadScreen(
     modifier: Modifier = Modifier,
 ) {
     val state by viewModel.state.collectAsState()
+    val listState = rememberLazyListState()
+    val collapsed = rememberCollapsedHeader(listState)
     val thread = state.thread
 
     Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
@@ -427,6 +430,7 @@ fun ThreadScreen(
                 title = stringResource(R.string.messages_thread_title),
                 subtitle = message?.author.orEmpty(),
                 modifier = Modifier.weight(1f),
+                collapsed = collapsed,
             )
             IconButton(onClick = viewModel::refresh, enabled = !state.isLoading) {
                 Icon(Icons.Filled.Refresh, contentDescription = stringResource(R.string.common_reload))
@@ -462,6 +466,7 @@ fun ThreadScreen(
         }
 
         LazyColumn(
+            state = listState,
             verticalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier.weight(1f),
         ) {
