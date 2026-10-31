@@ -4,7 +4,7 @@ import { PrismaService } from "../prisma/prisma.service";
 import type { AuthClaims } from "../auth/auth.service";
 import { EdupageClient } from "./client";
 import { BadCredentialsError, CaptchaError, MissingDataError } from "./errors";
-import { downloadViaSession, fetchThread, replyToMessage, sendTimelineMessage } from "./messages";
+import { downloadViaSession, fetchThread, replyToMessage, sendTimelineMessage, type DownloadedFile } from "./messages";
 import { EXAM_TYPES, HOMEWORK_TYPES, eventToDict, extractAttachments, formatIsoLocal, homeworkRank, homeworkToDict, markHidden, norm, recipientsFromDbi } from "./serializers";
 import { MESSAGE_TYPES, TimelineEvent, fetchTimelineHistory } from "./timeline";
 import { GERMAN_WEEKDAYS, LessonDict, fetchDayPlan, isAlldayEvent, lessonToDict, mergeLernzeit, parseDayPlan } from "./timetable";
@@ -15,6 +15,7 @@ import { fetchGradeData, gradeToDict, parseGrades } from "./grades";
 import { setHomeworkDone } from "./homework";
 import { page, parsePage } from "../common/pagination";
 import { openPassword } from "./vault";
+import { clearAttachmentCache, readCachedAttachment, writeCachedAttachment } from "./attachment-cache";
 import { t } from "../i18n";
 
 // Timeline-Cache: bestimmt, wie schnell neue Nachrichten auftauchen. Kurz
@@ -419,6 +420,13 @@ export class EdupageDataService {
     const event = await this.resolveEvent(client, claims.sub, subdomain, eventId as number);
     if (!event) throw new NotFoundException({ error: t("messages.notFound"), code: "NOT_FOUND" });
     this.attachmentUrl(event, subdomain, idx as number);
+    // Pull the file onto the server before handing out the token. If this
+    // fails, the attachment endpoint still retries on demand.
+    try {
+      await this.warmAttachment(claims.sub, client, subdomain, event, eventId as number, idx as number);
+    } catch {
+      /* on-demand fallback below */
+    }
     const token = randomBytes(18).toString("base64url");
     await this.writeCache(claims.sub, `dl:${token}`, { accountId: claims.sub, eventId: String(eventId), idx: String(idx) }, DL_TTL_S);
     return { download_token: token, expires_in: DL_TTL_S };
@@ -457,23 +465,59 @@ export class EdupageDataService {
   }
 
   private async downloadResolved(client: EdupageClient, accountId: string, subdomain: string, eventId: number, idx: number) {
+    const cached = await readCachedAttachment(accountId, eventId, idx);
+    if (cached) return cached;
     const event = await this.resolveEvent(client, accountId, subdomain, eventId);
     if (!event) throw new NotFoundException({ error: t("messages.notFound"), code: "NOT_FOUND" });
-    let url: string;
     try {
-      url = this.attachmentUrl(event, subdomain, idx);
+      return await this.warmAttachment(accountId, client, subdomain, event, eventId, idx);
     } catch (error) {
       if (error instanceof HttpException) throw error;
-      throw new NotFoundException({ error: t("messages.attachment"), code: "NOT_FOUND" });
-    }
-    try {
-      const file = await downloadViaSession(client.session, url, eventIdName(event, idx));
-      return file;
-    } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
       if (detail.startsWith("EduPage reports error")) throw new HttpException({ error: detail, code: "UPSTREAM" }, 502);
       throw new HttpException({ error: t("upstream.downloadFailed", { detail }), code: "UPSTREAM" }, 502);
     }
+  }
+
+  /** Download one attachment to the server cache and return it. */
+  private async warmAttachment(
+    accountId: string,
+    client: EdupageClient,
+    subdomain: string,
+    event: TimelineEvent,
+    eventId: number,
+    idx: number,
+  ): Promise<DownloadedFile> {
+    const cached = await readCachedAttachment(accountId, eventId, idx);
+    if (cached) return cached;
+    const url = this.attachmentUrl(event, subdomain, idx);
+    const file = await downloadViaSession(client.session, url, eventIdName(event, idx));
+    await writeCachedAttachment(accountId, eventId, idx, file);
+    return file;
+  }
+
+  /**
+   * Poll one account: refresh the timeline and cache attachments of messages
+   * that do not have a local copy yet. Called by [MessageSyncService].
+   */
+  async syncAccount(accountId: string): Promise<{ messages: number; attachments: number }> {
+    const { client, subdomain } = await this.loginFor(accountId, t("auth.badCredentialsAlt"));
+    const { events } = await this.timelineEvents(client, subdomain, accountId, EARLIEST_DEFAULT, true);
+    const messages = events.filter((event) => MESSAGE_TYPES.includes(event.eventType ?? "") && !isReply(event));
+    let attachments = 0;
+    for (const event of messages) {
+      const count = extractAttachments(event.additionalData).length;
+      for (let idx = 0; idx < count; idx += 1) {
+        if (await readCachedAttachment(accountId, event.eventId, idx)) continue;
+        try {
+          await this.warmAttachment(accountId, client, subdomain, event, event.eventId, idx);
+          attachments += 1;
+        } catch {
+          /* one broken attachment must not stop the poll */
+        }
+      }
+    }
+    return { messages: messages.length, attachments };
   }
 
   // ------------------------------------------------ Hausaufgaben (N-C)
@@ -1020,6 +1064,7 @@ export class EdupageDataService {
   async cacheClear(claims: AuthClaims) {
     try {
       const result = await this.prisma.resourceCache.deleteMany({ where: { accountId: claims.sub } });
+      await clearAttachmentCache(claims.sub);
       return { status: "ok", cleared: result.count };
     } catch (error) {
       const detail = error instanceof Error ? error.message : String(error);
