@@ -48,6 +48,19 @@ npm install
 `install.sh` configures PostgreSQL, generates `apps/api/.env.local` (mode `0600`),
 runs Prisma migrations, and never reads or overwrites existing secrets.
 
+### Docker backend (quick start)
+
+For a quick start without a local PostgreSQL setup, use the Docker backend:
+
+```sh
+./install-docker.sh            # real mode
+./install-docker.sh --demo     # demo mode (login: demo / demo)
+./install-docker.sh --stop     # stop the services
+```
+
+See [docs/INSTALLATION.md](docs/INSTALLATION.md#docker-backend-recommended-for-quick-start)
+for `.env` generation, secrets, ports and the health check. The native
+`./install.sh` remains available for a local PostgreSQL/NestJS setup.
 ### Run with run.sh
 
 ```sh
@@ -98,29 +111,53 @@ before use; never commit secrets.
 
 ### Android
 
-![Android home](docs/images/android/and_home.png)
-![Android grades](docs/images/android/and_grades.png)
-![Android tasks](docs/images/android/and_tasks.png)
-![Android plan](docs/images/android/and_plan.png)
-![Android events](docs/images/android/and_events.png)
-![Android messages](docs/images/android/and_messages.png)
-![Android settings](docs/images/android/and_settings.png)
-![Android devices](docs/images/android/and_devices.png)
-![Android more](docs/images/android/and_more.png)
-![Android login/onboarding](docs/images/android/and_onboarding0.png)
-![Android homework detail](docs/images/android/and_homework_detail.png)
-![Android message thread](docs/images/android/and_message_thread.png)
+<table>
+  <tr>
+    <td><img src="docs/images/android/and_home.png" alt="Android home" width="320"><br><em>Home: clock, next lesson, weather, latest messages</em></td>
+    <td><img src="docs/images/android/and_grades.png" alt="Android grades" width="320"><br><em>Grades: averages and subjects</em></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/android/and_tasks.png" alt="Android tasks" width="320"><br><em>Homework: filters and counters</em></td>
+    <td><img src="docs/images/android/and_plan.png" alt="Android plan" width="320"><br><em>Timetable / plan view</em></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/android/and_events.png" alt="Android events" width="320"><br><em>Events and substitutions</em></td>
+    <td><img src="docs/images/android/and_messages.png" alt="Android messages" width="320"><br><em>Messages inbox and thread</em></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/android/and_settings.png" alt="Android settings" width="320"><br><em>Settings</em></td>
+    <td><img src="docs/images/android/and_devices.png" alt="Android devices" width="320"><br><em>Devices and sessions</em></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/android/and_more.png" alt="Android more" width="320"><br><em>More menu</em></td>
+    <td><img src="docs/images/android/and_onboarding0.png" alt="Android login/onboarding" width="320"><br><em>Login / onboarding</em></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/android/and_homework_detail.png" alt="Android homework detail" width="320"><br><em>Homework detail</em></td>
+    <td><img src="docs/images/android/and_message_thread.png" alt="Android message thread" width="320"><br><em>Message thread</em></td>
+  </tr>
+</table>
 
 ### Web
 
-![Web home](docs/images/web/web_home.png)
-![Web homework](docs/images/web/web_homework.png)
-![Web grades](docs/images/web/web_grades.png)
-![Web timetable](docs/images/web/web_timetable.png)
-![Web messages](docs/images/web/web_messages.png)
-![Web agenda](docs/images/web/web_agenda.png)
-![Web settings](docs/images/web/web_settings.png)
-![Web login](docs/images/web/web_login.png)
+<table>
+  <tr>
+    <td><img src="docs/images/web/web_home.png" alt="Web home" width="320"><br><em>Home dashboard</em></td>
+    <td><img src="docs/images/web/web_homework.png" alt="Web homework" width="320"><br><em>Homework</em></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/web/web_grades.png" alt="Web grades" width="320"><br><em>Grades</em></td>
+    <td><img src="docs/images/web/web_timetable.png" alt="Web timetable" width="320"><br><em>Timetable</em></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/web/web_messages.png" alt="Web messages" width="320"><br><em>Messages</em></td>
+    <td><img src="docs/images/web/web_agenda.png" alt="Web agenda" width="320"><br><em>Events and substitutions</em></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/web/web_settings.png" alt="Web settings" width="320"><br><em>Settings</em></td>
+    <td><img src="docs/images/web/web_login.png" alt="Web login" width="320"><br><em>Login</em></td>
+  </tr>
+</table>
 
 ## API reference
 
