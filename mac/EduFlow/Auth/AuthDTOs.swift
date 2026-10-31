@@ -242,7 +242,7 @@ public struct SettingsValues: Equatable, Sendable {
     public var ovUnread = 10
     public var ovHomework = 10
     public var ovOrder = "messages,homework,weather"
-    public var ovWetter = true
+    public var ovWetter = false
     public var wetterCity = ""
     public var timeFormat = "24h"
 

@@ -35,7 +35,7 @@ describe("settings (Port von app.py + api/settings.py, Paket N-F)", () => {
     const got = await service.settingsGet(claims);
     expect(got.schema).toHaveLength(11);
     expect(got.values).toMatchObject({ landing: "uebersicht", hw_tests: false, ov_unread: 10, ov_order: "messages,homework,weather", time_format: "24h" });
-    expect(SETTINGS_DEFAULTS.ov_wetter).toBe(true);
+    expect(SETTINGS_DEFAULTS.ov_wetter).toBe(false);
   });
 
   it("koerzt gespeicherte Werte wie _coerce_setting", async () => {

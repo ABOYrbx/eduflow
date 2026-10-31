@@ -257,7 +257,7 @@ class AuthPackageTest {
         assertEquals(50, values.ovUnread)
         assertEquals(1, values.ovHomework)
         assertEquals("24h", values.timeFormat)
-        assertTrue(values.ovWetter) // Default: Wetterkarte an
+        assertFalse(values.ovWetter) // Default: Wetterkarte aus
         assertEquals("", values.wetterCity)
     }
 
@@ -335,7 +335,7 @@ class AuthPackageTest {
         assertEquals(true, hwTests.booleanOrNull)
         // Wetter-Einstellungen werden mitgespeichert (sonst setzt PUT sie
         // serverseitig auf Defaults zurück).
-        assertEquals(true, sent["ov_wetter"]!!.jsonPrimitive.booleanOrNull)
+        assertEquals(false, sent["ov_wetter"]!!.jsonPrimitive.booleanOrNull)
         assertEquals("", sent["wetter_city"]!!.jsonPrimitive.content)
         assertEquals("noten", saved.landing)
         assertTrue(saved.hwTests)

@@ -44,7 +44,7 @@ object SettingsDefaults {
     const val OV_UNREAD = 10
     const val OV_HOMEWORK = 10
     const val OV_ORDER = "messages,homework,weather"
-    const val OV_WETTER = true
+    const val OV_WETTER = false
     const val WETTER_CITY = ""
     const val WETTER_CITY_MAX = 100
     const val TIME_FORMAT = "24h"
