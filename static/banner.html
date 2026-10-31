@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EduFlow</title>
+    <style>
+      :root {
+        --bg: #0f172a;
+        --bg2: #1e293b;
+        --accent: #6366f1;
+        --accent2: #22d3ee;
+        --text: #f8fafc;
+        --muted: #cbd5e1;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background: radial-gradient(1200px 600px at 20% 20%, #1e293b 0%, #0f172a 60%),
+                    linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+        color: var(--text);
+        overflow: hidden;
+      }
+      .banner {
+        position: relative;
+        width: min(92vw, 960px);
+        padding: 48px 56px;
+        border-radius: 24px;
+        background: linear-gradient(135deg, rgba(99,102,241,0.18), rgba(34,211,238,0.10));
+        border: 1px solid rgba(255,255,255,0.10);
+        box-shadow: 0 30px 80px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        gap: 32px;
+      }
+      .logo-wrap {
+        flex: 0 0 auto;
+        width: 120px;
+        height: 120px;
+        border-radius: 28px;
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 12px 30px rgba(99,102,241,0.45);
+      }
+      .logo {
+        width: 88px;
+        height: 88px;
+        object-fit: contain;
+        border-radius: 18px;
+      }
+      .content { flex: 1 1 auto; min-width: 0; }
+      .title {
+        margin: 0;
+        font-size: clamp(2.2rem, 5vw, 3.4rem);
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1.05;
+        background: linear-gradient(90deg, #ffffff, #c7d2fe 60%, #67e8f9);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .subtitle {
+        margin: 12px 0 0;
+        font-size: clamp(1rem, 2vw, 1.35rem);
+        color: var(--muted);
+        font-weight: 400;
+        letter-spacing: 0.01em;
+      }
+      .tag {
+        display: inline-block;
+        margin-top: 18px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #e0e7ff;
+        background: rgba(99,102,241,0.25);
+        border: 1px solid rgba(99,102,241,0.4);
+        border-radius: 999px;
+      }
+      .orbs {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        overflow: hidden;
+        border-radius: 24px;
+      }
+      .orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(40px);
+        opacity: 0.35;
+      }
+      .orb.one { width: 220px; height: 220px; background: #6366f1; top: -60px; right: -40px; }
+      .orb.two { width: 180px; height: 180px; background: #22d3ee; bottom: -60px; left: -40px; }
+      @media (max-width: 640px) {
+        .banner { flex-direction: column; text-align: center; padding: 36px 28px; gap: 20px; }
+        .logo-wrap { width: 96px; height: 96px; }
+        .logo { width: 72px; height: 72px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="banner" role="banner">
+      <div class="orbs" aria-hidden="true">
+        <div class="orb one"></div>
+        <div class="orb two"></div>
+      </div>
+      <div class="logo-wrap">
+        <img class="logo" src="icons/icon.png" alt="EduFlow logo">
+      </div>
+      <div class="content">
+        <h1 class="title">EduFlow</h1>
+        <p class="subtitle">Local school dashboard for EduPage</p>
+        <span class="tag">Open source</span>
+      </div>
+    </main>
+  </body>
+</html>

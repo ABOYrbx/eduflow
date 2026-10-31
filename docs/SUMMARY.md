@@ -4,6 +4,7 @@
 * [Installation](INSTALLATION.md)
 * [Getting started](GETTING_STARTED.md)
 * [Features](FEATURES.md)
+* [Screenshots](SCREENSHOTS.md)
 * [Architecture](ARCHITECTURE.md)
 * [API reference](API.md)
 * [Platforms](PLATFORMS.md)
