@@ -1,5 +1,6 @@
 package de.eduflow.android.ui.grades
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -229,25 +230,17 @@ fun GradesScreen(
 @Composable
 private fun AverageCard(avgDisplay: String, compactFraction: Float = 0f) {
     val scheme = MaterialTheme.colorScheme
-    // Wie NowCard auf der Übersicht: the black card is only used in dark
-    // mode; light mode keeps a light surface with dark ink. A real accent
-    // choice still tints the card in both modes.
+    // Wie NowCard auf der Übersicht: default accent matches the clock card
+    // (surface + hairline border). A real accent still tints the card.
     val dark = LocalEduFlowDark.current
     val isDefaultAccent = scheme.primary == if (dark) Color.White else Color.Black
-    val cardColor = when {
-        isDefaultAccent && dark -> Color.Black
-        isDefaultAccent -> scheme.surfaceVariant
-        else -> scheme.primary
-    }
-    val contentColor = when {
-        isDefaultAccent && dark -> Color.White
-        isDefaultAccent -> scheme.onSurface
-        else -> scheme.onPrimary
-    }
+    val cardColor = if (isDefaultAccent) scheme.surface else scheme.primary
+    val contentColor = if (isDefaultAccent) scheme.onSurface else scheme.onPrimary
     val f = compactFraction.coerceIn(0f, 1f)
     Surface(
         shape = RoundedCornerShape(16.dp),
         color = cardColor,
+        border = if (isDefaultAccent) BorderStroke(1.dp, scheme.outlineVariant) else null,
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(Modifier.padding(horizontal = 20.dp, vertical = (20 - 8 * f).dp)) {

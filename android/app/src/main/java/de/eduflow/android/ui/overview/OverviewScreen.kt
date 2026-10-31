@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -293,24 +294,16 @@ private fun NowCard(
     onTimetable: () -> Unit,
 ) {
     val scheme = MaterialTheme.colorScheme
-    // Default accent: the black card is only intended for the dark theme.
-    // In light mode it uses a light surface with dark ink; a real accent
-    // choice still tints the card in both modes.
+    // Default accent: match the clock card above (surface + hairline border).
+    // A real accent choice still tints the card in both modes.
     val dark = LocalEduFlowDark.current
     val isDefaultAccent = scheme.primary == if (dark) Color.White else Color.Black
-    val cardColor = when {
-        isDefaultAccent && dark -> Color.Black
-        isDefaultAccent -> scheme.surfaceVariant
-        else -> scheme.primary
-    }
-    val contentColor = when {
-        isDefaultAccent && dark -> Color.White
-        isDefaultAccent -> scheme.onSurface
-        else -> scheme.onPrimary
-    }
+    val cardColor = if (isDefaultAccent) scheme.surface else scheme.primary
+    val contentColor = if (isDefaultAccent) scheme.onSurface else scheme.onPrimary
     Surface(
         shape = RoundedCornerShape(16.dp),
         color = cardColor,
+        border = if (isDefaultAccent) BorderStroke(1.dp, scheme.outlineVariant) else null,
         modifier = Modifier.fillMaxWidth(),
     ) {
         Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
