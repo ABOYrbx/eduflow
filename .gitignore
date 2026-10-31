@@ -63,3 +63,6 @@ GoogleService-Info.plist
 
 # other
 .cache
+# AI tooling
+.agents/
+skills-lock.json

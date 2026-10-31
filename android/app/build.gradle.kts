@@ -51,7 +51,7 @@ android {
         minSdk = 26
         targetSdk = 34
         versionCode = versionCodeOverride.toIntOrNull() ?: 1
-        versionName = versionNameOverride.ifEmpty { "0.1.0" }
+        versionName = versionNameOverride.ifEmpty { "0.2.0" }
         vectorDrawables { useSupportLibrary = true }
     }
 

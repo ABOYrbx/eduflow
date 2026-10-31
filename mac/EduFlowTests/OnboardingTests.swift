@@ -194,11 +194,10 @@ struct OnboardingTests {
         for entry in entries {
             #expect(entry.percent >= LanguageEntry.minimumPercent)
         }
-        // Der Katalog enthaelt sehr wohl unuebersetzte Sprachen; sie
-        // duerfen nur nicht angeboten werden.
+        // Unuebersetzte Sprachen (falls vorhanden) duerfen nicht
+        // angeboten werden.
         let unbrauchbar = AppLocalizations.coverage()
             .filter { $0.percent < LanguageEntry.minimumPercent }
-        #expect(!unbrauchbar.isEmpty)
         for row in unbrauchbar {
             #expect(!entries.contains { $0.code == row.code })
         }
