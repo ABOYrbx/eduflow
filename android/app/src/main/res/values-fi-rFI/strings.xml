@@ -213,6 +213,8 @@
     <string name="messages_reply_send">Vastaa</string>
     <string name="messages_compose_subtitle">Valitse opettajat ja luokkakaverit</string>
     <string name="messages_recipient_search">Hae vastaanottajia</string>
+    <string name="messages_role_teacher">Opettaja</string>
+    <string name="messages_role_student">Oppilas</string>
     <string name="common_clear">Clear search</string>
     <string name="messages_recipients_empty">No recipients loaded.</string>
     <string name="messages_recipients_no_match">No recipient matches that search.</string>

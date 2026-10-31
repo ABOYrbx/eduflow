@@ -45,7 +45,7 @@ describe("DemoSchoolService", () => {
     expect(root?.text.length).toBeGreaterThan(400);
     // Antworten (`textReply`) gehören in den Thread, nicht in die Nachrichtenliste.
     // Nach `sort_key` absteigend, also rein chronologisch.
-    expect(list.items.map((item) => item.id)).toEqual([4105, 4101, 4106, 4107, 4102, 4103]);
+    expect(list.items.map((item) => item.id)).toEqual([4130, 4121, 4129, 4128, 4120, 4127, 4126, 4125, 4124, 4123, 4122, 4119, 4118, 4117, 4105, 4101, 4106, 4107, 4102, 4103]);
   });
 
   it("offers every demo teacher and student as a recipient", async () => {
@@ -105,8 +105,8 @@ it("returns every reply of a thread with a consistent summary", async () => {
   it("filters, counts and changes homework state in PostgreSQL-backed local state", async () => {
     const claims = { sub: "acct", jti: "t", tokenUse: "access" as const };
     const list = await service.homework(claims, { include_tests: "0" });
-    expect(list.total).toBe(4);
-    expect(list.counts).toEqual({ offen: 2, ueberfaellig: 1, erledigt: 1, papierkorb: 0 });
+    expect(list.total).toBe(23);
+    expect(list.counts).toEqual({ offen: 14, ueberfaellig: 5, erledigt: 4, papierkorb: 0 });
     const updated = await service.homeworkChange(claims, "5101", "done", { done: true });
     expect(updated).toMatchObject({ id: 5101, is_done: true, status: "erledigt" });
     expect((await service.homework(claims, { status: "erledigt" })).items.map((item) => item.id)).toContain(5101);
@@ -128,7 +128,7 @@ it("returns every reply of a thread with a consistent summary", async () => {
     const week = service.timetableWeek({ day: "2026-09-24" });
     expect(week.days).toHaveLength(5);
     expect(week.days[0]?.day_name).toBe("Monday");
-    expect(service.timetableDay({ day: "2026-09-25" }).lessons).toHaveLength(6);
+    expect(service.timetableDay({ day: "2026-09-25" }).lessons).toHaveLength(10);
     expect(service.timetableDay({ day: "2026-09-26" }).lessons).toHaveLength(0);
     expect(service.agenda({}).items.map((item) => item.kind)).toEqual(expect.arrayContaining(["event", "exam", "attendance"]));
     expect(service.grades({ limit: "1" }).items).toHaveLength(1);

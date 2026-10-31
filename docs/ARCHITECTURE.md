@@ -38,3 +38,56 @@ All pages render through one client component (`DashboardApp`) behind a server-s
 - **macOS** (`mac/`, Swift 5 + SwiftUI, macOS 14+, system frameworks only): single entry + top pill nav (web design), MVVM per feature, one `APIClient` + file-based `TokenStore` (`0600`, deliberately no Keychain), string catalog for localization.
 
 Both stub the API per route for offline tests and treat any `401` as “back to login”.
+
+## Backend with Docker
+
+The NestJS backend and its PostgreSQL database can be run with Docker Compose using the repository-root `compose.yml` and `Dockerfile`. The web app is not part of the compose stack and runs separately (see [Platforms](PLATFORMS.md)).
+
+Start the backend stack:
+
+```sh
+docker compose up -d
+```
+
+Rebuild after code or dependency changes:
+
+```sh
+docker compose up -d --build
+```
+
+Force a clean rebuild:
+
+```sh
+docker compose build --no-cache
+docker compose up -d
+```
+
+Demo mode (fake provider, login `demo` / `demo`) is enabled with `DEMO=true`. The entrypoint switches `EDUFLOW_PROVIDER` to `fake` automatically:
+
+```sh
+DEMO=true docker compose up -d
+```
+
+Or set it in an environment file (`.env` next to `compose.yml`):
+
+```env
+DEMO=true
+```
+
+Ports:
+
+- API: host `${API_PORT:-3000}` → container `3000` (default `http://127.0.0.1:3000/api/v1`).
+- PostgreSQL: internal only (container port `5432`, no host port by default).
+
+Environment variables (from `compose.yml`, with defaults):
+
+- `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` (database credentials, default `eduflow` / `eduflow` / `eduflow_dev`).
+- `API_PORT` (host port for the API, default `3000`).
+- `JWT_ACCESS_SECRET` (access token signing secret; replace in any non-demo use).
+- `CREDENTIAL_ENCRYPTION_KEY` (seals stored EduPage credentials).
+- `DEMO` (`true`/`1` enables demo mode).
+- `EDUFLOW_PROVIDER` (`edupage` or `fake`).
+- `OPENWEATHER_KEY` (optional weather integration).
+- `EDUFLOW_TRUST_PROXY`, `EDUFLOW_API_TOKEN_DAYS`.
+
+Database migrations are applied automatically on startup by `docker/entrypoint.sh` (`prisma migrate deploy`). Persistent data lives in the `postgres_data` volume and survives `docker compose down`; use `docker compose down -v` to remove it. Health check: `GET /api/v1/health` (no auth).

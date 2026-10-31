@@ -170,7 +170,7 @@ fun GradesScreen(
         }
 
         PullRefreshBox(
-            refreshing = state.isLoading,
+            refreshing = state.isLoading && state.allItems.isNotEmpty(),
             onRefresh = viewModel::refresh,
             modifier = Modifier.weight(1f).fillMaxWidth(),
         ) {

@@ -180,7 +180,7 @@ fun HomeworkListScreen(
         }
 
         PullRefreshBox(
-            refreshing = state.isLoading,
+            refreshing = state.isLoading && state.items.isNotEmpty(),
             onRefresh = viewModel::refresh,
             modifier = Modifier.weight(1f).fillMaxWidth(),
         ) {

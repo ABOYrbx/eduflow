@@ -174,8 +174,9 @@ private fun WelcomePage(onNext: () -> Unit) {
                 contentDescription = stringResource(R.string.app_name),
                 contentScale = androidx.compose.ui.layout.ContentScale.Fit,
                 modifier = Modifier.size(96.dp)
+                    .shadow(16.dp, RoundedCornerShape(22.dp))
                     .clip(RoundedCornerShape(22.dp))
-                    .shadow(16.dp, RoundedCornerShape(22.dp)),
+                    .background(MaterialTheme.colorScheme.surface),
             )
         }
         Spacer(Modifier.weight(1f))
@@ -655,21 +656,7 @@ private fun ServerPage(baseUrl: String, onApply: suspend (String) -> Unit) {
             value = draft,
             onValueChange = { draft = it; message = null; connected = false },
             // Nur IP genügt, Port ist optional — der Hinweis sagt beides.
-            placeholder = { Text(TokenStore.SERVER_PLACEHOLDER) },
-            supportingText = if (draft.isBlank()) {
-                {
-                    Text(
-                        stringResource(
-                            R.string.onboarding_server_hint,
-                            TokenStore.DEFAULT_PORT,
-                            TokenStore.DEMO_PORT,
-                        ),
-                        fontSize = 12.sp,
-                    )
-                }
-            } else {
-                null
-            },
+            placeholder = { Text(stringResource(R.string.onboarding_server_placeholder)) },
             leadingIcon = { Icon(Icons.Filled.Dns, contentDescription = null) },
             singleLine = true,
             shape = CircleShape,

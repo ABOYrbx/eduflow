@@ -213,6 +213,8 @@
     <string name="messages_reply_send">Respon</string>
     <string name="messages_compose_subtitle">Tria docents i companys de classe</string>
     <string name="messages_recipient_search">Cerca destinataris</string>
+    <string name="messages_role_teacher">Docent</string>
+    <string name="messages_role_student">Alumne</string>
     <string name="common_clear">Clear search</string>
     <string name="messages_recipients_empty">No recipients loaded.</string>
     <string name="messages_recipients_no_match">No recipient matches that search.</string>

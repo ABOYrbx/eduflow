@@ -163,7 +163,7 @@ private fun SchoolScreen(
             )
         }
         PullRefreshBox(
-            refreshing = state.isLoading,
+            refreshing = state.isLoading && !(state.agenda.isEmpty() && state.substitutions.isEmpty()),
             onRefresh = { viewModel.load(refresh = true) },
             modifier = Modifier.weight(1f).fillMaxWidth(),
         ) {

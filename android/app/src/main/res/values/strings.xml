@@ -71,7 +71,8 @@
     <string name="onboarding_feat3_title">Timetable &amp; Weather</string>
     <string name="onboarding_feat3_desc">Day and week plus weather on the overview.</string>
     <string name="onboarding_server_sub">Enter the IP address of your EduFlow server.</string>
-    <string name="onboarding_server_hint">IP alone uses port %1$d. Add :port for another one — the demo server is %2$d.</string>
+    <string name="onboarding_server_hint">IP alone uses port %1$d. Add :port for another one</string>
+    <string name="onboarding_server_placeholder">e.g. http://192.168.1.5:3000</string>
     <string name="onboarding_connected">Connected</string>
     <string name="onboarding_unreachable">Server unreachable. Check the address and try again.</string>
     <string name="onboarding_test_connected">✓ Connected</string>
@@ -225,13 +226,13 @@
     <string name="messages_reply_send">Reply</string>
     <string name="messages_compose_subtitle">Choose teachers and classmates</string>
     <string name="messages_recipient_search">Search recipients</string>
+    <string name="messages_role_teacher">Teacher</string>
+    <string name="messages_role_student">Student</string>
     <string name="common_clear">Clear search</string>
     <string name="messages_recipients_empty">No recipients loaded.</string>
     <string name="messages_recipients_no_match">No recipient matches that search.</string>
     <string name="messages_body_placeholder">Message text</string>
     <string name="messages_compose_send">Send</string>
-    <string name="messages_role_teacher">Teacher</string>
-    <string name="messages_role_student">Student</string>
 
     <!-- Message types: resolved via MessageTypes.stringResFor + stringResource;
          label() stays the German context-free fallback for tests. -->

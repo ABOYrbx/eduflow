@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -140,7 +141,7 @@ fun MessagesScreen(
     val listState = rememberLazyListState()
     val barCollapsed = LocalBottomBarCollapsed.current
     val fabBottom by animateDpAsState(
-        targetValue = if (barCollapsed) 76.dp else 88.dp,
+        targetValue = if (barCollapsed) 148.dp else 160.dp,
         label = "messages-fab-bottom",
     )
 
@@ -260,7 +261,7 @@ fun MessagesScreen(
             }
 
             PullRefreshBox(
-                refreshing = state.isLoading,
+                refreshing = state.isLoading && state.items.isNotEmpty(),
                 onRefresh = viewModel::refresh,
                 modifier = Modifier.weight(1f).fillMaxWidth(),
             ) {
@@ -349,6 +350,7 @@ fun MessageCard(
     onOpenThread: () -> Unit,
     onAttachment: (Int) -> Unit,
     unread: Boolean = false,
+    fullText: Boolean = false,
 ) {
     val scheme = MaterialTheme.colorScheme
     EduCard(
@@ -374,7 +376,7 @@ fun MessageCard(
                     )
                 }
                 Text(
-                    item.bodyLine(),
+                    if (fullText) item.text.trim().ifBlank { item.bodyLine() } else item.bodyLine(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = scheme.onSurfaceVariant,
                 )
@@ -428,7 +430,7 @@ fun ThreadScreen(
     val collapsed = rememberCollapsedHeader(listState)
     val thread = state.thread
 
-    Column(modifier = modifier.fillMaxSize().padding(16.dp)) {
+    Column(modifier = modifier.fillMaxSize().navigationBarsPadding().imePadding().padding(16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onBack) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
@@ -483,6 +485,7 @@ fun ThreadScreen(
                         item = it,
                         onOpenThread = {},
                         onAttachment = { idx -> onAttachment(it.id, idx) },
+                        fullText = true,
                     )
                 }
             }
@@ -628,7 +631,7 @@ fun ComposeScreen(
 
     // Verfassen läuft ohne Bottom-Bar (NavGraph blendet sie auf dieser
     // Route aus); Systemleiste unten per navigationBarsPadding freihalten.
-    Column(modifier = modifier.fillMaxSize().navigationBarsPadding().padding(16.dp)) {
+    Column(modifier = modifier.fillMaxSize().navigationBarsPadding().imePadding().padding(16.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onBack) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.common_back))
